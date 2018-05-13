@@ -1,0 +1,163 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/img"
+    >
+
+
+    <ImageView
+        android:id="@+id/imageView4"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_21"
+        android:layout_marginRight="@dimen/dp_21"
+        android:scaleType="centerInside"
+        android:src="@mipmap/beijing3x"
+        />
+    <ImageView
+        android:id="@+id/imageView1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_130"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_50"
+        android:scaleType="centerInside"
+        android:src="@mipmap/tubiao3x"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_40"
+        android:gravity="center_vertical"
+        >
+    </RelativeLayout>
+
+    <EditText
+        android:id="@+id/et_phone"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/dp_220"
+        android:ems="10"
+        android:hint="输入手机号码"
+        android:layout_marginLeft="@dimen/dp_80"
+        android:layout_marginRight="@dimen/dp_60"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/sp_18"
+        android:inputType="phone"
+        />
+    <ImageView
+        android:id="@+id/image_phone"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_220"
+        android:layout_marginLeft="@dimen/dp_54"
+        android:scaleType="centerInside"
+        android:src="@mipmap/wo3x" />
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_below="@+id/et_phone"
+
+        android:layout_marginLeft="@dimen/dp_30"
+        android:layout_marginRight="@dimen/dp_30"
+        android:layout_marginTop="@dimen/dp_1"
+        />
+
+    <EditText
+        android:id="@+id/et_code"
+        android:layout_width="@dimen/dp_190"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/et_phone"
+        android:layout_below="@+id/view1"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@null"
+        android:gravity="center_vertical"
+        android:hint="请输入验证码"
+        android:inputType="number"
+        android:textSize="@dimen/sp_18" />
+    <ImageView
+        android:id="@+id/image_user"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_below="@id/image_phone"
+        android:layout_marginLeft="@dimen/dp_54"
+        android:layout_marginTop="@dimen/dp_37"
+        android:scaleType="centerInside"
+        android:src="@mipmap/yaoshi3x" />
+
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@+id/et_code"
+        android:layout_alignLeft="@+id/et_code"
+        android:layout_alignRight="@id/et_code"
+        android:layout_marginTop="@dimen/dp_1"
+        />
+
+    <Button
+        android:id="@+id/btn_get_code"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/view1"
+
+        android:layout_alignRight="@+id/et_phone"
+        android:textColor="@color/holo_gray_light"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@id/et_code"
+        android:layout_alignBottom="@id/view2"
+        android:background="@mipmap/anniu33x"
+        android:text="获取验证码"
+
+        />
+
+    <Button
+        android:id="@+id/btn_finish"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_alignLeft="@+id/et_phone"
+        android:layout_alignRight="@+id/et_phone"
+        android:layout_marginBottom="@dimen/dp_75"
+        android:text="下一步"
+        android:textColor="@color/holo_green_light"
+        android:background="@mipmap/anniu13x"
+        />
+
+    <EditText
+        android:id="@+id/et_password"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignLeft="@+id/et_phone"
+        android:layout_alignRight="@+id/et_phone"
+        android:layout_below="@id/et_code"
+        android:layout_marginTop="@dimen/dp_20"
+        android:background="@null"
+        android:textSize="@dimen/sp_18"
+        android:ems="10"
+        android:inputType="textPassword"
+        android:hint="请输入密码"
+        />
+    <ImageView
+        android:id="@+id/image_pwd"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_below="@id/image_user"
+        android:layout_marginLeft="@dimen/dp_54"
+        android:layout_marginTop="@dimen/dp_18"
+        android:scaleType="centerInside"
+        android:src="@mipmap/suo3x" />
+    <View
+        android:id="@+id/view3"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_below="@+id/et_password"
+        android:background="@color/white"
+        android:layout_alignLeft="@+id/et_password"
+        android:layout_alignRight="@+id/et_password"
+        android:layout_marginTop="@dimen/dp_1"
+        />
+</RelativeLayout>

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
+        android:src="@mipmap/keting3x" />
+
+    <GridView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_214"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentStart="true"
+        android:layout_marginBottom="76dp"
+        android:columnWidth="@dimen/dp_169"
+        android:id="@+id/gv_home"
+        android:gravity="center"
+        android:horizontalSpacing="@dimen/dp_12"
+        android:numColumns="2"
+        android:verticalSpacing="@dimen/dp_12">
+
+    </GridView>
+
+    <Button
+        android:layout_width="@dimen/dp_214"
+        android:layout_height="@dimen/dp_46"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="15dp"
+        android:text="+添加设备"
+        android:textColor="@color/white"
+        android:background="@color/green1"
+
+        />
+
+</RelativeLayout>

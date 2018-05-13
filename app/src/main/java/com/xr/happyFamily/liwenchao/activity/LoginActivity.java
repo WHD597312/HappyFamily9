@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
@@ -48,15 +49,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//       unbinder = ButterKnife.bind(this);
-//       imageView.setImageResource(R.mipmap.yanjing13x);
-//        preferences = getSharedPreferences("my", MODE_PRIVATE);
-//
-//        if (application == null) {
-//            application = (MyApplication) getApplication();
-//        }
-//
-//        application.addActivity(this);
+       unbinder = ButterKnife.bind(this);
+       imageView.setImageResource(R.mipmap.yanjing13x);
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+
+        application.addActivity(this);
     }
 
     SharedPreferences preferences;
@@ -65,28 +66,28 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        if (preferences.contains("phone")){
-//            String phone = preferences.getString("phone", "");
-//            et_name.setText(phone);
-//            et_pswd.setText("");
-//        }
-//        if (preferences.contains("phone") && preferences.contains("password")) {
-//            String phone = preferences.getString("phone", "");
-//            String password = preferences.getString("password", "");
-//            et_name.setText(phone);
-//            et_pswd.setText(password);
-//        }
+        if (preferences.contains("phone")){
+            String phone = preferences.getString("phone", "");
+            et_name.setText(phone);
+            et_pswd.setText("");
+        }
+        if (preferences.contains("phone") && preferences.contains("password")) {
+            String phone = preferences.getString("phone", "");
+            String password = preferences.getString("password", "");
+            et_name.setText(phone);
+            et_pswd.setText(password);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        if (preferences.contains("phone") && preferences.contains("password")){
-////            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            if (preferences.contains("login")){
-//                startActivity(new Intent(this,MainActivity.class));
-//            }
-//        }
+        if (preferences.contains("phone") && preferences.contains("password")){
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            if (preferences.contains("login")){
+                startActivity(new Intent(this,MainActivity.class));
+            }
+        }
     }
 
     @OnClick({R.id.btn_login, R.id.tv_register,R.id.tv_forget_pswd,R.id.image_seepwd ,R.id.image_wx})

@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.xr.happyFamily.jia.titleview.TitleView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <Button
+        android:id="@+id/bt_zixing_wifi"
+        android:layout_marginTop="@dimen/dp_62"
+        android:layout_width="@dimen/dp_156"
+        android:layout_height="@dimen/dp_40"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_40"
+        android:text="WLAN配对"
+        android:textColor="@color/color_gray2"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:background="@color/white"
+        />
+    <Button
+
+        android:layout_toRightOf="@+id/bt_zixing_wifi"
+        android:layout_alignTop="@+id/bt_zixing_wifi"
+        android:layout_width="@dimen/dp_156"
+        android:layout_height="@dimen/dp_40"
+        android:text="二维码"
+        android:textColor="@color/green2"
+        android:layout_marginLeft="@dimen/dp_14"
+        android:background="@color/white"
+        />
+
+
+    <TextView
+        android:layout_below="@+id/bt_zixing_wifi"
+        android:layout_marginTop="@dimen/dp_45"
+        android:id="@+id/tv_add"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_52"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/black"
+        android:text="■"
+        android:textSize="21sp"
+        />
+    <TextView
+        android:layout_alignTop="@+id/tv_add"
+        android:layout_toRightOf="@+id/tv_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="将二维码靠近摄像机"
+        android:textSize="21sp"
+        />
+
+    <Button
+        android:id="@+id/bt_add_zixing"
+        android:layout_below="@+id/test"
+        android:layout_marginTop="@dimen/dp_99"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:background="@mipmap/ok3x"
+        />
+    <ImageView
+        android:id="@+id/test"
+        android:layout_below="@id/tv_add"
+        android:layout_width="@dimen/dp_130"
+        android:layout_height="@dimen/dp_130"
+        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginLeft="@dimen/dp_130"
+        android:background="@color/black"
+        />
+
+</RelativeLayout>

@@ -14,7 +14,7 @@
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
     <application
-        android:name=".liwenchao.activity.MyApplication"
+        android:name=".jia.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
@@ -23,7 +23,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".liwenchao.activity.LoginActivity">
+        <activity android:name=".login.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -31,54 +31,59 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".liwenchao.wxapi.WXEntryActivity"
+            android:name=".login.wxapi.WXEntryActivity"
             android:exported="true">
 
         </activity>
-        <activity android:name=".liwenchao.activity.HomeActivity">
+        <activity android:name=".jia.HomeActivity">
 
         </activity>
 
-        <activity android:name=".liwenchao.activity.MenuActivity"
+        <activity android:name=".jia.MenuActivity"
         android:label="@string/app_name">
 
         </activity>
 
-        <activity android:name=".liwenchao.activity.AddEquipmentActivity"
+        <activity android:name=".jia.AddEquipmentActivity"
 
             >
 
         </activity>
 
-        <activity android:name=".liwenchao.activity.ManagementActivity"
+        <activity android:name=".jia.ManagementActivity"
 
             >
 
         </activity>
-        <activity android:name=".liwenchao.activity.ChangeEquipmentActivity"
+        <activity android:name=".jia.ChangeEquipmentActivity"
+
+        >
+
+    </activity>
+        <activity android:name=".jia.ZixingAddActivity"
 
             >
 
         </activity>
 
         <activity
-            android:name=".liwenchao.activity.MainActivity"
+            android:name=".jia.MainActivity"
             android:label="@string/app_name">
 
         </activity>
         <activity
-            android:name=".liwenchao.activity.ForgetPswdActivity"
+            android:name=".login.rigest.ForgetPswdActivity"
             android:label="@string/app_name">
         </activity>
-        <activity android:name=".liwenchao.activity.HomepageActivity"
+        <activity android:name=".jia.HomepageActivity"
             android:label="@string/app_name"/>
         <activity
-        android:name=".liwenchao.activity.RegistActivity"
+        android:name=".login.rigest.RegistActivity"
         android:label="@null">
 
         </activity>
         <activity
-            android:name=".liwenchao.activity.ChangeRoomActivity"
+            android:name=".jia.ChangeRoomActivity"
             android:label="@null">
 
         </activity>

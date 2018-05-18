@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <com.xr.happyFamily.liwenchao.titleview.TitleView
+    <com.xr.happyFamily.jia.titleview.TitleView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
@@ -19,7 +19,7 @@
         android:background="@color/white"
         />
     <Button
-
+        android:id="@+id/bt_tozxing"
         android:layout_toRightOf="@+id/bt_add"
         android:layout_alignTop="@id/bt_add"
         android:layout_width="@dimen/dp_156"

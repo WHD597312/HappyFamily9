@@ -126,7 +126,7 @@
 
                 />
 
-            <com.xr.happyFamily.liwenchao.activity.MyGridview
+            <com.xr.happyFamily.jia.MyGridview
                 android:layout_below="@id/tv_room_eqe"
                 android:layout_marginTop="@dimen/dp_48"
                 android:id="@+id/gv_room_home"
@@ -142,7 +142,7 @@
                 android:numColumns="2"
                 android:verticalSpacing="@dimen/dp_12">
 
-            </com.xr.happyFamily.liwenchao.activity.MyGridview>
+            </com.xr.happyFamily.jia.MyGridview>
 
         </RelativeLayout>
 

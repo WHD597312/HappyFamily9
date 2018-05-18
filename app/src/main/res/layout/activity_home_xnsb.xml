@@ -16,11 +16,11 @@
             />
     <TextView
         android:layout_alignBottom="@+id/ib_xnty_fanhui"
-        android:layout_centerVertical="true"
+        android:layout_toRightOf="@+id/ib_xnty_fanhui"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/dp_50"
         android:gravity="center"
-        android:layout_marginLeft="@dimen/dp_110"
+        android:layout_marginLeft="@dimen/dp_150"
         android:text="虚拟设备"
         android:textColor="@color/white"
         android:textSize="25sp"

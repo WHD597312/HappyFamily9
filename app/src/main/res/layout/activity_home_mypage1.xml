@@ -47,7 +47,7 @@
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_marginRight="@dimen/dp_12"
                 android:layout_centerHorizontal="true"
-                android:background="@color/white"
+                android:src="@mipmap/bj_mypage"
                 />
             <TextView
                 android:layout_width="wrap_content"

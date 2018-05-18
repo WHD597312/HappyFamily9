@@ -8,13 +8,13 @@
     android:background="@mipmap/bj1"
     android:orientation="vertical">
 
-<com.xr.happyFamily.liwenchao.activity.Myscrollview
+<com.xr.happyFamily.jia.Myscrollview
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="@dimen/dp_445"
     android:orientation="vertical"
-
+    android:layout_weight="1"
     >
 
     <RelativeLayout
@@ -69,7 +69,7 @@
                 android:layout_width="@dimen/dp_226"
                 android:layout_height="@dimen/dp_100"
                 android:layout_marginTop="@dimen/dp_91"
-                android:background="@color/white"
+                android:background="@mipmap/bj_m"
                 android:layout_marginLeft="@dimen/dp_12"
                 >
                 <TextView
@@ -125,7 +125,7 @@
 
                 />
 
-            <com.xr.happyFamily.liwenchao.activity.MyGridview
+            <com.xr.happyFamily.jia.MyGridview
                 android:layout_below="@id/tv_eqe_my"
                 android:layout_marginTop="@dimen/dp_48"
                 android:id="@+id/gv_home_my"
@@ -141,13 +141,13 @@
                 android:numColumns="2"
                 android:verticalSpacing="@dimen/dp_12">
 
-            </com.xr.happyFamily.liwenchao.activity.MyGridview>
+            </com.xr.happyFamily.jia.MyGridview>
 
         </RelativeLayout>
 
     </RelativeLayout>
 
-</com.xr.happyFamily.liwenchao.activity.Myscrollview>
+</com.xr.happyFamily.jia.Myscrollview>
 
     <View
         android:id="@+id/view6"

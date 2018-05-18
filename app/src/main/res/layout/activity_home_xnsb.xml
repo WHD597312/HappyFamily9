@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:background="@mipmap/bg_xnsb"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+        <ImageButton
+            android:id="@+id/ib_xnty"
+            android:layout_width="@dimen/dp_50"
+            android:layout_height="@dimen/dp_50"
+            android:src="@mipmap/fanhui_xnty3x"
+            android:background="@null"
+            />
+    <TextView
+        android:layout_alignBottom="@+id/ib_xnty_fanhui"
+        android:layout_centerVertical="true"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_50"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dp_110"
+        android:text="虚拟设备"
+        android:textColor="@color/white"
+        android:textSize="25sp"
+        android:layout_gravity="center"
+        />
+    </RelativeLayout>
+    <View
+        android:id="@+id/view_xnsb"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        android:background="@null"
+
+        android:layout_marginLeft="@dimen/dp_49"
+        android:layout_marginRight="@dimen/dp_49"
+        />
+    <ListView
+        android:id="@+id/xnsb_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:dividerHeight="@dimen/dp_12"
+        android:background="@null"
+        >
+
+    </ListView>
+
+</LinearLayout>

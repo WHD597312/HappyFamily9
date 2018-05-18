@@ -1,40 +1,172 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
 
-    <ImageView
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_keting"
+    android:orientation="vertical">
+<com.xr.happyFamily.liwenchao.activity.Myscrollview
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_490"
+    android:orientation="vertical"
+
+    >
+
+    <RelativeLayout
+
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
-        android:layout_alignParentTop="true"
-        android:src="@mipmap/keting3x" />
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+      <TextView
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_alignParentTop="true"
+          android:layout_centerHorizontal="true"
+          android:text="客厅"
+          android:textColor="@color/white"
+          />
 
-    <GridView
+    <RelativeLayout
+        android:id="@+id/rl_1"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_214"
-        android:layout_alignParentBottom="true"
-        android:layout_alignParentStart="true"
-        android:layout_marginBottom="76dp"
-        android:columnWidth="@dimen/dp_169"
-        android:id="@+id/gv_home"
-        android:gravity="center"
-        android:horizontalSpacing="@dimen/dp_12"
-        android:numColumns="2"
-        android:verticalSpacing="@dimen/dp_12">
+        android:layout_height="match_parent"
+        >
 
-    </GridView>
+        <TextView
+            android:id="@+id/tv_wd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_168"
+            android:layout_marginTop="@dimen/dp_63"
+            android:text="室温"
+            android:textColor="@color/color_white"
 
-    <Button
-        android:layout_width="@dimen/dp_214"
-        android:layout_height="@dimen/dp_46"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:layout_marginBottom="15dp"
-        android:text="+添加设备"
-        android:textColor="@color/white"
-        android:background="@color/green1"
+            />
 
-        />
+        <TextView
+            android:id="@+id/tv_23"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_wd"
+            android:layout_marginLeft="@dimen/dp_27"
+            android:layout_marginTop="@dimen/dp_43"
+            android:text="23"
+            android:textColor="@color/color_white"
+            android:textSize="35sp"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_c"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_23"
+            android:layout_alignTop="@id/tv_23"
+            android:layout_marginLeft="@dimen/dp_42"
+            android:layout_marginTop="@dimen/dp_22"
+            android:text="℃"
+            android:textColor="@color/color_white"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_shi"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_c"
+            android:layout_alignTop="@id/tv_c"
+            android:layout_marginLeft="@dimen/dp_22"
+            android:text="湿度"
+            android:textColor="@color/color_white"
+
+            />
+
+        <TextView
+            android:id="@+id/tv_sd"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_shi"
+            android:layout_alignTop="@id/tv_23"
+            android:layout_marginLeft="@dimen/dp_32"
+            android:text="30"
+            android:textColor="@color/color_white"
+            android:textSize="35sp"
+
+            />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@id/tv_sd"
+            android:layout_alignTop="@id/tv_c"
+            android:layout_marginLeft="@dimen/dp_42"
+            android:text="％"
+            android:textColor="@color/color_white"
+
+            />
+
+
+       <TextView
+           android:id="@+id/tv_eq"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:text="设备"
+           android:textColor="@color/white"
+           android:textSize="20sp"
+           android:layout_below="@id/tv_sd"
+           android:layout_marginTop="@dimen/dp_131"
+           android:layout_marginLeft="@dimen/dp_12"
+           />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="EQUPMENT"
+            android:textColor="@color/white"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:textSize="11sp"
+            android:layout_below="@+id/tv_eq"
+            android:id="@+id/tv_eqe"
+
+            />
+
+        <com.xr.happyFamily.liwenchao.activity.MyGridview
+            android:layout_below="@+id/tv_eqe"
+            android:layout_marginTop="@dimen/dp_48"
+            android:id="@+id/gv_home"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_191"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginRight="@dimen/dp_12"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="26dp"
+            android:columnWidth="@dimen/dp_169"
+            android:gravity="center"
+            android:horizontalSpacing="@dimen/dp_12"
+            android:numColumns="2"
+            android:verticalSpacing="@dimen/dp_12">
+
+        </com.xr.happyFamily.liwenchao.activity.MyGridview>
+
+
+    </RelativeLayout>
+
+
 
 </RelativeLayout>
+
+</com.xr.happyFamily.liwenchao.activity.Myscrollview>
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/button"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:text="+ 添加设备"
+        android:textColor="@color/white"
+        />
+
+</LinearLayout>

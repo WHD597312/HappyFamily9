@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_bathroom"
+    android:orientation="vertical">
+
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+
+    <RelativeLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:focusable="true"
+        android:focusableInTouchMode="true">
+
+
+        <RelativeLayout
+            android:id="@+id/rl_bath"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <TextView
+                android:id="@+id/tv_bath_wd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_168"
+                android:layout_marginTop="@dimen/dp_63"
+                android:text="室温"
+                android:textColor="@color/color_white"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_bath_23"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_bath_wd"
+                android:layout_marginLeft="@dimen/dp_27"
+                android:layout_marginTop="@dimen/dp_43"
+                android:text="23"
+                android:textColor="@color/color_white"
+                android:textSize="35sp"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_bath_c"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_bath_23"
+                android:layout_alignTop="@id/tv_bath_23"
+                android:layout_marginLeft="@dimen/dp_42"
+                android:layout_marginTop="@dimen/dp_22"
+                android:text="℃"
+                android:textColor="@color/color_white"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_bath_shi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_bath_c"
+                android:layout_alignTop="@id/tv_bath_c"
+                android:layout_marginLeft="@dimen/dp_22"
+                android:text="湿度"
+                android:textColor="@color/color_white"
+
+                />
+
+            <TextView
+                android:id="@+id/tv_bath_sd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_bath_shi"
+                android:layout_alignTop="@id/tv_bath_23"
+                android:layout_marginLeft="@dimen/dp_32"
+                android:text="30"
+                android:textColor="@color/color_white"
+                android:textSize="35sp"
+
+                />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@id/tv_bath_sd"
+                android:layout_alignTop="@id/tv_bath_c"
+                android:layout_marginLeft="@dimen/dp_42"
+                android:text="％"
+                android:textColor="@color/color_white"
+
+                />
+
+
+            <TextView
+                android:id="@+id/tv_bath_eq"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="设备"
+                android:textColor="@color/white"
+                android:textSize="20sp"
+                android:layout_below="@id/tv_bath_sd"
+                android:layout_marginTop="@dimen/dp_131"
+                android:layout_marginLeft="@dimen/dp_12"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="EQUPMENT"
+                android:textColor="@color/white"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:textSize="11sp"
+                android:layout_below="@+id/tv_bath_eq"
+                android:id="@+id/tv_bath_eqe"
+
+                />
+
+            <com.xr.happyFamily.liwenchao.activity.MyGridview
+                android:layout_below="@id/tv_bath_eqe"
+                android:layout_marginTop="@dimen/dp_48"
+                android:id="@+id/gv_bath_home"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_191"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_12"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="26dp"
+                android:columnWidth="@dimen/dp_169"
+                android:gravity="center"
+                android:horizontalSpacing="@dimen/dp_12"
+                android:numColumns="2"
+                android:verticalSpacing="@dimen/dp_12">
+
+            </com.xr.happyFamily.liwenchao.activity.MyGridview>
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</ScrollView>
+
+    <Button
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/button"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:text="+ 添加设备"
+        android:textColor="@color/white"
+        />
+
+</LinearLayout>

@@ -34,8 +34,17 @@ public class Equipment {
 
 
     }
+
+    public Equipment(String name, String equipment, String power, int imgeId) {
+        this.name = name;
+        this.equipment = equipment;
+        this.power = power;
+        this.imgeId = imgeId;
+    }
+
     public Equipment(String name, int imgeId) {
         this.name = name;
+
         this.imgeId = imgeId;
     }
 

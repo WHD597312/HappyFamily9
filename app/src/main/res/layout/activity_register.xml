@@ -10,39 +10,74 @@
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_50"
-        android:layout_marginLeft="@dimen/dp_21"
-        android:layout_marginRight="@dimen/dp_21"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true"
         android:scaleType="centerInside"
-        android:src="@mipmap/beijing3x"
-        />
+        android:src="@mipmap/beijing3x" />
     <ImageView
         android:id="@+id/imageView1"
-        android:layout_width="match_parent"
+        android:layout_width="@dimen/dp_130"
         android:layout_height="@dimen/dp_130"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_50"
+        android:layout_marginTop="@dimen/dp_60"
         android:scaleType="centerInside"
         android:src="@mipmap/tubiao3x"
         />
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_40"
-        android:gravity="center_vertical"
-        >
-    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_yuan"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/yuan23x"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginLeft="@dimen/dp_110"
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/daohang3x"
+        android:layout_toLeftOf="@id/iv_yuan"
+
+        />
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/yuan3x"
+        android:layout_below="@+id/imageView1"
+        android:layout_marginLeft="@dimen/dp_228"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="注册"
+        android:textSize="11sp"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_below="@id/iv_yuan"
+        android:textColor="@color/green2"
+        android:layout_marginLeft="@dimen/dp_109"
+        />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="完成"
+        android:textSize="11sp"
+        android:layout_marginTop="@dimen/dp_8"
+        android:layout_below="@id/iv_yuan"
+        android:textColor="@color/color_gray2"
+        android:layout_marginLeft="@dimen/dp_225"
+        />
 
     <EditText
         android:id="@+id/et_phone"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentTop="true"
-        android:layout_marginTop="@dimen/dp_220"
+        android:layout_marginTop="@dimen/dp_250"
         android:ems="10"
         android:hint="输入手机号码"
+        android:layout_alignTop="@+id/image_phone"
         android:layout_marginLeft="@dimen/dp_80"
         android:layout_marginRight="@dimen/dp_60"
+        android:background="@null"
         android:gravity="center_vertical"
         android:textSize="@dimen/sp_18"
         android:inputType="phone"
@@ -51,8 +86,8 @@
         android:id="@+id/image_phone"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        android:layout_marginTop="@dimen/dp_220"
-        android:layout_marginLeft="@dimen/dp_54"
+        android:layout_marginTop="@dimen/dp_246"
+        android:layout_marginLeft="@dimen/dp_48"
         android:scaleType="centerInside"
         android:src="@mipmap/wo3x" />
     <View
@@ -60,9 +95,9 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/et_phone"
-
-        android:layout_marginLeft="@dimen/dp_30"
-        android:layout_marginRight="@dimen/dp_30"
+        android:background="@color/color_gray2"
+        android:layout_marginLeft="@dimen/dp_49"
+        android:layout_marginRight="@dimen/dp_49"
         android:layout_marginTop="@dimen/dp_1"
         />
 
@@ -72,7 +107,7 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@+id/et_phone"
         android:layout_below="@+id/view1"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_28"
         android:background="@null"
         android:gravity="center_vertical"
         android:hint="请输入验证码"
@@ -82,9 +117,9 @@
         android:id="@+id/image_user"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        android:layout_below="@id/image_phone"
-        android:layout_marginLeft="@dimen/dp_54"
-        android:layout_marginTop="@dimen/dp_37"
+        android:layout_below="@+id/view1"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_20"
         android:scaleType="centerInside"
         android:src="@mipmap/yaoshi3x" />
 
@@ -93,7 +128,8 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/et_code"
-        android:layout_alignLeft="@+id/et_code"
+        android:background="@color/color_gray2"
+        android:layout_marginLeft="@dimen/dp_49"
         android:layout_alignRight="@id/et_code"
         android:layout_marginTop="@dimen/dp_1"
         />
@@ -103,7 +139,6 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/view1"
-
         android:layout_alignRight="@+id/et_phone"
         android:textColor="@color/holo_gray_light"
         android:layout_centerVertical="true"
@@ -123,7 +158,7 @@
         android:layout_alignRight="@+id/et_phone"
         android:layout_marginBottom="@dimen/dp_75"
         android:text="下一步"
-        android:textColor="@color/holo_green_light"
+        android:textColor="@color/green2"
         android:background="@mipmap/anniu13x"
         />
 
@@ -131,11 +166,10 @@
         android:id="@+id/et_password"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/et_phone"
-        android:layout_alignRight="@+id/et_phone"
-        android:layout_below="@id/et_code"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_below="@id/view2"
+        android:layout_marginTop="@dimen/dp_28"
         android:background="@null"
+        android:layout_marginLeft="@dimen/dp_80"
         android:textSize="@dimen/sp_18"
         android:ems="10"
         android:inputType="textPassword"
@@ -145,9 +179,9 @@
         android:id="@+id/image_pwd"
         android:layout_width="@dimen/dp_30"
         android:layout_height="@dimen/dp_30"
-        android:layout_below="@id/image_user"
-        android:layout_marginLeft="@dimen/dp_54"
-        android:layout_marginTop="@dimen/dp_18"
+        android:layout_below="@+id/view2"
+        android:layout_marginLeft="@dimen/dp_48"
+        android:layout_marginTop="@dimen/dp_25"
         android:scaleType="centerInside"
         android:src="@mipmap/suo3x" />
     <View
@@ -155,9 +189,9 @@
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
         android:layout_below="@+id/et_password"
-        android:background="@color/white"
-        android:layout_alignLeft="@+id/et_password"
-        android:layout_alignRight="@+id/et_password"
+        android:background="@color/color_gray2"
+        android:layout_marginLeft="@dimen/dp_49"
+        android:layout_marginRight="@dimen/dp_49"
         android:layout_marginTop="@dimen/dp_1"
         />
 </RelativeLayout>

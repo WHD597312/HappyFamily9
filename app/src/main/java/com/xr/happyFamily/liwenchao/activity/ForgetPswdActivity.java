@@ -26,7 +26,9 @@ public class ForgetPswdActivity extends AppCompatActivity
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgtpassword);
-
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         /*unbinder= ButterKnife.bind(this);
         if (application==null){
             application= (MyApplication) getApplication();

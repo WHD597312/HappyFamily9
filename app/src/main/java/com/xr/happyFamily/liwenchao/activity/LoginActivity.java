@@ -1,5 +1,6 @@
 package com.xr.happyFamily.liwenchao.activity;
 
+import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -26,6 +27,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
@@ -48,15 +50,18 @@ public class LoginActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-//       unbinder = ButterKnife.bind(this);
-//       imageView.setImageResource(R.mipmap.yanjing13x);
-//        preferences = getSharedPreferences("my", MODE_PRIVATE);
-//
-//        if (application == null) {
-//            application = (MyApplication) getApplication();
-//        }
-//
-//        application.addActivity(this);
+       unbinder = ButterKnife.bind(this);
+       imageView.setImageResource(R.mipmap.yanjing13x);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+
+        application.addActivity(this);
     }
 
     SharedPreferences preferences;
@@ -65,35 +70,35 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-//        if (preferences.contains("phone")){
-//            String phone = preferences.getString("phone", "");
-//            et_name.setText(phone);
-//            et_pswd.setText("");
-//        }
-//        if (preferences.contains("phone") && preferences.contains("password")) {
-//            String phone = preferences.getString("phone", "");
-//            String password = preferences.getString("password", "");
-//            et_name.setText(phone);
-//            et_pswd.setText(password);
-//        }
+        if (preferences.contains("phone")){
+            String phone = preferences.getString("phone", "");
+            et_name.setText(phone);
+            et_pswd.setText("");
+        }
+        if (preferences.contains("phone") && preferences.contains("password")) {
+            String phone = preferences.getString("phone", "");
+            String password = preferences.getString("password", "");
+            et_name.setText(phone);
+            et_pswd.setText(password);
+        }
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-//        if (preferences.contains("phone") && preferences.contains("password")){
-////            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            if (preferences.contains("login")){
-//                startActivity(new Intent(this,MainActivity.class));
-//            }
-//        }
+        if (preferences.contains("phone") && preferences.contains("password")){
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            if (preferences.contains("login")){
+                startActivity(new Intent(this,MainActivity.class));
+            }
+        }
     }
 
     @OnClick({R.id.btn_login, R.id.tv_register,R.id.tv_forget_pswd,R.id.image_seepwd ,R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(this, RegistActivity.class));
+                startActivity(new Intent(this, ChangeEquipmentActivity.class));
                 break;
             case R.id.btn_login:
                 String phone = et_name.getText().toString().trim();
@@ -105,6 +110,8 @@ public class LoginActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(password)) {
                     Utils.showToast(this, "请输入密码");
                     return;
+                }else{
+                    startActivity(new Intent(this, HomepageActivity.class));
                 }
 
                Map<String, Object> params = new HashMap<>();
@@ -113,7 +120,7 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, ForgetPswdActivity.class));
+                startActivity(new Intent(this, ManagementActivity.class));
                 break;
 
             case R.id.image_seepwd:

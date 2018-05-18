@@ -22,6 +22,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
+
         <activity android:name=".liwenchao.activity.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -31,17 +32,56 @@
         </activity>
         <activity
             android:name=".liwenchao.wxapi.WXEntryActivity"
-            android:exported="true"></activity>
-        <activity android:name=".liwenchao.activity.HomeActivity"></activity>
+            android:exported="true">
+
+        </activity>
+        <activity android:name=".liwenchao.activity.HomeActivity">
+
+        </activity>
+
+        <activity android:name=".liwenchao.activity.MenuActivity"
+        android:label="@string/app_name">
+
+        </activity>
+
+        <activity android:name=".liwenchao.activity.AddEquipmentActivity"
+
+            >
+
+        </activity>
+
+        <activity android:name=".liwenchao.activity.ManagementActivity"
+
+            >
+
+        </activity>
+        <activity android:name=".liwenchao.activity.ChangeEquipmentActivity"
+
+            >
+
+        </activity>
+
         <activity
             android:name=".liwenchao.activity.MainActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name">
+
+        </activity>
         <activity
             android:name=".liwenchao.activity.ForgetPswdActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name">
+        </activity>
+        <activity android:name=".liwenchao.activity.HomepageActivity"
+            android:label="@string/app_name"/>
         <activity
-            android:name=".liwenchao.activity.RegistActivity"
-            android:label="@null"></activity>
+        android:name=".liwenchao.activity.RegistActivity"
+        android:label="@null">
+
+        </activity>
+        <activity
+            android:name=".liwenchao.activity.ChangeRoomActivity"
+            android:label="@null">
+
+        </activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -61,6 +101,7 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
-    </application>
 
+     </application>
 </manifest>
+

@@ -22,6 +22,7 @@ import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.ZnPm25Activity;
 import com.xr.happyFamily.login.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -124,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, ManagementActivity.class));
+                startActivity(new Intent(this, ZnPm25Activity.class));
                 break;
 
             case R.id.image_seepwd:

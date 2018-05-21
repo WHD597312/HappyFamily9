@@ -38,6 +38,9 @@
         <activity android:name=".jia.HomeActivity">
 
         </activity>
+        <activity android:name=".jia.ZnPm25Activity">
+
+        </activity>
 
         <activity android:name=".jia.MenuActivity"
         android:label="@string/app_name">

@@ -17,7 +17,7 @@
         android:layout_alignParentTop="true"
         android:src="@mipmap/beijing3x"
         />
-    <com.xr.happyFamily.jia.MyGifView
+    <com.xr.happyFamily.login.login.MyGifView
         android:id="@+id/imageView6"
         android:layout_alignTop="@+id/imageView4"
         android:layout_marginLeft="@dimen/dp_75"

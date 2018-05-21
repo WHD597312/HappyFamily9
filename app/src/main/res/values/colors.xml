@@ -44,6 +44,10 @@
     <color name="green">#00ff00</color>
     <color name="green1">#01DDB1</color>
     <color name="green2">#57Cf76</color>
-
+    <color name="color_znzd">#3a3532</color>
+    <color name="color_blue_pm25">#19b5e9</color>
+    <color name="color_blue_yuan">#07eeff</color>
+    <color name="color_yellow_yuan">#fa8d07</color>
+    <color name="color_red_yuan">#d50400</color>
 
 </resources>

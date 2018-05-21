@@ -15,6 +15,7 @@
                 android:layout_height="315dp"
                 android:layout_alignParentTop="true"
                 android:src="@mipmap/mypage3x"
+                android:scaleType="centerCrop"
                 />
             <TextView
             android:id="@+id/tv_wd_my1"

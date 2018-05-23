@@ -1,6 +1,7 @@
 package com.xr.happyFamily.jia;
 
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -83,8 +84,12 @@ public class ChangeRoomActivity extends AppCompatActivity implements AdapterView
 
     @Override
     public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-        Log.i("room","-->"+position);
-        Room room=roomList.get(position);
-        Log.i("room",room.getName());
+        switch (position){
+            case 0:
+                Intent main=new Intent(ChangeRoomActivity.this,HomeActivity.class);
+        }
+
+
+
     }
 }

@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_180"
+    app:layout_behavior="@string/bottom_sheet_behavior"
+    android:background="@drawable/bg_shaped"
+    android:layout_marginLeft="@dimen/dp_12"
+    android:layout_marginRight="@dimen/dp_12"
+    android:id="@+id/bottomSheetLayout3"
+    app:behavior_hideable="true"
+    app:behavior_peekHeight="0dp"
+    >
+
+
+        <LinearLayout
+            android:id="@+id/li2_csj_db3"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_50"
+            android:orientation="horizontal"
+            >
+            <ImageView
+                android:id="@+id/iv_b3_qd"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/csj_qd3x"
+                android:paddingTop="@dimen/dp_15"
+                android:layout_weight="1"
+                />
+
+            <TextView
+                android:paddingTop="@dimen/dp_15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:textSize="18sp"
+                android:text="设定湿度"
+                android:textColor="@color/green2"/>
+            <ImageView
+                android:id="@+id/iv_b3_qx"
+                android:paddingTop="@dimen/dp_15"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/csj_qx3x"
+                android:layout_weight="1"
+                />
+        </LinearLayout>
+
+        <com.xr.happyFamily.jia.xnty.BeautySeekBarView
+            android:layout_marginTop="@dimen/dp_10"
+            android:layout_below="@+id/li2_csj_db3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+           />
+
+
+
+    </RelativeLayout>

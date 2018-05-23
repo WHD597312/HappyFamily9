@@ -20,9 +20,12 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MainActivity;
-import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.jia.ZnPm25Activity;
+import com.xr.happyFamily.jia.xnty.CsjActivity;
+import com.xr.happyFamily.jia.xnty.ZnPm25Activity;
+import com.xr.happyFamily.jia.xnty.ZnSdActivity;
+import com.xr.happyFamily.jia.xnty.ZnWdActivity;
+import com.xr.happyFamily.jia.xnty.aaa;
 import com.xr.happyFamily.login.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -103,7 +106,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(this, ChangeEquipmentActivity.class));
+                startActivity(new Intent(this, CsjActivity.class));
                 break;
             case R.id.btn_login:
                 String phone = et_name.getText().toString().trim();
@@ -125,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, ZnPm25Activity.class));
+                startActivity(new Intent(this, ZnWdActivity.class));
                 break;
 
             case R.id.image_seepwd:

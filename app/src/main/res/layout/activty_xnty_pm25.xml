@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="vertical">
 
     <com.xr.happyFamily.jia.titleview.TitleView
@@ -16,7 +17,7 @@
         <LinearLayout
             android:id="@+id/pm25_li"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_30"
             android:orientation="horizontal">
 
             <Button
@@ -25,9 +26,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
+                android:paddingRight="@dimen/dp_50"
                 android:text="温度"
                 android:textColor="@color/color_gray2"
-                android:textSize="20sp" />
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/bt_pm25_sd"
@@ -37,7 +39,7 @@
                 android:background="@null"
                 android:text="湿度"
                 android:textColor="@color/color_gray2"
-                android:textSize="20sp" />
+                android:textSize="13sp" />
 
             <Button
                 android:id="@+id/bt_pm25_pm25"
@@ -45,9 +47,10 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
+                android:paddingLeft="@dimen/dp_50"
                 android:text="PM2.5"
                 android:textColor="@color/color_blue_pm25"
-                android:textSize="20sp" />
+                android:textSize="13sp" />
 
         </LinearLayout>
 
@@ -57,22 +60,22 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/pm25_24"
             android:layout_below="@+id/pm25_li"
-            android:layout_marginLeft="@dimen/dp_100"
+            android:layout_marginLeft="@dimen/dp_115"
             android:layout_toRightOf="@+id/pm25_24"
             android:text="一般"
             android:textColor="@color/black"
-            android:textSize="25sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/pm25_24"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pm25_li"
-            android:layout_marginLeft="@dimen/dp_25"
-            android:layout_marginTop="@dimen/dp_13"
+            android:layout_marginLeft="@dimen/dp_35"
+            android:layout_marginTop="@dimen/dp_30"
             android:text="24"
             android:textColor="@color/color_gray2"
-            android:textSize="25sp" />
+            android:textSize="15sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -81,23 +84,34 @@
             android:layout_marginLeft="@dimen/dp_10"
             android:text="设定PM2.5"
             android:textColor="@color/color_gray2"
-            android:textSize="11sp" />
+            android:textSize="12sp" />
 
         <ImageView
+            android:id="@+id/pm25_d"
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_50"
-            android:layout_alignTop="@+id/tv_pm25_yb"
+            android:layout_below="@+id/pm25_li"
+            android:layout_marginTop="@dimen/dp_28"
             android:layout_marginLeft="@dimen/dp_90"
             android:layout_toRightOf="@+id/tv_pm25_yb"
-            android:src="@mipmap/pm25_pm3x" />
+           />
+        <ImageView
+            android:id="@+id/pm25_xh"
+            android:layout_width="@dimen/dp_70"
+            android:layout_height="@dimen/dp_80"
+            android:background="@color/green2"
+            android:layout_marginBottom="-20dp"
+            android:layout_toLeftOf="@+id/tv_pm25_wr"
+            android:layout_marginRight="-115dp"
+            android:layout_above="@+id/view_pm25"/>
 
         <ImageView
             android:id="@+id/iv_pm25_bj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pm25_24"
-            android:layout_marginLeft="@dimen/dp_30"
-            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginLeft="@dimen/dp_38"
+            android:layout_marginTop="@dimen/dp_25"
             android:layout_toRightOf="@id/pm25_24"
             android:scaleType="centerCrop"
             android:src="@mipmap/pm25_bj3x" />
@@ -109,8 +123,8 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/iv_pm25_bj"
             android:layout_alignTop="@+id/iv_pm25_bj"
-            android:layout_marginLeft="@dimen/dp_72"
-            android:layout_marginTop="@dimen/dp_78"
+            android:layout_marginLeft="@dimen/dp_67"
+            android:layout_marginTop="@dimen/dp_80"
             android:src="@mipmap/pm25_zd3x" />
 
         <TextView
@@ -118,8 +132,9 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/iv_pm25_zd"
             android:layout_below="@+id/tv_pm25_18"
-            android:layout_marginLeft="-10dp"
+
             android:text="当前PM2.5"
+            android:textSize="12sp"
             android:textColor="@color/color_gray2" />
 
         <TextView
@@ -128,11 +143,11 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_pm25_yb"
             android:layout_below="@+id/tv_pm25_yb"
-            android:layout_marginLeft="@dimen/dp_18"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginLeft="@dimen/dp_6"
+            android:layout_marginTop="@dimen/dp_50"
             android:text="18"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="18sp" />
 
         <TextView
             android:id="@+id/tv_pm25_1"
@@ -370,23 +385,23 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_pm25_bj"
-            android:layout_marginRight="@dimen/dp_170"
+            android:layout_marginRight="@dimen/dp_185"
             android:layout_marginTop="-10dp"
             android:layout_toLeftOf="@+id/tv_pm25_fc"
             android:text="污染"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="14sp" />
 
         <TextView
             android:id="@+id/tv_pm25_fc"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tv_pm25_wr"
-            android:layout_marginLeft="-90dp"
+            android:layout_marginLeft="-85dp"
             android:layout_toRightOf="@+id/iv_pm25_bj"
             android:text="非常好"
             android:textColor="@color/black"
-            android:textSize="20sp"
+            android:textSize="14sp"
 
 
             />
@@ -410,7 +425,7 @@
             android:text="智能净化空气"
             android:textColor="@color/color_gray2" />
 
-        <com.xr.happyFamily.jia.Pm25GifView
+        <com.xr.happyFamily.jia.xnty.Pm25GifView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_pm25"

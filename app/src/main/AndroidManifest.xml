@@ -38,12 +38,27 @@
         <activity android:name=".jia.HomeActivity">
 
         </activity>
-        <activity android:name=".jia.ZnPm25Activity">
+        <activity android:name=".jia.xnty.ZnPm25Activity">
 
         </activity>
+        <activity android:name=".jia.xnty.ZnSdActivity">
 
-        <activity android:name=".jia.MenuActivity"
-        android:label="@string/app_name">
+        </activity>
+        <activity android:name=".jia.xnty.aaa">
+
+        </activity>
+        <activity
+            android:name=".jia.xnty.CsjActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <activity android:name=".jia.xnty.ZnWdActivity">
+
+        </activity>
+        <activity
+            android:name=".jia.MenuActivity"
+            android:label="@string/app_name">
 
         </activity>
 
@@ -60,9 +75,9 @@
         </activity>
         <activity android:name=".jia.ChangeEquipmentActivity"
 
-        >
+            >
 
-    </activity>
+        </activity>
         <activity android:name=".jia.ZixingAddActivity"
 
             >
@@ -76,13 +91,13 @@
         </activity>
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
-            android:label="@string/app_name">
-        </activity>
-        <activity android:name=".jia.HomepageActivity"
-            android:label="@string/app_name"/>
+            android:label="@string/app_name"></activity>
         <activity
-        android:name=".login.rigest.RegistActivity"
-        android:label="@null">
+            android:name=".jia.HomepageActivity"
+            android:label="@string/app_name" />
+        <activity
+            android:name=".login.rigest.RegistActivity"
+            android:label="@null">
 
         </activity>
         <activity
@@ -110,6 +125,6 @@
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
 
-     </application>
+    </application>
 </manifest>
 

@@ -44,6 +44,8 @@
     <color name="green">#00ff00</color>
     <color name="green1">#01DDB1</color>
     <color name="green2">#57Cf76</color>
-
-
+    <color name="green3">#4FBA72</color>
+    <color name="shop_title">#808080</color>
+    <color name="shop_context">#696969</color>
+    <color name="shop_price">#EE7B2E</color>
 </resources>

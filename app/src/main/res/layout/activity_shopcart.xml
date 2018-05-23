@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+    <include
+    layout="@layout/title_shop" />
+
+    <RelativeLayout
+        android:id="@+id/rl_shopcart_have"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv_shopcart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                ></android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="50dp">
+            </View>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:id="@+id/ll_pay"
+            android:layout_alignParentBottom="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_shopcart_addselect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:drawableLeft="@mipmap/xuanzhong_shop3x"
+                android:text="全选"
+                android:drawablePadding="5dp"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:paddingRight="10dp"
+                >
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="33dp"
+                    android:text="合计"
+                    android:textColor="@color/shop_context"
+                    android:textSize="14sp"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_shopcart_totalprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="10dp"
+                    android:text="¥ 0.00"
+                    android:textColor="@color/shop_price"
+                    android:textSize="14sp"
+                    />
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_shopcart_submit"
+                android:layout_width="108.5dp"
+                android:layout_height="48.5dp"
+                android:background="@color/shop_price"
+                android:gravity="center"
+                android:text="去结算"
+                android:textColor="#ffffff"
+
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

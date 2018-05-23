@@ -1,0 +1,145 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="#eeeeee"
+    android:orientation="vertical">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+
+        <LinearLayout
+            android:layout_marginTop="10dp"
+            android:layout_width="match_parent"
+            android:layout_height="107dp"
+            android:orientation="vertical"
+            android:background="@color/white"
+            android:elevation="10dp">
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="107dp"
+                android:paddingLeft="13dp"
+                android:paddingRight="14dp">
+
+
+                <ImageView
+                    android:id="@+id/radio_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/xuanzhong_shop3x" />
+
+                <ImageView
+                    android:id="@+id/img_shop_pic"
+                    android:layout_width="87.5dp"
+                    android:layout_height="87.5dp"
+                    android:layout_marginLeft="12dp"
+                   android:layout_centerVertical="true"
+                    android:background="#000000"
+                    android:layout_toRightOf="@+id/radio_shop" />
+
+                <TextView
+                    android:id="@+id/tv_shop_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp"
+                    android:layout_alignTop="@+id/img_shop_pic"
+                    android:layout_toRightOf="@+id/img_shop_pic"
+                    android:text="电暖气  银色"
+                    android:textColor="@color/shop_context"
+                    android:textSize="12sp" />
+
+                <TextView
+                    android:id="@+id/tv_shop_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp"
+                    android:layout_below="@+id/tv_shop_name"
+                    android:layout_marginTop="1dp"
+                    android:layout_toRightOf="@+id/img_shop_pic"
+                    android:text="对流式加热，通电即热，无感静音，双重安装保护33333333333"
+                    android:textColor="#A5A5A5"
+                    android:textSize="10sp" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/img_shop_pic"
+                    android:orientation="horizontal"
+                    android:layout_alignLeft="@+id/tv_shop_type">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¥"
+                        android:textColor="@color/shop_price"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:text="2500"
+                        android:textColor="@color/shop_price"
+                        android:textSize="12sp" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="20dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_alignBottom="@+id/img_shop_pic">
+
+                    <TextView
+                        android:id="@+id/tv_shop_reduce"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/text_shopcar_main"
+                        android:gravity="center"
+                        android:text="—"
+                        android:textColor="@color/shop_title"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_num"
+                        android:layout_width="31dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/text_shopcar_main_no"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/shop_title"
+                        android:textSize="12sp" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_add"
+                        android:layout_width="20dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_shopcar_main"
+                        android:gravity="center"
+                        android:text="+"
+                        android:textColor="@color/shop_title"
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

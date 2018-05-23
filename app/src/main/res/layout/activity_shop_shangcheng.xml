@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_shop" />
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+
+
+    <TextView
+        android:id="@+id/tv_address"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/ic_shangcheng_dingwei"
+        android:drawablePadding="9dp"
+        android:drawableRight="@mipmap/ic_shangcheng_xiala"
+        android:padding="12dp"
+        android:text="收货地址"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+
+    <include layout="@layout/cutline" />
+
+
+    <TextView
+        android:id="@+id/tv_shouhou"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/ic_shangcheng_shouhou"
+        android:drawablePadding="9dp"
+        android:drawableRight="@mipmap/ic_shangcheng_xiala"
+        android:padding="12dp"
+        android:text="售后服务"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <include layout="@layout/cutline" />
+
+
+    <TextView
+        android:id="@+id/tv_guanyu"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:drawableLeft="@mipmap/ic_shangcheng_guanyu"
+        android:drawablePadding="5dp"
+        android:drawableRight="@mipmap/ic_shangcheng_xiala"
+        android:padding="12dp"
+        android:text="关于商城"
+        android:textColor="@color/black"
+        android:textSize="12sp" />
+
+    <include layout="@layout/cutline" />
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+
+
+</LinearLayout>

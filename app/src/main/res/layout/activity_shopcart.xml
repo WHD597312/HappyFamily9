@@ -6,6 +6,9 @@
 
     <include
     layout="@layout/title_shop" />
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_height="3dp"
+        android:layout_width="match_parent"/>
 
     <RelativeLayout
         android:id="@+id/rl_shopcart_have"
@@ -91,7 +94,7 @@
                 android:layout_height="48.5dp"
                 android:background="@color/shop_price"
                 android:gravity="center"
-                android:text="去结算"
+                android:text="狠心买"
                 android:textColor="#ffffff"
 
                 />

@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@mipmap/bg_pop_shopcart">
+        <View
+            android:layout_width="1dp"
+            android:layout_height="10dp"/>
+
+
+        <TextView
+            android:id="@+id/tv_shopcart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="11dp"
+            android:drawableLeft="@mipmap/ic_pop_gouwu"
+            android:textSize="12sp"
+            android:drawablePadding="18dp"
+            android:text="购物车"/>
+
+        <TextView
+            android:id="@+id/tv_dingdan"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"
+            android:drawableLeft="@mipmap/ic_pop_dingdan"
+            android:textSize="12sp"
+            android:drawablePadding="18dp"
+            android:text="我的订单"/>
+
+        <TextView
+            android:id="@+id/tv_shangcheng"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="18dp"
+            android:drawableLeft="@mipmap/ic_pop_shangcheng"
+            android:textSize="12sp"
+            android:drawablePadding="18dp"
+            android:text="商城中心"/>
+
+
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+

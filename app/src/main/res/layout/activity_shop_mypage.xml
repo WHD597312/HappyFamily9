@@ -27,12 +27,13 @@
                 android:padding="4dp"
                 android:src="@mipmap/sousuo2x" />
 
-            <EditText
+            <TextView
+                android:id="@+id/tv_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:layout_marginLeft="5dp"
-                android:background="@null"
-                android:hint="搜索"
+                android:text="搜索"
+                android:gravity="center_vertical"
                 android:textSize="12sp" />
 
         </LinearLayout>
@@ -43,7 +44,7 @@
             android:layout_height="16dp"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="5dp"
+            android:layout_marginRight="12dp"
             android:src="@mipmap/gengduo2x" />
 
     </RelativeLayout>
@@ -224,6 +225,14 @@
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_height="3dp"
         android:layout_width="match_parent"/>
+
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/home_recycle"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#10000000">
+
+    </android.support.v7.widget.RecyclerView>
 
     <ImageView
         android:layout_width="match_parent"

@@ -88,24 +88,16 @@
             android:label="@null">
 
         </activity>
-
-        <activity android:name=".bao.ShoppageActivity"
-
-            >
-
-        </activity>
-
-        <activity android:name=".bao.ShopCartActivity"
-
-            >
-
-        </activity>
-        <activity
-            android:name=".bao.TestActivity"
-
-            >
-
-        </activity>
+        <activity android:name=".bao.ShoppageActivity"></activity>
+        <activity android:name=".bao.ShopCartActivity"></activity>
+        <activity android:name=".bao.TestActivity"></activity>
+        <activity android:name=".bao.WuLiuActivity"></activity>
+        <activity android:name=".bao.ShopAddressActivity"></activity>
+        <activity android:name=".bao.ShopAddAddressActivity"></activity>
+        <activity android:name=".bao.ShopConfActivity"></activity>
+        <activity android:name=".bao.ShopDingdanActivity"></activity>
+        <activity android:name=".bao.ShopSearchActivity"></activity>
+        <activity android:name=".bao.ShopShangchengActivity"></activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

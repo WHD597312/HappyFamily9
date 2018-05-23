@@ -1,19 +1,14 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
-import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShopCartActivity;
-import com.xr.happyFamily.bean.ShopCartBean;
 
 import java.util.List;
 import java.util.Map;
@@ -55,7 +50,7 @@ public class TimeLineAdapter extends BaseAdapter {
         TimeLineHolder viewHolder = null;
         if (convertView == null) {
             inflater = LayoutInflater.from(parent.getContext());
-            convertView = inflater.inflate(R.layout.item_logistics, null);
+            convertView = inflater.inflate(R.layout.item_wuliu, null);
             viewHolder = new TimeLineHolder();
 
             viewHolder.title = (TextView) convertView.findViewById(R.id.title);

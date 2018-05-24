@@ -1,12 +1,16 @@
 package com.xr.happyFamily.bao;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 
@@ -37,8 +41,8 @@ public class ShopSearchActivity extends AppCompatActivity {
 
     private String[] from = {"title"};
     private int[] to = {R.id.tv_search};
-
-
+    String[] titles = new String[]{"电暖器", "空调", "智能传感器", "净水器", "除尘机"};
+    String[] titles2 = new String[]{"电暖器2", "空调2", "智能传感器2", "净水器2", "除尘机2"};
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +57,29 @@ public class ShopSearchActivity extends AppCompatActivity {
                 R.layout.item_search, from, to);
         gvHot.setAdapter(searchAdapter_hot);
         gvHistory.setAdapter(searchAdapter_his);
+
+        gvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("qqqqqqqqqqqq",titles[position]);
+                Toast.makeText(ShopSearchActivity.this, "i am:"+titles2[position], Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShopSearchActivity.this,ShopSearchResultActivity.class));
+            }
+
+        });
+
+        gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.e("qqqqqqqqqqqq",titles[position]);
+                Toast.makeText(ShopSearchActivity.this, "i am:"+titles[position], Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShopSearchActivity.this,ShopSearchResultActivity.class));
+            }
+
+        });
+
+
+
     }
 
 
@@ -60,6 +87,7 @@ public class ShopSearchActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
+                finish();
                 break;
             case R.id.title_rightText:
                 break;
@@ -71,7 +99,7 @@ public class ShopSearchActivity extends AppCompatActivity {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = null;
 
-        String[] titles = new String[]{"电暖器", "空调", "智能传感器", "净水器", "除尘机"};
+
         for (int i = 0; i < 5; i++) {
             map = new HashMap<String, Object>();
             map.put("title", titles[i]);
@@ -84,10 +112,10 @@ public class ShopSearchActivity extends AppCompatActivity {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = null;
 
-        String[] titles = new String[]{"电暖器2", "空调2", "智能传感器2", "净水器2", "除尘机2"};
+
         for (int i = 0; i < 5; i++) {
             map = new HashMap<String, Object>();
-            map.put("title", titles[i]);
+            map.put("title", titles2[i]);
             list.add(map);
         }
         return list;

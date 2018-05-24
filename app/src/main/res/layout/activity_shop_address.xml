@@ -6,7 +6,7 @@
     <include
     layout="@layout/title_shop" />
     <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="3dp"
+        android:layout_height="@dimen/dp_3"
         android:layout_width="match_parent"/>
 
     <android.support.v7.widget.RecyclerView
@@ -21,9 +21,9 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:gravity="bottom"
-        android:paddingBottom="15dp"
-        android:paddingRight="12dp"
-        android:paddingLeft="12dp">
+        android:paddingBottom="@dimen/dp_15"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_12">
         <ImageView
             android:id="@+id/img_add"
             android:layout_width="wrap_content"

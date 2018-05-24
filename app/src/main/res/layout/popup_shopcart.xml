@@ -11,8 +11,8 @@
         android:orientation="vertical"
         android:background="@mipmap/bg_pop_shopcart">
         <View
-            android:layout_width="1dp"
-            android:layout_height="10dp"/>
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_10"/>
 
 
         <TextView
@@ -22,10 +22,10 @@
             android:layout_weight="1"
             android:textColor="@color/white"
             android:gravity="center_vertical"
-            android:paddingLeft="11dp"
+            android:paddingLeft="@dimen/dp_11"
             android:drawableLeft="@mipmap/ic_pop_gouwu"
-            android:textSize="12sp"
-            android:drawablePadding="18dp"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
             android:text="购物车"/>
 
         <TextView
@@ -35,10 +35,10 @@
             android:layout_weight="1"
             android:textColor="@color/white"
             android:gravity="center_vertical"
-            android:paddingLeft="18dp"
+            android:paddingLeft="@dimen/dp_18"
             android:drawableLeft="@mipmap/ic_pop_dingdan"
-            android:textSize="12sp"
-            android:drawablePadding="18dp"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
             android:text="我的订单"/>
 
         <TextView
@@ -48,10 +48,10 @@
             android:layout_weight="1"
             android:textColor="@color/white"
             android:gravity="center_vertical"
-            android:paddingLeft="18dp"
+            android:paddingLeft="@dimen/dp_18"
             android:drawableLeft="@mipmap/ic_pop_shangcheng"
-            android:textSize="12sp"
-            android:drawablePadding="18dp"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
             android:text="商城中心"/>
 
 

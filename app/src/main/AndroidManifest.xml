@@ -24,11 +24,7 @@
         android:theme="@style/AppTheme">
 
         <activity android:name=".login.login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".login.wxapi.WXEntryActivity"
@@ -88,9 +84,17 @@
             android:label="@null">
 
         </activity>
-        <activity android:name=".bao.ShoppageActivity"></activity>
+        <activity android:name=".bao.TestActivity">
+
+        </activity>
+        <activity android:name=".bao.ShoppageActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
         <activity android:name=".bao.ShopCartActivity"></activity>
-        <activity android:name=".bao.TestActivity"></activity>
         <activity android:name=".bao.WuLiuActivity"></activity>
         <activity android:name=".bao.ShopAddressActivity"></activity>
         <activity android:name=".bao.ShopAddAddressActivity"></activity>
@@ -98,6 +102,8 @@
         <activity android:name=".bao.ShopDingdanActivity"></activity>
         <activity android:name=".bao.ShopSearchActivity"></activity>
         <activity android:name=".bao.ShopShangchengActivity"></activity>
+        <activity android:name=".bao.ShopDingdanXQActivity"></activity>
+        <activity android:name=".bao.ShopSearchResultActivity"></activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

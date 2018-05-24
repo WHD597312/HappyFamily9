@@ -7,39 +7,39 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="50dp"
+        android:layout_height="@dimen/dp_44"
         android:background="@color/white">
         <!--商城右边有字时的标题-->
         <ImageView
             android:id="@+id/back"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:padding="10dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_centerVertical="true"
-            android:src="@mipmap/fanhui3x"/>
+            android:src="@mipmap/fanhui3x"
+            android:padding="@dimen/dp_12"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginRight="55dp"
+            android:layout_height="@dimen/dp_28"
+            android:layout_marginLeft="@dimen/dp_55"
+            android:layout_marginRight="@dimen/dp_55"
             android:layout_centerInParent="true"
             android:background="@drawable/bg_shape_hui">
 
             <ImageView
-                android:layout_width="28dp"
+                android:layout_width="@dimen/dp_28"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:padding="4dp"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_4"
                 android:src="@mipmap/sousuo2x" />
 
             <EditText
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
+                android:layout_marginLeft="@dimen/dp_5"
                 android:background="@null"
                 android:hint="搜索"
-                android:textSize="12sp" />
+                android:textSize="@dimen/sp_12" />
 
         </LinearLayout>
 
@@ -50,16 +50,16 @@
             android:layout_centerInParent="true"
             android:text="搜索"
             android:layout_alignParentRight="true"
-            android:padding="10dp"
+            android:padding="@dimen/dp_10"
             android:textColor="@color/shop_title"
-            android:textSize="18sp" />
+            android:textSize="@dimen/sp_18" />
 
     </RelativeLayout>
 
 
 
     <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="3dp"
+        android:layout_height="@dimen/dp_3"
         android:layout_width="match_parent"/>
 
     <LinearLayout
@@ -67,15 +67,15 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:padding="12dp">
+        android:layout_marginTop="@dimen/dp_10"
+        android:padding="@dimen/dp_12">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="@dimen/sp_14"
             android:drawableLeft="@mipmap/remen2x"
-            android:drawablePadding="3dp"
+            android:drawablePadding="@dimen/dp_3"
             android:text="热门搜索"
             android:textColor="@color/shop_context"
 
@@ -83,25 +83,25 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="7sp"
-            android:textColor="@color/green2"
-            android:layout_marginLeft="15dp"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#851BAE59"
+            android:layout_marginLeft="@dimen/dp_15"
             android:text="TOP SEARCH"/>
 
         <GridView
+            android:listSelector="@android:color/transparent"
             android:id="@+id/gv_hot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:gravity="center"
-            android:horizontalSpacing="5dp"
             android:numColumns="4"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="20dp"></GridView>
+            android:verticalSpacing="@dimen/dp_20"></GridView>
     </LinearLayout>
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="3dp" />
+        android:layout_height="@dimen/dp_3" />
 
 
     <LinearLayout
@@ -109,15 +109,15 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:layout_marginTop="10dp"
-        android:padding="12dp">
+        android:layout_marginTop="@dimen/dp_10"
+        android:padding="@dimen/dp_12">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="12sp"
+            android:textSize="@dimen/sp_12"
             android:drawableLeft="@mipmap/shijian3x"
-            android:drawablePadding="3dp"
+            android:drawablePadding="@dimen/dp_3"
             android:text="历史搜索"
             android:textColor="@color/shop_context"
 
@@ -125,31 +125,31 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="7sp"
-            android:textColor="@color/green2"
-            android:layout_marginLeft="15dp"
+            android:textSize="@dimen/sp_12"
+            android:textColor="#851BAE59"
+            android:layout_marginLeft="@dimen/dp_15"
             android:text="TOP SEARCH"/>
 
         <GridView
+            android:listSelector="@android:color/transparent"
             android:id="@+id/gv_history"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="@dimen/dp_20"
             android:gravity="center"
-            android:horizontalSpacing="5dp"
             android:numColumns="4"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="20dp"></GridView>
+            android:verticalSpacing="@dimen/dp_20"></GridView>
 
         <ImageView
             android:id="@+id/img_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="@dimen/dp_10"
             android:src="@mipmap/qingkong3x"/>
     </LinearLayout>
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="3dp" />
+        android:layout_height="@dimen/dp_3" />
 
 </LinearLayout>

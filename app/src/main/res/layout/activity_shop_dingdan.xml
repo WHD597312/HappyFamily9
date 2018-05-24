@@ -21,17 +21,17 @@
                 android:id="@+id/tv1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/sp_12"
                 android:textColor="@color/green3"
                 android:text="全部"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"/>
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_2"/>
             <View
                 android:id="@+id/view1"
                 android:layout_width="wrap_content"
-                android:layout_height="3dp"
+                android:layout_height="@dimen/dp_3"
                 android:layout_alignLeft="@id/tv1"
                 android:layout_alignRight="@id/tv1"
                 android:background="@color/green3"
@@ -40,10 +40,10 @@
         </RelativeLayout>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="8dp"
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_8"
             android:background="@color/shop_context"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="@dimen/dp_15"/>
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -53,18 +53,18 @@
                 android:id="@+id/tv2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/sp_12"
                 android:textColor="@color/black"
                 android:text="待付款"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"/>
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_2"/>
             <View
                 android:visibility="gone"
                 android:id="@+id/view2"
                 android:layout_width="wrap_content"
-                android:layout_height="3dp"
+                android:layout_height="@dimen/dp_3"
                 android:layout_alignLeft="@id/tv2"
                 android:layout_alignRight="@id/tv2"
                 android:background="@color/green3"
@@ -73,10 +73,10 @@
         </RelativeLayout>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="8dp"
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_8"
             android:background="@color/shop_context"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="@dimen/dp_15"/>
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -86,18 +86,18 @@
                 android:id="@+id/tv3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/sp_12"
                 android:textColor="@color/black"
                 android:text="待收货"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"/>
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_2"/>
             <View
                 android:visibility="gone"
                 android:id="@+id/view3"
                 android:layout_width="wrap_content"
-                android:layout_height="3dp"
+                android:layout_height="@dimen/dp_3"
                 android:layout_alignLeft="@id/tv3"
                 android:layout_alignRight="@id/tv3"
                 android:background="@color/green3"
@@ -106,10 +106,10 @@
         </RelativeLayout>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="8dp"
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_8"
             android:background="@color/shop_context"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="@dimen/dp_15"/>
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -119,18 +119,18 @@
                 android:id="@+id/tv4"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:textSize="12sp"
+                android:textSize="@dimen/sp_12"
                 android:textColor="@color/black"
                 android:text="待评价"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"/>
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_2"/>
             <View
                 android:visibility="gone"
                 android:id="@+id/view4"
                 android:layout_width="wrap_content"
-                android:layout_height="3dp"
+                android:layout_height="@dimen/dp_3"
                 android:layout_alignLeft="@id/tv4"
                 android:layout_alignRight="@id/tv4"
                 android:background="@color/green3"
@@ -139,10 +139,10 @@
         </RelativeLayout>
 
         <View
-            android:layout_width="1dp"
-            android:layout_height="8dp"
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_8"
             android:background="@color/shop_context"
-            android:layout_marginTop="15dp"/>
+            android:layout_marginTop="@dimen/dp_15"/>
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -155,15 +155,15 @@
                 android:textSize="12sp"
                 android:textColor="@color/black"
                 android:text="退款/售后"
-                android:paddingTop="10dp"
-                android:paddingBottom="10dp"
-                android:paddingLeft="2dp"
-                android:paddingRight="2dp"/>
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:paddingLeft="@dimen/dp_2"
+                android:paddingRight="@dimen/dp_2"/>
             <View
                 android:id="@+id/view5"
                 android:visibility="gone"
                 android:layout_width="wrap_content"
-                android:layout_height="3dp"
+                android:layout_height="@dimen/dp_3"
                 android:layout_alignLeft="@id/tv5"
                 android:layout_alignRight="@id/tv5"
                 android:background="@color/green3"
@@ -174,7 +174,7 @@
     </LinearLayout>
 
     <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="3dp"
+        android:layout_height="@dimen/dp_3"
         android:layout_width="match_parent"/>
 
     <android.support.v7.widget.RecyclerView

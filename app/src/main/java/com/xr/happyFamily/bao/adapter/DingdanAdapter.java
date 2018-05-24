@@ -1,16 +1,20 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.ShopDingdanActivity;
+import com.xr.happyFamily.bao.ShopDingdanXQActivity;
 
 import java.util.ArrayList;
 
@@ -70,6 +74,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
         holder.img_del.setOnClickListener(this);
         holder.img_chakan.setOnClickListener(this);
         holder.img_queren.setOnClickListener(this);
+        holder.rl_dd.setOnClickListener(this);
     }
 
     @Override
@@ -83,6 +88,14 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                 break;
             case R.id.img_queren:
                 Toast.makeText(context,"确认",Toast.LENGTH_SHORT).show();
+                break;
+            case R.id.rl_dingdan:
+                MyViewHolder tag = (MyViewHolder)v.getTag();
+                Intent intent  = new Intent(v.getContext(),ShopDingdanXQActivity.class);
+//                intent.putExtra("argCon",tag.argCon);
+//                intent.putExtra("argName",tag.argName);
+//                intent.putExtra("argValue",tag.argValue);
+                v.getContext().startActivity(intent);
                 break;
         }
     }
@@ -100,6 +113,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
 
         ImageView img_del,img_chakan,img_queren;
         TextView tv_shop_price,tv_shop_name,tv_shop_type,tv_shop_num;
+        RelativeLayout rl_dd;
 
         public MyViewHolder(View view) {
             super(view);
@@ -110,6 +124,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             tv_shop_type= (TextView) view.findViewById(R.id.tv_shop_type);
             tv_shop_price= (TextView) view.findViewById(R.id.tv_shop_price);
             tv_shop_num= (TextView) view.findViewById(R.id.tv_shop_num);
+            rl_dd= (RelativeLayout) view.findViewById(R.id.rl_dingdan);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

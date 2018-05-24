@@ -2,281 +2,304 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
->
+    android:orientation="vertical">
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="28dp"
-        android:background="@color/white"
-        android:layout_marginTop="4dp">
+        android:layout_height="@dimen/dp_44"
+        android:layout_marginTop="@dimen/dp_4"
+
+        android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="28dp"
-            android:layout_marginLeft="55dp"
-            android:layout_marginRight="55dp"
-
+            android:layout_height="@dimen/dp_28"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_55"
+            android:layout_marginRight="@dimen/dp_55"
             android:background="@drawable/bg_shape_hui">
 
             <ImageView
                 android:id="@+id/image_search"
-                android:layout_width="28dp"
+                android:layout_width="@dimen/dp_28"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:padding="4dp"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:padding="@dimen/dp_4"
                 android:src="@mipmap/sousuo2x" />
 
             <TextView
                 android:id="@+id/tv_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="5dp"
-                android:text="搜索"
+                android:layout_marginLeft="@dimen/dp_5"
                 android:gravity="center_vertical"
-                android:textSize="12sp" />
+                android:text="搜索"
+                android:textSize="@dimen/sp_12" />
 
         </LinearLayout>
 
         <ImageView
             android:id="@+id/image_more"
-            android:layout_width="16dp"
-            android:layout_height="16dp"
+            android:layout_width="@dimen/dp_28"
+            android:layout_height="@dimen/dp_28"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:layout_marginRight="12dp"
+            android:layout_marginRight="@dimen/dp_12"
+            android:padding="@dimen/dp_6"
             android:src="@mipmap/gengduo2x" />
 
     </RelativeLayout>
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_44"
         android:background="@color/white"
-        android:paddingTop="10dp"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp">
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12">
 
 
         <HorizontalScrollView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginRight="18dp"
-            android:scrollbars="none"
-            >
+            android:layout_height="match_parent"
+            android:layout_alignParentBottom="true"
+            android:layout_marginRight="@dimen/dp_18"
+            android:scrollbars="none">
 
             <LinearLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
                 android:orientation="horizontal">
 
-                <LinearLayout
-                    android:id="@+id/ll1"
+                <RelativeLayout
+                    android:id="@+id/rl_tuijian"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:text="推荐"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/sp_12" />
 
                     <ImageView
-                        android:id="@+id/img1"
-                        android:layout_width="30dp"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/img_tuijian"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_4"
+                        android:layout_alignParentBottom="true"
                         android:src="@mipmap/xuanzhong2x" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll2"
+                <RelativeLayout
+                    android:id="@+id/rl_dian"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="37dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_37">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:text="电暖器"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/sp_12" />
 
                     <ImageView
-                        android:id="@+id/img2"
-                        android:layout_width="30dp"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/img_dian"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_4"
+                        android:layout_alignParentBottom="true"
                         android:src="@mipmap/xuanzhong2x"
                         android:visibility="gone" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll3"
+                <RelativeLayout
+                    android:id="@+id/rl_kong"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="37dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_37">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:text="空调"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/sp_12" />
 
                     <ImageView
-                        android:id="@+id/img3"
-                        android:layout_width="30dp"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/img_kong"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_4"
+                        android:layout_alignParentBottom="true"
                         android:src="@mipmap/xuanzhong2x"
                         android:visibility="gone" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll4"
+                <RelativeLayout
+                    android:id="@+id/rl_chu"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="37dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_37">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:text="除湿机"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/sp_12" />
 
                     <ImageView
-                        android:id="@+id/img4"
-                        android:layout_width="30dp"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/img_chu"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_4"
+                        android:layout_alignParentBottom="true"
                         android:src="@mipmap/xuanzhong2x"
                         android:visibility="gone" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll5"
+                <RelativeLayout
+                    android:id="@+id/rl_jing"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="37dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_37">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:text="净水器"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/sp_12" />
 
                     <ImageView
-                        android:id="@+id/img5"
-                        android:layout_width="30dp"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/img_jing"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_4"
+                        android:layout_alignParentBottom="true"
                         android:src="@mipmap/xuanzhong2x"
                         android:visibility="gone" />
-                </LinearLayout>
+                </RelativeLayout>
 
-                <LinearLayout
-                    android:id="@+id/ll6"
+                <RelativeLayout
+                    android:id="@+id/rl_chuan"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="37dp"
-                    android:gravity="center"
-                    android:orientation="vertical">
+                    android:layout_height="match_parent"
+                    android:layout_marginLeft="@dimen/dp_37">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
                         android:text="智能传感器"
                         android:textColor="@color/black"
-                        android:textSize="12sp" />
+                        android:textSize="@dimen/sp_12" />
 
                     <ImageView
-                        android:id="@+id/img6"
-                        android:layout_width="30dp"
-                        android:layout_height="4dp"
-                        android:layout_marginTop="5dp"
+                        android:id="@+id/img_chuan"
+                        android:layout_width="@dimen/dp_30"
+                        android:layout_height="@dimen/dp_4"
+                        android:layout_alignParentBottom="true"
                         android:src="@mipmap/xuanzhong2x"
                         android:visibility="gone" />
-                </LinearLayout>
+                </RelativeLayout>
             </LinearLayout>
         </HorizontalScrollView>
 
         <ImageView
-            android:layout_width="15dp"
-            android:layout_height="10dp"
+            android:id="@+id/img_more"
+            android:layout_width="@dimen/dp_15"
+            android:layout_height="@dimen/dp_10"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:background="@mipmap/xiala2x" />
     </RelativeLayout>
 
-    <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="3dp"
-        android:layout_width="match_parent"/>
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/home_recycle"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:background="#10000000">
 
-    </android.support.v7.widget.RecyclerView>
 
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="125dp"
-        android:src="@mipmap/banner_shop3x"
-        android:layout_marginTop="30dp"/>
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:gravity="center">
-        <View
-            android:layout_width="30dp"
-            android:layout_height="1dp"
-            android:background="@color/shop_context"/>
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="推荐"
-            android:paddingRight="5dp"
-            android:paddingLeft="5dp"
-            android:textColor="@color/black"/>
-        <View
-            android:layout_width="30dp"
-            android:layout_height="1dp"
-            android:background="@color/shop_context"/>
-    </LinearLayout>
-
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="15dp"
-        >
-
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
+        <LinearLayout
+            android:id="@+id/ll_data"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:scrollbars="none"
-            ></android.support.v7.widget.RecyclerView>
+            android:orientation="vertical">
+
+            <com.xr.happyFamily.bao.view.LinearGradientView
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_3" />
+
+
+            <include layout="@layout/shop_banner" />
+
+            <LinearLayout
+
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_25"
+                android:gravity="center"
+                android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/shop_context" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:paddingLeft="@dimen/dp_5"
+                    android:paddingRight="@dimen/dp_5"
+                    android:text="推荐"
+                    android:textColor="@color/black" />
+
+                <View
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_1"
+                    android:background="@color/shop_context" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_15">
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recyclerview"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+            </RelativeLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_nodata"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="gone">
+
+            <GridView
+                android:id="@+id/gv_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@color/white"
+                android:gravity="center"
+                android:listSelector="@android:color/transparent"
+                android:numColumns="4"
+                android:paddingTop="@dimen/dp_10"
+                android:paddingBottom="@dimen/dp_10"
+                android:stretchMode="columnWidth"
+                android:verticalSpacing="@dimen/dp_20"></GridView>
+
+
+        </LinearLayout>
     </RelativeLayout>
-
-
 </LinearLayout>
 
 

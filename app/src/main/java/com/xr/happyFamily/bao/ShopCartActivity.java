@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -100,10 +101,10 @@ public class ShopCartActivity extends AppCompatActivity {
             public void onResfresh(boolean isSelect) {
                 mSelect = isSelect;
                 if (isSelect) {
-                    Drawable left = getResources().getDrawable(R.mipmap.xuanzhong_shop3x);
+                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.xuanzhong_shop3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                 } else {
-                    Drawable left = getResources().getDrawable(R.mipmap.weixuanzhong3x);
+                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.weixuanzhong3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                 }
                 float mTotalPrice = 0;
@@ -127,14 +128,14 @@ public class ShopCartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mSelect = !mSelect;
                 if (mSelect) {
-                    Drawable left = getResources().getDrawable(R.mipmap.xuanzhong_shop3x);
+                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.xuanzhong_shop3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                     for (int i = 0; i < mAllOrderList.size(); i++) {
                         mAllOrderList.get(i).setSelect(true);
                         mAllOrderList.get(i).setShopSelect(true);
                     }
                 } else {
-                    Drawable left = getResources().getDrawable(R.mipmap.weixuanzhong3x);
+                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.weixuanzhong3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                     for (int i = 0; i < mAllOrderList.size(); i++) {
                         mAllOrderList.get(i).setSelect(false);

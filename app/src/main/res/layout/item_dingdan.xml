@@ -9,52 +9,47 @@
 
 
 
-    <LinearLayout
-
+    <RelativeLayout
+        android:id="@+id/rl_dingdan"
         android:layout_width="match_parent"
-        android:layout_height="107dp"
-        android:layout_marginTop="10dp"
-        android:background="@color/white"
-        android:orientation="vertical">
+        android:layout_height="@dimen/dp_107"
+        android:paddingLeft="@dimen/dp_13"
+        android:paddingRight="@dimen/dp_14"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white">
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:paddingLeft="13dp"
-            android:paddingRight="14dp">
 
-
-            <ImageView
+    <ImageView
                 android:id="@+id/img_shop_pic"
-                android:layout_width="87.5dp"
-                android:layout_height="87.5dp"
+                android:layout_width="@dimen/dp_88"
+                android:layout_height="@dimen/dp_88"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="12dp"
+
                 android:layout_toRightOf="@+id/radio_shop"
-                android:background="#000000" />
+                android:src="@mipmap/chanpin2"/>
 
             <TextView
                 android:id="@+id/tv_shop_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/img_shop_pic"
-                android:layout_marginLeft="17dp"
+                android:layout_marginLeft="@dimen/dp_17"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="电暖气  银色"
                 android:textColor="@color/shop_context"
-                android:textSize="14sp" />
+                android:textSize="@dimen/sp_14" />
 
             <TextView
                 android:id="@+id/tv_shop_type"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_shop_name"
-                android:layout_marginLeft="17dp"
-                android:layout_marginTop="1dp"
+                android:layout_marginLeft="@dimen/dp_17"
+                android:layout_marginTop="@dimen/dp_1"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="对流式加热，通电即热，无感静音，双重安装保护33333333333"
-                android:textColor="#A5A5A5"
+                android:textColor="@color/shop_type"
                 android:textSize="12sp" />
 
             <LinearLayout
@@ -69,22 +64,22 @@
                     android:layout_height="wrap_content"
                     android:text="¥"
                     android:textColor="@color/shop_price"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_12" />
 
                 <TextView
                     android:id="@+id/tv_shop_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="3dp"
+                    android:layout_marginLeft="@dimen/dp_3"
                     android:text="2500"
                     android:textColor="@color/shop_price"
-                    android:textSize="12sp" />
+                    android:textSize="@dimen/sp_12" />
             </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_shop_num"
                 android:layout_width="wrap_content"
-                android:layout_height="20dp"
+                android:layout_height="@dimen/dp_20"
                 android:layout_alignBottom="@+id/img_shop_pic"
                 android:layout_alignParentRight="true"
                 android:text="X1" />
@@ -93,17 +88,16 @@
         </RelativeLayout>
 
 
-    </LinearLayout>
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="5dp"
+        android:layout_height="@dimen/dp_5"
         android:background="@color/white"/>
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="12dp"
-        android:layout_marginRight="12dp">
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12">
         <include layout="@layout/cutline"/>
     </LinearLayout>
 
@@ -111,10 +105,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="12dp"
-        android:paddingRight="12dp"
-        android:paddingTop="5dp"
-        android:paddingBottom="5dp"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_5"
+        android:paddingBottom="@dimen/dp_5"
         android:background="@color/white">
         <ImageView
             android:id="@+id/img_del"
@@ -137,7 +131,7 @@
     
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="3dp" />
+        android:layout_height="@dimen/dp_3" />
 
 </LinearLayout>
 

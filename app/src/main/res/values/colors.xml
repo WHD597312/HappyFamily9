@@ -47,5 +47,6 @@
     <color name="green3">#4FBA72</color>
     <color name="shop_title">#808080</color>
     <color name="shop_context">#696969</color>
+    <color name="shop_type">#99767676</color>
     <color name="shop_price">#EE7B2E</color>
 </resources>

@@ -7,7 +7,7 @@
     <include
     layout="@layout/title_shop" />
     <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="3dp"
+        android:layout_height="@dimen/dp_3"
         android:layout_width="match_parent"/>
 
     <RelativeLayout
@@ -30,7 +30,7 @@
 
             <View
                 android:layout_width="match_parent"
-                android:layout_height="50dp">
+                android:layout_height="@dimen/dp_50">
             </View>
         </LinearLayout>
 
@@ -48,10 +48,10 @@
                 android:id="@+id/tv_shopcart_addselect"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="10dp"
+                android:layout_marginLeft="@dimen/dp_10"
                 android:drawableLeft="@mipmap/xuanzhong_shop3x"
                 android:text="全选"
-                android:drawablePadding="5dp"
+                android:drawablePadding="@dimen/dp_5"
                 />
 
             <LinearLayout
@@ -60,17 +60,17 @@
                 android:layout_weight="1"
                 android:orientation="horizontal"
                 android:gravity="right"
-                android:paddingRight="10dp"
+                android:paddingRight="@dimen/dp_10"
                 >
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:layout_marginLeft="33dp"
+                    android:layout_marginLeft="@dimen/dp_33"
                     android:text="合计"
                     android:textColor="@color/shop_context"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/sp_14"
                     />
 
                 <TextView
@@ -78,10 +78,10 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:paddingLeft="10dp"
+                    android:paddingLeft="@dimen/dp_10"
                     android:text="¥ 0.00"
                     android:textColor="@color/shop_price"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/sp_14"
                     />
 
 
@@ -90,8 +90,8 @@
 
             <TextView
                 android:id="@+id/tv_shopcart_submit"
-                android:layout_width="108.5dp"
-                android:layout_height="48.5dp"
+                android:layout_width="@dimen/dp_109"
+                android:layout_height="@dimen/dp_49"
                 android:background="@color/shop_price"
                 android:gravity="center"
                 android:text="狠心买"

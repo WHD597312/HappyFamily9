@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -111,9 +112,9 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
         });
 
         if(data.get(position).getIsSelect()){
-            holder.ivShopSel.setImageDrawable(context.getResources().getDrawable(R.mipmap.xuanzhong_shop3x));
+            holder.ivShopSel.setImageDrawable(ContextCompat.getDrawable(context,R.mipmap.xuanzhong_shop3x));
         }else {
-            holder.ivShopSel.setImageDrawable(context.getResources().getDrawable(R.mipmap.weixuanzhong3x));
+            holder.ivShopSel.setImageDrawable(ContextCompat.getDrawable(context,R.mipmap.weixuanzhong3x));
         }
 
 

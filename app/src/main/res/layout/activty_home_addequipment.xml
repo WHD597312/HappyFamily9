@@ -112,5 +112,4 @@
         android:layout_marginLeft="@dimen/dp_12"
         android:background="@mipmap/ok3x"
         />
-
 </RelativeLayout>

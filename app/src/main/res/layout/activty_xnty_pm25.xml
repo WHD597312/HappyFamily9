@@ -60,10 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/pm25_24"
             android:layout_below="@+id/pm25_li"
-            android:layout_marginLeft="@dimen/dp_115"
-            android:layout_toRightOf="@+id/pm25_24"
+            android:layout_centerHorizontal="true"
             android:text="一般"
-            android:textColor="@color/black"
+            android:textColor="@color/color_gray3"
             android:textSize="14sp" />
 
         <TextView
@@ -72,17 +71,17 @@
             android:layout_height="wrap_content"
             android:layout_below="@+id/pm25_li"
             android:layout_marginLeft="@dimen/dp_35"
-            android:layout_marginTop="@dimen/dp_30"
-            android:text="24"
-            android:textColor="@color/color_gray2"
-            android:textSize="15sp" />
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="200"
+            android:textColor="@color/color_xnty_h"
+            android:textSize="23sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/pm25_24"
-            android:layout_marginLeft="@dimen/dp_10"
-            android:text="设定PM2.5"
+            android:layout_marginLeft="@dimen/dp_20"
+            android:text="当前PM2.5"
             android:textColor="@color/color_gray2"
             android:textSize="12sp" />
 
@@ -91,18 +90,26 @@
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_50"
             android:layout_below="@+id/pm25_li"
-            android:layout_marginTop="@dimen/dp_28"
-            android:layout_marginLeft="@dimen/dp_90"
-            android:layout_toRightOf="@+id/tv_pm25_yb"
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_10"
            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已联动"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_alignTop="@+id/pm25_xh"
+            />
         <ImageView
             android:id="@+id/pm25_xh"
             android:layout_width="@dimen/dp_70"
             android:layout_height="@dimen/dp_80"
-            android:background="@color/green2"
+            android:scaleType="centerCrop"
             android:layout_marginBottom="-20dp"
-            android:layout_toLeftOf="@+id/tv_pm25_wr"
-            android:layout_marginRight="-115dp"
+            android:layout_centerHorizontal="true"
             android:layout_above="@+id/view_pm25"/>
 
         <ImageView
@@ -110,30 +117,27 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/pm25_24"
-            android:layout_marginLeft="@dimen/dp_38"
+            android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_25"
-            android:layout_toRightOf="@id/pm25_24"
-            android:scaleType="centerCrop"
-            android:src="@mipmap/pm25_bj3x" />
+            android:src="@mipmap/pm25_bj" />
 
         <ImageView
 
             android:id="@+id/iv_pm25_zd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/iv_pm25_bj"
+           android:layout_centerHorizontal="true"
             android:layout_alignTop="@+id/iv_pm25_bj"
-            android:layout_marginLeft="@dimen/dp_67"
+
             android:layout_marginTop="@dimen/dp_80"
-            android:src="@mipmap/pm25_zd3x" />
+            android:src="@mipmap/pm25_zd" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/iv_pm25_zd"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/tv_pm25_18"
-
-            android:text="当前PM2.5"
+            android:text="设定PM2.5"
             android:textSize="12sp"
             android:textColor="@color/color_gray2" />
 
@@ -141,13 +145,12 @@
             android:id="@+id/tv_pm25_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tv_pm25_yb"
+            android:layout_centerHorizontal="true"
             android:layout_below="@+id/tv_pm25_yb"
-            android:layout_marginLeft="@dimen/dp_6"
             android:layout_marginTop="@dimen/dp_50"
             android:text="18"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:textColor="@color/color_green3"
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/tv_pm25_1"
@@ -385,11 +388,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_pm25_bj"
-            android:layout_marginRight="@dimen/dp_185"
+            android:layout_marginLeft="@dimen/dp_95"
             android:layout_marginTop="-10dp"
-            android:layout_toLeftOf="@+id/tv_pm25_fc"
             android:text="污染"
-            android:textColor="@color/black"
+            android:textColor="@color/color_gray3"
             android:textSize="14sp" />
 
         <TextView
@@ -397,10 +399,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tv_pm25_wr"
-            android:layout_marginLeft="-85dp"
-            android:layout_toRightOf="@+id/iv_pm25_bj"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_95"
             android:text="非常好"
-            android:textColor="@color/black"
+            android:textColor="@color/color_gray3"
             android:textSize="14sp"
 
 
@@ -414,7 +416,7 @@
             android:layout_height="@dimen/dp_1"
             android:layout_below="@+id/tv_pm25_fc"
             android:layout_marginTop="@dimen/dp_5"
-            android:background="@color/color_gray2" />
+            android:background="@color/color_gray3" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -422,16 +424,18 @@
             android:layout_below="@+id/view_pm25"
             android:layout_marginLeft="@dimen/dp_15"
             android:layout_marginTop="@dimen/dp_8"
-            android:text="智能净化空气"
+            android:text="简化版净化空气"
             android:textColor="@color/color_gray2" />
 
-        <com.xr.happyFamily.jia.xnty.Pm25GifView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/iv_pm25_dh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/view_pm25"
-            android:layout_marginLeft="@dimen/dp_60"
+            android:layout_centerHorizontal="true"
+            android:scaleType="fitCenter"
             android:layout_marginTop="@dimen/dp_25"
-            android:background="@null" />
+             />
 
 
     </RelativeLayout>

@@ -60,10 +60,9 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/sd_24"
             android:layout_below="@+id/sd_li"
-            android:layout_marginLeft="@dimen/dp_115"
-            android:layout_toRightOf="@+id/sd_24"
-            android:text="舒适"
-            android:textColor="@color/black"
+            android:layout_centerHorizontal="true"
+            android:text="最佳"
+            android:textColor="@color/color_gray3"
             android:textSize="14sp" />
 
         <TextView
@@ -71,28 +70,37 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/sd_li"
-            android:layout_marginLeft="@dimen/dp_35"
-            android:layout_marginTop="@dimen/dp_30"
-            android:text="24"
-            android:textColor="@color/color_gray2"
-            android:textSize="15sp" />
+            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_20"
+            android:text="70%"
+            android:textColor="@color/color_xnty_h"
+            android:textSize="26sp" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/sd_24"
             android:layout_marginLeft="@dimen/dp_15"
-            android:text="设定温度"
+            android:layout_marginTop="2dp"
+            android:text="当前湿度"
             android:textColor="@color/color_gray2"
             android:textSize="12sp" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="已联动"
+            android:layout_centerHorizontal="true"
+            android:textSize="16sp"
+            android:layout_marginTop="@dimen/dp_30"
+            android:layout_alignTop="@+id/sd_xh"
+            />
         <ImageView
             android:id="@+id/sd_xh"
             android:layout_width="@dimen/dp_70"
             android:layout_height="@dimen/dp_80"
-            android:background="@color/green2"
+            android:scaleType="centerCrop"
             android:layout_marginBottom="-20dp"
-            android:layout_toLeftOf="@+id/tv_sd_wr"
-            android:layout_marginRight="-115dp"
+            android:layout_centerHorizontal="true"
             android:layout_above="@+id/view_sd"/>
 
 
@@ -101,40 +109,40 @@
             android:layout_width="@dimen/dp_50"
             android:layout_height="@dimen/dp_50"
             android:layout_below="@+id/sd_li"
-            android:layout_marginTop="@dimen/dp_28"
-            android:layout_marginLeft="@dimen/dp_90"
-            android:layout_toRightOf="@+id/tv_sd_yb"
-            android:src="@mipmap/sd_sd3x" />
+            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_20"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/sd_sd" />
 
         <ImageView
             android:id="@+id/iv_sd_bj"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@id/sd_24"
-            android:layout_marginLeft="@dimen/dp_38"
-            android:layout_marginTop="@dimen/dp_25"
-            android:layout_toRightOf="@id/sd_24"
+            android:layout_below="@+id/tv_sd_yb"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_20"
             android:scaleType="centerCrop"
-            android:src="@mipmap/pm25_bj3x" />
+            android:src="@mipmap/pm25_bj" />
 
         <ImageView
 
             android:id="@+id/iv_sd_zd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/iv_sd_bj"
+            android:layout_centerHorizontal="true"
             android:layout_alignTop="@+id/iv_sd_bj"
-            android:layout_marginLeft="@dimen/dp_67"
+
             android:layout_marginTop="@dimen/dp_80"
-            android:src="@mipmap/pm25_zd3x" />
+            android:src="@mipmap/pm25_zd" />
 
         <TextView
+            android:id="@+id/tv_sd_sz"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/iv_sd_zd"
-            android:layout_below="@+id/tv_sd_18"
-            android:layout_marginLeft="@dimen/dp_5"
-            android:text="当前温度"
+            android:layout_centerHorizontal="true"
+            android:layout_alignTop="@+id/iv_sd_zd"
+            android:layout_marginTop="-20dp"
+            android:text="设置湿度"
             android:textSize="12sp"
             android:textColor="@color/color_gray2" />
 
@@ -142,13 +150,12 @@
             android:id="@+id/tv_sd_18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tv_sd_yb"
-            android:layout_below="@+id/tv_sd_yb"
-
-        android:layout_marginTop="@dimen/dp_50"
-            android:text="18℃"
-            android:textColor="@color/black"
-            android:textSize="18sp" />
+            android:layout_centerHorizontal="true"
+            android:layout_above="@+id/tv_sd_sz"
+            android:layout_marginBottom="20dp"
+            android:text="55%"
+            android:textColor="@color/color_green3"
+            android:textSize="25sp" />
 
         <TextView
             android:id="@+id/tv_sd_1"
@@ -386,11 +393,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_sd_bj"
-            android:layout_marginRight="@dimen/dp_185"
+            android:layout_marginLeft="@dimen/dp_95"
             android:layout_marginTop="-10dp"
-            android:layout_toLeftOf="@+id/tv_sd_fc"
             android:text="潮湿"
-            android:textColor="@color/black"
+            android:textColor="@color/color_gray3"
             android:textSize="14sp" />
 
         <TextView
@@ -398,10 +404,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tv_sd_wr"
-            android:layout_marginLeft="-85dp"
-            android:layout_toRightOf="@+id/iv_sd_bj"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_90"
             android:text="干燥"
-            android:textColor="@color/black"
+            android:textColor="@color/color_gray3"
             android:textSize="14sp"
 
 
@@ -426,13 +432,15 @@
             android:text="智能加湿"
             android:textColor="@color/color_gray2" />
 
-        <com.xr.happyFamily.jia.xnty.sdGifView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+        <ImageView
+            android:id="@+id/iv_sd_dh"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@+id/view_sd"
-            android:layout_marginLeft="@dimen/dp_60"
+            android:scaleType="fitCenter"
+           android:layout_centerHorizontal="true"
             android:layout_marginTop="@dimen/dp_25"
-            android:background="@null" />
+             />
 
 
     </RelativeLayout>

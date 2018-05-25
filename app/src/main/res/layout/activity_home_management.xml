@@ -79,7 +79,7 @@
         android:layout_marginRight="@dimen/dp_12"
         android:layout_below="@id/gv_management_my"
         android:layout_marginTop="@dimen/dp_12"
-        android:background="@mipmap/management_button3x"
+        android:background="@mipmap/management_button"
         android:text="确定"
         android:textColor="@color/green2"
         />

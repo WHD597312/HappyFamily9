@@ -20,7 +20,7 @@ public class HomeActivity extends AppCompatActivity {
 
     private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台","阳台","阳台",};
 
-    private Integer[] img ={R.mipmap.t3x,R.mipmap.t3x,R.mipmap.t3x,R.mipmap.t3x,R.mipmap.t3x,R.mipmap.t3x};
+    private Integer[] img ={R.mipmap.t,R.mipmap.t,R.mipmap.t,R.mipmap.t,R.mipmap.t,R.mipmap.t};
     private GridView mGridView = null;
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
@@ -32,7 +32,7 @@ public class HomeActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-        setContentView(R.layout.activity_home_main);
+        setContentView(R.layout.activity_home_living);
 
         mGridView = (GridView) findViewById(R.id.gv_home);
         mGridData = new ArrayList<>();
@@ -82,7 +82,7 @@ public class HomeActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-        setContentView(R.layout.activity_home_main);
+        setContentView(R.layout.activity_home_living);
         GridView gridView = (GridView) findViewById(R.id.gv_home);
         SimpleAdapter pictureAdapter = new SimpleAdapter(this, getList(),
                 R.layout.activity_home_item, from, to);

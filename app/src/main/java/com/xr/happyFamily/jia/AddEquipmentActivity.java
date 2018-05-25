@@ -30,7 +30,7 @@ public class AddEquipmentActivity extends Activity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_add_finish:
-              startActivity(new Intent(this, MenuActivity.class));
+              startActivity(new Intent(this, MyPaperActivity.class));
                 break;
             case R.id.bt_tozxing:
                 startActivity(new Intent(this, QRScannerActivity.class));

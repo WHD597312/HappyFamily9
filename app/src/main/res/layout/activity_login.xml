@@ -15,15 +15,22 @@
         android:layout_marginRight="@dimen/dp_12"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_alignParentTop="true"
-        android:src="@mipmap/beijing3x"
+        android:src="@mipmap/beijing"
         />
-    <com.xr.happyFamily.login.login.MyGifView
+    <ImageView
         android:id="@+id/imageView6"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/dtubiao"
         android:layout_alignTop="@+id/imageView4"
-        android:layout_marginLeft="@dimen/dp_75"
         android:layout_height="wrap_content"
         android:layout_width="wrap_content"
         />
+    <RelativeLayout
+        android:id="@+id/rl_login"
+        android:layout_centerVertical="true"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
 
 
         <EditText
@@ -48,9 +55,9 @@
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
             android:layout_marginLeft="@dimen/dp_50"
-            android:layout_marginTop="@dimen/dp_250"
+            android:layout_marginTop="@dimen/dp_120"
             android:scaleType="centerInside"
-            android:src="@mipmap/wo3x" />
+            android:src="@mipmap/wo" />
 
         <View
             android:id="@+id/view5"
@@ -94,7 +101,7 @@
             android:scaleType="centerInside"
             android:layout_marginLeft="@dimen/dp_49"
             android:layout_marginTop="@dimen/dp_35"
-            android:src="@mipmap/suo3x" />
+            android:src="@mipmap/suo" />
 
         <View
             android:id="@+id/view3"
@@ -133,38 +140,39 @@
             android:layout_width="@dimen/dp_42"
             android:layout_height="@dimen/dp_42"
             android:layout_below="@+id/tv_forget_pswd"
+            android:layout_alignParentRight="true"
             android:layout_alignRight="@+id/tv_forget_pswd"
             android:layout_marginTop="@dimen/dp_31"
-            android:layout_marginRight="@dimen/dp_60"
-            android:src="@mipmap/qq3x" />
+            android:layout_marginRight="@dimen/dp_108"
+            android:src="@mipmap/qq" />
 
         <ImageView
             android:id="@+id/image_wx"
-            android:layout_width="@dimen/dp_45"
-            android:layout_height="@dimen/dp_45"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/image_qq"
-            android:layout_alignRight="@+id/image_qq"
-            android:layout_marginRight="@dimen/dp_86"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_108"
             android:layout_marginTop="@dimen/dp_31"
             android:scaleType="centerInside"
-            android:src="@mipmap/weixin3x" />
+            android:src="@mipmap/weixin1" />
 
-
+    </RelativeLayout>
 
     <Button
         android:id="@+id/btn_login"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@id/image_qq"
+        android:layout_below="@+id/rl_login"
         android:layout_marginTop="@dimen/dp_30"
         android:layout_marginLeft="@dimen/dp_60"
         android:layout_marginRight="@dimen/dp_60"
-        android:background="@mipmap/anniu13x"
+        android:background="@mipmap/anniu1"
         android:text="登录"
         android:textColor="@color/green2"
         android:layout_centerHorizontal="true"
         android:textSize="@dimen/sp_18"
-        android:elevation="@dimen/dp_5"
+
 
         />
 

@@ -91,6 +91,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                     imageViewkg.setImageResource(R.mipmap.csj_kgk3x);
                     imagefs.setImageResource(R.mipmap.csj_fs);
                     imagefs.clearAnimation();
+                    
                     textViewkq.setText("关机状态");
                     flag=1;
                 }else {

@@ -44,9 +44,9 @@
         <activity android:name=".jia.xnty.ZnSdActivity">
 
         </activity>
-        <activity android:name=".jia.xnty.aaa">
 
-        </activity>
+
+
         <activity
             android:name=".jia.xnty.CsjActivity"
             android:label=""

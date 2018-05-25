@@ -54,6 +54,17 @@ public class Timepicker extends NumberPicker {
         }
     }
 
+    @Override
+    public void setValue(int value) {
+        super.setValue(value);
+
+    }
+
+    @Override
+    public int getValue() {
+        return super.getValue();
+    }
+
     /**
      * 设置分割线的颜色值
      * @param numberPicker
@@ -71,7 +82,7 @@ public class Timepicker extends NumberPicker {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {
                     e.printStackTrace();
-                } catch (IllegalAccessException e) {
+                    } catch (IllegalAccessException e) {
                     e.printStackTrace();
                 }
                 break;

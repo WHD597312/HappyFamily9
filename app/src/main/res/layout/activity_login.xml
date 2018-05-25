@@ -153,7 +153,7 @@
 
     <Button
         android:id="@+id/btn_login"
-        android:layout_width="@dimen/dp_258"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/image_qq"
         android:layout_marginTop="@dimen/dp_30"

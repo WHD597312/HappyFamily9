@@ -63,7 +63,7 @@ public class BeautySeekBarView extends View {
         //等级数量即点的个数
         valueCountent=a.getInteger(R.styleable.BeautySeekBarView_valueCountent, 70);
         //点的颜色
-        pointColor = a.getColor(R.styleable.BeautySeekBarView_pointColor,this.getResources().getColor(R.color.green2));
+        //pointColor = a.getColor(R.styleable.BeautySeekBarView_pointColor,this.getResources().getColor(R.color.green2));
         //线的颜色
         lineColor = a.getColor(R.styleable.BeautySeekBarView_lineColor, this.getResources().getColor(R.color.color_gray2));
         //小图片
@@ -72,7 +72,7 @@ public class BeautySeekBarView extends View {
         bigPic=a.getResourceId(R.styleable.BeautySeekBarView_bigPic, R.mipmap.csj_bz3x);
         //控件的内边距
         viewPadding=a.getDimensionPixelSize(R.styleable.BeautySeekBarView_padding, (int) TypedValue.applyDimension(
-                TypedValue.COMPLEX_UNIT_SP, 46, getResources().getDisplayMetrics()));
+                TypedValue.COMPLEX_UNIT_SP, 30, getResources().getDisplayMetrics()));
         minValue=a.getInt(R.styleable.BeautySeekBarView_minValue,20);
         maxValue=a.getInt(R.styleable.BeautySeekBarView_maxValue,90);
         curValue=a.getInt(R.styleable.BeautySeekBarView_curValue,20);
@@ -108,7 +108,7 @@ public class BeautySeekBarView extends View {
         linePaint=new Paint();
         linePaint.setColor(lineColor);
         linePaint.setStyle(Paint.Style.STROKE);
-        linePaint.setStrokeWidth(4);
+        linePaint.setStrokeWidth(8);
         linePaint.setAntiAlias(true);
 
         textPaint=new Paint();
@@ -235,7 +235,7 @@ public class BeautySeekBarView extends View {
             return -1;
         }
         if(pointList.contains(mListX)){
-            index=pointList.indexOf(mListX)+20;
+            index=pointList.indexOf(mListX);
             if(mListener!=null){
                 mListener.getIndex(index);
             }

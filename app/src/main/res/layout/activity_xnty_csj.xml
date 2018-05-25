@@ -9,11 +9,15 @@
     tools:context="com.xr.happyFamily.jia.xnty.CsjActivity"
 
     >
+
     <ImageView
         android:id="@+id/iv_csj_bj"
-        android:background="@color/green2"
         android:layout_width="match_parent"
-        android:layout_height="match_parent" />
+        android:layout_height="match_parent"
+        android:src="@mipmap/kuai3x"
+        android:scaleType="centerCrop"
+        android:layout_alignParentTop="true"
+        android:background="@color/green2" />
     <View
         android:id="@+id/view_null"
         android:layout_width="match_parent"
@@ -30,24 +34,24 @@
         >
     <ImageButton
         android:id="@+id/ib_csj_fh"
-        android:layout_width="@dimen/dp_30"
-        android:paddingRight="@dimen/dp_19"
+        android:layout_width="0dp"
+        android:paddingRight="@dimen/dp_29"
         android:layout_weight="1"
         android:layout_height="@dimen/dp_30"
-        android:src="@mipmap/csj_fh"
+        android:src="@mipmap/fanhui_xnty3x"
         android:background="@null"
 
         />
-    <TextView
-        android:paddingBottom="@dimen/dp_3"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="除湿机虚拟体验"
-        android:textColor="@color/white"
-        android:gravity="center"
-        android:layout_weight="1"
-        android:textSize="25sp"
-        />
+
+        <TextView
+            android:layout_width="126dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingBottom="@dimen/dp_3"
+            android:text="除湿机虚拟体验"
+            android:textColor="@color/white"
+            android:textSize="19sp" />
         <View
             android:id="@+id/view_csj"
             android:layout_width="0dp"
@@ -62,9 +66,9 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="设定湿度"
-        android:textSize="19sp"
+        android:textSize="15sp"
         android:layout_below="@+id/li_csj"
-        android:layout_marginLeft="@dimen/dp_60"
+        android:layout_marginLeft="@dimen/dp_70"
         android:layout_marginTop="@dimen/dp_30"
         />
     <TextView
@@ -73,10 +77,11 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="当前湿度"
-        android:textSize="19sp"
+
+        android:textSize="15sp"
         android:layout_below="@+id/li_csj"
         android:layout_toRightOf="@+id/tv_csj_sdsd"
-        android:layout_marginLeft="@dimen/dp_95"
+        android:layout_marginLeft="@dimen/dp_99"
         android:layout_marginTop="@dimen/dp_30"
         />
     <TextView
@@ -85,62 +90,99 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="29"
-        android:textSize="38sp"
+        android:textSize="23sp"
         android:layout_below="@+id/tv_csj_sdsd"
-        android:layout_marginLeft="@dimen/dp_79"
+        android:layout_marginLeft="@dimen/dp_83"
         android:layout_marginTop="@dimen/dp_15"
         />
-    <com.xr.happyFamily.jia.xnty.RunningNumView
+    <TextView
         android:id="@+id/tv_csj_36"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
+        android:textSize="23sp"
         android:text="36"
-        android:textSize="38sp"
         android:layout_below="@+id/tv_csj_sdsd"
         android:layout_alignLeft="@+id/tv_csj_dqsd"
         android:layout_marginLeft="@dimen/dp_18"
         android:layout_marginTop="@dimen/dp_15"
         />
-    <ImageView
-        android:id="@+id/iv_csj_fs"
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_csj_29"
+        android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_80"
-        android:src="@mipmap/csj_fs"
-        />
+        >
+
+        <ImageView
+            android:id="@+id/iv_csj_kg"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/dp_80"
+            android:src="@mipmap/csj_kgg3x"
+            />
+
     <ImageView
         android:id="@+id/iv_csj_ds"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignLeft="@+id/tv_csj_36"
-        android:layout_alignParentBottom="true"
+        android:layout_weight="1"
         android:layout_marginBottom="@dimen/dp_80"
         android:src="@mipmap/csj_ds"
         />
-    <TextView
-        android:layout_width="wrap_content"
+
+        <ImageView
+
+            android:id="@+id/iv_csj_fs"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:layout_marginBottom="@dimen/dp_80"
+            android:src="@mipmap/csj_fsg3x"
+            />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_alignParentBottom="true"
+        >
+     <TextView
+        android:layout_weight="1"
+        android:id="@+id/tv_csj_kg"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/iv_csj_fs"
+        android:gravity="center"
         android:layout_marginBottom="@dimen/dp_38"
-        android:textSize="11sp"
+        android:textSize="14sp"
+        android:text="开机状态"
+        />
+    <TextView
+        android:layout_weight="1"
+        android:id="@+id/tv_csj_ds"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_marginBottom="@dimen/dp_38"
+        android:textSize="14sp"
+        android:text="13:00——14:00"
+        />
+        <TextView
+        android:id="@+id/tv_csj_f1"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:layout_weight="1"
+        android:layout_marginBottom="@dimen/dp_38"
+        android:textSize="14sp"
         android:text="风速1级"
         />
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
-        android:layout_alignParentBottom="true"
-        android:layout_alignLeft="@+id/iv_csj_ds"
-        android:layout_marginLeft="-10dp"
-        android:layout_marginBottom="@dimen/dp_38"
-        android:textSize="11sp"
-        android:text="2小时候开启"
-        />
+
+    </LinearLayout>
 
 </RelativeLayout>
 

@@ -1,0 +1,135 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+   <ImageView
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content"
+       android:src="@mipmap/chanpin4"/>
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_3" />
+
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="电暖器"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/dp_12"
+            android:padding="@dimen/dp_12"/>
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="对流式加热，通电即热，无感静音，双重安全保护"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/shop_title"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_12"/>
+        <TextView
+            android:id="@+id/tv_price"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="￥300"
+            android:textSize="@dimen/sp_12"
+            android:background="@color/white"
+            android:textColor="#ff0000"
+            android:padding="@dimen/dp_12"/>
+    
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dp_12"
+        android:textSize="@dimen/sp_12"
+        android:text="慈溪市鑫睿电子科技有限公司发货并提供售后"
+        android:gravity="center|left"
+        android:textColor="@color/shop_title"
+        android:drawableLeft="@mipmap/ic_shop_gou"
+        android:drawablePadding="@dimen/dp_8"/>
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+    
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dp_12">
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="送至"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/black"/>
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@id/tv1"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:textColor="@color/green3"
+            android:text="广东 深圳市 宝安区"
+            android:drawableLeft="@mipmap/ic_shop_address_green"
+            android:drawablePadding="@dimen/dp_8"/>
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/gengduo2x"
+            android:layout_alignParentRight="true"
+            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_10"
+            android:paddingLeft="@dimen/dp_20"/>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/green2"
+            android:textSize="@dimen/sp_12"
+            android:layout_alignLeft="@id/tv_address"
+            android:layout_below="@id/tv_address"
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="现货"/>
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/shop_title"
+            android:textSize="@dimen/sp_12"
+            android:layout_toRightOf="@id/tv2"
+            android:layout_alignTop="@id/tv2"
+            android:layout_marginLeft="@dimen/dp_8"
+            android:text="23.00前下单，预计明天（05月06日）送达"/>
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12"
+            android:layout_below="@id/tv_time"
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="重量"/>
+
+        <TextView
+            android:id="@+id/tv_weight"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/shop_title"
+            android:textSize="@dimen/sp_12"
+            android:layout_below="@id/tv2"
+            android:layout_alignLeft="@id/tv2"
+            android:layout_marginTop="@dimen/dp_3"
+            android:text="5.2kg"/>
+    </RelativeLayout>
+</LinearLayout>

@@ -59,6 +59,7 @@ public class ShopCartActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_shopcart);
+        mContext=ShopCartActivity.this;
         ButterKnife.bind(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -155,6 +156,7 @@ public class ShopCartActivity extends AppCompatActivity {
         @Override
         public void onItemOnClick(View view, int pos) {
             Toast.makeText(ShopCartActivity.this, "This is" + pos, Toast.LENGTH_SHORT).show();
+            startActivity(new Intent(ShopCartActivity.this,ShopXQActivity.class));
         }
 
         @Override

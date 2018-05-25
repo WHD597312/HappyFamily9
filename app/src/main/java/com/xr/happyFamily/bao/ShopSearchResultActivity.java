@@ -50,10 +50,6 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     ImageView imgPinpai;
     @BindView(R.id.rl_pinpai)
     RelativeLayout rlPinpai;
-    @BindView(R.id.img_fenlei)
-    ImageView imgFenlei;
-    @BindView(R.id.rl_fenlei)
-    RelativeLayout rlFenlei;
     @BindView(R.id.recyclerview)
     RecyclerView recyclerview;
     @BindView(R.id.ll_nodata)
@@ -62,6 +58,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     GridView gvMore;
     @BindView(R.id.ll_gv)
     LinearLayout llGv;
+    @BindView(R.id.view_zhe)
+    View viewZhe;
     private RecyclerView.LayoutManager mLayoutManager;
     private WaterFallAdapter mAdapter;
 
@@ -71,6 +69,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     String[] titles2 = new String[]{"松下", "小米", "海尔", "格力", "松下"};
     SimpleAdapter jiageAdapter;
     SimpleAdapter pinpaiAdapter;
+    private boolean isMore = false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -93,9 +93,9 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         recyclerview.setAdapter(mAdapter);
 
         jiageAdapter = new SimpleAdapter(this, getList(),
-                R.layout.item_search, from, to);
+                R.layout.item_search_result, from, to);
         pinpaiAdapter = new SimpleAdapter(this, getList2(),
-                R.layout.item_search, from, to);
+                R.layout.item_search_result, from, to);
     }
 
 
@@ -116,7 +116,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         return list;
     }
 
-    @OnClick({R.id.tv_search, R.id.back, R.id.rl_zonghe, R.id.rl_jiage, R.id.rl_pinpai, R.id.rl_fenlei})
+    @OnClick({R.id.tv_search, R.id.back, R.id.rl_zonghe, R.id.rl_jiage, R.id.rl_pinpai,R.id.view_zhe})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
@@ -130,23 +130,38 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 recyclerview.setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_jiage:
-                if(llGv.getVisibility()==View.VISIBLE){
+                if (!isMore) {
+                    gvMore.setNumColumns(3);
+                    gvMore.setAdapter(jiageAdapter);
+                    llGv.setVisibility(View.VISIBLE);
+                    isMore = true;
+                } else {
                     llGv.setVisibility(View.GONE);
-                }else
-                llGv.setVisibility(View.VISIBLE);
-                gvMore.setAdapter(jiageAdapter);
+                    isMore = false;
+                }
+//                if(llGv.getVisibility()==View.VISIBLE){
+//                    llGv.setVisibility(View.GONE);
+//                }else
+//                llGv.setVisibility(View.VISIBLE);
+//                gvMore.setNumColumns(3);
+//                gvMore.setAdapter(jiageAdapter);
                 break;
             case R.id.rl_pinpai:
-                if(llGv.getVisibility()==View.VISIBLE){
-                    llGv.setVisibility(View.GONE);
-                }else
+                if (!isMore) {
+                    gvMore.setNumColumns(4);
+                    gvMore.setAdapter(pinpaiAdapter);
                     llGv.setVisibility(View.VISIBLE);
-                gvMore.setAdapter(pinpaiAdapter);
+                    isMore = true;
+                } else {
+                    llGv.setVisibility(View.GONE);
+                    isMore = false;
+                }
                 break;
-            case R.id.rl_fenlei:
-                llNodata.setVisibility(View.VISIBLE);
-                recyclerview.setVisibility(View.GONE);
+            case R.id.view_zhe:
+                llGv.setVisibility(View.GONE);
+                isMore=false;
                 break;
+
         }
     }
 
@@ -168,7 +183,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
 
         for (int i = 0; i < 5; i++) {
             map = new HashMap<String, Object>();
-            map.put("title2", titles2[i]);
+            map.put("title", titles2[i]);
             list.add(map);
         }
         return list;

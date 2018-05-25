@@ -62,7 +62,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop_dingdan);
         ButterKnife.bind(this);
 
-        titleText.setText("订单详情");
+        titleText.setText("我的订单");
         titleRightText.setVisibility(View.GONE);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerview.setLayoutManager(linearLayoutManager);

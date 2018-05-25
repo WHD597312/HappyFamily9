@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="#eeeeee"
+    android:background="@color/color_gray"
     android:orientation="vertical">
 
 
@@ -10,9 +10,9 @@
 
 
     <RelativeLayout
+        android:id="@+id/ll_shop"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_107"
-        android:paddingLeft="@dimen/dp_12"
         android:paddingRight="@dimen/dp_12"
         android:layout_marginTop="@dimen/dp_10"
         android:background="@color/white">
@@ -24,13 +24,13 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+        android:padding="@dimen/dp_12"
                     android:src="@mipmap/xuanzhong_shop3x" />
 
                 <ImageView
                     android:id="@+id/img_shop_pic"
                     android:layout_width="@dimen/dp_88"
                     android:layout_height="@dimen/dp_88"
-                    android:layout_marginLeft="@dimen/dp_12"
                    android:layout_centerVertical="true"
                     android:src="@mipmap/chanpin2"
                     android:layout_toRightOf="@+id/radio_shop" />

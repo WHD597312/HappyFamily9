@@ -3,7 +3,6 @@ package com.xr.happyFamily.bao.adapter;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,15 +12,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShopDingdanActivity;
 import com.xr.happyFamily.bao.ShopDingdanXQActivity;
-import com.xr.happyFamily.bao.WuLiuActivity;
 
 import java.util.ArrayList;
 
 //快递列表适配器
 
-public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHolder> implements View.OnClickListener {
+public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHolder> {
     private Context context;
     private ArrayList<String> list;
     private ButtonInterface buttonInterface;
@@ -29,7 +26,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
     private int defItem = -1;
     private OnItemListener onItemListener;
 
-    public DingdanAdapter(Context context, ArrayList<String> list) {
+    public PinglunAdapter(Context context, ArrayList<String> list) {
         this.context=context;
         this.list=list;
     }
@@ -63,45 +60,15 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                context).inflate(R.layout.item_dingdan, parent,
+                context).inflate(R.layout.item_shop_pinglun, parent,
                 false));
         return holder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.tv_shop_name.setText(list.get(position));
+        holder.tv_name.setText(list.get(position));
 
-        holder.img_del.setOnClickListener(this);
-        holder.img_chakan.setOnClickListener(this);
-        holder.img_queren.setOnClickListener(this);
-        holder.rl_dd.setOnClickListener(this);
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()){
-            case R.id.img_chakan:
-                Toast.makeText(context,"查看",Toast.LENGTH_SHORT).show();
-                context.startActivity(new Intent(context, WuLiuActivity.class));
-
-
-                break;
-            case R.id.img_del:
-                Toast.makeText(context,"删除",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.img_queren:
-                Toast.makeText(context,"确认",Toast.LENGTH_SHORT).show();
-                break;
-            case R.id.rl_dingdan:
-                MyViewHolder tag = (MyViewHolder)v.getTag();
-                Intent intent  = new Intent(v.getContext(),ShopDingdanXQActivity.class);
-//                intent.putExtra("argCon",tag.argCon);
-//                intent.putExtra("argName",tag.argName);
-//                intent.putExtra("argValue",tag.argValue);
-                v.getContext().startActivity(intent);
-                break;
-        }
     }
 
 
@@ -115,20 +82,18 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
      */
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView img_del,img_chakan,img_queren;
-        TextView tv_shop_price,tv_shop_name,tv_shop_type,tv_shop_num;
-        RelativeLayout rl_dd;
+        ImageView img_touxiang,img_xing;
+        TextView tv_name,tv_time,tv_pinglun;
+
 
         public MyViewHolder(View view) {
             super(view);
-            img_del = (ImageView) view.findViewById(R.id.img_del);
-            img_chakan = (ImageView) view.findViewById(R.id.img_chakan);
-            img_queren = (ImageView) view.findViewById(R.id.img_queren);
-            tv_shop_name= (TextView) view.findViewById(R.id.tv_shop_name);
-            tv_shop_type= (TextView) view.findViewById(R.id.tv_shop_type);
-            tv_shop_price= (TextView) view.findViewById(R.id.tv_shop_price);
-            tv_shop_num= (TextView) view.findViewById(R.id.tv_shop_num);
-            rl_dd= (RelativeLayout) view.findViewById(R.id.rl_dingdan);
+            img_touxiang = (ImageView) view.findViewById(R.id.img_touxiang);
+            img_xing = (ImageView) view.findViewById(R.id.img_xing);
+            tv_name= (TextView) view.findViewById(R.id.tv_name);
+            tv_time= (TextView) view.findViewById(R.id.tv_time);
+            tv_pinglun= (TextView) view.findViewById(R.id.tv_pinglun);
+
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

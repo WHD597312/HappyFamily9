@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_gray"
+    android:orientation="vertical">
+
+
+
+
+
+    <LinearLayout
+        android:id="@+id/rl_dingdan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_12"
+        android:background="@color/white">
+
+
+
+    <ImageView
+                android:id="@+id/img_touxiang"
+                android:layout_width="@dimen/dp_45"
+                android:layout_height="@dimen/dp_45"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/radio_shop"
+                android:src="@mipmap/ic_shop_pinglun_touxiang"/>
+        <RelativeLayout
+            android:layout_gravity="center"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+        <TextView
+            android:id="@+id/tv_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_10"
+            android:text="文成"
+            android:textColor="#474747"
+            android:textSize="@dimen/sp_12" />
+
+        <ImageView
+            android:id="@+id/img_xing"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_shop_pinglun_xing"
+            android:layout_below="@+id/tv_name"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginLeft="@dimen/dp_8"/>
+
+
+
+        <TextView
+            android:id="@+id/tv_time"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="2018.4.3.11:30"
+            android:textColor="@color/shop_title"/>
+
+
+
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+
+
+    <TextView
+        android:id="@+id/tv_pinglun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_12"
+        android:background="@color/white"
+        android:padding="@dimen/dp_12"
+        android:text="东西很不错，漂亮大气，做工精细，安装也很方便，值得购买。"/>
+    <include layout="@layout/cutline"/>
+
+</LinearLayout>
+
+

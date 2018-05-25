@@ -29,7 +29,7 @@
                 android:layout_toRightOf="@+id/radio_shop" />
 
             <TextView
-                android:id="@+id/tv_shop_name"
+                android:id="@+id/tv_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_15"
@@ -40,11 +40,11 @@
                 android:textSize="@dimen/sp_12" />
 
             <TextView
-                android:id="@+id/tv_shop_type"
+                android:id="@+id/tv_tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_15"
-                android:layout_below="@+id/tv_shop_name"
+                android:layout_below="@+id/tv_state"
                 android:layout_marginTop="@dimen/dp_10"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="圆通速递：888919282567937017"

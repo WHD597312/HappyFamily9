@@ -2,8 +2,10 @@ package com.xr.happyFamily.bao;
 
 import android.content.Context;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -15,6 +17,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -26,6 +29,7 @@ import android.widget.Toast;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bean.PersonCard;
 
 import java.util.ArrayList;
@@ -92,6 +96,18 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout llNodata;
     @BindView(R.id.ll_data)
     LinearLayout llData;
+    @BindView(R.id.img_shang)
+    ImageView imgShang;
+    @BindView(R.id.rl_fenlei)
+    RelativeLayout rlFenlei;
+    @BindView(R.id.ll_yinying)
+    LinearGradientView llYinying;
+    @BindView(R.id.view_zhe)
+    View viewZhe;
+    @BindView(R.id.horiSV)
+    HorizontalScrollView horiSV;
+    @BindView(R.id.img_touming)
+    ImageView imgTouming;
     private RecyclerView mRecyclerView;
     private RecyclerView.LayoutManager mLayoutManager;
     private WaterFallAdapter mAdapter;
@@ -109,8 +125,9 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     private int[] imgae_dots = new int[]{R.id.img1, R.id.img2, R.id.img3, R.id.img4};
     private String[] from = {"title"};
     private int[] to = {R.id.tv_search};
-    String[] titles = new String[]{"推荐","电暖器", "空调", "智能传感器", "净水器", "除尘机"};
+    String[] titles = new String[]{"推荐", "电暖器", "空调", "智能传感器", "净水器", "除尘机"};
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -125,29 +142,51 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-
+    @RequiresApi(api = Build.VERSION_CODES.M)
     private void init() {
         mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        //瀑布流相关适配器
         mAdapter = new WaterFallAdapter(this, buildData());
         SimpleAdapter simpleAdapter = new SimpleAdapter(this, getList(),
-                R.layout.item_search, from, to);
+                R.layout.item_shop_more, from, to);
         mRecyclerView.setLayoutManager(mLayoutManager);
         mRecyclerView.setAdapter(mAdapter);
+        mAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Toast.makeText(ShoppageActivity.this, "点击了" + position, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShoppageActivity.this, ShopXQActivity.class));
+            }
+        });
+        //下拉选项相关适配器
         gvMore.setAdapter(simpleAdapter);
-
         gvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("qqqqqqqqqqqq",titles[position]);
-                Toast.makeText(ShoppageActivity.this, "i am:"+titles[position], Toast.LENGTH_SHORT).show();
-                if(llNodata.getVisibility()==View.VISIBLE){
+                Log.e("qqqqqqqqqqqq", titles[position]);
+                Toast.makeText(ShoppageActivity.this, "i am:" + titles[position], Toast.LENGTH_SHORT).show();
+                if (llNodata.getVisibility() == View.VISIBLE) {
                     llNodata.setVisibility(View.GONE);
-                }else
+                } else
                     llNodata.setVisibility(View.VISIBLE);
             }
 
+        });
+        horiSV.setOnScrollChangeListener(new View.OnScrollChangeListener() {
+            @Override
+            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
+
+                //滑到最左
+                if (horiSV.getChildAt(horiSV.getChildCount() - 1).getRight() ==
+
+                        horiSV.getScrollX() + horiSV.getWidth()) {
+                    imgTouming.setVisibility(View.GONE);
+                } else {  //滑到中间
+imgTouming.setVisibility(View.VISIBLE);
+                }
+            }
         });
         initData();//初始化数据
         initView();//初始化View，设置适配器
@@ -166,6 +205,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
         }
         return list;
     }
+
     /**
      * 第二步、初始化数据（图片、标题、点击事件）
      */
@@ -184,7 +224,6 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
             mImageList.add(iv);
         }
     }
-
 
 
     //图片点击事件
@@ -215,7 +254,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     public void initView() {
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(mImageList, viewPager);
         viewPager.setAdapter(viewPagerAdapter);
-        viewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
 
@@ -286,7 +325,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    @OnClick({R.id.tv_search, R.id.image_more, R.id.rl_tuijian, R.id.rl_dian, R.id.rl_kong, R.id.rl_chu, R.id.rl_jing, R.id.rl_chuan,R.id.img_more)
+    @OnClick({R.id.tv_search, R.id.image_more, R.id.rl_tuijian, R.id.rl_dian, R.id.rl_kong, R.id.rl_chu, R.id.rl_jing, R.id.rl_chuan, R.id.img_more, R.id.img_shang, R.id.view_zhe})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
@@ -308,10 +347,15 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
             case R.id.rl_chuan:
                 break;
             case R.id.img_more:
-                if(llNodata.getVisibility()==View.VISIBLE){
-                    llNodata.setVisibility(View.GONE);
-                }else
                 llNodata.setVisibility(View.VISIBLE);
+                rlFenlei.setVisibility(View.INVISIBLE);
+                llYinying.setVisibility(View.INVISIBLE);
+                break;
+            case R.id.img_shang:
+            case R.id.view_zhe:
+                llNodata.setVisibility(View.GONE);
+                rlFenlei.setVisibility(View.VISIBLE);
+                llYinying.setVisibility(View.VISIBLE);
                 break;
 
 

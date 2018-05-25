@@ -63,11 +63,14 @@ public class ShopConfActivity extends AppCompatActivity {
         titleRightText.setVisibility(View.GONE);
     }
 
-    @OnClick(R.id.image_more_address)
+    @OnClick({R.id.image_more_address,R.id.back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_more_address:
                 startActivity(new Intent(this, ShopAddressActivity.class));
+                break;
+            case R.id.back:
+                finish();
                 break;
         }
     }

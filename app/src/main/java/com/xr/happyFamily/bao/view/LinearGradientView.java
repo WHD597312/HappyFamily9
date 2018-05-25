@@ -30,10 +30,9 @@ public class LinearGradientView extends View {
         super.onDraw(canvas);
         Paint paint = new Paint();
         paint.setColor(Color.GREEN);
-        paint.setAlpha(120);
-        LinearGradient linearGradient = new LinearGradient(0, 0, 0, getMeasuredHeight(),new int[]{Color.parseColor("#C8C8C8"),Color.parseColor("#EEEEEE")}, null, LinearGradient.TileMode.CLAMP);
+        paint.setAlpha(60);
+        LinearGradient linearGradient = new LinearGradient(0, 0, 0, getMeasuredHeight(),new int[]{Color.parseColor("#C8C8C8"),Color.parseColor("#f8f8f8")}, null, LinearGradient.TileMode.CLAMP);
         paint.setShader(linearGradient);
         canvas.drawRect(0,0,getMeasuredWidth(),getMeasuredHeight(),paint);
     }
-
 }

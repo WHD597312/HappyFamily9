@@ -14,11 +14,11 @@
        android:textSize="@dimen/sp_12"
        android:textColor="#787878"
        android:layout_centerHorizontal="true"
-       android:background="@drawable/bg_shape_shop_result"
-       android:paddingTop="@dimen/dp_10"
-       android:paddingBottom="@dimen/dp_10"
-       android:paddingLeft="@dimen/dp_20"
-       android:paddingRight="@dimen/dp_20"
+       android:background="@drawable/bg_shape_shoppage_more"
+       android:paddingTop="@dimen/dp_3"
+       android:paddingBottom="@dimen/dp_3"
+       android:paddingLeft="@dimen/dp_10"
+       android:paddingRight="@dimen/dp_10"
        android:text="电暖器"/>
 
 </RelativeLayout>

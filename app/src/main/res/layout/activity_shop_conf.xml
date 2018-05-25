@@ -73,10 +73,11 @@
 
         <ImageView
             android:id="@+id/image_more_address"
-            android:layout_width="@dimen/dp_15"
-            android:layout_height="@dimen/dp_20"
+            android:layout_width="@dimen/dp_35"
+            android:layout_height="@dimen/dp_40"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
+            android:padding="@dimen/dp_10"
             android:src="@mipmap/gengduo_dizhi3x" />
 
     </RelativeLayout>

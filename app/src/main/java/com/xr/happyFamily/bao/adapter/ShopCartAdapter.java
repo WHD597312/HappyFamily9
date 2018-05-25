@@ -9,6 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
@@ -68,12 +69,12 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             mOnResfreshListener.onResfresh(isSelect);
         }
 
-//        holder.llShop.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                mOnItemOnClickListener.onItemOnClick(holder.itemView,position);
-//            }
-//        });
+        holder.llShop.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                mOnItemOnClickListener.onItemOnClick(holder.itemView,position);
+            }
+        });
 //
 //        holder.llShop.setOnLongClickListener(new View.OnLongClickListener() {
 //            @Override
@@ -185,7 +186,7 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
         private ImageView ivShopSel;
         private ImageView ivShopPic;
 
-        private LinearLayout llShop;
+        private RelativeLayout llShop;
 
 
         public MyViewHolder(View view)
@@ -200,6 +201,7 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             tvShopReduce = (TextView) view.findViewById(R.id.tv_shop_reduce);
             tvShopAdd = (TextView) view.findViewById(R.id.tv_shop_add);
             ivShopPic = (ImageView) view.findViewById(R.id.img_shop_pic);
+            llShop= (RelativeLayout) view.findViewById(R.id.ll_shop);
 
         }
     }

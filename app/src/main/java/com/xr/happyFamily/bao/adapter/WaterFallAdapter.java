@@ -32,7 +32,7 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
     @Override  //将ItemView渲染进来，创建ViewHolder
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(mContext).inflate(R.layout.recyclerview_item, null);
-        return new MyViewHolder(view);
+        return new MyViewHolder(view,mItemClickListener);
     }
 
     @Override  //将数据源的数据绑定到相应控件上
@@ -54,15 +54,46 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
     }
 
     //定义自己的ViewHolder，将View的控件引用在成员变量上
-    public class MyViewHolder extends RecyclerView.ViewHolder {
+    public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView userAvatar;
         public TextView userName;
+        private MyItemClickListener mListener;
 
-        public MyViewHolder(View itemView) {
+        public MyViewHolder(View itemView, MyItemClickListener myItemClickListener) {
             super(itemView);
             userAvatar = (ImageView) itemView.findViewById(R.id.user_avatar);
             userName = (TextView) itemView.findViewById(R.id.shop_name);
+            this.mListener = myItemClickListener;
+            itemView.setOnClickListener(this);
         }
+        /**
+         * 实现OnClickListener接口重写的方法
+         * @param v
+         */
+        @Override
+        public void onClick(View v) {
+            if (mListener != null) {
+                mListener.onItemClick(v, getPosition());
+            }
+
+        }
+    }
+
+    private MyItemClickListener mItemClickListener;
+    /**
+     * 创建一个回调接口
+     */
+    public interface MyItemClickListener {
+        void onItemClick(View view, int position);
+    }
+
+    /**
+     * 在activity里面adapter就是调用的这个方法,将点击事件监听传递过来,并赋值给全局的监听
+     *
+     * @param myItemClickListener
+     */
+    public void setItemClickListener(MyItemClickListener myItemClickListener) {
+        this.mItemClickListener = myItemClickListener;
     }
 }
 

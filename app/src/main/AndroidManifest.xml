@@ -38,6 +38,9 @@
         <activity android:name=".jia.HomeActivity">
 
         </activity>
+        <activity android:name=".jia.MyPaperActivity">
+
+        </activity>
         <activity android:name=".jia.xnty.ZnPm25Activity">
 
         </activity>

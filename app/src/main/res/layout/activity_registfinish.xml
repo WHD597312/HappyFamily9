@@ -12,7 +12,7 @@
         android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
         android:scaleType="centerInside"
-        android:src="@mipmap/beijing3x" />
+        android:src="@mipmap/beijing" />
     <ImageView
         android:id="@+id/imageView6"
         android:layout_width="@dimen/dp_130"
@@ -21,7 +21,7 @@
         android:layout_alignParentTop="true"
         android:scaleType="centerInside"
         android:layout_marginTop="@dimen/dp_45"
-        android:src="@mipmap/tubiao3x"
+        android:src="@mipmap/tubiao"
         />
 
     <RelativeLayout
@@ -51,7 +51,7 @@
             android:layout_marginLeft="@dimen/dp_42"
             android:layout_marginTop="@dimen/dp_10"
             android:scaleType="centerInside"
-            android:src="@mipmap/wo3x" />
+            android:src="@mipmap/wo" />
 
         <RadioGroup
             android:id="@+id/rgMale"
@@ -83,7 +83,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:layout_marginBottom="222dp"
             android:scaleType="centerInside"
-            android:src="@mipmap/xingbie3x" />
+            android:src="@mipmap/xingbie" />
 
         <ImageView
             android:id="@+id/image_date"
@@ -93,7 +93,7 @@
             android:layout_marginTop="@dimen/dp_38"
             android:layout_marginLeft="@dimen/dp_42"
             android:scaleType="centerInside"
-            android:src="@mipmap/rili3x"
+            android:src="@mipmap/rili"
             />
         <LinearLayout
             android:layout_width="match_parent"
@@ -116,7 +116,7 @@
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/et_username"
             android:layout_marginBottom="@dimen/dp_45"
-            android:background="@mipmap/anniu13x"
+            android:background="@mipmap/anniu1"
             android:text="注册" />
 
 

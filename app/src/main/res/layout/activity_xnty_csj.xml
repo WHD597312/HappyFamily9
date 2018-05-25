@@ -38,7 +38,7 @@
         android:paddingRight="@dimen/dp_29"
         android:layout_weight="1"
         android:layout_height="@dimen/dp_30"
-        android:src="@mipmap/fanhui_xnty3x"
+        android:src="@mipmap/fanhui_xnty"
         android:background="@null"
 
         />
@@ -77,11 +77,10 @@
         android:layout_height="wrap_content"
         android:textColor="@color/white"
         android:text="当前湿度"
-
+        android:layout_alignParentRight="true"
         android:textSize="15sp"
         android:layout_below="@+id/li_csj"
-        android:layout_toRightOf="@+id/tv_csj_sdsd"
-        android:layout_marginLeft="@dimen/dp_99"
+        android:layout_marginRight="@dimen/dp_60"
         android:layout_marginTop="@dimen/dp_30"
         />
     <TextView
@@ -120,7 +119,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/dp_80"
-            android:src="@mipmap/csj_kgg3x"
+            android:src="@mipmap/csj_kgg"
             />
 
     <ImageView
@@ -139,7 +138,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:layout_marginBottom="@dimen/dp_80"
-            android:src="@mipmap/csj_fsg3x"
+            android:src="@mipmap/csj_fsg"
             />
     </LinearLayout>
     <LinearLayout

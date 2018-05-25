@@ -37,6 +37,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import pl.droidsonroids.gif.GifDrawable;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -51,8 +52,12 @@ public class LoginActivity extends AppCompatActivity {
     ImageView imageView;
     @BindView(R.id.image_wx)
     ImageView imageViewwx;
+    @BindView(R.id.imageView6)
+    ImageView imageView6;
     boolean isHideFirst = true;
     IWXAPI wxapi;
+
+    GifDrawable gifDrawable;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -76,7 +81,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        try {
+            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao3x);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (gifDrawable!=null){
+            gifDrawable.start();
+            imageView6.setImageDrawable(gifDrawable);
+        }
         if (preferences.contains("phone")){
             String phone = preferences.getString("phone", "");
             et_name.setText(phone);

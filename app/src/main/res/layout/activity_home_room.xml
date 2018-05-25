@@ -10,7 +10,7 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="@dimen/dp_460"
     android:orientation="vertical"
     android:background="@mipmap/bg_room"
     >
@@ -22,7 +22,25 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
+        <LinearLayout
+            android:id="@+id/room_li"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
 
+            >
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="卧室"
+                android:textColor="@color/white" />
+            <ImageView
+                android:paddingTop="@dimen/dp_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/xiala3x"
+                />
+        </LinearLayout>
         <RelativeLayout
             android:id="@+id/rl_room"
             android:layout_width="match_parent"
@@ -156,8 +174,18 @@
 
 </ScrollView>
 
+    <View
+        android:id="@+id/view_room"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_15"
+        android:background="@null"
+        android:layout_marginLeft="@dimen/dp_49"
+        android:layout_marginRight="@dimen/dp_49"
+        />
+
 
     <Button
+        android:id="@+id/bt_room_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/button"

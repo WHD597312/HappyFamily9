@@ -82,7 +82,7 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_12"
         android:layout_marginLeft="@dimen/dp_12"
-        android:background="@mipmap/ok3x"
+        android:background="@mipmap/ok"
         />
     <ImageView
         android:id="@+id/test"

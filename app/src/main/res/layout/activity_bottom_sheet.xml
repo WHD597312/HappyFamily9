@@ -24,7 +24,7 @@
                 android:id="@+id/iv_b_qd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/csj_qd3x"
+                android:src="@mipmap/csj_qd"
                 android:paddingTop="@dimen/dp_15"
                 android:layout_weight="1"
                 />
@@ -43,7 +43,7 @@
                 android:paddingTop="@dimen/dp_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/csj_qx3x"
+                android:src="@mipmap/csj_qx"
                 android:layout_weight="1"
                 />
         </LinearLayout>
@@ -65,7 +65,7 @@
                     android:paddingLeft="@dimen/dp_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/csj_dj3x"
+                    android:src="@mipmap/csj_dj"
                     android:paddingTop="@dimen/dp_15"
 
                     />
@@ -92,7 +92,7 @@
                     android:paddingLeft="@dimen/dp_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/csj_djnull3x"
+                    android:src="@mipmap/csj_djnull"
                     android:paddingTop="@dimen/dp_15"
 
                     />
@@ -118,7 +118,7 @@
                     android:paddingLeft="@dimen/dp_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/csj_djnull3x"
+                    android:src="@mipmap/csj_djnull"
                     android:paddingTop="@dimen/dp_15"
 
                     />

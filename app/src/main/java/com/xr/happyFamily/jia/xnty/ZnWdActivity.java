@@ -18,14 +18,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import pl.droidsonroids.gif.GifDrawable;
 
 public class ZnWdActivity extends AppCompatActivity {
     Unbinder unbinder;
+    GifDrawable gifDrawable1;
+    GifDrawable gifDrawable2;
+    GifDrawable gifDrawable3;
     TitleView titleView;
     @BindView(R.id.wd_d)
     ImageView dimage;
     @BindView(R.id.wd_xh)
     ImageView image;
+    @BindView(R.id.iv_wd_dh)
+    ImageView image1;
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
         setContentView(R.layout.activty_xnty_wd);
@@ -54,17 +60,23 @@ public class ZnWdActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        try {//加载动画
+            gifDrawable1=new GifDrawable(getResources(),R.mipmap.wd_fs);
+            gifDrawable2=new GifDrawable(getResources(),R.mipmap.pm25_xh);
+            gifDrawable3=new GifDrawable(getResources(),R.mipmap.wd_kt);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (gifDrawable1!=null && gifDrawable2!=null&&gifDrawable3!=null){
+            gifDrawable1.start();
+            gifDrawable2.start();
+            gifDrawable3.setSpeed(5.0f);
+            gifDrawable3.start();
+            dimage.setImageDrawable(gifDrawable1);
+            image.setImageDrawable(gifDrawable2);
+            image1.setImageDrawable(gifDrawable3);
+        }
 
-        Glide.with(dimage.getContext())
-                .load(R.mipmap.wd_fs)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .centerCrop()
-                .into(new GlideDrawableImageViewTarget(dimage, 100));
-        Glide.with(image.getContext())
-                .load(R.mipmap.pm25_xh)
-                .diskCacheStrategy(DiskCacheStrategy.SOURCE)
-                .centerCrop()
-                .into(new GlideDrawableImageViewTarget(image, 100));
     }
     @Override
     protected void onDestroy() {

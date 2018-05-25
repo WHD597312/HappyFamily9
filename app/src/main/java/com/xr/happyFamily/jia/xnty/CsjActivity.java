@@ -88,16 +88,17 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 if (flag==0){
-                    imageViewkg.setImageResource(R.mipmap.csj_kgk3x);
+                    imageViewkg.setImageResource(R.mipmap.csj_kgk);
                     imagefs.setImageResource(R.mipmap.csj_fs);
                     imagefs.clearAnimation();
-                    
+                    imagefs.setClickable(false);
                     textViewkq.setText("关机状态");
                     flag=1;
                 }else {
-                    imageViewkg.setImageResource(R.mipmap.csj_kgg3x);
-                    imagefs.setImageResource(R.mipmap.csj_fsg3x);
+                    imageViewkg.setImageResource(R.mipmap.csj_kgg);
+                    imagefs.setImageResource(R.mipmap.csj_fsg);
                     imagefs.startAnimation(rotate);
+                    imagefs.setClickable(true);
                     textViewkq.setText("开机状态");
                     flag=0;
                 }
@@ -329,23 +330,23 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                 break;
             case R.id.iv_b_2:
                 position=1;
-                image2.setImageResource(R.mipmap.csj_dj3x);
-                image1.setImageResource(R.mipmap.csj_djnull3x);
-                image3.setImageResource(R.mipmap.csj_djnull3x);
+                image2.setImageResource(R.mipmap.csj_dj);
+                image1.setImageResource(R.mipmap.csj_djnull);
+                image3.setImageResource(R.mipmap.csj_djnull);
 
                 break;
             case R.id.iv_b_1:
                 position=0;
-                image1.setImageResource(R.mipmap.csj_dj3x);
-                image2.setImageResource(R.mipmap.csj_djnull3x);
-                image3.setImageResource(R.mipmap.csj_djnull3x);
+                image1.setImageResource(R.mipmap.csj_dj);
+                image2.setImageResource(R.mipmap.csj_djnull);
+                image3.setImageResource(R.mipmap.csj_djnull);
 
                 break;
             case R.id.iv_b_3:
                 position=2;
-                image3.setImageResource(R.mipmap.csj_dj3x);
-                image1.setImageResource(R.mipmap.csj_djnull3x);
-                image2.setImageResource(R.mipmap.csj_djnull3x);
+                image3.setImageResource(R.mipmap.csj_dj);
+                image1.setImageResource(R.mipmap.csj_djnull);
+                image2.setImageResource(R.mipmap.csj_djnull);
 
                 break;
             case R.id.iv_csj_ds://定时显示隐藏

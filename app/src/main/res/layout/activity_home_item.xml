@@ -51,6 +51,6 @@
         android:layout_height="@dimen/dp_86"
         android:layout_alignTop="@id/tv_home_1"
         android:layout_marginLeft="@dimen/dp_84"
-        android:src="@mipmap/t3x" />
+        android:src="@mipmap/t" />
 
 </RelativeLayout>

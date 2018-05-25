@@ -4,16 +4,17 @@
     android:layout_height="match_parent"
     android:background="@mipmap/img"
     >
-
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
 
     <ImageView
         android:id="@+id/imageView4"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentStart="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerInside"
-        android:src="@mipmap/beijing3x" />
+        android:src="@mipmap/beijing" />
     <ImageView
         android:id="@+id/imageView1"
         android:layout_width="@dimen/dp_130"
@@ -21,30 +22,33 @@
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_60"
         android:scaleType="centerInside"
-        android:src="@mipmap/tubiao3x"
+        android:src="@mipmap/tubiao"
         />
     <ImageView
         android:id="@+id/iv_yuan"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/yuan23x"
+        android:src="@mipmap/yuan2"
         android:layout_below="@+id/imageView1"
         android:layout_marginLeft="@dimen/dp_110"
         />
     <ImageView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/daohang3x"
+        android:src="@mipmap/daohang"
         android:layout_toLeftOf="@id/iv_yuan"
 
         />
+
     <ImageView
+        android:id="@+id/iv_yuanwc"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/yuan3x"
+        android:layout_alignParentRight="true"
         android:layout_below="@+id/imageView1"
-        android:layout_marginLeft="@dimen/dp_228"
-        />
+        android:layout_marginRight="@dimen/dp_103"
+        android:layout_marginTop="0dp"
+        android:src="@mipmap/yuan22" />
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -61,9 +65,9 @@
         android:text="完成"
         android:textSize="11sp"
         android:layout_marginTop="@dimen/dp_8"
-        android:layout_below="@id/iv_yuan"
+        android:layout_below="@id/iv_yuanwc"
         android:textColor="@color/color_gray2"
-        android:layout_marginLeft="@dimen/dp_225"
+        android:layout_alignRight="@+id/iv_yuanwc"
         />
 
     <EditText
@@ -89,7 +93,7 @@
         android:layout_marginTop="@dimen/dp_246"
         android:layout_marginLeft="@dimen/dp_48"
         android:scaleType="centerInside"
-        android:src="@mipmap/wo3x" />
+        android:src="@mipmap/wo" />
     <View
         android:id="@+id/view1"
         android:layout_width="match_parent"
@@ -121,7 +125,7 @@
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginTop="@dimen/dp_20"
         android:scaleType="centerInside"
-        android:src="@mipmap/yaoshi3x" />
+        android:src="@mipmap/yaoshi" />
 
     <View
         android:id="@+id/view2"
@@ -144,7 +148,7 @@
         android:layout_centerVertical="true"
         android:layout_alignTop="@id/et_code"
         android:layout_alignBottom="@id/view2"
-        android:background="@mipmap/anniu33x"
+        android:background="@mipmap/anniu3"
         android:text="获取验证码"
 
         />
@@ -159,7 +163,7 @@
         android:layout_marginBottom="@dimen/dp_75"
         android:text="下一步"
         android:textColor="@color/green2"
-        android:background="@mipmap/anniu13x"
+        android:background="@mipmap/anniu1"
         />
 
     <EditText
@@ -183,7 +187,7 @@
         android:layout_marginLeft="@dimen/dp_48"
         android:layout_marginTop="@dimen/dp_25"
         android:scaleType="centerInside"
-        android:src="@mipmap/suo3x" />
+        android:src="@mipmap/suo" />
     <View
         android:id="@+id/view3"
         android:layout_width="match_parent"
@@ -194,4 +198,5 @@
         android:layout_marginRight="@dimen/dp_49"
         android:layout_marginTop="@dimen/dp_1"
         />
+</RelativeLayout>
 </RelativeLayout>

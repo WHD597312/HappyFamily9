@@ -26,7 +26,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
         unbinder=ButterKnife.bind(this);
-        
+
     }
 
     private int position=-1;

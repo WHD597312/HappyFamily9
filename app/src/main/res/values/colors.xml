@@ -54,4 +54,8 @@
     <color name="color_green3">#7dd321</color>
     <color name="color_green4">#4ee3af</color>
     <color name="color_green5">#5ad78c</color>
+    <color name="result_view">#b0000000</color>
+    <color name="viewfinder_mask">#60000000</color>
+    <color name="possible_result_points">#c0ffff00</color>
+
 </resources>

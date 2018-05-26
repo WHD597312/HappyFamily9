@@ -15,7 +15,7 @@
             android:id="@+id/back"
             android:layout_width="40dp"
             android:layout_height="40dp"
-            android:src="@mipmap/fanhui3x"
+            android:src="@mipmap/fanhui"
             android:scaleType="centerInside"
             android:layout_centerVertical="true"
             />

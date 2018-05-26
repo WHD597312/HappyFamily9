@@ -151,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                     et_pswd.setTransformationMethod(method1);
                     isHideFirst = false;
                 } else {
-                    imageView.setImageResource(R.mipmap.yanjing13x);
+                    imageView.setImageResource(R.mipmap.yanjing1);
                     //密文
                     TransformationMethod method = PasswordTransformationMethod.getInstance();
                     et_pswd.setTransformationMethod(method);

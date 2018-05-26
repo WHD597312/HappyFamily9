@@ -61,7 +61,7 @@ public class ZnSdActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         try {//加载动画
-            gifDrawable1=new GifDrawable(getResources(),R.mipmap.sd_sd3x);
+            gifDrawable1=new GifDrawable(getResources(),R.mipmap.sd_sd);
             gifDrawable2=new GifDrawable(getResources(),R.mipmap.pm25_xh);
             gifDrawable3=new GifDrawable(getResources(),R.mipmap.sd_kqjhq);
         }catch (Exception e){

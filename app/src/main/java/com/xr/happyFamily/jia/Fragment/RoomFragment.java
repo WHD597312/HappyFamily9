@@ -26,7 +26,7 @@ import butterknife.Unbinder;
 public class RoomFragment extends Fragment {
     private ImageButton mLeftMenu;
     private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
-    private Integer[] img = {R.mipmap.t3x, R.mipmap.t3x, R.mipmap.t3x, R.mipmap.t3x, R.mipmap.t3x, R.mipmap.t3x};
+    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
 
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;

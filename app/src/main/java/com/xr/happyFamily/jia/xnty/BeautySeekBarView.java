@@ -67,9 +67,9 @@ public class BeautySeekBarView extends View {
         //线的颜色
         lineColor = a.getColor(R.styleable.BeautySeekBarView_lineColor, this.getResources().getColor(R.color.color_gray2));
         //小图片
-        smallPic=a.getResourceId(R.styleable.BeautySeekBarView_smallPic, R.mipmap.csj_bz3x);
+        smallPic=a.getResourceId(R.styleable.BeautySeekBarView_smallPic, R.mipmap.csj_bz);
         //滑动过程中的大图片
-        bigPic=a.getResourceId(R.styleable.BeautySeekBarView_bigPic, R.mipmap.csj_bz3x);
+        bigPic=a.getResourceId(R.styleable.BeautySeekBarView_bigPic, R.mipmap.csj_bz);
         //控件的内边距
         viewPadding=a.getDimensionPixelSize(R.styleable.BeautySeekBarView_padding, (int) TypedValue.applyDimension(
                 TypedValue.COMPLEX_UNIT_SP, 30, getResources().getDisplayMetrics()));

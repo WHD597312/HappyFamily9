@@ -19,7 +19,7 @@
                 android:id="@+id/ib_xnty"
                 android:layout_width="0dp"
                 android:layout_height="@dimen/dp_50"
-                android:src="@mipmap/fanhui_xnty3x"
+                android:src="@mipmap/fanhui_xnty"
 
                 android:background="@null"
                 />

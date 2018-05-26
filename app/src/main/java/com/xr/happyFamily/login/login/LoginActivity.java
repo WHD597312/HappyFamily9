@@ -82,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         try {
-            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao3x);
+            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao);
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -145,7 +145,7 @@ public class LoginActivity extends AppCompatActivity {
 
             case R.id.image_seepwd:
                 if (isHideFirst == true) {
-                    imageView.setImageResource(R.mipmap.yanjing3x);
+                    imageView.setImageResource(R.mipmap.yanjing);
                     //密文
                     HideReturnsTransformationMethod method1 = HideReturnsTransformationMethod.getInstance();
                     et_pswd.setTransformationMethod(method1);

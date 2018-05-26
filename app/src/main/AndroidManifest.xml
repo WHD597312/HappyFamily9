@@ -153,7 +153,8 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".jia.activity.AddDeviceActivity"></activity>
+        <activity android:name=".jia.activity.AddDeviceActivity" />
+        <activity android:name=".jia.activity.DeviceDetailActivity"></activity>
     </application>
 
 </manifest>

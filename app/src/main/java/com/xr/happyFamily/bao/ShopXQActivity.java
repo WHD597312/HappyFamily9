@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -151,10 +152,10 @@ public class ShopXQActivity extends AppCompatActivity {
                 Toast.makeText(ShopXQActivity.this, "分享", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_shopcart:
-                Toast.makeText(ShopXQActivity.this, "购物车", Toast.LENGTH_SHORT).show();
+                Toast.makeText(ShopXQActivity.this, "已加入购物车", Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_buy:
-                Toast.makeText(ShopXQActivity.this, "购买", Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(this,ShopConfActivity.class));
                 break;
         }
     }

@@ -81,6 +81,7 @@
             android:drawableLeft="@mipmap/ic_shop_address_green"
             android:drawablePadding="@dimen/dp_8"/>
         <ImageView
+            android:id="@+id/img_address"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/gengduo2x"

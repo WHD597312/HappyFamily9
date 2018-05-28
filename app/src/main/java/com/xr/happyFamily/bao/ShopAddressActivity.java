@@ -13,6 +13,9 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.AddressAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -35,6 +38,8 @@ public class ShopAddressActivity extends AppCompatActivity {
     TextView titleRightText;
     @BindView(R.id.img_add)
     ImageView imgAdd;
+    private AddressAdapter addressAdapter;
+    private  List<Map<String, Object>> mDatas;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -50,14 +55,31 @@ public class ShopAddressActivity extends AppCompatActivity {
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
 //      获取数据，向适配器传数据，绑定适配器
-        ArrayList<String> datas = initData();
-        final AddressAdapter honmeAdapter = new AddressAdapter(ShopAddressActivity.this, datas);
-        recyclerView.setAdapter(honmeAdapter);
+        mDatas=new ArrayList<Map<String, Object>>();
+        mDatas = initData();
+        addressAdapter = new AddressAdapter(ShopAddressActivity.this, mDatas);
+        recyclerView.setAdapter(addressAdapter);
         //      调用按钮返回事件回调的方法
-        honmeAdapter.buttonSetOnclick(new AddressAdapter.ButtonInterface() {
+        addressAdapter.buttonSetOnclick(new AddressAdapter.ButtonInterface() {
             @Override
             public void onclick(View view, int position) {
-                honmeAdapter.setDefSelect(position);
+                addressAdapter.setDefSelect(position);
+            }
+        });
+        addressAdapter.setOnItemClickListener(new AddressAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent();
+                intent.putExtra("name", mDatas.get(position).get("name").toString());
+                intent.putExtra("tel", mDatas.get(position).get("tel").toString());
+                intent.putExtra("address", mDatas.get(position).get("address").toString());
+    /*
+     * 调用setResult方法表示我将Intent对象返回给之前的那个Activity，这样就可以在onActivityResult方法中得到Intent对象，
+     * 参数1：resultCode返回码，跳转之前的activity根据是这个resultCode，区分是哪一个activity返回的
+     * 参数2：数据源
+     */
+                setResult(111, intent);
+                finish();//结束当前activity
             }
         });
 //        honmeAdapter.setOnItemListener(new AddressAdapter.OnItemListener() {
@@ -68,15 +90,23 @@ public class ShopAddressActivity extends AppCompatActivity {
 //            }
 //        });
 
+
     }
 
-    protected ArrayList<String> initData() {
-        ArrayList<String> mDatas = new ArrayList<String>();
+    public List<Map<String, Object>> initData() {
+        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+        Map<String, Object> map = null;
         for (int i = 0; i < 3; i++) {
-            mDatas.add("姓名" + i);
+            map = new HashMap<String, Object>();
+            map.put("name", "姓名"+i);
+            map.put("tel", "电话"+i);
+            map.put("address", "地址"+i+i+i+i+i+i+i+i+i+i+i);
+            list.add(map);
         }
-        return mDatas;
+        return list;
     }
+
+
 
 
     @OnClick({R.id.back, R.id.img_add})

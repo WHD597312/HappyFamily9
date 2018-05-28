@@ -3,6 +3,7 @@ package com.xr.happyFamily.bao.adapter;
 import android.content.Context;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -25,8 +26,8 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
 
     //定义构造方法，默认传入上下文和数据源
     public WaterFallAdapter(Context context, List<PersonCard> data) {
-        mContext = context;
-        mData = data;
+        this.mContext = context;
+        this.mData = data;
     }
 
     @Override  //将ItemView渲染进来，创建ViewHolder
@@ -37,8 +38,10 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
 
     @Override  //将数据源的数据绑定到相应控件上
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+
         MyViewHolder holder2 = (MyViewHolder) holder;
         PersonCard personCard = mData.get(position);
+        Log.e("qqqqqqqq2",mData.size()+"???"+personCard.name);
         int uri = personCard.avatarUrl;
         holder2.userAvatar.setBackgroundResource(uri);
 //        holder2.userAvatar.getLayoutParams().height = personCard.imgHeight; //从数据源中获取图片高度，动态设置到控件上

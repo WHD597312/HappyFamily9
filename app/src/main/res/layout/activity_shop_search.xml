@@ -2,6 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_gray"
     android:orientation="vertical">
 
 
@@ -95,7 +96,6 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_20"
             android:gravity="center"
-            android:numColumns="4"
             android:stretchMode="columnWidth"
             android:verticalSpacing="@dimen/dp_20"></GridView>
     </LinearLayout>
@@ -105,6 +105,7 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_his"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
@@ -115,7 +116,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="@dimen/sp_12"
+            android:textSize="@dimen/sp_14"
             android:drawableLeft="@mipmap/shijian3x"
             android:drawablePadding="@dimen/dp_3"
             android:text="历史搜索"
@@ -129,17 +130,17 @@
             android:textColor="#851BAE59"
             android:layout_marginLeft="@dimen/dp_15"
             android:text="TOP SEARCH"/>
+            <GridView
+                android:listSelector="@android:color/transparent"
+                android:id="@+id/gv_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_20"
+                android:gravity="center"
+                android:horizontalSpacing="@dimen/dp_15"
+                android:numColumns="auto_fit"
+                android:verticalSpacing="@dimen/dp_20"></GridView>
 
-        <GridView
-            android:listSelector="@android:color/transparent"
-            android:id="@+id/gv_history"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_20"
-            android:gravity="center"
-            android:numColumns="4"
-            android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/dp_20"></GridView>
 
         <ImageView
             android:id="@+id/img_clear"
@@ -147,8 +148,10 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="@dimen/dp_10"
             android:src="@mipmap/qingkong3x"/>
+
     </LinearLayout>
     <com.xr.happyFamily.bao.view.LinearGradientView
+        android:id="@+id/lg_his"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_3" />
 

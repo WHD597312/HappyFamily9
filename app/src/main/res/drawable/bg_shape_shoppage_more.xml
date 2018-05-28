@@ -4,7 +4,7 @@
     <!-- 搜索结果分类列表背景 -->
     <corners  android:radius="@dimen/dp_5"/>
 
-    <stroke android:color="@color/shop_title"
+    <stroke android:color="#33808080"
         android:width="@dimen/dp_1"/>
 
 

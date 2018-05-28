@@ -43,6 +43,7 @@
                 android:text="电暖器"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14"
+                android:layout_marginTop="@dimen/dp_14"
                 android:gravity="center"
                 />
 

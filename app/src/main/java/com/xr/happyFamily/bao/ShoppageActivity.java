@@ -4,10 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
@@ -27,6 +29,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
 import com.xr.happyFamily.bao.view.LinearGradientView;
@@ -51,32 +54,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     @BindView(R.id.image_more)
     ImageView imageMore;
 
-    @BindView(R.id.recyclerview)
-    RecyclerView recyclerview;
-    @BindView(R.id.img_tuijian)
-    ImageView imgTuijian;
-    @BindView(R.id.rl_tuijian)
-    RelativeLayout rlTuijian;
-    @BindView(R.id.img_dian)
-    ImageView imgDian;
-    @BindView(R.id.rl_dian)
-    RelativeLayout rlDian;
-    @BindView(R.id.img_kong)
-    ImageView imgKong;
-    @BindView(R.id.rl_kong)
-    RelativeLayout rlKong;
-    @BindView(R.id.img_chu)
-    ImageView imgChu;
-    @BindView(R.id.rl_chu)
-    RelativeLayout rlChu;
-    @BindView(R.id.img_jing)
-    ImageView imgJing;
-    @BindView(R.id.rl_jing)
-    RelativeLayout rlJing;
-    @BindView(R.id.img_chuan)
-    ImageView imgChuan;
-    @BindView(R.id.rl_chuan)
-    RelativeLayout rlChuan;
+
     @BindView(R.id.viewPager)
     ViewPager viewPager;
     @BindView(R.id.img1)
@@ -98,19 +76,18 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     LinearLayout llData;
     @BindView(R.id.img_shang)
     ImageView imgShang;
-    @BindView(R.id.rl_fenlei)
-    RelativeLayout rlFenlei;
     @BindView(R.id.ll_yinying)
     LinearGradientView llYinying;
     @BindView(R.id.view_zhe)
     View viewZhe;
-    @BindView(R.id.horiSV)
-    HorizontalScrollView horiSV;
-    @BindView(R.id.img_touming)
-    ImageView imgTouming;
-    private RecyclerView mRecyclerView;
-    private RecyclerView.LayoutManager mLayoutManager;
-    private WaterFallAdapter mAdapter;
+    @BindView(R.id.rv_title)
+    RecyclerView rvTitle;
+    @BindView(R.id.rv_shop)
+    RecyclerView rvShop;
+
+    private RecyclerView.LayoutManager shopLayoutManager;
+    private LinearLayoutManager titleLayoutManager;
+    private WaterFallAdapter shopAdapter;
     private View contentViewSign;
     private PopupWindow mPopWindow;
     private Context mContext;
@@ -125,7 +102,11 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     private int[] imgae_dots = new int[]{R.id.img1, R.id.img2, R.id.img3, R.id.img4};
     private String[] from = {"title"};
     private int[] to = {R.id.tv_search};
-    String[] titles = new String[]{"推荐", "电暖器", "空调", "智能传感器", "净水器", "除尘机"};
+    String[] titles = new String[]{"推荐", "电暖器", "空调", "除尘机", "净水器", "智能传感器"};
+    private MainTitleAdapter mainTitleAdapter;
+    private List<String> list_title;
+    private List<PersonCard> list_shop;
+
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
@@ -144,61 +125,74 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
 
     @RequiresApi(api = Build.VERSION_CODES.M)
     private void init() {
-        mRecyclerView = (RecyclerView) findViewById(R.id.recyclerview);
+        list_title = new ArrayList<>();
+        list_shop = new ArrayList<>();
+        list_shop = buildData("电暖器");
+        for (int i = 0; i < 6; i++) {
+            list_title.add(titles[i]);
+        }
+        mainTitleAdapter = new MainTitleAdapter(this, list_title);
+
+
+        titleLayoutManager = new LinearLayoutManager(this);
+        titleLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
+        rvTitle.setLayoutManager(titleLayoutManager);
+        rvTitle.setAdapter(mainTitleAdapter);
+
         //设置布局管理器为2列，纵向
-        mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
+        shopLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         //瀑布流相关适配器
-        mAdapter = new WaterFallAdapter(this, buildData());
-        SimpleAdapter simpleAdapter = new SimpleAdapter(this, getList(),
+        shopAdapter = new WaterFallAdapter(this, list_shop);
+        SimpleAdapter moreAdapter = new SimpleAdapter(this, getList(),
                 R.layout.item_shop_more, from, to);
-        mRecyclerView.setLayoutManager(mLayoutManager);
-        mRecyclerView.setAdapter(mAdapter);
-        mAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
+        rvShop.setLayoutManager(shopLayoutManager);
+        rvShop.setAdapter(shopAdapter);
+        shopAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
                 Toast.makeText(ShoppageActivity.this, "点击了" + position, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(ShoppageActivity.this, ShopXQActivity.class));
             }
         });
+        mainTitleAdapter.setOnItemClickListener(new MainTitleAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                mainTitleAdapter.setPosition(position); //传递当前的点击位置
+                mainTitleAdapter.notifyDataSetChanged(); //通知刷新
+                list_shop.clear();
+                list_shop.addAll(buildData(titles[position]));
+                shopAdapter.notifyDataSetChanged();
+            }
+        });
         //下拉选项相关适配器
-        gvMore.setAdapter(simpleAdapter);
+        gvMore.setAdapter(moreAdapter);
         gvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("qqqqqqqqqqqq", titles[position]);
                 Toast.makeText(ShoppageActivity.this, "i am:" + titles[position], Toast.LENGTH_SHORT).show();
-                if (llNodata.getVisibility() == View.VISIBLE) {
-                    llNodata.setVisibility(View.GONE);
-                } else
-                    llNodata.setVisibility(View.VISIBLE);
+                llNodata.setVisibility(View.GONE);
+                rvTitle.setVisibility(View.VISIBLE);
+                mainTitleAdapter.setPosition(position);
+                mainTitleAdapter.notifyDataSetChanged();
+                list_shop.clear();
+                list_shop.addAll(buildData(titles[position]));
+                shopAdapter.notifyDataSetChanged();
             }
 
         });
-        horiSV.setOnScrollChangeListener(new View.OnScrollChangeListener() {
-            @Override
-            public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
 
-                //滑到最左
-                if (horiSV.getChildAt(horiSV.getChildCount() - 1).getRight() ==
-
-                        horiSV.getScrollX() + horiSV.getWidth()) {
-                    imgTouming.setVisibility(View.GONE);
-                } else {  //滑到中间
-imgTouming.setVisibility(View.VISIBLE);
-                }
-            }
-        });
         initData();//初始化数据
         initView();//初始化View，设置适配器
         autoPlayView();//开启线程，自动播放
     }
 
+
+
+
     public List<Map<String, Object>> getList() {
         List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
         Map<String, Object> map = null;
-
-
-        for (int i = 0; i < 5; i++) {
+        for (int i = 0; i < 6; i++) {
             map = new HashMap<String, Object>();
             map.put("title", titles[i]);
             list.add(map);
@@ -307,9 +301,8 @@ imgTouming.setVisibility(View.VISIBLE);
         }).start();
     }
 
-    private List<PersonCard> buildData() {
-
-        String[] names = {"电暖气1", "电暖气2", "电暖气3", "电暖气4"};
+    private List<PersonCard> buildData(String name) {
+        String[] names = {name + "1", name + "2", name + "3", name + "4"};
         int[] imgUrs = {R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4
         };
 
@@ -325,7 +318,7 @@ imgTouming.setVisibility(View.VISIBLE);
     }
 
 
-    @OnClick({R.id.tv_search, R.id.image_more, R.id.rl_tuijian, R.id.rl_dian, R.id.rl_kong, R.id.rl_chu, R.id.rl_jing, R.id.rl_chuan, R.id.img_more, R.id.img_shang, R.id.view_zhe})
+    @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
@@ -334,27 +327,15 @@ imgTouming.setVisibility(View.VISIBLE);
             case R.id.image_more:
                 showPopup();
                 break;
-            case R.id.rl_tuijian:
-                break;
-            case R.id.rl_dian:
-                break;
-            case R.id.rl_kong:
-                break;
-            case R.id.rl_chu:
-                break;
-            case R.id.rl_jing:
-                break;
-            case R.id.rl_chuan:
-                break;
             case R.id.img_more:
                 llNodata.setVisibility(View.VISIBLE);
-                rlFenlei.setVisibility(View.INVISIBLE);
+                rvTitle.setVisibility(View.INVISIBLE);
                 llYinying.setVisibility(View.INVISIBLE);
                 break;
             case R.id.img_shang:
             case R.id.view_zhe:
                 llNodata.setVisibility(View.GONE);
-                rlFenlei.setVisibility(View.VISIBLE);
+                rvTitle.setVisibility(View.VISIBLE);
                 llYinying.setVisibility(View.VISIBLE);
                 break;
 
@@ -400,12 +381,15 @@ imgTouming.setVisibility(View.VISIBLE);
         switch (v.getId()) {
             case R.id.tv_shopcart:
                 startActivity(new Intent(this, ShopCartActivity.class));
+                mPopWindow.dismiss();
                 break;
             case R.id.tv_dingdan:
                 startActivity(new Intent(this, ShopDingdanActivity.class));
+                mPopWindow.dismiss();
                 break;
             case R.id.tv_shangcheng:
                 startActivity(new Intent(this, ShopShangchengActivity.class));
+                mPopWindow.dismiss();
                 break;
         }
     }

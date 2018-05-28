@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
@@ -61,7 +64,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     @BindView(R.id.view_zhe)
     View viewZhe;
     private RecyclerView.LayoutManager mLayoutManager;
-    private WaterFallAdapter mAdapter;
+    private WaterFallAdapter shopAdapter;
 
     private String[] from = {"title"};
     private int[] to = {R.id.tv_search};
@@ -70,7 +73,10 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     SimpleAdapter jiageAdapter;
     SimpleAdapter pinpaiAdapter;
     private boolean isMore = false;
-
+    private int sign=0;
+    private ImageView[] img;
+    private List<PersonCard> list_shop;
+    
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -84,24 +90,42 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     }
 
     private void init() {
+        img= new ImageView[]{imgZonghe, imgJiage, imgPinpai};
+        list_shop = new ArrayList<>();
+        list_shop = buildData("电暖器");
         recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
-        mAdapter = new WaterFallAdapter(this, buildData());
+        shopAdapter = new WaterFallAdapter(this, list_shop);
 
         recyclerview.setLayoutManager(mLayoutManager);
-        recyclerview.setAdapter(mAdapter);
+        recyclerview.setAdapter(shopAdapter);
 
         jiageAdapter = new SimpleAdapter(this, getList(),
                 R.layout.item_search_result, from, to);
         pinpaiAdapter = new SimpleAdapter(this, getList2(),
                 R.layout.item_search_result, from, to);
+        gvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                if(sign==1){
+                    list_shop.clear();
+                    list_shop.addAll(buildData(titles[position]));
+                    shopAdapter.notifyDataSetChanged();
+
+                }else {
+                    list_shop.clear();
+                    list_shop.addAll(buildData(titles2[position]));
+                    shopAdapter.notifyDataSetChanged();
+                }
+                llGv.setVisibility(View.GONE);
+            }
+        });
     }
 
 
-    private List<PersonCard> buildData() {
-
-        String[] names = {"电暖气1", "电暖气2", "电暖气3", "电暖气4"};
+    private List<PersonCard> buildData(String name) {
+        String[] names = {name + "1", name + "2", name + "3", name + "4"};
         int[] imgUrs = {R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4
         };
 
@@ -128,33 +152,44 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             case R.id.rl_zonghe:
                 llNodata.setVisibility(View.GONE);
                 recyclerview.setVisibility(View.VISIBLE);
+                img[sign].setVisibility(View.INVISIBLE);
+                sign=0;
+                img[sign].setVisibility(View.VISIBLE);
                 break;
             case R.id.rl_jiage:
-                if (!isMore) {
+                if(sign==1){
+                    if(llGv.getVisibility()==View.VISIBLE){
+                        llGv.setVisibility(View.GONE);
+                    }else
+                        llGv.setVisibility(View.VISIBLE);
+            }
+               else  {
                     gvMore.setNumColumns(3);
                     gvMore.setAdapter(jiageAdapter);
                     llGv.setVisibility(View.VISIBLE);
-                    isMore = true;
-                } else {
-                    llGv.setVisibility(View.GONE);
-                    isMore = false;
+                    img[sign].setVisibility(View.INVISIBLE);
+                    sign=1;
+                    img[sign].setVisibility(View.VISIBLE);
                 }
-//                if(llGv.getVisibility()==View.VISIBLE){
-//                    llGv.setVisibility(View.GONE);
-//                }else
-//                llGv.setVisibility(View.VISIBLE);
-//                gvMore.setNumColumns(3);
-//                gvMore.setAdapter(jiageAdapter);
                 break;
             case R.id.rl_pinpai:
-                if (!isMore) {
+                Log.e("qqqqqqqqqqq",sign+"???");
+                if(sign==2){
+
+                    if(llGv.getVisibility()==View.VISIBLE){
+                        llGv.setVisibility(View.GONE);
+                        Log.e("qqqqqqqqqqq","!!!!!");
+                    }else {
+                        llGv.setVisibility(View.VISIBLE);
+                        Log.e("qqqqqqqqqqq", "?????");
+                    }
+                }else {
                     gvMore.setNumColumns(4);
                     gvMore.setAdapter(pinpaiAdapter);
                     llGv.setVisibility(View.VISIBLE);
-                    isMore = true;
-                } else {
-                    llGv.setVisibility(View.GONE);
-                    isMore = false;
+                    img[sign].setVisibility(View.INVISIBLE);
+                    sign=2;
+                    img[sign].setVisibility(View.VISIBLE);
                 }
                 break;
             case R.id.view_zhe:

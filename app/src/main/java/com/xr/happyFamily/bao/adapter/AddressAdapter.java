@@ -19,13 +19,13 @@ import java.util.Map;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder> {
     private Context context;
-    private ArrayList<String> list;
+    private List<Map<String, Object>> list;
     private ButtonInterface buttonInterface;
 
     private int defItem = -1;
     private OnItemListener onItemListener;
 
-    public AddressAdapter(Context context, ArrayList<String> list) {
+    public AddressAdapter(Context context, List<Map<String, Object>> list) {
         this.context=context;
         this.list=list;
     }
@@ -39,6 +39,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
         this.defItem = position;
         notifyDataSetChanged();
     }
+
 
     /**
      *按钮点击事件需要的方法
@@ -58,13 +59,15 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
                 context).inflate(R.layout.item_address, parent,
-                false));
+                false),mItemClickListener);
         return holder;
     }
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.tv_name.setText(list.get(position));
+        holder.tv_name.setText(list.get(position).get("name").toString());
+        holder.tv_tel.setText(list.get(position).get("tel").toString());
+        holder.tv_address.setText(list.get(position).get("address").toString());
         if (defItem != -1) {
             if (defItem == position) {
                 holder.img_choose.setImageResource(R.mipmap.xuanzhong3x);
@@ -91,12 +94,13 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
     /**
      * ViewHolder的类，用于缓存控件
      */
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener{
 
         ImageView img_choose,img_bianji,img_del;
         TextView tv_name,tv_tel,tv_address;
+        private MyItemClickListener mListener;
 
-        public MyViewHolder(View view) {
+        public MyViewHolder(View view,MyItemClickListener myItemClickListener) {
             super(view);
             img_choose = (ImageView) view.findViewById(R.id.img_choose);
             img_bianji = (ImageView) view.findViewById(R.id.img_bianji);
@@ -104,16 +108,27 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
             tv_name= (TextView) view.findViewById(R.id.tv_name);
             tv_tel= (TextView) view.findViewById(R.id.tv_tel);
             tv_address= (TextView) view.findViewById(R.id.tv_address);
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemListener != null) {
-                        onItemListener.onClick(v,getLayoutPosition(),list.get(getLayoutPosition()));
-                    }
-                }
-            });
+            this.mListener = myItemClickListener;
+            itemView.setOnClickListener(this);
         }
 
 
+
+        @Override
+        public void onClick(View v) {
+            if (mListener != null) {
+                mListener.onItemClick(v, getLayoutPosition());
+            }
+
+        }
+    }
+
+
+    private MyItemClickListener mItemClickListener;
+    public void setOnItemClickListener(MyItemClickListener onItemClickListener) {
+        mItemClickListener = onItemClickListener;
+    }
+    public interface MyItemClickListener {
+        void onItemClick(View view, int position);
     }
 }

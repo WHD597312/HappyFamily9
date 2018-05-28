@@ -53,6 +53,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_44"
+                android:background="@color/white"
                 android:orientation="horizontal">
 
                 <RelativeLayout
@@ -91,6 +92,7 @@
                         android:drawableRight="@mipmap/ic_result_price"
                         android:textColor="@color/black"
                         android:layout_centerInParent="true"
+                        android:drawablePadding="@dimen/dp_3"
                         android:textSize="@dimen/sp_12" />
 
                     <ImageView
@@ -176,7 +178,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:visibility="visible">
+            android:visibility="gone">
 
             <GridView
                 android:id="@+id/gv_more"

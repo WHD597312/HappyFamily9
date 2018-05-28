@@ -11,6 +11,7 @@
         android:layout_height="@dimen/dp_3" />
 
     <RelativeLayout
+        android:id="@+id/rl_address"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_70"
         android:layout_marginTop="@dimen/dp_10"

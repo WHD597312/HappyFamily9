@@ -1,10 +1,12 @@
 package com.xr.happyFamily.bao;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 
@@ -57,10 +59,13 @@ public class ShopShangchengActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_address:
+                startActivity(new Intent(ShopShangchengActivity.this,ShopAddressActivity.class));
                 break;
             case R.id.tv_shouhou:
+                Toast.makeText(ShopShangchengActivity.this, "售后" , Toast.LENGTH_SHORT).show();
                 break;
             case R.id.tv_guanyu:
+                Toast.makeText(ShopShangchengActivity.this, "售后" , Toast.LENGTH_SHORT).show();
                 break;
         }
     }

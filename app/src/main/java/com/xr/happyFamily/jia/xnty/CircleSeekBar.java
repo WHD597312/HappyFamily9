@@ -7,7 +7,6 @@ import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
@@ -16,19 +15,16 @@ import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
-
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.pojo.TimeTask;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
 
 /**
- * Created by gaopengfei on 15/11/15.
+ *
  */
 public class CircleSeekBar extends View {
 
@@ -68,11 +64,11 @@ public class CircleSeekBar extends View {
     private boolean isHasReachedCornerRound;
     private int mPointerColor;
     private float mPointerRadius;
-    private float start_angle;
-    private float cur_angle;
-    private int week;/**某一周的星期*/
-    private String deviceId;/**设备Id*/
-
+    private String module;
+    /**
+     * 模式
+     */
+    private boolean slide;
 
     private double mCurAngle;
     private float mWheelCurX, mWheelCurY;
@@ -95,30 +91,26 @@ public class CircleSeekBar extends View {
 
     private Paint mPaint;
     private OnSeekBarChangeListener mChangListener;
-    public double[] angles={-90, -75, -60, -45,-30, -15, 0, 15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,250,265,270,285,300,315,330,345,360};
-    public double[] angles2={270,  285, 300, 315, 330,345,0,15,30,45,60,75,90,105,120,135,150,165,180,195,210,225,250,265};
-    private Context context;
+    private int mCurrentAngle;//当前角度
+    private int end;
+    private String workMode;
+    private String output;
 
     public CircleSeekBar(Context context) {
         this(context, null);
-        this.context=context;
-
     }
 
     public CircleSeekBar(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
-        this.context=context;
     }
 
     public CircleSeekBar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
-        this.context=context;
+
         initAttrs(attrs, defStyleAttr);
         initPadding();
         initPaints();
-        mPaint=new Paint();
-
-        Log.d("angles",angles.length+"");
+        mPaint = new Paint();
     }
 
     private void initPaints() {
@@ -130,9 +122,9 @@ public class CircleSeekBar extends View {
         mWheelPaint.setColor(mUnreachedColor);
         mWheelPaint.setStyle(Paint.Style.STROKE);
         mWheelPaint.setStrokeWidth(mUnreachedWidth);
-        if (isHasWheelShadow) {
-            mWheelPaint.setShadowLayer(mWheelShadowRadius, mDefShadowOffset, mDefShadowOffset, Color.DKGRAY);
-        }
+//        if (isHasWheelShadow) {
+//            mWheelPaint.setShadowLayer(mWheelShadowRadius, mDefShadowOffset, mDefShadowOffset, Color.DKGRAY);
+//        }
         /**
          * 选中区域画笔
          */
@@ -159,30 +151,43 @@ public class CircleSeekBar extends View {
         mReachedEdgePaint.setStyle(Paint.Style.FILL);
     }
 
+    private boolean first;
+
+    public void setFirst(boolean first) {
+        this.first = first;
+    }
+
+    public boolean isFirst() {
+        return first;
+    }
+
+
     private void initAttrs(AttributeSet attrs, int defStyle) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.CircleSeekBar, defStyle, 0);
         mMaxProcess = a.getInt(R.styleable.CircleSeekBar_wheel_max_process, 100);
+
         mCurProcess = a.getInt(R.styleable.CircleSeekBar_wheel_cur_process, 0);
         if (mCurProcess > mMaxProcess) mCurProcess = mMaxProcess;
-        mReachedColor = a.getColor(R.styleable.CircleSeekBar_wheel_reached_color, getColor(R.color.color_orange));
-        mUnreachedColor = a.getColor(R.styleable.CircleSeekBar_wheel_unreached_color,
-                getColor(R.color.color_blank2));
+        mReachedColor = a.getColor(R.styleable.CircleSeekBar_wheel_reached_color, getColor(R.color.color_blank3));
+
         mUnreachedWidth = a.getDimension(R.styleable.CircleSeekBar_wheel_unreached_width,
                 getDimen(R.dimen.def_wheel_width));
+
         isHasReachedCornerRound = a.getBoolean(R.styleable.CircleSeekBar_wheel_reached_has_corner_round, true);
         mReachedWidth = a.getDimension(R.styleable.CircleSeekBar_wheel_reached_width, mUnreachedWidth);
         mPointerColor = a.getColor(R.styleable.CircleSeekBar_wheel_pointer_color, getColor(R.color.def_pointer_color));
         mPointerRadius = a.getDimension(R.styleable.CircleSeekBar_wheel_pointer_radius, mUnreachedWidth / 2);
         isHasWheelShadow = a.getBoolean(R.styleable.CircleSeekBar_wheel_has_wheel_shadow, false);
-        mPointColor=a.getColor(R.styleable.CircleSeekBar_pointcolor, Color.WHITE);
-        start_angle=a.getFloat(R.styleable.CircleSeekBar_wheel_start_angle,0);
-        cur_angle=a.getFloat(R.styleable.CircleSeekBar_wheel_current_angle,0);
-        deviceId=a.getString(R.styleable.CircleSeekBar_deviceId);
-        week=a.getInt(R.styleable.CircleSeekBar_week,0);
-
-
-        mNumColor=a.getColor(R.styleable.CircleSeekBar_numcolor, Color.BLACK);
-        mNumSize=a.getInt(R.styleable.CircleSeekBar_numsize,14);
+        mPointColor = a.getColor(R.styleable.CircleSeekBar_pointcolor, Color.WHITE);
+        mCurrentAngle = a.getInt(R.styleable.CircleSeekBar_mCurrentAngle, 0);
+        mNumColor = a.getColor(R.styleable.CircleSeekBar_numcolor, Color.BLACK);
+        mNumSize = a.getInt(R.styleable.CircleSeekBar_numsize, 14);
+        first = a.getBoolean(R.styleable.CircleSeekBar_first, false);
+        mCurAngle = a.getInt(R.styleable.CircleSeekBar_mCurAngle, 0);
+        deviceId = a.getString(R.styleable.CircleSeekBar_deviceId);
+        end = a.getInt(R.styleable.CircleSeekBar_end, 0);
+        workMode = a.getString(R.styleable.CircleSeekBar_workMode);
+        output = a.getString(R.styleable.CircleSeekBar_output);
         if (isHasWheelShadow) {
             mWheelShadowRadius = a.getDimension(R.styleable.CircleSeekBar_wheel_shadow_radius,
                     getDimen(R.dimen.def_shadow_radius));
@@ -237,6 +242,14 @@ public class CircleSeekBar extends View {
         }
     }
 
+    public void setEnd(int end) {
+        this.end = end;
+    }
+
+    public int getEnd() {
+        return end;
+    }
+
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         int height = getDefaultSize(getSuggestedMinimumHeight(), heightMeasureSpec);
@@ -248,6 +261,9 @@ public class CircleSeekBar extends View {
         refershUnreachedWidth();
     }
 
+    private int cur = 0;
+
+    private int start=0;
     @Override
     protected void onDraw(Canvas canvas) {
         float left = getPaddingLeft() + mUnreachedWidth / 2;
@@ -257,7 +273,9 @@ public class CircleSeekBar extends View {
         float centerX = (left + right) / 2;
         float centerY = (top + bottom) / 2;
 
+
         float wheelRadius = (canvas.getWidth() - getPaddingLeft() - getPaddingRight()) / 2 - mUnreachedWidth / 2;
+
 
         if (isHasCache) {
             if (mCacheCanvas == null) {
@@ -265,91 +283,180 @@ public class CircleSeekBar extends View {
             }
             canvas.drawBitmap(mCacheBitmap, 0, 0, null);
         } else {
-            mWheelPaint.setColor(getResources().getColor(R.color.color_blank3));
-            canvas.drawCircle(centerX, centerY, wheelRadius, mWheelPaint);
+//            mWheelPaint.setColor(getResources().getColor(R.color.white));
+//            canvas.drawCircle(centerX, centerY, wheelRadius, mWheelPaint);
+//            canvas.drawArc(new RectF(left, top, right, bottom), -90, (float) 315, false, mWheelPaint);
         }
 
-//        //画选中区域
-//        canvas.drawArc(new RectF(left, top, right, bottom), -90, (float) -60, false, mReachedPaint);
-//        canvas.drawArc(new RectF(left, top, right, bottom), 0, (float) 30, false, mReachedPaint);
+        //画选中区域
+        canvas.drawArc(new RectF(left, top, right, bottom), 135, (float) 270, false, mReachedPaint);
 
-
-//            if (!com.xr.happyFamily.login.util.Utils.isEmpty(deviceId)){
-//                long device=Long.parseLong(deviceId);
-//               List<TimeTask> list=timeTaskDao.findWeekAll(device,week);
-//                for (TimeTask timeTask :list){
-//                    int start= timeTask.getStart();
-//                    int end= timeTask.getEnd();
-//                    if (start==24){
-//                        start=0;
-//                    }
-//                    float startAngle= (360/24)*start-90;
-//                    float endAngle=(360/24)*end-90;
-//
-//                    mCurAngle=endAngle-startAngle;
-//
-//                    //画选中区域
-//                    canvas.drawArc(new RectF(left, top, right, bottom), startAngle, (float)mCurAngle, false, mReachedPaint);
-//                    canvas.save();
-//
-////            double cos = -Math.cos(Math.toRadians((360/24)*start));
-////            mWheelCurX = calcXLocationInWheel((360/24)*start, cos);
-////            mWheelCurY = calcYLocationInWheel(cos);
-////            //画锚点
-////            canvas.drawCircle(mWheelCurX, mWheelCurY, mPointerRadius, mPointerPaint);
-////            canvas.save();
-////            cos = -Math.cos(Math.toRadians(360/24)*end);
-////            mWheelCurX = calcXLocationInWheel((360/24)*end, cos);
-////            mWheelCurY = calcYLocationInWheel(cos);
-////            //画锚点
-////            canvas.drawCircle(mWheelCurX, mWheelCurY, mPointerRadius, mPointerPaint);
-////            canvas.save();
-
-//                }
-//            }
-
-
-
+        //画锚点
+//        mPointerPaint.setColor(getResources().getColor(R.color.color_black3));
 
         mPaint.setAntiAlias(true);//去除边缘锯齿，优化绘制效果
-        mPaint.setColor(getResources().getColor(R.color.color_white));
+        mPaint.setColor(getResources().getColor(R.color.color_blank3));
         canvas.save();//保存当前的状态
 
-        for (int i = 0; i < 24; i++) {//总共24个点  所以绘制24次  //绘制一圈的小黑点
-            if (i % 2 == 0) {
 
-                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
-                        getPaddingTop() + mUnreachedWidth+ TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()),
-                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
-
-                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
+        for (int i = 0; i < 25; i++) {//总共45个点  所以绘制45次  //绘制一圈的小黑点
+            if (i > 9 && i < 15) {
+//                mPaint.setColor();
+                mPaint.setColor(getResources().getColor(R.color.white));
             } else {
-                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()),
-                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 10, getResources().getDisplayMetrics()), mPaint);
+                mPaint.setColor(getResources().getColor(R.color.color_blank3));
             }
-            canvas.rotate(15, centerX, centerY);//360度  绘制60次   每次旋转6度
+//            if (i > 37) {
+//                mPaint.setColor(getResources().getColor(R.color.color_blank3));
+//            }
+//            if (i % 7 == 0) {
+//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()), mPaint);
+//            } else {
+            float centerX2 = ((centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()) +
+                    (centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics())))) / 2;
+            float centerY2 = ((getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics())) + (getPaddingTop() + mUnreachedWidth
+                    + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()))) / 2;
+            canvas.drawCircle(centerX2, centerY2, 18, mPaint);
+//            canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),
+//                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),
+//                    centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),
+//                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
+//            }
+//            if (i == 37) {
+//                mPaint.setColor(getResources().getColor(R.color.red_normal));
+//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()), mPaint);
+//            }
+            canvas.rotate(15, centerX, centerY);//360度  绘制72次   每次旋转5度
         }
-        if (mNumColor == 0) {
-            mPaint.setColor(Color.BLACK);
+//        if (mNumColor == 0) {
+//            mPaint.setColor(Color.BLACK);
+//        }
+//        mPaint.setColor(Color.WHITE);
+//        mPaint.setTextSize(mNumSize);
+//        if (mNumSize == 0) {
+//            mPaint.setTextSize((int) TypedValue.applyDimension(
+//                    TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
+//        }
+//        mPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
+//        String[] strs = null;
+//        String[] strs2 = null;
+//
+//        strs = new String[]{"05", "12", "19", "26", "33", "40"};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
+//        strs2 = new String[]{"", "", "", "", "", "", "42"};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
+//
+//
+//        Rect rect = new Rect();
+//        canvas.save();
+//        for (int i = 0; i < 6; i++) {//绘制6次  每次旋转56度
+//
+//            mPaint.getTextBounds(strs[i], 0, strs[i].length(), rect);
+//            canvas.drawText(strs[i], centerX - rect.width() / 2,
+//                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()) + rect.height(), mPaint);
+//            canvas.rotate(56, centerX, centerY);
+//        }
+//        canvas.save();
+
+
+//        for (int i = 0; i < 7; i++) {//绘制6次  每次旋转30度
+//            if (i == 6) {
+//                mPaint.setColor(getResources().getColor(R.color.white));
+//            } else {
+//                mPaint.setColor(getResources().getColor(R.color.color_blank3));
+//            }
+//
+//            mPaint.getTextBounds(strs2[i], 0, strs2[i].length(), rect);
+//            canvas.drawText(strs2[i], centerX - rect.width() / 2,
+//                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()) + rect.height(), mPaint);
+//
+//            canvas.rotate(53.5f, centerX, centerY);
+//        }
+//        canvas.save();
+
+
+        mCurAngle = mCurProcess;
+
+
+        if (mCurAngle >= 0) {
+//            if (mCurAngle >= 272) {
+//                if (mCurAngle > 272 && mCurAngle <= 330) {
+//                    mCurAngle = 272;
+//                } else if (mCurAngle > 330 && mCurAngle <= 360) {
+//                    mCurAngle = 0;
+//                    return;
+//                }
+//            }
+//            if (mCurAngle >225) {
+            for (int i = 0; i < (mCurAngle) / 15; i++) {
+
+
+                    mPaint.setColor(getResources().getColor(R.color.holo_orange_light));
+
+
+
+
+                float centerX2 = ((centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()) +
+                        (centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics())))) / 2;
+                float centerY2 = ((getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics())) + (getPaddingTop() + mUnreachedWidth
+                        + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()))) / 2;
+                canvas.drawCircle(centerX2, centerY2, 18, mPaint);
+
+//                    if (i<15)
+//                    if (i>=15){
+
+//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()),
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
+////
+                canvas.rotate(15, centerX, centerY);//360度  绘制60次   每次旋转6度
+//                    }else if (i>=0&& i<14){
+//                        if (i > 8 && i < 14) {
+////                mPaint.setColor();
+//                            mPaint.setColor(getResources().getColor(R.color.white));
+//                        }else {
+//                            mPaint.setColor(getResources().getColor(R.color.color_blank3));
+//
+//                        }
+//                        float centerX2 = ((centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()) +
+//                                (centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics())))) / 2;
+//                        float centerY2 = ((getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics())) + (getPaddingTop() + mUnreachedWidth
+//                                + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()))) / 2;
+//                        canvas.drawCircle(centerX2, centerY2, 18, mPaint);
+////                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 0, getResources().getDisplayMetrics()),
+////                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+////                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 5, getResources().getDisplayMetrics()),
+////                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
+////
+//                        canvas.rotate(15, centerX, centerY);//360度  绘制60次   每次旋转6度
+//                    }
+
+//                }
+
+            }
+
         }
-        mPaint.setTextSize(mNumSize);
-        if (mNumSize == 0) {
-            mPaint.setTextSize((int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
-        }
-        mPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
-        String[] strs = new String[]{"24","2","4","6", "8","10", "12","14", "16","18", "20","22"};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
-        Rect rect = new Rect();
         canvas.save();
-        for (int i = 0; i < 12; i++) {//绘制12次  每次旋转30度
-            mPaint.getTextBounds(strs[i], 0, strs[i].length(), rect);
-            canvas.drawText(strs[i], centerX - rect.width() / 2,
-                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 18, getResources().getDisplayMetrics()) + rect.height(), mPaint);
-            canvas.rotate(30, centerX, centerY);
-        }
-        canvas.restore();
+
+
+    }
+
+
+    private String deviceId;
+
+    public void setDeviceId(String deviceId) {
+        this.deviceId = deviceId;
+    }
+
+    public String getDeviceId() {
+        return deviceId;
     }
 
     private void buildCache(float centerX, float centerY, float wheelRadius) {
@@ -360,12 +467,49 @@ public class CircleSeekBar extends View {
         mCacheCanvas.drawCircle(centerX, centerY, wheelRadius, mWheelPaint);
     }
 
+    public void setWorkMode(String workMode) {
+        this.workMode = workMode;
+    }
+
+    public String getWorkMode() {
+        return workMode;
+    }
+
+    public void setOutput(String output) {
+        this.output = output;
+    }
+
+    public String getOutput() {
+        return output;
+    }
+
+    public boolean outside = false;
+
+    public boolean isOutside() {
+        return outside;
+    }
+
+    public void setOutside(boolean outside) {
+        this.outside = outside;
+    }
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
+
+
+        end = 0;
         float x = event.getX();
         float y = event.getY();
-        if (isCanTouch && (event.getAction() == MotionEvent.ACTION_MOVE || isTouch(x, y))) {
+
+
+        if ("timer".equals(workMode) && !"childProtect".equals(output) && event.getAction() == MotionEvent.ACTION_DOWN) {
+            Toast toast = Toast.makeText(getContext(), "定时模式下不能滑动", Toast.LENGTH_SHORT);
+            toast.setGravity(Gravity.CENTER, 0, 0);
+            toast.show();
+        }
+        if (isCanTouch && (event.getAction() == MotionEvent.ACTION_MOVE || isTouch(x, y)) && (y >= 75 && y <= 770)) {
             // 通过当前触摸点搞到cos角度值
+            outside = false;
             float cos = computeCos(x, y);
             // 通过反三角函数获得角度值
             double angle;
@@ -386,17 +530,43 @@ public class CircleSeekBar extends View {
                 }
             } else {
                 mCurAngle = angle;
+
             }
             mCurProcess = getSelectedValue();
             refershWheelCurPosition(cos);
+            end = 0;
             if (mChangListener != null && (event.getAction() & (MotionEvent.ACTION_MOVE | MotionEvent.ACTION_UP)) > 0) {
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    end = 1;
+                } else {
+                    end = 0;
+                }
+                Log.i("mmm", "-->" + mUnreachedWidth);
+                Log.i("xxx", "-->" + x);
+                Log.i("yyy", "-->" + y);
+
                 mChangListener.onChanged(this, mCurProcess);
+                Log.i("out", "-->" + outside);
+
             }
             invalidate();
+
             return true;
         } else {
+            end = 0;
+            Log.i("out", "-->" + outside);
             return super.onTouchEvent(event);
+
         }
+
+    }
+
+    public boolean isCanTouch() {
+        return isCanTouch;
+    }
+
+    public void setCanTouch(boolean canTouch) {
+        isCanTouch = canTouch;
     }
 
     private boolean isTouch(float x, float y) {
@@ -501,8 +671,32 @@ public class CircleSeekBar extends View {
         }
     }
 
+    public void setmCurrentAngle(int mCurrentAngle) {
+        this.mCurrentAngle = mCurrentAngle;
+    }
+
+    public int getmCurrentAngle() {
+        return mCurrentAngle;
+    }
+
+    public void setModule(String module) {
+        this.module = module;
+    }
+
+    public String getModule() {
+        return module;
+    }
+
+    public void setSlide(boolean slide) {
+        this.slide = slide;
+    }
+
+    public boolean isSlide() {
+        return slide;
+    }
+
     private double getSelectedValue() {
-        return  (mCurAngle/360)*mMaxProcess;
+        return (mCurAngle / 360) * mMaxProcess;
 
 //        return Math.round(mMaxProcess * ((float) mCurAngle / 360));
     }
@@ -513,13 +707,16 @@ public class CircleSeekBar extends View {
 
     public void setCurProcess(int curProcess) {
         this.mCurProcess = curProcess > mMaxProcess ? mMaxProcess : curProcess;
-        if (mChangListener != null) {
-            mChangListener.onChanged(this, curProcess);
+        try {
+            if (mChangListener != null) {
+                mChangListener.onChanged(this, curProcess);
+            }
+            refershPosition();
+            invalidate();
+        } catch (Exception e) {
+            e.printStackTrace();
         }
-        refershPosition();
-        invalidate();
     }
-
 
     public int getMaxProcess() {
         return mMaxProcess;
@@ -530,6 +727,7 @@ public class CircleSeekBar extends View {
         refershPosition();
         invalidate();
     }
+
 
     public int getReachedColor() {
         return mReachedColor;
@@ -560,28 +758,6 @@ public class CircleSeekBar extends View {
         this.mReachedWidth = reachedWidth;
         mReachedPaint.setStrokeWidth(reachedWidth);
         mReachedEdgePaint.setStrokeWidth(reachedWidth);
-        invalidate();
-    }
-
-    public static double getRADIAN() {
-        return RADIAN;
-    }
-
-    public float getStart_angle() {
-        return start_angle;
-    }
-
-    public void setStart_angle(float start_angle) {
-        this.start_angle = start_angle;
-        invalidate();
-    }
-
-    public float getCur_angle() {
-        return cur_angle;
-    }
-
-    public void setCur_angle(float cur_angle) {
-        this.cur_angle = cur_angle;
         invalidate();
     }
 
@@ -644,23 +820,6 @@ public class CircleSeekBar extends View {
         invalidate();
     }
 
-    public String getDeviceId() {
-        return deviceId;
-    }
-
-    public void setDeviceId(String deviceId) {
-        this.deviceId = deviceId;
-    }
-
-    public int getWeek() {
-        return week;
-    }
-
-    public void setWeek(int week) {
-        this.week = week;
-    }
-
-
     public float getWheelShadowRadius() {
         return mWheelShadowRadius;
     }
@@ -683,6 +842,14 @@ public class CircleSeekBar extends View {
             setSoftwareLayer();
         }
         invalidate();
+    }
+
+    public void setmCurAngle(double mCurAngle) {
+        this.mCurAngle = mCurAngle;
+    }
+
+    public double getmCurAngle() {
+        return mCurAngle;
     }
 
     public void setOnSeekBarChangeListener(OnSeekBarChangeListener listener) {

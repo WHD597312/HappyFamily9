@@ -103,7 +103,7 @@
         android:textColor="@color/green2"
         />
     <Button
-        android:id="@+id/bt_add_finish"
+        android:id="@+id/bt_add_finish1"
         android:layout_below="@+id/et_add"
         android:layout_marginTop="@dimen/dp_189"
         android:layout_width="match_parent"

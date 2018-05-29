@@ -20,16 +20,17 @@ public class AddEquipmentActivity extends Activity {
     TitleView titleView;
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
+
         setContentView(R.layout.activty_home_addequipment);
         unbinder = ButterKnife.bind(this);
         titleView = (TitleView) findViewById(R.id.title);
         titleView.setTitleText("添加设备");
 
     }
-    @OnClick({R.id.bt_add_finish,R.id.bt_tozxing})
+    @OnClick({R.id.bt_add_finish1,R.id.bt_tozxing})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bt_add_finish:
+            case R.id.bt_add_finish1:
               startActivity(new Intent(this, MyPaperActivity.class));
                 break;
             case R.id.bt_tozxing:

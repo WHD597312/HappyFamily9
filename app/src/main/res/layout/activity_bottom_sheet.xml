@@ -20,15 +20,15 @@
             android:layout_height="@dimen/dp_50"
             android:orientation="horizontal"
             >
+
             <ImageView
-                android:id="@+id/iv_b_qd"
+                android:id="@+id/iv_b_qx"
+                android:paddingTop="@dimen/dp_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/csj_qd"
-                android:paddingTop="@dimen/dp_15"
+                android:src="@mipmap/csj_qx"
                 android:layout_weight="1"
                 />
-
             <TextView
                 android:paddingTop="@dimen/dp_15"
                 android:layout_width="wrap_content"
@@ -38,12 +38,13 @@
                 android:textSize="18sp"
                 android:text="设定风速"
                 android:textColor="@color/green2"/>
+
             <ImageView
-                android:id="@+id/iv_b_qx"
-                android:paddingTop="@dimen/dp_15"
+                android:id="@+id/iv_b_qd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/csj_qx"
+                android:src="@mipmap/csj_qd"
+                android:paddingTop="@dimen/dp_15"
                 android:layout_weight="1"
                 />
         </LinearLayout>
@@ -55,6 +56,7 @@
             android:orientation="horizontal"
             >
             <LinearLayout
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -71,6 +73,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_b_1"
                     android:paddingTop="@dimen/dp_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -98,6 +101,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_b_2"
                     android:paddingTop="@dimen/dp_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -108,6 +112,7 @@
                     android:textColor="@color/color_gray2"/>
             </LinearLayout>
             <LinearLayout
+
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -124,6 +129,7 @@
                     />
 
                 <TextView
+                    android:id="@+id/tv_b_3"
                     android:paddingTop="@dimen/dp_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"

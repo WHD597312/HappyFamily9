@@ -11,6 +11,7 @@ import android.widget.TextView;
 
 import com.xr.happyFamily.R;
 
+import java.util.HashMap;
 import java.util.List;
 
 import butterknife.BindView;
@@ -19,8 +20,8 @@ public class ZnczAdapter extends BaseAdapter {
 
     private LayoutInflater mInflater;
     private Context mContext ;
-    private List<String> mList;
-    public ZnczAdapter( Context mContext , List<String> mList){
+    private List<HashMap<String, Object>> mList;
+    public ZnczAdapter( Context mContext , List<HashMap<String, Object>> mList){
         mInflater = LayoutInflater.from(mContext);
         this.mContext = mContext;
         this.mList = mList;
@@ -47,7 +48,7 @@ public class ZnczAdapter extends BaseAdapter {
         }else {
             holder = (ZnczAdapter.ViewHolder)contentView.getTag();
         }
-        holder.tv_title.setText(mList.get(position));
+//        holder.tv_title.setText(mList.get(Object));
         // ListView.LayoutParams params = new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT,70);//设置宽度和高度
         //contentView.setLayoutParams(params);
         return contentView;

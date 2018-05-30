@@ -39,6 +39,10 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/zncz_add_list"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:dividerHeight="@dimen/dp_12"
+        android:divider="@null"
         >
 
     </ListView>

@@ -22,6 +22,18 @@
     </style>
 　　　
     <declare-styleable name="BeautySeekBarView">
+    <attr name="valueCountent" format="integer"/>
+    <attr name="padding" format="dimension"/>
+    <attr name="pointColor" format="color"/>
+    <attr name="lineColor" format="color"/>
+    <attr name="smallPic" format="reference"/>
+    <attr name="bigPic" format="reference"/>
+    <attr name="minValue" format="integer"/>
+    <attr name="maxValue" format="integer"/>
+    <attr name="curValue" format="integer"/>
+    <attr name="curProgress" format="integer"/>
+</declare-styleable>
+    <declare-styleable name="ZnczWdSeekBarView">
         <attr name="valueCountent" format="integer"/>
         <attr name="padding" format="dimension"/>
         <attr name="pointColor" format="color"/>

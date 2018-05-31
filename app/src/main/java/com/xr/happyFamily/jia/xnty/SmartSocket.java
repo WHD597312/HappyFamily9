@@ -17,6 +17,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.view.animation.RotateAnimation;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
@@ -33,11 +34,10 @@ public class SmartSocket extends AppCompatActivity {
     Unbinder unbinder;
     Dialog dia ;
     Animation rotate;
-    Animation rotate1;
-    Animation rotate2;
     MyView myView;
     @BindView(R.id.zncz_adde)
     ImageView imageView1;
+
     @BindView(R.id. iv_zncz_dy)
     ImageView imageViewyuan;
     @BindView(R.id. zncz_znzd)
@@ -86,6 +86,7 @@ public class SmartSocket extends AppCompatActivity {
      int flag = -1 ;
     Animation anim;
     Animation anim1;
+
     public void onCreate( Bundle savedInstanceState ) {
      super.onCreate(savedInstanceState);
 
@@ -104,12 +105,12 @@ public class SmartSocket extends AppCompatActivity {
         lp.x = 0;
         dia.onWindowAttributesChanged(lp);
         //上拉列表
-//        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout));
+        bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayoutznwd));
         bottomSheetBehavior2= BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout2));
-//        bottomSheetBehavior3 = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout3));
-        if (textViewwd.getText().equals("")){
+        bottomSheetBehavior3 = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout3));
+        if (textViewxz.getText().equals("")){
             flag=3;
-        }else if (!textViewwd.getText().equals("")){
+        }else if (!textViewxz.getText().equals("")){
             flag=0;
         }
         initTimer();
@@ -148,9 +149,9 @@ public class SmartSocket extends AppCompatActivity {
                     flag=0;
                 }else if (flag==3){
                     imageViewkg.setImageResource(R.mipmap.zncz_kgg);
-                    if (textViewwd.getText().equals("")){
+                    if (textViewxz.getText().equals("")){
                         flag=4;
-                    }else   if (!textViewwd.getText().equals("")){
+                    }else   if (!textViewxz.getText().equals("")){
                         flag=1;
                         imageViewwd.setImageResource(R.mipmap.zncz_hq);
                         imageViewxz.setImageResource(R.mipmap.zncz_hq);
@@ -167,9 +168,9 @@ public class SmartSocket extends AppCompatActivity {
 
                 }else if (flag==4) {
                     imageViewkg.setImageResource(R.mipmap.zncz_kg);
-                    if (textViewwd.getText().equals("")){
+                    if (textViewxz.getText().equals("")){
                         flag=3;
-                    }else   if (!textViewwd.getText().equals("")){
+                    }else   if (!textViewxz.getText().equals("")){
                         textViewsdwd.setTextColor(getResources().getColor(R.color.color_gray2));
                         textViewsdxz.setTextColor(getResources().getColor(R.color.color_gray2));
                         textViewkg.setTextColor(getResources().getColor(R.color.color_gray2));
@@ -212,7 +213,7 @@ public class SmartSocket extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.zncz_adde, R.id.iv_zncz_fanh ,R.id.tv_zncz_qhsb,R.id.iv_zncz_ds ,R.id.iv_b2_qx,R.id.iv_b2_qd})
+    @OnClick({R.id.zncz_adde, R.id.iv_zncz_fanh ,R.id.tv_zncz_qhsb,R.id.iv_zncz_ds ,R.id.iv_b2_qx,R.id.iv_b2_qd ,R.id. iv_zncz_addwd})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.zncz_adde:
@@ -241,8 +242,24 @@ public class SmartSocket extends AppCompatActivity {
                 int sh= timepicker1.getValue();
                 int em = timepicker4.getValue();
                 int eh = timepicker3.getValue();
-                textViewds.setText(sh+":"+sm+"——"+eh+":"+em);
+                textViewds.setText(sh+":"+sm+"-"+eh+":"+em);
                 bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.iv_zncz_addwd://叫出设置湿度界面
+                if (textViewsdwd.getText().equals("设定湿度")){
+                    if(bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_EXPANDED ){
+                        // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
+                    } else if(bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+                        bottomSheetBehavior3.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+
+                }else if (textViewsdwd.getText().equals("设定温度")) {
+                    if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                        // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
+                    } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                        bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+                }
                 break;
 
         }
@@ -260,10 +277,11 @@ public class SmartSocket extends AppCompatActivity {
 
 
 
-             anim =new RotateAnimation(0f, 359f,  Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 3.4f);
+             anim =new RotateAnimation(0f, 359f,  Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 3.5f);
 
         anim.setDuration(5000); // 设置动画时间
         anim.setRepeatCount(-1);
+
 //        anim.setInterpolator(new AccelerateInterpolator()); // 设置插入器
         LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
         anim.setInterpolator(lin);
@@ -275,6 +293,8 @@ public class SmartSocket extends AppCompatActivity {
         anim1.setInterpolator(lin1);
         imageView1.startAnimation(anim);
         imageView2.startAnimation(anim1);
+
+
     }
 
     @Override
@@ -290,6 +310,7 @@ public class SmartSocket extends AppCompatActivity {
                 textViewwd.setText("24℃");
                 imageViewxz.setImageResource(R.mipmap.zncz_lv);
                 textViewxz.setText("2000W");
+
                 textViewsdwd.setTextColor(getResources().getColor(R.color.color_green4));
                 textViewsdxz.setTextColor(getResources().getColor(R.color.color_green4));
                 imageViewcz.setImageResource(R.drawable.kxyuan_shape);
@@ -303,6 +324,16 @@ public class SmartSocket extends AppCompatActivity {
                 move();
                 textViewqh.setText("切换设备");
                 textViewsb.setText("已连接空气净化器");
+                imageViewwd.setImageResource(R.mipmap.zncz_lv);
+                textViewwd.setText("24");
+                textViewsdwd.setText("设定PM25");
+                imageViewxz.setImageResource(R.mipmap.zncz_lv);
+                textViewxz.setText("2000W");
+                textViewsdwd.setTextColor(getResources().getColor(R.color.color_green4));
+                textViewsdxz.setTextColor(getResources().getColor(R.color.color_green4));
+                imageViewcz.setImageResource(R.drawable.kxyuan_shape);
+                textView36.setText("100");
+                textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
                 break;
             case 3:
@@ -310,6 +341,16 @@ public class SmartSocket extends AppCompatActivity {
                 move();
                 textViewqh.setText("切换设备");
                 textViewsb.setText("已连接电暖气");
+                imageViewwd.setImageResource(R.mipmap.zncz_lv);
+                textViewwd.setText("24℃");
+                textViewsdwd.setText("设定温度");
+                imageViewxz.setImageResource(R.mipmap.zncz_lv);
+                textViewxz.setText("2000W");
+                textViewsdwd.setTextColor(getResources().getColor(R.color.color_green4));
+                textViewsdxz.setTextColor(getResources().getColor(R.color.color_green4));
+                imageViewcz.setImageResource(R.drawable.kxyuan_shape);
+                textView36.setText("36℃");
+                textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
                 break;
             case 4:
@@ -317,13 +358,33 @@ public class SmartSocket extends AppCompatActivity {
                 move();
                 textViewqh.setText("切换设备");
                 textViewsb.setText("已连接除湿器");
+                imageViewwd.setImageResource(R.mipmap.zncz_lv);
+                textViewwd.setText("24");
+                textViewsdwd.setText("设定湿度");
+                imageViewxz.setImageResource(R.mipmap.zncz_lv);
+                textViewxz.setText("2000W");
+                textViewsdwd.setTextColor(getResources().getColor(R.color.color_green4));
+                textViewsdxz.setTextColor(getResources().getColor(R.color.color_green4));
+                imageViewcz.setImageResource(R.drawable.kxyuan_shape);
+                textView36.setText("40");
+                textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
                 break;
             case 5:
                 imageView1.setImageResource(R.mipmap.zncz_jsqb);
                 move();
                 textViewqh.setText("切换设备");
-                textViewsb.setText("已连接净水器");
+
+                imageViewwd.setImageResource(R.mipmap.zncz_lv);
+                textViewwd.setText("");
+                textViewsdwd.setText("");
+                imageViewxz.setImageResource(R.mipmap.zncz_lv);
+                textViewxz.setText("2000W");
+                textViewsdwd.setTextColor(getResources().getColor(R.color.color_green4));
+                textViewsdxz.setTextColor(getResources().getColor(R.color.color_green4));
+                imageViewcz.setImageResource(R.drawable.kxyuan_shape);
+                textView36.setText("30");
+                textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
                 break;
             default:

@@ -88,17 +88,19 @@
             android:text="请添加设备"
             android:textColor="@color/color_gray3"
             android:textSize="15sp" />
+
         <ImageView
+            android:layout_alignTop="@+id/iv_zncz_dy"
             android:id="@+id/zncz_adde"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/znzc_add"
             android:scaleType="centerInside"
-            android:layout_alignTop="@+id/iv_zncz_dy"
-            android:background="@drawable/yuab_shape"
-            android:layout_marginTop="-21dp"
-            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-26dp"
+             android:background="@drawable/yuab_shape"
+            android:layout_centerInParent="true"
             />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -284,5 +286,7 @@
 
 </LinearLayout>
 </RelativeLayout>
-<include layout="@layout/activity_bottom_sheet2" />
+    <include layout="@layout/activity_bottom_sheet2" />
+    <include layout="@layout/activity_bottom_sheet3" />
+    <include layout="@layout/activity_bottom_sheetznwd" />
 </android.support.design.widget.CoordinatorLayout>

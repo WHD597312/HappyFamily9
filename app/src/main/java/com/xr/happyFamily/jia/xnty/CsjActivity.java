@@ -21,6 +21,8 @@ import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.xr.happyFamily.R;
 
 
+import org.greenrobot.greendao.generator.Index;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -63,7 +65,18 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     ImageView imageViewkg;
     @BindView(R.id.tv_csj_ds)
     TextView textViewds;
-
+    @BindView(R.id.tv_b_1)
+    TextView textb1;
+    @BindView(R.id.tv_b_2)
+    TextView textb2;
+    @BindView(R.id.tv_b_3)
+    TextView textb3;
+    @BindView(R.id.iv_b3_qd)
+    ImageView imageViewb3qd;
+    @BindView(R.id.tv_csj_29)
+    TextView text29;
+    @BindView(R.id.beautySeekBar)
+    BeautySeekBarView beautySeekBarView;
     int hour = -1;
     int minute=-1;
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +203,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     private int position=-1;
     private int flag=0;
     @OnClick({R.id.ib_csj_fh, R.id.iv_b_qx,R.id.iv_b_qd,R.id.iv_b_2,R.id.iv_b_3,R.id.iv_b_1,R.id.iv_csj_ds
-            , R.id.iv_b2_qx,R.id.tv_csj_29, R.id.iv_b3_qx,R.id.iv_b2_qd
+            , R.id.iv_b2_qx,R.id.tv_csj_29, R.id.iv_b3_qx,R.id.iv_b2_qd,R.id.iv_b3_qd
     })
 
     @Override
@@ -355,6 +368,30 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                 } else if(bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_COLLAPSED){
                     bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
+                break;
+            case R.id.tv_b_2:
+                position=1;
+                image2.setImageResource(R.mipmap.csj_dj);
+                image1.setImageResource(R.mipmap.csj_djnull);
+                image3.setImageResource(R.mipmap.csj_djnull);
+
+                break;
+            case R.id.tv_b_1:
+                position=0;
+                image1.setImageResource(R.mipmap.csj_dj);
+                image2.setImageResource(R.mipmap.csj_djnull);
+                image3.setImageResource(R.mipmap.csj_djnull);
+
+                break;
+            case R.id.tv_b_3:
+                position=2;
+                image3.setImageResource(R.mipmap.csj_dj);
+                image1.setImageResource(R.mipmap.csj_djnull);
+                image2.setImageResource(R.mipmap.csj_djnull);
+
+                break;
+            case R.id.iv_b3_qd:
+
                 break;
 
 

@@ -40,5 +40,13 @@ public class MenuActivity extends AppCompatActivity {
 
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
+
 
 }

@@ -34,5 +34,13 @@ public class HomepageActivity extends AppCompatActivity {
         }
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
+
 
 }

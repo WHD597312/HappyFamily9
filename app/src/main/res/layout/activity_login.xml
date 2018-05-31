@@ -17,14 +17,15 @@
         android:layout_alignParentTop="true"
         android:src="@mipmap/beijing"
         />
+
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/dtubiao"
-        android:layout_alignTop="@+id/imageView4"
-        android:layout_height="wrap_content"
         android:layout_width="wrap_content"
-        />
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/imageView4"
+        android:scaleType="centerCrop"
+        android:layout_centerHorizontal="true"
+        android:src="@mipmap/dtubiao" />
     <RelativeLayout
         android:id="@+id/rl_login"
         android:layout_centerVertical="true"

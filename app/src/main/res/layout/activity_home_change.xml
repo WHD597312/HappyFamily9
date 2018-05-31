@@ -38,6 +38,7 @@
         android:layout_marginRight="@dimen/dp_12"
         android:dividerHeight="@dimen/dp_12"
         android:background="@null"
+        android:divider="@null"
         >
 
     </ListView>

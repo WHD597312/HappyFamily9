@@ -12,16 +12,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-       init();
-    }
-    private void init() {
-        LinearLayout layout=(LinearLayout) findViewById(R.id.root);
-        final CircleSeekBar view=new CircleSeekBar(this);
-        view.setMinimumHeight(500);
-        view.setMinimumWidth(300);
-        //通知view组件重绘
-        view.invalidate();
-        layout.addView(view);
 
     }
+
 }

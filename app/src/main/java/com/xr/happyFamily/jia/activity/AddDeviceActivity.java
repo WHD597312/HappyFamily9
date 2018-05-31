@@ -25,11 +25,14 @@ public class AddDeviceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_device);
+        if (getSupportActionBar() != null){
+            getSupportActionBar().hide();
+        }
         unbinder=ButterKnife.bind(this);
 
     }
 
-    private int position=-1;
+    private int position=0;
     @OnClick({R.id.back,R.id.btn_wifi,R.id.btn_scan,R.id.bt_add_finish})
     public void onClick(View view){
         switch (view.getId()){
@@ -57,7 +60,8 @@ public class AddDeviceActivity extends AppCompatActivity {
             case R.id.bt_add_finish:
                 switch (position){
                     case 0:
-
+                        Intent wifiIntent=new Intent(this,DeviceManagerActivity.class);
+                        startActivity(wifiIntent);
                         break;
                     case 1:
                         Intent scanIntent=new Intent(this,QRScannerActivity.class);

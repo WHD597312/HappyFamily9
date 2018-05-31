@@ -16,6 +16,10 @@
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">#3d3c38</item>
     </style>
+    <style name="Popupwindow">
+        <item name="android:windowEnterAnimation">@anim/window_out</item>
+        <item name="android:windowExitAnimation">@anim/window_back</item>
+    </style>
 　　　
     <declare-styleable name="BeautySeekBarView">
         <attr name="valueCountent" format="integer"/>

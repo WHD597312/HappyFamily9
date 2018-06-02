@@ -27,8 +27,10 @@ public class DeviceDetailActivity extends AppCompatActivity {
      * 抽奖的文字
      */
     private String[] mStrs = new String[]{"5", "10", "15", "20", "25", "30", "35","40"};
+    @BindView(R.id.layout_body) RelativeLayout layout_body;/**屏幕中间布局*/
     @BindView(R.id.semicBar)
     SmartWheelBar semicBar;
+
     Unbinder unbinder;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,13 +48,14 @@ public class DeviceDetailActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         WindowManager wm = (WindowManager)this.getSystemService(Context.WINDOW_SERVICE);
-        int width = wm.getDefaultDisplay().getWidth()-200;
+        int width = wm.getDefaultDisplay().getWidth();
         Log.w("width","width"+width);
 
 
-//        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(width,width);
-//        params.leftMargin=100;
-//        semicBar.setLayoutParams(params);
+        RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(width,width);
+        params.leftMargin=100;
+        params.rightMargin=100;
+        semicBar.setLayoutParams(params);
 
 //        semicBar.setOnSeekBarChangeListener(new SemicircleBar.OnSeekBarChangeListener() {
 //            @Override

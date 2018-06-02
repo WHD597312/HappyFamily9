@@ -196,7 +196,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
 
          initTimer();//定时设置
          initViews();//上拉列表
-        image21r.setVisibility(View.GONE);
+
         // 启动动画
 
         /*translateAnimation.setDuration(2000);      //设置位置变化动画的持续时间

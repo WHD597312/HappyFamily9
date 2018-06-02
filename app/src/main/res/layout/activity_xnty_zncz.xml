@@ -46,6 +46,7 @@
             android:gravity="center"
             />
         <ImageView
+            android:id="@+id/iv_zncz_tb"
             android:paddingTop="@dimen/dp_6"
             android:paddingLeft="@dimen/dp_60"
             android:layout_weight="1"
@@ -289,4 +290,6 @@
     <include layout="@layout/activity_bottom_sheet2" />
     <include layout="@layout/activity_bottom_sheet3" />
     <include layout="@layout/activity_bottom_sheetznwd" />
+    <include layout="@layout/activity_bottom_sheetznczxz" />
+    <include layout="@layout/activity_bottom_sheetpm25" />
 </android.support.design.widget.CoordinatorLayout>

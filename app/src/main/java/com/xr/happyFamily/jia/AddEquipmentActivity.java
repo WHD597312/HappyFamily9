@@ -27,10 +27,10 @@ public class AddEquipmentActivity extends Activity {
         titleView.setTitleText("添加设备");
 
     }
-    @OnClick({R.id.bt_add_finish1,R.id.bt_tozxing})
+    @OnClick({R.id.bt_add_finish2,R.id.bt_tozxing})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bt_add_finish1:
+            case R.id.bt_add_finish2:
               startActivity(new Intent(this, MyPaperActivity.class));
                 break;
             case R.id.bt_tozxing:

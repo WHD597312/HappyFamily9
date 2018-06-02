@@ -38,7 +38,7 @@
             android:textSize="18sp" />
 
         <ImageView
-            android:id="@+id/iv_b3_qd"
+            android:id="@+id/iv_cnczsd_qd"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_weight="1"
@@ -46,12 +46,22 @@
             android:src="@mipmap/csj_qd" />
     </LinearLayout>
 
-    <com.xr.happyFamily.jia.xnty.BeautySeekBarView
-        android:id="@+id/beautySeekBar"
+
+    <com.xr.happyFamily.jia.xnty.MySeekBarsd
+        android:layout_marginTop="@dimen/dp_10"
+        android:id="@+id/beautySeekBar2"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@+id/li2_csj_db3"
-        android:layout_marginTop="@dimen/dp_10" />
+        android:max="70"
+        android:progress="0"
+        android:progressDrawable="@drawable/bg_seekbar_progress_drawable"
+        android:thumb="@null"
+        app:textBackground="@mipmap/csj_bz"
+        app:textColor="@color/white"
+        app:textOrientation="top"
+        app:textSize="19sp" />
+
 
 
 </RelativeLayout>

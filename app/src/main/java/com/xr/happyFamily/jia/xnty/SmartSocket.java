@@ -18,6 +18,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.view.animation.RotateAnimation;
 import android.widget.RelativeLayout;
+import android.widget.SeekBar;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
@@ -26,11 +27,13 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class SmartSocket extends AppCompatActivity {
+public class SmartSocket extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
     private int requestCode;
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetBehavior bottomSheetBehavior2;
     private BottomSheetBehavior bottomSheetBehavior3;
+    private BottomSheetBehavior bottomSheetBehavior4;
+    private BottomSheetBehavior bottomSheetBehavior5;
     Unbinder unbinder;
     Dialog dia ;
     Animation rotate;
@@ -86,12 +89,24 @@ public class SmartSocket extends AppCompatActivity {
      int flag = -1 ;
     Animation anim;
     Animation anim1;
-
+    private MySeekBarsd mSeekBar2;
+    private MySeekBarwd mSeekBar1;
+    private MySeekBar mSeekBar3;
+    private MySeekBarPm25 mSeekBar4;
+    int x ;
     public void onCreate( Bundle savedInstanceState ) {
      super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_xnty_zncz);
         unbinder = ButterKnife.bind(this);
+        mSeekBar1 = (MySeekBarwd) findViewById(R.id.beautySeekBar1);
+        mSeekBar1.setOnSeekBarChangeListener(this);
+        mSeekBar2 = (MySeekBarsd) findViewById(R.id.beautySeekBar2);
+        mSeekBar2.setOnSeekBarChangeListener(this);
+        mSeekBar3 = (MySeekBar) findViewById(R.id.beautySeekBar3);
+        mSeekBar3.setOnSeekBarChangeListener(this);
+        mSeekBar4 = (MySeekBarPm25) findViewById(R.id.beautySeekBar4);
+        mSeekBar4.setOnSeekBarChangeListener(this);
         Context context = SmartSocket.this;
         //提示图片
         dia = new Dialog(context, R.style.edit_AlertDialog_style);//设置进入时跳出提示框
@@ -105,15 +120,27 @@ public class SmartSocket extends AppCompatActivity {
         lp.x = 0;
         dia.onWindowAttributesChanged(lp);
         //上拉列表
+        //设定温度界面
         bottomSheetBehavior = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayoutznwd));
+        //定时界面
         bottomSheetBehavior2= BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout2));
+        //设定湿度
         bottomSheetBehavior3 = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayout3));
+        //设定限制
+        bottomSheetBehavior4 = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayoutznczxz));
+        //设定PM25
+        bottomSheetBehavior5 = BottomSheetBehavior.from(findViewById(R.id.bottomSheetLayoutpm25));//
         if (textViewxz.getText().equals("")){
             flag=3;
         }else if (!textViewxz.getText().equals("")){
             flag=0;
         }
         initTimer();
+
+            imageViewwd.setClickable(false);
+            imageViewxz.setClickable(false);
+
+
         //开关键逻辑
         imageViewkg.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -212,25 +239,41 @@ public class SmartSocket extends AppCompatActivity {
         timepicker4.setNumberPickerDividerColor(timepicker4);
 
     }
+    @Override
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        x=  seekBar.getProgress();
+    }
 
-    @OnClick({R.id.zncz_adde, R.id.iv_zncz_fanh ,R.id.tv_zncz_qhsb,R.id.iv_zncz_ds ,R.id.iv_b2_qx,R.id.iv_b2_qd ,R.id. iv_zncz_addwd})
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @OnClick({R.id.zncz_adde, R.id.iv_zncz_fanh ,R.id.tv_zncz_qhsb,R.id.iv_zncz_ds ,R.id.iv_b2_qx,R.id.iv_b2_qd
+            ,R.id. iv_zncz_addwd,R.id.iv_zncz_qd,R.id.iv_zncz_addxz ,R.id.iv_znczxz_qd,R.id.iv_cnczsd_qd,
+            R.id.iv_znczxz_qx,R.id.iv_znczpm25_qd})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.zncz_adde:
 //                startActivity(new Intent(this, ZnczListActivity.class));//点击跳转到设备列表
-                   //添加设备
-                startActivityForResult(new Intent(this, ZnczListActivity.class),0);
+                //添加设备
+                startActivityForResult(new Intent(this, ZnczListActivity.class), 0);
                 break;
             case R.id.iv_zncz_fanh:
                 finish();
                 break;
             case R.id.tv_zncz_qhsb://切换设备
-                startActivityForResult(new Intent(this, ZnczListActivity.class),0);
+                startActivityForResult(new Intent(this, ZnczListActivity.class), 0);
                 break;
-            case R.id.iv_zncz_ds://切换设备
-                if(bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_EXPANDED ){
+            case R.id.iv_zncz_ds://定时设备
+                if (bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
-                } else if(bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+                } else if (bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior2.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                     bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_EXPANDED);
                 }
                 break;
@@ -238,30 +281,69 @@ public class SmartSocket extends AppCompatActivity {
                 bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_b2_qd:
-                int sm= timepicker2.getValue();
-                int sh= timepicker1.getValue();
+                int sm = timepicker2.getValue();
+                int sh = timepicker1.getValue();
                 int em = timepicker4.getValue();
                 int eh = timepicker3.getValue();
-                textViewds.setText(sh+":"+sm+"-"+eh+":"+em);
+                textViewds.setText(sh + ":" + sm + "-" + eh + ":" + em);
                 bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_zncz_addwd://叫出设置湿度界面
-                if (textViewsdwd.getText().equals("设定湿度")){
-                    if(bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_EXPANDED ){
+                if (textViewsdwd.getText().equals("设定湿度")) {
+                    if (bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                         // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
-                    } else if(bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_COLLAPSED){
+                    } else if (bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                         bottomSheetBehavior3.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
 
-                }else if (textViewsdwd.getText().equals("设定温度")) {
+                } else if (textViewsdwd.getText().equals("设定温度")) {
                     if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                         // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
-                    } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior3.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                    } else if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
                         bottomSheetBehavior.setState(BottomSheetBehavior.STATE_EXPANDED);
                     }
+                } else if (textViewsdwd.getText().equals("设定PM25")) {
+                    if (bottomSheetBehavior5.getState() == BottomSheetBehavior.STATE_EXPANDED) {
+                        // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
+                    } else if (bottomSheetBehavior5.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior5.getState() == BottomSheetBehavior.STATE_COLLAPSED) {
+                        bottomSheetBehavior5.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
                 }
-                break;
 
+
+                break;
+            case R.id.iv_zncz_qd://设定温度确定
+                textView36.setText(String.valueOf(x+5)+"℃");
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.iv_zncz_qx://取消
+                bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.iv_znczpm25_qd://设定pm25确定
+                textView36.setText(String.valueOf(x));
+                bottomSheetBehavior5.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.iv_cnczsd_qd://设定湿度确定
+                textView36.setText(String.valueOf(x+20));
+                bottomSheetBehavior3.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.iv_zncz_addxz://叫出设置限制
+
+                    if(bottomSheetBehavior4.getState() == BottomSheetBehavior.STATE_EXPANDED ){
+                        // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
+                    } else if(bottomSheetBehavior4.getState() == BottomSheetBehavior.STATE_HIDDEN || bottomSheetBehavior4 .getState() == BottomSheetBehavior.STATE_COLLAPSED){
+                        bottomSheetBehavior4.setState(BottomSheetBehavior.STATE_EXPANDED);
+                    }
+
+                break;
+            case R.id.iv_znczxz_qd://设置瓦数
+                textViewxz.setText(String.valueOf(x+1000)+"W");
+                bottomSheetBehavior4.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
+            case R.id.iv_znczxz_qx://设置瓦数
+
+                bottomSheetBehavior4.setState(BottomSheetBehavior.STATE_HIDDEN);
+                break;
         }
     }
 
@@ -310,14 +392,15 @@ public class SmartSocket extends AppCompatActivity {
                 textViewwd.setText("24℃");
                 imageViewxz.setImageResource(R.mipmap.zncz_lv);
                 textViewxz.setText("2000W");
-
+                textViewsdwd.setText("设定温度");
                 textViewsdwd.setTextColor(getResources().getColor(R.color.color_green4));
                 textViewsdxz.setTextColor(getResources().getColor(R.color.color_green4));
                 imageViewcz.setImageResource(R.drawable.kxyuan_shape);
                 textView36.setText("36℃");
                 textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
-
+                imageViewwd.setClickable(true);
+                imageViewxz.setClickable(true);
                 break;
             case 2:
                 imageView1.setImageResource(R.mipmap.zncz_kqjhb);
@@ -335,6 +418,8 @@ public class SmartSocket extends AppCompatActivity {
                 textView36.setText("100");
                 textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
+                imageViewwd.setClickable(true);
+                imageViewxz.setClickable(true);
                 break;
             case 3:
                 imageView1.setImageResource(R.mipmap.zncz_dnqb);
@@ -352,6 +437,8 @@ public class SmartSocket extends AppCompatActivity {
                 textView36.setText("36℃");
                 textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
+                imageViewwd.setClickable(true);
+                imageViewxz.setClickable(true);
                 break;
             case 4:
                 imageView1.setImageResource(R.mipmap.zncz_csqb);
@@ -369,13 +456,14 @@ public class SmartSocket extends AppCompatActivity {
                 textView36.setText("40");
                 textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
+                imageViewwd.setClickable(true);
+                imageViewxz.setClickable(true);
                 break;
             case 5:
                 imageView1.setImageResource(R.mipmap.zncz_jsqb);
                 move();
                 textViewqh.setText("切换设备");
-
-                imageViewwd.setImageResource(R.mipmap.zncz_lv);
+                imageViewwd.setImageResource(R.mipmap.zncz_hq);
                 textViewwd.setText("");
                 textViewsdwd.setText("");
                 imageViewxz.setImageResource(R.mipmap.zncz_lv);
@@ -386,6 +474,8 @@ public class SmartSocket extends AppCompatActivity {
                 textView36.setText("30");
                 textViewsj.setText("13:00—14:00");
                 textViewadd.setText("");
+                imageViewwd.setClickable(true);
+                imageViewxz.setClickable(true);
                 break;
             default:
                 break;

@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -20,9 +21,13 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MainActivity;
+import com.xr.happyFamily.jia.MenuActivity;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
 import com.xr.happyFamily.jia.xnty.AircleanerActivity;
 import com.xr.happyFamily.jia.xnty.CsjActivity;
+import com.xr.happyFamily.jia.xnty.MySeekBar;
 import com.xr.happyFamily.jia.xnty.SmartSocket;
 import com.xr.happyFamily.jia.xnty.ZnPm25Activity;
 import com.xr.happyFamily.jia.xnty.ZnSdActivity;
@@ -142,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, AircleanerActivity.class));
+                startActivity(new Intent(this, AirConditionerActivity.class));
                 break;
 
             case R.id.image_seepwd:

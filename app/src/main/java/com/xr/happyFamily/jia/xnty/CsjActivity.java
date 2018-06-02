@@ -71,12 +71,11 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     TextView textb2;
     @BindView(R.id.tv_b_3)
     TextView textb3;
-    @BindView(R.id.iv_b3_qd)
-    ImageView imageViewb3qd;
+/*    @BindView(R.id.iv_b3_qd)
+    ImageView imageViewb3qd;*/
     @BindView(R.id.tv_csj_29)
     TextView text29;
-    @BindView(R.id.beautySeekBar)
-    BeautySeekBarView beautySeekBarView;
+
     int hour = -1;
     int minute=-1;
     protected void onCreate(Bundle savedInstanceState) {
@@ -203,7 +202,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     private int position=-1;
     private int flag=0;
     @OnClick({R.id.ib_csj_fh, R.id.iv_b_qx,R.id.iv_b_qd,R.id.iv_b_2,R.id.iv_b_3,R.id.iv_b_1,R.id.iv_csj_ds
-            , R.id.iv_b2_qx,R.id.tv_csj_29, R.id.iv_b3_qx,R.id.iv_b2_qd,R.id.iv_b3_qd
+            , R.id.iv_b2_qx,R.id.tv_csj_29, R.id.iv_b3_qx,R.id.iv_b2_qd,/*R.id.iv_b3_qd*/
     })
 
     @Override
@@ -390,10 +389,10 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                 image2.setImageResource(R.mipmap.csj_djnull);
 
                 break;
-            case R.id.iv_b3_qd:
+     /*       case R.id.iv_b3_qd:
 
                 break;
-
+*/
 
         }
     }

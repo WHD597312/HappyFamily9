@@ -10,7 +10,7 @@
         android:layout_height="@dimen/dp_40"
         android:padding="@dimen/dp_10"
         android:layout_centerVertical="true"
-        android:src="@mipmap/fanhui3x"/>
+        android:src="@mipmap/fanhui"/>
 
     <TextView
         android:id="@+id/title_text"

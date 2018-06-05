@@ -35,29 +35,29 @@
         <attr name="output" format="string"/>
         <attr name="semicircle_module" format="string"/>
     </declare-styleable>
-    <declare-styleable name="DashboardView">
-        <attr name="radius" format="dimension"/>
-        <attr name="startAngle" format="integer"/>
-        <attr name="sweepAngle" format="integer"/>
-        <attr name="bigSliceCount" format="integer"/>
-        <attr name="sliceCountInOneBigSlice" format="integer"/>
-        <attr name="arcColor" format="color"/>
-        <attr name="measureTextSize" format="dimension"/>
-        <attr name="textColor" format="color"/>
-        <attr name="headerTitle" format="string"/>
-        <attr name="headerTextSize" format="string"/>
-        <attr name="headerRadius" format="dimension"/>
-        <attr name="pointerRadius" format="dimension"/>
-        <attr name="circleRadius" format="dimension"/>
-        <attr name="realTimeValue" format="float"/>
-        <attr name="stripeWidth" format="dimension"/>
-        <attr name="stripeMode" >
-            <enum name="normal" value="0"/>
-            <enum name="inner" value="1"/>
-            <enum name="outer" value="2"/>
-        </attr>
-        <attr name="bgColor" format="color"/>
-    </declare-styleable>
+    <!--<declare-styleable name="DashboardView">-->
+        <!--<attr name="radius" format="dimension"/>-->
+        <!--<attr name="startAngle" format="integer"/>-->
+        <!--<attr name="sweepAngle" format="integer"/>-->
+        <!--<attr name="bigSliceCount" format="integer"/>-->
+        <!--<attr name="sliceCountInOneBigSlice" format="integer"/>-->
+        <!--<attr name="arcColor" format="color"/>-->
+        <!--<attr name="measureTextSize" format="dimension"/>-->
+        <!--<attr name="textColor" format="color"/>-->
+        <!--<attr name="headerTitle" format="string"/>-->
+        <!--<attr name="headerTextSize" format="string"/>-->
+        <!--<attr name="headerRadius" format="dimension"/>-->
+        <!--<attr name="pointerRadius" format="dimension"/>-->
+        <!--<attr name="circleRadius" format="dimension"/>-->
+        <!--<attr name="realTimeValue" format="float"/>-->
+        <!--<attr name="stripeWidth" format="dimension"/>-->
+        <!--<attr name="stripeMode" >-->
+            <!--<enum name="normal" value="0"/>-->
+            <!--<enum name="inner" value="1"/>-->
+            <!--<enum name="outer" value="2"/>-->
+        <!--</attr>-->
+        <!--<attr name="bgColor" format="color"/>-->
+    <!--</declare-styleable>-->
     <declare-styleable name="MySeekBar">
         <attr name="textSize" format="dimension" />
         <attr name="textColor" format="color" />

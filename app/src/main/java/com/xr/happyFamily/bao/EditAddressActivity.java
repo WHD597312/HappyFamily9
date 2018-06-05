@@ -93,7 +93,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     imgChoose.setImageResource(R.mipmap.weixuanzhong3x);
                 }else {
                     isMoren=true;
-                    imgChoose.setImageResource(R.mipmap.xuanzhong3x);
+                    imgChoose.setImageResource(R.mipmap.xuanzhong);
                 }
                 break;
             case R.id.tv_choose:

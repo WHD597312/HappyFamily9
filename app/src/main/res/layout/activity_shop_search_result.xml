@@ -43,7 +43,7 @@
             android:layout_height="@dimen/dp_40"
             android:layout_centerVertical="true"
             android:padding="@dimen/dp_12"
-            android:src="@mipmap/fanhui3x" />
+            android:src="@mipmap/fanhui" />
 
     </RelativeLayout>
 

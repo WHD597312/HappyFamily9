@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+
+
+
+
+
+            <include layout="@layout/happy_banner" />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@mipmap/bg_happy_quwei"
+                android:layout_marginTop="@dimen/dp_25"/>
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="@dimen/dp_12">
+        <LinearLayout
+            android:id="@+id/ll_xuyuan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/bg_shape_fill_white5"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_14"
+            android:paddingBottom="@dimen/dp_14">
+            <ImageView
+                android:layout_width="@dimen/dp_60"
+                android:layout_height="@dimen/dp_60"
+                android:background="@color/color_dark_gray"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_10">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="许愿墙"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/happy_green_main"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2.325条愿望"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:textColor="@color/happy_gray_main"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/bg_shape_fill_white5"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_14"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_14">
+            <ImageView
+                android:layout_width="@dimen/dp_60"
+                android:layout_height="@dimen/dp_60"
+                android:background="@color/color_dark_gray"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_10">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="智能闹钟"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/happy_green_main"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2.325条愿望"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:textColor="@color/happy_gray_main"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12">
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/bg_shape_fill_white5"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_14"
+            android:paddingBottom="@dimen/dp_14">
+            <ImageView
+                android:layout_width="@dimen/dp_60"
+                android:layout_height="@dimen/dp_60"
+                android:background="@color/color_dark_gray"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_10">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="许愿墙"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/happy_green_main"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textSize="@dimen/sp_12"
+                    android:text="2.325条愿望"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:textColor="@color/happy_gray_main"/>
+            </LinearLayout>
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_weight="1"
+            android:background="@drawable/bg_shape_fill_white5"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_14"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:paddingBottom="@dimen/dp_14">
+            <ImageView
+                android:layout_width="@dimen/dp_60"
+                android:layout_height="@dimen/dp_60"
+                android:background="@color/color_dark_gray"/>
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_gravity="center"
+                android:layout_marginLeft="@dimen/dp_10">
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="许愿墙"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/happy_green_main"/>
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="2.325条愿望"
+                    android:textSize="@dimen/sp_12"
+                    android:layout_marginTop="@dimen/dp_5"
+                    android:textColor="@color/happy_gray_main"/>
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/bg_happy_jiankang"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_25"/>
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_108"
+        android:padding="@dimen/dp_12"
+        android:src="@color/color_dark_gray"
+        android:layout_gravity="bottom"/>
+</LinearLayout>
+
+

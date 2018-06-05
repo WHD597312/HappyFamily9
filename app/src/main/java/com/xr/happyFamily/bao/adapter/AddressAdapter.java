@@ -77,7 +77,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
         holder.img_del.setTag(position);
         if (defItem != -1) {
             if (defItem == position) {
-                holder.img_choose.setImageResource(R.mipmap.xuanzhong3x);
+                holder.img_choose.setImageResource(R.mipmap.xuanzhong);
             } else {
                 holder.img_choose.setImageResource(R.mipmap.weixuanzhong3x);
             }

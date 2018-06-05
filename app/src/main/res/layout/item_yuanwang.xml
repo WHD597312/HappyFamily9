@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+
+
+
+   <TextView
+       android:id="@+id/text"
+       android:layout_alignTop="@id/img_touxiang"
+       android:layout_alignBottom="@id/img_touxiang"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:paddingLeft="@dimen/dp_40"
+       android:textSize="@dimen/sp_12"
+       android:textColor="@color/white"
+       android:text="我要放假"
+       android:gravity="center"
+       android:paddingRight="@dimen/dp_18"
+       android:background="@drawable/bg_shape_yuanwang"/>
+
+   <ImageView
+       android:id="@+id/img_touxiang"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:singleLine="true"
+       android:src="@mipmap/ic_shop_pinglun_touxiang"/>
+
+</RelativeLayout>

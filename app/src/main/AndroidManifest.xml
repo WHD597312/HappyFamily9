@@ -88,14 +88,14 @@
 
         </activity>
         <activity android:name=".bao.TestActivity">
-
-        </activity>
-        <activity android:name=".bao.ShoppageActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".bao.ShoppageActivity" android:launchMode="singleTask">
+
         </activity>
         <activity android:name=".bao.ShopCartActivity"></activity>
         <activity android:name=".bao.WuLiuActivity"></activity>
@@ -120,6 +120,17 @@
         <activity android:name=".bao.WoDePingLunActivity"></activity>
         <activity android:name=".bao.TuiKuanSuccessActivity"></activity>
         <activity android:name=".bao.PaySuccessActivity"></activity>
+
+
+        <activity android:name=".le.PageActivity" android:launchMode="singleTask">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
+
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

@@ -30,7 +30,8 @@ android {
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
-
+        renderscriptTargetApi 25    //添加
+        renderscriptSupportModeEnabled true  //添加
     }
     buildTypes {
         release {
@@ -42,7 +43,12 @@ android {
 //        gradle.projectsEvaluated {tasks.withType(JavaCompile) {options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"} }
 //
 //    }
-
+    allprojects {
+        repositories {
+            jcenter()
+            maven { url 'https://jitpack.io' }   //添加
+        }
+    }
 }
 
 
@@ -69,8 +75,8 @@ dependencies {
     compile 'com.google.code.gson:gson:2.8.2'
     compile 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'org.jsoup:jsoup:1.11.2'
-    compile 'com.google.zxing:core:3.2.1'
-    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
+//    compile 'com.google.zxing:core:3.2.1'
+//    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
     compile name: 'SMSSDK-2.1.2', ext: 'aar'
     compile name: 'SMSSDKGUI-2.1.2', ext: 'aar'
     compile 'com.contrarywind:Android-PickerView:3.2.5'
@@ -82,4 +88,9 @@ dependencies {
     compile 'com.android.support:cardview-v7:25.0.0'
     compile 'com.android.support:recyclerview-v7:25.4.0'
     compile 'com.yuyh.easyadapter:library:1.1.5'
+    compile 'com.github.javaexception:FuzzyBackground:v1.0'
+    compile 'com.github.donkingliang:LabelsView:1.4.1'
+    implementation 'com.github.bumptech.glide:glide:3.7.0'
+    implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
+    implementation files('libs/zxing.jar')
 }

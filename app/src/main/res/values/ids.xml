@@ -38,4 +38,10 @@
   <item type="id" name="split">false</item>
   <item name="change_scene" type="id">换景</item>
   <item name="decorat" type="id">装饰</item>
+
+
+  <item name="pager_image1" type="id" />
+  <item name="pager_image2" type="id" />
+  <item name="pager_image3" type="id" />
+  <item name="pager_image4" type="id" />
 </resources>

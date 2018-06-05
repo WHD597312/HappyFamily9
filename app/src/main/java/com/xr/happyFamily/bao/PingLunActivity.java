@@ -110,7 +110,7 @@ public class PingLunActivity extends AppCompatActivity {
                     imgChoose.setImageResource(R.mipmap.weixuanzhong3x);
                     isChoose = false;
                 } else {
-                    imgChoose.setImageResource(R.mipmap.xuanzhong3x);
+                    imgChoose.setImageResource(R.mipmap.xuanzhong);
                     isChoose = true;
                 }
                 break;

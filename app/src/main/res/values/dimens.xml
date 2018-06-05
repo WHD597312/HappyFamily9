@@ -342,6 +342,8 @@
     <dimen name="sp_28">28sp</dimen>
     <dimen name="sp_29">29sp</dimen>
     <dimen name="sp_30">30sp</dimen>
+    <dimen name="sp_35">35sp</dimen>
+
     <dimen name="slv_item_height">66dip</dimen>
     <dimen name="slv_item_height2">120dip</dimen>
 

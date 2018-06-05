@@ -2,24 +2,43 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
+    <LinearLayout
+        android:id="@+id/li_zxing"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
     <com.xr.happyFamily.jia.titleview.TitleView
         android:id="@+id/title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+        <View
+            android:id="@+id/view_zxing"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_12"
+            android:background="@null"
+
+            />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            >
     <Button
         android:id="@+id/bt_zixing_wifi"
-        android:layout_marginTop="@dimen/dp_62"
+
         android:layout_width="@dimen/dp_156"
         android:layout_height="@dimen/dp_40"
         android:layout_marginRight="@dimen/dp_12"
         android:layout_marginBottom="@dimen/dp_40"
+        android:layout_weight="1"
         android:text="WLAN配对"
         android:textColor="@color/color_gray2"
         android:layout_marginLeft="@dimen/dp_12"
-        android:background="@color/white"
+        android:background="@drawable/bg_shape"
         />
     <Button
-
+        android:layout_weight="1"
         android:layout_toRightOf="@+id/bt_zixing_wifi"
         android:layout_alignTop="@+id/bt_zixing_wifi"
         android:layout_width="@dimen/dp_156"
@@ -27,12 +46,14 @@
         android:text="二维码"
         android:textColor="@color/green2"
         android:layout_marginLeft="@dimen/dp_14"
-        android:background="@color/white"
+        android:layout_marginRight="@dimen/dp_12"
+        android:background="@drawable/bg_shape"
         />
+        </LinearLayout>
 
-
+    </LinearLayout>
     <TextView
-        android:layout_below="@+id/bt_zixing_wifi"
+        android:layout_below="@+id/li_zxing"
         android:layout_marginTop="@dimen/dp_45"
         android:id="@+id/tv_add"
         android:layout_marginRight="@dimen/dp_12"
@@ -43,6 +64,7 @@
         android:text="■"
         android:textSize="21sp"
         />
+
     <TextView
         android:layout_alignTop="@+id/tv_add"
         android:layout_toRightOf="@+id/tv_add"
@@ -60,11 +82,11 @@
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_12"
         android:layout_marginLeft="@dimen/dp_12"
-        android:background="@mipmap/ok3x"
+        android:background="@mipmap/ok"
         />
     <ImageView
         android:id="@+id/test"
-        android:layout_below="@id/tv_add"
+        android:layout_below="@+id/tv_add"
         android:layout_width="@dimen/dp_130"
         android:layout_height="@dimen/dp_130"
         android:layout_marginTop="@dimen/dp_50"

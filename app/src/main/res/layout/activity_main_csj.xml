@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.design.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    tools:context="com.xr.happyFamily.jia.xnty.CsjActivity">
+
+    <!-- Main Content -->
+    <include layout="@layout/activity_xnty_csj" />
+
+    <!-- Bottom Sheet Content -->
+   <include layout="@layout/activity_bottom_sheet" />
+    <include layout="@layout/activity_bottom_sheet2" />
+    <include layout="@layout/activity_bottom_sheet3" />
+
+</android.support.design.widget.CoordinatorLayout>

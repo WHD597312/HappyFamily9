@@ -47,5 +47,13 @@ public class ManagementActivity extends AppCompatActivity {
 
         titleView.setTitleText("设备管理");
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
+
 
 }

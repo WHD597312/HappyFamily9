@@ -1,87 +1,111 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    >
+
     <com.xr.happyFamily.jia.titleview.TitleView
         android:id="@+id/title1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+
     <TextView
-        android:layout_below="@+id/title1"
-        android:layout_marginTop="@dimen/dp_24"
-        android:textColor="@color/black"
-        android:textSize="17sp"
         android:id="@+id/tv_managment_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@+id/title1"
         android:layout_marginLeft="@dimen/dp_12"
-        android:text="设备名称"/>
+        android:layout_marginTop="@dimen/dp_24"
+        android:text="设备名称"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
+
     <TextView
         android:id="@+id/tv_managment_room"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:textColor="@color/black"
-        android:textSize="17sp"
         android:layout_below="@id/tv_managment_name"
-        android:layout_marginTop="@dimen/dp_35"
-        android:text="房间类型"/>
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="35dp"
+        android:text="房间类型"
+        android:textColor="@color/black"
+        android:textSize="17sp" />
+
     <EditText
+        android:id="@+id/et_managment_name"
+        android:layout_width="@dimen/dp_250"
+        android:layout_height="@dimen/dp_35"
         android:layout_alignBottom="@+id/tv_managment_name"
-        android:hint="请输入设备名"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_99"
-        android:id="@+id/et_managment_name"
         android:layout_toRightOf="@+id/tv_managment_name"
         android:background="@null"
-        android:layout_width="@dimen/dp_250"
-        android:layout_height="@dimen/dp_35" />
+        android:paddingLeft="@dimen/dp_15"
+        android:hint="请输入设备名" />
+
     <View
-        android:layout_toRightOf="@+id/tv_managment_name"
         android:id="@+id/et_view"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_1"
-        android:background="@color/color_gray2"
         android:layout_below="@+id/et_managment_name"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_99"
-        />
+        android:layout_toRightOf="@+id/tv_managment_name"
+        android:background="@color/color_gray2" />
+
     <org.angmarch.views.NiceSpinner
-        android:layout_toRightOf="@id/tv_managment_room"
-        android:layout_alignBottom="@id/tv_managment_room"
         android:id="@+id/managment_spinner"
-        android:layout_width="@dimen/dp_250"
-        android:layout_height="@dimen/dp_35"
-        android:layout_marginRight="@dimen/dp_99"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_40"
+        android:layout_alignBottom="@id/tv_managment_room"
+        android:layout_alignLeft="@+id/et_view"
+        android:layout_alignRight="@+id/et_view"
+        android:layout_toRightOf="@id/tv_managment_room"
+        android:text="ssss"
+        android:gravity="center_vertical"
+        android:textColor="@color/green"
         />
 
-    <GridView
+
+    <View
+        android:id="@+id/et_view2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:layout_alignLeft="@+id/et_view"
+        android:layout_alignRight="@+id/et_view"
         android:layout_below="@+id/managment_spinner"
-        android:layout_marginTop="@dimen/dp_12"
+        android:background="@color/color_gray2" />
+
+
+
+
+    <GridView
         android:id="@+id/gv_management_my"
         android:layout_width="match_parent"
         android:layout_height="320dp"
+        android:layout_below="@+id/managment_spinner"
+        android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_12"
-        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_12"
         android:gravity="center"
         android:horizontalSpacing="@dimen/dp_12"
         android:numColumns="4"
         android:verticalSpacing="@dimen/dp_12">
 
     </GridView>
+
     <Button
         android:id="@+id/bt_management_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_below="@id/gv_management_my"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_12"
-        android:layout_below="@id/gv_management_my"
         android:layout_marginTop="@dimen/dp_12"
-        android:background="@mipmap/management_button3x"
+        android:background="@mipmap/management_button"
         android:text="确定"
-        android:textColor="@color/green2"
-        />
+        android:textColor="@color/green2" />
 
 </RelativeLayout>

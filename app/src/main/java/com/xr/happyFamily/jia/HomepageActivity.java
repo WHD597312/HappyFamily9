@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,11 +29,18 @@ public class HomepageActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_add_equipment:
-                startActivity(new Intent(this, AddEquipmentActivity.class));
+                startActivity(new Intent(this, AddDeviceActivity.class));
                 break;
-
         }
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
+
 
 }

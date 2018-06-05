@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:background="@color/white"
+    android:background="@drawable/bg_shape"
     android:minHeight="@dimen/dp_129"
     android:layout_height="match_parent">
 
@@ -90,7 +90,7 @@
         android:layout_alignBottom="@id/tv_xnsb_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/xnsb_yj3x"
+        android:src="@mipmap/xnsb_yj"
         android:layout_toRightOf="@id/tv_xnsb_6"
         android:id="@+id/iv_xnsb_yj"
         />
@@ -102,7 +102,7 @@
         android:layout_marginLeft="@dimen/dp_5"
         android:layout_marginTop="@dimen/dp_14"
         android:layout_toRightOf="@+id/iv_xnsb_yj"
-        android:src="@mipmap/t3x" />
+        android:src="@mipmap/t" />
 
 
 </RelativeLayout>

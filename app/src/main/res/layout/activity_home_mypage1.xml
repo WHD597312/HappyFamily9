@@ -14,7 +14,8 @@
                 android:layout_width="match_parent"
                 android:layout_height="315dp"
                 android:layout_alignParentTop="true"
-                android:src="@mipmap/mypage3x"
+                android:src="@mipmap/mypage"
+                android:scaleType="centerCrop"
                 />
             <TextView
             android:id="@+id/tv_wd_my1"
@@ -74,7 +75,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="@dimen/dp_166"
                 android:layout_alignTop="@+id/tv_xnty_my1"
-                android:src="@mipmap/mypage_xnty3x"
+                android:src="@mipmap/mypage_xnty"
                 android:layout_alignLeft="@id/tv_xnty_my1"
                 android:layout_marginLeft="@dimen/dp_133"
                 />

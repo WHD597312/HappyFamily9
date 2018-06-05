@@ -8,7 +8,7 @@
         android:layout_height="40dp"
         android:padding="10dp"
         android:layout_centerVertical="true"
-        android:src="@mipmap/fanhui3x"/>
+        android:src="@mipmap/fanhui"/>
 
     <TextView
         android:id="@+id/title_text"

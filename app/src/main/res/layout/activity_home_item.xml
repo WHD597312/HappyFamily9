@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@color/color_white"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_shape"
     >
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_home_1"
         android:layout_marginLeft="@dimen/dp_14"
-        android:layout_marginTop="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_10"
         android:text="智能终端"
         android:textColor="@color/black" />
 
@@ -32,9 +32,18 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_home_2"
         android:layout_marginLeft="@dimen/dp_14"
-        android:layout_marginTop="@dimen/dp_28"
+        android:layout_marginTop="@dimen/dp_21"
         android:text="电源开"
         android:textColor="@color/green2" />
+    <View
+        android:id="@+id/view_homeitem"
+        android:layout_width="3dp"
+        android:layout_height="@dimen/dp_10"
+        android:background="@null"
+        android:layout_below="@+id/tv_home_3"
+        android:layout_marginLeft="@dimen/dp_9"
+
+        />
 
     <ImageView
         android:id="@+id/iv_home"
@@ -42,6 +51,6 @@
         android:layout_height="@dimen/dp_86"
         android:layout_alignTop="@id/tv_home_1"
         android:layout_marginLeft="@dimen/dp_84"
-        android:src="@mipmap/t3x" />
+        android:src="@mipmap/t" />
 
 </RelativeLayout>

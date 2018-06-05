@@ -51,14 +51,14 @@
                     android:layout_height="wrap_content"
                     android:text="许愿墙"
                     android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green_main"/>
+                    android:textColor="@color/green"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2.325条愿望"
                     android:textSize="@dimen/sp_12"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:textColor="@color/happy_gray_main"/>
+                    android:textColor="@color/color_gray"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -88,14 +88,14 @@
                     android:layout_height="wrap_content"
                     android:text="智能闹钟"
                     android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green_main"/>
+                    android:textColor="@color/green"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2.325条愿望"
                     android:textSize="@dimen/sp_12"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:textColor="@color/happy_gray_main"/>
+                    android:textColor="@color/color_gray"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>
@@ -131,14 +131,14 @@
                     android:layout_height="wrap_content"
                     android:text="许愿墙"
                     android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green_main"/>
+                    android:textColor="@color/green"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="@dimen/sp_12"
                     android:text="2.325条愿望"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:textColor="@color/happy_gray_main"/>
+                    android:textColor="@color/color_gray"/>
             </LinearLayout>
         </LinearLayout>
 
@@ -168,14 +168,14 @@
                     android:layout_height="wrap_content"
                     android:text="许愿墙"
                     android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green_main"/>
+                    android:textColor="@color/green"/>
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="2.325条愿望"
                     android:textSize="@dimen/sp_12"
                     android:layout_marginTop="@dimen/dp_5"
-                    android:textColor="@color/happy_gray_main"/>
+                    android:textColor="@color/green"/>
             </LinearLayout>
         </LinearLayout>
     </LinearLayout>

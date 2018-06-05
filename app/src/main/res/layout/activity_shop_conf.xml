@@ -83,10 +83,14 @@
 
     </RelativeLayout>
 
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_12"
         android:background="@color/white"
         android:gravity="center_vertical"
         android:orientation="horizontal"

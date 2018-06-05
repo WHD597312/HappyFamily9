@@ -17,13 +17,14 @@ import java.util.Map;
 
 //快递列表适配器
 
-public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder> {
+public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder> implements View.OnClickListener {
     private Context context;
     private List<Map<String, Object>> list;
     private ButtonInterface buttonInterface;
 
     private int defItem = -1;
     private OnItemListener onItemListener;
+    private InnerItemOnclickListener mListener;
 
     public AddressAdapter(Context context, List<Map<String, Object>> list) {
         this.context=context;
@@ -32,6 +33,8 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
     public void setOnItemListener(OnItemListener onItemListener) {
         this.onItemListener = onItemListener;
     }
+
+
     public interface OnItemListener {
         void onClick(View v, int pos, String projectc);
     }
@@ -68,6 +71,10 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
         holder.tv_name.setText(list.get(position).get("name").toString());
         holder.tv_tel.setText(list.get(position).get("tel").toString());
         holder.tv_address.setText(list.get(position).get("address").toString());
+        holder.img_bianji.setOnClickListener(this);
+        holder.img_del.setOnClickListener(this);
+        holder.img_bianji.setTag(position);
+        holder.img_del.setTag(position);
         if (defItem != -1) {
             if (defItem == position) {
                 holder.img_choose.setImageResource(R.mipmap.xuanzhong3x);
@@ -84,6 +91,18 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
                 }
             }
         });
+    }
+
+    public interface InnerItemOnclickListener {
+        void itemClick(View v);
+    }
+
+    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener){
+        this.mListener=listener;
+    }
+    @Override
+    public void onClick(View v) {
+        mListener.itemClick(v);
     }
 
     @Override

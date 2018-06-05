@@ -54,13 +54,15 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_40"
-                android:paddingLeft="@dimen/dp_20"
+                android:paddingLeft="@dimen/dp_8"
                 android:orientation="horizontal"
                 android:layout_marginTop="@dimen/dp_30">
 
 
                 <RelativeLayout
                     android:id="@+id/rl_sheng"
+                    android:paddingLeft="@dimen/dp_12"
+                    android:paddingRight="@dimen/dp_12"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
@@ -75,9 +77,10 @@
 
                     <ImageView
                         android:visibility="visible"
-                        android:id="@+id/img_tuijian"
+                        android:id="@+id/img_sheng"
                         android:layout_width="@dimen/dp_42"
                         android:layout_height="@dimen/dp_3"
+                        android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
                         android:background="@drawable/bg_shape_search_result" />
                 </RelativeLayout>
@@ -86,14 +89,17 @@
                     android:id="@+id/rl_shi"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_37">
+                    android:layout_marginLeft="@dimen/dp_12">
 
                     <TextView
                         android:id="@+id/tv_shi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingLeft="@dimen/dp_12"
+                        android:paddingRight="@dimen/dp_12"
                         android:layout_centerInParent="true"
                         android:text="XX市"
+
                         android:textColor="#6e6e6e"
                         android:textSize="@dimen/sp_14" />
 
@@ -102,6 +108,7 @@
                         android:layout_width="@dimen/dp_42"
                         android:layout_height="@dimen/dp_3"
                         android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
                         android:background="@drawable/bg_shape_search_result"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -110,10 +117,12 @@
                     android:id="@+id/rl_qu"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_37">
+                    android:layout_marginLeft="@dimen/dp_12">
 
                     <TextView
                         android:id="@+id/tv_qu"
+                        android:paddingLeft="@dimen/dp_12"
+                        android:paddingRight="@dimen/dp_12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
@@ -126,6 +135,7 @@
                         android:layout_width="@dimen/dp_42"
                         android:layout_height="@dimen/dp_3"
                         android:layout_alignParentBottom="true"
+                        android:layout_centerHorizontal="true"
                         android:background="@drawable/bg_shape_search_result"
                         android:visibility="gone" />
                 </RelativeLayout>
@@ -142,12 +152,18 @@
             android:textSize="@dimen/sp_12"
             android:padding="@dimen/dp_12"/>
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
-            android:background="@color/white"
+        <ListView
+            android:id="@+id/list_city"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </android.support.v7.widget.RecyclerView>
+            android:divider="@null"
+            android:layout_height="match_parent"></ListView>
+
+        <!--<android.support.v7.widget.RecyclerView-->
+            <!--android:id="@+id/recyclerview"-->
+            <!--android:background="@color/white"-->
+            <!--android:layout_width="match_parent"-->
+            <!--android:layout_height="match_parent">-->
+        <!--</android.support.v7.widget.RecyclerView>-->
 
     </LinearLayout>
 

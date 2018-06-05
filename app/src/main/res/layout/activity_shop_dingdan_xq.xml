@@ -47,13 +47,6 @@
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12" />
 
-        <ImageView
-            android:id="@+id/img_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/ic_shangcheng_xiala" />
     </RelativeLayout>
 
 
@@ -341,21 +334,22 @@
            android:layout_alignParentBottom="true"
             android:background="@color/white">
             <ImageView
+                android:id="@+id/img_queren"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/btn_dingdan2"
+                android:visibility="invisible"/>
+            <ImageView
                 android:id="@+id/img_del"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/btn_dingdan2"/>
+                android:src="@mipmap/btn_dingdan2"
+                android:layout_centerHorizontal="true"/>
             <ImageView
                 android:id="@+id/img_chakan"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/btn_dingdan1"
-                android:layout_centerHorizontal="true"/>
-            <ImageView
-                android:id="@+id/img_queren"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/btn_dingdan3"
                 android:layout_alignParentRight="true"/>
         </RelativeLayout>
 

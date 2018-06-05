@@ -15,18 +15,19 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopDingdanXQActivity;
 
 import java.util.ArrayList;
+import java.util.Map;
 
 //快递列表适配器
 
 public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHolder> {
     private Context context;
-    private ArrayList<String> list;
+    private ArrayList<Map<String,Object>>  list;
     private ButtonInterface buttonInterface;
 
     private int defItem = -1;
     private OnItemListener onItemListener;
 
-    public PinglunAdapter(Context context, ArrayList<String> list) {
+    public PinglunAdapter(Context context, ArrayList<Map<String,Object>> list) {
         this.context=context;
         this.list=list;
     }
@@ -67,8 +68,10 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.tv_name.setText(list.get(position));
-
+        holder.tv_name.setText(list.get(position).get("name").toString());
+        holder.tv_pinglun.setText(list.get(position).get("pinglun").toString());
+        holder.tv_time.setText(list.get(position).get("time").toString());
+        holder.img_pingjia.setImageResource( Integer.parseInt(list.get(position).get("pic").toString()));
     }
 
 
@@ -82,7 +85,7 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
      */
     class MyViewHolder extends RecyclerView.ViewHolder {
 
-        ImageView img_touxiang,img_xing;
+        ImageView img_touxiang,img_xing,img_pingjia;
         TextView tv_name,tv_time,tv_pinglun;
 
 
@@ -90,6 +93,7 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
             super(view);
             img_touxiang = (ImageView) view.findViewById(R.id.img_touxiang);
             img_xing = (ImageView) view.findViewById(R.id.img_xing);
+            img_pingjia = (ImageView) view.findViewById(R.id.img_pinglun);
             tv_name= (TextView) view.findViewById(R.id.tv_name);
             tv_time= (TextView) view.findViewById(R.id.tv_time);
             tv_pinglun= (TextView) view.findViewById(R.id.tv_pinglun);
@@ -98,7 +102,7 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
                 @Override
                 public void onClick(View v) {
                     if (onItemListener != null) {
-                        onItemListener.onClick(v,getLayoutPosition(),list.get(getLayoutPosition()));
+                        onItemListener.onClick(v,getLayoutPosition(),list.get(getLayoutPosition()).get("name").toString());
                     }
                 }
             });

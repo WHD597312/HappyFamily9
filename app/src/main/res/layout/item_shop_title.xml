@@ -17,13 +17,15 @@
        android:layout_centerVertical="true"
        android:text="推荐"
        android:textColor="@color/black"
-       android:textSize="@dimen/sp_12" />
+       android:textSize="@dimen/sp_15" />
 
    <ImageView
        android:id="@+id/img_title"
-       android:layout_width="@dimen/dp_30"
+       android:layout_width="wrap_content"
        android:layout_height="@dimen/dp_4"
        android:layout_alignParentBottom="true"
-       android:src="@mipmap/xuanzhong2x"
+       android:src="@drawable/bg_shape_search_result"
+       android:layout_alignLeft="@+id/tv_name"
+       android:layout_alignRight="@+id/tv_name"
        android:layout_centerHorizontal="true"/>
 </RelativeLayout>

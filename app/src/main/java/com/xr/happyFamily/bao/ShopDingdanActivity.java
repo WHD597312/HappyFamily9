@@ -13,6 +13,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,7 +60,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     int sing_title=0;
     View[] view_title;
     TextView[] tv_title;
-    ArrayList<String> datas;
+    ArrayList<Map<String,Object>> datas;
     DingdanAdapter dingdanAdapter;
 
     @Override
@@ -97,10 +99,14 @@ public class ShopDingdanActivity extends AppCompatActivity {
 
     }
 
-    protected ArrayList<String> initData(String name) {
-        ArrayList<String> mDatas = new ArrayList<String>();
-        for (int i = 0; i < 3; i++) {
-            mDatas.add(name+ i);
+    protected ArrayList<Map<String,Object>> initData(String name) {
+        ArrayList<Map<String,Object>> mDatas = new ArrayList<Map<String,Object>>();
+
+        for (int i = 0; i < 4; i++) {
+            Map<String,Object> maps=new HashMap<>();
+            maps.put("name",name+i);
+            maps.put("type",i);
+            mDatas.add(maps);
         }
         return mDatas;
     }

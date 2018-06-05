@@ -8,9 +8,7 @@
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
        android:src="@mipmap/chanpin4"/>
-    <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_3" />
+
 
         <TextView
             android:id="@+id/tv_name"
@@ -40,18 +38,52 @@
             android:background="@color/white"
             android:textColor="#ff0000"
             android:padding="@dimen/dp_12"/>
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_45"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/dp_12"
+        android:gravity="center"
+        android:background="@color/white"
+        android:padding="@dimen/dp_12">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_12"
+            android:text="已选:"
+            android:textColor="@color/shop_title"/>
+        <TextView
+            android:id="@+id/tv_xinghao"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/dp_12"
+            android:text="请选择型号"
+            android:drawableRight="@mipmap/gengduo_dizhi3x"
+            android:paddingLeft="@dimen/dp_8"
+            android:textColor="@color/shop_title"/>
+    </LinearLayout>
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
     
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_45"
         android:background="@color/white"
         android:paddingLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_12"
         android:textSize="@dimen/sp_12"
         android:text="慈溪市鑫睿电子科技有限公司发货并提供售后"
         android:gravity="center|left"
         android:textColor="@color/shop_title"
         android:drawableLeft="@mipmap/ic_shop_gou"
-        android:drawablePadding="@dimen/dp_8"/>
+        android:drawablePadding="@dimen/dp_14"/>
 
 
     <com.xr.happyFamily.bao.view.LinearGradientView

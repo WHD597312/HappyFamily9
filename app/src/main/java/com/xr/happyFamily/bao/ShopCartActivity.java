@@ -39,6 +39,8 @@ public class ShopCartActivity extends AppCompatActivity {
     TextView titleText;
     @BindView(R.id.title_rightText)
     TextView titleRightText;
+    @BindView(R.id.tv_sum)
+    TextView tvSum;
 
     private TextView tvShopCartSubmit, tvShopCartSelect;
     private Context mContext;
@@ -52,14 +54,15 @@ public class ShopCartActivity extends AppCompatActivity {
     private TextView tvShopCartTotalPrice;
     private int mCount, mPosition;
     private float mTotalPrice1;
-    private boolean mSelect;
+    private boolean mSelect, isEdit = false;
+    private boolean[] isChoose;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
         setContentView(R.layout.activity_shopcart);
-        mContext=ShopCartActivity.this;
+        mContext = ShopCartActivity.this;
         ButterKnife.bind(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
@@ -81,9 +84,11 @@ public class ShopCartActivity extends AppCompatActivity {
         rlvShopCart.setAdapter(mShopCartAdapter);
         //删除商品接口
         mShopCartAdapter.setOnDeleteClickListener(new ShopCartAdapter.OnDeleteClickListener() {
+
+
             @Override
             public void onDeleteClick(View view, int position, int cartid) {
-                mShopCartAdapter.notifyDataSetChanged();
+
             }
         });
         //修改数量接口
@@ -102,10 +107,10 @@ public class ShopCartActivity extends AppCompatActivity {
             public void onResfresh(boolean isSelect) {
                 mSelect = isSelect;
                 if (isSelect) {
-                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.xuanzhong_shop3x);
+                    Drawable left = ContextCompat.getDrawable(mContext, R.mipmap.xuanzhong_shop3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                 } else {
-                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.weixuanzhong3x);
+                    Drawable left = ContextCompat.getDrawable(mContext, R.mipmap.weixuanzhong3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                 }
                 float mTotalPrice = 0;
@@ -129,14 +134,14 @@ public class ShopCartActivity extends AppCompatActivity {
             public void onClick(View v) {
                 mSelect = !mSelect;
                 if (mSelect) {
-                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.xuanzhong_shop3x);
+                    Drawable left = ContextCompat.getDrawable(mContext, R.mipmap.xuanzhong_shop3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                     for (int i = 0; i < mAllOrderList.size(); i++) {
                         mAllOrderList.get(i).setSelect(true);
                         mAllOrderList.get(i).setShopSelect(true);
                     }
                 } else {
-                    Drawable left = ContextCompat.getDrawable(mContext,R.mipmap.weixuanzhong3x);
+                    Drawable left = ContextCompat.getDrawable(mContext, R.mipmap.weixuanzhong3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                     for (int i = 0; i < mAllOrderList.size(); i++) {
                         mAllOrderList.get(i).setSelect(false);
@@ -156,7 +161,7 @@ public class ShopCartActivity extends AppCompatActivity {
         @Override
         public void onItemOnClick(View view, int pos) {
             Toast.makeText(ShopCartActivity.this, "This is" + pos, Toast.LENGTH_SHORT).show();
-            startActivity(new Intent(ShopCartActivity.this,ShopXQActivity.class));
+            startActivity(new Intent(ShopCartActivity.this, ShopXQActivity.class));
         }
 
         @Override
@@ -182,12 +187,6 @@ public class ShopCartActivity extends AppCompatActivity {
             mAllOrderList.add(sb);
         }
 
-        findViewById(R.id.tv_shopcart_submit).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                startActivity(new Intent(ShopCartActivity.this, ShopConfActivity.class));
-            }
-        });
 
     }
 
@@ -206,14 +205,60 @@ public class ShopCartActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.back, R.id.title_rightText})
+    @OnClick({R.id.back, R.id.title_rightText,R.id.tv_shopcart_submit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.title_rightText:
+                upDataUI();
+                break;
+            case R.id.tv_shopcart_submit:
+                String s = "";
+                if (!isEdit) {
+                    s = "选中支付";
+                    for (int i = 0; i < mAllOrderList.size(); i++) {
+                        if (mAllOrderList.get(i).getIsSelect()) {
+                            s = s + i + ",";
+                        }
+                    }
+                    Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+                    startActivity(new Intent(ShopCartActivity.this, ShopConfActivity.class));
+                } else{ s = "删除";
+                    List<ShopCartBean> sign=new ArrayList<>();
+                    for (int i = 0; i < mAllOrderList.size(); i++) {
+                        if (mAllOrderList.get(i).getIsSelect()) {
+                            s = s + i + ",";
+                        }
+                        else {
+                            sign.add(mAllOrderList.get(i));
+                        }
+                    }
+                    Toast.makeText(this,s,Toast.LENGTH_SHORT).show();
+                    mAllOrderList.clear();
+                    mAllOrderList.addAll(sign);
+                    mShopCartAdapter.notifyDataSetChanged();
+                    }
 
+
+                break;
+        }
+    }
+
+    public void upDataUI() {
+        if (!isEdit) {
+            titleRightText.setText("完成");
+            tvShopCartSubmit.setText("删除");
+            tvSum.setVisibility(View.GONE);
+            tvShopCartTotalPrice.setVisibility(View.GONE);
+            isEdit=true;
+        }else {
+            titleRightText.setText("编辑");
+            tvShopCartSubmit.setText("狠心买");
+            tvSum.setVisibility(View.VISIBLE);
+            tvShopCartTotalPrice.setVisibility(View.VISIBLE);
+            isEdit=false;
         }
     }
 }

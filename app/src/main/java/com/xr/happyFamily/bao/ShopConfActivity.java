@@ -76,7 +76,7 @@ public class ShopConfActivity extends AppCompatActivity {
         pay_false.setBounds(0, 0, pay_false.getMinimumWidth(), pay_false.getMinimumHeight());
     }
 
-    @OnClick({R.id.rl_address, R.id.back, R.id.tv_zhifubao, R.id.tv_weixin, R.id.tv_yinlian})
+    @OnClick({R.id.rl_address, R.id.back, R.id.tv_zhifubao, R.id.tv_weixin, R.id.tv_yinlian,R.id.tv_shopcart_submit})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_address:
@@ -99,6 +99,9 @@ public class ShopConfActivity extends AppCompatActivity {
                 tvYinlian.setCompoundDrawables(null, null, pay_true, null);
                 tv_pay[sign_pay].setCompoundDrawables(null, null, pay_false, null);
                 sign_pay = 2;
+                break;
+            case R.id.tv_shopcart_submit:
+                startActivityForResult(new Intent(this, PaySuccessActivity.class), 101);
                 break;
 
         }

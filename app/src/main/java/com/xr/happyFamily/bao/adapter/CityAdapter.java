@@ -11,92 +11,78 @@ import android.widget.TextView;
 import com.xr.happyFamily.R;
 
 import java.util.ArrayList;
+import java.util.List;
 
-//快递列表适配器
-
-public class CityAdapter extends RecyclerView.Adapter<CityAdapter.MyViewHolder> {
-    private Context context;
-    private ArrayList<String> list;
-    private ButtonInterface buttonInterface;
-
-    private int defItem = -1;
-    private OnItemListener onItemListener;
-
-    public CityAdapter(Context context, ArrayList<String> list) {
-        this.context=context;
-        this.list=list;
-    }
-    public void setOnItemListener(OnItemListener onItemListener) {
-        this.onItemListener = onItemListener;
-    }
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.TextView;
 
 
-    public interface OnItemListener {
-        void onClick(View v, int pos, String projectc);
-    }
-    public void setDefSelect(int position) {
-        this.defItem = position;
-        notifyDataSetChanged();
-    }
+//最简单的list点击item
+public class CityAdapter extends BaseAdapter implements OnClickListener {
+    private List<String> mList;
+    private Context mContext;
+    private InnerItemOnclickListener mListener;
 
-    /**
-     *按钮点击事件需要的方法
-     */
-    public void buttonSetOnclick(ButtonInterface buttonInterface){
-        this.buttonInterface=buttonInterface;
-    }
-
-    /**
-     * 按钮点击事件对应的接口
-     */
-    public interface ButtonInterface{
-        public void onclick(View view, int position);
+    public CityAdapter(List<String> mList, Context mContext) {
+        this.mList = mList;
+        this.mContext = mContext;
     }
 
     @Override
-    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-        MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                context).inflate(R.layout.item_city, parent,
-                false));
-        return holder;
+    public int getCount() {
+        // TODO 自动生成的方法存根
+        return mList.size();
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.tv_search.setText(list.get(position));
-
+    public Object getItem(int position) {
+        // TODO 自动生成的方法存根
+        return mList.get(position);
     }
-
 
     @Override
-    public int getItemCount() {
-        return list.size();
+    public long getItemId(int position) {
+        // TODO 自动生成的方法存根
+        return position;
     }
 
-    /**
-     * ViewHolder的类，用于缓存控件
-     */
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final ViewHolder viewHolder;
+        if (convertView == null) {
+            viewHolder = new ViewHolder();
+            convertView = LayoutInflater.from(mContext).inflate(R.layout.item_city,
+                    null);
 
-
-        TextView tv_search;
-
-
-        public MyViewHolder(View view) {
-            super(view);
-
-            tv_search= (TextView) view.findViewById(R.id.tv_search);
-
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (onItemListener != null) {
-                        onItemListener.onClick(v,getLayoutPosition(),list.get(getLayoutPosition()));
-                    }
-                }
-            });
+            viewHolder.tv = (TextView) convertView.findViewById(R.id.tv_city);
+            convertView.setTag(viewHolder);
+        } else {
+            viewHolder = (ViewHolder) convertView.getTag();
         }
+        viewHolder.tv.setText(mList.get(position));
+        return convertView;
+    }
 
+    public final static class ViewHolder {
+        TextView tv;
+    }
 
+    interface InnerItemOnclickListener {
+        void itemClick(View v);
+    }
+
+    public void setOnInnerItemOnClickListener(InnerItemOnclickListener listener){
+        this.mListener=listener;
+    }
+
+    @Override
+    public void onClick(View v) {
+        mListener.itemClick(v);
     }
 }

@@ -37,7 +37,7 @@
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="正在派件..."
                 android:textColor="#3D9E5D"
-                android:textSize="@dimen/sp_12" />
+                android:textSize="@dimen/sp_16" />
 
             <TextView
                 android:id="@+id/tv_tel"
@@ -70,7 +70,7 @@
             android:layout_marginTop="@dimen/dp_10"
             android:text="物流动态"
             android:textColor="#3D9E5D"
-            android:layout_marginLeft="@dimen/dp_12"/>
+            android:layout_marginLeft="@dimen/dp_16"/>
 
         <LinearLayout
             android:layout_width="match_parent"

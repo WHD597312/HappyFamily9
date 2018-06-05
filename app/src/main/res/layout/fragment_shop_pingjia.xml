@@ -2,7 +2,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/color_gray"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+
+
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -18,19 +22,62 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_12"
             android:textColor="@color/black"
-            android:text="评论（1258）"/>
+            android:text="评论"/>
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_38"
+            android:src="@mipmap/ic_shop_pinglun_xing"/>
         <TextView
             android:id="@+id/tv_haoping"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_12"
             android:textColor="@color/shop_title"
-            android:text="好评度98%"
-            android:drawableRight="@mipmap/ic_shop_pinglun_more"
+            android:text="满意度98%"
             android:layout_alignParentRight="true"
-            android:gravity="center"
-            android:drawablePadding="@dimen/dp_3"/>
+            android:gravity="center" />
     </RelativeLayout>
+    <com.xr.happyFamily.bao.view.FlowTagView
+        android:id="@+id/ft_pinglun"
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_12"
+        app:tagSpacing="@dimen/dp_10"
+        app:lineSpacing="@dimen/dp_10"/>
+    
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="vertical">
+        
+        <ImageView
+        android:id="@+id/img_more"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+            android:padding="@dimen/dp_5"
+        android:src="@mipmap/ic_pingjia_more_xia"/>
+        <com.xr.happyFamily.bao.view.LinearGradientView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_3"
+            android:layout_marginTop="@dimen/dp_3"/>
+    
+    </LinearLayout>
+
+    
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_12"
+        android:background="@color/color_gray"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"

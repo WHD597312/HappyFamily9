@@ -150,7 +150,6 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
         shopAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Toast.makeText(ShoppageActivity.this, "点击了" + position, Toast.LENGTH_SHORT).show();
                 startActivity(new Intent(ShoppageActivity.this, ShopXQActivity.class));
             }
         });
@@ -302,12 +301,12 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private List<PersonCard> buildData(String name) {
-        String[] names = {name + "1", name + "2", name + "3", name + "4"};
-        int[] imgUrs = {R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4
+        String[] names = {name + "1", name + "2", name + "3", name + "4",name + "1", name + "2", name + "3", name + "4"};
+        int[] imgUrs = {R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4,R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4
         };
 
         List<PersonCard> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < 8; i++) {
             PersonCard p = new PersonCard();
             p.avatarUrl = imgUrs[i];
             p.name = names[i];

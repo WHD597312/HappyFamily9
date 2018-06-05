@@ -1,18 +1,37 @@
 package com.xr.happyFamily.bao;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.Canvas;
+import android.graphics.Rect;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.GradientDrawable;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Environment;
+import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.MyViewPageAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
@@ -20,6 +39,7 @@ import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
 import com.xr.happyFamily.bao.fragment.XiangQingFragment;
 
+import java.io.FileOutputStream;
 import java.lang.reflect.Field;
 import java.util.ArrayList;
 import java.util.List;
@@ -51,6 +71,9 @@ public class ShopXQActivity extends AppCompatActivity {
     TextView tvShopcart;
     @BindView(R.id.tv_buy)
     TextView tvBuy;
+    private View contentViewSign;
+    private PopupWindow mPopWindow;
+    private Context mContext;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +81,7 @@ public class ShopXQActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        mContext = ShopXQActivity.this;
         setContentView(R.layout.activity_shopxq);
         ButterKnife.bind(this);
         initView();
@@ -142,6 +166,7 @@ public class ShopXQActivity extends AppCompatActivity {
         return (int) (dp * scale + 0.5f);
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @OnClick({R.id.back, R.id.img_fenxiang, R.id.tv_shopcart, R.id.tv_buy})
     public void onViewClicked(View view) {
         switch (view.getId()) {
@@ -149,7 +174,7 @@ public class ShopXQActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.img_fenxiang:
-                Toast.makeText(ShopXQActivity.this, "分享", Toast.LENGTH_SHORT).show();
+                showPopup();
                 break;
             case R.id.tv_shopcart:
                 Toast.makeText(ShopXQActivity.this, "已加入购物车", Toast.LENGTH_SHORT).show();
@@ -158,5 +183,115 @@ public class ShopXQActivity extends AppCompatActivity {
                 startActivity(new Intent(this,ShopConfActivity.class));
                 break;
         }
+    }
+
+
+    private LinearLayout rl_bg;
+    public static Bitmap captureScreen(Activity activity) {
+
+        activity.getWindow().getDecorView().setDrawingCacheEnabled(true);
+
+        Bitmap bmp=activity.getWindow().getDecorView().getDrawingCache();
+
+
+        View view = activity.getWindow().getDecorView();
+        view.setDrawingCacheEnabled(true);
+        view.buildDrawingCache();
+
+        Bitmap bitmap = view.getDrawingCache();
+
+        // 获取状态栏高度
+        Rect frame = new Rect();
+        activity.getWindow().getDecorView().getWindowVisibleDisplayFrame(frame);
+        int statusBarHeight = frame.top;
+        Log.e("TAG", "" + statusBarHeight);
+
+        // 获取屏幕长和高
+        int width = activity.getWindowManager().getDefaultDisplay().getWidth();
+        int height = activity.getWindowManager().getDefaultDisplay().getHeight();
+
+        Bitmap b = Bitmap.createBitmap(bitmap, 0, statusBarHeight, width, height - statusBarHeight);
+
+
+        return b;
+
+    }
+    private GradientDrawable mBackShadowDrawableLR;
+    private ImageView img_close;
+    private TextView tv_dis;
+    private RelativeLayout rl_dis;
+
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
+    private void showPopup() {
+
+        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_fenxiang, null);
+        rl_bg = (LinearLayout) contentViewSign.findViewById(R.id.rl_bg);
+        img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
+        tv_dis = (TextView) contentViewSign.findViewById(R.id.tv_dis);
+        rl_dis = (RelativeLayout) contentViewSign.findViewById(R.id.rl_dis);
+//        tv_dingdan = (TextView) contentViewSign.findViewById(R.id.tv_dingdan);
+//        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
+//        tv_shopcart.setOnClickListener(this);
+//        tv_dingdan.setOnClickListener(this);
+//        tv_shangcheng.setOnClickListener(this);
+        img_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopWindow.dismiss();
+            }
+        });
+        tv_dis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopWindow.dismiss();
+            }
+        });
+        rl_dis.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopWindow.dismiss();
+            }
+        });
+        Resources res = getResources();
+        Bitmap finalBitmap = Fuzzy_Background.with(this)
+                .bitmap(captureScreen(this)) //要模糊的图片
+                .radius(20)//模糊半径
+                .blur();
+        Drawable drawable2 = new BitmapDrawable(finalBitmap);
+        rl_bg.setBackground(drawable2);
+        mPopWindow = new PopupWindow(contentViewSign);
+        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //点击空白处时，隐藏掉pop窗口
+        mPopWindow.setFocusable(true);
+//        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopWindow.setOutsideTouchable(true);
+        backgroundAlpha(0.5f);
+        //添加pop窗口关闭事件
+        mPopWindow.setOnDismissListener(new ShopXQActivity.poponDismissListener());
+        mPopWindow.showAsDropDown(findViewById(R.id.view_pop));
+    }
+
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp); //添加pop窗口关闭事件
+    }
+
+
+
+
+    class poponDismissListener implements PopupWindow.OnDismissListener {
+
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            backgroundAlpha(1f);
+        }
+
     }
 }

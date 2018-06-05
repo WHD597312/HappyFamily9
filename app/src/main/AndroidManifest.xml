@@ -13,6 +13,9 @@
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
 
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
@@ -87,7 +90,7 @@
         <activity android:name=".bao.TestActivity">
 
         </activity>
-        <activity android:name=".bao.ShoppageActivity">
+        <activity android:name=".bao.ShoppageActivity" android:launchMode="singleTask">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -106,7 +109,17 @@
         <activity android:name=".bao.ShopDingdanXQActivity"></activity>
         <activity android:name=".bao.ShopSearchResultActivity"></activity>
         <activity android:name=".bao.ShopXQActivity"></activity>
-
+        <activity android:name=".bao.EditAddressActivity"></activity>
+        <activity android:name=".bao.FuWuActivity"></activity>
+        <activity android:name=".bao.TuiKuanActivity"
+            android:launchMode="singleTask"  ></activity>
+        <activity android:name=".bao.TuiKuanXQActivity"></activity>
+        <activity android:name=".bao.PingLunActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".bao.PingLunSuccessActivity"></activity>
+        <activity android:name=".bao.WoDePingLunActivity"></activity>
+        <activity android:name=".bao.TuiKuanSuccessActivity"></activity>
+        <activity android:name=".bao.PaySuccessActivity"></activity>
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"

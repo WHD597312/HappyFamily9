@@ -92,6 +92,11 @@
 
 
 
+        <com.xr.happyFamily.bao.view.MyScrollview
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/rv_title">
+
 
         <LinearLayout
             android:id="@+id/ll_data"
@@ -99,12 +104,8 @@
             android:layout_height="match_parent"
             android:orientation="vertical"
             android:background="@color/color_gray"
-            android:layout_below="@id/rv_title">
+           >
 
-            <com.xr.happyFamily.bao.view.LinearGradientView
-                android:id="@+id/ll_yinying"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_3" />
 
 
             <include layout="@layout/shop_banner" />
@@ -148,6 +149,14 @@
                     android:scrollbars="none"></android.support.v7.widget.RecyclerView>
             </RelativeLayout>
         </LinearLayout>
+
+        </com.xr.happyFamily.bao.view.MyScrollview>
+
+        <com.xr.happyFamily.bao.view.LinearGradientView
+            android:id="@+id/ll_yinying"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_3"
+            android:layout_below="@id/rv_title"/>
 
         <LinearLayout
             android:id="@+id/ll_nodata"

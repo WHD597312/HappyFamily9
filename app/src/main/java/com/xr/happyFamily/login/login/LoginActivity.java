@@ -17,6 +17,8 @@ import android.widget.ImageView;
 import com.tencent.mm.sdk.modelmsg.SendAuth;
 import com.tencent.mm.sdk.openapi.IWXAPI;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.ShopCartActivity;
+import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MainActivity;
@@ -115,7 +117,7 @@ public class LoginActivity extends AppCompatActivity {
                     Utils.showToast(this, "请输入密码");
                     return;
                 }else{
-                    startActivity(new Intent(this, HomepageActivity.class));
+                    startActivity(new Intent(this, ShoppageActivity.class));
                 }
 
                Map<String, Object> params = new HashMap<>();

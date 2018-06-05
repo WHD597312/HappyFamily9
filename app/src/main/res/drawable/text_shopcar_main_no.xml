@@ -3,7 +3,7 @@
     <!-- 连框颜色值 -->
     <item>
         <shape>
-            <solid android:color="@color/shop_title" />
+            <solid android:color="#1A000000" />
         </shape>
     </item>
     <!-- 主体背景颜色值 -->

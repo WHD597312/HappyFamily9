@@ -84,7 +84,7 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
 //            }
 //        });
 
-        holder.tvShopReduce.setOnClickListener(new View.OnClickListener() {
+        holder.view_jian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("qqqqqqq222",position+"?????");
@@ -99,7 +99,7 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             }
         });
 
-        holder.tvShopAdd.setOnClickListener(new View.OnClickListener() {
+        holder.view_jia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Log.e("qqqqqqq222",position+"?????");
@@ -188,6 +188,8 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
 
         private RelativeLayout llShop;
 
+        private View view_jia,view_jian;
+
 
         public MyViewHolder(View view)
         {
@@ -202,6 +204,8 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             tvShopAdd = (TextView) view.findViewById(R.id.tv_shop_add);
             ivShopPic = (ImageView) view.findViewById(R.id.img_shop_pic);
             llShop= (RelativeLayout) view.findViewById(R.id.ll_shop);
+            view_jia=view.findViewById(R.id.view_jia);
+            view_jian=  view.findViewById(R.id.view_jian);
 
         }
     }

@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:gravity="center">
+    <View
+        android:id="@+id/view_dis"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"
+        android:orientation="vertical"
+        android:background="@drawable/bg_shape_xinghao_popup">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingTop="@dimen/dp_14"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+
+            <ImageView
+                android:id="@+id/img_shop_pic"
+                android:layout_width="@dimen/dp_86"
+                android:layout_height="@dimen/dp_74"
+                android:src="@mipmap/chanpin2"
+                android:layout_toRightOf="@+id/radio_shop" />
+
+            <TextView
+                android:id="@+id/tv_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginTop="@dimen/dp_10"
+                android:layout_toRightOf="@+id/img_shop_pic"
+                android:text="取暖器"
+                android:textColor="@color/black"
+                android:textSize="@dimen/sp_18" />
+
+            <TextView
+                android:id="@+id/tv_tel"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_below="@+id/tv_state"
+                android:layout_marginTop="@dimen/dp_8"
+                android:layout_toRightOf="@+id/img_shop_pic"
+                android:text="￥999"
+                android:textColor="#CE5B54"
+                android:textSize="@dimen/sp_18" />
+
+            <ImageView
+                android:id="@+id/img_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_3"
+                android:src="@mipmap/ic_address_close"/>
+
+        </RelativeLayout>
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="型号"
+                android:textColor="@color/shop_title"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_37"
+                android:textSize="@dimen/sp_13" />
+        <com.donkingliang.labels.LabelsView
+            xmlns:app="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/labels"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            app:labelBackground="@drawable/selector_xinghao"
+        app:labelTextColor="@drawable/selector_pinglun_text"
+        app:labelTextSize="@dimen/sp_13"
+        app:labelTextPaddingBottom="@dimen/dp_8"
+        app:labelTextPaddingLeft="@dimen/dp_10"
+        app:labelTextPaddingRight="@dimen/dp_10"
+        app:labelTextPaddingTop="@dimen/dp_8"
+        app:lineMargin="@dimen/dp_10"
+        app:wordMargin="@dimen/dp_10"
+        app:selectType="SINGLE_IRREVOCABLY"
+        />
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</LinearLayout>
+
+

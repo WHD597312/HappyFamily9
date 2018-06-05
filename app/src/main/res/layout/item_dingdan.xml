@@ -8,6 +8,26 @@
 
 
 
+    <TextView
+        android:id="@+id/tv_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="right"
+        android:text="正在交易"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_8"
+        android:layout_marginTop="@dimen/dp_10"
+        android:textColor="#ffb135"
+        android:paddingBottom="@dimen/dp_8"
+        android:background="@color/white"
+        />
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white">
+        <include layout="@layout/cutline"/>
+    </LinearLayout>
 
     <RelativeLayout
         android:id="@+id/rl_dingdan"
@@ -15,7 +35,7 @@
         android:layout_height="@dimen/dp_107"
         android:paddingLeft="@dimen/dp_13"
         android:paddingRight="@dimen/dp_14"
-        android:layout_marginTop="@dimen/dp_10"
+
         android:background="@color/white">
 
 
@@ -73,7 +93,7 @@
                     android:layout_marginLeft="@dimen/dp_3"
                     android:text="2500"
                     android:textColor="@color/shop_price"
-                    android:textSize="@dimen/sp_12" />
+                    android:textSize="@dimen/sp_14" />
             </LinearLayout>
 
             <TextView
@@ -96,8 +116,7 @@
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12">
+        android:background="@color/white">
         <include layout="@layout/cutline"/>
     </LinearLayout>
 
@@ -111,18 +130,18 @@
         android:paddingBottom="@dimen/dp_5"
         android:background="@color/white">
         <ImageView
-            android:id="@+id/img_del"
+            android:id="@+id/img1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/btn_dingdan2"/>
         <ImageView
-            android:id="@+id/img_chakan"
+            android:id="@+id/img2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/btn_dingdan1"
             android:layout_centerInParent="true"/>
         <ImageView
-            android:id="@+id/img_queren"
+            android:id="@+id/img3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/btn_dingdan3"

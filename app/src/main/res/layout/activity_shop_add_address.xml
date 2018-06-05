@@ -31,6 +31,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/sp_12" />
         <EditText
+            android:id="@+id/ed_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
@@ -57,6 +58,7 @@
             android:textColor="@color/black"
             android:textSize="@dimen/sp_12" />
         <EditText
+            android:id="@+id/ed_tel"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@null"
@@ -83,6 +85,13 @@
             android:textColor="@color/black"
             android:textSize="@dimen/sp_12"
             />
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12"/>
         <TextView
             android:id="@+id/tv_choose"
             android:layout_width="match_parent"
@@ -116,14 +125,18 @@
 
 
     <LinearLayout
+        android:id="@+id/ll_moren"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-     android:padding="@dimen/dp_12">
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@color/white"
+     >
         <ImageView
             android:id="@+id/img_choose"
-            android:layout_width="@dimen/dp_14"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
             android:src="@mipmap/xuanzhong3x"/>
         <TextView
             android:layout_width="wrap_content"

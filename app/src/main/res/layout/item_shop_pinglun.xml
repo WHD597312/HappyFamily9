@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color_gray"
+    android:background="@color/white"
     android:orientation="vertical">
 
 
@@ -70,12 +70,21 @@
 
     <TextView
         android:id="@+id/tv_pinglun"
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_12"
         android:background="@color/white"
         android:padding="@dimen/dp_12"
         android:text="东西很不错，漂亮大气，做工精细，安装也很方便，值得购买。"/>
+
+
+    <ImageView
+        android:id="@+id/img_pinglun"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/chanpin2"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingBottom="@dimen/dp_12"/>
     <include layout="@layout/cutline"/>
 
 </LinearLayout>

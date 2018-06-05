@@ -5,9 +5,11 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.AddressAdapter;
@@ -25,7 +27,7 @@ import butterknife.OnClick;
  * Created by win7 on 2018/5/22.
  */
 
-public class ShopAddressActivity extends AppCompatActivity {
+public class ShopAddressActivity extends AppCompatActivity implements AddressAdapter.InnerItemOnclickListener {
 
 
     @BindView(R.id.recyclerView)
@@ -56,7 +58,7 @@ public class ShopAddressActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(linearLayoutManager);
 //      获取数据，向适配器传数据，绑定适配器
         mDatas=new ArrayList<Map<String, Object>>();
-        mDatas = initData();
+        initData("初始");
         addressAdapter = new AddressAdapter(ShopAddressActivity.this, mDatas);
         recyclerView.setAdapter(addressAdapter);
         //      调用按钮返回事件回调的方法
@@ -82,35 +84,55 @@ public class ShopAddressActivity extends AppCompatActivity {
                 finish();//结束当前activity
             }
         });
-//        honmeAdapter.setOnItemListener(new AddressAdapter.OnItemListener() {
-//            @Override
-//            public void onClick(View v, int pos, String projectc) {
-//                honmeAdapter.setDefSelect(pos);
-//
-//            }
-//        });
-
-
+        addressAdapter.setOnInnerItemOnClickListener(this);
     }
 
-    public List<Map<String, Object>> initData() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+    public void  initData(String name) {
         Map<String, Object> map = null;
         for (int i = 0; i < 3; i++) {
             map = new HashMap<String, Object>();
-            map.put("name", "姓名"+i);
+            map.put("name", name+i);
             map.put("tel", "电话"+i);
             map.put("address", "地址"+i+i+i+i+i+i+i+i+i+i+i);
-            list.add(map);
+            mDatas.add(map);
         }
-        return list;
+
     }
 
-
+    @Override
+    public void itemClick(View v) {
+        int position;
+        position = (Integer) v.getTag();
+        switch (v.getId()) {
+            case R.id.img_bianji:
+                Intent intent=new Intent(this,EditAddressActivity.class);
+                intent.putExtra("name",mDatas.get(position).get("name").toString());
+                intent.putExtra("tel",mDatas.get(position).get("tel").toString());
+                intent.putExtra("address",mDatas.get(position).get("address").toString());
+                startActivity(intent);
+                break;
+            case R.id.img_del:
+                Toast.makeText(this,"删除"+v.getTag()+"成功",Toast.LENGTH_SHORT).show();
+                mDatas.clear();
+                Map<String, Object> map = null;
+                for (int i = 0; i < 2; i++) {
+                    map = new HashMap<String, Object>();
+                    map.put("name", "删除"+i);
+                    map.put("tel", "电话"+i);
+                    map.put("address", "地址"+i+i+i+i+i+i+i+i+i+i+i);
+                    mDatas.add(map);
+                }
+                addressAdapter.notifyDataSetChanged();
+                break;
+            default:
+                break;
+        }
+    }
 
 
     @OnClick({R.id.back, R.id.img_add})
     public void onViewClicked(View view) {
+        Log.e("qqqqqqqq..","22222");
         switch (view.getId()) {
             case R.id.back:
                 finish();
@@ -119,5 +141,13 @@ public class ShopAddressActivity extends AppCompatActivity {
                 startActivity(new Intent(ShopAddressActivity.this, ShopAddAddressActivity.class));
                 break;
         }
+    }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+        mDatas.clear();
+        initData("刷新");
+        addressAdapter.notifyDataSetChanged();
     }
 }

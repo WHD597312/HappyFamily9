@@ -1,19 +1,32 @@
 package com.xr.happyFamily.bao;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Resources;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.AdapterView;
-import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
+import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 
 import java.util.ArrayList;
@@ -29,30 +42,30 @@ import butterknife.OnClick;
  * Created by win7 on 2018/5/22.
  */
 
-public class ShopSearchActivity extends AppCompatActivity {
+public class ShopSearchActivity extends AppCompatActivity implements View.OnClickListener {
 
 
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.title_rightText)
     TextView titleRightText;
-    @BindView(R.id.gv_hot)
-    GridView gvHot;
-    @BindView(R.id.gv_history)
-    GridView gvHistory;
+
+
     @BindView(R.id.img_clear)
     ImageView imgClear;
     @BindView(R.id.ll_his)
     LinearLayout llHis;
     @BindView(R.id.lg_his)
     LinearGradientView lgHis;
+    @BindView(R.id.ft_hot)
+    FlowTagView ftHot;
+    @BindView(R.id.ft_his)
+    FlowTagView ftHis;
 
-    private String[] from = {"title"};
-    private int[] to = {R.id.tv_search};
-    String[] titles = new String[]{"电暖器", "空调", "智能传感器", "净水器", "除尘机"};
-    String[] titles2 = new String[]{"电暖器2", "空调2", "智能传感器2", "净水器2", "除尘机2"};
-    private List<Map<String, Object>> list_hot, list_his;
-    private SimpleAdapter searchAdapter_hot, searchAdapter_his;
+
+
+    //标签类相关
+    private EvaluateAdapter adapter_hot,adapter_his;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -62,39 +75,55 @@ public class ShopSearchActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_shop_search);
         ButterKnife.bind(this);
-        list_hot = getList();
-        list_his = getList2();
-        searchAdapter_hot = new SimpleAdapter(this, list_hot,
-                R.layout.item_search, from, to);
-        searchAdapter_his = new SimpleAdapter(this, list_his,
-                R.layout.item_search, from, to);
-        gvHot.setAdapter(searchAdapter_hot);
 
-        gvHistory.setAdapter(searchAdapter_his);
 
-        gvHistory.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("qqqqqqqqqqqq", titles[position]);
-                Toast.makeText(ShopSearchActivity.this, "i am:" + titles2[position], Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(ShopSearchActivity.this, ShopSearchResultActivity.class));
-            }
-
-        });
-
-        gvHot.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.e("qqqqqqqqqqqq", titles[position]);
-                Toast.makeText(ShopSearchActivity.this, "i am:" + titles[position], Toast.LENGTH_SHORT).show();
-                startActivity(new Intent(ShopSearchActivity.this, ShopSearchResultActivity.class));
-            }
-
-        });
+        initView();
+        initData();
 
 
     }
 
+    private void initData() {
+        List<String> list = new ArrayList();
+
+        list.add("电暖器");
+        list.add("空调");
+        list.add("智能传感器");
+        list.add("净水器");
+        list.add("除尘器");
+        adapter_hot.setItems(list);
+        List<String> list2 = new ArrayList();
+        list2.add("werewrewrwerwe");
+        list2.add("wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww");
+        list2.add("智能传感器");
+        list2.add("净水器");
+        list2.add("除尘器");
+        adapter_his.setItems(list2);
+
+    }
+
+    private void initView() {
+        adapter_hot = new EvaluateAdapter(this,R.layout.item_search);
+        ftHot.setAdapter(adapter_hot);
+        ftHot.setItemClickListener(new FlowTagView.TagItemClickListener() {
+            @Override
+            public void itemClick(int position) {
+                String e = adapter_hot.getItem(position).toString();
+                Toast.makeText(ShopSearchActivity.this, "i am:" + e, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShopSearchActivity.this, ShopSearchResultActivity.class));
+            }
+        });
+        adapter_his = new EvaluateAdapter(this,R.layout.item_search);
+        ftHis.setAdapter(adapter_his);
+        ftHis.setItemClickListener(new FlowTagView.TagItemClickListener() {
+            @Override
+            public void itemClick(int position) {
+                String e = adapter_his.getItem(position).toString();
+                Toast.makeText(ShopSearchActivity.this, "i am:" + e, Toast.LENGTH_SHORT).show();
+                startActivity(new Intent(ShopSearchActivity.this, ShopSearchResultActivity.class));
+            }
+        });
+    }
 
     @OnClick({R.id.back, R.id.title_rightText, R.id.img_clear})
     public void onViewClicked(View view) {
@@ -110,40 +139,72 @@ public class ShopSearchActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.img_clear:
-//                list_his.clear();
-//                searchAdapter_his.notifyDataSetChanged();
+                showPopup();
+                break;
+        }
+    }
+
+    private View contentViewSign;
+    private PopupWindow mPopWindow;
+    private Context mContext;
+    private TextView tv_quxiao,tv_queding;
+
+    private void showPopup() {
+        mContext=ShopSearchActivity.this;
+        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_search, null);
+        tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
+        tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
+//        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
+//        tv_shopcart.setOnClickListener(this);
+        tv_quxiao.setOnClickListener(this);
+        tv_queding.setOnClickListener(this);
+        mPopWindow = new PopupWindow(contentViewSign);
+        mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //点击空白处时，隐藏掉pop窗口
+        mPopWindow.setFocusable(true);
+//        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopWindow.setOutsideTouchable(true);
+        backgroundAlpha(0.5f);
+        //添加pop窗口关闭事件
+        mPopWindow.setOnDismissListener(new ShopSearchActivity.poponDismissListener());
+        mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+    }
+
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp); //添加pop窗口关闭事件
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId())
+        {
+            case R.id.tv_quxiao:
+                mPopWindow.dismiss();
+                break;
+            case R.id.tv_queren:
                 llHis.setVisibility(View.GONE);
                 lgHis.setVisibility(View.GONE);
-//                imgClear.setVisibility(View.GONE);
+                mPopWindow.dismiss();
                 break;
         }
     }
 
 
-    public List<Map<String, Object>> getList() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = null;
+    class poponDismissListener implements PopupWindow.OnDismissListener {
 
-
-        for (int i = 0; i < 5; i++) {
-            map = new HashMap<String, Object>();
-            map.put("title", titles[i]);
-            list.add(map);
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            backgroundAlpha(1f);
         }
-        return list;
+
     }
-
-    public List<Map<String, Object>> getList2() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = null;
-
-        for (int i = 0; i < 5; i++) {
-            map = new HashMap<String, Object>();
-            map.put("title", titles2[i]);
-            list.add(map);
-        }
-        return list;
-    }
-
 
 }

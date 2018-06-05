@@ -73,6 +73,8 @@ public class homeFragment extends Fragment {
         super.onActivityCreated(savedInstanceState);
 
 
+
+        
         relativeLayout.setOnClickListener(new OnClickListener() {
 
             @Override

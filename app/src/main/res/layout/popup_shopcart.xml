@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@mipmap/bg_pop_shopcart">
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_10"/>
+
+
+        <TextView
+            android:id="@+id/tv_shopcart"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_11"
+            android:drawableLeft="@mipmap/ic_pop_gouwu"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
+            android:text="购物车"/>
+
+        <TextView
+            android:id="@+id/tv_dingdan"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_18"
+            android:drawableLeft="@mipmap/ic_pop_dingdan"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
+            android:text="我的订单"/>
+
+        <TextView
+            android:id="@+id/tv_shangcheng"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/white"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_18"
+            android:drawableLeft="@mipmap/ic_pop_shangcheng"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
+            android:text="商城中心"/>
+
+
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+

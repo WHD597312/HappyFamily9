@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/rl_bg"
+    android:gravity="center">
+    <RelativeLayout
+        android:id="@+id/rl_dis"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:background="#44000000"
+        android:layout_weight="1"></RelativeLayout>
+
+    <LinearLayout
+
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="#44000000"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+
+
+        <TextView
+            android:id="@+id/tv_dis"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:text="分享给好友"
+            android:textColor="@color/white"
+            android:gravity="center" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal"
+            android:gravity="center"
+
+           >
+            <TextView
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="微信好友"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/sp_12"
+                android:drawablePadding="@dimen/dp_10"
+                android:drawableTop="@mipmap/ic_fenxiang_weixin"/>
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="QQ好友"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_12"
+                android:gravity="center"
+                android:drawablePadding="@dimen/dp_10"
+                android:drawableTop="@mipmap/ic_fenxiang_qq"/>
+
+            <TextView
+                android:gravity="center"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="生成海报"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_12"
+                android:drawablePadding="@dimen/dp_10"
+                android:drawableTop="@mipmap/ic_fenxiang_haibao"/>
+        </LinearLayout>
+
+        <ImageView
+            android:id="@+id/img_close"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:tint="#ffffff"
+            android:src="@mipmap/ic_fenxiang_close"/>
+
+
+
+
+
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+

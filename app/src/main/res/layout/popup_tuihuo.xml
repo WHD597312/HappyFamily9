@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <View
+        android:id="@+id/view_dis"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:background="@drawable/bg_shape_xinghao_popup">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_10"
+            android:paddingRight="@dimen/dp_10">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="退款原因"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/shop_context"
+                android:layout_marginTop="@dimen/dp_12"
+                android:layout_centerHorizontal="true"/>
+
+
+            <ImageView
+                android:id="@+id/img_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/dp_12"
+                android:src="@mipmap/ic_address_close"/>
+
+        </RelativeLayout>
+
+
+        <TextView
+            android:id="@+id/tv1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="我不想要了"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+
+        <TextView
+            android:id="@+id/tv2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="颜色与描述不符"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+        <TextView
+            android:id="@+id/tv3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="型号与商品描述不符"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+        <TextView
+            android:id="@+id/tv4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="质量有问题"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+        <TextView
+            android:id="@+id/tv5"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="发错货了"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+        <TextView
+            android:id="@+id/tv6"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="商品受损"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+        <TextView
+            android:id="@+id/tv7"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="缺少配件"
+            android:textSize="@dimen/sp_14"
+            android:textColor="@color/shop_context"
+            android:paddingLeft="@dimen/dp_12"
+            android:paddingTop="@dimen/dp_16"
+            android:paddingBottom="@dimen/dp_16"
+
+            android:layout_centerHorizontal="true"/>
+        <include layout="@layout/cutline"/>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
+
+

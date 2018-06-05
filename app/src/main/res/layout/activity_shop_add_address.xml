@@ -1,0 +1,154 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <View
+        android:id="@+id/view_line"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"/>
+
+    <include
+    layout="@layout/title_shop" />
+    <com.xr.happyFamily.bao.view.LinearGradientView
+
+        android:layout_height="@dimen/dp_3"
+        android:layout_width="match_parent"/>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="收货人："
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12" />
+        <EditText
+            android:id="@+id/ed_name"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_12"
+            android:layout_marginLeft="@dimen/dp_10" />
+
+    </LinearLayout>
+    <include
+        layout="@layout/cutline"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="联系电话："
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12" />
+        <EditText
+            android:id="@+id/ed_tel"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@null"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_12"
+            android:layout_marginLeft="@dimen/dp_10" />
+
+    </LinearLayout>
+    <include
+        layout="@layout/cutline"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        android:gravity="center_vertical"
+        android:padding="@dimen/dp_12">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="所在地址："
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12"
+            />
+        <TextView
+            android:id="@+id/tv_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12"/>
+        <TextView
+            android:id="@+id/tv_choose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="请选择"
+            android:drawablePadding="@dimen/dp_8"
+            android:drawableRight="@mipmap/gengduo_dizhi3x"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_12"
+            android:gravity="right"
+            android:layout_marginLeft="@dimen/dp_10" />
+
+    </LinearLayout>
+    <include
+        layout="@layout/cutline"/>
+
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_80"
+        android:hint="详细地址"
+        android:gravity="top|left"
+        android:textSize="@dimen/sp_12"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_5"
+        android:background="@color/white"
+        />
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_height="@dimen/dp_3"
+        android:layout_width="match_parent"/>
+
+
+    <LinearLayout
+        android:id="@+id/ll_moren"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@color/white"
+     >
+        <ImageView
+            android:id="@+id/img_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_12"
+            android:src="@mipmap/xuanzhong3x"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="设为默认地址"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_12"
+            android:layout_weight="1"
+            android:layout_marginLeft="@dimen/dp_5" />
+
+    </LinearLayout>
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_height="@dimen/dp_3"
+        android:layout_width="match_parent"/>
+</LinearLayout>

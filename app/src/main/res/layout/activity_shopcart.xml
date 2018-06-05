@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:theme="@android:style/Theme.NoTitleBar.Fullscreen">
+
+    <include
+    layout="@layout/title_shop" />
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_height="@dimen/dp_3"
+        android:layout_width="match_parent"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_shopcart_have"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/rlv_shopcart"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                ></android.support.v7.widget.RecyclerView>
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_50">
+            </View>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:background="@color/white"
+            android:gravity="center_vertical"
+            android:id="@+id/ll_pay"
+            android:layout_alignParentBottom="true"
+            >
+
+            <TextView
+                android:id="@+id/tv_shopcart_addselect"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_10"
+                android:drawableLeft="@mipmap/xuanzhong_shop3x"
+                android:text="全选"
+                android:drawablePadding="@dimen/dp_5"
+                />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_10"
+                >
+
+                <TextView
+                    android:id="@+id/tv_sum"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:layout_marginLeft="@dimen/dp_33"
+                    android:text="合计"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_14"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_shopcart_totalprice"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:paddingLeft="@dimen/dp_10"
+                    android:text="¥ 0.00"
+                    android:textColor="@color/shop_price"
+                    android:textSize="@dimen/sp_14"
+                    />
+
+
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_shopcart_submit"
+                android:layout_width="@dimen/dp_109"
+                android:layout_height="@dimen/dp_49"
+                android:background="@color/shop_price"
+                android:gravity="center"
+                android:text="狠心买"
+                android:textColor="#ffffff"
+
+                />
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</LinearLayout>

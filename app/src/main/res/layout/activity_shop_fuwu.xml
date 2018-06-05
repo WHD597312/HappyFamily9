@@ -1,0 +1,195 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_shop" />
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_107"
+        android:layout_marginTop="@dimen/dp_12"
+        android:background="@color/white"
+        android:paddingLeft="@dimen/dp_12"
+        android:paddingRight="@dimen/dp_12">
+
+
+        <ImageView
+            android:id="@+id/img_shop_pic"
+            android:layout_width="@dimen/dp_88"
+            android:layout_height="@dimen/dp_88"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/radio_shop"
+            android:src="@mipmap/chanpin2" />
+
+        <TextView
+            android:id="@+id/tv_shop_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/img_shop_pic"
+            android:layout_marginLeft="@dimen/dp_17"
+            android:layout_toRightOf="@+id/img_shop_pic"
+            android:text="电暖气  银色"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/tv_shop_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_shop_name"
+            android:layout_marginLeft="@dimen/dp_17"
+            android:layout_marginTop="@dimen/dp_1"
+            android:layout_toRightOf="@+id/img_shop_pic"
+            android:text="对流式加热，通电即热，无感静音，双重安装保护33333333333"
+            android:textColor="#A5A5A5"
+            android:textSize="@dimen/sp_12" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img_shop_pic"
+            android:layout_alignLeft="@+id/tv_shop_type"
+            android:orientation="horizontal">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="¥"
+                android:textColor="@color/shop_price"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/tv_shop_price"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_3"
+                android:text="2500"
+                android:textColor="@color/shop_price"
+                android:textSize="@dimen/sp_12" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_shop_num"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_20"
+            android:layout_alignBottom="@+id/img_shop_pic"
+            android:layout_alignParentRight="true"
+            android:text="X1" />
+
+
+
+    </RelativeLayout>
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_tuikuan"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_12"
+        android:padding="@dimen/dp_12">
+
+        <ImageView
+            android:id="@+id/img_tuikuan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_tuikuan" />
+
+        <TextView
+            android:id="@+id/tv_type"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_toLeftOf="@+id/img_more"
+            android:layout_toRightOf="@+id/img_tuikuan"
+            android:text="仅退款"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_type"
+            android:layout_below="@+id/tv_type"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="未收到货（包含未签收）"
+            android:textColor="@color/shop_tuikuan_context"
+            android:textSize="@dimen/sp_12" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_shangcheng_xiala" />
+    </RelativeLayout>
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
+
+    <RelativeLayout
+        android:id="@+id/rl_tuihuo"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_12"
+        android:padding="@dimen/dp_12">
+
+        <ImageView
+            android:id="@+id/img_tuihuo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_tuihuo" />
+
+        <TextView
+            android:id="@+id/tv_type2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_8"
+            android:layout_toLeftOf="@+id/img_more"
+            android:layout_toRightOf="@+id/img_tuihuo"
+            android:text="仅退款"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/tv_type2"
+            android:layout_below="@+id/tv_type2"
+            android:layout_marginTop="@dimen/dp_10"
+            android:text="已收到货，需要退换已收到的货"
+            android:textColor="@color/shop_tuikuan_context"
+            android:textSize="@dimen/sp_12" />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_shangcheng_xiala" />
+    </RelativeLayout>
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_3" />
+
+
+</LinearLayout>

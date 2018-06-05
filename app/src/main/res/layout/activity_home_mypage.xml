@@ -70,7 +70,7 @@
                 android:layout_width="@dimen/dp_226"
                 android:layout_height="@dimen/dp_110"
                 android:layout_marginTop="@dimen/dp_91"
-                android:background="@mipmap/bj_m"
+                android:background="@mipmap/bj_m3x"
                 android:layout_marginLeft="@dimen/dp_12"
                 >
                 <TextView

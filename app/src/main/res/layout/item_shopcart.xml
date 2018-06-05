@@ -1,0 +1,160 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_gray"
+    android:orientation="vertical">
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/ll_shop"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_107"
+
+        android:layout_marginTop="@dimen/dp_10"
+        android:background="@color/white">
+
+
+
+    <ImageView
+                    android:id="@+id/radio_shop"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+        android:padding="@dimen/dp_12"
+                    android:src="@mipmap/xuanzhong_shop3x" />
+
+                <ImageView
+                    android:id="@+id/img_shop_pic"
+                    android:layout_width="@dimen/dp_88"
+                    android:layout_height="@dimen/dp_88"
+                   android:layout_centerVertical="true"
+                    android:src="@mipmap/chanpin2"
+                    android:layout_toRightOf="@+id/radio_shop" />
+
+                <TextView
+                    android:id="@+id/tv_shop_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_alignTop="@+id/img_shop_pic"
+                    android:layout_toRightOf="@+id/img_shop_pic"
+                    android:text="电暖气  银色"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_14" />
+
+                <TextView
+                    android:id="@+id/tv_shop_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_17"
+                    android:layout_below="@+id/tv_shop_name"
+                    android:layout_marginTop="@dimen/dp_1"
+                    android:layout_toRightOf="@+id/img_shop_pic"
+                    android:paddingRight="@dimen/dp_12"
+                    android:text="对流式加热，通电即热，无感静音，双重安装保护33333333333"
+                    android:textColor="@color/shop_type"
+                    android:textSize="@dimen/sp_12" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/img_shop_pic"
+                    android:orientation="horizontal"
+                    android:layout_alignLeft="@+id/tv_shop_type">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¥"
+                        android:textColor="@color/shop_price"
+                        android:textSize="@dimen/sp_14" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_3"
+                        android:text="2500"
+                        android:textColor="@color/shop_price"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll"
+                    android:layout_width="wrap_content"
+                    android:layout_height="@dimen/dp_40"
+                    android:layout_alignParentRight="true"
+                    android:paddingLeft="@dimen/dp_20"
+                    android:paddingRight="@dimen/dp_12"
+
+                    android:layout_alignBottom="@+id/img_shop_pic">
+
+                    <TextView
+                        android:id="@+id/tv_shop_reduce"
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/text_shopcar_main"
+                        android:gravity="center"
+                        android:text="—"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/sp_15" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_num"
+                        android:layout_width="@dimen/dp_31"
+                        android:layout_height="match_parent"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:background="@drawable/text_shopcar_main_no"
+                        android:gravity="center"
+                        android:text="1"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_add"
+                        android:layout_width="@dimen/dp_20"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_shopcar_main"
+                        android:gravity="center"
+                        android:text="+"
+                        android:layout_marginTop="@dimen/dp_20"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/sp_15" />
+                </LinearLayout>
+
+
+        <View
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:id="@+id/view_jian"
+            android:layout_alignTop="@+id/ll"
+            android:layout_alignLeft="@+id/ll"/>
+
+        <View
+            android:layout_width="@dimen/dp_40"
+            android:layout_height="@dimen/dp_40"
+            android:id="@+id/view_jia"
+            android:layout_alignTop="@+id/ll"
+            android:layout_alignParentRight="true"/>
+
+            </RelativeLayout>
+
+
+
+
+
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_height="@dimen/dp_3"
+        android:layout_width="match_parent"/>
+
+</LinearLayout>
+
+

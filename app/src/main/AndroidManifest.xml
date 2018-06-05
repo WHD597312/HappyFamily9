@@ -145,7 +145,17 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@null" />
         <activity
-            android:name=".jia.xnty.ZnczListActivity"
+        android:name=".jia.xnty.ZnczListActivity"
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.NoActionBar"
+        android:label="@null" />
+        <activity
+            android:name=".jia.xnty.HeaterActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@null" />
+        <activity
+            android:name=".jia.xnty.WaterPurifierActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@null" />

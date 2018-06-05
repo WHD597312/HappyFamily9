@@ -43,7 +43,7 @@
         <attr name="sliceCountInOneBigSlice" format="integer"/>
         <attr name="arcColor" format="color"/>
         <attr name="measureTextSize" format="dimension"/>
-        <attr name="textColor" format="color"/>
+
         <attr name="headerTitle" format="string"/>
         <attr name="headerTextSize" format="string"/>
         <attr name="headerRadius" format="dimension"/>

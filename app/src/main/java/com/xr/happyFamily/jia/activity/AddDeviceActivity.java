@@ -8,6 +8,7 @@ import android.widget.Button;
 import android.widget.RelativeLayout;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyPaperActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -60,7 +61,7 @@ public class AddDeviceActivity extends AppCompatActivity {
             case R.id.bt_add_finish:
                 switch (position){
                     case 0:
-                        Intent wifiIntent=new Intent(this,DeviceManagerActivity.class);
+                        Intent wifiIntent=new Intent(this,MyPaperActivity.class);
                         startActivity(wifiIntent);
                         break;
                     case 1:

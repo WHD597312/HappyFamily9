@@ -48,8 +48,9 @@
     <color name="color_blue_pm25">#19b5e9</color>
     <color name="color_blue_yuan">#07eeff</color>
     <color name="color_yellow_yuan">#fa8d07</color>
+    <color name="color_yellow1">#fff4ec</color>
     <color name="color_red_yuan">#d50400</color>
-
+    <color name="color_blue1">#f2feff</color>
     <color name="color_xnty_h">#f38f14</color>
     <color name="color_gray3">#999999</color>
     <color name="color_green3">#7dd321</color>
@@ -58,9 +59,12 @@
     <color name="result_view">#b0000000</color>
     <color name="viewfinder_mask">#60000000</color>
     <color name="possible_result_points">#c0ffff00</color>
-
-
-
-
-
+    <color name="color_deep_blue">#05a7fb</color>
+    <color name="color_deep_green">#01d692</color>
+    <color name="color_deep_yellow">#f3b000</color>
+    <color name="color_black5">#161211</color>
+    <color name="color_light_blue">#7cdcfc</color>
+    <color name="color_orange_light">#fb6b39</color>
+    <color name="color_black6">#0d0a09</color>
+    ] <color name="color_light_blue1">#00ddff</color>
 </resources>

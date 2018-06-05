@@ -20,26 +20,20 @@
     <declare-styleable name="BeautySeekBarView">
     <attr name="valueCountent" format="integer"/>
     <attr name="padding" format="dimension"/>
-    <attr name="pointColor" format="color"/>
     <attr name="lineColor" format="color"/>
-    <attr name="smallPic" format="reference"/>
-    <attr name="bigPic" format="reference"/>
-    <attr name="minValue" format="integer"/>
-    <attr name="maxValue" format="integer"/>
-    <attr name="curValue" format="integer"/>
-    <attr name="curProgress" format="integer"/>
 </declare-styleable>
     <declare-styleable name="ZnczWdSeekBarView">
-        <attr name="valueCountent" format="integer"/>
-        <attr name="padding" format="dimension"/>
         <attr name="pointColor" format="color"/>
-        <attr name="lineColor" format="color"/>
         <attr name="smallPic" format="reference"/>
         <attr name="bigPic" format="reference"/>
         <attr name="minValue" format="integer"/>
         <attr name="maxValue" format="integer"/>
         <attr name="curValue" format="integer"/>
         <attr name="curProgress" format="integer"/>
+    </declare-styleable>
+    <declare-styleable name="Timepicker">
+        <attr name="myTextColor" format="color"/>
+
     </declare-styleable>
     <style name="edit_AlertDialog_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsFloating">true</item>
@@ -51,6 +45,14 @@
         <item name="android:backgroundDimEnabled">true</item>
         <!-- 是否使用背景半透明 -->
     </style>
-
+    <declare-styleable name="DiffuseView">
+        <attr name="diffuse_color"/>
+        <attr name="diffuse_coreColor"/>
+        <attr name="diffuse_coreImage"/>
+        <attr name="diffuse_coreRadius"/>
+        <attr name="diffuse_width"/>
+        <attr name="diffuse_maxWidth"/>
+        <attr name="diffuse_speed"/>
+    </declare-styleable>
 
 </resources>

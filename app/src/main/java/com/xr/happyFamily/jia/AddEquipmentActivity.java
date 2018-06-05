@@ -40,4 +40,12 @@ public class AddEquipmentActivity extends Activity {
         }
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
+
 }

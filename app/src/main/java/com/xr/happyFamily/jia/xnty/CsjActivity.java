@@ -1,8 +1,7 @@
 package com.xr.happyFamily.jia.xnty;
 
 
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
+
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
 import android.support.v7.app.AppCompatActivity;
@@ -10,25 +9,16 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.animation.RotateAnimation;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
-
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.xr.happyFamily.R;
-
-
-import org.greenrobot.greendao.generator.Index;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageView;
+
 
 
 public class CsjActivity extends AppCompatActivity implements View.OnClickListener {
@@ -405,5 +395,13 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
 
 
     }
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+    }
+
 
 }

@@ -1,5 +1,6 @@
 package com.xr.happyFamily.jia.Fragment;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
@@ -9,9 +10,12 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.view.View.OnClickListener;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
+import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
@@ -19,6 +23,7 @@ import com.xr.happyFamily.jia.pojo.Equipment;
 import java.util.ArrayList;
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class homeFragment extends Fragment {
@@ -31,6 +36,8 @@ public class homeFragment extends Fragment {
     Unbinder unbinder;
     @BindView(R.id.bt_mypage_add)
     Button buttonadd;
+    @BindView(R.id.rl_home_xnty)
+    RelativeLayout relativeLayout;
     @BindView(R.id.gv_home_my)
     com.xr.happyFamily.jia.MyGridview mGridView;
 
@@ -60,4 +67,23 @@ public class homeFragment extends Fragment {
 
         return view;
     }
+
+    public void onActivityCreated(Bundle savedInstanceState) {
+        // TODO Auto-generated method stub
+        super.onActivityCreated(savedInstanceState);
+
+
+
+        
+        relativeLayout.setOnClickListener(new OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+//                Intent intent = Intent(getActivity(), ChangeEquipmentActivity);
+//                startActivity(intent);
+            }
+        });
+
+    }
+
 }

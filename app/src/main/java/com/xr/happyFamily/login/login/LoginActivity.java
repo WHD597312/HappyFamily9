@@ -29,8 +29,10 @@ import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
 import com.xr.happyFamily.jia.xnty.AircleanerActivity;
 import com.xr.happyFamily.jia.xnty.CsjActivity;
+import com.xr.happyFamily.jia.xnty.HeaterActivity;
 import com.xr.happyFamily.jia.xnty.MySeekBar;
 import com.xr.happyFamily.jia.xnty.SmartSocket;
+import com.xr.happyFamily.jia.xnty.WaterPurifierActivity;
 import com.xr.happyFamily.jia.xnty.ZnPm25Activity;
 import com.xr.happyFamily.jia.xnty.ZnSdActivity;
 import com.xr.happyFamily.jia.xnty.ZnWdActivity;
@@ -127,7 +129,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(this, SmartSocket.class));
+                startActivity(new Intent(this, HeaterActivity.class));
                 break;
             case R.id.btn_login:
                 String phone = et_name.getText().toString().trim();
@@ -149,7 +151,7 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, AirConditionerActivity.class));
+                startActivity(new Intent(this, WaterPurifierActivity.class));
                 break;
 
             case R.id.image_seepwd:

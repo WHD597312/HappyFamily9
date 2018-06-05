@@ -1,136 +1,160 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.xr.happyFamily">
 
-    <uses-permission android:name="android.permission.INTERNET" />
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
-    <!-- SDK2.1新增获取用户位置信息 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.RECEIVE_SMS" />
+    <uses-permission android:name="android.permission.READ_SMS" />
+    <uses-permission android:name="android.permission.GET_TASKS" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+
+    <!-- 拍照权限 -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- Normal Permissions 不需要运行时注册 -->
+    <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <!-- 用于访问wifi网络信息，wifi信息会用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission
+        android:name="android.permission.CHANGE_CONFIGURATION"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- 请求网络 -->
+    <uses-permission android:name="android.permission.INTERNET" />
+
+    <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
+    <!-- 需要运行时注册的权限 -->
+    <!-- 用于进行网络定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <!-- 用于提高GPS定位速度 -->
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <!-- 写入扩展存储，向扩展卡写入数据，用于写入缓存定位数据 -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <!-- 读取缓存数据 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
+    <!-- 用于读取手机当前的状态 -->
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+
+    <!-- 更改设置 -->
+    <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        tools:ignore="ProtectedPermissions" />
+
+    <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!-- 3.2.0版本增加 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
+    <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
 
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
-        android:hardwareAccelerated="false"
+        android:hardwareAccelerated="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity android:name=".login.login.LoginActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
         <activity
             android:name=".login.wxapi.WXEntryActivity"
-            android:exported="true">
-
-        </activity>
-        <activity android:name=".jia.HomeActivity">
-
-        </activity>
-
+            android:exported="true" />
+        <activity android:name=".jia.HomeActivity" />
+        <activity android:name=".jia.xnty.ZnPm25Activity" />
+        <activity android:name=".jia.xnty.ZnSdActivity" />
+        <activity
+            android:name=".jia.xnty.CsjActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".jia.xnty.ZnWdActivity" />
         <activity
             android:name=".jia.MenuActivity"
-            android:label="@string/app_name">
-
-        </activity>
-
+            android:label="@string/app_name" />
         <activity android:name=".jia.AddEquipmentActivity"
-
-            >
-
-        </activity>
-
-        <activity android:name=".jia.ManagementActivity"
-
-            >
-
-        </activity>
-        <activity android:name=".jia.ChangeEquipmentActivity"
-
-            >
-
-        </activity>
-        <activity android:name=".jia.ZixingAddActivity"
-
-            >
-
-        </activity>
-
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".jia.ManagementActivity" />
+        <activity android:name=".jia.ChangeEquipmentActivity" />
+        <activity android:name=".jia.ZixingAddActivity" />
         <activity
             android:name=".jia.MainActivity"
-            android:label="@string/app_name">
-
-        </activity>
+            android:hardwareAccelerated="true"
+            android:label="@string/app_name" />
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
-            android:label="@string/app_name"></activity>
+            android:label="@string/app_name" />
         <activity
             android:name=".jia.HomepageActivity"
             android:label="@string/app_name" />
         <activity
-            android:name=".login.rigest.RegistActivity"
-            android:label="@null">
-
-        </activity>
+            android:name=".jia.xnty.AircleanerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".jia.ChangeRoomActivity"
-            android:label="@null">
-
-        </activity>
-        <activity android:name=".bao.TestActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-        <activity android:name=".bao.ShoppageActivity" android:launchMode="singleTask">
-
-        </activity>
-        <activity android:name=".bao.ShopCartActivity"></activity>
-        <activity android:name=".bao.WuLiuActivity"></activity>
-        <activity android:name=".bao.ShopAddressActivity"></activity>
-        <activity android:name=".bao.ShopAddAddressActivity"></activity>
-        <activity android:name=".bao.ShopConfActivity"></activity>
-        <activity android:name=".bao.ShopDingdanActivity"></activity>
-        <activity android:name=".bao.ShopSearchActivity"
-            android:launchMode="singleTask"  ></activity>
-        <activity android:name=".bao.ShopShangchengActivity"></activity>
-        <activity android:name=".bao.ShopDingdanXQActivity"></activity>
-        <activity android:name=".bao.ShopSearchResultActivity"></activity>
-        <activity android:name=".bao.ShopXQActivity"></activity>
-        <activity android:name=".bao.EditAddressActivity"></activity>
-        <activity android:name=".bao.FuWuActivity"></activity>
-        <activity android:name=".bao.TuiKuanActivity"
-            android:launchMode="singleTask"  ></activity>
-        <activity android:name=".bao.TuiKuanXQActivity"></activity>
-        <activity android:name=".bao.PingLunActivity"
-            android:launchMode="singleTask"></activity>
-        <activity android:name=".bao.PingLunSuccessActivity"></activity>
-        <activity android:name=".bao.WoDePingLunActivity"></activity>
-        <activity android:name=".bao.TuiKuanSuccessActivity"></activity>
-        <activity android:name=".bao.PaySuccessActivity"></activity>
-
-
-        <activity android:name=".le.PageActivity" android:launchMode="singleTask">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
-
-
+            android:name=".jia.xnty.AirConditionerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".login.rigest.RegistActivity"
+            android:label="@null" />
+        <activity
+            android:name=".jia.xnty.SmartSocket"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@null" />
+        <activity
+            android:name=".jia.xnty.ZnczListActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@null" />
+        <activity
+        android:name=".jia.ChangeRoomActivity"
+        android:label="@null" />
+        <activity
+            android:name=".jia.MyPaperActivity"
+            android:label="@null" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -150,7 +174,14 @@
             android:configChanges="orientation|keyboardHidden"
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
+            android:name=".jia.activity.QRScannerActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".jia.activity.AddDeviceActivity">
 
+        </activity>
     </application>
-</manifest>
 
+</manifest>

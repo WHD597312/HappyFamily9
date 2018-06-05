@@ -3,8 +3,14 @@ package com.xr.happyFamily.jia.xnty;
 import android.content.Context;
 import android.content.res.Resources;
 import java.lang.reflect.Field;
+
+import android.content.res.TypedArray;
+import android.graphics.Color;
+import android.graphics.Paint;
+import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.NumberPicker;
@@ -15,7 +21,9 @@ public class Timepicker extends NumberPicker {
     public Timepicker(Context context, AttributeSet attrs,
                               int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+
     }
+
 
     public Timepicker(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -41,10 +49,11 @@ public class Timepicker extends NumberPicker {
                         android.view.ViewGroup.LayoutParams params) {
         super.addView(child, index, params);
         setNumberPicker(child);
+
     }
 
     /**
-     * 设置CustomNumberPicker的属性 颜色 大小
+     * 设置TimePicker的属性 颜色 大小
      * @param view
      */
     public void setNumberPicker(View view) {
@@ -52,6 +61,30 @@ public class Timepicker extends NumberPicker {
             ((EditText) view).setTextColor(this.getResources().getColor(R.color.green2));
             ((EditText) view).setTextSize(18);
         }
+    }
+    public static boolean setNumberPickerTextColor(NumberPicker numberPicker, int color) {
+        final int count = numberPicker.getChildCount();
+        for (int i = 0; i < count; i++) {
+            View child = numberPicker.getChildAt(i);
+            if (child instanceof EditText) {
+                Field selectorWheelPaintField;
+                try {
+                    selectorWheelPaintField = numberPicker.getClass().getDeclaredField("mSelectorWheelPaint");
+                    selectorWheelPaintField.setAccessible(true);
+                    try {
+                        ((Paint) selectorWheelPaintField.get(numberPicker)).setColor(color);
+                    } catch (IllegalAccessException e) {
+                        e.printStackTrace();
+                    }
+                    ((EditText) child).setTextColor(color);
+                    numberPicker.invalidate();
+                    return true;
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        return false;
     }
 
     @Override

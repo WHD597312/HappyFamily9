@@ -89,11 +89,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".login.login.LoginActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
         </activity>
         <activity
             android:name=".login.wxapi.WXEntryActivity"
@@ -181,6 +177,51 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.activity.AddDeviceActivity">
 
+        </activity>
+
+        <activity android:name=".bao.TestActivity">
+
+        </activity>
+        <activity android:name=".bao.ShoppageActivity" android:launchMode="singleTask">
+
+        </activity>
+        <activity android:name=".bao.ShopCartActivity"></activity>
+        <activity android:name=".bao.WuLiuActivity"></activity>
+        <activity android:name=".bao.ShopAddressActivity"></activity>
+        <activity android:name=".bao.ShopAddAddressActivity"></activity>
+        <activity android:name=".bao.ShopConfActivity"></activity>
+        <activity android:name=".bao.ShopDingdanActivity"></activity>
+        <activity android:name=".bao.ShopSearchActivity"
+            android:launchMode="singleTask"  ></activity>
+        <activity android:name=".bao.ShopShangchengActivity"></activity>
+        <activity android:name=".bao.ShopDingdanXQActivity"></activity>
+        <activity android:name=".bao.ShopSearchResultActivity"></activity>
+        <activity android:name=".bao.ShopXQActivity"></activity>
+        <activity android:name=".bao.EditAddressActivity"></activity>
+        <activity android:name=".bao.FuWuActivity"></activity>
+        <activity android:name=".bao.TuiKuanActivity"
+            android:launchMode="singleTask"  ></activity>
+        <activity android:name=".bao.TuiKuanXQActivity"></activity>
+        <activity android:name=".bao.PingLunActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".bao.PingLunSuccessActivity"></activity>
+        <activity android:name=".bao.WoDePingLunActivity"></activity>
+        <activity android:name=".bao.TuiKuanSuccessActivity"></activity>
+        <activity android:name=".bao.PaySuccessActivity"></activity>
+
+
+        <activity android:name=".le.PageActivity">
+
+        </activity>
+
+        <activity android:name=".le.FaBuActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 

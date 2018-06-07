@@ -45,7 +45,7 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
     /** 位移动画类型：从坐标点移动到中心点。 */
     public static final int LOCATION_TO_CENTER = 4;
     public static final long ANIM_DURATION = 800l;
-    public static final int MAX = 12;
+    public static final int MAX = 8;
     public static final int TEXT_SIZE_MAX = 20;
     public static final int TEXT_SIZE_MIN = 10;
     private OnClickListener itemClickListener;
@@ -56,7 +56,7 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
             animScaleZero2Normal, animScaleNormal2Zero;
     /** 存储显示的关键字。 */
     private Vector<String> vecKeywords;
-    private int width, height;
+    private int width, height,height_child;
     /**
      * go2Show()中被赋值为true，标识开发人员触发其开始动画显示。<br/> 
      * 本标识的作用是防止在填充keywrods未完成的过程中获取到width和height后提前启动动画。<br/> 
@@ -72,6 +72,9 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
     /** 动画运行时间。 */
     private long animDuration;
     private Context context;
+
+    private int[][] position=new int[8][4];
+    private int sign_height=0;
     public KeywordsFlow(Context context) {
         super(context);
         init();
@@ -181,7 +184,7 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
             enableShow = false;
             lastStartAnimationTime = System.currentTimeMillis();
             int xCenter = width >> 1, yCenter = height >> 1;
-            int size = vecKeywords.size();
+            final int size = vecKeywords.size();
             int xItem = width / size, yItem = height / size;
 
             LinkedList<XuYuanTextView> listTxtTop = new LinkedList<XuYuanTextView>();
@@ -189,35 +192,35 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
             for (int i = 0; i < size; i++) {
                 String keyword = vecKeywords.get(i);
                 // 随机位置，糙值  
-                int xy[] = randomXY(random);
+                int xy[] = randomXY(random,i);
                 // 实例化TextView  
                 final XuYuanTextView txv = new XuYuanTextView(getContext());
-                txv.setGravity(Gravity.CENTER);
                 txv.setOnClickListener(itemClickListener);
                 txv.setText(keyword);
-                txv.setPadding(8, 6, 8, 6);
+
+
 
                 GradientDrawable myGrad = (GradientDrawable)txv.getBackground();
 //              txv.setBackgroundColor(mColor);  
                 // 获取文本长度  
                 int strWidth= txv.getWidth();
 
+                        while (xy[IDX_X]*3>width*2)
+                            {xy = randomXY(random,i);}
+                Log.e("qqqqqqqqqqqq",xy[IDX_Y]+"???"+height+"........"+size);
 
-                        while (xy[IDX_X]+strWidth>width)
-                            {xy = randomXY(random);}
-                Log.e("qqqqqqqqqqqq",xy[IDX_X]+","+strWidth+","+width);
 //                int strWidth = (int) Math.ceil(paint.measureText(keyword));
                 xy[IDX_TXT_LENGTH] = strWidth;
-                // 第一次修正:修正x坐标
-                if (xy[IDX_X] + strWidth > width - (xItem >> 1)) {
-                    int baseX = width - strWidth;
-                    // 减少文本右边缘一样的概率
-                    xy[IDX_X] = baseX - xItem + random.nextInt(xItem >> 1);
-                } else if (xy[IDX_X] == 0) {
-                    // 减少文本左边缘一样的概率
-                    xy[IDX_X] = Math.max(random.nextInt(xItem), xItem / 3);
-                }
-                xy[IDX_DIS_Y] = Math.abs(xy[IDX_Y] - yCenter);
+//                // 第一次修正:修正x坐标
+//                if (xy[IDX_X] + strWidth > width - (xItem >> 1)) {
+//                    int baseX = width - strWidth;
+//                    // 减少文本右边缘一样的概率
+//                    xy[IDX_X] = baseX - xItem + random.nextInt(xItem >> 1);
+//                } else if (xy[IDX_X] == 0) {
+//                    // 减少文本左边缘一样的概率
+//                    xy[IDX_X] = Math.max(random.nextInt(xItem), xItem / 3);
+//                }
+//                xy[IDX_DIS_Y] = Math.abs(xy[IDX_Y] - yCenter);
                 txv.setTag(xy);
                 if (xy[IDX_Y] > yCenter) {
                     listTxtBottom.add(txv);
@@ -240,40 +243,40 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
         for (int i = 0; i < size; i++) {
             XuYuanTextView txv = listTxt.get(i);
             int[] iXY = (int[]) txv.getTag();
-            // 第二次修正:修正y坐标  
-            int yDistance = iXY[IDX_Y] - yCenter;
-            // 对于最靠近中心点的，其值不会大于yItem<br/>  
-            // 对于可以一路下降到中心点的，则该值也是其应调整的大小<br/>  
-            int yMove = Math.abs(yDistance);
-            inner: for (int k = i - 1; k >= 0; k--) {
-                int[] kXY = (int[]) listTxt.get(k).getTag();
-                int startX = kXY[IDX_X];
-                int endX = startX + kXY[IDX_TXT_LENGTH];
-                // y轴以中心点为分隔线，在同一侧  
-                if (yDistance * (kXY[IDX_Y] - yCenter) > 0) {
-                    if (isXMixed(startX, endX, iXY[IDX_X], iXY[IDX_X]
-                            + iXY[IDX_TXT_LENGTH])) {
-                        int tmpMove = Math.abs(iXY[IDX_Y] - kXY[IDX_Y]);
-                        if (tmpMove > yItem) {
-                            yMove = tmpMove;
-                        } else if (yMove > 0) {
-                            // 取消默认值。  
-                            yMove = 0;
-                        }
-                        break inner;
-                    }
-                }
-            }
-            if (yMove > yItem) {
-                int maxMove = yMove - yItem;
-                int randomMove = random.nextInt(maxMove);
-                int realMove = Math.max(randomMove, maxMove >> 1) * yDistance
-                        / Math.abs(yDistance);
-                iXY[IDX_Y] = iXY[IDX_Y] - realMove;
-                iXY[IDX_DIS_Y] = Math.abs(iXY[IDX_Y] - yCenter);
-                // 已经调整过前i个需要再次排序  
-                sortXYList(listTxt, i + 1);
-            }
+//            // 第二次修正:修正y坐标
+//            int yDistance = iXY[IDX_Y] - yCenter;
+//            // 对于最靠近中心点的，其值不会大于yItem<br/>
+//            // 对于可以一路下降到中心点的，则该值也是其应调整的大小<br/>
+//            int yMove = Math.abs(yDistance);
+//            inner: for (int k = i - 1; k >= 0; k--) {
+//                int[] kXY = (int[]) listTxt.get(k).getTag();
+//                int startX = kXY[IDX_X];
+//                int endX = startX + kXY[IDX_TXT_LENGTH];
+//                // y轴以中心点为分隔线，在同一侧
+//                if (yDistance * (kXY[IDX_Y] - yCenter) > 0) {
+//                    if (isXMixed(startX, endX, iXY[IDX_X], iXY[IDX_X]
+//                            + iXY[IDX_TXT_LENGTH])) {
+//                        int tmpMove = Math.abs(iXY[IDX_Y] - kXY[IDX_Y]);
+//                        if (tmpMove > yItem) {
+//                            yMove = tmpMove;
+//                        } else if (yMove > 0) {
+//                            // 取消默认值。
+//                            yMove = 0;
+//                        }
+//                        break inner;
+//                    }
+//                }
+//            }
+//            if (yMove > yItem) {
+//                int maxMove = yMove - yItem;
+//                int randomMove = random.nextInt(maxMove);
+//                int realMove = Math.max(randomMove, maxMove >> 1) * yDistance
+//                        / Math.abs(yDistance);
+//                iXY[IDX_Y] = iXY[IDX_Y] - realMove;
+//                iXY[IDX_DIS_Y] = Math.abs(iXY[IDX_Y] - yCenter);
+//                // 已经调整过前i个需要再次排序
+//                sortXYList(listTxt, i + 1);
+//            }
             FrameLayout.LayoutParams layParams = new FrameLayout.LayoutParams(
                     FrameLayout.LayoutParams.WRAP_CONTENT,
                     FrameLayout.LayoutParams.WRAP_CONTENT);
@@ -362,19 +365,21 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
     }
 
     //得到随机坐标  
-    private int[] randomXY(Random ran) {
+    private int[] randomXY(Random ran,int num) {
         int[] arr = new int[4];
         arr[IDX_X] = ran.nextInt(width) ;
-        arr[IDX_Y] = ran.nextInt(height);
+        arr[IDX_Y] = ran.nextInt(height_child/3)+height_child*num;
+        Log.e("qqqq2",height_child+","+num);
         return arr;
     }
 
     public void onGlobalLayout() {
         int tmpW = getWidth();
-        int tmpH = getHeight();
+        int tmpH = getHeight()*9/10;
         if (width != tmpW || height != tmpH) {
             width = tmpW;
             height = tmpH;
+            height_child=height/MAX;
             show();
         }
     }

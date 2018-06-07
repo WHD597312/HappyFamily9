@@ -165,7 +165,7 @@ public class PageActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_xuyuan:
-                startActivity(new Intent(this, TestActivity.class));
+                startActivity(new Intent(this, XuYuanActivity.class));
                 break;
         }
     }

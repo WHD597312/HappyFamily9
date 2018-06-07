@@ -7,6 +7,8 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.xr.happyFamily.R;
+
 
 public class XuYuanTextView extends LinearLayout {
 
@@ -45,4 +47,7 @@ public class XuYuanTextView extends LinearLayout {
     }
 
 
+    public String getText(){
+        return mTextView.getText().toString();
+    }
 }

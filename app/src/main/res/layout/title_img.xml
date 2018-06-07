@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_50"
+    android:background="@color/white">
+    <!--右边有图片时的标题-->
+    <ImageView
+        android:id="@+id/back"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:padding="@dimen/dp_10"
+        android:layout_centerVertical="true"
+        android:src="@mipmap/fanhui"/>
+
+    <TextView
+        android:id="@+id/title_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
+        android:text="This is Title"
+        android:textColor="@color/shop_title"
+        android:textSize="@dimen/sp_18" />
+
+    <ImageView
+        android:id="@+id/img_right"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
+        android:padding="@dimen/dp_10"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:src="@mipmap/fanhui"/>
+
+</RelativeLayout>

@@ -91,6 +91,9 @@
         <activity android:name=".login.login.LoginActivity">
 
         </activity>
+
+        <activity android:name=".jia.xnty.WaterPurifierActivity">
+        </activity>
         <activity
             android:name=".login.wxapi.WXEntryActivity"
             android:exported="true" />
@@ -217,11 +220,20 @@
         <activity android:name=".le.FaBuActivity"
             android:windowSoftInputMode="stateVisible|adjustPan"
             android:screenOrientation="portrait">
+
+        </activity>
+        <activity android:name=".le.XuYuanActivity"></activity>
+        <activity android:name=".le.XQActivity">
+        </activity>
+        <activity android:name=".le.PiPeiActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".le.YouYuanActivity">
+
         </activity>
     </application>
 

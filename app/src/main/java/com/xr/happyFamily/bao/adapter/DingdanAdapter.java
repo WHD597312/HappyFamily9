@@ -88,9 +88,9 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             case 0:
                 //正在交易
                 holder.tv_state.setText("正在交易");
-                holder.img1.setVisibility(View.INVISIBLE);
-                holder.img2.setImageResource(R.mipmap.btn_dingdan2);
-                holder.img3.setImageResource(R.mipmap.btn_dingdan1);
+                holder.img1.setImageResource(R.mipmap.btn_dingdan2);
+                holder.img2.setImageResource(R.mipmap.btn_dingdan1);
+                holder.img3.setImageResource(R.mipmap.btn_dingdan3);
                 break;
             case 1:
                 //交易成功
@@ -123,8 +123,9 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             public void onClick(View v) {
                 switch (Integer.parseInt(list.get(position).get("type").toString())){
                     case 0:
-                        //正在交易  确认收货
-
+                        //正在交易  删除订单
+                        Toast.makeText(context,"删除订单",Toast.LENGTH_SHORT).show();
+                        showPopup();
                         break;
                     case 1:
                         //交易成功
@@ -143,9 +144,8 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             public void onClick(View v) {
                 switch (Integer.parseInt(list.get(position).get("type").toString())){
                     case 0:
-                        //正在交易  删除订单
-                        Toast.makeText(context,"删除订单",Toast.LENGTH_SHORT).show();
-                        showPopup();
+                        //正在交易  查看物流
+                        context.startActivity(new Intent(context, WuLiuActivity.class));
                         break;
                     case 1:
                         //交易成功  查看物流
@@ -164,7 +164,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                 switch (Integer.parseInt(list.get(position).get("type").toString())){
                     case 0:
                         //正在交易  查看物流
-                        context.startActivity(new Intent(context, WuLiuActivity.class));
+                        showPopup();
                         break;
                     case 1:
                         //交易成功  评价

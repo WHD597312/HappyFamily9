@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center">
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical"
+        android:background="@mipmap/bg_pop_xuyuan">
+        <View
+            android:layout_width="@dimen/dp_1"
+            android:layout_height="@dimen/dp_10"/>
+
+
+        <TextView
+            android:id="@+id/tv_msg"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_18"
+            android:drawableLeft="@mipmap/ic_pop_xuyuan_xiaoxi"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
+            android:text="消息"/>
+
+        <TextView
+            android:id="@+id/tv_fabu"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_18"
+            android:drawableLeft="@mipmap/ic_pop_xuyuan_fabu"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_20"
+            android:text="发布愿望"/>
+
+        <TextView
+            android:id="@+id/tv_pipei"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:paddingLeft="@dimen/dp_18"
+            android:drawableLeft="@mipmap/ic_pop_xuyuan_pipei"
+            android:textSize="@dimen/sp_12"
+            android:drawablePadding="@dimen/dp_18"
+            android:text="匹配愿望"/>
+
+
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+

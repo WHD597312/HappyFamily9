@@ -47,4 +47,7 @@ public class XuYuanTextView extends LinearLayout {
     }
 
 
+    public String getText(){
+        return mTextView.getText().toString();
+    }
 }

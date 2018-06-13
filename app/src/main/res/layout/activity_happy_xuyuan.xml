@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+   android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_xuyuanqiang"
+    android:orientation="vertical">
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
+  <ImageView
+      android:id="@+id/img_back"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/ic_xuyuan_back"
+      android:layout_margin="@dimen/dp_12"/>
+  <ImageView
+      android:id="@+id/img_add"
+      android:src="@mipmap/ic_xuyuan_add"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_margin="@dimen/dp_12"
+      android:layout_alignParentRight="true"/>
+ </RelativeLayout>
+ <com.xr.happyFamily.le.view.MyHorizontalScrollView
+     android:id="@+id/myHs1"
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:scrollbars="none"
+     android:layout_weight="1">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" >
+  </LinearLayout>
+ </com.xr.happyFamily.le.view.MyHorizontalScrollView>
+
+ <com.xr.happyFamily.le.view.MyHorizontalScrollView
+     android:id="@+id/myHs2"
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:scrollbars="none"
+     android:layout_weight="1">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" >
+  </LinearLayout>
+
+ </com.xr.happyFamily.le.view.MyHorizontalScrollView>
+
+ <com.xr.happyFamily.le.view.MyHorizontalScrollView
+     android:id="@+id/myHs3"
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:scrollbars="none"
+     android:layout_weight="1">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" >
+  </LinearLayout>
+
+ </com.xr.happyFamily.le.view.MyHorizontalScrollView>
+
+ <com.xr.happyFamily.le.view.MyHorizontalScrollView
+     android:id="@+id/myHs4"
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:scrollbars="none"
+     android:layout_weight="1">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" >
+  </LinearLayout>
+
+ </com.xr.happyFamily.le.view.MyHorizontalScrollView>
+
+ <com.xr.happyFamily.le.view.MyHorizontalScrollView
+     android:id="@+id/myHs5"
+     android:layout_width="match_parent"
+     android:layout_height="0dp"
+     android:scrollbars="none"
+     android:layout_weight="1">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal" >
+  </LinearLayout>
+
+ </com.xr.happyFamily.le.view.MyHorizontalScrollView>
+
+<View
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_100"/>
+ </LinearLayout>

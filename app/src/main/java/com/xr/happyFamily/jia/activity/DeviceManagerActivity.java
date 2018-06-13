@@ -32,6 +32,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import butterknife.Unbinder;
 
 public class DeviceManagerActivity extends AppCompatActivity {
@@ -75,7 +76,6 @@ public class DeviceManagerActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
@@ -91,6 +91,7 @@ public class DeviceManagerActivity extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

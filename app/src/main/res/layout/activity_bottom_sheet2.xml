@@ -108,8 +108,6 @@
         android:descendantFocusability="blocksDescendants"
         android:layout_marginTop="@dimen/dp_10"
         android:layout_below="@+id/li2_csj_db"
-
-        myview:myTextColor="@color/color_blue_yuan"
         android:id="@+id/tm_js2"
         android:layout_width="45dp"
         android:layout_height="@dimen/dp_100"

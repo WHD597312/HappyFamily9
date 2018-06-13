@@ -1,6 +1,8 @@
+
 package com.xr.happyFamily.jia.xnty;
 
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -59,28 +61,85 @@ public class WaterPurifierActivity extends AppCompatActivity{
     ImageView imageViewsd;
     @BindView(R.id.iv_jsq_sd1)
     ImageView imageViewsd1;
+    @BindView(R.id.tv_jsq_time)
+    TextView textView;
     int flag=0 ;
     int change=0 ;
-
+    private MyCountDownTimer timer;
+    private final long TIME = 6 * 1000L;
+    private final long INTERVAL = 1000L;
+    @BindView(R.id.diffuseview)
     DiffuseView mDiffuseView;
     Handler handler;
     Runnable runnable ;
+    Handler handler1;
+    Runnable runnable1 ;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xnty_jsq);
         unbinder = ButterKnife.bind(this);
-        imageViewsd1.setTag("close");
         anim = AnimationUtils.loadAnimation(this, R.anim.rotate_jsqqp1);
         anim2 = AnimationUtils.loadAnimation(this, R.anim.rotate_jsqqp2);
         anim3 = AnimationUtils.loadAnimation(this, R.anim.rotate_jsqsd);
         initanim();
-
-       mDiffuseView = (DiffuseView) findViewById(R.id.diffuseview);
-
-      timerunner();
-
+        imageViewsd1.setTag("close");
+        startTimer();
+        timerunner();
         inswitch ();
 
+
+
+
+
+
+    }
+    public class MyCountDownTimer extends CountDownTimer {
+        public MyCountDownTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        @Override
+        public void onTick(long millisUntilFinished) {
+            long time = millisUntilFinished / 1000;
+            textView.setText(String.format(" %02d", time));
+
+        }
+
+        @Override
+        public void onFinish() {
+            textView.setText("");
+            cancelTimer();
+        }
+    }
+    public void start(View view) {
+        startTimer();
+    }
+
+    public void cancel(View view) {
+        textView.setText("");
+        cancelTimer();
+    }
+
+
+ //开始倒计时
+
+    private void startTimer() {
+        if (timer == null) {
+            timer = new MyCountDownTimer(TIME, INTERVAL);
+        }
+        timer.start();
+    }
+
+
+    /**
+     * 取消倒计时
+     */
+
+    private void cancelTimer() {
+        if (timer != null) {
+            timer.cancel();
+            timer = null;
+        }
     }
     private void timerunner(){
 
@@ -94,10 +153,12 @@ public class WaterPurifierActivity extends AppCompatActivity{
                 imageViewkg.setImageResource(R.mipmap.jsq_kgk2);
                 imageViewsd1.setImageResource(R.mipmap.shudi12);
                 change=1;
+                mDiffuseView.start();
             }
         };
         handler.postDelayed(runnable, 6000);   //6秒 }
     }
+
     private void initanim(){
         image1.startAnimation(anim);
         image2.startAnimation(anim);
@@ -121,44 +182,46 @@ public class WaterPurifierActivity extends AppCompatActivity{
             public void onClick(View v) {
                 if (change==0){
                     if (flag==0){
-                    imageViewkg.setImageResource(R.mipmap.jsq_kgg);
-                    mDiffuseView.stop();// 停止扩散
-                    image1.clearAnimation();
-                    image6.clearAnimation();
-                    image3.clearAnimation();
-                    image3.clearAnimation();
-                    image4.clearAnimation();
-                    image5.clearAnimation();
-                    image2.clearAnimation();
-                    imager1.clearAnimation();
-                    imager2.clearAnimation();
-                    imager3.clearAnimation();
-                    imager4.clearAnimation();
-                    imager5.clearAnimation();
-                    imager6.clearAnimation();
-                    handler.removeCallbacks(runnable);
-                    flag=1;
+                        imageViewkg.setImageResource(R.mipmap.jsq_kgg);
+                        mDiffuseView.stop();// 停止扩散
+                        image1.clearAnimation();
+                        image6.clearAnimation();
+                        image3.clearAnimation();
+                        image3.clearAnimation();
+                        image4.clearAnimation();
+                        image5.clearAnimation();
+                        image2.clearAnimation();
+                        imager1.clearAnimation();
+                        imager2.clearAnimation();
+                        imager3.clearAnimation();
+                        imager4.clearAnimation();
+                        imager5.clearAnimation();
+                        imager6.clearAnimation();
+                        cancelTimer();
+                        handler.removeCallbacks(runnable);
+                        flag=1;
 
-                }else {
-                    imageViewkg.setImageResource(R.mipmap.jsq_kgk1);
-                    mDiffuseView.start();
-                    image1.startAnimation(anim);
-                    image6.startAnimation(anim);
-                    image3.startAnimation(anim);
-                    image2.startAnimation(anim);
-                    image4.startAnimation(anim);
-                    image5.startAnimation(anim);
-                    image3.startAnimation(anim);
-                    imager1.startAnimation(anim2);
-                    imager2.startAnimation(anim2);
-                    imager3.startAnimation(anim2);
-                    imager4.startAnimation(anim2);
-                    imager5.startAnimation(anim2);
-                    imager6.startAnimation(anim2);
-                    timerunner();
-                    flag=0;
+                    }else {
+                        imageViewkg.setImageResource(R.mipmap.jsq_kgk1);
+                        mDiffuseView.start();
+                        image1.startAnimation(anim);
+                        image6.startAnimation(anim);
+                        image3.startAnimation(anim);
+                        image2.startAnimation(anim);
+                        image4.startAnimation(anim);
+                        image5.startAnimation(anim);
+                        image3.startAnimation(anim);
+                        imager1.startAnimation(anim2);
+                        imager2.startAnimation(anim2);
+                        imager3.startAnimation(anim2);
+                        imager4.startAnimation(anim2);
+                        imager5.startAnimation(anim2);
+                        imager6.startAnimation(anim2);
+                        startTimer();
+                        timerunner();
+                        flag=0;
 
-                }
+                    }
                 }else if (change==1){
                     if (flag==0){
                         imageViewkg.setImageResource(R.mipmap.jsq_kgg);
@@ -194,7 +257,8 @@ public class WaterPurifierActivity extends AppCompatActivity{
                         imager4.startAnimation(anim2);
                         imager5.startAnimation(anim2);
                         imager6.startAnimation(anim2);
-                        timerunner();
+
+
                         flag=0;
                     }
                 }
@@ -205,7 +269,7 @@ public class WaterPurifierActivity extends AppCompatActivity{
 
     }
 
-    @OnClick({R.id.iv_jsq_sd})
+    @OnClick({R.id.iv_jsq_sd,R.id.iv_jsq_fh})
     public void onClick(View view){
         switch (view.getId()) {
             case R.id.iv_jsq_sd:
@@ -223,13 +287,16 @@ public class WaterPurifierActivity extends AppCompatActivity{
                 }
 
                 break;
+            case R.id.iv_jsq_fh:
+
+                finish();
+                break;
         }
     }
     @Override
     protected void onStart() {
         super.onStart();
-
-        mDiffuseView.start(); // 开始扩散
+        mDiffuseView.start();
         // mDiffuseView.stop();// 停止扩散
     }
 
@@ -239,6 +306,9 @@ public class WaterPurifierActivity extends AppCompatActivity{
         if (unbinder!=null){
             unbinder.unbind();
         }
+        handler.removeCallbacks(runnable);
+
+        cancelTimer();
     }
 
 }

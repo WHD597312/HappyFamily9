@@ -74,16 +74,17 @@ public class homeFragment extends Fragment {
 
 
 
-        
+
         relativeLayout.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                Intent intent = Intent(getActivity(), ChangeEquipmentActivity);
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), ChangeEquipmentActivity.class);
+                startActivity(intent);
             }
         });
 
     }
+
 
 }

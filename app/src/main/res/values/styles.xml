@@ -70,5 +70,14 @@
         <item name="android:windowEnterAnimation">@anim/slide_up</item>
         <item name="android:windowExitAnimation">@anim/slide_down</item>
     </style>
+    <declare-styleable name="DiffuseView">
+        <attr name="diffuse_color"/>
+        <attr name="diffuse_coreColor"/>
+        <attr name="diffuse_coreImage"/>
+        <attr name="diffuse_coreRadius"/>
+        <attr name="diffuse_width"/>
+        <attr name="diffuse_maxWidth"/>
+        <attr name="diffuse_speed"/>
+    </declare-styleable>
 
 </resources>

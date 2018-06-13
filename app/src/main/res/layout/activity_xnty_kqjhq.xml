@@ -10,15 +10,17 @@
     android:fitsSystemWindows="true"
     tools:context="com.xr.happyFamily.jia.xnty.AircleanerActivity">
 
-    <RelativeLayout
+    <android.support.percent.PercentRelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         >
 
         <RelativeLayout
             android:id="@+id/rl_kqjh"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            app:layout_heightPercent="75%"
+            app:layout_widthPercent="100%"
             android:background="@color/color_green5">
 
             <ImageView
@@ -629,6 +631,7 @@
                 android:layout_below="@+id/tv_kqjh_ty"
                 android:layout_centerHorizontal="true"
                 android:layout_marginTop="@dimen/dp_90"
+                android:layout_marginBottom="@dimen/dp_30"
                 android:scaleType="centerInside"
                 android:src="@mipmap/kqjh_jq" />
 
@@ -671,8 +674,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignRight="@id/iv_kqjh_jq"
                 android:layout_alignTop="@+id/iv_kqjh_jq"
-                android:layout_marginRight="@dimen/dp_70"
-                android:layout_marginTop="@dimen/dp_26"
+                android:layout_marginRight="@dimen/dp_74"
+                android:layout_marginTop="@dimen/dp_23"
                 android:src="@mipmap/kqjh_ly"
 
                 />
@@ -681,9 +684,9 @@
                 android:id="@+id/iv_kqjh_y2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@id/iv_kqjh_jq"
+                android:layout_marginRight="-18dp"
                 android:layout_alignTop="@id/iv_kqjh_y1"
-                android:layout_marginRight="@dimen/dp_50"
+                android:layout_alignRight="@+id/iv_kqjh_y1"
                 android:src="@mipmap/kqjh_hy"
 
                 />
@@ -692,10 +695,9 @@
                 android:id="@+id/iv_kqjh_y3"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignRight="@id/iv_kqjh_jq"
-                android:layout_alignTop="@+id/iv_kqjh_jq"
-                android:layout_marginRight="@dimen/dp_30"
-                android:layout_marginTop="@dimen/dp_26"
+                android:layout_marginRight="-18dp"
+                android:layout_alignTop="@id/iv_kqjh_y2"
+                android:layout_alignRight="@+id/iv_kqjh_y2"
                 android:src="@mipmap/kqjh_hy"
 
                 />
@@ -704,11 +706,10 @@
         </RelativeLayout>
 
         <LinearLayout
-            android:layout_below="@+id/rl_kqjh"
-            android:id="@+id/li_kqjh"
+            android:layout_above="@+id/li_kqjhq"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_40"
+            android:layout_marginBottom="@dimen/dp_10"
             android:background="@color/white">
 
             <ImageView
@@ -735,7 +736,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_weight="1"
-                android:src="@mipmap/kqjh_sm" />
+                android:src="@mipmap/kqjh_smg" />
 
             <ImageView
                 android:id="@+id/iv_kqjh_ds"
@@ -749,8 +750,9 @@
 
         <LinearLayout
 
-            android:layout_below="@+id/li_kqjh"
-            android:layout_marginTop="@dimen/dp_10"
+            android:id="@+id/li_kqjhq"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp_30"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
@@ -781,7 +783,7 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="睡眠"
-                android:textColor="@color/color_green5"
+                android:textColor="@color/color_gray2"
                 android:textSize="14sp" />
 
             <TextView
@@ -790,13 +792,13 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center"
-                android:text="2小时关闭"
+                android:text="12:00-13:00"
                 android:textColor="@color/color_green5"
                 android:textSize="14sp" />
         </LinearLayout>
 
 
-    </RelativeLayout>
+    </android.support.percent.PercentRelativeLayout>
     <include layout="@layout/activity_bottom_sheet" />
     <include layout="@layout/activity_bottom_sheet2" />
 </android.support.design.widget.CoordinatorLayout>

@@ -5,63 +5,129 @@
     android:background="@mipmap/img"
     >
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_centerHorizontal="true"
-        android:scaleType="centerInside"
-        android:src="@mipmap/beijing" />
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="@dimen/dp_130"
-        android:layout_height="@dimen/dp_130"
-        android:layout_centerHorizontal="true"
-        android:layout_alignParentTop="true"
-        android:scaleType="centerInside"
-        android:layout_marginTop="@dimen/dp_45"
-        android:src="@mipmap/tubiao"
-        />
-
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_alignParentTop="true"
-        android:gravity="center_vertical">
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_100"
+        android:layout_centerInParent="true"
+        android:background="@mipmap/beijing">
+
+        <ImageView
+            android:id="@+id/iv_registerf_tb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="-30dp"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/dtubiao" />
+
+        <ImageView
+            android:id="@+id/iv_fyuan"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_registerf_tb"
+            android:layout_toLeftOf="@+id/iv_registerf_dh"
+            android:src="@mipmap/yuan2" />
+
+        <ImageView
+            android:id="@+id/iv_registerf_dh"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_registerf_tb"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_5"
+            android:src="@mipmap/daohang"
+
+
+            />
+
+        <ImageView
+            android:id="@+id/iv_fyuanwc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/iv_registerf_tb"
+            android:layout_marginTop="0dp"
+            android:layout_toRightOf="@+id/iv_registerf_dh"
+            android:src="@mipmap/yuan22" />
+
+        <TextView
+            android:id="@+id/tv_registerf_zc"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/iv_fyuan"
+            android:layout_below="@id/iv_fyuan"
+            android:layout_marginTop="@dimen/dp_9"
+            android:text="注册"
+            android:textColor="@color/color_gray2"
+            android:textSize="7sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignRight="@+id/iv_fyuanwc"
+            android:layout_below="@id/iv_fyuanwc"
+            android:layout_marginTop="@dimen/dp_9"
+            android:text="完成"
+            android:textColor="@color/green2"
+            android:textSize="7sp" />
 
         <EditText
-            android:id="@+id/et_username"
+            android:id="@+id/et_fphone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/dp_72"
-            android:layout_marginRight="@dimen/dp_72"
-            android:layout_marginTop="@dimen/dp_210"
-            android:ems="10"
-            android:gravity="center_vertical"
+            android:layout_toRightOf="@+id/image_fphone"
+            android:layout_alignTop="@+id/image_fphone"
+            android:layout_marginLeft="@dimen/dp_14"
+            android:background="@null"
+            android:layout_marginBottom="@dimen/dp_5"
             android:hint="昵称"
+            android:inputType="phone"
             android:textSize="@dimen/sp_18" />
 
         <ImageView
-            android:id="@+id/image_user"
+            android:id="@+id/image_fphone"
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
-            android:layout_alignTop="@id/et_username"
-            android:layout_marginLeft="@dimen/dp_42"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_below="@+id/tv_registerf_zc"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_56"
             android:scaleType="centerInside"
             android:src="@mipmap/wo" />
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_below="@+id/et_fphone"
+            android:layout_marginLeft="@dimen/dp_29"
+            android:layout_marginRight="@dimen/dp_29"
+            android:layout_marginTop="@dimen/dp_1"
+            android:background="@color/color_gray2" />
+        <ImageView
+            android:id="@+id/image_sex"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_above="@+id/view2"
+            android:layout_marginBottom="-7dp"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:scaleType="centerInside"
+            android:src="@mipmap/xingbie" />
 
         <RadioGroup
             android:id="@+id/rgMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_below="@id/et_username"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_5"
+            android:layout_below="@+id/view1"
             android:orientation="horizontal">
 
             <RadioButton
+
                 android:id="@+id/rbMale"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -69,66 +135,66 @@
 
             <RadioButton
                 android:id="@+id/rbfaMale"
-                android:layout_width="94dp"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="女" />
         </RadioGroup>
 
-        <ImageView
-            android:id="@+id/image_sex"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            android:layout_marginLeft="@dimen/dp_42"
-            android:layout_below="@id/image_user"
-            android:layout_marginTop="@dimen/dp_10"
-            android:layout_marginBottom="222dp"
-            android:scaleType="centerInside"
-            android:src="@mipmap/xingbie" />
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_1"
+            android:layout_below="@+id/rgMale"
+            android:layout_marginLeft="@dimen/dp_29"
+            android:layout_marginRight="@dimen/dp_29"
+            android:layout_marginTop="@dimen/dp_5"
+            android:background="@color/color_gray2" />
 
-        <ImageView
-            android:id="@+id/image_date"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            android:layout_below="@id/et_username"
-            android:layout_marginTop="@dimen/dp_38"
-            android:layout_marginLeft="@dimen/dp_42"
-            android:scaleType="centerInside"
-            android:src="@mipmap/rili"
+        <TextView
+            android:id="@+id/tv_birthday"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/image_fpwd"
+            android:layout_centerHorizontal="true"
+            android:text="        年            月            日       "
             />
-        <LinearLayout
+
+        <DatePicker
+            android:id="@+id/register_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-             <DatePicker
-             android:layout_width="match_parent"
-             android:layout_height="wrap_content"
-             android:calendarViewShown="false"
+            android:visibility="gone"
+            />
 
-             >
 
-             </DatePicker>
-        </LinearLayout>
-        <Button
-            android:id="@+id/btn_finish"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/et_username"
-            android:layout_alignParentBottom="true"
-            android:layout_alignRight="@+id/et_username"
-            android:layout_marginBottom="@dimen/dp_45"
-            android:background="@mipmap/anniu1"
-            android:text="注册" />
-
+        <ImageView
+            android:id="@+id/image_fpwd"
+            android:layout_width="@dimen/dp_30"
+            android:layout_height="@dimen/dp_30"
+            android:layout_below="@+id/view2"
+            android:layout_marginLeft="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_12"
+            android:scaleType="centerInside"
+            android:src="@mipmap/rili" />
 
         <View
             android:id="@+id/view3"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_1"
-            android:layout_alignLeft="@+id/et_password"
-            android:layout_alignRight="@+id/et_password"
-            android:layout_below="@+id/et_password"
-            android:layout_marginTop="@dimen/dp_5"
-            android:background="@color/white" />
+            android:layout_below="@+id/image_fpwd"
+            android:layout_marginLeft="@dimen/dp_29"
+            android:layout_marginRight="@dimen/dp_29"
+            android:background="@color/color_gray2" />
+
+        <Button
+            android:id="@+id/btn_ffinish"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_35"
+            android:layout_marginRight="@dimen/dp_35"
+            android:layout_alignParentBottom="true"
+            android:background="@mipmap/anniu1"
+            android:text="注册"
+            android:textColor="@color/green2" />
     </RelativeLayout>
 </RelativeLayout>
-

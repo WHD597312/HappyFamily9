@@ -99,10 +99,14 @@
             android:name=".login.wxapi.WXEntryActivity"
             android:exported="true" />
         <activity android:name=".jia.HomeActivity" />
-        <activity android:name=".jia.xnty.ZnPm25Activity" />
-        <activity android:name=".jia.xnty.ZnSdActivity" />
+
         <activity
             android:name=".jia.xnty.CsjActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jia.xnty.HeaterActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -122,12 +126,23 @@
             android:label="@string/app_name" />
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
+            android:hardwareAccelerated="true"
             android:label="@string/app_name" />
         <activity
             android:name=".jia.HomepageActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".jia.xnty.AircleanerActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".login.rigest.RegistFinishActivity"
+            android:label="@string/app_name"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jia.xnty.Smartsj"
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -182,6 +197,18 @@
         <activity android:name=".jia.activity.AddDeviceActivity">
 
         </activity>
+        <activity
+            android:name=".jia.xnty.WaterPurifierActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name=".bao.ShoppageActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
     </application>
 
 </manifest>

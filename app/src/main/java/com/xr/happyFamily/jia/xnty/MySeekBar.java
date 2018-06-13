@@ -152,7 +152,7 @@ public class MySeekBar extends SeekBar {
     /**
      * 计算SeekBar数值文字的显示位置
      */
-    private void getTextLocation() {
+    public void getTextLocation() {
         Paint.FontMetrics fm = mPaint.getFontMetrics();
         mText = "" + String.valueOf(getProgress()+1000);
         //测量文字宽度

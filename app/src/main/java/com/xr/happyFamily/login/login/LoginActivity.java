@@ -10,6 +10,7 @@ import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
@@ -21,6 +22,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
 import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
+import com.xr.happyFamily.jia.HomeActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MenuActivity;
@@ -33,9 +35,10 @@ import com.xr.happyFamily.jia.xnty.HeaterActivity;
 import com.xr.happyFamily.jia.xnty.MySeekBar;
 import com.xr.happyFamily.jia.xnty.SmartSocket;
 import com.xr.happyFamily.jia.xnty.WaterPurifierActivity;
-import com.xr.happyFamily.jia.xnty.ZnPm25Activity;
-import com.xr.happyFamily.jia.xnty.ZnSdActivity;
 import com.xr.happyFamily.jia.xnty.ZnWdActivity;
+import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
+import com.xr.happyFamily.login.rigest.RegistActivity;
+import com.xr.happyFamily.login.rigest.RegistFinishActivity;
 import com.xr.happyFamily.login.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -58,7 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     EditText et_name;
     @BindView(R.id.et_pswd)
     EditText et_pswd;
-    String url = "";
+    String url = "http://47.98.131.11:8084/login/auth";
     @BindView(R.id.image_seepwd)
     ImageView imageView;
     @BindView(R.id.image_wx)
@@ -85,6 +88,8 @@ public class LoginActivity extends AppCompatActivity {
         }
 
         application.addActivity(this);
+        et_name.setText(preferences.getString("phone", ""));
+        et_pswd.setText(preferences.getString("password", ""));
     }
 
     SharedPreferences preferences;
@@ -120,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
         if (preferences.contains("phone") && preferences.contains("password")){
 //            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             if (preferences.contains("login")){
-                startActivity(new Intent(this,MainActivity.class));
+                startActivity(new Intent(this,HomepageActivity.class));
             }
         }
     }
@@ -129,7 +134,7 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(this, HeaterActivity.class));
+                startActivity(new Intent(this, RegistFinishActivity.class));
                 break;
             case R.id.btn_login:
                 String phone = et_name.getText().toString().trim();
@@ -141,8 +146,6 @@ public class LoginActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(password)) {
                     Utils.showToast(this, "请输入密码");
                     return;
-                }else{
-                    startActivity(new Intent(this, ShoppageActivity.class));
                 }
 
                Map<String, Object> params = new HashMap<>();
@@ -151,7 +154,7 @@ public class LoginActivity extends AppCompatActivity {
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, WaterPurifierActivity.class));
+                startActivity(new Intent(this, ForgetPswdActivity.class));
                 break;
 
             case R.id.image_seepwd:
@@ -200,27 +203,8 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getInt("code");
-                    JSONObject content=jsonObject.getJSONObject("content");
-                    int userId=content.getInt("userId");
-                    String phone=content.getString("phone");
-                    String password=content.getString("password");
-                    if (code==2000){
-                        SharedPreferences.Editor editor=preferences.edit();
-                        if (preferences.contains("phone")){
-                            String phone2=preferences.getString("phone","");
-                            if (!phone2.equals(phone)){
-                               // new DeviceGroupDaoImpl(LoginActivity.this).deleteAll();
-                               // new DeviceChildDaoImpl(LoginActivity.this).deleteAll();
-                            }
-                        }
-                        if (!preferences.contains("password")) {
-                            editor.putString("phone",phone);
-                            editor.putString("password",password);
-                        }
-                        editor.putString("userId",userId+"");
-                        editor.commit();
-                    }
+                    code = jsonObject.getInt("returnCode");
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -232,17 +216,24 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
             switch (code) {
-                case -1006:
+                case 10002:
                     Utils.showToast(LoginActivity.this, "手机号码未注册");
                     break;
-                case -1005:
+                case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
                     et_name.setText("");
                     et_pswd.setText("");
                     break;
-                case 2000:
+                case 100:
                     Utils.showToast(LoginActivity.this, "登录成功");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    String phone = et_name.getText().toString().trim();
+                    String password = et_pswd.getText().toString().trim();
+                    Log.i("phone", "---->: "+phone+",,,,"+password);
+                    editor.putString("phone", phone);
+                    editor.putString("password", password);
+                    editor.commit();
+                    Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
                     startActivity(intent);
                     break;

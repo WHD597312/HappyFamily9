@@ -54,22 +54,39 @@ public class ChangeRoomActivity extends AppCompatActivity {
         change_list.setAdapter(adapter);
         change_list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                int a=position;
                 switch (position){
                     case 0:
-                        Intent localIntent1=new Intent(ChangeRoomActivity.this,KitchenFragment.class);
+                        Intent intent1 = new Intent();
+                        ChangeRoomActivity.this.setResult(1,intent1);
+                        finish();
                         break;
 
                     case 1:
-                        Intent localIntent2=new Intent(ChangeRoomActivity.this,RoomFragment.class);
+                        Intent intent2 = new Intent();
+
+
+                        ChangeRoomActivity.this.setResult(2,intent2);
+                        finish();
                         break;
                     case 2:
-                        Intent localIntent3=new Intent(getApplicationContext(),BathroomFragment.class);
+                        Intent intent3 = new Intent();
+
+
+                        ChangeRoomActivity.this.setResult(3,intent3);
+                        finish();
                         break;
                     case 3:
-                        Intent localIntent4=new Intent(getApplicationContext(),LivingFragment.class);
+                        Intent intent4 = new Intent();
+
+
+                        ChangeRoomActivity.this.setResult(4,intent4);
+                        finish();
                         break;
                     case 4:
-                        Intent localIntent=new Intent(getApplicationContext(),BalconyFragment.class);
+                        Intent intent5 = new Intent();
+                        ChangeRoomActivity.this.setResult(5,intent5);
+                        finish();
                         break;
                 }
 

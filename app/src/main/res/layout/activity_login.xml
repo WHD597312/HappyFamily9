@@ -7,41 +7,36 @@
     android:background="@mipmap/img"
     >
 
-    <ImageView
-        android:id="@+id/imageView4"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp_30"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_alignParentTop="true"
-        android:src="@mipmap/beijing"
-        />
 
-    <ImageView
-        android:id="@+id/imageView6"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignTop="@+id/imageView4"
-        android:scaleType="centerCrop"
-        android:layout_centerHorizontal="true"
-        android:src="@mipmap/dtubiao" />
     <RelativeLayout
         android:id="@+id/rl_login"
         android:layout_centerVertical="true"
+        android:background="@mipmap/beijing"
+        android:layout_centerInParent="true"
+        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_100"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="490dp">
 
 
+        <ImageView
+            android:id="@+id/imageView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="-30dp"
+            android:scaleType="centerCrop"
+            android:layout_centerHorizontal="true"
+            android:src="@mipmap/dtubiao" />
 
         <EditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/image_user"
-            android:layout_marginLeft="@dimen/dp_142"
-            android:layout_marginRight="@dimen/dp_80"
-            android:layout_marginTop="@dimen/dp_30"
+            android:layout_toRightOf="@+id/image_user"
+            android:layout_marginLeft="@dimen/dp_77"
+            android:layout_marginBottom="@dimen/dp_5"
             android:digits="1234567890"
             android:hint="请输入帐户"
             android:inputType="phone|number"
@@ -55,8 +50,9 @@
             android:id="@+id/image_user"
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
-            android:layout_marginLeft="@dimen/dp_50"
-            android:layout_marginTop="@dimen/dp_120"
+            android:layout_marginLeft="@dimen/dp_28"
+            android:layout_marginTop="@dimen/dp_60"
+            android:layout_below="@+id/imageView6"
             android:scaleType="centerInside"
             android:src="@mipmap/wo" />
 
@@ -66,18 +62,19 @@
             android:layout_height="@dimen/dp_1"
             android:background="@color/color_gray2"
             android:layout_below="@+id/et_name"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginRight="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_30"
              />
 
         <EditText
             android:id="@+id/et_pswd"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/view5"
-            android:layout_marginTop="@dimen/dp_13"
-            android:layout_marginLeft="@dimen/dp_142"
-            android:layout_marginRight="@dimen/dp_80"
+            android:layout_marginTop="@dimen/dp_28"
+            android:layout_marginBottom="@dimen/dp_5"
+            android:layout_toRightOf="@+id/image_pswd"
+            android:layout_marginLeft="@dimen/dp_77"
             android:hint="请输入密码"
             android:inputType="textPassword"
             android:background="@null"
@@ -89,8 +86,8 @@
             android:layout_width="@dimen/dp_30"
             android:layout_height="@dimen/dp_30"
             android:scaleType="centerInside"
-            android:layout_toRightOf="@+id/image_user"
-            android:layout_marginLeft="@dimen/dp_200"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_25"
             android:layout_alignBottom="@+id/view3"
             />
 
@@ -100,8 +97,8 @@
             android:layout_height="@dimen/dp_30"
             android:layout_below="@id/image_user"
             android:scaleType="centerInside"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginTop="@dimen/dp_35"
+            android:layout_marginLeft="@dimen/dp_28"
+            android:layout_marginTop="@dimen/dp_28"
             android:src="@mipmap/suo" />
 
         <View
@@ -110,18 +107,16 @@
             android:layout_height="@dimen/dp_1"
             android:background="@color/color_gray2"
             android:layout_below="@+id/et_pswd"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginRight="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_30"
             />
 
         <TextView
             android:id="@+id/tv_register"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignParentLeft="true"
             android:layout_below="@+id/image_pswd"
-            android:layout_centerInParent="true"
-            android:layout_marginLeft="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_24"
             android:layout_marginTop="@dimen/dp_14"
             android:gravity="center"
             android:text="注册" />
@@ -131,7 +126,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_55"
+            android:layout_marginRight="@dimen/dp_24"
             android:layout_alignTop="@id/tv_register"
             android:gravity="center"
             android:text="忘记密码" />
@@ -142,9 +137,8 @@
             android:layout_height="@dimen/dp_40"
             android:layout_below="@+id/tv_forget_pswd"
             android:layout_alignParentRight="true"
-            android:layout_alignRight="@+id/tv_forget_pswd"
             android:layout_marginTop="@dimen/dp_31"
-            android:layout_marginRight="@dimen/dp_108"
+            android:layout_marginRight="@dimen/dp_99"
             android:src="@mipmap/qq" />
 
         <ImageView
@@ -152,28 +146,29 @@
             android:layout_width="@dimen/dp_40"
             android:layout_height="@dimen/dp_40"
             android:layout_alignBottom="@+id/image_qq"
-            android:layout_marginLeft="108dp"
-            android:layout_marginTop="@dimen/dp_31"
+            android:layout_toLeftOf="@+id/image_qq"
+            android:layout_marginRight="@dimen/dp_64"
             android:src="@mipmap/weixin1" />
+        <Button
+            android:id="@+id/btn_login"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/dp_35"
+            android:layout_marginRight="@dimen/dp_35"
+            android:background="@mipmap/anniu1"
+            android:text="登录"
+            android:gravity="center"
+            android:textColor="@color/green2"
+            android:layout_centerHorizontal="true"
+            android:textSize="@dimen/sp_18"
+
+
+            />
 
     </RelativeLayout>
 
-    <Button
-        android:id="@+id/btn_login"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/rl_login"
-        android:layout_marginTop="@dimen/dp_30"
-        android:layout_marginLeft="@dimen/dp_60"
-        android:layout_marginRight="@dimen/dp_60"
-        android:background="@mipmap/anniu1"
-        android:text="登录"
-        android:textColor="@color/green2"
-        android:layout_centerHorizontal="true"
-        android:textSize="@dimen/sp_18"
 
-
-        />
 
 
 

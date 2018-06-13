@@ -3,6 +3,7 @@ package com.xr.happyFamily.jia.Fragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -67,10 +68,24 @@ public class BalconyFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getActivity(), ChangeRoomActivity.class));
+
+                startActivityForResult(new Intent(getActivity(), ChangeRoomActivity.class),5);
+//                startActivity();
             }
         });
         return view;
 
+    }
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int a=4;
+        int b=a;
+
+        switch (resultCode) {
+            case 5:
+                Log.i("aaaa", "onActivityResult: ");
+            break;
+        }
     }
 }

@@ -18,6 +18,7 @@ import android.widget.NumberPicker;
 import com.xr.happyFamily.R;
 
 public class Timepicker extends NumberPicker {
+    View view1;
     public Timepicker(Context context, AttributeSet attrs,
                               int defStyleAttr) {
         super(context, attrs, defStyleAttr);
@@ -58,7 +59,7 @@ public class Timepicker extends NumberPicker {
      */
     public void setNumberPicker(View view) {
         if (view instanceof EditText) {
-            ((EditText) view).setTextColor(this.getResources().getColor(R.color.green2));
+           ((EditText) view).setTextColor(this.getResources().getColor(R.color.green2));
             ((EditText) view).setTextSize(18);
         }
     }

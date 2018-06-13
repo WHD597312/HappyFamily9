@@ -54,7 +54,7 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/li2_csj_db3"
         android:max="70"
-        android:progress="0"
+        android:progress="9"
         android:progressDrawable="@drawable/bg_seekbar_progress_drawable"
         android:thumb="@null"
         app:textBackground="@mipmap/csj_bz"

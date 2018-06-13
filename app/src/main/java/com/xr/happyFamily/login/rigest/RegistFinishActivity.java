@@ -92,7 +92,7 @@ public class RegistFinishActivity extends AppCompatActivity {
 //        Bundle bundle=getIntent().getExtras();
 //       phone=bundle.getString("phone");
 //       password=bundle.getString("password");
-        phone="12345678915";
+        phone="12345678917";
         password="123456";
         Log.e("asd", "onCreate: "+phone );
     }

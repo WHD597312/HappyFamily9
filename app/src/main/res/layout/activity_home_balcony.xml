@@ -1,17 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<LinearLayout
+<android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg_balcony"
     android:orientation="vertical">
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_460"
+    <FrameLayout
+        android:id="@+id/fragment_containerbl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+    <ScrollView
     android:orientation="vertical"
+    android:layout_width="0dp"
+    android:layout_height="0dp"
+    android:layout_alignParentTop="true"
+    app:layout_heightPercent="85%"
+    app:layout_widthPercent="100%"
 
     >
 
@@ -22,22 +30,46 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
         <LinearLayout
-            android:id="@+id/balcony_li"
-            android:layout_width="wrap_content"
+            android:id="@+id/balcony_li1"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_12"
             android:layout_centerHorizontal="true"
-
             >
+        <TextView
+            android:id="@+id/tv_balcony_gl"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:text="管理"
+            android:textSize="16sp"
+            android:paddingLeft="@dimen/dp_12"
+            />
+        <LinearLayout
+            android:id="@+id/balcony_li"
+            android:layout_weight="1"
+            android:layout_width="0dp"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_height="wrap_content">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="阳台"
+                android:textSize="16sp"
                 android:textColor="@color/white" />
             <ImageView
-                android:paddingTop="@dimen/dp_4"
+                android:paddingTop="@dimen/dp_7"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/xiala3x"
+                />
+        </LinearLayout>
+            <ImageView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 />
         </LinearLayout>
 
@@ -45,15 +77,25 @@
             android:id="@+id/rl_balcony"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            > <TextView
+            android:id="@+id/tv_balcony_wd1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_63"
+            android:textColor="@color/color_white"
+
+            />
 
             <TextView
                 android:id="@+id/tv_balcony_wd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_168"
+                android:layout_toRightOf="@id/tv_balcony_wd1"
+                android:layout_marginLeft="@dimen/dp_12"
                 android:layout_marginTop="@dimen/dp_63"
                 android:text="室温"
+                android:textSize="10sp"
                 android:textColor="@color/color_white"
 
                 />
@@ -62,12 +104,13 @@
                 android:id="@+id/tv_balcony_23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_balcony_wd"
-                android:layout_marginLeft="@dimen/dp_27"
-                android:layout_marginTop="@dimen/dp_43"
+                android:layout_marginBottom="-7dp"
+                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@+id/tv_balcony_wd"
+                android:layout_alignBottom="@+id/tv_balcony_wd"
                 android:text="23"
                 android:textColor="@color/color_white"
-                android:textSize="35sp"
+                android:textSize="27sp"
 
                 />
 
@@ -75,10 +118,9 @@
                 android:id="@+id/tv_balcony_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_balcony_23"
-                android:layout_alignTop="@id/tv_balcony_23"
-                android:layout_marginLeft="@dimen/dp_42"
-                android:layout_marginTop="@dimen/dp_22"
+                android:layout_toRightOf="@+id/tv_balcony_23"
+                android:layout_alignBottom="@id/tv_balcony_23"
+                android:layout_marginBottom="5dp"
                 android:text="℃"
                 android:textColor="@color/color_white"
 
@@ -88,10 +130,11 @@
                 android:id="@+id/tv_balcony_shi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/tv_balcony_c"
-                android:layout_alignTop="@id/tv_balcony_c"
-                android:layout_marginLeft="@dimen/dp_22"
+                android:layout_toRightOf="@+id/tv_balcony_c"
+                android:layout_alignTop="@id/tv_balcony_wd"
+                android:layout_marginLeft="@dimen/dp_12"
                 android:text="湿度"
+                android:textSize="10sp"
                 android:textColor="@color/color_white"
 
                 />
@@ -100,21 +143,19 @@
                 android:id="@+id/tv_balcony_sd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_balcony_shi"
+                android:layout_toRightOf="@id/tv_balcony_shi"
                 android:layout_alignTop="@id/tv_balcony_23"
-                android:layout_marginLeft="@dimen/dp_32"
+                android:layout_marginLeft="@dimen/dp_5"
                 android:text="30"
                 android:textColor="@color/color_white"
-                android:textSize="35sp"
-
+                android:textSize="28sp"
                 />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_balcony_sd"
+                android:layout_toRightOf="@id/tv_balcony_sd"
                 android:layout_alignTop="@id/tv_balcony_c"
-                android:layout_marginLeft="@dimen/dp_42"
                 android:text="％"
                 android:textColor="@color/color_white"
 
@@ -186,6 +227,8 @@
 
     <Button
         android:id="@+id/bt_balcony_add"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_20"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/button"
@@ -195,4 +238,4 @@
         android:textColor="@color/white"
         />
 
-</LinearLayout>
+</android.support.percent.PercentRelativeLayout>

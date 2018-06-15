@@ -29,13 +29,12 @@ public class HomepageActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_add_equipment:
-                startActivity(new Intent(this, AddDeviceActivity.class));
+                startActivity(new Intent(this, ManagementActivity.class));
                 break;
             case R.id.rl_page:
                 startActivity(new Intent(this, ChangeEquipmentActivity.class));
                 break;
         }
-
     }
     @Override
     protected void onDestroy() {

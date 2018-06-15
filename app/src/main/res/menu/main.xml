@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+    <item
+        android:id="@+id/action_open"
+        android:orderInCategory="80"
+        android:title="更改房间名"
+        app:showAsAction="never" />
+  <item
+    android:id="@+id/action_new"
+    android:orderInCategory="80"
+    android:title="删除房间"
+    app:showAsAction="never"/>
+
+</menu>

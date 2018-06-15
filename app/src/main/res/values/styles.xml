@@ -34,18 +34,7 @@
     <attr name="curValue" format="integer"/>
     <attr name="curProgress" format="integer"/>
 </declare-styleable>
-    <!--<declare-styleable name="ZnczWdSeekBarView">-->
-        <!--<attr name="valueCountent2" format="integer"/>-->
-        <!--<attr name="padding" format="dimension"/>-->
-        <!--<attr name="pointColor" format="color"/>-->
-        <!--<attr name="lineColor" format="color"/>-->
-        <!--<attr name="smallPic" format="reference"/>-->
-        <!--<attr name="bigPic" format="reference"/>-->
-        <!--<attr name="minValue" format="integer"/>-->
-        <!--<attr name="maxValue" format="integer"/>-->
-        <!--<attr name="curValue" format="integer"/>-->
-        <!--<attr name="curProgress" format="integer"/>-->
-    <!--</declare-styleable>-->
+
     <style name="edit_AlertDialog_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsFloating">true</item>
         <item name="android:windowIsTranslucent">true</item>

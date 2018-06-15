@@ -1,6 +1,6 @@
 package com.xr.happyFamily.jia.xnty;
 
-import android.content.Intent;
+
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -9,12 +9,7 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.engine.DiskCacheStrategy;
-import com.bumptech.glide.request.target.GlideDrawableImageViewTarget;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.MenuActivity;
-import com.xr.happyFamily.jia.ZixingAddActivity;
 import com.xr.happyFamily.jia.titleview.TitleView;
 
 import butterknife.BindView;

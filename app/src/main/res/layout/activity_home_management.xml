@@ -4,7 +4,15 @@
     android:layout_height="match_parent"
     android:background="@color/white"
     >
-
+    <ImageView
+        android:id="@+id/iv_mzxing"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/le13x"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        />
     <com.xr.happyFamily.jia.titleview.TitleView
         android:id="@+id/title1"
         android:layout_width="match_parent"
@@ -54,18 +62,7 @@
         android:layout_toRightOf="@+id/tv_managment_name"
         android:background="@color/color_gray2" />
 
-    <org.angmarch.views.NiceSpinner
-        android:id="@+id/managment_spinner"
-        android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_40"
-        android:layout_alignBottom="@id/tv_managment_room"
-        android:layout_alignLeft="@+id/et_view"
-        android:layout_alignRight="@+id/et_view"
-        android:layout_toRightOf="@id/tv_managment_room"
-        android:text="ssss"
-        android:gravity="center_vertical"
-        android:textColor="@color/green"
-        />
+
 
 
     <View
@@ -84,7 +81,7 @@
         android:id="@+id/gv_management_my"
         android:layout_width="match_parent"
         android:layout_height="320dp"
-        android:layout_below="@+id/managment_spinner"
+        android:layout_below="@+id/tv_managment_room"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_12"
@@ -100,10 +97,10 @@
         android:id="@+id/bt_management_ok"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/gv_management_my"
+        android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_12"
         android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_12"
         android:background="@mipmap/management_button"
         android:text="确定"
         android:textColor="@color/green2" />

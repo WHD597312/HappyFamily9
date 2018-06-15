@@ -2,60 +2,16 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <LinearLayout
-        android:id="@+id/li_addequipment"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        >
+
     <com.xr.happyFamily.jia.titleview.TitleView
-        android:id="@+id/title"
+        android:id="@+id/title_adde"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-        <View
-            android:id="@+id/view_addEuipment"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_12"
-            android:background="@null"
 
-            />
-       <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        >
-        <Button
-        android:id="@+id/bt_add"
-        android:layout_alignBottom="@id/tv_add"
-            android:layout_weight="1"
-        android:layout_width="@dimen/dp_156"
-        android:layout_height="@dimen/dp_40"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginBottom="@dimen/dp_40"
-        android:text="WLAN配对"
-        android:textColor="@color/green2"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:background="@drawable/bg_shape"
-        />
-       <Button
-        android:id="@+id/bt_tozxing"
-           android:layout_weight="1"
-        android:layout_toRightOf="@+id/bt_add"
-        android:layout_alignTop="@id/bt_add"
-        android:layout_width="@dimen/dp_156"
-        android:layout_height="@dimen/dp_40"
-        android:text="二维码"
-        android:textColor="@color/color_gray2"
-        android:layout_marginLeft="@dimen/dp_14"
-           android:layout_marginRight="@dimen/dp_14"
-        android:background="@drawable/bg_shape"
-        />
 
-    </LinearLayout>
-</LinearLayout>
     <TextView
-       android:layout_below="@+id/li_addequipment"
+       android:layout_below="@+id/title_adde"
         android:layout_marginTop="@dimen/dp_20"
         android:id="@+id/tv_add"
         android:layout_marginRight="@dimen/dp_12"
@@ -78,6 +34,7 @@
         android:layout_below="@id/tv_add"
         android:id="@+id/nice_spinner"
         android:layout_width="match_parent"
+        android:hint="WLAN扫描中..."
         android:layout_height="@dimen/dp_50"
         android:layout_marginRight="@dimen/dp_12"
         android:layout_marginLeft="@dimen/dp_12"
@@ -95,7 +52,7 @@
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="忘记密码"
+        android:text="隐藏密码"
         android:layout_below="@id/et_add"
         android:layout_toRightOf="@id/et_add"
         android:layout_marginTop="@dimen/dp_24"
@@ -104,8 +61,8 @@
         />
     <Button
         android:id="@+id/bt_add_finish2"
-        android:layout_below="@+id/et_add"
-        android:layout_marginTop="@dimen/dp_189"
+       android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_50"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginRight="@dimen/dp_12"

@@ -55,6 +55,7 @@ public class ChangeRoomActivity extends AppCompatActivity {
         change_list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 int a=position;
+                Log.i("ppppppp", "---->: "+a);
                 switch (position){
                     case 0:
                         Intent intent1 = new Intent();

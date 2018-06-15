@@ -150,7 +150,7 @@
           android:layout_marginRight="@dimen/dp_29"
           android:background="@mipmap/anniu3"
           android:text="获取验证码"
-          android:textColor="@color/holo_gray_light"
+          android:textColor="@color/color_black3"
 
           />
 

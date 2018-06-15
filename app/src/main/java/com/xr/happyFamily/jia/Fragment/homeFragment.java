@@ -15,8 +15,10 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
+import com.xr.happyFamily.jia.AddRoomActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
+import com.xr.happyFamily.jia.HourseActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
@@ -40,7 +42,8 @@ public class homeFragment extends Fragment {
     RelativeLayout relativeLayout;
     @BindView(R.id.gv_home_my)
     com.xr.happyFamily.jia.MyGridview mGridView;
-
+    @BindView(R.id.gv_home_my1)
+    com.xr.happyFamily.jia.MyGridview mGridView1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -56,6 +59,7 @@ public class homeFragment extends Fragment {
         }
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
+        mGridView1.setAdapter(mGridViewAdapter);
         buttonadd.setOnClickListener(new OnClickListener()
         {
             @Override
@@ -67,7 +71,20 @@ public class homeFragment extends Fragment {
 
         return view;
     }
+    @OnClick({R.id.image_change,R.id.tv_my_hourse})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.image_change:
+                startActivity(new Intent(getActivity(), AddRoomActivity.class));
+                break;
+            case R.id.tv_my_hourse:
+                startActivity(new Intent(getActivity(), HourseActivity.class));
+                break;
 
+
+        }
+
+    }
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);

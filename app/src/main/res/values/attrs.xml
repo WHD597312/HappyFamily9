@@ -82,10 +82,10 @@
         <attr name="arcText" format="string"/>
     </declare-styleable>
     <declare-styleable name="RaidoTextView">
-        <attr name="radioTitleText" format="string" />
-        <attr name="radioBackground" format="color"/>
-        <attr name="radioTitleTextSize" format="dimension"/>
-        <attr name="radioTitleTextColor" format="color"/>
-        <attr name="radioCornerSize" format="integer"/>
-    </declare-styleable>
+    <attr name="radioTitleText" format="string" />
+    <attr name="radioBackground" format="color"/>
+    <attr name="radioTitleTextSize" format="dimension"/>
+    <attr name="radioTitleTextColor" format="color"/>
+    <attr name="radioCornerSize" format="integer"/>
+</declare-styleable>
 </resources>

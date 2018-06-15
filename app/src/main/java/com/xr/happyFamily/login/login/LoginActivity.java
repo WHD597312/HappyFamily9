@@ -22,7 +22,6 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
 import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
-import com.xr.happyFamily.jia.HomeActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MenuActivity;
@@ -134,18 +133,18 @@ public class LoginActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(this, RegistFinishActivity.class));
+                startActivity(new Intent(this, RegistActivity.class));
                 break;
             case R.id.btn_login:
                 String phone = et_name.getText().toString().trim();
                 String password = et_pswd.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this, "账号码不能为空");
-                    return;
+                    break;
                 }
                 if (TextUtils.isEmpty(password)) {
                     Utils.showToast(this, "请输入密码");
-                    return;
+                    break;
                 }
 
                Map<String, Object> params = new HashMap<>();

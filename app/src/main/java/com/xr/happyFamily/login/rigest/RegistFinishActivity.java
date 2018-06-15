@@ -89,11 +89,10 @@ public class RegistFinishActivity extends AppCompatActivity {
         initsex();
         calendar = Calendar.getInstance();
         Log.i("aaaaa1", "----> "+temp);
-//        Bundle bundle=getIntent().getExtras();
-//       phone=bundle.getString("phone");
-//       password=bundle.getString("password");
-        phone="12345678917";
-        password="123456";
+        Bundle bundle=getIntent().getExtras();
+       phone=bundle.getString("phone");
+       password=bundle.getString("password");
+
         Log.e("asd", "onCreate: "+phone );
     }
     private void initbirthday(){

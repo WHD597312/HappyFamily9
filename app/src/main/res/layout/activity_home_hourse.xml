@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <com.xr.happyFamily.jia.titleview.TitleView
+        android:id="@+id/title_addroom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <TextView
+        android:id="@+id/tv_hourse"
+        android:layout_below="@+id/title_addroom"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="家庭"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:textColor="@color/color_gray4"
+        />
+    <ListView
+        android:layout_below="@+id/tv_hourse"
+        android:id="@+id/lv_hourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+    <TextView
+        android:id="@+id/tv_addhourse"
+        android:layout_below="@+id/lv_hourse"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="添加"
+        android:layout_marginTop="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:textColor="@color/color_gray4"
+        />
+    <TextView
+        android:layout_below="@+id/tv_addhourse"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:text="新建家庭"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_12"
+        android:textColor="@color/green2"
+        android:background="@drawable/bg_shape"
+        />
+
+</RelativeLayout>

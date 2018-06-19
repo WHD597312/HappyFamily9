@@ -58,9 +58,9 @@ public class HourseActivity extends AppCompatActivity{
                 // 数据来源
                 R.layout.activity_home_hourseitem,//每一个user xml 相当ListView的一个组件
 
-                new String[] { "mhome", "mplace" },
+                new String[] { "mhome", "mplace"},
                 // 分别对应view 的id
-                new int[] { R.id.tv_hourse_h, R.id.tv_hourse_p});
+                new int[] { R.id.tv_hourse_h, R.id.tv_hourse});
         // 获取listview
         listView.setAdapter(saImageItems);
 //        Map<String, Object> params = new HashMap<>();

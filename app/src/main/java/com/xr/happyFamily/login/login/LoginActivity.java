@@ -308,7 +308,7 @@ public class LoginActivity extends AppCompatActivity {
                                     room.setRoomType(roomType);
                                     roomDao.update(room);
                                 }else {
-//                                    room = new Room((long)roomId,  roomName,  houseId, roomType);
+                                    room = new Room((long)roomId,  roomName,  houseId, roomType);
                                     roomDao.insert(room);
                                     Log.i("dddddd", "doInBackground:---> "+hourse);
                                 }

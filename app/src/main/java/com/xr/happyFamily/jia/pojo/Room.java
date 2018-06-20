@@ -68,13 +68,14 @@ public class Room {
     
 
     @Generated(hash = 860491580)
-    public Room(Long roomId, String roomName, int houseId, String roomType, int imgId) {
+    public Room(Long roomId, String roomName, int houseId, String roomType) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.houseId = houseId;
         this.roomType = roomType;
-        this.imgId = imgId;
+
     }
+
 
     @Generated(hash = 703125385)
     public Room() {

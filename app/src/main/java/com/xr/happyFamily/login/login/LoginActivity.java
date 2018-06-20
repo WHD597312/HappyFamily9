@@ -18,7 +18,9 @@ import android.widget.ImageView;
 
 
 import com.xr.database.dao.HourseDao;
+import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
 import com.xr.happyFamily.bao.ShoppageActivity;
@@ -31,6 +33,7 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
 import com.xr.happyFamily.jia.xnty.AircleanerActivity;
 import com.xr.happyFamily.jia.xnty.CsjActivity;
@@ -75,7 +78,7 @@ public class LoginActivity extends AppCompatActivity {
     ImageView imageView6;
     boolean isHideFirst = true;
     private HourseDaoImpl hourseDao;
-
+    private RoomDaoImpl roomDao;
     GifDrawable gifDrawable;
 
     @Override
@@ -293,10 +296,22 @@ public class LoginActivity extends AppCompatActivity {
                             JSONArray roomDevices=houseObject.getJSONArray("roomDevices");
                             for (int j = 0; j < roomDevices.length(); j++) {
                                JSONObject roomObject=roomDevices.getJSONObject(j);
-                               int roomId=roomObject.getInt("roomId");
+                               long roomId=roomObject.getInt("roomId");
                                String roomName=roomObject.getString("roomName");
                                int houseId=roomObject.getInt("houseId");
                                String  roomType=roomObject.getString("roomType");
+                                Room room = roomDao.findById((long) roomId);
+                                if (room!=null){
+                                    room.setRoomId(roomId);
+                                    room.setHouseId(houseId);
+                                    room.setHouseId(userId);
+                                    room.setRoomType(roomType);
+                                    roomDao.update(room);
+                                }else {
+//                                    room = new Room((long)roomId,  roomName,  houseId, roomType,imgId);
+                                    roomDao.insert(room);
+                                    Log.i("dddddd", "doInBackground:---> "+hourse);
+                                }
                             }
                         }
 //                        JSONArray roomDevices=returnData.getJSONArray("roomDevices");

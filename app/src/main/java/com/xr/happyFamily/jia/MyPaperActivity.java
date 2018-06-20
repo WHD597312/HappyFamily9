@@ -36,6 +36,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.Unbinder;
 
 
 public class MyPaperActivity extends AppCompatActivity {
@@ -47,6 +49,7 @@ public class MyPaperActivity extends AppCompatActivity {
     private List<Room> rooms;
     private Handler handler;
     String phone;
+    Unbinder unbinder;
     @BindView(R.id.viewpager)
     ViewPager myViewPager;
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +58,10 @@ public class MyPaperActivity extends AppCompatActivity {
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
-//        roomDao=new RoomDaoImpl(getApplicationContext());
-//        rooms = roomDao.findByAllRoom();
-        
+        unbinder = ButterKnife.bind(this);
+        roomDao=new RoomDaoImpl(getApplicationContext());
+        rooms = roomDao.findByAllRoom();
+
         Log.i("room", "---->: "+rooms);
         views = new ArrayList<>();
         views.add(new homeFragment());

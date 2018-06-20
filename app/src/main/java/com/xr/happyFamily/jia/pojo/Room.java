@@ -25,14 +25,13 @@ public class Room {
         this.imgId = imgId;
     }
 
-
-
-
     public Room(int imgId) {
 
         this.imgId = imgId;
-
     }
+
+
+
 
     public Long getRoomId() {
         return roomId;
@@ -68,12 +67,12 @@ public class Room {
     
 
     @Generated(hash = 860491580)
-    public Room(Long roomId, String roomName, int houseId, String roomType) {
+    public Room(Long roomId, String roomName, int houseId, String roomType,int imgId) {
         this.roomId = roomId;
         this.roomName = roomName;
         this.houseId = houseId;
         this.roomType = roomType;
-
+        this.imgId = imgId;
     }
 
 

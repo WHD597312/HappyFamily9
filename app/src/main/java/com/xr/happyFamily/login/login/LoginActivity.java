@@ -291,7 +291,7 @@ public class LoginActivity extends AppCompatActivity {
                             }else {
                                 hourse = new Hourse((long)id, houseName, houseAddress, userId);
                                 hourseDao.insert(hourse);
-                                Log.i("dddddd", "doInBackground:---> "+hourse);
+                                Log.i("dddddd1", "doInBackground:---> "+hourse);
                             }
                             JSONArray roomDevices=houseObject.getJSONArray("roomDevices");
                             for (int j = 0; j < roomDevices.length(); j++) {
@@ -308,9 +308,9 @@ public class LoginActivity extends AppCompatActivity {
                                     room.setRoomType(roomType);
                                     roomDao.update(room);
                                 }else {
-                                    room = new Room((long)roomId,  roomName,  houseId, roomType);
+                                    room = new Room((long)roomId,  roomName,  houseId, roomType,0);
                                     roomDao.insert(room);
-                                    Log.i("dddddd", "doInBackground:---> "+hourse);
+                                    Log.i("dddddd1111", "doInBackground:---> "+room);
                                 }
                             }
                         }

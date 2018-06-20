@@ -28,6 +28,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.esptouch.EspWifiAdminSimple;
 import com.xr.happyFamily.esptouch.EsptouchTask;
@@ -38,6 +39,7 @@ import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
 import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.pojo.SmartTerminalInfo;
 import com.xr.happyFamily.jia.view_custom.SmartTerminalCircle;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -111,6 +113,7 @@ public class Demo extends AppCompatActivity {
 
     float alpha=0;
     WindowManager.LayoutParams lp;
+    private RoomDaoImpl roomDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -119,8 +122,26 @@ public class Demo extends AppCompatActivity {
         add_image= (GifImageView) findViewById(R.id.add_image);
 
 
+
+//       Room room=new Room();
+//       room.setRoomId(1L);
+//       room.setRoomName("whd");
+//        roomDao.insert(room);
+//
+//        Room room2=new Room();
+//        room2.setRoomId(2L);
+//        room2.setRoomName("whd2");
+//        roomDao.insert(room2);
+//
+//        Room room3=new Room();
+//        room3.setRoomId(3L);
+//        room3.setRoomName("whd3");
+//        roomDao.insert(room3);
+
         getAlpha=linear.getBackground().mutate().getAlpha();
         getAlpha2=add_image.getBackground().mutate().getAlpha();
+
+
 
         mWifiAdmin = new EspWifiAdminSimple(this);
         SharedPreferences my = getSharedPreferences("my", MODE_PRIVATE);

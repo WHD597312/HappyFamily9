@@ -44,8 +44,10 @@ public class HourseActivity extends AppCompatActivity {
     Unbinder unbinder;
     TitleView titleView;
     String ip = "http://47.98.131.11:8084;";
+    SharedPreferences preferences;
+    String houseName;
+    String houseAddress;
     private HourseDaoImpl hourseDao;
-    private Hourse hourse;
    @BindView(R.id.lv_hourse)
    RecyclerView recyclerView;
     List<Hourse> hourses;
@@ -156,5 +158,6 @@ public class HourseActivity extends AppCompatActivity {
             unbinder.unbind();
         }
     }
+
 
 }

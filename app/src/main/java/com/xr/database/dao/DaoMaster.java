@@ -25,6 +25,7 @@ public class DaoMaster extends AbstractDaoMaster {
         DeviceChildDao.createTable(db, ifNotExists);
         RoomDao.createTable(db, ifNotExists);
         HourseDao.createTable(db, ifNotExists);
+        Room1Dao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -33,6 +34,7 @@ public class DaoMaster extends AbstractDaoMaster {
         DeviceChildDao.dropTable(db, ifExists);
         RoomDao.dropTable(db, ifExists);
         HourseDao.dropTable(db, ifExists);
+        Room1Dao.dropTable(db, ifExists);
     }
 
     /**
@@ -55,6 +57,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(DeviceChildDao.class);
         registerDaoClass(RoomDao.class);
         registerDaoClass(HourseDao.class);
+        registerDaoClass(Room1Dao.class);
     }
 
     public DaoSession newSession() {

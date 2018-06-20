@@ -82,6 +82,16 @@ public class RoomFragment extends Fragment {
         return view;
 
     }
+    public static RoomFragment newInstance(int num) {
+        RoomFragment f = new RoomFragment();
+
+        // Supply num input as an argument.
+        Bundle args = new Bundle();
+        args.putInt("num", 3);
+        f.setArguments(args);
+
+        return f;
+    }
     @OnClick({R.id.tv_room_gl})
     public void onClick(View view) {
         switch (view.getId()) {

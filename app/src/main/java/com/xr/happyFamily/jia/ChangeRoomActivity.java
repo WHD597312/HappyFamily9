@@ -96,15 +96,15 @@ public class ChangeRoomActivity extends AppCompatActivity {
 
     private void initRoom() {
 
-        Room chufang = new Room(R.mipmap.chifang);
+        Room chufang = new Room((long)0,"",0,"",R.mipmap.chifang);
         roomList.add(chufang);
-        Room keting = new Room(R.mipmap.keting);
+        Room keting = new Room((long)0,"",0,"",R.mipmap.keting);
         roomList.add(keting);
-        Room weishengjian = new Room(R.mipmap.weishengjian);
+        Room weishengjian = new Room((long)0,"",0,"",R.mipmap.weishengjian);
         roomList.add(weishengjian);
-        Room woshi = new Room(R.mipmap.woshi);
+        Room woshi = new Room((long)0,"",0,"",R.mipmap.woshi);
         roomList.add(woshi);
-        Room yangtai = new Room(R.mipmap.yangtai);
+        Room yangtai = new Room((long)0,"",0,"",R.mipmap.yangtai);
         roomList.add(yangtai);
     }
 

@@ -4,7 +4,6 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -21,30 +20,20 @@ import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl1;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShopCartActivity;
-import com.xr.happyFamily.bao.ShoppageActivity;
-import com.xr.happyFamily.jia.ChangeEquipmentActivity;
+
 import com.xr.happyFamily.jia.HomepageActivity;
-import com.xr.happyFamily.jia.HourseActivity;
-import com.xr.happyFamily.jia.MainActivity;
-import com.xr.happyFamily.jia.MenuActivity;
+
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
-import com.xr.happyFamily.jia.pojo.DeviceChild;
+
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
-import com.xr.happyFamily.jia.xnty.AircleanerActivity;
-import com.xr.happyFamily.jia.xnty.CsjActivity;
-import com.xr.happyFamily.jia.xnty.HeaterActivity;
-import com.xr.happyFamily.jia.xnty.MySeekBar;
-import com.xr.happyFamily.jia.xnty.SmartSocket;
-import com.xr.happyFamily.jia.xnty.WaterPurifierActivity;
-import com.xr.happyFamily.jia.xnty.ZnWdActivity;
+import com.xr.happyFamily.jia.pojo.Room1;
+
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
-import com.xr.happyFamily.login.rigest.RegistFinishActivity;
 import com.xr.happyFamily.login.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -100,6 +89,7 @@ public class LoginActivity extends AppCompatActivity {
         et_name.setText(preferences.getString("phone", ""));
         et_pswd.setText(preferences.getString("password", ""));
         hourseDao=new HourseDaoImpl(getApplicationContext());
+        roomDao=new RoomDaoImpl(getApplicationContext());
     }
 
     SharedPreferences preferences;
@@ -276,7 +266,8 @@ public class LoginActivity extends AppCompatActivity {
 
                     if (code == 100) {
                         JSONArray returnData=jsonObject.getJSONArray("returnData");
-                        for (int i = 0; i < returnData.length(); i++) {
+                        for (int i = 0; i < returnData.length(); i++)
+                        {
                             JSONObject houseObject=returnData.getJSONObject(i);
                             int id=houseObject.getInt("id");
                             String houseName=houseObject.getString("houseName");
@@ -294,26 +285,27 @@ public class LoginActivity extends AppCompatActivity {
                                 Log.i("dddddd1", "doInBackground:---> "+hourse);
                             }
                             JSONArray roomDevices=houseObject.getJSONArray("roomDevices");
+                            Log.i("dddddd11qqq1", "doInBackground:---> "+roomDevices.length());
                             for (int j = 0; j < roomDevices.length(); j++) {
                                JSONObject roomObject=roomDevices.getJSONObject(j);
-                               long roomId=roomObject.getInt("roomId");
+                               int roomId=roomObject.getInt("roomId");
                                String roomName=roomObject.getString("roomName");
                                int houseId=roomObject.getInt("houseId");
                                String  roomType=roomObject.getString("roomType");
                                 Room room = roomDao.findById((long) roomId);
                                 if (room!=null){
-                                    room.setRoomId(roomId);
+                                    room.setRoomId((long)roomId);
                                     room.setHouseId(houseId);
-                                    room.setHouseId(userId);
                                     room.setRoomType(roomType);
                                     roomDao.update(room);
+                                    Log.i("dddddd11qqq1", "doInBackground:---> "+room);
                                 }else {
                                     room = new Room((long)roomId,  roomName,  houseId, roomType,0);
                                     roomDao.insert(room);
                                     Log.i("dddddd1111", "doInBackground:---> "+room);
                                 }
                             }
-                        }
+                    }
 //                        JSONArray roomDevices=returnData.getJSONArray("roomDevices");
 
 
@@ -333,7 +325,9 @@ public class LoginActivity extends AppCompatActivity {
 
                     }
                 }
-            } catch (Exception e) {
+            }
+
+            catch (Exception e) {
                 e.printStackTrace();
             }
             return code;

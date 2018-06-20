@@ -1,32 +1,34 @@
 package com.xr.happyFamily.jia.pojo;
 
 import org.greenrobot.greendao.annotation.Entity;
-import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
-
+import org.greenrobot.greendao.annotation.Generated;
 @Entity
-public class Room {
-
+public class Room1 {
     @Id(autoincrement = false)
     private Long roomId;
     private String roomName;
     private int houseId;
     private String roomType;
-    private int  imgId;
 
-
-
-
-    public int getImgId() {
-        return imgId;
+    @Generated(hash = 819419166)
+    public Room1(Long roomId, String roomName, int houseId, String roomType) {
+        this.roomId = roomId;
+        this.roomName = roomName;
+        this.houseId = houseId;
+        this.roomType = roomType;
     }
 
-    public void setImgId(int imgId) {
-        this.imgId = imgId;
+    @Generated(hash = 296051058)
+    public Room1() {
     }
 
     public Long getRoomId() {
         return roomId;
+    }
+
+    public void setRoomId(Long roomId) {
+        this.roomId = roomId;
     }
 
     public String getRoomName() {
@@ -51,24 +53,5 @@ public class Room {
 
     public void setRoomType(String roomType) {
         this.roomType = roomType;
-    }
-
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
-    }
-    
-
-    @Generated(hash = 860491580)
-    public Room(Long roomId, String roomName, int houseId, String roomType,int imgId) {
-        this.roomId = roomId;
-        this.roomName = roomName;
-        this.houseId = houseId;
-        this.roomType = roomType;
-        this.imgId = imgId;
-    }
-
-
-    @Generated(hash = 703125385)
-    public Room() {
     }
 }

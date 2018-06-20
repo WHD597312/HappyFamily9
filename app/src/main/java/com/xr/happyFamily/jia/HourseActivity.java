@@ -1,16 +1,29 @@
 package com.xr.happyFamily.jia;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.SimpleAdapter;
+import android.widget.TextView;
 
+import com.xr.database.dao.HourseDao;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.TestActivity;
+import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
+import com.xr.happyFamily.jia.adapter.HouseAdapter;
+import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.jia.pojo.SmartSet;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -27,14 +40,18 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class HourseActivity extends AppCompatActivity{
+public class HourseActivity extends AppCompatActivity {
     Unbinder unbinder;
     TitleView titleView;
-    @BindView(R.id.lv_hourse)
-    ListView listView;//
-    private String[] mhome = { "1的家", "2的家", "3的家",};
-    private String[] mplace = { "北京", "上海", "杭州"};
-    String url = "http://47.98.131.11:8084/login/auth";
+    String ip = "http://47.98.131.11:8084;";
+    private HourseDaoImpl hourseDao;
+    private Hourse hourse;
+   @BindView(R.id.lv_hourse)
+   RecyclerView recyclerView;
+    List<Hourse> hourses;
+    HouseAdapter ListAdapter;
+
+
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
 
@@ -42,39 +59,60 @@ public class HourseActivity extends AppCompatActivity{
         unbinder = ButterKnife.bind(this);
         titleView = (TitleView) findViewById(R.id.title_addroom);
         titleView.setTitleText("家庭管理");
-        final List<HashMap<String, Object>> users = new ArrayList<>();
-        for (int i = 0; i < 3; i++) {
-            HashMap<String, Object> user = new HashMap<>();
-            user.put("mhome",mhome[i]);
-            user.put("mplace", mplace[i]);
 
-            users.add(user);
-        }
-    /*    ListView listView = (ListView) findViewById(R.id.zncz_add_list);
-        ZnczAdapter mAdapter = new ZnczAdapter(context,
-                users);*/
-        SimpleAdapter saImageItems = new SimpleAdapter(this,
-                users,
-                // 数据来源
-                R.layout.activity_home_hourseitem,//每一个user xml 相当ListView的一个组件
+//        preferences = getSharedPreferences("my", MODE_PRIVATE);
+//        houseName=preferences.getString("phone", "");
+//        houseAddress=preferences.getString("password", "");
 
-                new String[] { "mhome", "mplace"},
-                // 分别对应view 的id
-                new int[] { R.id.tv_hourse_h, R.id.tv_hourse});
-        // 获取listview
-        listView.setAdapter(saImageItems);
-//        Map<String, Object> params = new HashMap<>();
-//        params.put("houseid", houseid);
-//        params.put("houseAddress", houseAddress);
-//        new HourseAsyncTask().execute(params);
+        hourseDao=new HourseDaoImpl(getApplicationContext());
+        hourses = hourseDao.findAllHouse();
+
+
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+//        final List<HashMap<String, Object>> users = new ArrayList<>();
+//        for (int i = 0; i < 3; i++) {
+//            HashMap<String, Object> user = new HashMap<>();
+//            user.put("mhome",mhome[i]);
+//            user.put("mplace", mplace[i]);
+//
+//            users.add(user);
+//        }
+//
+//        SimpleAdapter saImageItems = new SimpleAdapter(this,
+//                users,
+//                // 数据来源
+//                R.layout.activity_home_hourseitem,//每一个user xml 相当ListView的一个组件
+//
+//                new String[] { "mhome", "mplace" },
+//                // 分别对应view 的id
+//                new int[] { R.id.tv_hourse_h});
+//        // 获取listview
+//        listView.setAdapter(saImageItems);
+//
+//        houseId = 1;
+//        new HourseAsyncTask().execute();
+        ListAdapter = new HouseAdapter(this, hourses);
+
+        recyclerView.setAdapter(ListAdapter);
+//        ListAdapter.notifyDataSetChanged();
     }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
+
     class HourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
             int code = 0;
-            Map<String, Object> params = maps[0];
-            String result = HttpUtils.postOkHpptRequest(url, params);
+
+            String url = "http://192.168.168.27:8084/family/room/getExistRooms?houseId=" ;
+            String result = HttpUtils.getOkHpptRequest(url);
+
             try {
                 if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -91,44 +129,30 @@ public class HourseActivity extends AppCompatActivity{
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
             switch (code) {
-//                case 10002:
-//                    com.xr.happyFamily.login.util.Utils.showToast(LoginActivity.this, "手机号码未注册");
-//                    break;
-//                case 10004:
-//                    com.xr.happyFamily.login.util.Utils.showToast(LoginActivity.this, "用户名或密码错误");
-//
-//                    break;
-//                case 100:
-//                    com.xr.happyFamily.login.util.Utils.showToast(LoginActivity.this, "登录成功");
-//                    SharedPreferences.Editor editor=preferences.edit();
-//                    String phone = et_name.getText().toString().trim();
-//                    String password = et_pswd.getText().toString().trim();
-//                    Log.i("phone", "---->: "+phone+",,,,"+password);
-//                    editor.putString("phone", phone);
-//                    editor.putString("password", password);
-//                    editor.commit();
-//                    Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-//                    startActivity(intent);
-//                    break;
-                     }
+
+                case 100:
+
+                    break;
             }
         }
-    @OnClick({})
+    }
+
+    @OnClick({R.id.tv_hourse_xjjt})
     public void onClick(View view) {
         switch (view.getId()) {
-//            case
-//                break;
-
+            case R.id.tv_hourse_xjjt:
+                startActivity(new Intent(this, AddhourseActivity.class));
+                break;
 
 
         }
 
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (unbinder!=null){
+        if (unbinder != null) {
             unbinder.unbind();
         }
     }

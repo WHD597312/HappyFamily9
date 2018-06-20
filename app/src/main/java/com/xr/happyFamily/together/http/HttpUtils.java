@@ -304,15 +304,18 @@ public class HttpUtils {
         return result;
     }
     public static String getOkHpptRequest(String url) {
-        File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
-        int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
-        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+//        File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
+//        int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
+//        Cache cache = new Cache(httpCacheDirectory, cacheSize);
 
         String result=null;
         try{
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("login", 0);
+            String token =my.getString("token","");
 
             Request request = new Request.Builder()
-                    .addHeader("client","android-xr")
+                    .addHeader("authorization",token)
                     .url(url)
                     .get()
                     .tag(1)
@@ -323,7 +326,6 @@ public class HttpUtils {
                     .readTimeout(5, TimeUnit.SECONDS)//读取超时
                     .writeTimeout(5, TimeUnit.SECONDS)//写入超时
                     .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
-                    .cache(cache)//把缓存添加进来
                     .build();
 
             Response response=okHttpClient.newCall(request).execute();

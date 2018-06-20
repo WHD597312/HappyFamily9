@@ -39,10 +39,12 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
-//    allprojects {
-//        gradle.projectsEvaluated {tasks.withType(JavaCompile) {options.compilerArgs << "-Xlint:unchecked" << "-Xlint:deprecation"} }
-//
-//    }
+    lintOptions {
+        checkReleaseBuilds false
+        // Or, if you prefer, you can continue to checkforerrorsinrelease builds,
+        // but continue the build even whenerrorsarefound:
+        abortOnError false
+    }
     allprojects {
         repositories {
             jcenter()

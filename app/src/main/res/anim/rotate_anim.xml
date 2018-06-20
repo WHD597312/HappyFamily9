@@ -4,8 +4,8 @@
         android:drawable="@mipmap/csj_fs"
         android:fromDegrees="0"
         android:toDegrees="360"
-        android:pivotX="49%"
-        android:pivotY="56%"
+        android:pivotX="50%"
+        android:pivotY="50%"
         android:duration="2000"
         android:repeatCount="-1">
     </rotate>

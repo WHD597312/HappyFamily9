@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <com.xr.happyFamily.jia.titleview.TitleView
+        android:id="@+id/title_addhourse"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" />
+    <com.xr.happyFamily.jia.view_custom.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_30"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+        android:background="@color/white"
+        >
+        <TextView
+            android:id="@+id/tv_ahourse_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="家庭名称"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:textSize="14sp"
+            />
+        <EditText
+            android:layout_toRightOf="@+id/tv_ahourse_name"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:layout_marginRight="@dimen/dp_12"
+            android:paddingLeft="@dimen/dp_25"
+            android:layout_centerVertical="true"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_40"
+            android:hint="请输入家庭名称"
+            android:background="@null"
+            android:textSize="10sp"
+            />
+
+    </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_1"
+        android:background="@color/color_gray2"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_50"
+
+        >
+        <TextView
+            android:id="@+id/tv_ahourse_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:text="家庭位置"
+            android:layout_marginLeft="@dimen/dp_12"
+            android:textSize="14sp"
+            />
+        <org.angmarch.views.NiceSpinner
+            android:layout_toRightOf="@+id/tv_ahourse_position"
+            android:layout_marginLeft="@dimen/dp_30"
+            android:id="@+id/nice_spinner"
+            android:layout_width="match_parent"
+            android:layout_centerVertical="true"
+            android:hint="请选择家庭位置"
+            android:layout_height="@dimen/dp_40"
+            android:layout_marginRight="@dimen/dp_12"
+            android:textSize="10sp"
+           />
+
+
+    </RelativeLayout>
+    <com.xr.happyFamily.jia.view_custom.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="3dp" />
+</LinearLayout>

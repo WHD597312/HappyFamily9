@@ -2,6 +2,7 @@ package com.xr.happyFamily.bao;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -18,13 +19,25 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.AddressAdapter;
+import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
+import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.le.view.KeywordsFlow;
+import com.xr.happyFamily.together.http.HttpUtils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -39,42 +52,65 @@ public class TestActivity extends AppCompatActivity {
     private KeywordsFlow keywordsFlow;
     private String[] keywords;
 
+    DingDanXQAdapter confListAdapter;
+    List<OrderBean.OrderDetailsList> orderDetailsLists=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
-        initView();
-        refreshTags();
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recyclerView);
+
+        confListAdapter = new DingDanXQAdapter(TestActivity.this, orderDetailsLists);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(confListAdapter);
+        Map<String, Object> map = new HashMap<>();
+        new getOrderAsync().execute(map);
     }
 
-    private void initView() {
-        keywords= new String[]{"我想放假", "我想看电影", "我想去旅游", "我想啪啪啪", "我想放假", "我想看电影", "我想去旅游", "我想啪啪啪", "我想放假", "我想看电影", "我想去旅游", "我想啪啪啪"};
-        keywordsFlow = (KeywordsFlow) findViewById(R.id.keywordsflow);
+    String wuliu,wuliu_time,name,address,tel,postFee,paidAmount,orderNumber,paymentId;
+    //发货时间  创建时间  付款时间
+    String sendTime , createTime ,paymentTime;
 
-    }
+    class getOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
 
-    private void refreshTags() {
-        keywordsFlow.setDuration(800l);
-        keywordsFlow.setOnItemClickListener(new View.OnClickListener() {
 
-            @Override
-            public void onClick(View v) {
-                String keyword = ((TextView) v).getText().toString();// 获得点击的标签
-                Log.e("qqqqqqqqqqqqq",keyword);
+            String result = "{\"returnCode\":\"100\",\"returnMsg\":\"请求成功\",\"returnData\":{\"orderId\":249,\"orderNumber\":\"H201806191500004\",\"user\":{\"userId\":0,\"username\":null,\"phone\":\"123456\",\"password\":null,\"birthday\":null,\"sex\":false,\"oAuthType\":null,\"oAuthId\":null,\"headImgUrl\":null},\"totalAmount\":3600,\"paidAmount\":3600,\"discountAmount\":null,\"postFee\":null,\"receive\":{\"receiveId\":null,\"userId\":null,\"contact\":\"那姣龙\",\"tel\":\"13750846823\",\"receiveProvince\":\"黑龙江\",\"receiveCity\":\"绥化\",\"receiveCounty\":\"海伦\",\"receiveAddress\":\"八字桥\",\"isDefault\":null,\"delState\":null,\"createTime\":null,\"updateTime\":null},\"sendTime\":null,\"paymentTime\":null,\"logisticsState\":1,\"invoiceTag\":0,\"comment\":null,\"delState\":2,\"payment\":null,\"paymentSeq\":null,\"payState\":1,\"state\":1,\"createTime\":\"2018-06-19 10:51:28\",\"updateTime\":\"2018-06-19 10:51:28\",\"userId\":null,\"paymentId\":null,\"receiveId\":null,\"orderDetailsList\":[{\"orderDetailsId\":411,\"orderId\":null,\"orderNumber\":\"H201806191500004\",\"goodsId\":1,\"goodsName\":\"电暖器\",\"num\":3,\"priceId\":6,\"detailsAmount\":2700,\"createTime\":null,\"image\":\"http://p9zaf8j1m.bkt.clouddn.com/good/1.png\",\"simpleDescribe\":\"对流式加热,通电加热,无感静音,双重安装保护\",\"price\":900},{\"orderDetailsId\":412,\"orderId\":null,\"orderNumber\":\"H201806191500004\",\"goodsId\":4,\"goodsName\":\"净水器\",\"num\":1,\"priceId\":4,\"detailsAmount\":900,\"createTime\":null,\"image\":\"http://p9zaf8j1m.bkt.clouddn.com/good/4.png\",\"simpleDescribe\":\"对流式加热,通电加热,无感静音,双重安装保护\",\"price\":900}],\"orderCertify\":null,\"startTime\":null,\"endTime\":null,\"startAmount\":null,\"endAmount\":null,\"phone\":\"123456\",\"logisticCode\":null,\"shipperCode\":null}}\n" +
+                    "06-20 12:07:03.829 24786-24820/com.xr.happyFamily E/qqqqqqqq: {\"returnCode\":\"100\",\"returnMsg\":\"请求成功\",\"returnData\":{\"orderId\":249,\"orderNumber\":\"H201806191500004\",\"user\":{\"userId\":0,\"username\":null,\"phone\":\"123456\",\"password\":null,\"birthday\":null,\"sex\":false,\"oAuthType\":null,\"oAuthId\":null,\"headImgUrl\":null},\"totalAmount\":3600,\"paidAmount\":3600,\"discountAmount\":null,\"postFee\":null,\"receive\":{\"receiveId\":null,\"userId\":null,\"contact\":\"那姣龙\",\"tel\":\"13750846823\",\"receiveProvince\":\"黑龙江\",\"receiveCity\":\"绥化\",\"receiveCounty\":\"海伦\",\"receiveAddress\":\"八字桥\",\"isDefault\":null,\"delState\":null,\"createTime\":null,\"updateTime\":null},\"sendTime\":null,\"paymentTime\":null,\"logisticsState\":1,\"invoiceTag\":0,\"comment\":null,\"delState\":2,\"payment\":null,\"paymentSeq\":null,\"payState\":1,\"state\":1,\"createTime\":\"2018-06-19 10:51:28\",\"updateTime\":\"2018-06-19 10:51:28\",\"userId\":null,\"paymentId\":null,\"receiveId\":null,\"orderDetailsList\":[{\"orderDetailsId\":411,\"orderId\":null,\"orderNumber\":\"H201806191500004\",\"goodsId\":1,\"goodsName\":\"电暖器\",\"num\":3,\"priceId\":6,\"detailsAmount\":2700,\"createTime\":null,\"image\":\"http://p9zaf8j1m.bkt.clouddn.com/good/1.png\",\"simpleDescribe\":\"对流式加热,通电加热,无感静音,双重安装保护\",\"price\":900},{\"orderDetailsId\":412,\"orderId\":null,\"orderNumber\":\"H201806191500004\",\"goodsId\":4,\"goodsName\":\"净水器\",\"num\":1,\"priceId\":4,\"detailsAmount\":900,\"createTime\":null,\"image\":\"http://p9zaf8j1m.bkt.clouddn.com/good/4.png\",\"simpleDescribe\":\"对流式加热,通电加热,无感静音,双重安装保护\",\"price\":900}],\"orderCertify\":null,\"startTime\":null,\"endTime\":null,\"startAmount\":null,\"endAmount\":null,\"phone\":\"123456\",\"logisticCode\":null,\"shipperCode\":null}}";
+            try {
+                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                    Log.e("qqqqqqqq", result);
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    Log.e("qqqqqqqM", returnData.get("paidAmount").toString());
+
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("orderDetailsList");
+                    Gson gson = new Gson();
+
+                    Log.e("qqqqqqqqqSIze", list.size() + "???");
+                    for (JsonElement user : list) {
+                        //通过反射 得到UserBean.class
+                        OrderBean.OrderDetailsList userList = gson.fromJson(user, OrderBean.OrderDetailsList.class);
+                        orderDetailsLists.add(userList);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-        // 添加
-        feedKeywordsFlow(keywordsFlow, keywords);
-        keywordsFlow.go2Show(KeywordsFlow.ANIMATION_IN);
-    }
+            return "100";
+        }
 
-    private static void feedKeywordsFlow(KeywordsFlow keywordsFlow, String[] arr) {
-        Random random = new Random();
-        for (int i = 0; i < KeywordsFlow.MAX; i++) {
-            int ran = random.nextInt(arr.length);
-            String tmp = arr[ran];
-            keywordsFlow.feedKeyword(tmp);
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!com.xr.happyFamily.login.util.Utils.isEmpty(s) && "100".equals(s)) {
+                confListAdapter.notifyDataSetChanged();
+            }
         }
     }
 

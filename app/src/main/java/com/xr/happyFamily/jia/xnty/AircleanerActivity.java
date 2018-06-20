@@ -676,7 +676,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                    image9r.startAnimation(animr1);
 
 
-                   
+
                    image23r.startAnimation(anim2r);
 
                    image17r.startAnimation(anim2r);

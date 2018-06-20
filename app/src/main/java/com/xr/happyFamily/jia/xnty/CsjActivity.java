@@ -358,12 +358,13 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                             .into(new GlideDrawableImageViewTarget(image, 1));*/
 
                     try {
-                        gifDrawable=new GifDrawable(getResources(),R.mipmap.zhong2x);
+                        gifDrawable=new GifDrawable(getResources(),R.mipmap.man2x);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     if (gifDrawable!=null){
                         gifDrawable.setLoopCount(10000);
+                        gifDrawable.setSpeed(3.0f);
                         gifDrawable.start();
                         image.setImageDrawable(gifDrawable);
                     }
@@ -379,12 +380,13 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                             .into(new GlideDrawableImageViewTarget(image, 1));*/
 
                     try {
-                        gifDrawable=new GifDrawable(getResources(),R.mipmap.kuai3x);
+                        gifDrawable=new GifDrawable(getResources(),R.mipmap.man2x);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     if (gifDrawable!=null){
                         gifDrawable.setLoopCount(10000);
+                        gifDrawable.setSpeed(7.0f);
                         gifDrawable.start();
                         image.setImageDrawable(gifDrawable);
                     }

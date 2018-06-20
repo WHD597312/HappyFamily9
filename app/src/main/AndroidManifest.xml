@@ -88,16 +88,14 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".jia.MyPaperActivity">
+        <activity android:name=".login.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity
-            android:name=".login.wxapi.WXEntryActivity"
-            android:exported="true" />
+
 
 
         <activity
@@ -117,6 +115,9 @@
         <activity android:name=".jia.AddEquipmentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".jia.AddhourseActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.ManagementActivity" />
         <activity android:name=".jia.ChangeEquipmentActivity" />
         <activity
@@ -128,7 +129,7 @@
             android:hardwareAccelerated="true"
             android:label="@string/app_name" />
         <activity
-            android:name=".login.login.LoginActivity"
+            android:name=".jia.MyPaperActivity"
             android:label="@string/app_name" />
         <activity
             android:name=".jia.xnty.AircleanerActivity"
@@ -214,6 +215,19 @@
             />
         <activity
             android:name=".bao.ShoppageActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+
+        <activity
+            android:name=".bao.ShopXQActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name=".bao.FuWuActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"

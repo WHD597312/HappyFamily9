@@ -26,7 +26,7 @@ public class RoomAdapter extends ArrayAdapter {
         ImageView roomImage = (ImageView) view.findViewById(R.id.iv_change);//获取该布局内的图片视图
         TextView roomName = (TextView) view.findViewById(R.id.tv_change_1);//获取该布局内的文本视图
         roomImage.setImageResource(room.getImgId());//为图片视图设置图片资源
-        roomName.setText(room.getName());//为文本视图设置文本内容
+        roomName.setText(room.getRoomName());//为文本视图设置文本内容
         return view;
 
     }

@@ -16,17 +16,21 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.openapi.IWXAPI;
+
+import com.xr.database.dao.HourseDao;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
 import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
+import com.xr.happyFamily.jia.HourseActivity;
 import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MenuActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
 import com.xr.happyFamily.jia.xnty.AircleanerActivity;
 import com.xr.happyFamily.jia.xnty.CsjActivity;
@@ -41,6 +45,7 @@ import com.xr.happyFamily.login.rigest.RegistFinishActivity;
 import com.xr.happyFamily.login.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -61,6 +66,7 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.et_pswd)
     EditText et_pswd;
     String url = "http://47.98.131.11:8084/login/auth";
+    String ip = "http://47.98.131.11:8084";
     @BindView(R.id.image_seepwd)
     ImageView imageView;
     @BindView(R.id.image_wx)
@@ -68,16 +74,17 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.imageView6)
     ImageView imageView6;
     boolean isHideFirst = true;
-    IWXAPI wxapi;
+    private HourseDaoImpl hourseDao;
 
     GifDrawable gifDrawable;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-       unbinder = ButterKnife.bind(this);
-       imageView.setImageResource(R.mipmap.yanjing13x);
-        if (getSupportActionBar() != null){
+        unbinder = ButterKnife.bind(this);
+        imageView.setImageResource(R.mipmap.yanjing13x);
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -89,6 +96,7 @@ public class LoginActivity extends AppCompatActivity {
         application.addActivity(this);
         et_name.setText(preferences.getString("phone", ""));
         et_pswd.setText(preferences.getString("password", ""));
+        hourseDao=new HourseDaoImpl(getApplicationContext());
     }
 
     SharedPreferences preferences;
@@ -97,15 +105,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         try {
-            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao);
-        }catch (Exception e){
+            gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if (gifDrawable!=null){
+        if (gifDrawable != null) {
             gifDrawable.start();
             imageView6.setImageDrawable(gifDrawable);
         }
-        if (preferences.contains("phone")){
+        if (preferences.contains("phone")) {
             String phone = preferences.getString("phone", "");
             et_name.setText(phone);
             et_pswd.setText("");
@@ -121,15 +129,15 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (preferences.contains("phone") && preferences.contains("password")){
+        if (preferences.contains("phone") && preferences.contains("password")) {
 //            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            if (preferences.contains("login")){
-                startActivity(new Intent(this,HomepageActivity.class));
+            if (preferences.contains("login")) {
+                startActivity(new Intent(this, HomepageActivity.class));
             }
         }
     }
 
-    @OnClick({R.id.btn_login, R.id.tv_register,R.id.tv_forget_pswd,R.id.image_seepwd ,R.id.image_wx})
+    @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
@@ -147,7 +155,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 }
 
-               Map<String, Object> params = new HashMap<>();
+                Map<String, Object> params = new HashMap<>();
                 params.put("phone", phone);
                 params.put("password", password);
                 new LoginAsyncTask().execute(params);
@@ -176,15 +184,12 @@ public class LoginActivity extends AppCompatActivity {
                 et_pswd.setSelection(index);
                 break;
             case R.id.image_wx:
-                SendAuth.Req req = new SendAuth.Req();
-                req.scope = "snsapi_userinfo"; //授权域，snsapi_userinfo 表示获取用户个人信息
-                req.state = "wechat_sdk_demo_test";
-                wxapi.sendReq(req);
+
                 break;
         }
     }
 
-   @Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             application.removeAllActivity();//**退出主页面*//*
@@ -192,6 +197,8 @@ public class LoginActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    String userId;
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -203,6 +210,21 @@ public class LoginActivity extends AppCompatActivity {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
+                    JSONObject returnData=jsonObject.getJSONObject("returnData");
+                    if (code == 100) {
+                         userId=returnData.getString("userId");
+                        String token = returnData.getString("token");
+                        SharedPreferences.Editor editor = preferences.edit();
+                        String phone = et_name.getText().toString().trim();
+                        String password = et_pswd.getText().toString().trim();
+
+                        Log.i("phone", "---->: " + phone + ",,,," + password);
+                        editor.putString("phone", phone);
+                        editor.putString("userId",userId);
+                        editor.putString("password", password);
+                        editor.putString("token", token);
+                        editor.commit();
+                    }
 
                 }
             } catch (Exception e) {
@@ -220,29 +242,113 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
-                    et_name.setText("");
                     et_pswd.setText("");
                     break;
                 case 100:
-                    Utils.showToast(LoginActivity.this, "登录成功");
-                    SharedPreferences.Editor editor=preferences.edit();
-                    String phone = et_name.getText().toString().trim();
-                    String password = et_pswd.getText().toString().trim();
-                    Log.i("phone", "---->: "+phone+",,,,"+password);
-                    editor.putString("phone", phone);
-                    editor.putString("password", password);
-                    editor.commit();
-                    Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+
+                    new hourseAsyncTask().execute();
+
                     break;
             }
         }
     }
+    long id;
+    class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+//            Map<String, Object> params = maps[0];
+
+            String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("ffffffff", "--->: " + result);
+            try {
+                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    Log.i("fffffffft", "--->: " + code);
+
+//                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
+
+                    if (code == 100) {
+                        JSONArray returnData=jsonObject.getJSONArray("returnData");
+                        for (int i = 0; i < returnData.length(); i++) {
+                            JSONObject houseObject=returnData.getJSONObject(i);
+                            int id=houseObject.getInt("id");
+                            String houseName=houseObject.getString("houseName");
+                            String houseAddress=houseObject.getString("houseAddress");
+                            int userId=houseObject.getInt("userId");
+                            Hourse hourse = hourseDao.findById((long) id);
+                            if (hourse!=null){
+                                hourse.setHouseName(houseName);
+                                hourse.setHouseAddress(houseAddress);
+                                hourse.setUserId(userId);
+                                hourseDao.update(hourse);
+                            }else {
+                                hourse = new Hourse((long)id, houseName, houseAddress, userId);
+                                hourseDao.insert(hourse);
+                                Log.i("dddddd", "doInBackground:---> "+hourse);
+                            }
+                            JSONArray roomDevices=houseObject.getJSONArray("roomDevices");
+                            for (int j = 0; j < roomDevices.length(); j++) {
+                               JSONObject roomObject=roomDevices.getJSONObject(j);
+                               int roomId=roomObject.getInt("roomId");
+                               String roomName=roomObject.getString("roomName");
+                               int houseId=roomObject.getInt("houseId");
+                               String  roomType=roomObject.getString("roomType");
+                            }
+                        }
+//                        JSONArray roomDevices=returnData.getJSONArray("roomDevices");
+
+
+//                        id = returnData.getInt("id");
+//                        String houseAddress = returnData.getString("houseAddress");
+//                        String houseName = returnData.getString("houseName");
+////                        Integer userId = returnData.getInt("userId");
+////                        Integer roomId = roomDevices.getInt("roomId");
+////                        SharedPreferences.Editor editor = preferences.edit();
+////                        editor.putInt("id",
+//////                        editor.putString("houseAddress", houseAddress);
+//////                        editor.putInt("roomId", roomId);
+//////                        editor.putString("houseName", houseName);
+//////                        editor.commit();
 
 
 
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
 
+        }
+
+
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 1005:
+                    Utils.showToast(LoginActivity.this, "查询失败");
+                    break;
+
+
+                case 100:
+                    Utils.showToast(LoginActivity.this, "请求成功");
+                    if (id != -1) {
+                        Intent intent = new Intent(LoginActivity.this, MyPaperActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                    } else {
+                        Intent intent = new Intent(LoginActivity.this, HomepageActivity.class);
+                        intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        startActivity(intent);
+                        break;
+                    }
+            }
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

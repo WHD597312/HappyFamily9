@@ -16,7 +16,8 @@
         android:layout_marginLeft="@dimen/dp_12"
         android:textColor="@color/color_gray4"
         />
-    <ListView
+    <android.support.v7.widget.RecyclerView
+        android:layout_marginTop="@dimen/dp_12"
         android:layout_below="@+id/tv_hourse"
         android:id="@+id/lv_hourse"
         android:layout_width="match_parent"
@@ -32,6 +33,8 @@
         android:textColor="@color/color_gray4"
         />
     <TextView
+        android:id="@+id/tv_hourse_xjjt"
+        android:layout_marginTop="@dimen/dp_12"
         android:layout_below="@+id/tv_addhourse"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
@@ -41,5 +44,8 @@
         android:textColor="@color/green2"
         android:background="@drawable/bg_shape"
         />
-
+    <com.xr.happyFamily.jia.view_custom.LinearGradientView
+        android:layout_below="@+id/tv_hourse_xjjt"
+        android:layout_width="match_parent"
+        android:layout_height="5dp" />
 </RelativeLayout>

@@ -31,7 +31,7 @@ public class AddEquipmentActivity extends Activity {
         switch (view.getId()) {
             case R.id.bt_add_finish2:
               startActivity(new Intent(this, MyPaperActivity.class));
-                break;
+            break;
 
 
 

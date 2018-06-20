@@ -57,6 +57,7 @@ public class MyPaperActivity extends AppCompatActivity {
         }
 //        roomDao=new RoomDaoImpl(getApplicationContext());
 //        rooms = roomDao.findByAllRoom();
+        
         Log.i("room", "---->: "+rooms);
         views = new ArrayList<>();
         views.add(new homeFragment());

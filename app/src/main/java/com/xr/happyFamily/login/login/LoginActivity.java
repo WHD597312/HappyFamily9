@@ -346,7 +346,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 case 100:
                     Utils.showToast(LoginActivity.this, "请求成功");
-                    if (Id == -1) {
+                    if (Id != -1) {
                         Intent intent = new Intent(LoginActivity.this, MyPaperActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

@@ -136,6 +136,8 @@ public class MyPaperActivity extends AppCompatActivity {
         myViewPager.setAdapter(adapter);
         myViewPager.setCurrentItem(0);  //初始化显示第一个页面
 
+//        Bundle bundle=getIntent().getExtras();
+//        int item =bundle.getInt ("item");
 
 
     }

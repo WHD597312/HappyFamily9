@@ -166,7 +166,7 @@ public class RegistActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
-                    SharedPreferences.Editor editor = preferences.edit();
+
 
                 } catch (Exception e) {
                     e.printStackTrace();

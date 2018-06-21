@@ -72,7 +72,6 @@
         android:layout_height="@dimen/dp_1"
         android:layout_alignLeft="@+id/et_view"
         android:layout_alignRight="@+id/et_view"
-        android:layout_below="@+id/managment_spinner"
         android:background="@color/color_gray2" />
 
 

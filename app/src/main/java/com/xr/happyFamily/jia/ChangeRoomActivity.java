@@ -20,6 +20,9 @@ import com.xr.happyFamily.jia.Fragment.LivingFragment;
 import com.xr.happyFamily.jia.Fragment.RoomFragment;
 import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.login.rigest.RegistActivity;
+import com.xr.happyFamily.login.rigest.RegistFinishActivity;
+
 import android.widget.AdapterView.OnItemClickListener;
 import java.util.ArrayList;
 import java.util.List;
@@ -61,33 +64,42 @@ public class ChangeRoomActivity extends AppCompatActivity {
                         Intent intent1 = new Intent();
                         ChangeRoomActivity.this.setResult(1,intent1);
                         finish();
+//                        Intent intent = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
+//                        intent.putExtra("item",1);
+//                        startActivity(intent);
                         break;
 
                     case 1:
                         Intent intent2 = new Intent();
-
-
                         ChangeRoomActivity.this.setResult(2,intent2);
                         finish();
+//                        Intent intent1 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
+//                        intent1.putExtra("item",2);
+//                        startActivity(intent1);
                         break;
                     case 2:
                         Intent intent3 = new Intent();
-
-
                         ChangeRoomActivity.this.setResult(3,intent3);
                         finish();
+//                        Intent intent2 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
+//                        intent2.putExtra("item",3);
+//                        startActivity(intent2);
                         break;
                     case 3:
                         Intent intent4 = new Intent();
-
-
                         ChangeRoomActivity.this.setResult(4,intent4);
                         finish();
+//                        Intent intent3 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
+//                        intent3.putExtra("item",4);
+//                        startActivity(intent3);
                         break;
                     case 4:
                         Intent intent5 = new Intent();
                         ChangeRoomActivity.this.setResult(5,intent5);
                         finish();
+//                        Intent intent5 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
+//                        intent5.putExtra("item",5);
+//                        startActivity(intent5);
                         break;
                 }
 

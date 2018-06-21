@@ -6,9 +6,13 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
 import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.JsonParseException;
+import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.together.util.TenTwoUtil;
@@ -22,6 +26,7 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -183,57 +188,96 @@ public class MQService extends Service {
 
         @Override
         protected Object doInBackground(String... strings) {
-            String topicName=strings[0];/**收到的主题*/
 
-            String macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
+            String topicName=strings[0];/**收到的主题*/
+            String macAddress=null;
+
+            if (topicName.startsWith("warmer")){
+                macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
+            }else if (topicName.startsWith("p99")){
+                macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
+            }
+            int type=-1;
+            int timerMoudle=-1;/**定时器模式*/
+            int mcuVersion=-1;/**MCU版本*/
+            int waramerSetTemp=-1;/**取暖器设定温度*/
+            int warmerCurTemp=-1;/**取暖器当前温度*/
+            int warmerSampleData=-1;/**取暖器采样数据*/
+            int warmerRatePower=-1;/**取暖器额定总功率*/
+            int warmerCurRunRoatePower=-1;/**取暖器当前运行功率*/
+            int warmerRunState=-1;/**机器当前运行状态*/
+            int deviceState=-1;/**开关机状态 0表示关机，1表示开机*/
+            String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
+            int lockState=-1;/** 屏幕是否锁定 1：锁定 0：未锁定*/
+            int screenState=-1;/**屏保是否开启 1：开启 0：未开启 */
+            int curRunState2=-1;/**机器当前运行状态2  (保留)*/
+            int curRunState3=-1;/**机器当前运行状态2  (保留)*/
+            int timerHour=-1;/**定时时间 小时*/
+            int timerMin=-1;/**定时时间 分*/
+            int checkCode=-1;/**校验码*/
+            int endCode=-1;/**结束码*/
             String message=strings[1];/**收到的消息*/
+
+            Log.i("message","-->"+message);
             try {
-                JSONObject messageJsonObject=new JSONObject(message);
-                JSONArray messageJsonArray=messageJsonObject.getJSONArray("Warmer");
-                int type=messageJsonArray.getInt(1);
-                int timerMoudle=-1;/**定时器模式*/
-                int mcuVersion=-1;/**MCU版本*/
-                int waramerSetTemp=-1;/**取暖器设定温度*/
-                int warmerCurTemp=-1;/**取暖器当前温度*/
-                int warmerSampleData=-1;/**取暖器采样数据*/
-                int warmerRatePower=-1;/**取暖器额定总功率*/
-                int warmerCurRunRoatePower=-1;/**取暖器当前运行功率*/
-                int warmerRunState=-1;/**机器当前运行状态*/
-                int deviceState=-1;/**开关机状态 0表示关机，1表示开机*/
-                String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
-                int lockState=-1;/** 屏幕是否锁定 1：锁定 0：未锁定*/
-                int screenState=-1;/**屏保是否开启 1：开启 0：未开启 */
-                int curRunState2=-1;/**机器当前运行状态2  (保留)*/
-                int curRunState3=-1;/**机器当前运行状态2  (保留)*/
-                int timerHour=-1;/**定时时间 小时*/
-                int timerMin=-1;/**定时时间 分*/
-                int checkCode=-1;/**校验码*/
-                int endCode=-1;/**结束码*/
+                JSONObject messageJsonObject=null;
+                if (isGoodJson(message)){
+                    messageJsonObject=new JSONObject(message);
+                }
+
+                String productType=null;
+                JSONArray messageJsonArray=null;
+
+                if (messageJsonObject!=null && messageJsonObject.has("productType")){
+                    productType= messageJsonObject.getString("productType");
+                }
+                if (messageJsonObject !=null && messageJsonObject.has("Warmer")){
+                    messageJsonArray=messageJsonObject.getJSONArray("Warmer");
+                }
+
+
+                if (!TextUtils.isEmpty(productType)){
+                    type=Integer.parseInt(productType);
+                }else {
+                    type=messageJsonArray.getInt(1);
+                }
+
                 DeviceChild deviceChild=null;
                 switch (type){
                     case 1:
                         break;
                     case 2:/**取暖器*/
-                        timerMoudle=messageJsonArray.getInt(messageJsonArray.length()-14);
-                        mcuVersion=messageJsonArray.getInt(messageJsonArray.length()-13);
-                        waramerSetTemp=messageJsonArray.getInt(messageJsonArray.length()-12);
-                        warmerCurTemp=messageJsonArray.getInt(messageJsonArray.length()-11);
-                        warmerSampleData=messageJsonArray.getInt(messageJsonArray.length()-10);
-                        warmerRatePower=messageJsonArray.getInt(messageJsonArray.length()-9);
-                        warmerCurRunRoatePower=messageJsonArray.getInt(messageJsonArray.length()-8);
-                        warmerRunState=messageJsonArray.getInt(messageJsonArray.length()-7);
-                        int[] x=TenTwoUtil.changeToTwo(warmerRunState);
-                        deviceState=x[7];
-                        rateState=x[6]+""+x[5];
-                        lockState=x[4];
-                        screenState=x[3];
-                        curRunState2=messageJsonArray.getInt(messageJsonArray.length()-6);
-                        curRunState3=messageJsonArray.getInt(messageJsonArray.length()-5);
-                        timerHour=messageJsonArray.getInt(messageJsonArray.length()-4);
-                        timerMin=messageJsonArray.getInt(messageJsonArray.length()-3);
-                        checkCode=messageJsonArray.getInt(messageJsonArray.length()-2);
-                        endCode=messageJsonArray.getInt(messageJsonArray.length()-1);
-                        deviceChild=deviceChildDao.findById(1);
+                        if (!TextUtils.isEmpty(productType)){
+
+                        }else {
+                            timerMoudle=messageJsonArray.getInt(messageJsonArray.length()-14);
+                            mcuVersion=messageJsonArray.getInt(messageJsonArray.length()-13);
+                            waramerSetTemp=messageJsonArray.getInt(messageJsonArray.length()-12);
+                            warmerCurTemp=messageJsonArray.getInt(messageJsonArray.length()-11);
+                            warmerSampleData=messageJsonArray.getInt(messageJsonArray.length()-10);
+                            warmerRatePower=messageJsonArray.getInt(messageJsonArray.length()-9);
+                            warmerCurRunRoatePower=messageJsonArray.getInt(messageJsonArray.length()-8);
+                            warmerRunState=messageJsonArray.getInt(messageJsonArray.length()-7);
+                            int[] x=TenTwoUtil.changeToTwo(warmerRunState);
+                            deviceState=x[7];
+                            rateState=x[6]+""+x[5];
+                            lockState=x[4];
+                            screenState=x[3];
+                            curRunState2=messageJsonArray.getInt(messageJsonArray.length()-6);
+                            curRunState3=messageJsonArray.getInt(messageJsonArray.length()-5);
+                            timerHour=messageJsonArray.getInt(messageJsonArray.length()-4);
+                            timerMin=messageJsonArray.getInt(messageJsonArray.length()-3);
+                            checkCode=messageJsonArray.getInt(messageJsonArray.length()-2);
+                            endCode=messageJsonArray.getInt(messageJsonArray.length()-1);
+                        }
+
+                        List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                        for (DeviceChild deviceChild2:deviceChildren) {
+                            if (macAddress.equals(deviceChild2.getMacAddress())){
+                                deviceChild=deviceChild2;
+                                break;
+                            }
+                        }
                         if (deviceChild!=null){
                             deviceChild.setType(type);
                             deviceChild.setTimerMoudle(timerMoudle);
@@ -270,7 +314,12 @@ public class MQService extends Service {
                         break;
                 }
 
-                if (DeviceDetailActivity.running){
+                if (AddDeviceActivity.running){
+                    Intent mqttIntent = new Intent("AddDeviceActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress",macAddress);
+                    sendBroadcast(mqttIntent);
+                } else if (DeviceDetailActivity.running){
                     Intent mqttIntent = new Intent("DeviceDetailActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress",macAddress);
@@ -292,7 +341,6 @@ public class MQService extends Service {
 //        list.add("warmer/p99"+macAddress+"/set");
         return  list;
     }
-
     /**
      * 重新连接MQTT
      * */
@@ -307,6 +355,16 @@ public class MQService extends Service {
                 }
             }
         }, 0 * 1000, 1 * 1000, TimeUnit.MILLISECONDS);
+    }
+
+    public static boolean isGoodJson(String json) {
+        try {
+            new JsonParser().parse(json);
+            return true;
+        } catch (JsonParseException e) {
+            System.out.println("bad json: " + json);
+            return false;
+        }
     }
 
     /**

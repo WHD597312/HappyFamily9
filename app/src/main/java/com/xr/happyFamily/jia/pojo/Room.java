@@ -15,8 +15,6 @@ public class Room {
     private int  imgId;
 
 
-
-
     public int getImgId() {
         return imgId;
     }
@@ -66,7 +64,6 @@ public class Room {
         this.roomType = roomType;
         this.imgId = imgId;
     }
-
 
     @Generated(hash = 703125385)
     public Room() {

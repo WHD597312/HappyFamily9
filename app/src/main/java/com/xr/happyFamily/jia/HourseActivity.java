@@ -20,7 +20,6 @@ import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.TestActivity;
-import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.jia.adapter.HouseAdapter;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.SmartSet;

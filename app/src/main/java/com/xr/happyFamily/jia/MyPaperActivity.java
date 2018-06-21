@@ -72,8 +72,8 @@ public class MyPaperActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         unbinder = ButterKnife.bind(this);
-      str1=new ArrayList();
-       str2=new ArrayList();
+        str1=new ArrayList();
+        str2=new ArrayList();
         roomDao=new RoomDaoImpl(getApplicationContext());
         rooms = roomDao.findByAllRoom();
         for(int i = 0 ; i < rooms.size() ; i++) {
@@ -83,7 +83,6 @@ public class MyPaperActivity extends AppCompatActivity {
           str1.add(roomName);
           str2.add(roomType);
         }
-
 
         Log.i("room", "---->: "+str1+".........."+str2);
         views = new ArrayList<>();

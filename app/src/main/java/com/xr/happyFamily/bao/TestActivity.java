@@ -25,12 +25,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.adapter.AddressAdapter;
+
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
-import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.le.view.KeywordsFlow;
-import com.xr.happyFamily.together.http.HttpUtils;
 
 import org.json.JSONObject;
 

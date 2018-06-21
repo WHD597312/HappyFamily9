@@ -9,6 +9,8 @@ import com.xr.database.dao.DaoSession;
 import com.xr.database.dao.DeviceChildDao;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 
+import java.util.List;
+
 public class DeviceChildDaoImpl {
     private Context context;
     private SQLiteDatabase db;
@@ -27,8 +29,9 @@ public class DeviceChildDaoImpl {
      * 添加设备
      * @param deviceChild
      */
-    public void insert(DeviceChild deviceChild){
-        deviceChildDao.insert(deviceChild);
+    public boolean insert(DeviceChild deviceChild){
+        long n=deviceChildDao.insert(deviceChild);
+        return n>0?true:false;
     }
 
     /**
@@ -49,5 +52,11 @@ public class DeviceChildDaoImpl {
 
     public DeviceChild findById(long id){
         return deviceChildDao.load(id);
+    }
+    public List<DeviceChild> findAllDevice(){
+        return deviceChildDao.loadAll();
+    }
+    public void deleteAll(){
+        deviceChildDao.deleteAll();
     }
 }

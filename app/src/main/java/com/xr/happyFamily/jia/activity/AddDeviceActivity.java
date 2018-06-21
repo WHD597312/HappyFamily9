@@ -1,10 +1,16 @@
 package com.xr.happyFamily.jia.activity;
 
 import android.app.ProgressDialog;
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -23,8 +29,11 @@ import com.xr.happyFamily.esptouch.IEsptouchListener;
 import com.xr.happyFamily.esptouch.IEsptouchResult;
 import com.xr.happyFamily.esptouch.IEsptouchTask;
 import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 
 import org.angmarch.views.NiceSpinner;
@@ -48,12 +57,20 @@ public class AddDeviceActivity extends AppCompatActivity {
     @BindView(R.id.et_wifi) EditText et_wifi;
     @BindView(R.id.bt_add_finish) Button bt_add_finish;/**确定配置*/
     @BindView(R.id.image_gif) GifImageView image_gif;
+    private MyApplication application;
 
+    private String inNewRoom= HttpUtils.ipAddress+"/family/device/registerDeviceInNewRoom";
+    private String inOldRoom=HttpUtils.ipAddress+"/family/device/registerDeviceInOldRoom";
     GifDrawable gifDrawable;
-
     DeviceChildDaoImpl deviceChildDao;
+    private boolean isBound=false;
+    private String mac=null;
+    MessageReceiver receiver;
+    public static boolean running=false;
 
 
+    DeviceChild deviceChild=null;
+    SharedPreferences my;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -62,8 +79,20 @@ public class AddDeviceActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         unbinder=ButterKnife.bind(this);
-        deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
+        application= (MyApplication) getApplicationContext();
+        if (application!=null){
+            application.addActivity(this);
+        }
+        my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+        Intent service=new Intent(this, MQService.class);
+        startService(service);
 
+
+        IntentFilter intentFilter = new IntentFilter("AddDeviceActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
+
+        deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
         mWifiAdmin = new EspWifiAdminSimple(this);
     }
 
@@ -76,6 +105,14 @@ public class AddDeviceActivity extends AppCompatActivity {
         } else {
             nice_spinner.setText("");
         }
+        String userId=my.getString("userId","");
+        Log.i("userId","-->"+userId);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        running=true;
     }
 
     @OnClick({R.id.back,R.id.bt_add_finish})
@@ -91,7 +128,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                     break;
                 }
                 break;
-
             case R.id.bt_add_finish:
 
                 String ssid = nice_spinner.getText().toString();
@@ -107,48 +143,40 @@ public class AddDeviceActivity extends AppCompatActivity {
                     break;
                 }
                 if (!TextUtils.isEmpty(ssid)) {
-//                    popupWindow();
-//                    image_gif.setVisibility(View.VISIBLE);
-//                    nice_spinner.setEnabled(false);
-//                    et_wifi.setEnabled(false);
-//                    bt_add_finish.setEnabled(false);
-//                    try {
-//                        gifDrawable=new GifDrawable(getResources(),R.mipmap.touxiang3);
-//                    }catch (Exception e){
-//                        e.printStackTrace();
-//                    }
-//                    if (gifDrawable!=null){
-//                        gifDrawable.start();
-//                        image_gif.setImageDrawable(gifDrawable);
-//                    }
-
-
-//                    lp.alpha = 0.4f;
-//                    getWindow().setAttributes(lp);
-//                    linear.getBackground().mutate().setAlpha(100);
-
-//                    image_gif.getBackground().mutate().setAlpha(0);
-//                    add_image.getBackground().mutate().setAlpha((int) alpha);
-
-//                    WindowManager.LayoutParams lp=getWindow().getAttributes();
-//                    lp.alpha = 0.4f;
-//                    getWindow().setAttributes(lp);
-
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
-//                    String macAddress="vlinks_test18d634d6d3c6";
-//                    Map<String, Object> params = new HashMap<>();
-//                    params.put("deviceName", "设备3");
-//                    params.put("houseId", houseId);
-//                    params.put("masterControllerUserId", Integer.parseInt(userId));
-//                    params.put("type", 1);
-//                    params.put("macAddress", macAddress);
-//                    new WifiConectionAsync().execute(params);
-
                 }
                 break;
         }
     }
 
+    MQService mqService;
+    private boolean bound=false;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+            if (bound==true && !TextUtils.isEmpty(mac)){
+                String wifiName=nice_spinner.getText().toString();
+                String macAddress=wifiName+mac;
+                String topicName2="p99/"+macAddress+"/transfer";
+                boolean success=mqService.subscribe(topicName2,1);
+                if (success){
+                    String topicName="p99/"+macAddress+"/set";
+                    String payLoad="getType";
+                    boolean step2=mqService.publish(topicName,1,payLoad);
+                    if (step2){
+                        new AddDeviceAsync().execute(macAddress);
+                    }
+                }
+            }
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+        }
+    };
     private void onEsptoucResultAddedPerform(final IEsptouchResult result) {
         runOnUiThread(new Runnable() {
 
@@ -172,6 +200,40 @@ public class AddDeviceActivity extends AppCompatActivity {
     private ProgressDialog mProgressDialog;
     private static final String TAG = "Esptouch";
     private EspWifiAdminSimple mWifiAdmin;
+    private class AddDeviceAsync extends AsyncTask<String,Void,Void>{
+
+        @Override
+        protected Void doInBackground(String... macs) {
+            String macAddress=macs[0];
+            DeviceChild deviceChild3=null;
+            List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+            if (deviceChildren==null ||deviceChildren.isEmpty()){
+                deviceChild=new DeviceChild();/**不存在，就添加该设备*/
+                deviceChild.setMacAddress(macAddress);
+                deviceChild.setName(mac);
+                boolean insert=deviceChildDao.insert(deviceChild);
+                Log.i("insert","-->"+insert);
+            }else {
+                for(DeviceChild deviceChild2:deviceChildren){/**从数据库中找是否该设备已经存在*/
+                    if (macAddress.equals(deviceChild2.getMacAddress())){
+                        deviceChild3=deviceChild2;/**存在，就结束循环，遍历结束*/
+                        break;
+                    }
+                }
+                if (deviceChild3!=null){
+                    deviceChild=deviceChild3;
+                    deviceChildDao.update(deviceChild);/**存在就更新一下该设备*/
+                }else {
+                    deviceChild=new DeviceChild();/**不存在，就添加该设备*/
+                    deviceChild.setMacAddress(macAddress);
+                    deviceChild.setName(mac);
+                    boolean insert=deviceChildDao.insert(deviceChild);
+                    Log.i("insert","-->"+insert);
+                }
+            }
+            return null;
+        }
+    }
 
     private class EsptouchAsyncTask3 extends AsyncTask<String, Void, List<IEsptouchResult>> {
 
@@ -259,8 +321,12 @@ public class AddDeviceActivity extends AppCompatActivity {
                         //                String ssid=et_ssid.getText().toString();
                         String ssid = resultInList.getBssid();
 
-
-                        sb.append("配置成功");
+                        sb.append("配置成功"+ssid);
+                        if (!TextUtils.isEmpty(ssid)){
+                            Intent service=new Intent(AddDeviceActivity.this, MQService.class);
+                            isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+                            mac=ssid;
+                        }
                         count++;
                         if (count >= maxDisplayCount) {
                             break;
@@ -285,6 +351,44 @@ public class AddDeviceActivity extends AppCompatActivity {
         super.onDestroy();
         if (unbinder!=null){
             unbinder.unbind();
+        }
+        if (isBound){
+            unbindService(connection);
+        }
+        if (receiver!=null){
+            unregisterReceiver(receiver);
+        }
+        running=false;
+    }
+    class AddDeviceInNewRoomAsync extends AsyncTask<Map<String,Object>,Void,Integer>{
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String macAddress=intent.getStringExtra("macAddress");
+            if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())){
+                Map<String,Object> params=new HashMap<>();
+                params.put("deviceName",deviceChild.getName());
+                params.put("deviceType",deviceChild.getType());
+                params.put("deviceMacAddress",deviceChild.getMacAddress());
+                params.put("houseId",deviceChild.getHouseId());
+                params.put("roomId",deviceChild.getRoomId());
+                String userId=my.getString("userId","");
+                params.put("userId",userId);
+                new AddDeviceInNewRoomAsync().execute(params);
+            }
         }
     }
 }

@@ -262,12 +262,14 @@ public class RegistActivity extends AppCompatActivity {
         @Override
         public void onTick(long millisUntilFinished) {
             Log.e("Tag", "倒计时=" + (millisUntilFinished/1000));
-            btn_get_code.setText(millisUntilFinished / 1000 + "s后重新发送");
-            //设置倒计时中的按钮外观
-            btn_get_code.setClickable(false);//倒计时过程中将按钮设置为不可点击
+            if (btn_get_code!=null){
+                btn_get_code.setText(millisUntilFinished / 1000 + "s后重新发送");
+                //设置倒计时中的按钮外观
+                btn_get_code.setClickable(false);//倒计时过程中将按钮设置为不可点击
 //            btn_get_code.setBackgroundColor(Color.parseColor("#c7c7c7"));
-            btn_get_code.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.darker_gray));
-            btn_get_code.setTextSize(16);
+                btn_get_code.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.darker_gray));
+                btn_get_code.setTextSize(16);
+            }
         }
 
         /**
@@ -279,9 +281,12 @@ public class RegistActivity extends AppCompatActivity {
             //设置倒计时结束之后的按钮样式
 //            btn_get_code.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_blue_light));
 //            btn_get_code.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
-            btn_get_code.setTextSize(18);
-            btn_get_code.setText("重新发送");
-            btn_get_code.setClickable(true);
+            if (btn_get_code!=null){
+                btn_get_code.setTextSize(18);
+                btn_get_code.setText("重新发送");
+                btn_get_code.setClickable(true);
+            }
+
         }
     }
     @Override

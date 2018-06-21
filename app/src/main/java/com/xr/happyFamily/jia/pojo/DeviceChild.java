@@ -9,10 +9,13 @@ import java.io.Serializable;
 
 @Entity
 public class DeviceChild implements Serializable{
-    @Id(autoincrement = false)
+    @Id(autoincrement = true)
     private Long id;
+    long houseId;/**设备的房子Id*/
+    long roomId;/**设备的房间Id*/
     int type;/**设备类型*/
     String macAddress;/**mac地址*/
+    String name;/**设备名称*/
     int timerMoudle=-1;/**定时器模式*/
     int mcuVersion=-1;/**MCU版本*/
     int waramerSetTemp=-1;/**取暖器设定温度*/
@@ -157,16 +160,38 @@ public class DeviceChild implements Serializable{
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
     }
-    @Generated(hash = 1185543534)
-    public DeviceChild(Long id, int type, String macAddress, int timerMoudle,
-            int mcuVersion, int waramerSetTemp, int warmerCurTemp,
-            int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower,
-            int warmerRunState, int deviceState, String rateState, int lockState,
-            int screenState, int curRunState2, int curRunState3, int timerHour,
-            int timerMin, int checkCode, int endCode) {
+    public String getName() {
+        return this.name;
+    }
+    public void setName(String name) {
+        this.name = name;
+    }
+    public long getHouseId() {
+        return this.houseId;
+    }
+    public void setHouseId(long houseId) {
+        this.houseId = houseId;
+    }
+    public long getRoomId() {
+        return this.roomId;
+    }
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+    @Generated(hash = 1594076145)
+    public DeviceChild(Long id, long houseId, long roomId, int type,
+            String macAddress, String name, int timerMoudle, int mcuVersion,
+            int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
+            int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
+            int deviceState, String rateState, int lockState, int screenState,
+            int curRunState2, int curRunState3, int timerHour, int timerMin,
+            int checkCode, int endCode) {
         this.id = id;
+        this.houseId = houseId;
+        this.roomId = roomId;
         this.type = type;
         this.macAddress = macAddress;
+        this.name = name;
         this.timerMoudle = timerMoudle;
         this.mcuVersion = mcuVersion;
         this.waramerSetTemp = waramerSetTemp;

@@ -25,26 +25,29 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
      */
     public static class Properties {
         public final static Property Id = new Property(0, Long.class, "id", true, "_id");
-        public final static Property Type = new Property(1, int.class, "type", false, "TYPE");
-        public final static Property MacAddress = new Property(2, String.class, "macAddress", false, "MAC_ADDRESS");
-        public final static Property TimerMoudle = new Property(3, int.class, "timerMoudle", false, "TIMER_MOUDLE");
-        public final static Property McuVersion = new Property(4, int.class, "mcuVersion", false, "MCU_VERSION");
-        public final static Property WaramerSetTemp = new Property(5, int.class, "waramerSetTemp", false, "WARAMER_SET_TEMP");
-        public final static Property WarmerCurTemp = new Property(6, int.class, "warmerCurTemp", false, "WARMER_CUR_TEMP");
-        public final static Property WarmerSampleData = new Property(7, int.class, "warmerSampleData", false, "WARMER_SAMPLE_DATA");
-        public final static Property WarmerRatePower = new Property(8, int.class, "warmerRatePower", false, "WARMER_RATE_POWER");
-        public final static Property WarmerCurRunRoatePower = new Property(9, int.class, "warmerCurRunRoatePower", false, "WARMER_CUR_RUN_ROATE_POWER");
-        public final static Property WarmerRunState = new Property(10, int.class, "warmerRunState", false, "WARMER_RUN_STATE");
-        public final static Property DeviceState = new Property(11, int.class, "deviceState", false, "DEVICE_STATE");
-        public final static Property RateState = new Property(12, String.class, "rateState", false, "RATE_STATE");
-        public final static Property LockState = new Property(13, int.class, "lockState", false, "LOCK_STATE");
-        public final static Property ScreenState = new Property(14, int.class, "screenState", false, "SCREEN_STATE");
-        public final static Property CurRunState2 = new Property(15, int.class, "curRunState2", false, "CUR_RUN_STATE2");
-        public final static Property CurRunState3 = new Property(16, int.class, "curRunState3", false, "CUR_RUN_STATE3");
-        public final static Property TimerHour = new Property(17, int.class, "timerHour", false, "TIMER_HOUR");
-        public final static Property TimerMin = new Property(18, int.class, "timerMin", false, "TIMER_MIN");
-        public final static Property CheckCode = new Property(19, int.class, "checkCode", false, "CHECK_CODE");
-        public final static Property EndCode = new Property(20, int.class, "endCode", false, "END_CODE");
+        public final static Property HouseId = new Property(1, long.class, "houseId", false, "HOUSE_ID");
+        public final static Property RoomId = new Property(2, long.class, "roomId", false, "ROOM_ID");
+        public final static Property Type = new Property(3, int.class, "type", false, "TYPE");
+        public final static Property MacAddress = new Property(4, String.class, "macAddress", false, "MAC_ADDRESS");
+        public final static Property Name = new Property(5, String.class, "name", false, "NAME");
+        public final static Property TimerMoudle = new Property(6, int.class, "timerMoudle", false, "TIMER_MOUDLE");
+        public final static Property McuVersion = new Property(7, int.class, "mcuVersion", false, "MCU_VERSION");
+        public final static Property WaramerSetTemp = new Property(8, int.class, "waramerSetTemp", false, "WARAMER_SET_TEMP");
+        public final static Property WarmerCurTemp = new Property(9, int.class, "warmerCurTemp", false, "WARMER_CUR_TEMP");
+        public final static Property WarmerSampleData = new Property(10, int.class, "warmerSampleData", false, "WARMER_SAMPLE_DATA");
+        public final static Property WarmerRatePower = new Property(11, int.class, "warmerRatePower", false, "WARMER_RATE_POWER");
+        public final static Property WarmerCurRunRoatePower = new Property(12, int.class, "warmerCurRunRoatePower", false, "WARMER_CUR_RUN_ROATE_POWER");
+        public final static Property WarmerRunState = new Property(13, int.class, "warmerRunState", false, "WARMER_RUN_STATE");
+        public final static Property DeviceState = new Property(14, int.class, "deviceState", false, "DEVICE_STATE");
+        public final static Property RateState = new Property(15, String.class, "rateState", false, "RATE_STATE");
+        public final static Property LockState = new Property(16, int.class, "lockState", false, "LOCK_STATE");
+        public final static Property ScreenState = new Property(17, int.class, "screenState", false, "SCREEN_STATE");
+        public final static Property CurRunState2 = new Property(18, int.class, "curRunState2", false, "CUR_RUN_STATE2");
+        public final static Property CurRunState3 = new Property(19, int.class, "curRunState3", false, "CUR_RUN_STATE3");
+        public final static Property TimerHour = new Property(20, int.class, "timerHour", false, "TIMER_HOUR");
+        public final static Property TimerMin = new Property(21, int.class, "timerMin", false, "TIMER_MIN");
+        public final static Property CheckCode = new Property(22, int.class, "checkCode", false, "CHECK_CODE");
+        public final static Property EndCode = new Property(23, int.class, "endCode", false, "END_CODE");
     }
 
 
@@ -60,27 +63,30 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DEVICE_CHILD\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
-                "\"TYPE\" INTEGER NOT NULL ," + // 1: type
-                "\"MAC_ADDRESS\" TEXT," + // 2: macAddress
-                "\"TIMER_MOUDLE\" INTEGER NOT NULL ," + // 3: timerMoudle
-                "\"MCU_VERSION\" INTEGER NOT NULL ," + // 4: mcuVersion
-                "\"WARAMER_SET_TEMP\" INTEGER NOT NULL ," + // 5: waramerSetTemp
-                "\"WARMER_CUR_TEMP\" INTEGER NOT NULL ," + // 6: warmerCurTemp
-                "\"WARMER_SAMPLE_DATA\" INTEGER NOT NULL ," + // 7: warmerSampleData
-                "\"WARMER_RATE_POWER\" INTEGER NOT NULL ," + // 8: warmerRatePower
-                "\"WARMER_CUR_RUN_ROATE_POWER\" INTEGER NOT NULL ," + // 9: warmerCurRunRoatePower
-                "\"WARMER_RUN_STATE\" INTEGER NOT NULL ," + // 10: warmerRunState
-                "\"DEVICE_STATE\" INTEGER NOT NULL ," + // 11: deviceState
-                "\"RATE_STATE\" TEXT," + // 12: rateState
-                "\"LOCK_STATE\" INTEGER NOT NULL ," + // 13: lockState
-                "\"SCREEN_STATE\" INTEGER NOT NULL ," + // 14: screenState
-                "\"CUR_RUN_STATE2\" INTEGER NOT NULL ," + // 15: curRunState2
-                "\"CUR_RUN_STATE3\" INTEGER NOT NULL ," + // 16: curRunState3
-                "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 17: timerHour
-                "\"TIMER_MIN\" INTEGER NOT NULL ," + // 18: timerMin
-                "\"CHECK_CODE\" INTEGER NOT NULL ," + // 19: checkCode
-                "\"END_CODE\" INTEGER NOT NULL );"); // 20: endCode
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
+                "\"HOUSE_ID\" INTEGER NOT NULL ," + // 1: houseId
+                "\"ROOM_ID\" INTEGER NOT NULL ," + // 2: roomId
+                "\"TYPE\" INTEGER NOT NULL ," + // 3: type
+                "\"MAC_ADDRESS\" TEXT," + // 4: macAddress
+                "\"NAME\" TEXT," + // 5: name
+                "\"TIMER_MOUDLE\" INTEGER NOT NULL ," + // 6: timerMoudle
+                "\"MCU_VERSION\" INTEGER NOT NULL ," + // 7: mcuVersion
+                "\"WARAMER_SET_TEMP\" INTEGER NOT NULL ," + // 8: waramerSetTemp
+                "\"WARMER_CUR_TEMP\" INTEGER NOT NULL ," + // 9: warmerCurTemp
+                "\"WARMER_SAMPLE_DATA\" INTEGER NOT NULL ," + // 10: warmerSampleData
+                "\"WARMER_RATE_POWER\" INTEGER NOT NULL ," + // 11: warmerRatePower
+                "\"WARMER_CUR_RUN_ROATE_POWER\" INTEGER NOT NULL ," + // 12: warmerCurRunRoatePower
+                "\"WARMER_RUN_STATE\" INTEGER NOT NULL ," + // 13: warmerRunState
+                "\"DEVICE_STATE\" INTEGER NOT NULL ," + // 14: deviceState
+                "\"RATE_STATE\" TEXT," + // 15: rateState
+                "\"LOCK_STATE\" INTEGER NOT NULL ," + // 16: lockState
+                "\"SCREEN_STATE\" INTEGER NOT NULL ," + // 17: screenState
+                "\"CUR_RUN_STATE2\" INTEGER NOT NULL ," + // 18: curRunState2
+                "\"CUR_RUN_STATE3\" INTEGER NOT NULL ," + // 19: curRunState3
+                "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 20: timerHour
+                "\"TIMER_MIN\" INTEGER NOT NULL ," + // 21: timerMin
+                "\"CHECK_CODE\" INTEGER NOT NULL ," + // 22: checkCode
+                "\"END_CODE\" INTEGER NOT NULL );"); // 23: endCode
     }
 
     /** Drops the underlying database table. */
@@ -97,34 +103,41 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getType());
+        stmt.bindLong(2, entity.getHouseId());
+        stmt.bindLong(3, entity.getRoomId());
+        stmt.bindLong(4, entity.getType());
  
         String macAddress = entity.getMacAddress();
         if (macAddress != null) {
-            stmt.bindString(3, macAddress);
+            stmt.bindString(5, macAddress);
         }
-        stmt.bindLong(4, entity.getTimerMoudle());
-        stmt.bindLong(5, entity.getMcuVersion());
-        stmt.bindLong(6, entity.getWaramerSetTemp());
-        stmt.bindLong(7, entity.getWarmerCurTemp());
-        stmt.bindLong(8, entity.getWarmerSampleData());
-        stmt.bindLong(9, entity.getWarmerRatePower());
-        stmt.bindLong(10, entity.getWarmerCurRunRoatePower());
-        stmt.bindLong(11, entity.getWarmerRunState());
-        stmt.bindLong(12, entity.getDeviceState());
+ 
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(6, name);
+        }
+        stmt.bindLong(7, entity.getTimerMoudle());
+        stmt.bindLong(8, entity.getMcuVersion());
+        stmt.bindLong(9, entity.getWaramerSetTemp());
+        stmt.bindLong(10, entity.getWarmerCurTemp());
+        stmt.bindLong(11, entity.getWarmerSampleData());
+        stmt.bindLong(12, entity.getWarmerRatePower());
+        stmt.bindLong(13, entity.getWarmerCurRunRoatePower());
+        stmt.bindLong(14, entity.getWarmerRunState());
+        stmt.bindLong(15, entity.getDeviceState());
  
         String rateState = entity.getRateState();
         if (rateState != null) {
-            stmt.bindString(13, rateState);
+            stmt.bindString(16, rateState);
         }
-        stmt.bindLong(14, entity.getLockState());
-        stmt.bindLong(15, entity.getScreenState());
-        stmt.bindLong(16, entity.getCurRunState2());
-        stmt.bindLong(17, entity.getCurRunState3());
-        stmt.bindLong(18, entity.getTimerHour());
-        stmt.bindLong(19, entity.getTimerMin());
-        stmt.bindLong(20, entity.getCheckCode());
-        stmt.bindLong(21, entity.getEndCode());
+        stmt.bindLong(17, entity.getLockState());
+        stmt.bindLong(18, entity.getScreenState());
+        stmt.bindLong(19, entity.getCurRunState2());
+        stmt.bindLong(20, entity.getCurRunState3());
+        stmt.bindLong(21, entity.getTimerHour());
+        stmt.bindLong(22, entity.getTimerMin());
+        stmt.bindLong(23, entity.getCheckCode());
+        stmt.bindLong(24, entity.getEndCode());
     }
 
     @Override
@@ -135,34 +148,41 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         if (id != null) {
             stmt.bindLong(1, id);
         }
-        stmt.bindLong(2, entity.getType());
+        stmt.bindLong(2, entity.getHouseId());
+        stmt.bindLong(3, entity.getRoomId());
+        stmt.bindLong(4, entity.getType());
  
         String macAddress = entity.getMacAddress();
         if (macAddress != null) {
-            stmt.bindString(3, macAddress);
+            stmt.bindString(5, macAddress);
         }
-        stmt.bindLong(4, entity.getTimerMoudle());
-        stmt.bindLong(5, entity.getMcuVersion());
-        stmt.bindLong(6, entity.getWaramerSetTemp());
-        stmt.bindLong(7, entity.getWarmerCurTemp());
-        stmt.bindLong(8, entity.getWarmerSampleData());
-        stmt.bindLong(9, entity.getWarmerRatePower());
-        stmt.bindLong(10, entity.getWarmerCurRunRoatePower());
-        stmt.bindLong(11, entity.getWarmerRunState());
-        stmt.bindLong(12, entity.getDeviceState());
+ 
+        String name = entity.getName();
+        if (name != null) {
+            stmt.bindString(6, name);
+        }
+        stmt.bindLong(7, entity.getTimerMoudle());
+        stmt.bindLong(8, entity.getMcuVersion());
+        stmt.bindLong(9, entity.getWaramerSetTemp());
+        stmt.bindLong(10, entity.getWarmerCurTemp());
+        stmt.bindLong(11, entity.getWarmerSampleData());
+        stmt.bindLong(12, entity.getWarmerRatePower());
+        stmt.bindLong(13, entity.getWarmerCurRunRoatePower());
+        stmt.bindLong(14, entity.getWarmerRunState());
+        stmt.bindLong(15, entity.getDeviceState());
  
         String rateState = entity.getRateState();
         if (rateState != null) {
-            stmt.bindString(13, rateState);
+            stmt.bindString(16, rateState);
         }
-        stmt.bindLong(14, entity.getLockState());
-        stmt.bindLong(15, entity.getScreenState());
-        stmt.bindLong(16, entity.getCurRunState2());
-        stmt.bindLong(17, entity.getCurRunState3());
-        stmt.bindLong(18, entity.getTimerHour());
-        stmt.bindLong(19, entity.getTimerMin());
-        stmt.bindLong(20, entity.getCheckCode());
-        stmt.bindLong(21, entity.getEndCode());
+        stmt.bindLong(17, entity.getLockState());
+        stmt.bindLong(18, entity.getScreenState());
+        stmt.bindLong(19, entity.getCurRunState2());
+        stmt.bindLong(20, entity.getCurRunState3());
+        stmt.bindLong(21, entity.getTimerHour());
+        stmt.bindLong(22, entity.getTimerMin());
+        stmt.bindLong(23, entity.getCheckCode());
+        stmt.bindLong(24, entity.getEndCode());
     }
 
     @Override
@@ -174,26 +194,29 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
     public DeviceChild readEntity(Cursor cursor, int offset) {
         DeviceChild entity = new DeviceChild( //
             cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0), // id
-            cursor.getInt(offset + 1), // type
-            cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2), // macAddress
-            cursor.getInt(offset + 3), // timerMoudle
-            cursor.getInt(offset + 4), // mcuVersion
-            cursor.getInt(offset + 5), // waramerSetTemp
-            cursor.getInt(offset + 6), // warmerCurTemp
-            cursor.getInt(offset + 7), // warmerSampleData
-            cursor.getInt(offset + 8), // warmerRatePower
-            cursor.getInt(offset + 9), // warmerCurRunRoatePower
-            cursor.getInt(offset + 10), // warmerRunState
-            cursor.getInt(offset + 11), // deviceState
-            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // rateState
-            cursor.getInt(offset + 13), // lockState
-            cursor.getInt(offset + 14), // screenState
-            cursor.getInt(offset + 15), // curRunState2
-            cursor.getInt(offset + 16), // curRunState3
-            cursor.getInt(offset + 17), // timerHour
-            cursor.getInt(offset + 18), // timerMin
-            cursor.getInt(offset + 19), // checkCode
-            cursor.getInt(offset + 20) // endCode
+            cursor.getLong(offset + 1), // houseId
+            cursor.getLong(offset + 2), // roomId
+            cursor.getInt(offset + 3), // type
+            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // macAddress
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // name
+            cursor.getInt(offset + 6), // timerMoudle
+            cursor.getInt(offset + 7), // mcuVersion
+            cursor.getInt(offset + 8), // waramerSetTemp
+            cursor.getInt(offset + 9), // warmerCurTemp
+            cursor.getInt(offset + 10), // warmerSampleData
+            cursor.getInt(offset + 11), // warmerRatePower
+            cursor.getInt(offset + 12), // warmerCurRunRoatePower
+            cursor.getInt(offset + 13), // warmerRunState
+            cursor.getInt(offset + 14), // deviceState
+            cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15), // rateState
+            cursor.getInt(offset + 16), // lockState
+            cursor.getInt(offset + 17), // screenState
+            cursor.getInt(offset + 18), // curRunState2
+            cursor.getInt(offset + 19), // curRunState3
+            cursor.getInt(offset + 20), // timerHour
+            cursor.getInt(offset + 21), // timerMin
+            cursor.getInt(offset + 22), // checkCode
+            cursor.getInt(offset + 23) // endCode
         );
         return entity;
     }
@@ -201,26 +224,29 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
     @Override
     public void readEntity(Cursor cursor, DeviceChild entity, int offset) {
         entity.setId(cursor.isNull(offset + 0) ? null : cursor.getLong(offset + 0));
-        entity.setType(cursor.getInt(offset + 1));
-        entity.setMacAddress(cursor.isNull(offset + 2) ? null : cursor.getString(offset + 2));
-        entity.setTimerMoudle(cursor.getInt(offset + 3));
-        entity.setMcuVersion(cursor.getInt(offset + 4));
-        entity.setWaramerSetTemp(cursor.getInt(offset + 5));
-        entity.setWarmerCurTemp(cursor.getInt(offset + 6));
-        entity.setWarmerSampleData(cursor.getInt(offset + 7));
-        entity.setWarmerRatePower(cursor.getInt(offset + 8));
-        entity.setWarmerCurRunRoatePower(cursor.getInt(offset + 9));
-        entity.setWarmerRunState(cursor.getInt(offset + 10));
-        entity.setDeviceState(cursor.getInt(offset + 11));
-        entity.setRateState(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
-        entity.setLockState(cursor.getInt(offset + 13));
-        entity.setScreenState(cursor.getInt(offset + 14));
-        entity.setCurRunState2(cursor.getInt(offset + 15));
-        entity.setCurRunState3(cursor.getInt(offset + 16));
-        entity.setTimerHour(cursor.getInt(offset + 17));
-        entity.setTimerMin(cursor.getInt(offset + 18));
-        entity.setCheckCode(cursor.getInt(offset + 19));
-        entity.setEndCode(cursor.getInt(offset + 20));
+        entity.setHouseId(cursor.getLong(offset + 1));
+        entity.setRoomId(cursor.getLong(offset + 2));
+        entity.setType(cursor.getInt(offset + 3));
+        entity.setMacAddress(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
+        entity.setName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setTimerMoudle(cursor.getInt(offset + 6));
+        entity.setMcuVersion(cursor.getInt(offset + 7));
+        entity.setWaramerSetTemp(cursor.getInt(offset + 8));
+        entity.setWarmerCurTemp(cursor.getInt(offset + 9));
+        entity.setWarmerSampleData(cursor.getInt(offset + 10));
+        entity.setWarmerRatePower(cursor.getInt(offset + 11));
+        entity.setWarmerCurRunRoatePower(cursor.getInt(offset + 12));
+        entity.setWarmerRunState(cursor.getInt(offset + 13));
+        entity.setDeviceState(cursor.getInt(offset + 14));
+        entity.setRateState(cursor.isNull(offset + 15) ? null : cursor.getString(offset + 15));
+        entity.setLockState(cursor.getInt(offset + 16));
+        entity.setScreenState(cursor.getInt(offset + 17));
+        entity.setCurRunState2(cursor.getInt(offset + 18));
+        entity.setCurRunState3(cursor.getInt(offset + 19));
+        entity.setTimerHour(cursor.getInt(offset + 20));
+        entity.setTimerMin(cursor.getInt(offset + 21));
+        entity.setCheckCode(cursor.getInt(offset + 22));
+        entity.setEndCode(cursor.getInt(offset + 23));
      }
     
     @Override

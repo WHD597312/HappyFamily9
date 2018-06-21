@@ -261,7 +261,6 @@ public class LoginActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     Log.i("fffffffft", "--->: " + code);
-
 //                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
 
                     if (code == 100) {
@@ -342,8 +341,6 @@ public class LoginActivity extends AppCompatActivity {
                 case 1005:
                     Utils.showToast(LoginActivity.this, "查询失败");
                     break;
-
-
                 case 100:
                     Utils.showToast(LoginActivity.this, "请求成功");
                     if (Id != -1) {

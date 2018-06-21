@@ -38,6 +38,7 @@ import okhttp3.Response;
 public class HttpUtils {
 
 
+    public static String ipAddress="http://47.98.131.11:8084";
     public static String getInputStream(InputStream is) {
         String result = null;
         byte[] buffer = new byte[1024 * 10];
@@ -189,8 +190,12 @@ public class HttpUtils {
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE),jsonObject.toJSONString());
 
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("login", 0);
+            String token =my.getString("token","");
             Request request = new Request.Builder()
                     .addHeader("client","android-xr")
+                    .addHeader("authorization",token)
                     .url(url)
                     .post(requestBody)
                     .build();

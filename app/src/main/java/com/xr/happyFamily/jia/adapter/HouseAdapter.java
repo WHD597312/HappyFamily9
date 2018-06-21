@@ -10,11 +10,9 @@ import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
-import com.squareup.picasso.Picasso;
+
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.FuWuActivity;
-import com.xr.happyFamily.bao.ShopXQActivity;
-import com.xr.happyFamily.bean.OrderBean;
+
 import com.xr.happyFamily.jia.pojo.Hourse;
 
 import java.util.List;

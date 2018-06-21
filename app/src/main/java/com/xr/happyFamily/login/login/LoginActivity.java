@@ -245,7 +245,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
-    long id;
+    long Id=-1;
     class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -289,6 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                             for (int j = 0; j < roomDevices.length(); j++) {
                                JSONObject roomObject=roomDevices.getJSONObject(j);
                                int roomId=roomObject.getInt("roomId");
+                                Id=roomId;
                                String roomName=roomObject.getString("roomName");
                                int houseId=roomObject.getInt("houseId");
                                String  roomType=roomObject.getString("roomType");
@@ -345,7 +346,7 @@ public class LoginActivity extends AppCompatActivity {
 
                 case 100:
                     Utils.showToast(LoginActivity.this, "请求成功");
-                    if (id != -1) {
+                    if (Id == -1) {
                         Intent intent = new Intent(LoginActivity.this, MyPaperActivity.class);
                         intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(intent);

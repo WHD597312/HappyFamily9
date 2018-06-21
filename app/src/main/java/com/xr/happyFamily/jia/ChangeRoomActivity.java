@@ -64,6 +64,7 @@ public class ChangeRoomActivity extends AppCompatActivity {
                         Intent intent1 = new Intent();
                         ChangeRoomActivity.this.setResult(1,intent1);
                         finish();
+                        
 //                        Intent intent = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
 //                        intent.putExtra("item",1);
 //                        startActivity(intent);

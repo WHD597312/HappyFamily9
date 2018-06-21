@@ -265,6 +265,7 @@ public class LoginActivity extends AppCompatActivity {
 //                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
 
                     if (code == 100) {
+
                         JSONArray returnData=jsonObject.getJSONArray("returnData");
                         for (int i = 0; i < returnData.length(); i++)
                         {

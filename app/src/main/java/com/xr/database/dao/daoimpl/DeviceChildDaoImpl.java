@@ -41,7 +41,9 @@ public class DeviceChildDaoImpl {
     public void delete(DeviceChild deviceChild){
         deviceChildDao.delete(deviceChild);
     }
-
+    public void  deleteAll(){
+        deviceChildDao.deleteAll();
+    }
     /**
      * 更新设备
      * @param deviceChild

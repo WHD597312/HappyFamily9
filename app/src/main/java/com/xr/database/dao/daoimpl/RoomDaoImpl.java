@@ -57,4 +57,7 @@ public class RoomDaoImpl {
     public List<Room> findByAllRoom(){
         return roomDao.loadAll();
     }
+    public void  deleteAll(){
+        roomDao.deleteAll();
+    }
 }

@@ -57,4 +57,7 @@ public class HourseDaoImpl {
     public List<Hourse> findAllHouse(){
         return hourseDao.loadAll();
     }
+    public void  deleteAll(){
+        hourseDao.deleteAll();
+    }
 }

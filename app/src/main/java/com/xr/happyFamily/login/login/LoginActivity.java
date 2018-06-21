@@ -14,24 +14,17 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-
-
 import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
-import com.xr.database.dao.daoimpl.RoomDaoImpl1;
 import com.xr.happyFamily.R;
-
 import com.xr.happyFamily.jia.HomepageActivity;
-
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
-
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.jia.pojo.Room1;
-
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.login.util.Utils;
@@ -68,6 +61,7 @@ public class LoginActivity extends AppCompatActivity {
     boolean isHideFirst = true;
     private HourseDaoImpl hourseDao;
     private RoomDaoImpl roomDao;
+    private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
 
     @Override
@@ -90,6 +84,7 @@ public class LoginActivity extends AppCompatActivity {
         et_pswd.setText(preferences.getString("password", ""));
         hourseDao=new HourseDaoImpl(getApplicationContext());
         roomDao=new RoomDaoImpl(getApplicationContext());
+        deviceChildDao= new DeviceChildDaoImpl(getApplicationContext());
     }
 
     SharedPreferences preferences;
@@ -265,7 +260,9 @@ public class LoginActivity extends AppCompatActivity {
 //                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
 
                     if (code == 100) {
-
+                        hourseDao.deleteAll();
+                        roomDao.deleteAll();
+                        deviceChildDao.deleteAll();
                         JSONArray returnData=jsonObject.getJSONArray("returnData");
                         for (int i = 0; i < returnData.length(); i++)
                         {

@@ -88,7 +88,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.login.LoginActivity">
+        <activity android:name=".jia.ManagementActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -118,7 +118,7 @@
         <activity android:name=".jia.AddhourseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".jia.ManagementActivity" />
+        <!--<activity android:name=".jia.ManagementActivity" />-->
         <activity android:name=".jia.ChangeEquipmentActivity" />
         <activity
             android:name=".jia.MainActivity"

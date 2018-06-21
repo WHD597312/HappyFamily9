@@ -19,13 +19,13 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ManagementActivity extends AppCompatActivity {
-    private String[] localCartoonText = {"厨房", "卧室", "客厅", "卫生间","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房"};
-    private Integer[] img ={R.mipmap.chufang3x,R.mipmap.house_ws,R.mipmap.house_kt,R.mipmap.house_wsj,
-            R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,
-            R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,
-            R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x};
+    private String[] localCartoonText = {"厨房", "卧室", "客厅","餐厅", "卫生间","浴室","儿童房","婴儿房","活动室","媒体房",
+            "办公室","休闲室","书房","工作室","衣帽间","后院"};
+    private Integer[] img ={R.mipmap.house_cf,R.mipmap.house_ws,R.mipmap.house_kt,R.mipmap.house_ct,
+            R.mipmap.house_wsj, R.mipmap.house_ys,R.mipmap.house_etf,R.mipmap.house_yef,
+            R.mipmap.house_hds, R.mipmap.house_mt,R.mipmap.house_bgs,R.mipmap.house_xxs,
+            R.mipmap.house_sf, R.mipmap.house_gzs,R.mipmap.house_ym,R.mipmap.house_hy};
     private GridView mGridView = null;
-    
     private ManagementGridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     Unbinder unbinder;

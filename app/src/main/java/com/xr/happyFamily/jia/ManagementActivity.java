@@ -25,6 +25,7 @@ public class ManagementActivity extends AppCompatActivity {
             R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,
             R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x};
     private GridView mGridView = null;
+    
     private ManagementGridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     Unbinder unbinder;

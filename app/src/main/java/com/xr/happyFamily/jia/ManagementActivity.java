@@ -19,8 +19,8 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ManagementActivity extends AppCompatActivity {
-    private String[] localCartoonText = {"厨房", "厨房", "厨房", "厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房"};
-    private Integer[] img ={R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,
+    private String[] localCartoonText = {"厨房", "卧室", "客厅", "卫生间","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房","厨房"};
+    private Integer[] img ={R.mipmap.chufang3x,R.mipmap.house_ws,R.mipmap.house_kt,R.mipmap.house_wsj,
             R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,
             R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,
             R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x,R.mipmap.chufang3x};

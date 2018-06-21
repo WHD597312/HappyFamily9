@@ -60,9 +60,10 @@ public class MyPaperActivity extends AppCompatActivity {
     ArrayList str1;
     ArrayList str2;
     int count=0;
-
-
-
+    int count1=0;
+    int count2=0;
+    int count3=0;
+    int count4=0;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -96,32 +97,32 @@ public class MyPaperActivity extends AppCompatActivity {
                 }
             }
             if ("阳台".equals(str2.get(i))){
-                count++;
-                if (count>0){
-                    count--;
-                    views.add( new RoomFragment());
+                count1++;
+                if (count1>0){
+                    count1--;
+                    views.add( new BalconyFragment());
                 }
             }
             if ("客厅".equals(str2.get(i))){
-                count++;
-                if (count>0){
-                    count--;
-                    views.add( new RoomFragment());
+                count2++;
+                if (count2>0){
+                    count2--;
+                    views.add( new LivingFragment());
                 }
 
             }
                 if ("厨房".equals(str2.get(i))) {
-                    count++;
-                    if (count > 0) {
-                        count--;
-                        views.add(new RoomFragment());
+                    count3++;
+                    if (count3 > 0) {
+                        count3--;
+                        views.add(new KitchenFragment());
                     }
                 }
             if ("卫生间".equals(str2.get(i))) {
-                count++;
-                if (count > 0) {
-                    count--;
-                    views.add(new RoomFragment());
+                count4++;
+                if (count4 > 0) {
+                    count4--;
+                    views.add(new BathroomFragment());
                 }
             }
         }

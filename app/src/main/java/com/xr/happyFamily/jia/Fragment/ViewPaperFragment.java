@@ -8,6 +8,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
@@ -20,7 +21,6 @@ import android.widget.TextView;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
-import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
 
@@ -31,7 +31,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class BathroomFragment extends Fragment {
+public class ViewPaperFragment extends Fragment {
     private ImageButton mLeftMenu;
     private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
     private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
@@ -39,23 +39,13 @@ public class BathroomFragment extends Fragment {
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     Unbinder unbinder;
-//    @BindView(R.id.bt_balcony_add)
-//    Button buttonadd;
-//    @BindView(R.id.tv_bathroom_gl)
-//    TextView textViewgl;
-//
-//    @BindView(R.id.gv_bath_home)
-//    com.xr.happyFamily.jia.MyGridview mGridView;
-//    @BindView(R.id.bathroom_li)
-//    LinearLayout li;
-//    String roomName,roomType,roomId;
     @BindView(R.id.bt_balcony_add)
     Button buttonadd;
     @BindView(R.id.tv_balcony_gl)
     TextView textViewgl;
     @BindView(R.id.balcony_li)
     LinearLayout li;
-    String roomName,roomType,roomId;
+
     @BindView(R.id.gv_balcony_home)
     com.xr.happyFamily.jia.MyGridview mGridView;
     @Override
@@ -65,11 +55,6 @@ public class BathroomFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home_balcony, container, false);
 
         unbinder=ButterKnife.bind(this,view);
-        android.support.percent.PercentRelativeLayout percentRelativeLayout=
-                ( android.support.percent.PercentRelativeLayout)view.findViewById(R.id.pr_view);
-        TextView textViewr = (TextView) view.findViewById(R.id.tv_roomname);
-        percentRelativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_bathroom));
-        textViewr.setText(roomName);
         mGridData = new ArrayList<>();
         for (int i = 0; i < img.length; i++) {
             Equipment item = new Equipment();
@@ -79,61 +64,45 @@ public class BathroomFragment extends Fragment {
         }
         Bundle bundle=getArguments();
         if (bundle!=null){
-             roomName=bundle.getString("roomName");
-             roomType=bundle.getString("roomType");
-             roomId=bundle.getString("roomId");
-            textViewr.setText(roomName);
+            String roomName=bundle.getString("roomName");
+            String roomType=bundle.getString("roomType");
+            String roomId=bundle.getString("roomId");
+            Log.i("dddddd1", "------->: "+roomName+"....."+roomType+"....."+roomId);
         }
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
-        buttonadd.setOnClickListener(new View.OnClickListener()
+        buttonadd.setOnClickListener(new OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+            }
+        });
+        li.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
 
-//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
-                Intent intent = new Intent();
-                intent.putExtra("roomId",roomId);
-                startActivityForResult(intent,2);
-                Log.i("dddddd2", "------->: "+roomName+"....."+roomType+"....."+roomId);
-            }
-        });
-        li.setOnClickListener(new View.OnClickListener()
-        {
-            @Override
-            public void onClick(View v)
-            {
-                startActivityForResult(new Intent(getActivity(), ChangeRoomActivity.class),3);
+                startActivityForResult(new Intent(getActivity(), ChangeRoomActivity.class),5);
+//                startActivity();
             }
         });
         return view;
 
     }
-//    @OnClick({R.id.tv_bathroom_gl})
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.tv_bathroom_gl:
-//                showPopupMenu(textViewgl);
-//                break;
-//
-//
-//
-//        }
-//
-//    }
-@OnClick({R.id.tv_balcony_gl,R.id.iv_home_fh})
-public void onClick(View view) {
-    switch (view.getId()) {
-        case R.id.tv_balcony_gl:
-            showPopupMenu(textViewgl);
-            break;
+    @OnClick({R.id.tv_balcony_gl})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.tv_balcony_gl:
+                showPopupMenu(textViewgl);
+                break;
 
-        case R.id.iv_home_fh:
-            startActivityForResult(new Intent(getActivity(), MyPaperActivity.class),5);
-            break;
 
-    }
+
+        }
+
     }
     String title;
     private void showPopupMenu(View view) {
@@ -147,7 +116,7 @@ public void onClick(View view) {
             public boolean onMenuItemClick(MenuItem item) {
 //                Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
 //                Log.i("title", "---->: "+item.getTitle());
-                title = String.valueOf(item.getTitle());
+              title = String.valueOf(item.getTitle());
                 return false;
             }
         });
@@ -182,11 +151,10 @@ public void onClick(View view) {
 
         popupMenu.show();
     }
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int a=4;
-        int b=a;
 
         switch (resultCode) {
 
@@ -227,11 +195,10 @@ public void onClick(View view) {
             case 5:
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()
-                        .replace(R.id.fragment_container ,new BalconyFragment(), null)
+                        .replace(R.id.fragment_container ,new ViewPaperFragment(), null)
                         .addToBackStack(null)
                         .commit();
                 break;
         }
-
     }
 }

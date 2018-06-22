@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,7 +20,9 @@ import com.xr.happyFamily.jia.AddRoomActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.HourseActivity;
+import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
 import java.util.ArrayList;
@@ -44,6 +47,7 @@ public class homeFragment extends Fragment {
     com.xr.happyFamily.jia.MyGridview mGridView;
     @BindView(R.id.gv_home_my1)
     com.xr.happyFamily.jia.MyGridview mGridView1;
+    String roomName,roomType,roomId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -57,6 +61,13 @@ public class homeFragment extends Fragment {
             item.setImgeId(img[i]);
             mGridData.add(item);
         }
+        Bundle bundle=getArguments();
+        if (bundle!=null){
+        roomName=bundle.getString("roomName");
+         roomType=bundle.getString("roomType");
+         roomId=bundle.getString("roomId");
+
+        }
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
         mGridView1.setAdapter(mGridViewAdapter);
@@ -65,7 +76,9 @@ public class homeFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent=new Intent(getActivity(), ManagementActivity.class);
+                Log.i("dddddd6", "------->: "+roomName+"....."+roomType+"....."+roomId);
+                startActivity(intent);
             }
         });
 
@@ -75,7 +88,8 @@ public class homeFragment extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_change:
-                startActivity(new Intent(getActivity(), AddRoomActivity.class));
+
+                startActivity(new Intent(getActivity(), ChangeRoomActivity.class));
                 break;
             case R.id.tv_my_hourse:
                 startActivity(new Intent(getActivity(), HourseActivity.class));

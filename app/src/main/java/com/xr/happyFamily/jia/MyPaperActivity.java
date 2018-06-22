@@ -3,10 +3,14 @@ package com.xr.happyFamily.jia;
 
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
+import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
@@ -30,6 +34,7 @@ import android.support.v4.app.Fragment;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
@@ -38,6 +43,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
@@ -45,7 +51,7 @@ public class MyPaperActivity extends AppCompatActivity {
     private ViewPager mViewpaper;
     private List<Fragment> views;
     private LayoutInflater inflater;
-    private TabFragmentPagerAdapter adapter;
+    private FragmentPagerAdapter adapter;
     private RoomDaoImpl roomDao;
     private List<Room> rooms;
     private Handler handler;
@@ -56,15 +62,18 @@ public class MyPaperActivity extends AppCompatActivity {
     Room room;
     String roomName;
     String roomType;
+    long roomId;
     Context context;
     ArrayList str1;
     ArrayList str2;
+    ArrayList str3;
     int count=0;
+    int z=0;
     int count1=0;
     int count2=0;
     int count3=0;
     int count4=0;
-
+    int postion;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewpape);
@@ -72,57 +81,96 @@ public class MyPaperActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         unbinder = ButterKnife.bind(this);
-        str1=new ArrayList();
-        str2=new ArrayList();
+      str1=new ArrayList();
+       str2=new ArrayList();
+        str3=new ArrayList();
         roomDao=new RoomDaoImpl(getApplicationContext());
         rooms = roomDao.findByAllRoom();
+        str1.add("首页");
+        str2.add("首页");
+        str3.add("25");
         for(int i = 0 ; i < rooms.size() ; i++) {
           room = rooms.get(i);
           roomName= room.getRoomName();
           roomType= room.getRoomType();
+          roomId=room.getRoomId();
           str1.add(roomName);
           str2.add(roomType);
+          str3.add(roomId);
         }
 
-        Log.i("room", "---->: "+str1+".........."+str2);
+
+        Log.i("room", "---->: "+str1+".........."+str2+"...."+str3);
         views = new ArrayList<>();
-        views.add(new homeFragment());
-        for (int i=0;i<str2.size();i++){
-            if ("卧室".equals(str2.get(i))){
-                count++;
-                if (count>0){
-                    count--;
-                    views.add( new RoomFragment());
-                }
-            }
-            if ("阳台".equals(str2.get(i))){
-                count1++;
-                if (count1>0){
-                    count1--;
-                    views.add( new BalconyFragment());
-                }
-            }
-            if ("客厅".equals(str2.get(i))){
-                count2++;
-                if (count2>0){
-                    count2--;
-                    views.add( new LivingFragment());
-                }
+        for (int i=0;i<str3.size();i++){
+            Log.i("22222222", "onCreate:---> "+i+"...."+str2.get(i));
+            if ("首页".equals(str2.get(i))){
+                Bundle bundle=new Bundle();
+                bundle.putString("roomName", "首页");
+                bundle.putString("roomType", "首页");
+                bundle.putString("roomId","25");
+                homeFragment homeFragment=new homeFragment();
+                homeFragment.setArguments(bundle);
+                views.add(homeFragment);
+
 
             }
-                if ("厨房".equals(str2.get(i))) {
-                    count3++;
-                    if (count3 > 0) {
-                        count3--;
-                        views.add(new KitchenFragment());
-                    }
-                }
-            if ("卫生间".equals(str2.get(i))) {
-                count4++;
-                if (count4 > 0) {
-                    count4--;
-                    views.add(new BathroomFragment());
-                }
+            else if ("厨房".equals(str2.get(i))) {
+
+                Bundle bundle=new Bundle();
+                bundle.putString("roomName",str1.get(i).toString());
+                bundle.putString("roomType",str2.get(i).toString());
+                bundle.putString("roomId",str3.get(i).toString());
+                KitchenFragment kitchenFragment=new KitchenFragment();
+                kitchenFragment.setArguments(bundle);
+                views.add(kitchenFragment);
+
+            }
+           else if ("卧室".equals(str2.get(i))){
+                Bundle bundle=new Bundle();
+                bundle.putString("roomName",str1.get(i).toString());
+                bundle.putString("roomType",str2.get(i).toString());
+                bundle.putString("roomId",str3.get(i).toString());
+                RoomFragment roomFragmen=new RoomFragment();
+                roomFragmen.setArguments(bundle);
+                views.add( roomFragmen);
+
+
+            }
+            else if ("阳台".equals(str2.get(i))){
+                Bundle bundle=new Bundle();
+                bundle.putString("roomName",str1.get(i).toString());
+                bundle.putString("roomType",str2.get(i).toString());
+                bundle.putString("roomId",str3.get(i).toString());
+                BalconyFragment balconyFragment=new BalconyFragment();
+                balconyFragment.setArguments(bundle);
+
+                views.add( balconyFragment);
+
+
+
+            }
+            else if ("客厅".equals(str2.get(i))){
+                Bundle bundle=new Bundle();
+                bundle.putString("roomName",str1.get(i).toString());
+                bundle.putString("roomType",str2.get(i).toString());
+                bundle.putString("roomId",str3.get(i).toString());
+                LivingFragment livingFragment=new LivingFragment();
+                livingFragment.setArguments(bundle);
+                views.add( livingFragment);
+
+
+            }
+
+            else if ("卫生间".equals(str2.get(i))) {
+                Bundle bundle=new Bundle();
+                bundle.putString("roomName",str1.get(i).toString());
+                bundle.putString("roomType",str2.get(i).toString());
+                bundle.putString("roomId",str3.get(i).toString());
+                BathroomFragment bathroomFragment=new BathroomFragment();
+                bathroomFragment.setArguments(bundle);
+                    views.add(bathroomFragment);
+
             }
         }
 
@@ -131,28 +179,71 @@ public class MyPaperActivity extends AppCompatActivity {
 //        views.add(new RoomFragment());
 //        views.add(new BathroomFragment());
 //        views.add(new BalconyFragment());
-        adapter = new TabFragmentPagerAdapter(context,getSupportFragmentManager(), views);
+        adapter = new TabFragmentPagerAdapter(getSupportFragmentManager(), views);
         myViewPager.setAdapter(adapter);
         myViewPager.setCurrentItem(0);  //初始化显示第一个页面
 
-//        Bundle bundle=getIntent().getExtras();
-//        int item =bundle.getInt ("item");
+        Log.e("ppppp", "onStart:--> "+postion );
+//
+        myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+            int i = (int) position;
+
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+
+            }
+        });
 
 
     }
-    public void AddFragment() {
-//        views.add();
-        adapter.notifyDataSetChanged();
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (resultCode) {
+
+            case 1:
+
+
+
+                break;
+            case 2:
+
+
+                break;
+            case 3:
+
+
+                break;
+            case 4:
+
+
+                break;
+            case 5:
+                myViewPager.setCurrentItem(0);
+                break;
+        }
     }
 
-    public void DelFragment() {
-        views.remove(views.size()-1);
-        adapter.notifyDataSetChanged();
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
     }
-
-
-
 
 
 

@@ -39,27 +39,48 @@ public class RoomFragment extends Fragment {
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     Unbinder unbinder;
-    @BindView(R.id.bt_room_add)
+//    @BindView(R.id.bt_balcony_add)
+//    Button buttonadd;
+//    @BindView(R.id.tv_room_gl)
+//    TextView textViewgl;
+//    @BindView(R.id.gv_room_home)
+//    com.xr.happyFamily.jia.MyGridview mGridView;
+//    @BindView(R.id.room_li)
+//    LinearLayout li;
+//    String roomName,roomType,roomId;
+    @BindView(R.id.bt_balcony_add)
     Button buttonadd;
-    @BindView(R.id.tv_room_gl)
+    @BindView(R.id.tv_balcony_gl)
     TextView textViewgl;
-    @BindView(R.id.gv_room_home)
-    com.xr.happyFamily.jia.MyGridview mGridView;
-    @BindView(R.id.room_li)
+    @BindView(R.id.balcony_li)
     LinearLayout li;
+    String roomName,roomType,roomId;
+    @BindView(R.id.gv_balcony_home)
+    com.xr.happyFamily.jia.MyGridview mGridView;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
-        View view = inflater.inflate(R.layout.activity_home_room, container, false);
-
+        View view = inflater.inflate(R.layout.activity_home_balcony, container, false);
         unbinder=ButterKnife.bind(this,view);
+        android.support.percent.PercentRelativeLayout percentRelativeLayout=
+                ( android.support.percent.PercentRelativeLayout)view.findViewById(R.id.pr_view);
+        TextView textViewr = (TextView) view.findViewById(R.id.tv_roomname);
+        percentRelativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_room));
+
         mGridData = new ArrayList<>();
         for (int i = 0; i < img.length; i++) {
             Equipment item = new Equipment();
             item.setName(localCartoonText[i]);
             item.setImgeId(img[i]);
             mGridData.add(item);
+        }
+        Bundle bundle=getArguments();
+        if (bundle!=null){
+             roomName=bundle.getString("roomName");
+             roomType=bundle.getString("roomType");
+             roomId=bundle.getString("roomId");
+            textViewr.setText(roomName);
         }
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
@@ -68,7 +89,11 @@ public class RoomFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("roomId",roomId);
+                startActivityForResult(intent,5);
+                Log.i("dddddd5", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });
         li.setOnClickListener(new View.OnClickListener()
@@ -92,18 +117,31 @@ public class RoomFragment extends Fragment {
 
         return f;
     }
-    @OnClick({R.id.tv_room_gl})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.tv_room_gl:
-                showPopupMenu(textViewgl);
-                break;
+//    @OnClick({R.id.tv_room_gl})
+//    public void onClick(View view) {
+//        switch (view.getId()) {
+//            case R.id.tv_room_gl:
+//                showPopupMenu(textViewgl);
+//                break;
+//
+//
+//
+//        }
+//
+//    }
+@OnClick({R.id.tv_balcony_gl,R.id.iv_home_fh})
+public void onClick(View view) {
+    switch (view.getId()) {
+        case R.id.tv_balcony_gl:
+            showPopupMenu(textViewgl);
+            break;
 
-
-
-        }
+        case R.id.iv_home_fh:
+            startActivityForResult(new Intent(getActivity(), MyPaperActivity.class),5);
+            break;
 
     }
+}
     String title;
     private void showPopupMenu(View view) {
         // View当前PopupMenu显示的相对View的位置

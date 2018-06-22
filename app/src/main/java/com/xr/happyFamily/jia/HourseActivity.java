@@ -71,28 +71,7 @@ public class HourseActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-//        final List<HashMap<String, Object>> users = new ArrayList<>();
-//        for (int i = 0; i < 3; i++) {
-//            HashMap<String, Object> user = new HashMap<>();
-//            user.put("mhome",mhome[i]);
-//            user.put("mplace", mplace[i]);
-//
-//            users.add(user);
-//        }
-//
-//        SimpleAdapter saImageItems = new SimpleAdapter(this,
-//                users,
-//                // 数据来源
-//                R.layout.activity_home_hourseitem,//每一个user xml 相当ListView的一个组件
-//
-//                new String[] { "mhome", "mplace" },
-//                // 分别对应view 的id
-//                new int[] { R.id.tv_hourse_h});
-//        // 获取listview
-//        listView.setAdapter(saImageItems);
-//
-//        houseId = 1;
-//        new HourseAsyncTask().execute();
+
         ListAdapter = new HouseAdapter(this, hourses);
 
         recyclerView.setAdapter(ListAdapter);
@@ -111,7 +90,7 @@ public class HourseActivity extends AppCompatActivity {
         protected Integer doInBackground(Map<String, Object>... maps) {
             int code = 0;
 
-            String url = "http://192.168.168.27:8084/family/room/getExistRooms?houseId=" ;
+            String url =ip+ "/family/room/getExistRooms?houseId=" ;
             String result = HttpUtils.getOkHpptRequest(url);
 
             try {

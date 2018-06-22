@@ -24,7 +24,7 @@ android {
     compileSdkVersion 25
     defaultConfig {
         applicationId "com.xr.happyFamily"
-        minSdkVersion 15
+        minSdkVersion 21
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

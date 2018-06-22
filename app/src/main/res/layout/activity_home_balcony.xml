@@ -7,6 +7,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bg_balcony"
+    android:id="@+id/pr_view"
+
     android:orientation="vertical">
     <FrameLayout
         android:id="@+id/fragment_containerbl"
@@ -36,15 +38,14 @@
             android:layout_marginTop="@dimen/dp_12"
             android:layout_centerHorizontal="true"
             >
-        <TextView
-            android:id="@+id/tv_balcony_gl"
-            android:layout_weight="1"
+        <ImageView
+            android:id="@+id/iv_home_fh"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:text="管理"
-            android:textSize="16sp"
-            android:paddingLeft="@dimen/dp_12"
+            android:layout_weight="1"
+            android:src="@mipmap/house_house"
+            android:paddingRight="@dimen/dp_72"
+
             />
         <LinearLayout
             android:id="@+id/balcony_li"
@@ -54,6 +55,7 @@
             android:gravity="center"
             android:layout_height="wrap_content">
             <TextView
+                android:id="@+id/tv_roomname"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="阳台"
@@ -66,10 +68,17 @@
                 android:src="@mipmap/xiala3x"
                 />
         </LinearLayout>
-            <ImageView
+
+            <TextView
+                android:id="@+id/tv_balcony_gl"
+                android:layout_weight="1"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_weight="1"
+                android:textColor="@color/white"
+                android:text="管理"
+                android:textSize="16sp"
+                android:gravity="right"
+                android:paddingRight="@dimen/dp_12"
                 />
         </LinearLayout>
 
@@ -77,26 +86,29 @@
             android:id="@+id/rl_balcony"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            > <TextView
-            android:id="@+id/tv_balcony_wd1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_63"
-            android:textColor="@color/color_white"
+            android:layout_alignParentStart="true"
+            android:layout_alignParentTop="true">
 
-            />
+            <TextView
+                android:id="@+id/tv_balcony_wd1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_63"
+                android:textColor="@color/color_white"
+
+                />
 
             <TextView
                 android:id="@+id/tv_balcony_wd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tv_balcony_wd1"
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_marginTop="@dimen/dp_63"
+                android:layout_toRightOf="@id/tv_balcony_wd1"
                 android:text="室温"
-                android:textSize="10sp"
                 android:textColor="@color/color_white"
+                android:textSize="10sp"
 
                 />
 
@@ -104,10 +116,10 @@
                 android:id="@+id/tv_balcony_23"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/tv_balcony_wd"
                 android:layout_marginBottom="-7dp"
                 android:layout_marginLeft="@dimen/dp_5"
                 android:layout_toRightOf="@+id/tv_balcony_wd"
-                android:layout_alignBottom="@+id/tv_balcony_wd"
                 android:text="23"
                 android:textColor="@color/color_white"
                 android:textSize="27sp"
@@ -118,9 +130,9 @@
                 android:id="@+id/tv_balcony_c"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_balcony_23"
                 android:layout_alignBottom="@id/tv_balcony_23"
                 android:layout_marginBottom="5dp"
+                android:layout_toRightOf="@+id/tv_balcony_23"
                 android:text="℃"
                 android:textColor="@color/color_white"
 
@@ -130,12 +142,12 @@
                 android:id="@+id/tv_balcony_shi"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@+id/tv_balcony_c"
                 android:layout_alignTop="@id/tv_balcony_wd"
                 android:layout_marginLeft="@dimen/dp_12"
+                android:layout_toRightOf="@+id/tv_balcony_c"
                 android:text="湿度"
-                android:textSize="10sp"
                 android:textColor="@color/color_white"
+                android:textSize="10sp"
 
                 />
 
@@ -143,19 +155,18 @@
                 android:id="@+id/tv_balcony_sd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tv_balcony_shi"
                 android:layout_alignTop="@id/tv_balcony_23"
                 android:layout_marginLeft="@dimen/dp_5"
+                android:layout_toRightOf="@id/tv_balcony_shi"
                 android:text="30"
                 android:textColor="@color/color_white"
-                android:textSize="28sp"
-                />
+                android:textSize="28sp" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_toRightOf="@id/tv_balcony_sd"
                 android:layout_alignTop="@id/tv_balcony_c"
+                android:layout_toRightOf="@id/tv_balcony_sd"
                 android:text="％"
                 android:textColor="@color/color_white"
 
@@ -166,35 +177,35 @@
                 android:id="@+id/tv_balcony_eq"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@id/tv_balcony_sd"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_131"
                 android:text="设备"
                 android:textColor="@color/white"
-                android:textSize="20sp"
-                android:layout_below="@id/tv_balcony_sd"
-                android:layout_marginTop="@dimen/dp_131"
-                android:layout_marginLeft="@dimen/dp_12"
-                />
+                android:textSize="20sp" />
+
             <TextView
+                android:id="@+id/tv_balcony_eqe"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_balcony_eq"
+                android:layout_marginLeft="@dimen/dp_12"
                 android:text="EQUPMENT"
                 android:textColor="@color/white"
-                android:layout_marginLeft="@dimen/dp_12"
                 android:textSize="11sp"
-                android:layout_below="@+id/tv_balcony_eq"
-                android:id="@+id/tv_balcony_eqe"
 
                 />
 
             <com.xr.happyFamily.jia.MyGridview
-                android:layout_below="@id/tv_balcony_eqe"
-                android:layout_marginTop="@dimen/dp_48"
                 android:id="@+id/gv_balcony_home"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_191"
-                android:layout_marginLeft="@dimen/dp_12"
-                android:layout_marginRight="@dimen/dp_12"
+                android:layout_below="@id/tv_balcony_eqe"
                 android:layout_centerHorizontal="true"
                 android:layout_marginBottom="26dp"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_48"
                 android:columnWidth="@dimen/dp_169"
                 android:gravity="center"
                 android:horizontalSpacing="@dimen/dp_12"

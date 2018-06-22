@@ -23,6 +23,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.MyPaperActivity1;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;

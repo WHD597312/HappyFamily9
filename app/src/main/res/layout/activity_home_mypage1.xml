@@ -105,7 +105,7 @@
                 android:layout_marginLeft="@dimen/dp_12"
                 android:layout_marginTop="@dimen/dp_20"
                 android:layout_marginRight="@dimen/dp_12"
-                android:text="+ 添加设备"
+                android:text="+ 添加房间"
                 android:textColor="@color/white"
                 />
 

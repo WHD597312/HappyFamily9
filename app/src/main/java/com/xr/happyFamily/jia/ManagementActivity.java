@@ -15,19 +15,23 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.activity.QRScannerActivity;
 import com.xr.happyFamily.jia.adapter.ManagementGridViewAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -46,15 +50,18 @@ public class ManagementActivity extends AppCompatActivity {
     private ManagementGridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     String ip = "http://47.98.131.11:8084";
+//String ip = "http://192.168.168.27:8084";
+
     Unbinder unbinder;
     TitleView titleView;
     String  roomType;
     String  roomName;
     long houseId=1;
-    long roomId=1;
-    @BindView(R.id.et_managment_name)
-    EditText editTextname;
+    long roomId;
+    List<Room> rooms;
+
     int mPoistion=-1;
+    private RoomDaoImpl roomDao;
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -63,6 +70,9 @@ public class ManagementActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         unbinder = ButterKnife.bind(this);
+        roomDao= new RoomDaoImpl(getApplicationContext());
+        rooms = roomDao.findByAllRoom();
+        roomId= rooms.size()+1;
         mGridView = (GridView) findViewById(R.id.gv_management_my);
         mGridData = new ArrayList<>();
         for (int i=0; i<img.length; i++) {
@@ -76,7 +86,7 @@ public class ManagementActivity extends AppCompatActivity {
 
         mGridViewAdapter.setSelectedPosition(mPoistion);
         titleView = (TitleView) findViewById(R.id.title1);
-        titleView.setTitleText("设备管理");
+        titleView.setTitleText("添加房间");
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
 
             @Override
@@ -151,6 +161,18 @@ public class ManagementActivity extends AppCompatActivity {
                     JSONObject returnData=jsonObject.getJSONObject("returnData");
                     if (code == 100) {
 
+                        Room room = roomDao.findById((long) roomId);
+                        if (room!=null){
+                            room.setRoomId((long)roomId);
+                            room.setHouseId((int)houseId);
+                            room.setRoomType(roomType);
+                            roomDao.update(room);
+                            Log.i("dddddd11qqq1", "doInBackground:---> "+room);
+                        }else {
+                            room = new Room((long)roomId,  roomName,  (int)houseId, roomType,0);
+                            roomDao.insert(room);
+                            Log.i("dddddd1111", "doInBackground:---> "+room);
+                        }
 
                     }
 
@@ -171,21 +193,16 @@ public class ManagementActivity extends AppCompatActivity {
 
                 case 100:
 
-                    startActivity(new Intent(ManagementActivity.this, AddEquipmentActivity.class));
+                    startActivity(new Intent(ManagementActivity.this, MyPaperActivity.class));
 
                     break;
             }
         }
     }
-    @OnClick({R.id.bt_management_ok,R.id.iv_mzxing})
+    @OnClick({R.id.bt_management_ok})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_management_ok:
-               String name = editTextname.getText().toString().trim();
-                if (TextUtils.isEmpty(name)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(this, "设备名称不能为空");
-                    break;
-                }
 
                 Map<String,Object> params=new HashMap<>();
                 params.put("roomName",roomName);
@@ -195,9 +212,9 @@ public class ManagementActivity extends AppCompatActivity {
                 new ManagementActivity.AddroomAsyncTask().execute(params);
 //                startActivity(new Intent(this, AddEquipmentActivity.class));
                 break;
-            case R.id.iv_mzxing:
-                startActivity(new Intent(this, QRScannerActivity.class));
-                break;
+//            case R.id.iv_mzxing:
+//                startActivity(new Intent(this, QRScannerActivity.class));
+//                break;
         }
 
     }

@@ -185,15 +185,17 @@ public class HttpUtils {
             }
 
             Log.e("qqqqqqqqqqq",jsonObject.toString());
-
-
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE),jsonObject.toJSONString());
-
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("login", 0);
+            String token =my.getString("token","");
             Request request = new Request.Builder()
                     .addHeader("client","android-xr")
+                    .addHeader("authorization",token)
                     .url(url)
                     .post(requestBody)
                     .build();
+
 
             OkHttpClient okHttpClient=new OkHttpClient();
             Response response=okHttpClient.newCall(request).execute();

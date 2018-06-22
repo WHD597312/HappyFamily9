@@ -52,7 +52,7 @@ public class BalconyFragment extends Fragment {
     Dialog dia ;
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
-    String ip = "http://47.98.131.11:8084;";
+    String ip = "http://47.98.131.11:8084";
     Unbinder unbinder;
     @BindView(R.id.bt_balcony_add)
     Button buttonadd;
@@ -113,7 +113,10 @@ public class BalconyFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("roomId",roomId);
+                startActivityForResult(intent,1);
                 Log.i("dddddd1", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });
@@ -197,8 +200,8 @@ public class BalconyFragment extends Fragment {
         dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-                houseName = dialog.getName();
-                if (com.xr.happyFamily.login.util.Utils.isEmpty(houseName)) {
+                roomName = dialog.getName();
+                if (com.xr.happyFamily.login.util.Utils.isEmpty(roomName)) {
                     com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
 

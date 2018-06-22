@@ -89,7 +89,10 @@ public class RoomFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("roomId",roomId);
+                startActivityForResult(intent,5);
                 Log.i("dddddd5", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });

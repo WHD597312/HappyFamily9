@@ -92,7 +92,10 @@ public class BathroomFragment extends Fragment {
             public void onClick(View v)
             {
 
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("roomId",roomId);
+                startActivityForResult(intent,2);
                 Log.i("dddddd2", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });

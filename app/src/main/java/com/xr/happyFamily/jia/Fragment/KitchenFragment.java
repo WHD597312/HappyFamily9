@@ -100,7 +100,10 @@ public class KitchenFragment extends Fragment {
             public void onClick(View v)
             {
 
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("roomId",roomId);
+                startActivityForResult(intent,3);
                 Log.i("dddddd3", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });

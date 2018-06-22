@@ -95,7 +95,10 @@ public class LivingFragment extends Fragment {
             @Override
             public void onClick(View v)
             {
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+                Intent intent = new Intent();
+                intent.putExtra("roomId",roomId);
+                startActivityForResult(intent,4);
                 Log.i("dddddd4", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });

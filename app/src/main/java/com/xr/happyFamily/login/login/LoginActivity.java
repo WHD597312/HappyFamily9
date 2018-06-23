@@ -29,6 +29,7 @@ import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.login.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Mobile;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -136,6 +137,9 @@ public class LoginActivity extends AppCompatActivity {
                 String password = et_pswd.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this, "账号码不能为空");
+                    break;
+                }else if (!Mobile.isMobile(phone)) {
+                    Utils.showToast(this, "手机号码不合法");
                     break;
                 }
                 if (TextUtils.isEmpty(password)) {

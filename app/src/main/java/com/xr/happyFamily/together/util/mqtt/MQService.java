@@ -192,14 +192,16 @@ public class MQService extends Service {
             String topicName=strings[0];/**收到的主题*/
             String macAddress=null;
 
-            if (topicName.startsWith("warmer")){
+            if (topicName.startsWith("p99/warmer")){
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
             }else if (topicName.startsWith("p99")){
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
-            int type=-1;
+            int type=-1;/**产品类型*/
+            int busModel=-1;/**商业模式*/
             int timerMoudle=-1;/**定时器模式*/
-            int mcuVersion=-1;/**MCU版本*/
+            String mcuVersion=null;/**MCU版本*/
+            String wifiVersion=null;/**wifi版本*/
             int waramerSetTemp=-1;/**取暖器设定温度*/
             int warmerCurTemp=-1;/**取暖器当前温度*/
             int warmerSampleData=-1;/**取暖器采样数据*/
@@ -224,10 +226,8 @@ public class MQService extends Service {
                 if (isGoodJson(message)){
                     messageJsonObject=new JSONObject(message);
                 }
-
                 String productType=null;
                 JSONArray messageJsonArray=null;
-
                 if (messageJsonObject!=null && messageJsonObject.has("productType")){
                     productType= messageJsonObject.getString("productType");
                 }
@@ -235,11 +235,13 @@ public class MQService extends Service {
                     messageJsonArray=messageJsonObject.getJSONArray("Warmer");
                 }
 
-
                 if (!TextUtils.isEmpty(productType)){
                     type=Integer.parseInt(productType);
                 }else {
-                    type=messageJsonArray.getInt(1);
+                    int index=messageJsonArray.getInt(1);
+                    int index2=messageJsonArray.getInt(2);
+                    String x=""+index+index2;
+                    type=Integer.parseInt(x);
                 }
 
                 DeviceChild deviceChild=null;
@@ -250,25 +252,33 @@ public class MQService extends Service {
                         if (!TextUtils.isEmpty(productType)){
 
                         }else {
-                            timerMoudle=messageJsonArray.getInt(messageJsonArray.length()-14);
-                            mcuVersion=messageJsonArray.getInt(messageJsonArray.length()-13);
-                            waramerSetTemp=messageJsonArray.getInt(messageJsonArray.length()-12);
-                            warmerCurTemp=messageJsonArray.getInt(messageJsonArray.length()-11);
-                            warmerSampleData=messageJsonArray.getInt(messageJsonArray.length()-10);
-                            warmerRatePower=messageJsonArray.getInt(messageJsonArray.length()-9);
-                            warmerCurRunRoatePower=messageJsonArray.getInt(messageJsonArray.length()-8);
-                            warmerRunState=messageJsonArray.getInt(messageJsonArray.length()-7);
+                            busModel=messageJsonArray.getInt(3);
+                            int mMcuVersion=messageJsonArray.getInt(4);
+                            mcuVersion="v"+mMcuVersion/16+"."+mMcuVersion%16;
+                            int mWifiVersion=messageJsonArray.getInt(5);
+                            wifiVersion="v"+mWifiVersion/16+"."+mWifiVersion%16;
+
+                            warmerRunState=messageJsonArray.getInt(7);
+                            curRunState2=messageJsonArray.getInt(8);
+                            curRunState3=messageJsonArray.getInt(9);
+
                             int[] x=TenTwoUtil.changeToTwo(warmerRunState);
                             deviceState=x[7];
                             rateState=x[6]+""+x[5];
                             lockState=x[4];
                             screenState=x[3];
-                            curRunState2=messageJsonArray.getInt(messageJsonArray.length()-6);
-                            curRunState3=messageJsonArray.getInt(messageJsonArray.length()-5);
-                            timerHour=messageJsonArray.getInt(messageJsonArray.length()-4);
-                            timerMin=messageJsonArray.getInt(messageJsonArray.length()-3);
-                            checkCode=messageJsonArray.getInt(messageJsonArray.length()-2);
-                            endCode=messageJsonArray.getInt(messageJsonArray.length()-1);
+
+                            waramerSetTemp=messageJsonArray.getInt(10);
+                            warmerCurTemp=messageJsonArray.getInt(11);
+
+                            warmerSampleData=messageJsonArray.getInt(12);
+                            warmerRatePower=messageJsonArray.getInt(13);
+                            warmerCurRunRoatePower=messageJsonArray.getInt(14);
+
+                            timerHour=messageJsonArray.getInt(15);
+                            timerMin=messageJsonArray.getInt(16);
+                            checkCode=messageJsonArray.getInt(17);
+                            endCode=messageJsonArray.getInt(18);
                         }
 
                         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
@@ -279,24 +289,66 @@ public class MQService extends Service {
                             }
                         }
                         if (deviceChild!=null){
-                            deviceChild.setType(type);
-                            deviceChild.setTimerMoudle(timerMoudle);
-                            deviceChild.setMcuVersion(mcuVersion);
-                            deviceChild.setWaramerSetTemp(waramerSetTemp);
-                            deviceChild.setWarmerCurTemp(warmerCurTemp);
-                            deviceChild.setWarmerCurTemp(warmerSampleData);
-                            deviceChild.setWarmerCurTemp(warmerRatePower);
-                            deviceChild.setWarmerCurTemp(warmerCurRunRoatePower);
-                            deviceChild.setDeviceState(deviceState);
-                            deviceChild.setRateState(rateState);
-                            deviceChild.setLockState(lockState);
-                            deviceChild.setScreenState(screenState);
-                            deviceChild.setCheckCode(curRunState2);
-                            deviceChild.setCheckCode(curRunState3);
-                            deviceChild.setType(timerHour);
-                            deviceChild.setType(timerMin);
-                            deviceChild.setCheckCode(checkCode);
-                            deviceChild.setEndCode(endCode);
+                            if (type!=-1){
+                                deviceChild.setType(type);
+                            }
+                            if (busModel!=-1){
+                                deviceChild.setBusModel(busModel);
+                            }
+                            if (timerMoudle!=-1){
+                                deviceChild.setTimerMoudle(timerMoudle);
+                            }
+                            if (!TextUtils.isEmpty(wifiVersion)){
+                                deviceChild.setWifiVersion(wifiVersion);
+                            }
+                            if (!TextUtils.isEmpty(mcuVersion)){
+                                deviceChild.setMcuVersion(mcuVersion);
+                            }
+                            if (waramerSetTemp!=-1){
+                                deviceChild.setWaramerSetTemp(waramerSetTemp);
+                            }
+                            if (warmerCurTemp!=-1){
+                                deviceChild.setWarmerCurTemp(warmerCurTemp);
+                            }
+                            if (warmerSampleData!=-1){
+                                deviceChild.setWarmerCurTemp(warmerSampleData);
+                            }
+                            if (warmerRatePower!=-1){
+                                deviceChild.setWarmerCurTemp(warmerRatePower);
+                            }
+                            if (warmerCurRunRoatePower!=-1){
+                                deviceChild.setWarmerCurTemp(warmerCurRunRoatePower);
+                            }
+                            if (deviceState!=-1){
+                                deviceChild.setDeviceState(deviceState);
+                            }
+                            if (!TextUtils.isEmpty(rateState)){
+                                deviceChild.setRateState(rateState);
+                            }
+                            if (lockState!=-1){
+                                deviceChild.setLockState(lockState);
+                            }
+                            if (screenState!=-1){
+                                deviceChild.setScreenState(screenState);
+                            }
+                            if (curRunState2!=-1){
+                                deviceChild.setCheckCode(curRunState2);
+                            }
+                            if (curRunState3!=-1){
+                                deviceChild.setCheckCode(curRunState3);
+                            }
+                            if (timerHour!=-1){
+                                deviceChild.setTimerHour(timerHour);
+                            }
+                            if (timerMin!=-1){
+                                deviceChild.setTimerMin(timerMin);
+                            }
+                            if (checkCode!=-1){
+                                deviceChild.setCheckCode(checkCode);
+                            }
+                            if (endCode!=-1){
+                                deviceChild.setEndCode(endCode);
+                            }
                             deviceChildDao.update(deviceChild);
                         }
                         break;
@@ -325,7 +377,6 @@ public class MQService extends Service {
                     mqttIntent.putExtra("macAddress",macAddress);
                     sendBroadcast(mqttIntent);
                 }
-
             }catch (Exception e){
                 e.printStackTrace();
             }

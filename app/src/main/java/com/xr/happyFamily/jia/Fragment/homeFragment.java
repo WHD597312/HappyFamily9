@@ -49,6 +49,7 @@ public class homeFragment extends Fragment {
     @BindView(R.id.gv_home_my1)
     com.xr.happyFamily.jia.MyGridview mGridView1;
     String roomName,roomType,roomId;
+    public static final int MREQUEST_CODE=2;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -72,14 +73,11 @@ public class homeFragment extends Fragment {
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
         mGridView1.setAdapter(mGridViewAdapter);
-        buttonadd.setOnClickListener(new OnClickListener()
-        {
+        buttonadd.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
+            public void onClick(View v) {
                 Intent intent=new Intent(getActivity(), ManagementActivity.class);
-                Log.i("dddddd6", "------->: "+roomName+"....."+roomType+"....."+roomId);
-                startActivity(intent);
+                startActivityForResult(intent,MREQUEST_CODE);
             }
         });
 
@@ -89,17 +87,25 @@ public class homeFragment extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_change:
-
                 startActivity(new Intent(getActivity(), ChangeRoomActivity.class));
                 break;
             case R.id.tv_my_hourse:
                 startActivity(new Intent(getActivity(), ChooseHourseActivity.class));
                 break;
+        }
+    }
 
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==MREQUEST_CODE && resultCode==MREQUEST_CODE){
+
+            int a=10;
+            int n=a;
 
         }
-
     }
+
     public void onActivityCreated(Bundle savedInstanceState) {
         // TODO Auto-generated method stub
         super.onActivityCreated(savedInstanceState);

@@ -23,7 +23,6 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
-import com.xr.happyFamily.jia.MyPaperActivity1;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
@@ -206,7 +205,6 @@ public class LoginActivity extends AppCompatActivity {
                         SharedPreferences.Editor editor = preferences.edit();
                         String phone = et_name.getText().toString().trim();
                         String password = et_pswd.getText().toString().trim();
-
                         Log.i("phone", "---->: " + phone + ",,,," + password);
                         editor.putString("phone", phone);
                         editor.putString("userId",userId);
@@ -214,7 +212,6 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("token", token);
                         editor.commit();
                     }
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

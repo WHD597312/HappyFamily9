@@ -164,8 +164,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:visibility="gone"
+            android:calendarViewShown="false"
+            android:datePickerMode="spinner"
+            android:layout_below="@+id/image_fphone"
             />
-
 
         <ImageView
             android:id="@+id/image_fpwd"

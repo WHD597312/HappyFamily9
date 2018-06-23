@@ -465,15 +465,15 @@ public class SmartWheelBar extends View {
 //        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                touchX = event.getX();
+                touchY = event.getY();
                 if (isInCiecle(touchX, touchY)) {
-                    touchX = event.getX();
-                    touchY = event.getY();
                     //按下时的时间
                     nowClick = System.currentTimeMillis();
                 }
-
                 break;
             case MotionEvent.ACTION_MOVE:
+
                 float moveX = event.getX();
                 float moveY = event.getY();
                 //得到旋转的角度
@@ -490,30 +490,31 @@ public class SmartWheelBar extends View {
                 if (mStartAngle <= -360) {
                     mStartAngle = 0;
                 }
-
                 if (isInCiecle(touchX, touchY)) {
                     onDrawInvalidate();
                 }
-
                 break;
             case MotionEvent.ACTION_UP:
-                Log.i("mStartAngle2", "-->" + mStartAngle);
+
+                touchX = event.getX();
+                touchY = event.getY();
+
                 //落点的角度加上偏移量基于初始的点的位置
+
+
                 if (mStartAngle % 4.5f != 0) {
                     int t = (int) (mStartAngle / 4.5f);
                     mStartAngle = t * 4.5f;
-
                     Log.i("mStartAngle3", "-->" + mStartAngle);
                 }
                 checkPosition = calInExactArea(getRoundArc(event.getX(), event.getY()) - mStartAngle);
-                touchX = event.getX();
-                touchY = event.getY();
 
                 onDrawInvalidate();
                 if (mOnWheelCheckListener != null) {
 //                        mOnWheelCheckListener.onCheck(checkPosition);
                     mOnWheelCheckListener.onChanged(this, mStartAngle);
                 }
+
 
                 break;
         }
@@ -636,21 +637,17 @@ public class SmartWheelBar extends View {
      **/
     private void onDrawInvalidate() {
         invalidate();
-
     }
 
     public int getCheckPosition() {
         return checkPosition;
     }
 
-
     private OnWheelCheckListener mOnWheelCheckListener;
 
     public void setOnWheelCheckListener(OnWheelCheckListener mOnWheelCheckListener) {
         this.mOnWheelCheckListener = mOnWheelCheckListener;
     }
-
-
     public interface OnWheelCheckListener {
         //        void onCheck(int position);
         void onChanged(SmartWheelBar wheelBar, float curAngle);

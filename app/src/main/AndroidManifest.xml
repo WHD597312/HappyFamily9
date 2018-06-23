@@ -91,13 +91,14 @@
         <activity android:name=".login.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
-
-
+        <service
+            android:name=".together.util.mqtt.MQService"
+            android:enabled="true"
+            android:exported="true"
+            />
         <activity
             android:name=".jia.xnty.CsjActivity"
             android:label=""
@@ -113,15 +114,12 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".jia.MyPaperActivity1"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity android:name=".jia.xnty.ZnWdActivity" />
         <activity
             android:name=".jia.MenuActivity"
             android:label="@string/app_name" />
+
         <activity android:name=".jia.AddEquipmentActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -130,6 +128,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.ManagementActivity" />
         <activity android:name=".jia.ChangeEquipmentActivity" />
+        <activity android:name=".jia.activity.AddDeviceActivity"/>
         <activity
             android:name=".jia.MainActivity"
             android:hardwareAccelerated="true"
@@ -146,11 +145,7 @@
             android:label="@string/app_name"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".login.rigest.RegistFinishActivity"
-            android:label="@string/app_name"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".jia.xnty.Smartsj"
             android:label="@string/app_name"
@@ -214,9 +209,7 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".jia.activity.AddDeviceActivity">
 
-        </activity>
         <activity
             android:name=".jia.xnty.WaterPurifierActivity"
             android:label=""

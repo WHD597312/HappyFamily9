@@ -15,11 +15,14 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.Fragment.homeFragment;
 import com.xr.happyFamily.jia.activity.QRScannerActivity;
 import com.xr.happyFamily.jia.adapter.ManagementGridViewAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.login.login.LoginActivity;
@@ -56,12 +59,13 @@ public class ManagementActivity extends AppCompatActivity {
     TitleView titleView;
     String  roomType;
     String  roomName;
-    long houseId=1;
+    long houseId=0;
     long roomId;
     List<Room> rooms;
 
     int mPoistion=-1;
     private RoomDaoImpl roomDao;
+    private HourseDaoImpl hourseDao;
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -71,8 +75,22 @@ public class ManagementActivity extends AppCompatActivity {
         }
         unbinder = ButterKnife.bind(this);
         roomDao= new RoomDaoImpl(getApplicationContext());
+        hourseDao=new HourseDaoImpl(getApplicationContext());
         rooms = roomDao.findByAllRoom();
+
+        if (!rooms.isEmpty()){
+            Room room=rooms.get(0);
+            houseId=room.getHouseId();
+        }else {
+            List<Hourse> hourses=hourseDao.findAllHouse();
+            if (hourses.size()==1){
+                Hourse hourse=hourses.get(0);
+                houseId=hourse.getHouseId();
+            }
+        }
         roomId= rooms.size()+1;
+
+
         mGridView = (GridView) findViewById(R.id.gv_management_my);
         mGridData = new ArrayList<>();
         for (int i=0; i<img.length; i++) {
@@ -132,69 +150,54 @@ public class ManagementActivity extends AppCompatActivity {
                         roomName="餐厅";
                         Toast.makeText(ManagementActivity.this,"1",Toast.LENGTH_SHORT).show();
                         break;
-
                     default:
                         break;
                 }
             }
         });
 
-
-
     }
 
-
-
     class AddroomAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
-
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
             int code = 0;
             Map<String, Object> params = maps[0];
             String result = HttpUtils.postOkHpptRequest(ip+"/family/room/registerRoom", params);
             Log.i("aaaaaa", "doInBackground:---> "+result);
-
             try {
                 if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     JSONObject returnData=jsonObject.getJSONObject("returnData");
                     if (code == 100) {
-
-                        Room room = roomDao.findById((long) roomId);
-                        if (room!=null){
-                            room.setRoomId((long)roomId);
-                            room.setHouseId((int)houseId);
-                            room.setRoomType(roomType);
-                            roomDao.update(room);
-                            Log.i("dddddd11qqq1", "doInBackground:---> "+room);
-                        }else {
-                            room = new Room((long)roomId,  roomName,  (int)houseId, roomType,0);
-                            roomDao.insert(room);
-                            Log.i("dddddd1111", "doInBackground:---> "+room);
-                        }
-
+                        int roomId=returnData.getInt("roomId");
+                        String roomName=returnData.getString("roomName");
+                        String roomType=returnData.getString("roomType");
+                        int houseId=returnData.getInt("houseId");
+                        Room room = new Room((long)roomId,  roomName,  houseId, roomType,0);
+                        room.setRoomId((long)roomId);
+                        room.setHouseId(houseId);
+                        room.setRoomType(roomType);
+                        roomDao.insert(room);
                     }
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return code;
         }
-
-
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
             switch (code) {
                 case 3001:
                     com.xr.happyFamily.login.util.Utils.showToast(ManagementActivity.this, "添加房间失败，请重试");
                     break;
-
                 case 100:
-
-                    startActivity(new Intent(ManagementActivity.this, MyPaperActivity.class));
-
+                    Toast.makeText(ManagementActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
+                   Intent intent=new Intent(ManagementActivity.this,MyPaperActivity.class);
+                   intent.putExtra("weizhi",rooms.size()+1);
+                   startActivity(intent);
                     break;
             }
         }
@@ -203,12 +206,11 @@ public class ManagementActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_management_ok:
-
                 Map<String,Object> params=new HashMap<>();
                 params.put("roomName",roomName);
                 params.put("roomType",roomType);
                 params.put("houseId",houseId);
-                params.put("roomId",roomId);
+//                params.put("roomId",roomId);
                 new ManagementActivity.AddroomAsyncTask().execute(params);
 //                startActivity(new Intent(this, AddEquipmentActivity.class));
                 break;

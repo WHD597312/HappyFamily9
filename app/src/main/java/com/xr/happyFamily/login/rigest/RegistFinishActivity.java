@@ -85,15 +85,15 @@ public class RegistFinishActivity extends AppCompatActivity {
             gifDrawable.start();
             imageView6.setImageDrawable(gifDrawable);
         }
-        initbirthday();
+//        initbirthday();
         initsex();
         calendar = Calendar.getInstance();
         Log.i("aaaaa1", "----> "+temp);
-        Bundle bundle=getIntent().getExtras();
-       phone=bundle.getString("phone");
-       password=bundle.getString("password");
-
-        Log.e("asd", "onCreate: "+phone );
+//        Bundle bundle=getIntent().getExtras();
+//       phone=bundle.getString("phone");
+//       password=bundle.getString("password");
+//
+//        Log.e("asd", "onCreate: "+phone );
     }
     private void initbirthday(){
         textViewb.setOnTouchListener(new View.OnTouchListener() {
@@ -153,7 +153,11 @@ public class RegistFinishActivity extends AppCompatActivity {
     @OnClick({R.id.btn_ffinish,R.id.tv_birthday})
     public void onClick(View view) {
         switch (view.getId()) {
-
+            case R.id.tv_birthday:
+                int a=10;
+                int b=a;
+                datePicker.setVisibility(View.VISIBLE);
+                break;
             case R.id.btn_ffinish:
                 String name = editTextf.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {

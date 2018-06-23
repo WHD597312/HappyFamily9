@@ -1,6 +1,5 @@
 package com.xr.happyFamily.jia.pojo;
 
-
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
@@ -9,15 +8,18 @@ import java.io.Serializable;
 
 @Entity
 public class DeviceChild implements Serializable{
-    @Id(autoincrement = true)
+    @Id(autoincrement = false)
     private Long id;
     long houseId;/**设备的房子Id*/
     long roomId;/**设备的房间Id*/
+    int deviceUsedCount;/**设备被用户使用的次数*/
     int type;/**设备类型*/
+    int busModel;/**商业模式*/
     String macAddress;/**mac地址*/
     String name;/**设备名称*/
     int timerMoudle=-1;/**定时器模式*/
-    int mcuVersion=-1;/**MCU版本*/
+    String mcuVersion;/**MCU版本*/
+    String wifiVersion;/**wifi版本*/
     int waramerSetTemp=-1;/**取暖器设定温度*/
     int warmerCurTemp=-1;/**取暖器当前温度*/
     int warmerSampleData=-1;/**取暖器采样数据*/
@@ -130,10 +132,10 @@ public class DeviceChild implements Serializable{
     public void setWaramerSetTemp(int waramerSetTemp) {
         this.waramerSetTemp = waramerSetTemp;
     }
-    public int getMcuVersion() {
+    public String getMcuVersion() {
         return this.mcuVersion;
     }
-    public void setMcuVersion(int mcuVersion) {
+    public void setMcuVersion(String mcuVersion) {
         this.mcuVersion = mcuVersion;
     }
     public int getTimerMoudle() {
@@ -178,9 +180,32 @@ public class DeviceChild implements Serializable{
     public void setRoomId(long roomId) {
         this.roomId = roomId;
     }
-    @Generated(hash = 1594076145)
-    public DeviceChild(Long id, long houseId, long roomId, int type,
-            String macAddress, String name, int timerMoudle, int mcuVersion,
+    public int getDeviceUsedCount() {
+        return this.deviceUsedCount;
+    }
+    public void setDeviceUsedCount(int deviceUsedCount) {
+        this.deviceUsedCount = deviceUsedCount;
+    }
+    public int getBusModel() {
+        return this.busModel;
+    }
+    public void setBusModel(int busModel) {
+        this.busModel = busModel;
+    }
+    public String getWifiVersion() {
+        return this.wifiVersion;
+    }
+    public void setWifiVersion(String wifiVersion) {
+        this.wifiVersion = wifiVersion;
+    }
+   
+    @Generated(hash = 1973447423)
+    public DeviceChild() {
+    }
+    @Generated(hash = 1160689476)
+    public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount,
+            int type, int busModel, String macAddress, String name,
+            int timerMoudle, String mcuVersion, String wifiVersion,
             int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
             int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
             int deviceState, String rateState, int lockState, int screenState,
@@ -189,11 +214,14 @@ public class DeviceChild implements Serializable{
         this.id = id;
         this.houseId = houseId;
         this.roomId = roomId;
+        this.deviceUsedCount = deviceUsedCount;
         this.type = type;
+        this.busModel = busModel;
         this.macAddress = macAddress;
         this.name = name;
         this.timerMoudle = timerMoudle;
         this.mcuVersion = mcuVersion;
+        this.wifiVersion = wifiVersion;
         this.waramerSetTemp = waramerSetTemp;
         this.warmerCurTemp = warmerCurTemp;
         this.warmerSampleData = warmerSampleData;
@@ -210,9 +238,6 @@ public class DeviceChild implements Serializable{
         this.timerMin = timerMin;
         this.checkCode = checkCode;
         this.endCode = endCode;
-    }
-    @Generated(hash = 1973447423)
-    public DeviceChild() {
     }
 
 }

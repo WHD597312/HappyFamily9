@@ -212,7 +212,7 @@
                 />
 
             <ImageView
-                android:id="@+id/image_power"
+                android:id="@+id/image_rate"
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
                 android:layout_marginLeft="@dimen/dp_20"
@@ -224,8 +224,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/image_timer"
-                android:layout_alignLeft="@+id/image_power"
-                android:layout_alignRight="@+id/image_power"
+                android:layout_alignLeft="@+id/image_rate"
+                android:layout_alignRight="@+id/image_rate"
                 android:text="功率"
                 android:gravity="center"
                 />
@@ -236,7 +236,7 @@
                 android:layout_width="@dimen/dp_60"
                 android:layout_height="@dimen/dp_60"
                 android:layout_marginLeft="@dimen/dp_20"
-                android:layout_toRightOf="@+id/image_power"
+                android:layout_toRightOf="@+id/image_rate"
                 android:scaleType="centerInside"
                 android:src="@mipmap/img_lock" />
             <TextView

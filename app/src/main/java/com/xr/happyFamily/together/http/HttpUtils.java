@@ -37,7 +37,6 @@ import okhttp3.Response;
 
 public class HttpUtils {
 
-
     public static String ipAddress="http://47.98.131.11:8084";
     public static String getInputStream(InputStream is) {
         String result = null;

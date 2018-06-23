@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -50,6 +51,8 @@ public class ChooseHourseActivity extends AppCompatActivity {
     TextView textViewgl;
     List<Hourse> hourses;
     ChooseHouseAdapter adapter;
+    public static  final int MREQUEST_CODE=1;
+
 
 
     protected void onCreate(Bundle savadInstanceState) {
@@ -59,7 +62,7 @@ public class ChooseHourseActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         titleView = (TitleView) findViewById(R.id.title_choose);
         titleView.setTitleText("家庭选择");
- imageView1= (ImageView) findViewById(R.id.iv_hourse_c);
+        imageView1= (ImageView) findViewById(R.id.iv_hourse_c);
 //        preferences = getSharedPreferences("my", MODE_PRIVATE);
 //        houseName=preferences.getString("phone", "");
 //        houseAddress=preferences.getString("password", "");
@@ -70,19 +73,14 @@ public class ChooseHourseActivity extends AppCompatActivity {
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-
         adapter = new ChooseHouseAdapter(this, hourses);
-
         adapter.setClicked(-1);
         recyclerView.setAdapter(adapter);
-
-//        adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onStart() {
         super.onStart();
-
     }
 
     int i =0 ;
@@ -99,17 +97,27 @@ public class ChooseHourseActivity extends AppCompatActivity {
                     adapter.setClicked(1);
                     adapter.notifyDataSetChanged();
                     i=1;
-                }else   if (i==1){
-                    startActivity(new Intent(this,AddhourseActivity.class));
+                }else if (i==1){
+                    Intent intent=new Intent(this,AddhourseActivity.class);
+                    startActivityForResult(intent,MREQUEST_CODE);
                 }
-
                 break;
-
-
         }
-
     }
 
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        int a=10;
+        int b=a;
+        if (requestCode==MREQUEST_CODE && requestCode==MREQUEST_CODE){
+            hourses=hourseDao.findAllHouse();
+            Log.i("house","-->"+hourses.size());
+            adapter = new ChooseHouseAdapter(this, hourses);
+            adapter.setClicked(-1);
+            recyclerView.setAdapter(adapter);
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -117,6 +125,4 @@ public class ChooseHourseActivity extends AppCompatActivity {
             unbinder.unbind();
         }
     }
-
-
 }

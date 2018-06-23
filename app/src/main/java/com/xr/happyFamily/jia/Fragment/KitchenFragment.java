@@ -26,6 +26,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
@@ -126,7 +127,7 @@ public class KitchenFragment extends Fragment {
             {
 
 //                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
-                Intent intent = new Intent();
+                Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
                 intent.putExtra("roomId",roomId);
                 startActivityForResult(intent,3);
                 Log.i("dddddd3", "------->: "+roomName+"....."+roomType+"....."+roomId);

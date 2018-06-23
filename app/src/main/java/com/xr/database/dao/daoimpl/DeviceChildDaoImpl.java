@@ -29,9 +29,8 @@ public class DeviceChildDaoImpl {
      * 添加设备
      * @param deviceChild
      */
-    public boolean insert(DeviceChild deviceChild){
-        long n=deviceChildDao.insert(deviceChild);
-        return n>0?true:false;
+    public void insert(DeviceChild deviceChild){
+        deviceChildDao.insert(deviceChild);
     }
 
     /**
@@ -58,7 +57,5 @@ public class DeviceChildDaoImpl {
     public List<DeviceChild> findAllDevice(){
         return deviceChildDao.loadAll();
     }
-    public void deleteAll(){
-        deviceChildDao.deleteAll();
-    }
+
 }

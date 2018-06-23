@@ -10,7 +10,9 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -38,7 +40,11 @@ import com.xr.happyFamily.jia.view_custom.SmartWheelBar;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
 import com.xr.happyFamily.jia.xnty.Timepicker;
 import com.xr.happyFamily.jia.xnty.Timepicker2;
+import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.lang.reflect.Field;
 import java.util.ArrayList;
@@ -58,13 +64,15 @@ public class DeviceDetailActivity extends AppCompatActivity {
      */
     private String[] mStrs = new String[]{"5", "10", "15", "20", "25", "30", "35","40"};
     @BindView(R.id.image_switch) ImageView image_switch;/**开关状态*/
-    @BindView(R.id.image_power) ImageView image_power;/**功率状态*/
+    @BindView(R.id.image_rate) ImageView image_rate;/**功率状态*/
     @BindView(R.id.tv_rate_state) TextView tv_rate_state;/**功率状态*/
     @BindView(R.id.image_lock) ImageView image_lock;/**屏幕锁定状态*/
     @BindView(R.id.image_screen) ImageView image_screen;/**屏幕开启状态*/
     @BindView(R.id.tv_set_temp) TextView tv_set_temp;/**设定温度*/
+
     @BindView(R.id.layout_body) RelativeLayout layout_body;/**屏幕中间布局*/
     @BindView(R.id.image_timer) ImageView image_timer;/**定时任务*/
+    @BindView(R.id.tv_cur_temp) TextView tv_cur_temp;/**当前温度*/
     @BindView(R.id.semicBar)
     SmartWheelBar wheelBar;
     @BindView(R.id.relative4) RelativeLayout relative4;/**底部布局*/
@@ -99,20 +107,20 @@ public class DeviceDetailActivity extends AppCompatActivity {
         wheelBar.setBitInfos(infos);
         deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
         deviceChild=deviceChildDao.findById(1L);
+        List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+        Log.i("deviceChildren","-->"+deviceChildren.size());
+
         if (deviceChild==null){
             deviceChild=new DeviceChild();
             deviceChild.setId(1L);
+            deviceChild.setMacAddress("hrrj7895ccf7f6c9fa4");
+            deviceChild.setType(2);
             deviceChild.setDeviceState(1);
             deviceChild.setRateState("00");
             deviceChild.setLockState(1);
             deviceChild.setScreenState(1);
             deviceChildDao.insert(deviceChild);
         }
-        deviceChild.setDeviceState(1);
-        deviceChild.setRateState("01");
-        deviceChild.setLockState(1);
-        deviceChild.setScreenState(1);
-        deviceChild.setTimerHour(1);
 
         Intent service = new Intent(this, MQService.class);
         startService(service);
@@ -121,8 +129,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter("DeviceDetailActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
-
-        image_switch.setImageResource(R.mipmap.image_open);
     }
     @Override
     protected void onStart() {
@@ -173,6 +179,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             @Override
             public void onChanged(SmartWheelBar wheelBar, float curAngle) {
                 Log.i("SmartWheelBar","-->"+curAngle);
+                int warmerTempSet=0;
                 if (curAngle>0){/**顺时钟转*/
                     int temp2=0;
 //                    float tempSet=(curAngle2/4.5f * 0.5f);
@@ -186,6 +193,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     if (temp2>=42){
                         temp2=42;
                     }
+                    warmerTempSet=temp2;
                     tv_set_temp.setText(temp2+"");
                 }else if (curAngle<=0){/**逆时针转*/
                     if (curAngle % 4.5f != 0){
@@ -198,16 +206,53 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     if (temp>=42){
                         temp=42;
                     }
+                    warmerTempSet=temp;
                     tv_set_temp.setText(temp+"");
                 }
+
+                deviceChild.setWarmerCurTemp(warmerTempSet);
+                send(deviceChild);
             }
         });
     }
-    @OnClick({R.id.image_timer})
+    @OnClick({R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.image_switch:
+                int deviceState=deviceChild.getDeviceState();
+                if (deviceState==0){
+                    deviceChild.setDeviceState(1);
+                }else if (deviceState==1){
+                    deviceChild.setDeviceState(0);
+                }
+                setMode(deviceChild);
+                send(deviceChild);
+                break;
             case R.id.image_timer:
-                popupWindow();
+                popupTimerWindow();
+                break;
+            case R.id.image_rate:
+                popupRateView();
+                break;
+            case R.id.image_lock:
+                int lockState=deviceChild.getLockState();
+                if (lockState==1){
+                    deviceChild.setLockState(0);
+                }else if (lockState==0){
+                    deviceChild.setLockState(1);
+                }
+                setMode(deviceChild);
+                send(deviceChild);
+                break;
+            case R.id.image_screen:
+                int screenState=deviceChild.getScreenState();
+                if (screenState==1){
+                    deviceChild.setScreenState(0);
+                }else if (screenState==0){
+                    deviceChild.setScreenState(1);
+                }
+                setMode(deviceChild);
+                send(deviceChild);
                 break;
         }
     }
@@ -225,30 +270,13 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
 
     }
-    public void setNumberPickerDividerColor(NumberPicker numberPicker) {
-        NumberPicker picker = numberPicker;
-        Field[] pickerFields = NumberPicker.class.getDeclaredFields();
-        for (Field pf : pickerFields) {
-            if (pf.getName().equals("mSelectionDivider")) {
-                pf.setAccessible(true);
-                try {
-                    pf.set(picker, new ColorDrawable(this.getResources().getColor(R.color.color_gray)));
-                } catch (IllegalArgumentException e) {
-                    e.printStackTrace();
-                } catch (Resources.NotFoundException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-                break;
-            }
-        }
-    }
+
     private PopupWindow popupWindow;
-    public void popupWindow() {
+    public void popupTimerWindow() {
         if (popupWindow != null && popupWindow.isShowing()) {
             return;
         }
+
         View view = View.inflate(this, R.layout.popview_timetask, null);
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
@@ -257,7 +285,22 @@ public class DeviceDetailActivity extends AppCompatActivity {
         ImageView image_ensure= (ImageView) view.findViewById(R.id.image_ensure);
        tv_timer_hour= (Timepicker3) view.findViewById(R.id.tv_hour);
        tv_timer_min= (Timepicker3) view.findViewById(R.id.tv_min);
+
+
+
+
         initTimer();
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        tv_timer_hour.setValue(hour);
+
+        int hour2=tv_timer_hour.getValue();
+        Log.i("hour2", "popupWindow: "+hour2);
+
+        int minute = calendar.get(Calendar.MINUTE);
+        tv_timer_min.setValue(minute);
+        int min=tv_timer_min.getValue();
+        Log.i("min", "popupWindow: "+min);
 
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
@@ -280,7 +323,9 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     case R.id.image_ensure:
                         int sh= tv_timer_hour.getValue();
                         int sm= tv_timer_min.getValue();
-
+                        deviceChild.setTimerHour(sh);
+                        deviceChild.setTimerMin(sm);
+                        send(deviceChild);
                         Log.i("time", "--->: "+sh+",,,"+sm);
                         popupWindow.dismiss();
                         break;
@@ -291,6 +336,68 @@ public class DeviceDetailActivity extends AppCompatActivity {
         image_cancle.setOnClickListener(listener);
         image_ensure.setOnClickListener(listener);
     }
+
+    public void popupRateView(){
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.popview_rate, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        ImageView image_cancle= (ImageView) view.findViewById(R.id.image_cancle);
+
+        ImageView image_ensure= (ImageView) view.findViewById(R.id.image_ensure);
+        ImageView image_low_rate= (ImageView) view.findViewById(R.id.image_low_rate);
+        ImageView image_middle_rate= (ImageView) view.findViewById(R.id.image_middle_rate);
+        ImageView image_high_rate= (ImageView) view.findViewById(R.id.image_high_rate);
+
+
+
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow.setAnimationStyle(R.style.Popupwindow);
+
+        ColorDrawable dw = new ColorDrawable(0x30000000);
+        popupWindow.setBackgroundDrawable(dw);
+        popupWindow.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.image_cancle:
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.image_ensure:
+                        setMode(deviceChild);
+                        send(deviceChild);
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.image_low_rate:
+                        deviceChild.setRateState("01");
+                        break;
+                    case R.id.image_middle_rate:
+                        deviceChild.setRateState("10");
+                        break;
+                    case R.id.image_high_rate:
+                        deviceChild.setRateState("11");
+                        break;
+                }
+            }
+        };
+
+        image_cancle.setOnClickListener(listener);
+        image_ensure.setOnClickListener(listener);
+        image_low_rate.setOnClickListener(listener);
+        image_middle_rate.setOnClickListener(listener);
+        image_high_rate.setOnClickListener(listener);
+
+    }
+
     class MessageReceiver extends BroadcastReceiver{
 
         @Override
@@ -319,15 +426,27 @@ public class DeviceDetailActivity extends AppCompatActivity {
         /**开关机状态*/
         if (deviceState==0){
             image_switch.setImageResource(R.mipmap.image_switch);
-            image_power.setImageResource(R.mipmap.rate_power);
+            image_rate.setImageResource(R.mipmap.rate_power);
         }else if (deviceState==1){
             image_switch.setImageResource(R.mipmap.image_open);
-            image_power.setImageResource(R.mipmap.rate_open);
+            image_rate.setImageResource(R.mipmap.rate_open);
         }
         if (timerHour==0 && timerMin==0){
+            Log.i("timer","-->"+"timer");
             image_timer.setImageResource(R.mipmap.timer_task);
         }else if (timerHour!=0 || timerMin!=0){
+            Log.i("timer","-->"+"timer3");
             image_timer.setImageResource(R.mipmap.timer_open);
+        }
+        if (warmerCurTemp!=0){
+            tv_cur_temp.setText(warmerCurTemp+"");
+        }
+        if (waramerSetTemp!=0){
+            tv_set_temp.setText(waramerSetTemp+"");
+            Message msg=handler.obtainMessage();
+            msg.arg1=1;
+            msg.what=waramerSetTemp;
+            handler.sendMessage(msg);
         }
 
         /**功率状态*/
@@ -345,7 +464,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         }else if (1==lockState){
             image_lock.setImageResource(R.mipmap.lock_open);
         }
-
         /**屏幕开启状态*/
         if (0==screenState){
             image_screen.setImageResource(R.mipmap.img_screen);
@@ -353,6 +471,109 @@ public class DeviceDetailActivity extends AppCompatActivity {
             image_screen.setImageResource(R.mipmap.screen_open);
         }
     }
+    int sum=0;
+    public void send(DeviceChild deviceChild){
+        try {
+            JSONObject jsonObject=new JSONObject();
+            JSONArray jsonArray=new JSONArray();
+            int headCode=144;
+            jsonArray.put(0,headCode);/**头码*/
+            sum+=headCode;
+            int type=deviceChild.getType();
+            int typeHigh=type/256;
+            sum+=typeHigh;
+            int typeLow=type%256;
+            sum+=typeLow;
+            int dataLength=6;
+            sum+=dataLength;
+
+            int busMode=deviceChild.getBusModel();
+            sum+=busMode;
+            jsonArray.put(1,typeHigh);/**类型 高位*/
+            jsonArray.put(2,typeLow);/**类型 低位*/
+            jsonArray.put(3,busMode);/**商业模式*/
+            jsonArray.put(4,dataLength);/**数据长度*/
+            int deviceState=deviceChild.getDeviceState();
+            String rateStateStr=deviceChild.getRateState();
+            int rateState=Integer.parseInt(rateStateStr);
+            int rateStateHigh=rateState/10;
+            int rateStateLow=rateState%10;
+            int lockState=deviceChild.getLockState();
+            int screenState=deviceChild.getScreenState();
+            int []x=new int[8];
+            x[0]=deviceState;
+            x[1]=rateStateHigh;
+            x[2]=rateStateLow;
+            x[3]=lockState;
+            x[4]=screenState;
+            x[5]=0;
+            x[6]=0;
+            x[7]=0;
+
+            int dataContent=TenTwoUtil.changeToTen(x);
+            sum+=dataContent;
+            jsonArray.put(5,dataContent);/**数据内容 开关，功率状态，屏幕状态，屏保状态*/
+            int runState2=0;
+            sum+=runState2;
+            jsonArray.put(6,runState2);/**机器当前运行状态2  (保留*/
+            int runState3=0;
+            sum+=runState3;
+            jsonArray.put(7,runState3);/**机器当前运行状态3  (保留*/
+
+            int timeHour=deviceChild.getTimerHour();
+            sum+=timeHour;
+            jsonArray.put(8,timeHour);/**定时时间 小时*/
+            int timeMin=deviceChild.getTimerMin();
+            sum+=timeMin;
+            jsonArray.put(9,0);/**定时时间 分*/
+            int waramerSetTemp=deviceChild.getWaramerSetTemp();
+            sum+=waramerSetTemp;
+
+            int checkCode=sum%256;
+            jsonArray.put(10,waramerSetTemp);/**设定温度*/
+            jsonArray.put(11,checkCode);/**校验码*/
+
+            jsonArray.put(12,9);/**结束码*/
+            jsonObject.put("Warmer",jsonArray);
+
+            if (isBound){
+                String topicName="p99/warmer/"+deviceChild.getMacAddress()+"/set";
+                String s=jsonObject.toString();
+                boolean success=mqService.publish(topicName,1,s);
+                if (success){
+                    Log.i("success","-->"+success);
+                    int timerHour=deviceChild.getTimerHour();
+                    int timerMin=deviceChild.getTimerMin();
+                    if (timerHour==0 && timerMin==0){
+                        Log.i("timer","-->"+"timer");
+                        image_timer.setImageResource(R.mipmap.timer_task);
+                    }else if (timerHour!=0 || timerMin!=0){
+                        Log.i("timer","-->"+"timer3");
+                        image_timer.setImageResource(R.mipmap.timer_open);
+                    }
+                    deviceChildDao.update(deviceChild);
+                }
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    Handler handler=new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            switch (msg.arg1){
+                case 1:
+                    int temp=msg.what;
+                    tv_set_temp.setText(temp+"");
+                    wheelBar.setmStartAngle((temp+1)*9);
+                    wheelBar.invalidate();
+                    break;
+            }
+        }
+    };
+
     private boolean bound=false;
     ServiceConnection connection = new ServiceConnection() {
         @Override

@@ -102,7 +102,7 @@ public class MyPaperActivity extends AppCompatActivity {
 
         Intent intent=getIntent();
         int position =intent.getIntExtra("position",0);
-
+        int position1 =intent.getIntExtra("weizhi",0);
         Log.i("ttttt", "---->"+position);
         Log.i("room", "---->: "+str1+".........."+str2+"...."+str3);
         views = new ArrayList<>();
@@ -116,8 +116,6 @@ public class MyPaperActivity extends AppCompatActivity {
                 homeFragment homeFragment=new homeFragment();
                 homeFragment.setArguments(bundle);
                 views.add(homeFragment);
-
-
             }
             else if ("厨房".equals(str2.get(i))) {
 
@@ -174,7 +172,6 @@ public class MyPaperActivity extends AppCompatActivity {
                 BathroomFragment bathroomFragment=new BathroomFragment();
                 bathroomFragment.setArguments(bundle);
                     views.add(bathroomFragment);
-
             }
         }
 
@@ -187,6 +184,7 @@ public class MyPaperActivity extends AppCompatActivity {
         myViewPager.setAdapter(adapter);
         myViewPager.setCurrentItem(0);  //初始化显示第一个页面
         myViewPager.setCurrentItem(position);
+        myViewPager.setCurrentItem(position1);
         Log.e("ppppp", "onStart:--> "+postion );
 //
         myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -207,15 +205,11 @@ public class MyPaperActivity extends AppCompatActivity {
 
             }
         });
-
-
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-
         if(requestCode==5000){
             myViewPager.setCurrentItem(0);
         }
@@ -227,8 +221,6 @@ public class MyPaperActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
-
     }
 
 

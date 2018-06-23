@@ -37,6 +37,7 @@ import com.xr.happyFamily.together.util.mqtt.MQService;
 
 
 import org.angmarch.views.NiceSpinner;
+import org.json.JSONObject;
 
 import java.util.HashMap;
 import java.util.List;
@@ -59,7 +60,6 @@ public class AddDeviceActivity extends AppCompatActivity {
     @BindView(R.id.image_gif) GifImageView image_gif;
     private MyApplication application;
 
-    private String inNewRoom= HttpUtils.ipAddress+"/family/device/registerDeviceInNewRoom";
     private String inOldRoom=HttpUtils.ipAddress+"/family/device/registerDeviceInOldRoom";
     GifDrawable gifDrawable;
     DeviceChildDaoImpl deviceChildDao;
@@ -67,7 +67,6 @@ public class AddDeviceActivity extends AppCompatActivity {
     private String mac=null;
     MessageReceiver receiver;
     public static boolean running=false;
-
 
     DeviceChild deviceChild=null;
     SharedPreferences my;
@@ -96,9 +95,13 @@ public class AddDeviceActivity extends AppCompatActivity {
         mWifiAdmin = new EspWifiAdminSimple(this);
     }
 
+    String roomId;
     @Override
     protected void onStart() {
         super.onStart();
+        Intent intent=getIntent();
+        roomId=intent.getStringExtra("roomId");
+        Log.i("roomId","-->"+roomId);
         String apSsid = mWifiAdmin.getWifiConnectedSsid();
         if (apSsid != null) {
             nice_spinner.setText(apSsid);
@@ -127,6 +130,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                     nice_spinner.setEnabled(true);
                     break;
                 }
+                finish();
                 break;
             case R.id.bt_add_finish:
 
@@ -160,15 +164,14 @@ public class AddDeviceActivity extends AppCompatActivity {
             if (bound==true && !TextUtils.isEmpty(mac)){
                 String wifiName=nice_spinner.getText().toString();
                 String macAddress=wifiName+mac;
-                String topicName2="p99/"+macAddress+"/transfer";
-                boolean success=mqService.subscribe(topicName2,1);
-                if (success){
-                    String topicName="p99/"+macAddress+"/set";
-                    String payLoad="getType";
-                    boolean step2=mqService.publish(topicName,1,payLoad);
-                    if (step2){
-                        new AddDeviceAsync().execute(macAddress);
-                    }
+                if (!TextUtils.isEmpty(macAddress)){
+                    deviceChild=new DeviceChild();
+                    List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                    long id=deviceChildren.size()+1;
+                    deviceChild.setId(id);
+                    deviceChild.setMacAddress(macAddress);
+                    deviceChild.setName(macAddress);
+                    new AddDeviceAsync().execute(macAddress);
                 }
             }
         }
@@ -207,29 +210,36 @@ public class AddDeviceActivity extends AppCompatActivity {
             String macAddress=macs[0];
             DeviceChild deviceChild3=null;
             List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-            if (deviceChildren==null ||deviceChildren.isEmpty()){
-                deviceChild=new DeviceChild();/**不存在，就添加该设备*/
-                deviceChild.setMacAddress(macAddress);
-                deviceChild.setName(mac);
-                boolean insert=deviceChildDao.insert(deviceChild);
-                Log.i("insert","-->"+insert);
-            }else {
-                for(DeviceChild deviceChild2:deviceChildren){/**从数据库中找是否该设备已经存在*/
-                    if (macAddress.equals(deviceChild2.getMacAddress())){
-                        deviceChild3=deviceChild2;/**存在，就结束循环，遍历结束*/
-                        break;
-                    }
+            for (DeviceChild deviceChild2 : deviceChildren) {
+                if (macAddress.equals(deviceChild2.getMacAddress())) {
+                    deviceChild3 = deviceChild2;
+                    break;
                 }
-                if (deviceChild3!=null){
-                    deviceChild=deviceChild3;
-                    deviceChildDao.update(deviceChild);/**存在就更新一下该设备*/
-                }else {
-                    deviceChild=new DeviceChild();/**不存在，就添加该设备*/
-                    deviceChild.setMacAddress(macAddress);
-                    deviceChild.setName(mac);
-                    boolean insert=deviceChildDao.insert(deviceChild);
-                    Log.i("insert","-->"+insert);
+            }
+
+            Log.i("deviceChild3","-->"+deviceChild3);
+            if (deviceChild3 == null) {
+                deviceChildDao.insert(deviceChild);
+                Log.i("deviceChild3","-->"+"yes");
+                    String topicName2="p99/"+macAddress+"/transfer";
+                    boolean success=mqService.subscribe(topicName2,1);
+                    if (success){
+                        String topicName="p99/"+macAddress+"/set";
+                        String payLoad="getType";
+                        boolean step2=mqService.publish(topicName,1,payLoad);
                 }
+            } else {
+                deviceChildDao.delete(deviceChild3);
+                Log.i("deviceChild3","-->"+"no");
+                deviceChildDao.insert(deviceChild);
+                String topicName2="p99/"+macAddress+"/transfer";
+                boolean success=mqService.subscribe(topicName2,1);
+                if (success){
+                    String topicName="p99/"+macAddress+"/set";
+                    String payLoad="getType";
+                    boolean step2=mqService.publish(topicName,1,payLoad);
+                }
+
             }
             return null;
         }
@@ -255,31 +265,9 @@ public class AddDeviceActivity extends AppCompatActivity {
 //            addDeviceDialog.show();
 
             mProgressDialog = new ProgressDialog(AddDeviceActivity.this);
-            mProgressDialog
-                    .setMessage("正在配置, 请耐心等待...");
+            mProgressDialog.setMessage("正在配置, 请耐心等待...");
             mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-                @Override
-                public void onCancel(DialogInterface dialog) {
-                    synchronized (mLock) {
-                        if (__IEsptouchTask.DEBUG) {
-                            Log.i(TAG, "progress dialog is canceled");
-                        }
-                        if (mEsptouchTask != null) {
-                            mEsptouchTask.interrupt();
-                        }
-                    }
-                }
-            });
-            mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-                    "Waiting...", new DialogInterface.OnClickListener() {
-                        @Override
-                        public void onClick(DialogInterface dialog, int which) {
-                        }
-                    });
             mProgressDialog.show();
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setEnabled(false);
         }
 
         @Override
@@ -302,10 +290,6 @@ public class AddDeviceActivity extends AppCompatActivity {
 
         @Override
         protected void onPostExecute(List<IEsptouchResult> result) {
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-                    .setEnabled(true);
-            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(
-                    "确认");
             IEsptouchResult firstResult = result.get(0);
             // check whether the task is cancelled and no results received
             if (!firstResult.isCancelled()) {
@@ -316,12 +300,14 @@ public class AddDeviceActivity extends AppCompatActivity {
                 // the task received some results including cancelled while
                 // executing before receiving enough results
                 if (firstResult.isSuc()) {
+
                     StringBuilder sb = new StringBuilder();
                     for (IEsptouchResult resultInList : result) {
                         //                String ssid=et_ssid.getText().toString();
                         String ssid = resultInList.getBssid();
 
                         sb.append("配置成功"+ssid);
+                        mProgressDialog.dismiss();
                         if (!TextUtils.isEmpty(ssid)){
                             Intent service=new Intent(AddDeviceActivity.this, MQService.class);
                             isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
@@ -336,11 +322,9 @@ public class AddDeviceActivity extends AppCompatActivity {
                         sb.append("\nthere's " + (result.size() - count)
                                 + " more result(s) without showing\n");
                     }
-                    mProgressDialog.setMessage(sb.toString());
                 } else {
-
                     com.xr.happyFamily.login.util.Utils.showToast(AddDeviceActivity.this,"配置失败");
-                    mProgressDialog.setMessage("配置失败");
+                    mProgressDialog.dismiss();
                 }
             }
         }
@@ -360,34 +344,60 @@ public class AddDeviceActivity extends AppCompatActivity {
         }
         running=false;
     }
-    class AddDeviceInNewRoomAsync extends AsyncTask<Map<String,Object>,Void,Integer>{
+
+    class AddDeviceInOldRoomAsync extends AsyncTask<Map<String,Object>,Void,Integer>{
 
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
-            return null;
+            int code=0;
+            Map<String,Object> params=maps[0];
+            String result=HttpUtils.postOkHpptRequest(inOldRoom,params);
+            Log.i("result","-->"+result);
+            if (!TextUtils.isEmpty(result)){
+                try {
+                    JSONObject jsonObject=new JSONObject(result);
+                    String returnCode=jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)){
+                        code=Integer.parseInt(returnCode);
+                    }
+                }catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
+            return code;
         }
 
         @Override
-        protected void onPostExecute(Integer integer) {
-            super.onPostExecute(integer);
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code){
+                case 100:
+                    Toast.makeText(AddDeviceActivity.this,"添加成功",Toast.LENGTH_LONG).show();
+                    finish();
+                    break;
+                case 2001:
+                    Toast.makeText(AddDeviceActivity.this,"添加失败",Toast.LENGTH_LONG).show();
+                    break;
+            }
         }
     }
 
     class MessageReceiver extends BroadcastReceiver{
-
         @Override
         public void onReceive(Context context, Intent intent) {
             String macAddress=intent.getStringExtra("macAddress");
+            DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
             if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())){
+                deviceChild=deviceChild2;
                 Map<String,Object> params=new HashMap<>();
                 params.put("deviceName",deviceChild.getName());
                 params.put("deviceType",deviceChild.getType());
                 params.put("deviceMacAddress",deviceChild.getMacAddress());
-                params.put("houseId",deviceChild.getHouseId());
-                params.put("roomId",deviceChild.getRoomId());
+                params.put("houseId",1);
+                params.put("roomId",roomId);
                 String userId=my.getString("userId","");
                 params.put("userId",userId);
-                new AddDeviceInNewRoomAsync().execute(params);
+                new AddDeviceInOldRoomAsync().execute(params);
             }
         }
     }

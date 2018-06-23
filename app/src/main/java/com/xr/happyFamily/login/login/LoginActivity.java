@@ -187,7 +187,7 @@ public class LoginActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
 
-    String userId= "1001";
+    String userId;
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -201,7 +201,7 @@ public class LoginActivity extends AppCompatActivity {
                     code = jsonObject.getInt("returnCode");
                     JSONObject returnData=jsonObject.getJSONObject("returnData");
                     if (code == 100) {
-//                         userId=returnData.getString("userId");
+                         userId=returnData.getString("userId");
                         String token = returnData.getString("token");
                         SharedPreferences.Editor editor = preferences.edit();
                         String phone = et_name.getText().toString().trim();

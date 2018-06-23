@@ -19,6 +19,7 @@ import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.AddRoomActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
+import com.xr.happyFamily.jia.ChooseHourseActivity;
 import com.xr.happyFamily.jia.HourseActivity;
 import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
@@ -92,7 +93,7 @@ public class homeFragment extends Fragment {
                 startActivity(new Intent(getActivity(), ChangeRoomActivity.class));
                 break;
             case R.id.tv_my_hourse:
-                startActivity(new Intent(getActivity(), HourseActivity.class));
+                startActivity(new Intent(getActivity(), ChooseHourseActivity.class));
                 break;
 
 

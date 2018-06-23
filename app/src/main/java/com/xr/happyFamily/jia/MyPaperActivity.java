@@ -100,6 +100,10 @@ public class MyPaperActivity extends AppCompatActivity {
         }
 
 
+        Intent intent=getIntent();
+        int position =intent.getIntExtra("position",0);
+
+        Log.i("ttttt", "---->"+position);
         Log.i("room", "---->: "+str1+".........."+str2+"...."+str3);
         views = new ArrayList<>();
         for (int i=0;i<str3.size();i++){
@@ -182,7 +186,7 @@ public class MyPaperActivity extends AppCompatActivity {
         adapter = new TabFragmentPagerAdapter(getSupportFragmentManager(), views);
         myViewPager.setAdapter(adapter);
         myViewPager.setCurrentItem(0);  //初始化显示第一个页面
-
+        myViewPager.setCurrentItem(position);
         Log.e("ppppp", "onStart:--> "+postion );
 //
         myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -211,29 +215,11 @@ public class MyPaperActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (resultCode) {
 
-            case 1:
-
-
-
-                break;
-            case 2:
-
-
-                break;
-            case 3:
-
-
-                break;
-            case 4:
-
-
-                break;
-            case 5:
-                myViewPager.setCurrentItem(0);
-                break;
+        if(requestCode==5000){
+            myViewPager.setCurrentItem(0);
         }
+
     }
 
 

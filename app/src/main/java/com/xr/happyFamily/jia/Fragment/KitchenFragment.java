@@ -2,6 +2,7 @@ package com.xr.happyFamily.jia.Fragment;
 
 import android.app.Dialog;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -20,6 +21,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
@@ -27,11 +29,18 @@ import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
+import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.jia.view_custom.HomeDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+
+import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Field;
 import java.text.Format;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -43,9 +52,11 @@ public class KitchenFragment extends Fragment {
     private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
     private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
     Dialog dia ;
+    String ip = "http://47.98.131.11:8084";
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     Unbinder unbinder;
+
 //    @BindView(R.id.bt_balcony_add)
 //    Button buttonadd;
 //    @BindView(R.id.tv_kitchen_gl)
@@ -63,7 +74,12 @@ public class KitchenFragment extends Fragment {
     String roomName,roomType,roomId;
     @BindView(R.id.gv_balcony_home)
     com.xr.happyFamily.jia.MyGridview mGridView;
-
+    RoomDaoImpl roomDao;
+    List<Room> rooms;
+    Room room;
+    ArrayList str1;
+    ArrayList str2;
+    ArrayList str3;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -76,7 +92,16 @@ public class KitchenFragment extends Fragment {
                 ( android.support.percent.PercentRelativeLayout)view.findViewById(R.id.pr_view);
         TextView textViewr = (TextView) view.findViewById(R.id.tv_roomname);
         percentRelativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_kitchen));
-
+        str1=new ArrayList();
+        str2=new ArrayList();
+        str3=new ArrayList();
+        roomDao = new RoomDaoImpl(getActivity());
+        rooms= roomDao.findByAllRoom();
+        for (int i = 0 ;i<rooms.size();i++){
+            room=rooms.get(i);
+            String type = room.getRoomType();
+            str1.add(type);
+        }
         mGridData = new ArrayList<>();
         for (int i = 0; i < img.length; i++) {
             Equipment item = new Equipment();
@@ -140,7 +165,7 @@ public void onClick(View view) {
             break;
 
         case R.id.iv_home_fh:
-            startActivityForResult(new Intent(getActivity(), MyPaperActivity.class), 5);
+            startActivityForResult(new Intent(getActivity(), MyPaperActivity.class), 5000);
             break;
 
     }
@@ -166,15 +191,7 @@ public void onClick(View view) {
             @Override
             public void onDismiss(PopupMenu menu) {
                 if ("更改房间名".equals(title)){
-                    dia = new Dialog(getActivity(), R.style.edit_AlertDialog_style);//设置进入时跳出提示框
-                    dia.setContentView(R.layout.activity_home_dedialog);
-//                    relativeLayoutre.setBackgroundResource(R.drawable.bg_shape);
-                    dia.show();
-                    dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
-                    Window w = dia.getWindow();
-                    WindowManager.LayoutParams lp = w.getAttributes();
-                    lp.x = 0;
-                    dia.onWindowAttributesChanged(lp);
+                    buildUpdateHomeDialog();
                 }
                 if ("删除房间".equals(title)){
                     dia = new Dialog(getActivity(), R.style.edit_AlertDialog_style);//设置进入时跳出提示框
@@ -192,7 +209,61 @@ public void onClick(View view) {
 
         popupMenu.show();
     }
-    @Override
+    private String houseName;
+    private void buildUpdateHomeDialog() {
+        final HomeDialog dialog = new HomeDialog(getActivity());
+        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                roomName = dialog.getName();
+                if (com.xr.happyFamily.login.util.Utils.isEmpty(roomName)) {
+                    com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
+                } else {
+
+                    for (int i=0;i<str1.size();i++){
+                        if ("阳台".equals(str1.get(i))){
+
+                            new KitchenFragment.ChangeNameAsyncTask().execute();
+                            dialog.dismiss();
+                        }
+                    }
+
+
+
+                }
+            }
+        });
+        dialog.show();
+    }
+    class ChangeNameAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+
+            String url = ip + "/family/room/changeRoomName?roomName=" + roomName + "&roomId=" + roomId;
+            String result = HttpUtils.getOkHpptRequest(url);
+
+            try {
+                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+    }
+        @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i("recode", "--->: "+requestCode);

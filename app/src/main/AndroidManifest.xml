@@ -109,6 +109,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".jia.ChooseHourseActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".jia.MyPaperActivity1"
             android:label=""
             android:screenOrientation="portrait"

@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.Hourse;
 
@@ -15,7 +16,7 @@ import java.util.List;
 
 //快递列表适配器
 
-public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder> /*implements View.OnClickListener*/ {
+public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.MyViewHolder> /*implements View.OnClickListener*/ {
     private Context context;
     private List<Hourse> data;
     private ButtonInterface buttonInterface;
@@ -24,8 +25,9 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder
     private OnItemListener onItemListener;
     private int type=0;
     private String shopId;
+    private int clicked;
 
-    public HouseAdapter(Context context, List<Hourse> list) {
+    public ChooseHouseAdapter(Context context, List<Hourse> list) {
         this.context=context;
         this.data=list;
     }
@@ -59,7 +61,7 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder
     @Override
     public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
-                context).inflate(R.layout.activity_home_hourseitem, parent,
+                context).inflate(R.layout.activity_hourse_chhoose_item, parent,
                 false));
         return holder;
     }
@@ -69,6 +71,14 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder
 //        holder.tv_shop_type.setText(data.get(position).getGoods().getSimpleDescribe());
         holder.tv_name.setText(data.get(position).getHouseName());
         holder.tv_address.setText(data.get(position).getHouseAddress());
+        if (clicked==-1){
+            holder.img_change.setVisibility(View.GONE);
+        }else if (clicked==1){
+            holder.img_change.setVisibility(View.VISIBLE);
+        }
+        if (position==data.size()){
+            holder.view1.setVisibility(View.GONE);
+        }
 //        shopId=data.get(position).getGoodsId();
 //        holder.img_tui.setOnClickListener(this);
 //        holder.rl_dingdan.setOnClickListener(new View.OnClickListener() {
@@ -107,6 +117,7 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder
     class MyViewHolder extends RecyclerView.ViewHolder {
 
         ImageView img_change;
+        View view1;
         TextView tv_address,tv_name;
         RelativeLayout rl_d1;
         RelativeLayout rl_d2;
@@ -114,11 +125,12 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder
             super(view);
 
 
-
-            tv_name= (TextView) view.findViewById(R.id.tv_hourse_h);
-            tv_address= (TextView) view.findViewById(R.id.tv_hourse_ad);
-            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it1);
-            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it2);
+            tv_name= (TextView) view.findViewById(R.id.tv_hourse_choosen);
+            tv_address= (TextView) view.findViewById(R.id.tv_hourse_choosep);
+            img_change= (ImageView) view.findViewById(R.id.iv_hourse_c);
+            view1= view.findViewById(R.id.house_view);
+//            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it1);
+//            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it2);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -128,7 +140,8 @@ public class HouseAdapter extends RecyclerView.Adapter<HouseAdapter.MyViewHolder
                 }
             });
         }
-
-
+    }
+    public void setClicked(int clicked){
+        this.clicked=clicked;
     }
 }

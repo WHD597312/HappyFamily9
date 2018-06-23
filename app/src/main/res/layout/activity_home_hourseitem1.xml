@@ -8,4 +8,5 @@
     <com.xr.happyFamily.jia.view_custom.LinearGradientView
         android:layout_width="match_parent"
         android:layout_height="5dp" />
+
 </LinearLayout>

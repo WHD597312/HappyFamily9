@@ -6,18 +6,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
-import android.support.v4.app.FragmentActivity;
-import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
-import android.support.v4.app.FragmentStatePagerAdapter;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.PagerAdapter;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.support.v4.app.ListFragment;
-
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.Fragment.BalconyFragment;
@@ -26,17 +19,10 @@ import com.xr.happyFamily.jia.Fragment.KitchenFragment;
 import com.xr.happyFamily.jia.Fragment.LivingFragment;
 import com.xr.happyFamily.jia.Fragment.RoomFragment;
 import com.xr.happyFamily.jia.Fragment.homeFragment;
-import com.xr.happyFamily.jia.adapter.MyAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
 import com.xr.happyFamily.jia.pojo.Room;
-
 import android.support.v4.app.Fragment;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ImageView;
-import android.widget.ListView;
-import android.widget.TextView;
+
 
 import java.util.ArrayList;
 import java.util.List;
@@ -101,8 +87,9 @@ public class MyPaperActivity extends AppCompatActivity {
 
 
         Intent intent=getIntent();
+        Intent intent1=getIntent();
         int position =intent.getIntExtra("position",0);
-        int position1 =intent.getIntExtra("weizhi",0);
+        int position1 =intent1.getIntExtra("weizhi",position);
         Log.i("ttttt", "---->"+position);
         Log.i("room", "---->: "+str1+".........."+str2+"...."+str3);
         views = new ArrayList<>();
@@ -186,7 +173,7 @@ public class MyPaperActivity extends AppCompatActivity {
         myViewPager.setCurrentItem(position);
         myViewPager.setCurrentItem(position1);
         Log.e("ppppp", "onStart:--> "+postion );
-//
+
         myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
             @Override

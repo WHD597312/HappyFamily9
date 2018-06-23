@@ -228,7 +228,7 @@ public void onClick(View view) {
                 } else {
 
                     for (int i=0;i<str1.size();i++){
-                        if ("阳台".equals(str1.get(i))){
+                        if ("厨房".equals(str1.get(i))){
 
                             new KitchenFragment.ChangeNameAsyncTask().execute();
                             dialog.dismiss();

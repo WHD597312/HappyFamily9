@@ -224,7 +224,7 @@ public void onClick(View view) {
                 } else {
 
                     for (int i=0;i<str1.size();i++){
-                        if ("阳台".equals(str1.get(i))){
+                        if ("卧室".equals(str1.get(i))){
 
                             new RoomFragment.ChangeNameAsyncTask().execute();
                             dialog.dismiss();

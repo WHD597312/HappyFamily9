@@ -115,8 +115,8 @@ public class AddRoomActivity extends AppCompatActivity {
                         new AddRoomActivity.AddroomAsyncTask().execute(params2);
                         break;
                     case 4:
-                        roomType="餐厅";
-                        roomName="餐厅";
+                        roomType="阳台";
+                        roomName="阳台";
                         Toast.makeText(AddRoomActivity.this,"4",Toast.LENGTH_SHORT).show();
                         Map<String,Object> params3=new HashMap<>();
                         params3.put("roomName",roomName);

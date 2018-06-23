@@ -269,6 +269,7 @@ public class LoginActivity extends AppCompatActivity {
                         {
                             JSONObject houseObject=returnData.getJSONObject(i);
                             int id=houseObject.getInt("id");
+                            Log.i("rrrr", "doInBackground:--> "+id);
                             String houseName=houseObject.getString("houseName");
                             String houseAddress=houseObject.getString("houseAddress");
                             int userId=houseObject.getInt("userId");
@@ -288,7 +289,7 @@ public class LoginActivity extends AppCompatActivity {
                             for (int j = 0; j < roomDevices.length(); j++) {
                                JSONObject roomObject=roomDevices.getJSONObject(j);
                                int roomId=roomObject.getInt("roomId");
-                                Id=roomId;
+                               Id=roomId;
                                String roomName=roomObject.getString("roomName");
                                int houseId=roomObject.getInt("houseId");
                                String  roomType=roomObject.getString("roomType");

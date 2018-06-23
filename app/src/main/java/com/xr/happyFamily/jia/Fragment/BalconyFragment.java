@@ -142,7 +142,7 @@ public class BalconyFragment extends Fragment {
                 break;
 
             case R.id.iv_home_fh:
-                startActivityForResult(new Intent(getActivity(), MyPaperActivity.class),5);
+                startActivityForResult(new Intent(getActivity(), MyPaperActivity.class),5000);
                 break;
 //            case R.id.tv_dialog_qx:
 //                dia.hide();

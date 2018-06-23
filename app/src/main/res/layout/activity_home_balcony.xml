@@ -10,11 +10,7 @@
     android:id="@+id/pr_view"
 
     android:orientation="vertical">
-    <FrameLayout
-        android:id="@+id/fragment_containerbl"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+
     <ScrollView
     android:orientation="vertical"
     android:layout_width="0dp"

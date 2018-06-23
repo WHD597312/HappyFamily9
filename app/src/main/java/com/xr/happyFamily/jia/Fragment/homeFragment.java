@@ -34,8 +34,8 @@ import butterknife.Unbinder;
 
 public class homeFragment extends Fragment {
 
-    private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
-    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
+//    private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
+//    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
 
     private GridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
@@ -57,12 +57,12 @@ public class homeFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home_mypage, container, false);
         unbinder=ButterKnife.bind(this,view);
         mGridData = new ArrayList<>();
-        for (int i = 0; i < img.length; i++) {
-            Equipment item = new Equipment();
-            item.setName(localCartoonText[i]);
-            item.setImgeId(img[i]);
-            mGridData.add(item);
-        }
+//        for (int i = 0; i < img.length; i++) {
+//            Equipment item = new Equipment();
+//            item.setName(localCartoonText[i]);
+//            item.setImgeId(img[i]);
+//            mGridData.add(item);
+//        }
         Bundle bundle=getArguments();
         if (bundle!=null){
         roomName=bundle.getString("roomName");

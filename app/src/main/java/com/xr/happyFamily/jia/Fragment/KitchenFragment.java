@@ -72,6 +72,8 @@ public class KitchenFragment extends Fragment {
     TextView textViewgl;
     @BindView(R.id.balcony_li)
     LinearLayout li;
+    @BindView(R.id.tv_roomname)
+    TextView textViewname;
     String roomName,roomType,roomId;
     @BindView(R.id.gv_balcony_home)
     com.xr.happyFamily.jia.MyGridview mGridView;
@@ -231,6 +233,8 @@ public void onClick(View view) {
                         if ("厨房".equals(str1.get(i))){
 
                             new KitchenFragment.ChangeNameAsyncTask().execute();
+                                textViewname.setText(roomName);
+
                             dialog.dismiss();
                         }
                     }

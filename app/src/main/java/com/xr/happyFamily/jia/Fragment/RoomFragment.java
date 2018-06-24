@@ -64,6 +64,8 @@ public class RoomFragment extends Fragment {
     TextView textViewgl;
     @BindView(R.id.balcony_li)
     LinearLayout li;
+    @BindView(R.id.tv_roomname)
+    TextView textViewname;
     String roomName,roomType,roomId;
     @BindView(R.id.gv_balcony_home)
     com.xr.happyFamily.jia.MyGridview mGridView;
@@ -224,9 +226,10 @@ public void onClick(View view) {
                 } else {
 
                     for (int i=0;i<str1.size();i++){
-                        if ("阳台".equals(str1.get(i))){
+                        if ("卧室".equals(str1.get(i))){
 
                             new RoomFragment.ChangeNameAsyncTask().execute();
+                            textViewname.setText(roomName);
                             dialog.dismiss();
                         }
                     }

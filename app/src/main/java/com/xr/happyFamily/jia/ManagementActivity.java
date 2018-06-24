@@ -43,7 +43,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class ManagementActivity extends AppCompatActivity {
-    private String[] localCartoonText = {"厨房", "卧室", "客厅","餐厅", "卫生间","浴室","儿童房","婴儿房","活动室","媒体房",
+    private String[] localCartoonText = {"厨房", "卧室", "客厅","阳台", "卫生间","浴室","儿童房","婴儿房","活动室","媒体房",
             "办公室","休闲室","书房","工作室","衣帽间","后院"};
     private Integer[] img ={R.mipmap.house_cf,R.mipmap.house_ws,R.mipmap.house_kt,R.mipmap.house_ct,
             R.mipmap.house_wsj, R.mipmap.house_ys,R.mipmap.house_etf,R.mipmap.house_yef,
@@ -88,9 +88,7 @@ public class ManagementActivity extends AppCompatActivity {
                 houseId=hourse.getHouseId();
             }
         }
-        roomId= rooms.size()+1;
-
-
+        Log.e("rrrrrrrrr", "onCreate: ---->"+houseId );
         mGridView = (GridView) findViewById(R.id.gv_management_my);
         mGridData = new ArrayList<>();
         for (int i=0; i<img.length; i++) {
@@ -135,21 +133,22 @@ public class ManagementActivity extends AppCompatActivity {
                         roomName="卧室";
                         Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
                         break;
-                    case 3:
+                    case 2:
                         roomType="客厅";
                         roomName="客厅";
-                        Toast.makeText(ManagementActivity.this,"1",Toast.LENGTH_SHORT).show();
-                        break;
-                    case 4:
-                        roomType="餐厅";
-                        roomName="餐厅";
                         Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
                         break;
-                    case 5:
-                        roomType="卫生间";
-                        roomName="餐厅";
-                        Toast.makeText(ManagementActivity.this,"1",Toast.LENGTH_SHORT).show();
+                    case 3:
+                        roomType="阳台";
+                        roomName="阳台";
+                        Toast.makeText(ManagementActivity.this,"3",Toast.LENGTH_SHORT).show();
                         break;
+                    case 4:
+                        roomType="卫生间";
+                        roomName="卫生间";
+                        Toast.makeText(ManagementActivity.this,"4",Toast.LENGTH_SHORT).show();
+                        break;
+
                     default:
                         break;
                 }

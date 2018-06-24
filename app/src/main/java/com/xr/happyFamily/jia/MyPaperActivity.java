@@ -84,8 +84,6 @@ public class MyPaperActivity extends AppCompatActivity {
           str2.add(roomType);
           str3.add(roomId);
         }
-
-
         Intent intent=getIntent();
         Intent intent1=getIntent();
         int position =intent.getIntExtra("position",0);
@@ -123,8 +121,6 @@ public class MyPaperActivity extends AppCompatActivity {
                 RoomFragment roomFragmen=new RoomFragment();
                 roomFragmen.setArguments(bundle);
                 views.add( roomFragmen);
-
-
             }
             else if ("阳台".equals(str2.get(i))){
                 Bundle bundle=new Bundle();
@@ -133,11 +129,7 @@ public class MyPaperActivity extends AppCompatActivity {
                 bundle.putString("roomId",str3.get(i).toString());
                 BalconyFragment balconyFragment=new BalconyFragment();
                 balconyFragment.setArguments(bundle);
-
                 views.add( balconyFragment);
-
-
-
             }
             else if ("客厅".equals(str2.get(i))){
                 Bundle bundle=new Bundle();
@@ -147,8 +139,6 @@ public class MyPaperActivity extends AppCompatActivity {
                 LivingFragment livingFragment=new LivingFragment();
                 livingFragment.setArguments(bundle);
                 views.add( livingFragment);
-
-
             }
 
             else if ("卫生间".equals(str2.get(i))) {
@@ -200,7 +190,20 @@ public class MyPaperActivity extends AppCompatActivity {
         if(requestCode==5000){
             myViewPager.setCurrentItem(0);
         }
-
+        int a=10;
+        int b=a;
+        int c=requestCode;
+        int d=resultCode;
+        if (resultCode==6000){
+            String s=data.getStringExtra("roomId");
+            long roomId=Long.parseLong(s);
+            Room room=roomDao.findById(roomId);
+            String roomName=room.getRoomName();
+            Bundle bundle=new Bundle();
+            if ("厨房".equals(roomName)){
+                myViewPager.setCurrentItem(1);
+            }
+        }
     }
 
 
@@ -209,8 +212,6 @@ public class MyPaperActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
     }
-
-
 
     @Override
     protected void onRestart() {

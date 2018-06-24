@@ -11,24 +11,26 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class GridViewAdapter extends ArrayAdapter {
     private Context mContext;
     private int layoutResourceId;
-    private ArrayList<Equipment> mGridData = new ArrayList<Equipment>();
+    private List<DeviceChild> mGridData;
 
 
-    public GridViewAdapter(Context context, int resource, ArrayList<Equipment> objects) {
+    public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
         super(context, resource, objects);
         this.mContext = context;
         this.layoutResourceId = resource;
         this.mGridData = objects;
     }
 
-    public void setGridData(ArrayList<Equipment> mGridData) {
+    public void setGridData(ArrayList<DeviceChild> mGridData) {
         this.mGridData = mGridData;
         notifyDataSetChanged();
     }
@@ -47,10 +49,9 @@ public class GridViewAdapter extends ArrayAdapter {
             }
             holder.textView = (TextView) convertView.findViewById(R.id.tv_home_1);
             holder.imageView = (ImageView) convertView.findViewById(R.id.iv_home);
-            Equipment item = mGridData.get(position);
+            DeviceChild item = mGridData.get(position);
             holder.textView.setText(item.getName());
-          Picasso.with(mContext).load(item.getImgeId()).into(holder.imageView);
-
+            Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             return convertView;
         }
 

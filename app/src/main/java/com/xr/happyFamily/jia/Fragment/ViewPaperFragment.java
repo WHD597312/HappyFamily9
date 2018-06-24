@@ -18,13 +18,19 @@ import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
+import com.xr.happyFamily.jia.pojo.Hourse;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -37,7 +43,7 @@ public class ViewPaperFragment extends Fragment {
     private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
     Dialog dia ;
     private GridViewAdapter mGridViewAdapter = null;
-    private ArrayList<Equipment> mGridData = null;
+    private List<DeviceChild> mGridData = null;
     Unbinder unbinder;
     @BindView(R.id.bt_balcony_add)
     Button buttonadd;
@@ -48,6 +54,12 @@ public class ViewPaperFragment extends Fragment {
 
     @BindView(R.id.gv_balcony_home)
     com.xr.happyFamily.jia.MyGridview mGridView;
+    private DeviceChildDaoImpl deviceChildDao;
+    private HourseDaoImpl hourseDao;
+    RoomDaoImpl roomDao;
+    String roomName;
+    String roomType;
+    String roomId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -55,20 +67,22 @@ public class ViewPaperFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home_balcony, container, false);
 
         unbinder=ButterKnife.bind(this,view);
-        mGridData = new ArrayList<>();
-        for (int i = 0; i < img.length; i++) {
-            Equipment item = new Equipment();
-            item.setName(localCartoonText[i]);
-            item.setImgeId(img[i]);
-            mGridData.add(item);
-        }
+        roomDao = new RoomDaoImpl(getActivity());
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+
+        List<Hourse> hourses=hourseDao.findAllHouse();
+        Hourse hourse=hourses.get(0);
+        long houseId=hourse.getHouseId();
+
+
         Bundle bundle=getArguments();
         if (bundle!=null){
-            String roomName=bundle.getString("roomName");
-            String roomType=bundle.getString("roomType");
-            String roomId=bundle.getString("roomId");
+            roomName=bundle.getString("roomName");
+            roomType=bundle.getString("roomType");
+            roomId=bundle.getString("roomId");
             Log.i("dddddd1", "------->: "+roomName+"....."+roomType+"....."+roomId);
         }
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
         buttonadd.setOnClickListener(new OnClickListener()

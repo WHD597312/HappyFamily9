@@ -235,6 +235,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar"
             />
+        <activity android:name=".jia.activity.DeviceDetailActivity"/>
     </application>
 
 </manifest>

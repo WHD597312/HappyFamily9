@@ -23,6 +23,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
@@ -243,13 +244,13 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
     long Id=-1;
+    int img[]={R.mipmap.t};
     class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
             int code = 0;
 //            Map<String, Object> params = maps[0];
-
             String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
             String result = HttpUtils.getOkHpptRequest(url);
             Log.i("ffffffff", "--->: " + result);
@@ -304,6 +305,23 @@ public class LoginActivity extends AppCompatActivity {
                                     room = new Room((long)roomId,  roomName,  houseId, roomType,0);
                                     roomDao.insert(room);
                                     Log.i("dddddd1111", "doInBackground:---> "+room);
+                                }
+                                JSONArray deviceList=roomObject.getJSONArray("deviceList");
+                                for (int k = 0; k < deviceList.length(); k++) {
+                                    JSONObject device=deviceList.getJSONObject(k);
+                                    int deviceId=device.getInt("deviceId");
+                                    String deviceName=device.getString("deviceName");
+                                    int deviceType=device.getInt("deviceType");
+                                    String deviceMacAddress=device.getString("deviceMacAddress");
+                                    int houseId2=device.getInt("houseId");
+                                    int userId2=device.getInt("userId");
+                                    int roomId2=device.getInt("roomId");
+                                    int deviceUsedCount=device.getInt("deviceUsedCount");
+
+                                    DeviceChild deviceChild=new DeviceChild((long)deviceId, (long)houseId2, (long)roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
+                                    deviceChild.setImg(img[0]);
+
+                                    deviceChildDao.insert(deviceChild);
                                 }
                             }
                     }

@@ -138,6 +138,9 @@ public class AddDeviceActivity extends AppCompatActivity {
                     nice_spinner.setEnabled(true);
                     break;
                 }
+                Intent intent=new Intent();
+                intent.putExtra("roomId",roomId);
+                setResult(6000,intent);
                 finish();
                 break;
             case R.id.bt_add_finish:

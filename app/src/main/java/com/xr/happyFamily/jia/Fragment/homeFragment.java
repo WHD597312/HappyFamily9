@@ -14,6 +14,8 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.AddRoomActivity;
@@ -25,8 +27,11 @@ import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
 import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,7 +43,7 @@ public class homeFragment extends Fragment {
 //    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
 
     private GridViewAdapter mGridViewAdapter = null;
-    private ArrayList<Equipment> mGridData = null;
+    private List<DeviceChild> mGridData = null;
     Unbinder unbinder;
     @BindView(R.id.bt_mypage_add)
     Button buttonadd;
@@ -50,6 +55,8 @@ public class homeFragment extends Fragment {
     com.xr.happyFamily.jia.MyGridview mGridView1;
     String roomName,roomType,roomId;
     public static final int MREQUEST_CODE=2;
+    private DeviceChildDaoImpl deviceChildDao;
+    private HourseDaoImpl hourseDao;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -92,6 +99,7 @@ public class homeFragment extends Fragment {
             case R.id.tv_my_hourse:
                 startActivity(new Intent(getActivity(), ChooseHourseActivity.class));
                 break;
+
         }
     }
 

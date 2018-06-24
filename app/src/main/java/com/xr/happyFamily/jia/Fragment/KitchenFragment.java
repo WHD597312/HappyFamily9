@@ -14,6 +14,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -21,15 +22,20 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
+import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -48,14 +54,14 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class KitchenFragment extends Fragment {
+public class KitchenFragment extends Fragment{
     private ImageButton mLeftMenu;
     private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
     private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
     Dialog dia ;
     String ip = "http://47.98.131.11:8084";
     private GridViewAdapter mGridViewAdapter = null;
-    private ArrayList<Equipment> mGridData = null;
+    private List<DeviceChild> mGridData = null;
     Unbinder unbinder;
 
 //    @BindView(R.id.bt_balcony_add)
@@ -83,6 +89,9 @@ public class KitchenFragment extends Fragment {
     ArrayList str1;
     ArrayList str2;
     ArrayList str3;
+    private DeviceChildDaoImpl deviceChildDao;
+    private HourseDaoImpl hourseDao;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -99,18 +108,18 @@ public class KitchenFragment extends Fragment {
         str2=new ArrayList();
         str3=new ArrayList();
         roomDao = new RoomDaoImpl(getActivity());
+        hourseDao=new HourseDaoImpl(getActivity());
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+
+        List<Hourse> hourses=hourseDao.findAllHouse();
+        Hourse hourse=hourses.get(0);
+        long houseId=hourse.getHouseId();
+
         rooms= roomDao.findByAllRoom();
         for (int i = 0 ;i<rooms.size();i++){
             room=rooms.get(i);
             String type = room.getRoomType();
             str1.add(type);
-        }
-        mGridData = new ArrayList<>();
-        for (int i = 0; i < img.length; i++) {
-            Equipment item = new Equipment();
-            item.setName(localCartoonText[i]);
-            item.setImgeId(img[i]);
-            mGridData.add(item);
         }
         Bundle bundle=getArguments();
         if (bundle!=null){
@@ -119,19 +128,19 @@ public class KitchenFragment extends Fragment {
              roomId=bundle.getString("roomId");
             textViewr.setText(roomName);
         }
-
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
+
         mGridView.setAdapter(mGridViewAdapter);
         buttonadd.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-
 //                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
                 Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
                 intent.putExtra("roomId",roomId);
-                startActivityForResult(intent,3);
+                startActivityForResult(intent,6000);
                 Log.i("dddddd3", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });
@@ -173,6 +182,24 @@ public void onClick(View view) {
 
     }
 }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DeviceChild deviceChild=mGridData.get(position);
+                String deviceName=deviceChild.getName();
+                long deviceId=deviceChild.getId();
+                Intent intent=new Intent(getActivity(), DeviceDetailActivity.class);
+                intent.putExtra("deviceName",deviceName);
+                intent.putExtra("deviceId",deviceId);
+                startActivity(intent);
+            }
+        });
+    }
+
     String title;
     private void showPopupMenu(View view) {
         // View当前PopupMenu显示的相对View的位置
@@ -274,7 +301,6 @@ public void onClick(View view) {
         Log.i("recode", "--->: "+requestCode);
 
         switch (resultCode) {
-
             case 1:
                 getActivity().getSupportFragmentManager()
                         .beginTransaction()

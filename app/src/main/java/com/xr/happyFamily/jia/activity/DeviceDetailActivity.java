@@ -74,6 +74,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @BindView(R.id.image_timer) ImageView image_timer;/**定时任务*/
     @BindView(R.id.tv_cur_temp) TextView tv_cur_temp;/**当前温度*/
     @BindView(R.id.tv_timer) TextView tv_timer;/**定时*/
+    @BindView(R.id.tv_title) TextView tv_title;
     @BindView(R.id.semicBar)
     SmartWheelBar wheelBar;
     @BindView(R.id.relative4) RelativeLayout relative4;/**底部布局*/
@@ -107,7 +108,11 @@ public class DeviceDetailActivity extends AppCompatActivity {
         getBitWheelInfos();
         wheelBar.setBitInfos(infos);
         deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
-        deviceChild=deviceChildDao.findById(1L);
+        Intent intent=getIntent();
+        String deviceName=intent.getStringExtra("deviceName");
+        tv_title.setText(deviceName);
+        long deviceId=intent.getLongExtra("deviceId",0);
+        deviceChild=deviceChildDao.findById(deviceId);
         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
         Log.i("deviceChildren","-->"+deviceChildren.size());
 
@@ -216,9 +221,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
             }
         });
     }
-    @OnClick({R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
+    @OnClick({R.id.image_back,R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.image_back:
+                finish();
+                break;
             case R.id.image_switch:
                 int deviceState=deviceChild.getDeviceState();
                 if (deviceState==0){
@@ -326,6 +334,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         int sm= tv_timer_min.getValue();
                         deviceChild.setTimerHour(sh);
                         deviceChild.setTimerMin(sm);
+                        setMode(deviceChild);
                         send(deviceChild);
                         Log.i("time", "--->: "+sh+",,,"+sm);
                         popupWindow.dismiss();
@@ -424,10 +433,11 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
+
+
             String macAddress=intent.getStringExtra("macAddress");
+            Log.i("macAddress","-->"+macAddress);
             DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
-            Log.i("deviceChild2","-->"+deviceChild2.getMacAddress());
-            Log.i("warmerCurTemp","-->"+deviceChild2.getWarmerCurTemp());
             if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
                 deviceChild=deviceChild2;
                 Log.i("warmerCurTemp","-->"+deviceChild.getWarmerCurTemp());
@@ -520,8 +530,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
             int deviceState=deviceChild.getDeviceState();
             String rateStateStr=deviceChild.getRateState();
             int rateState=Integer.parseInt(rateStateStr);
-            int rateStateHigh=rateState/10;
-            int rateStateLow=rateState%10;
+            int rateStateHigh=Integer.parseInt(rateStateStr.substring(0,1));
+            int rateStateLow=Integer.parseInt(rateStateStr.substring(1));
             int lockState=deviceChild.getLockState();
             int screenState=deviceChild.getScreenState();
             int []x=new int[8];

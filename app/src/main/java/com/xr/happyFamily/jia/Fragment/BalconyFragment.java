@@ -23,16 +23,21 @@ import android.widget.TextView;
 import android.widget.Toast;
 import android.view.View.OnClickListener;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.zhy.http.okhttp.utils.L;
 
 import org.json.JSONObject;
 
@@ -51,7 +56,7 @@ public class BalconyFragment extends Fragment {
     private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
     Dialog dia ;
     private GridViewAdapter mGridViewAdapter = null;
-    private ArrayList<Equipment> mGridData = null;
+    private List<DeviceChild> mGridData = null;
     String ip = "http://47.98.131.11:8084";
     Unbinder unbinder;
     @BindView(R.id.bt_balcony_add)
@@ -72,6 +77,8 @@ public class BalconyFragment extends Fragment {
     ArrayList str1;
     ArrayList str2;
     ArrayList str3;
+    private DeviceChildDaoImpl deviceChildDao;
+    private HourseDaoImpl hourseDao;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -87,6 +94,13 @@ public class BalconyFragment extends Fragment {
         str2=new ArrayList();
         str3=new ArrayList();
         roomDao = new RoomDaoImpl(getActivity());
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+        hourseDao=new HourseDaoImpl(getActivity());
+
+        List<Hourse> hourses=hourseDao.findAllHouse();
+        Hourse hourse=hourses.get(0);
+        long houseId=hourse.getHouseId();
+
         rooms= roomDao.findByAllRoom();
         for (int i = 0 ;i<rooms.size();i++){
             room=rooms.get(i);
@@ -95,13 +109,7 @@ public class BalconyFragment extends Fragment {
         }
 
 
-        mGridData = new ArrayList<>();
-        for (int i = 0; i < img.length; i++) {
-            Equipment item = new Equipment();
-            item.setName(localCartoonText[i]);
-            item.setImgeId(img[i]);
-            mGridData.add(item);
-        }
+
         Bundle bundle=getArguments();
         if (bundle!=null){
              roomName=bundle.getString("roomName");
@@ -109,6 +117,7 @@ public class BalconyFragment extends Fragment {
              roomId=bundle.getString("roomId");
             textViewr.setText(roomName);
         }
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
         buttonadd.setOnClickListener(new OnClickListener()

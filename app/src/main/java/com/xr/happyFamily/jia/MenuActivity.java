@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.GridView;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
 import java.util.ArrayList;
 import butterknife.ButterKnife;
@@ -16,7 +17,7 @@ public class MenuActivity extends AppCompatActivity {
     private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
     private GridView mGridView = null;
     private GridViewAdapter mGridViewAdapter = null;
-    private ArrayList<Equipment> mGridData = null;
+    private ArrayList<DeviceChild> mGridData = null;
     Unbinder unbinder;
 
     @Override
@@ -30,15 +31,13 @@ public class MenuActivity extends AppCompatActivity {
         mGridView = (GridView) findViewById(R.id.gv_home_my);
         mGridData = new ArrayList<>();
         for (int i = 0; i < img.length; i++) {
-            Equipment item = new Equipment();
+            DeviceChild item = new DeviceChild();
             item.setName(localCartoonText[i]);
-            item.setImgeId(img[i]);
+            item.setImg(img[i]);
             mGridData.add(item);
         }
         mGridViewAdapter = new GridViewAdapter(this, R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
-
-
     }
     @Override
     protected void onDestroy() {

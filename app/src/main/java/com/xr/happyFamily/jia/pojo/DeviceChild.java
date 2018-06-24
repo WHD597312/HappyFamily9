@@ -37,6 +37,7 @@ public class DeviceChild implements Serializable{
     int checkCode=-1;/**校验码*/
     int endCode=-1;/**结束码*/
     int userId=0;/**用户Id*/
+    int img;/**设备标志图片*/
     public int getEndCode() {
         return this.endCode;
     }
@@ -205,19 +206,31 @@ public class DeviceChild implements Serializable{
     public void setUserId(int userId) {
         this.userId = userId;
     }
+    public int getImg() {
+        return this.img;
+    }
+    public void setImg(int img) {
+        this.img = img;
+    }
    
     @Generated(hash = 1973447423)
     public DeviceChild() {
     }
-    @Generated(hash = 1833874823)
-    public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount,
-            int type, int busModel, String macAddress, String name,
-            int timerMoudle, String mcuVersion, String wifiVersion,
-            int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
-            int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
-            int deviceState, String rateState, int lockState, int screenState,
-            int curRunState2, int curRunState3, int timerHour, int timerMin,
-            int checkCode, int endCode, int userId) {
+    public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
+        this.id = id;
+        this.houseId = houseId;
+        this.roomId = roomId;
+        this.deviceUsedCount = deviceUsedCount;
+        this.type = type;
+        this.macAddress = macAddress;
+        this.name = name;
+        this.userId = userId;
+    }
+    @Generated(hash = 1736145084)
+    public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount, int type, int busModel, String macAddress, String name,
+            int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
+            int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState, int deviceState, String rateState, int lockState,
+            int screenState, int curRunState2, int curRunState3, int timerHour, int timerMin, int checkCode, int endCode, int userId, int img) {
         this.id = id;
         this.houseId = houseId;
         this.roomId = roomId;
@@ -246,6 +259,6 @@ public class DeviceChild implements Serializable{
         this.checkCode = checkCode;
         this.endCode = endCode;
         this.userId = userId;
+        this.img = img;
     }
-
 }

@@ -391,7 +391,12 @@ public class MQService extends Service {
      * */
     public List<String> getTopicNames(){
         List<String> list=new ArrayList<>();
-        list.add("p99/warmer/hrrj7895ccf7f6c9fa4/transfer");
+        List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+        for (DeviceChild deviceChild:deviceChildren){
+            String macAddress=deviceChild.getMacAddress();
+            String topicName="p99/warmer/"+macAddress+"/transfer";
+            list.add(topicName);
+        }
 //        list.add("warmer/p99"+macAddress+"/set");
         return  list;
     }

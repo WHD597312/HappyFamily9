@@ -9,6 +9,8 @@ import com.xr.database.dao.DaoSession;
 import com.xr.database.dao.DeviceChildDao;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.List;
 
 public class DeviceChildDaoImpl {
@@ -57,5 +59,12 @@ public class DeviceChildDaoImpl {
     public List<DeviceChild> findAllDevice(){
         return deviceChildDao.loadAll();
     }
-
+    public List<DeviceChild> findHouseDevices(long houseId){
+        List<DeviceChild> deviceChildren=deviceChildDao.queryBuilder().where(DeviceChildDao.Properties.HouseId.eq(houseId)).orderAsc(DeviceChildDao.Properties.Id).list();
+        return deviceChildren;
+    }
+    public List<DeviceChild> findHouseInRoomDevices(long houseId,long roomId){
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.Type.eq(roomId));
+        return deviceChildDao.queryBuilder().where(whereCondition).list();
+    }
 }

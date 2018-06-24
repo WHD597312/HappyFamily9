@@ -51,6 +51,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property TimerMin = new Property(24, int.class, "timerMin", false, "TIMER_MIN");
         public final static Property CheckCode = new Property(25, int.class, "checkCode", false, "CHECK_CODE");
         public final static Property EndCode = new Property(26, int.class, "endCode", false, "END_CODE");
+        public final static Property UserId = new Property(27, int.class, "userId", false, "USER_ID");
     }
 
 
@@ -92,7 +93,8 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 23: timerHour
                 "\"TIMER_MIN\" INTEGER NOT NULL ," + // 24: timerMin
                 "\"CHECK_CODE\" INTEGER NOT NULL ," + // 25: checkCode
-                "\"END_CODE\" INTEGER NOT NULL );"); // 26: endCode
+                "\"END_CODE\" INTEGER NOT NULL ," + // 26: endCode
+                "\"USER_ID\" INTEGER NOT NULL );"); // 27: userId
     }
 
     /** Drops the underlying database table. */
@@ -155,6 +157,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(25, entity.getTimerMin());
         stmt.bindLong(26, entity.getCheckCode());
         stmt.bindLong(27, entity.getEndCode());
+        stmt.bindLong(28, entity.getUserId());
     }
 
     @Override
@@ -211,6 +214,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(25, entity.getTimerMin());
         stmt.bindLong(26, entity.getCheckCode());
         stmt.bindLong(27, entity.getEndCode());
+        stmt.bindLong(28, entity.getUserId());
     }
 
     @Override
@@ -247,7 +251,8 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.getInt(offset + 23), // timerHour
             cursor.getInt(offset + 24), // timerMin
             cursor.getInt(offset + 25), // checkCode
-            cursor.getInt(offset + 26) // endCode
+            cursor.getInt(offset + 26), // endCode
+            cursor.getInt(offset + 27) // userId
         );
         return entity;
     }
@@ -281,6 +286,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setTimerMin(cursor.getInt(offset + 24));
         entity.setCheckCode(cursor.getInt(offset + 25));
         entity.setEndCode(cursor.getInt(offset + 26));
+        entity.setUserId(cursor.getInt(offset + 27));
      }
     
     @Override

@@ -22,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.esptouch.EspWifiAdminSimple;
 import com.xr.happyFamily.esptouch.EsptouchTask;
@@ -32,6 +33,7 @@ import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
@@ -70,6 +72,7 @@ public class AddDeviceActivity extends AppCompatActivity {
 
     DeviceChild deviceChild=null;
     SharedPreferences my;
+    private RoomDaoImpl roomDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -92,15 +95,20 @@ public class AddDeviceActivity extends AppCompatActivity {
         registerReceiver(receiver, intentFilter);
 
         deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
+        roomDao=new RoomDaoImpl(getApplicationContext());
         mWifiAdmin = new EspWifiAdminSimple(this);
     }
 
     String roomId;
+    long houseId;
     @Override
     protected void onStart() {
         super.onStart();
         Intent intent=getIntent();
         roomId=intent.getStringExtra("roomId");
+        long roomId2=Long.parseLong(roomId);
+        Room room=roomDao.findById(roomId2);
+        houseId=room.getHouseId();
         Log.i("roomId","-->"+roomId);
         String apSsid = mWifiAdmin.getWifiConnectedSsid();
         if (apSsid != null) {
@@ -300,7 +308,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                 // the task received some results including cancelled while
                 // executing before receiving enough results
                 if (firstResult.isSuc()) {
-
                     StringBuilder sb = new StringBuilder();
                     for (IEsptouchResult resultInList : result) {
                         //                String ssid=et_ssid.getText().toString();
@@ -373,6 +380,7 @@ public class AddDeviceActivity extends AppCompatActivity {
             switch (code){
                 case 100:
                     Toast.makeText(AddDeviceActivity.this,"添加成功",Toast.LENGTH_LONG).show();
+                    setResult(1);
                     finish();
                     break;
                 case 2001:
@@ -393,7 +401,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 params.put("deviceName",deviceChild.getName());
                 params.put("deviceType",deviceChild.getType());
                 params.put("deviceMacAddress",deviceChild.getMacAddress());
-                params.put("houseId",1);
+                params.put("houseId",houseId+"");
                 params.put("roomId",roomId);
                 String userId=my.getString("userId","");
                 params.put("userId",userId);

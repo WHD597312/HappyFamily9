@@ -271,6 +271,8 @@ public class MQService extends Service {
                             waramerSetTemp=messageJsonArray.getInt(10);
                             warmerCurTemp=messageJsonArray.getInt(11);
 
+                            Log.i("warmerCurTemp","-->"+warmerCurTemp);
+
                             warmerSampleData=messageJsonArray.getInt(12);
                             warmerRatePower=messageJsonArray.getInt(13);
                             warmerCurRunRoatePower=messageJsonArray.getInt(14);
@@ -311,13 +313,13 @@ public class MQService extends Service {
                                 deviceChild.setWarmerCurTemp(warmerCurTemp);
                             }
                             if (warmerSampleData!=-1){
-                                deviceChild.setWarmerCurTemp(warmerSampleData);
+                                deviceChild.setWarmerSampleData(warmerSampleData);
                             }
                             if (warmerRatePower!=-1){
-                                deviceChild.setWarmerCurTemp(warmerRatePower);
+                                deviceChild.setWarmerRatePower(warmerRatePower);
                             }
                             if (warmerCurRunRoatePower!=-1){
-                                deviceChild.setWarmerCurTemp(warmerCurRunRoatePower);
+                                deviceChild.setWarmerCurRunRoatePower(warmerCurRunRoatePower);
                             }
                             if (deviceState!=-1){
                                 deviceChild.setDeviceState(deviceState);
@@ -332,10 +334,10 @@ public class MQService extends Service {
                                 deviceChild.setScreenState(screenState);
                             }
                             if (curRunState2!=-1){
-                                deviceChild.setCheckCode(curRunState2);
+                                deviceChild.setCurRunState2(curRunState2);
                             }
                             if (curRunState3!=-1){
-                                deviceChild.setCheckCode(curRunState3);
+                                deviceChild.setCurRunState3(curRunState3);
                             }
                             if (timerHour!=-1){
                                 deviceChild.setTimerHour(timerHour);
@@ -349,6 +351,7 @@ public class MQService extends Service {
                             if (endCode!=-1){
                                 deviceChild.setEndCode(endCode);
                             }
+                            Log.i("warmerCurTemp2222","-->"+deviceChild.getWarmerCurTemp());
                             deviceChildDao.update(deviceChild);
                         }
                         break;

@@ -36,6 +36,7 @@ public class DeviceChild implements Serializable{
     int timerMin=-1;/**定时时间 分*/
     int checkCode=-1;/**校验码*/
     int endCode=-1;/**结束码*/
+    int userId=0;/**用户Id*/
     public int getEndCode() {
         return this.endCode;
     }
@@ -198,11 +199,17 @@ public class DeviceChild implements Serializable{
     public void setWifiVersion(String wifiVersion) {
         this.wifiVersion = wifiVersion;
     }
+    public int getUserId() {
+        return this.userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
    
     @Generated(hash = 1973447423)
     public DeviceChild() {
     }
-    @Generated(hash = 1160689476)
+    @Generated(hash = 1833874823)
     public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount,
             int type, int busModel, String macAddress, String name,
             int timerMoudle, String mcuVersion, String wifiVersion,
@@ -210,7 +217,7 @@ public class DeviceChild implements Serializable{
             int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
             int deviceState, String rateState, int lockState, int screenState,
             int curRunState2, int curRunState3, int timerHour, int timerMin,
-            int checkCode, int endCode) {
+            int checkCode, int endCode, int userId) {
         this.id = id;
         this.houseId = houseId;
         this.roomId = roomId;
@@ -238,6 +245,7 @@ public class DeviceChild implements Serializable{
         this.timerMin = timerMin;
         this.checkCode = checkCode;
         this.endCode = endCode;
+        this.userId = userId;
     }
 
 }

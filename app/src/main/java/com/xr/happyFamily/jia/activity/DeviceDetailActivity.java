@@ -73,6 +73,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @BindView(R.id.layout_body) RelativeLayout layout_body;/**屏幕中间布局*/
     @BindView(R.id.image_timer) ImageView image_timer;/**定时任务*/
     @BindView(R.id.tv_cur_temp) TextView tv_cur_temp;/**当前温度*/
+    @BindView(R.id.tv_timer) TextView tv_timer;/**定时*/
     @BindView(R.id.semicBar)
     SmartWheelBar wheelBar;
     @BindView(R.id.relative4) RelativeLayout relative4;/**底部布局*/
@@ -337,6 +338,9 @@ public class DeviceDetailActivity extends AppCompatActivity {
         image_ensure.setOnClickListener(listener);
     }
 
+    ImageView image_low_rate;
+    ImageView image_middle_rate;
+    ImageView image_high_rate;
     public void popupRateView(){
         if (popupWindow != null && popupWindow.isShowing()) {
             return;
@@ -348,9 +352,18 @@ public class DeviceDetailActivity extends AppCompatActivity {
         ImageView image_cancle= (ImageView) view.findViewById(R.id.image_cancle);
 
         ImageView image_ensure= (ImageView) view.findViewById(R.id.image_ensure);
-        ImageView image_low_rate= (ImageView) view.findViewById(R.id.image_low_rate);
-        ImageView image_middle_rate= (ImageView) view.findViewById(R.id.image_middle_rate);
-        ImageView image_high_rate= (ImageView) view.findViewById(R.id.image_high_rate);
+        image_low_rate= (ImageView) view.findViewById(R.id.image_low_rate);
+        image_middle_rate= (ImageView) view.findViewById(R.id.image_middle_rate);
+        image_high_rate= (ImageView) view.findViewById(R.id.image_high_rate);
+
+        String rateState=deviceChild.getRateState();
+        if ("01".equals(rateState)){
+            image_low_rate.setImageResource(R.mipmap.rate_open);
+        }else if ("10".equals(rateState)){
+            image_middle_rate.setImageResource(R.mipmap.rate_open);
+        }else if ("11".equals(rateState)){
+            image_high_rate.setImageResource(R.mipmap.rate_open);
+        }
 
 
 
@@ -379,12 +392,21 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         break;
                     case R.id.image_low_rate:
                         deviceChild.setRateState("01");
+                        image_low_rate.setImageResource(R.mipmap.rate_open);
+                        image_middle_rate.setImageResource(R.mipmap.rate_close);
+                        image_high_rate.setImageResource(R.mipmap.rate_close);
                         break;
                     case R.id.image_middle_rate:
                         deviceChild.setRateState("10");
+                        image_low_rate.setImageResource(R.mipmap.rate_close);
+                        image_middle_rate.setImageResource(R.mipmap.rate_open);
+                        image_high_rate.setImageResource(R.mipmap.rate_close);
                         break;
                     case R.id.image_high_rate:
                         deviceChild.setRateState("11");
+                        image_low_rate.setImageResource(R.mipmap.rate_close);
+                        image_middle_rate.setImageResource(R.mipmap.rate_close);
+                        image_high_rate.setImageResource(R.mipmap.rate_open);
                         break;
                 }
             }
@@ -405,8 +427,10 @@ public class DeviceDetailActivity extends AppCompatActivity {
             String macAddress=intent.getStringExtra("macAddress");
             DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
             Log.i("deviceChild2","-->"+deviceChild2.getMacAddress());
+            Log.i("warmerCurTemp","-->"+deviceChild2.getWarmerCurTemp());
             if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
                 deviceChild=deviceChild2;
+                Log.i("warmerCurTemp","-->"+deviceChild.getWarmerCurTemp());
                 setMode(deviceChild);
             }
         }
@@ -437,6 +461,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         }else if (timerHour!=0 || timerMin!=0){
             Log.i("timer","-->"+"timer3");
             image_timer.setImageResource(R.mipmap.timer_open);
+            tv_timer.setText(timerHour+":"+timerMin);
         }
         if (warmerCurTemp!=0){
             tv_cur_temp.setText(warmerCurTemp+"");
@@ -448,7 +473,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.what=waramerSetTemp;
             handler.sendMessage(msg);
         }
-
         /**功率状态*/
         if ("01".equals(rateState)){
             tv_rate_state.setText("低");
@@ -567,7 +591,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 case 1:
                     int temp=msg.what;
                     tv_set_temp.setText(temp+"");
-                    wheelBar.setmStartAngle((temp+1)*9);
+                    float mStartAngle=(45-temp)*9;
+                    wheelBar.setmStartAngle(mStartAngle);
                     wheelBar.invalidate();
                     break;
             }

@@ -53,7 +53,7 @@
             android:id="@+id/image_low_rate"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/rate_open"
+            android:src="@mipmap/rate_close"
             android:scaleType="centerInside"
             android:layout_marginLeft="@dimen/dp_40"
             android:layout_centerVertical="true"

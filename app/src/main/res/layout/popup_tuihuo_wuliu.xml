@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        >
+
+        <View
+            android:id="@+id/view_dis"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="@dimen/dp_jy_10"
+            android:paddingRight="@dimen/dp_jy_10"
+            android:background="@drawable/bg_shape_xinghao_popup">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="选择物流类型"
+                android:textSize="@dimen/sp_14"
+                android:textColor="@color/shop_context"
+                android:layout_marginTop="@dimen/dp_jy_12"
+                android:layout_centerHorizontal="true"/>
+
+
+            <ImageView
+                android:id="@+id/img_close"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:padding="@dimen/dp_jy_12"
+                android:src="@mipmap/ic_address_close"/>
+
+        </RelativeLayout>
+
+
+      <ListView
+          android:id="@+id/list_wuliu"
+          android:divider="@null"
+          android:layout_width="match_parent"
+          android:layout_height="0dp"
+          android:layout_weight="2"></ListView>
+
+
+
+
+
+    </LinearLayout>
+
+
+
+</RelativeLayout>
+
+

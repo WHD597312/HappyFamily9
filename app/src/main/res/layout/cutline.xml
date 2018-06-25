@@ -5,8 +5,8 @@
     <!--商城右边有字时的标题-->
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
+        android:layout_height="@dimen/dp_jy_1"
         android:background="#eeeeee"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"/>
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"/>
 </RelativeLayout>

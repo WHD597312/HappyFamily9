@@ -3,11 +3,11 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_180"
+    android:layout_height="@dimen/dp_jy_180"
     app:layout_behavior="@string/bottom_sheet_behavior"
     android:background="@drawable/bg_shaped"
-    android:layout_marginLeft="@dimen/dp_12"
-    android:layout_marginRight="@dimen/dp_12"
+    android:layout_marginLeft="@dimen/dp_jy_12"
+    android:layout_marginRight="@dimen/dp_jy_12"
     android:id="@+id/bottomSheetLayout"
     app:behavior_hideable="true"
     app:behavior_peekHeight="0dp"
@@ -17,20 +17,20 @@
         <LinearLayout
             android:id="@+id/li_csj_db"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="@dimen/dp_jy_50"
             android:orientation="horizontal"
             >
 
             <ImageView
                 android:id="@+id/iv_b_qx"
-                android:paddingTop="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_jy_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/csj_qx"
                 android:layout_weight="1"
                 />
             <TextView
-                android:paddingTop="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_jy_15"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -44,15 +44,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/csj_qd"
-                android:paddingTop="@dimen/dp_15"
+                android:paddingTop="@dimen/dp_jy_15"
                 android:layout_weight="1"
                 />
         </LinearLayout>
         <LinearLayout
-            android:layout_marginTop="@dimen/dp_24"
+            android:layout_marginTop="@dimen/dp_jy_24"
             android:layout_below="@+id/li_csj_db"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="@dimen/dp_jy_50"
             android:orientation="horizontal"
             >
             <LinearLayout
@@ -64,23 +64,23 @@
                 >
                 <ImageView
                     android:id="@+id/iv_b_1"
-                    android:paddingLeft="@dimen/dp_24"
+                    android:paddingLeft="@dimen/dp_jy_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/csj_dj"
-                    android:paddingTop="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_jy_15"
 
                     />
 
                 <TextView
                     android:id="@+id/tv_b_1"
-                    android:paddingTop="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_jy_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="18sp"
                     android:text="一级"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingLeft="@dimen/dp_jy_10"
                     android:textColor="@color/color_gray2"/>
             </LinearLayout>
             <LinearLayout
@@ -92,23 +92,23 @@
                 >
                 <ImageView
                     android:id="@+id/iv_b_2"
-                    android:paddingLeft="@dimen/dp_24"
+                    android:paddingLeft="@dimen/dp_jy_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/csj_djnull"
-                    android:paddingTop="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_jy_15"
 
                     />
 
                 <TextView
                     android:id="@+id/tv_b_2"
-                    android:paddingTop="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_jy_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="18sp"
                     android:text="二级"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingLeft="@dimen/dp_jy_10"
                     android:textColor="@color/color_gray2"/>
             </LinearLayout>
             <LinearLayout
@@ -120,22 +120,22 @@
                 >
                 <ImageView
                     android:id="@+id/iv_b_3"
-                    android:paddingLeft="@dimen/dp_24"
+                    android:paddingLeft="@dimen/dp_jy_24"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/csj_djnull"
-                    android:paddingTop="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_jy_15"
 
                     />
 
                 <TextView
                     android:id="@+id/tv_b_3"
-                    android:paddingTop="@dimen/dp_15"
+                    android:paddingTop="@dimen/dp_jy_15"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:textSize="18sp"
-                    android:paddingLeft="@dimen/dp_10"
+                    android:paddingLeft="@dimen/dp_jy_10"
                     android:text="三级"
                     android:textColor="@color/color_gray2"/>
             </LinearLayout>

@@ -11,11 +11,11 @@
     <RelativeLayout
         android:id="@+id/head"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50">
+        android:layout_height="@dimen/dp_jy_50">
         <ImageView
             android:id="@+id/image_back"
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_40"
             android:src="@mipmap/fanhui"
             android:scaleType="centerInside"
             android:layout_centerVertical="true"
@@ -23,7 +23,7 @@
         <TextView
             android:id="@+id/tv_title"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_jy_40"
             android:text="电暖器"
             android:gravity="center"
             android:layout_centerVertical="true"
@@ -52,7 +52,7 @@
                 android:text="19"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_30"
-                android:layout_marginLeft="@dimen/dp_25"
+                android:layout_marginLeft="@dimen/dp_jy_25"
                 />
             <TextView
                 android:id="@+id/tv_temp"
@@ -61,7 +61,7 @@
                 android:text="℃"
                 android:textSize="@dimen/sp_18"
                 android:layout_toRightOf="@+id/tv_cur_temp"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:textColor="@color/white"
                 />
             <TextView
@@ -72,7 +72,7 @@
                 android:textColor="@color/white"
                 android:text="当前温度"
                 android:layout_alignLeft="@id/tv_cur_temp"
-                android:layout_marginTop="@dimen/dp_5"
+                android:layout_marginTop="@dimen/dp_jy_5"
                 android:textSize="@dimen/sp_12"
                 />
 
@@ -84,7 +84,7 @@
                 android:textSize="@dimen/sp_18"
                 android:textColor="@color/color_orange"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dp_25"
+                android:layout_marginRight="@dimen/dp_jy_25"
                 />
             <TextView
                 android:id="@+id/tv_set_temp"
@@ -144,7 +144,7 @@
             android:textColor="@color/white"
             android:textSize="@dimen/sp_16"
             android:layout_above="@+id/relative4"
-            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_jy_20"
             />
 
         <RelativeLayout
@@ -152,14 +152,14 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_jy_20"
             android:gravity="center">
 
 
             <ImageView
                 android:id="@+id/image_mode"
-                android:layout_width="@dimen/dp_60"
-                android:layout_height="@dimen/dp_60"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
                 android:layout_centerVertical="true"
                 android:scaleType="centerInside"
                 android:src="@mipmap/timer_task"
@@ -168,9 +168,9 @@
 
             <ImageView
                 android:id="@+id/module_task"
-                android:layout_width="@dimen/dp_60"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
+                android:layout_marginLeft="@dimen/dp_jy_20"
                 android:layout_toRightOf="@+id/image_mode"
                 android:scaleType="centerInside"
                 android:src="@mipmap/module_task" />
@@ -178,9 +178,9 @@
 
             <ImageView
                 android:id="@+id/image_mode3"
-                android:layout_width="@dimen/dp_60"
-                android:layout_height="@dimen/dp_60"
-                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
+                android:layout_marginLeft="@dimen/dp_jy_20"
                 android:layout_toRightOf="@+id/module_task"
                 android:scaleType="centerInside"
                 android:src="@mipmap/img_lock" />
@@ -199,10 +199,10 @@
 
             <ImageView
                 android:id="@+id/image_mode4"
-                android:layout_width="@dimen/dp_60"
-                android:layout_height="@dimen/dp_60"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
 
-                android:layout_marginLeft="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_jy_20"
                 android:layout_toRightOf="@+id/image_mode3"
                 android:scaleType="centerInside"
                 android:src="@mipmap/img_screen" />

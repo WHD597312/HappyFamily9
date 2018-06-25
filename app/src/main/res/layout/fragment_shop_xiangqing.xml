@@ -16,7 +16,7 @@
              android:layout_width="match_parent"
              android:layout_height="wrap_content"
              android:src="@mipmap/img_shop_xq1"
-             android:layout_marginTop="@dimen/dp_12"/>
+             android:layout_marginTop="@dimen/dp_jy_12"/>
          <ImageView
              android:id="@+id/img2"
              android:layout_width="match_parent"

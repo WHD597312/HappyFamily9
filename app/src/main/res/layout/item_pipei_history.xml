@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:paddingTop="@dimen/dp_jy_16">
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:padding="@dimen/dp_jy_12"
+        android:layout_gravity="center">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_day"
+            android:text="15"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_time"
+            android:text="11:30"
+            android:layout_below="@+id/tv_day"
+            android:textColor="#A8A8A8"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_month"
+            android:layout_toRightOf="@id/tv_day"
+            android:layout_alignBottom="@id/tv_day"
+            android:layout_marginLeft="@dimen/dp_jy_4"
+            android:text="4月"
+            android:textColor="#A8A8A8"
+            android:textSize="@dimen/sp_12"/>
+
+
+
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/img_touxiang_my"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_touxiang_pipei_history"
+        android:layout_gravity="center"
+        android:layout_marginLeft="@dimen/dp_jy_30"/>
+
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_pipei_history"
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:layout_gravity="center"/>
+
+    <ImageView
+        android:id="@+id/img_touxiang_to"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_touxiang_pipei_history"
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:layout_gravity="center"
+       />
+</LinearLayout>

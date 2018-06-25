@@ -7,7 +7,7 @@
     <View
         android:id="@+id/view_dis"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_150"/>
+        android:layout_height="@dimen/dp_jy_150"/>
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -18,8 +18,8 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_12">
+            android:layout_marginTop="@dimen/dp_jy_10"
+            android:paddingRight="@dimen/dp_jy_12">
 
             <TextView
                 android:layout_width="wrap_content"
@@ -42,8 +42,8 @@
             android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_12"
-            android:padding="@dimen/dp_12">
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:padding="@dimen/dp_jy_12">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -53,16 +53,16 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_40"
-                android:paddingLeft="@dimen/dp_8"
+                android:layout_height="@dimen/dp_jy_40"
+                android:paddingLeft="@dimen/dp_jy_8"
                 android:orientation="horizontal"
-                android:layout_marginTop="@dimen/dp_30">
+                android:layout_marginTop="@dimen/dp_jy_30">
 
 
                 <RelativeLayout
                     android:id="@+id/rl_sheng"
-                    android:paddingLeft="@dimen/dp_12"
-                    android:paddingRight="@dimen/dp_12"
+                    android:paddingLeft="@dimen/dp_jy_12"
+                    android:paddingRight="@dimen/dp_jy_12"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent">
 
@@ -71,15 +71,15 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="XX省"
+                        android:text="请选择"
                         android:textColor="#6e6e6e"
                         android:textSize="@dimen/sp_14" />
 
                     <ImageView
                         android:visibility="visible"
                         android:id="@+id/img_sheng"
-                        android:layout_width="@dimen/dp_42"
-                        android:layout_height="@dimen/dp_3"
+                        android:layout_width="@dimen/dp_jy_42"
+                        android:layout_height="@dimen/dp_jy_3"
                         android:layout_centerHorizontal="true"
                         android:layout_alignParentBottom="true"
                         android:background="@drawable/bg_shape_search_result" />
@@ -89,24 +89,24 @@
                     android:id="@+id/rl_shi"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_12">
+                    android:layout_marginLeft="@dimen/dp_jy_12">
 
                     <TextView
                         android:id="@+id/tv_shi"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingLeft="@dimen/dp_12"
-                        android:paddingRight="@dimen/dp_12"
+                        android:paddingLeft="@dimen/dp_jy_12"
+                        android:paddingRight="@dimen/dp_jy_12"
                         android:layout_centerInParent="true"
-                        android:text="XX市"
+                        android:text="请选择"
 
                         android:textColor="#6e6e6e"
                         android:textSize="@dimen/sp_14" />
 
                     <ImageView
                         android:id="@+id/img_shi"
-                        android:layout_width="@dimen/dp_42"
-                        android:layout_height="@dimen/dp_3"
+                        android:layout_width="@dimen/dp_jy_42"
+                        android:layout_height="@dimen/dp_jy_3"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/bg_shape_search_result"
@@ -117,23 +117,23 @@
                     android:id="@+id/rl_qu"
                     android:layout_width="wrap_content"
                     android:layout_height="match_parent"
-                    android:layout_marginLeft="@dimen/dp_12">
+                    android:layout_marginLeft="@dimen/dp_jy_12">
 
                     <TextView
                         android:id="@+id/tv_qu"
-                        android:paddingLeft="@dimen/dp_12"
-                        android:paddingRight="@dimen/dp_12"
+                        android:paddingLeft="@dimen/dp_jy_12"
+                        android:paddingRight="@dimen/dp_jy_12"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="XX区"
+                        android:text="请选择"
                         android:textColor="#6e6e6e"
                         android:textSize="@dimen/sp_14" />
 
                     <ImageView
                         android:id="@+id/img_qu"
-                        android:layout_width="@dimen/dp_42"
-                        android:layout_height="@dimen/dp_3"
+                        android:layout_width="@dimen/dp_jy_42"
+                        android:layout_height="@dimen/dp_jy_3"
                         android:layout_alignParentBottom="true"
                         android:layout_centerHorizontal="true"
                         android:background="@drawable/bg_shape_search_result"
@@ -150,7 +150,7 @@
             android:textColor="#996e6e6e"
             android:text="选择省份/地区"
             android:textSize="@dimen/sp_12"
-            android:padding="@dimen/dp_12"/>
+            android:padding="@dimen/dp_jy_12"/>
 
         <ListView
             android:id="@+id/list_city"

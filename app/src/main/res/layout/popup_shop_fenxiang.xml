@@ -49,7 +49,7 @@
                 android:textColor="@color/white"
                 android:gravity="center"
                 android:textSize="@dimen/sp_12"
-                android:drawablePadding="@dimen/dp_10"
+                android:drawablePadding="@dimen/dp_jy_10"
                 android:drawableTop="@mipmap/ic_fenxiang_weixin"/>
             <TextView
                 android:layout_width="0dp"
@@ -59,7 +59,7 @@
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12"
                 android:gravity="center"
-                android:drawablePadding="@dimen/dp_10"
+                android:drawablePadding="@dimen/dp_jy_10"
                 android:drawableTop="@mipmap/ic_fenxiang_qq"/>
 
             <TextView
@@ -70,7 +70,7 @@
                 android:text="生成海报"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_12"
-                android:drawablePadding="@dimen/dp_10"
+                android:drawablePadding="@dimen/dp_jy_10"
                 android:drawableTop="@mipmap/ic_fenxiang_haibao"/>
         </LinearLayout>
 

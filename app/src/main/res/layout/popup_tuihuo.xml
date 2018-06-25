@@ -19,15 +19,15 @@
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10">
+            android:paddingLeft="@dimen/dp_jy_10"
+            android:paddingRight="@dimen/dp_jy_10">
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="退款原因"
                 android:textSize="@dimen/sp_14"
                 android:textColor="@color/shop_context"
-                android:layout_marginTop="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_jy_12"
                 android:layout_centerHorizontal="true"/>
 
 
@@ -36,7 +36,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:padding="@dimen/dp_12"
+                android:padding="@dimen/dp_jy_12"
                 android:src="@mipmap/ic_address_close"/>
 
         </RelativeLayout>
@@ -49,9 +49,9 @@
             android:text="我不想要了"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>
@@ -63,9 +63,9 @@
             android:text="颜色与描述不符"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>
@@ -76,9 +76,9 @@
             android:text="型号与商品描述不符"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>
@@ -89,9 +89,9 @@
             android:text="质量有问题"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>
@@ -103,9 +103,9 @@
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
 
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>
@@ -116,9 +116,9 @@
             android:text="商品受损"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>
@@ -129,9 +129,9 @@
             android:text="缺少配件"
             android:textSize="@dimen/sp_14"
             android:textColor="@color/shop_context"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingTop="@dimen/dp_16"
-            android:paddingBottom="@dimen/dp_16"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingTop="@dimen/dp_jy_16"
+            android:paddingBottom="@dimen/dp_jy_16"
 
             android:layout_centerHorizontal="true"/>
         <include layout="@layout/cutline"/>

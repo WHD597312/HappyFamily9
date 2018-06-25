@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@drawable/bg_shape"
-    android:minHeight="@dimen/dp_129"
+    android:minHeight="@dimen/dp_jy_129"
     android:layout_height="match_parent">
 
     <TextView
@@ -12,8 +12,8 @@
         android:text="智能终端升级版"
         android:textColor="@color/black"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_16"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_16"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
     <TextView
         android:layout_below="@+id/tv_xnsb_1"
@@ -23,8 +23,8 @@
         android:text="PM2.5"
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_22"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_22"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
 
     <TextView
@@ -36,8 +36,8 @@
         android:text="湿度"
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_16"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_16"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
     <TextView
         android:id="@+id/tv_xnsb_4"
@@ -48,8 +48,8 @@
         android:text="温度"
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_16"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_16"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
     <TextView
         android:id="@+id/tv_xnsb_5"
@@ -60,8 +60,8 @@
         android:text="甲醛"
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_16"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_16"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
     <TextView
         android:id="@+id/tv_xnsb_6"
@@ -72,8 +72,8 @@
         android:text="氧浓度"
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_16"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_16"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
     <TextView
         android:id="@+id/tv_xnsb_7"
@@ -83,8 +83,8 @@
         android:text="电源开"
         android:textColor="@color/green2"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_13"
-        android:layout_marginLeft="@dimen/dp_11"
+        android:layout_marginTop="@dimen/dp_jy_13"
+        android:layout_marginLeft="@dimen/dp_jy_11"
         />
     <ImageView
         android:layout_alignBottom="@id/tv_xnsb_1"
@@ -99,8 +99,8 @@
         android:id="@+id/iv_xnsb"
         android:layout_width="wrap_content"
         android:layout_height="102dp"
-        android:layout_marginLeft="@dimen/dp_5"
-        android:layout_marginTop="@dimen/dp_14"
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:layout_marginTop="@dimen/dp_jy_14"
         android:layout_toRightOf="@+id/iv_xnsb_yj"
         android:src="@mipmap/t" />
 

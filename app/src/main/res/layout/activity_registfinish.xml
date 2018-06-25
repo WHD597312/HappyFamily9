@@ -15,12 +15,12 @@
         android:src="@mipmap/beijing" />
     <ImageView
         android:id="@+id/imageView6"
-        android:layout_width="@dimen/dp_130"
-        android:layout_height="@dimen/dp_130"
+        android:layout_width="@dimen/dp_jy_130"
+        android:layout_height="@dimen/dp_jy_130"
         android:layout_centerHorizontal="true"
         android:layout_alignParentTop="true"
         android:scaleType="centerInside"
-        android:layout_marginTop="@dimen/dp_45"
+        android:layout_marginTop="@dimen/dp_jy_45"
         android:src="@mipmap/tubiao"
         />
 
@@ -35,9 +35,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentTop="true"
-            android:layout_marginLeft="@dimen/dp_72"
-            android:layout_marginRight="@dimen/dp_72"
-            android:layout_marginTop="@dimen/dp_210"
+            android:layout_marginLeft="@dimen/dp_jy_72"
+            android:layout_marginRight="@dimen/dp_jy_72"
+            android:layout_marginTop="@dimen/dp_jy_210"
             android:ems="10"
             android:gravity="center_vertical"
             android:hint="昵称"
@@ -45,11 +45,11 @@
 
         <ImageView
             android:id="@+id/image_user"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_30"
             android:layout_alignTop="@id/et_username"
-            android:layout_marginLeft="@dimen/dp_42"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_jy_42"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:scaleType="centerInside"
             android:src="@mipmap/wo" />
 
@@ -76,22 +76,22 @@
 
         <ImageView
             android:id="@+id/image_sex"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
-            android:layout_marginLeft="@dimen/dp_42"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_30"
+            android:layout_marginLeft="@dimen/dp_jy_42"
             android:layout_below="@id/image_user"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:layout_marginBottom="222dp"
             android:scaleType="centerInside"
             android:src="@mipmap/xingbie" />
 
         <ImageView
             android:id="@+id/image_date"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_30"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_30"
             android:layout_below="@id/et_username"
-            android:layout_marginTop="@dimen/dp_38"
-            android:layout_marginLeft="@dimen/dp_42"
+            android:layout_marginTop="@dimen/dp_jy_38"
+            android:layout_marginLeft="@dimen/dp_jy_42"
             android:scaleType="centerInside"
             android:src="@mipmap/rili"
             />
@@ -115,7 +115,7 @@
             android:layout_alignLeft="@+id/et_username"
             android:layout_alignParentBottom="true"
             android:layout_alignRight="@+id/et_username"
-            android:layout_marginBottom="@dimen/dp_45"
+            android:layout_marginBottom="@dimen/dp_jy_45"
             android:background="@mipmap/anniu1"
             android:text="注册" />
 
@@ -123,11 +123,11 @@
         <View
             android:id="@+id/view3"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
+            android:layout_height="@dimen/dp_jy_1"
             android:layout_alignLeft="@+id/et_password"
             android:layout_alignRight="@+id/et_password"
             android:layout_below="@+id/et_password"
-            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_jy_5"
             android:background="@color/white" />
     </RelativeLayout>
 </RelativeLayout>

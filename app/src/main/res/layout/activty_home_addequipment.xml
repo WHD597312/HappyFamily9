@@ -16,7 +16,7 @@
         <View
             android:id="@+id/view_addEuipment"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_12"
+            android:layout_height="@dimen/dp_jy_12"
             android:background="@null"
 
             />
@@ -29,13 +29,13 @@
         android:id="@+id/bt_add"
         android:layout_alignBottom="@id/tv_add"
             android:layout_weight="1"
-        android:layout_width="@dimen/dp_156"
-        android:layout_height="@dimen/dp_40"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginBottom="@dimen/dp_40"
+        android:layout_width="@dimen/dp_jy_156"
+        android:layout_height="@dimen/dp_jy_40"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginBottom="@dimen/dp_jy_40"
         android:text="WLAN配对"
         android:textColor="@color/green2"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:background="@drawable/bg_shape"
         />
        <Button
@@ -43,12 +43,12 @@
            android:layout_weight="1"
         android:layout_toRightOf="@+id/bt_add"
         android:layout_alignTop="@id/bt_add"
-        android:layout_width="@dimen/dp_156"
-        android:layout_height="@dimen/dp_40"
+        android:layout_width="@dimen/dp_jy_156"
+        android:layout_height="@dimen/dp_jy_40"
         android:text="二维码"
         android:textColor="@color/color_gray2"
-        android:layout_marginLeft="@dimen/dp_14"
-           android:layout_marginRight="@dimen/dp_14"
+        android:layout_marginLeft="@dimen/dp_jy_14"
+           android:layout_marginRight="@dimen/dp_jy_14"
         android:background="@drawable/bg_shape"
         />
 
@@ -56,10 +56,10 @@
 </LinearLayout>
     <TextView
        android:layout_below="@+id/li_addequipment"
-        android:layout_marginTop="@dimen/dp_20"
+        android:layout_marginTop="@dimen/dp_jy_20"
         android:id="@+id/tv_add"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textColor="@color/black"
@@ -78,18 +78,18 @@
         android:layout_below="@id/tv_add"
         android:id="@+id/nice_spinner"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_height="@dimen/dp_jy_50"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginTop="16dp"/>
     <EditText
         android:id="@+id/et_add"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:layout_below="@+id/nice_spinner"
-        android:layout_marginTop="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:background="@color/white"
         />
     <TextView
@@ -98,18 +98,18 @@
         android:text="忘记密码"
         android:layout_below="@id/et_add"
         android:layout_toRightOf="@id/et_add"
-        android:layout_marginTop="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_jy_24"
         android:layout_marginLeft="-70dp"
         android:textColor="@color/green2"
         />
     <Button
         android:id="@+id/bt_add_finish2"
         android:layout_below="@+id/et_add"
-        android:layout_marginTop="@dimen/dp_189"
+        android:layout_marginTop="@dimen/dp_jy_189"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:background="@mipmap/ok"
         />
 </RelativeLayout>

@@ -9,7 +9,7 @@
         android:id="@+id/tv_home_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_14"
+        android:layout_marginLeft="@dimen/dp_jy_14"
         android:layout_alignParentTop="true"
 
         android:layout_marginTop="11dp"
@@ -21,8 +21,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_home_1"
-        android:layout_marginLeft="@dimen/dp_14"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_jy_14"
+        android:layout_marginTop="@dimen/dp_jy_10"
         android:text="智能终端"
         android:textColor="@color/black" />
 
@@ -31,26 +31,26 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_home_2"
-        android:layout_marginLeft="@dimen/dp_14"
-        android:layout_marginTop="@dimen/dp_21"
+        android:layout_marginLeft="@dimen/dp_jy_14"
+        android:layout_marginTop="@dimen/dp_jy_21"
         android:text="电源开"
         android:textColor="@color/green2" />
     <View
         android:id="@+id/view_homeitem"
         android:layout_width="3dp"
-        android:layout_height="@dimen/dp_10"
+        android:layout_height="@dimen/dp_jy_10"
         android:background="@null"
         android:layout_below="@+id/tv_home_3"
-        android:layout_marginLeft="@dimen/dp_9"
+        android:layout_marginLeft="@dimen/dp_jy_9"
 
         />
 
     <ImageView
         android:id="@+id/iv_home"
         android:layout_width="100dp"
-        android:layout_height="@dimen/dp_86"
+        android:layout_height="@dimen/dp_jy_86"
         android:layout_alignTop="@id/tv_home_1"
-        android:layout_marginLeft="@dimen/dp_84"
+        android:layout_marginLeft="@dimen/dp_jy_84"
         android:src="@mipmap/t" />
 
 </RelativeLayout>

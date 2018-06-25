@@ -7,7 +7,7 @@
     android:layout_margin="0dp"
 
     android:orientation="vertical"
-    android:padding="@dimen/dp_5"
+    android:padding="@dimen/dp_jy_5"
 
     >
 
@@ -16,17 +16,17 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        app:cardCornerRadius="@dimen/dp_5"
-        android:layout_marginRight="@dimen/dp_2"
-        android:layout_marginLeft="@dimen/dp_2"
+        app:cardCornerRadius="@dimen/dp_jy_5"
+        android:layout_marginRight="@dimen/dp_jy_2"
+        android:layout_marginLeft="@dimen/dp_jy_2"
         >
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingBottom="@dimen/dp_5"
-            android:paddingLeft="@dimen/dp_6"
-            android:paddingRight="@dimen/dp_6"
-            android:paddingTop="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_jy_5"
+            android:paddingLeft="@dimen/dp_jy_6"
+            android:paddingRight="@dimen/dp_jy_6"
+            android:paddingTop="@dimen/dp_jy_10"
             android:orientation="vertical"
             android:gravity="center_horizontal"
 
@@ -44,7 +44,7 @@
                 android:text="电暖器"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14"
-                android:layout_marginTop="@dimen/dp_14"
+                android:layout_marginTop="@dimen/dp_jy_14"
                 android:gravity="center"
                 />
 
@@ -55,7 +55,7 @@
                 android:text="对流式加热，通电即热..."
                 android:textColor="#99696969"
                 android:textSize="@dimen/sp_12"
-                android:layout_marginTop="@dimen/dp_1"
+                android:layout_marginTop="@dimen/dp_jy_1"
                 android:gravity="center"
                 />
 
@@ -64,7 +64,7 @@
                 android:id="@+id/shop_price"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="￥380"
+                android:text="¥380"
                 android:textColor="@color/shop_price"
                 android:textSize="@dimen/sp_15"
                 android:gravity="center"
@@ -74,9 +74,9 @@
 
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3"
-        android:layout_marginLeft="@dimen/dp_4"
-        android:layout_marginRight="@dimen/dp_4"/>
+        android:layout_height="@dimen/dp_jy_3"
+        android:layout_marginLeft="@dimen/dp_jy_4"
+        android:layout_marginRight="@dimen/dp_jy_4"/>
 
 </LinearLayout>
 

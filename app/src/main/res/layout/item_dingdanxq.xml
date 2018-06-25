@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/color_gray"
+    android:orientation="vertical">
+
+
+
+
+
+    <RelativeLayout
+        android:id="@+id/rl_dingdan"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_107"
+        android:paddingLeft="@dimen/dp_jy_13"
+        android:paddingRight="@dimen/dp_jy_14"
+
+        android:background="@color/white">
+
+
+
+    <ImageView
+                android:id="@+id/img_shop_pic"
+                android:layout_width="@dimen/dp_jy_88"
+                android:layout_height="@dimen/dp_jy_88"
+                android:layout_centerVertical="true"
+
+                android:layout_toRightOf="@+id/radio_shop"
+                android:src="@mipmap/chanpin2"/>
+
+            <TextView
+                android:id="@+id/tv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/img_shop_pic"
+                android:layout_marginLeft="@dimen/dp_jy_17"
+                android:layout_toRightOf="@+id/img_shop_pic"
+                android:text="电暖气  银色"
+                android:textColor="@color/shop_context"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_shop_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_shop_name"
+                android:layout_marginLeft="@dimen/dp_jy_17"
+                android:layout_marginTop="@dimen/dp_jy_1"
+                android:layout_toRightOf="@+id/img_shop_pic"
+                android:text=""
+                android:textColor="@color/shop_type"
+                android:textSize="12sp" />
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/img_shop_pic"
+                android:layout_alignLeft="@+id/tv_shop_type"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="¥"
+                    android:textColor="@color/shop_price"
+                    android:textSize="@dimen/sp_12" />
+
+                <TextView
+                    android:id="@+id/tv_shop_price"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_jy_3"
+                    android:text="2500"
+                    android:textColor="@color/shop_price"
+                    android:textSize="@dimen/sp_14" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_shop_num"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_jy_20"
+                android:layout_alignBottom="@+id/img_shop_pic"
+                android:layout_alignParentRight="true"
+                android:text="X1" />
+
+
+        </RelativeLayout>
+
+
+
+
+
+    <!--<View-->
+        <!--android:layout_width="match_parent"-->
+        <!--android:layout_height="@dimen/dp_jy_5"-->
+        <!--android:background="@color/white"/>-->
+    <!--<LinearLayout-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:background="@color/white">-->
+        <!--<include layout="@layout/cutline"/>-->
+    <!--</LinearLayout>-->
+
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_1" />
+
+</LinearLayout>
+
+

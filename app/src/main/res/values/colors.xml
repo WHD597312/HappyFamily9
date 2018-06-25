@@ -76,4 +76,7 @@
     <color name="shop_type">#99767676</color>
     <color name="shop_price">#EE7B2E</color>
     <color name="shop_tuikuan_context">#b4b4b4</color>
+
+    <color name="happy_green">#65CB90</color>
+    <color name="happy_gray">#d7d7d7</color>
 </resources>

@@ -15,10 +15,10 @@
        android:textColor="@drawable/selector_more_text"
        android:layout_centerHorizontal="true"
        android:background="@drawable/selector_more"
-       android:paddingTop="@dimen/dp_3"
-       android:paddingBottom="@dimen/dp_3"
-       android:paddingLeft="@dimen/dp_10"
-       android:paddingRight="@dimen/dp_10"
+       android:paddingTop="@dimen/dp_jy_3"
+       android:paddingBottom="@dimen/dp_jy_3"
+       android:paddingLeft="@dimen/dp_jy_10"
+       android:paddingRight="@dimen/dp_jy_10"
        android:text="电暖器"/>
 
 </RelativeLayout>

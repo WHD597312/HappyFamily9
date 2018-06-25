@@ -17,10 +17,10 @@
        android:layout_centerHorizontal="true"
        android:background="@drawable/bg_shape_stroke_gray25"
        android:singleLine="true"
-       android:paddingTop="@dimen/dp_8"
-       android:paddingBottom="@dimen/dp_8"
-       android:paddingLeft="@dimen/dp_25"
-       android:paddingRight="@dimen/dp_25"
+       android:paddingTop="@dimen/dp_jy_8"
+       android:paddingBottom="@dimen/dp_jy_8"
+       android:paddingLeft="@dimen/dp_jy_25"
+       android:paddingRight="@dimen/dp_jy_25"
        android:text="电暖器"/>
 
 </RelativeLayout>

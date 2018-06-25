@@ -1,0 +1,190 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:id="@+id/ll_shopcart_header"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="5dp"></View>
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="38dp"
+            android:paddingLeft="13dp"
+            android:paddingRight="14dp"
+            android:gravity="center_vertical">
+
+            <ImageView
+                android:id="@+id/iv_shopcart_shopselect"
+                android:layout_width="18dp"
+                android:layout_height="18dp" />
+
+            <ImageView
+                android:id="@+id/img_shops_icon"
+                android:layout_width="15dp"
+                android:layout_height="14dp"
+                android:layout_marginLeft="12dp"
+                android:layout_toEndOf="@+id/iv_shopcart_shopselect"
+                android:layout_toRightOf="@+id/iv_shopcart_shopselect" />
+
+            <TextView
+                android:id="@+id/tv_shops_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="12dp"
+                android:layout_toEndOf="@+id/img_shops_icon"
+                android:text="标题1"
+                android:layout_toRightOf="@+id/img_shops_icon" />
+
+            <TextView
+                android:id="@+id/tv_shops_coupon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="优惠券"
+                android:layout_alignParentRight="true" />
+
+        </RelativeLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical">
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="107dp"
+            android:orientation="vertical">
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"></View>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="13dp"
+                android:paddingRight="14dp">
+
+
+                <ImageView
+                    android:id="@+id/radio_shop"
+                    android:layout_width="18dp"
+                    android:layout_height="18dp"
+                    android:layout_marginTop="35dp" />
+
+                <ImageView
+                    android:id="@+id/img_shop_pic"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
+                    android:layout_marginLeft="12dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_toEndOf="@+id/radio_shop"
+                    android:background="#000000"
+                    android:layout_toRightOf="@+id/radio_shop" />
+
+                <TextView
+                    android:id="@+id/tv_shop_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginTop="10dp"
+                    android:layout_toEndOf="@+id/img_shop_pic"
+                    android:lineSpacingExtra="5dp"
+                    android:lines="2"
+                    android:text="手作设计温婉气质显瘦圆环天然贝壳花瓣部队称耳环"
+                    android:layout_toRightOf="@+id/img_shop_pic" />
+
+                <TextView
+                    android:id="@+id/tv_shop_type"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="17dp"
+                    android:layout_marginTop="49dp"
+                    android:layout_toEndOf="@+id/img_shop_pic"
+                    android:text="玫瑰金 耳夹"
+                    android:layout_toRightOf="@+id/img_shop_pic" />
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/img_shop_pic"
+                    android:layout_alignStart="@+id/tv_shop_type"
+                    android:orientation="horizontal"
+                    android:layout_alignLeft="@+id/tv_shop_type">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="¥"
+                         />
+
+                    <TextView
+                        android:id="@+id/tv_shop_price"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="3dp"
+                        android:text="255.00"
+                       />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="21dp"
+                    android:layout_alignParentRight="true"
+                    android:layout_marginTop="70dp">
+
+                    <TextView
+                        android:id="@+id/tv_shop_reduce"
+                        android:layout_width="21dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/text_shopcar_main"
+                        android:gravity="center"
+                        android:text="—"
+                        android:textSize="15sp" />
+
+                    <TextView
+                        android:id="@+id/tv_shop_num"
+                        android:layout_width="31dp"
+                        android:layout_height="match_parent"
+                        android:background="@drawable/text_shopcar_main_no"
+                        android:gravity="center"
+                        android:text="1"
+                        />
+
+                    <TextView
+                        android:id="@+id/tv_shop_add"
+                        android:layout_width="21dp"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1"
+                        android:background="@drawable/text_shopcar_main"
+                        android:gravity="center"
+                        android:text="+"
+
+                        android:textSize="15sp" />
+                </LinearLayout>
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+</LinearLayout>
+
+

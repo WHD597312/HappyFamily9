@@ -15,10 +15,10 @@
 
             <ImageButton
                  android:layout_weight="1"
-                android:paddingRight="@dimen/dp_55"
+                android:paddingRight="@dimen/dp_jy_55"
                 android:id="@+id/ib_xnty"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_50"
+                android:layout_height="@dimen/dp_jy_50"
                 android:src="@mipmap/fanhui_xnty"
 
                 android:background="@null"
@@ -28,7 +28,7 @@
         android:layout_toRightOf="@+id/ib_xnty_fanhui"
         android:layout_width="wrap_content"
         android:layout_weight="1"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:gravity="center"
         android:text="虚拟设备"
         android:textColor="@color/white"
@@ -39,7 +39,7 @@
                 android:id="@+id/view_xnsb2"
                 android:layout_weight="1"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_1"
+                android:layout_height="@dimen/dp_jy_1"
                 android:background="@null"
 
                 />
@@ -49,19 +49,19 @@
     <View
         android:id="@+id/view_xnsb"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_30"
+        android:layout_height="@dimen/dp_jy_30"
         android:background="@null"
 
-        android:layout_marginLeft="@dimen/dp_49"
-        android:layout_marginRight="@dimen/dp_49"
+        android:layout_marginLeft="@dimen/dp_jy_49"
+        android:layout_marginRight="@dimen/dp_jy_49"
         />
     <ListView
         android:id="@+id/xnsb_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
-        android:dividerHeight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:dividerHeight="@dimen/dp_jy_12"
         android:background="@null"
         >
 

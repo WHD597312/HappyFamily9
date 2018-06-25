@@ -11,12 +11,12 @@
    <LinearLayout
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:paddingLeft="@dimen/dp_12"
-       android:paddingRight="@dimen/dp_12"
-       android:paddingTop="@dimen/dp_5"
-       android:paddingBottom="@dimen/dp_5"
+       android:paddingLeft="@dimen/dp_jy_12"
+       android:paddingRight="@dimen/dp_jy_12"
+       android:paddingTop="@dimen/dp_jy_5"
+       android:paddingBottom="@dimen/dp_jy_5"
        android:background="@color/white"
-       android:layout_marginTop="@dimen/dp_10"
+       android:layout_marginTop="@dimen/dp_jy_10"
        android:gravity="center">
        <ImageView
            android:id="@+id/img_touxiang"
@@ -30,7 +30,7 @@
            android:textColor="@color/shop_context"
            android:text="用户名"
            android:textSize="@dimen/sp_14"
-           android:layout_marginLeft="@dimen/dp_12"/>
+           android:layout_marginLeft="@dimen/dp_jy_12"/>
        <TextView
            android:id="@+id/tv_time"
            android:layout_width="match_parent"
@@ -43,7 +43,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_jy_12"
         android:background="@color/white">
         <TextView
             android:id="@+id/tv_color"
@@ -58,7 +58,7 @@
             android:layout_height="wrap_content"
             android:textColor="@color/shop_tuikuan_context"
             android:textSize="@dimen/sp_12"
-            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_jy_20"
             android:text="型号：2355"/>
     </LinearLayout>
 
@@ -67,21 +67,21 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/white"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12"
         android:text="产品外形美观，使用方便，关键是不占地方，我很喜欢"
         android:textSize="@dimen/sp_12"
         android:textColor="@color/shop_context"
-        android:paddingTop="@dimen/dp_8"
-        android:paddingBottom="@dimen/dp_30"/>
+        android:paddingTop="@dimen/dp_jy_8"
+        android:paddingBottom="@dimen/dp_jy_30"/>
 
 
     <RelativeLayout
         android:id="@+id/rl_dingdan"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_107"
-        android:paddingLeft="@dimen/dp_13"
-        android:paddingRight="@dimen/dp_14"
+        android:layout_height="@dimen/dp_jy_107"
+        android:paddingLeft="@dimen/dp_jy_13"
+        android:paddingRight="@dimen/dp_jy_14"
 
         android:background="@color/white">
 
@@ -89,8 +89,8 @@
 
     <ImageView
                 android:id="@+id/img_shop_pic"
-                android:layout_width="@dimen/dp_88"
-                android:layout_height="@dimen/dp_88"
+                android:layout_width="@dimen/dp_jy_88"
+                android:layout_height="@dimen/dp_jy_88"
                 android:layout_centerVertical="true"
 
                 android:layout_toRightOf="@+id/radio_shop"
@@ -101,7 +101,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignTop="@+id/img_shop_pic"
-                android:layout_marginLeft="@dimen/dp_17"
+                android:layout_marginLeft="@dimen/dp_jy_17"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="电暖气  银色"
                 android:textColor="@color/shop_context"
@@ -112,8 +112,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@+id/tv_shop_name"
-                android:layout_marginLeft="@dimen/dp_17"
-                android:layout_marginTop="@dimen/dp_1"
+                android:layout_marginLeft="@dimen/dp_jy_17"
+                android:layout_marginTop="@dimen/dp_jy_1"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="对流式加热，通电即热，无感静音，双重安装保护33333333333"
                 android:textColor="@color/shop_type"
@@ -137,7 +137,7 @@
                     android:id="@+id/tv_shop_price"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_3"
+                    android:layout_marginLeft="@dimen/dp_jy_3"
                     android:text="2500"
                     android:textColor="@color/shop_price"
                     android:textSize="@dimen/sp_14" />
@@ -146,7 +146,7 @@
             <TextView
                 android:id="@+id/tv_shop_num"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_20"
+                android:layout_height="@dimen/dp_jy_20"
                 android:layout_alignBottom="@+id/img_shop_pic"
                 android:layout_alignParentRight="true"
                 android:text="X1" />
@@ -162,10 +162,10 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
-        android:paddingTop="@dimen/dp_5"
-        android:paddingBottom="@dimen/dp_5"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12"
+        android:paddingTop="@dimen/dp_jy_5"
+        android:paddingBottom="@dimen/dp_jy_5"
         android:background="@color/white">
 
         <TextView
@@ -177,17 +177,17 @@
             android:text="写追评"
             android:drawableLeft="@mipmap/ic_pingjia_zhuiping"
             android:background="@drawable/bg_shape_stroke_green25"
-            android:drawablePadding="@dimen/dp_5"
-            android:paddingLeft="@dimen/dp_30"
-            android:paddingRight="@dimen/dp_30"
-            android:paddingTop="@dimen/dp_8"
-            android:paddingBottom="@dimen/dp_8"
+            android:drawablePadding="@dimen/dp_jy_5"
+            android:paddingLeft="@dimen/dp_jy_30"
+            android:paddingRight="@dimen/dp_jy_30"
+            android:paddingTop="@dimen/dp_jy_8"
+            android:paddingBottom="@dimen/dp_jy_8"
             android:layout_alignParentRight="true"/>
     </RelativeLayout>
     
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 </LinearLayout>
 

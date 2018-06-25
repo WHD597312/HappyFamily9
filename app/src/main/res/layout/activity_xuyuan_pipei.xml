@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/green3">
+    android:background="@mipmap/bg_pipei">
 
     <LinearLayout
         android:id="@+id/ll1"
@@ -14,13 +14,11 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1">
-        <TextView
+        <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:text="正在匹配"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_22"/>
+           android:src="@mipmap/bg_pipei_text"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -79,10 +77,10 @@
             android:text="小花"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:gravity="center"
             android:drawableLeft="@mipmap/ic_pipei_nv"
-            android:drawablePadding="@dimen/dp_2"
+            android:drawablePadding="@dimen/dp_jy_2"
             />
     </RelativeLayout>
 
@@ -91,7 +89,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:text="正在匹配"
-        android:paddingTop="@dimen/dp_20"
+        android:paddingTop="@dimen/dp_jy_20"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_22"/>
 
@@ -114,10 +112,10 @@
             android:text="小花"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:gravity="center"
             android:drawableLeft="@mipmap/ic_pipei_nan"
-            android:drawablePadding="@dimen/dp_2"
+            android:drawablePadding="@dimen/dp_jy_2"
             />
     </RelativeLayout>
 

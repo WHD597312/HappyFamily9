@@ -4,18 +4,18 @@
 
     android:orientation="horizontal"
     android:background="@drawable/bg_shape"
-    android:minHeight="@dimen/dp_59"
+    android:minHeight="@dimen/dp_jy_59"
     android:layout_height="match_parent">
 
 
     <ImageView
-        android:layout_marginLeft="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_jy_20"
         android:id="@+id/iv_zncz_1"
-        android:layout_width="@dimen/dp_30"
-        android:layout_height="@dimen/dp_30"
+        android:layout_width="@dimen/dp_jy_30"
+        android:layout_height="@dimen/dp_jy_30"
         android:scaleType="centerInside"
         android:gravity="center"
-        android:layout_marginTop="@dimen/dp_16"
+        android:layout_marginTop="@dimen/dp_jy_16"
         android:src="@mipmap/zncz_sb1" />
     <TextView
         android:id="@+id/tv_zncz_1"
@@ -25,8 +25,8 @@
         android:textColor="@color/color_gray3"
         android:gravity="center"
         android:textSize="15sp"
-        android:layout_marginTop="@dimen/dp_19"
-        android:layout_marginLeft="@dimen/dp_21"
+        android:layout_marginTop="@dimen/dp_jy_19"
+        android:layout_marginLeft="@dimen/dp_jy_21"
         />
 
 </LinearLayout>

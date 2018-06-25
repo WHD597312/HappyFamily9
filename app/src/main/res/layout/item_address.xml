@@ -4,16 +4,16 @@
     android:layout_height="wrap_content"
     android:background="@color/white"
     android:orientation="vertical"
-    android:layout_marginTop="@dimen/dp_10">
+    android:layout_marginTop="@dimen/dp_jy_10">
 
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginTop="@dimen/dp_jy_10"
         android:background="@color/white"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
-        android:paddingTop="@dimen/dp_12">
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12"
+        android:paddingTop="@dimen/dp_jy_12">
 
         <TextView
             android:id="@+id/tv_name"
@@ -28,7 +28,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginLeft="@dimen/dp_35"
+            android:layout_marginLeft="@dimen/dp_jy_35"
             android:text="15335379527"
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12" />
@@ -42,8 +42,8 @@
         android:layout_height="wrap_content"
         android:layout_alignLeft="@id/tv_conf_name"
         android:layout_below="@+id/tv_conf_name"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_10"
         android:text="浙江  宁波  慈溪  详细地址......"
         android:textColor="@color/shop_context"
         android:textSize="@dimen/sp_12" />
@@ -51,7 +51,7 @@
 
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_6" />
+        android:layout_height="@dimen/dp_jy_6" />
 
     <include layout="@layout/cutline" />
 
@@ -59,14 +59,14 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-        android:paddingRight="@dimen/dp_12"
-        android:paddingTop="@dimen/dp_5"
-        android:paddingBottom="@dimen/dp_5">
+        android:paddingRight="@dimen/dp_jy_12"
+        android:paddingTop="@dimen/dp_jy_5"
+        android:paddingBottom="@dimen/dp_jy_5">
         <ImageView
             android:id="@+id/img_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_12"
+            android:padding="@dimen/dp_jy_12"
             android:src="@mipmap/weixuanzhong3x"/>
         <TextView
             android:layout_width="wrap_content"
@@ -75,7 +75,7 @@
             android:textColor="@color/shop_context"
             android:textSize="@dimen/sp_12"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_5" />
+            android:layout_marginLeft="@dimen/dp_jy_5" />
         <ImageView
             android:id="@+id/img_bianji"
             android:layout_width="wrap_content"
@@ -86,10 +86,10 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/btn_del"
-            android:layout_marginLeft="@dimen/dp_20"/>
+            android:layout_marginLeft="@dimen/dp_jy_20"/>
     </LinearLayout>
     <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="@dimen/dp_3"
+        android:layout_height="@dimen/dp_jy_3"
         android:layout_width="match_parent"/>
 
 </LinearLayout>

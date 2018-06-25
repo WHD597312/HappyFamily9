@@ -9,24 +9,24 @@
     <LinearLayout
         android:id="@+id/id_bto_jia"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical" >
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_3"
+            android:layout_height="@dimen/dp_jy_3"
             android:background="@null"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginRight="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_jy_49"
+            android:layout_marginRight="@dimen/dp_jy_49"
             />
 
 
         <ImageButton
             android:id="@+id/id_bto_jia_img"
             android:scaleType="centerInside"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_25"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_25"
             android:background="#00000000"
             android:clickable="false"
             android:src="@mipmap/jia13x" />
@@ -41,22 +41,22 @@
     <LinearLayout
         android:id="@+id/id_bto_le"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical">
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_3"
+            android:layout_height="@dimen/dp_jy_3"
             android:background="@null"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginRight="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_jy_49"
+            android:layout_marginRight="@dimen/dp_jy_49"
             />
         <ImageButton
             android:id="@+id/id_bto_le_img"
             android:scaleType="centerInside"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_25"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_25"
             android:background="#00000000"
             android:clickable="false"
             android:src="@mipmap/le3x" />
@@ -70,22 +70,22 @@
     <LinearLayout
         android:id="@+id/id_bto_bao"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical" >
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_3"
+            android:layout_height="@dimen/dp_jy_3"
             android:background="@null"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginRight="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_jy_49"
+            android:layout_marginRight="@dimen/dp_jy_49"
             />
         <ImageButton
             android:scaleType="centerInside"
             android:id="@+id/id_bto_bao_img"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_25"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_25"
             android:background="#00000000"
             android:clickable="false"
             android:src="@mipmap/bao3x" />
@@ -100,21 +100,21 @@
     <LinearLayout
         android:id="@+id/id_bto_zhen"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:layout_weight="1"
         android:gravity="center"
         android:orientation="vertical" >
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_3"
+            android:layout_height="@dimen/dp_jy_3"
             android:background="@null"
-            android:layout_marginLeft="@dimen/dp_49"
-            android:layout_marginRight="@dimen/dp_49"
+            android:layout_marginLeft="@dimen/dp_jy_49"
+            android:layout_marginRight="@dimen/dp_jy_49"
             />
         <ImageButton
             android:id="@+id/id_bto_zhen_img"
-            android:layout_width="@dimen/dp_30"
-            android:layout_height="@dimen/dp_25"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_25"
             android:background="#00000000"
             android:scaleType="fitCenter"
             android:clickable="false"

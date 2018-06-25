@@ -13,17 +13,17 @@
         android:id="@+id/rl_dingdan"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
-        android:paddingTop="@dimen/dp_12"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12"
+        android:paddingTop="@dimen/dp_jy_12"
         android:background="@color/white">
 
 
 
     <ImageView
                 android:id="@+id/img_touxiang"
-                android:layout_width="@dimen/dp_45"
-                android:layout_height="@dimen/dp_45"
+                android:layout_width="@dimen/dp_jy_45"
+                android:layout_height="@dimen/dp_jy_45"
                 android:layout_centerVertical="true"
                 android:layout_toRightOf="@+id/radio_shop"
                 android:src="@mipmap/ic_shop_pinglun_touxiang"/>
@@ -35,21 +35,49 @@
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_jy_10"
             android:text="文成"
             android:textColor="#474747"
             android:textSize="@dimen/sp_12" />
 
-        <ImageView
-            android:id="@+id/img_xing"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:src="@mipmap/ic_shop_pinglun_xing"
-            android:layout_below="@+id/tv_name"
-            android:layout_marginTop="@dimen/dp_5"
-            android:layout_marginLeft="@dimen/dp_8"/>
 
 
+            <ImageView
+                android:id="@+id/img1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_name"
+                android:layout_marginTop="@dimen/dp_jy_5"
+                android:layout_marginLeft="@dimen/dp_jy_8"
+                android:src="@mipmap/ic_pl_xx_false"/>
+            <ImageView
+                android:id="@+id/img2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_toRightOf="@+id/img1"
+                android:layout_alignTop="@id/img1"
+                android:src="@mipmap/ic_pl_xx_false"/>
+            <ImageView
+                android:id="@+id/img3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/img1"
+                android:layout_toRightOf="@+id/img2"
+                android:src="@mipmap/ic_pl_xx_false"/>
+            <ImageView
+                android:id="@+id/img4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/img1"
+                android:layout_toRightOf="@+id/img3"
+                android:src="@mipmap/ic_pl_xx_false"/>
+            <ImageView
+                android:id="@+id/img5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@id/img1"
+                android:layout_toRightOf="@+id/img4"
+                android:src="@mipmap/ic_pl_xx_false"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -74,17 +102,18 @@
         android:layout_height="wrap_content"
         android:textSize="@dimen/sp_12"
         android:background="@color/white"
-        android:padding="@dimen/dp_12"
+        android:padding="@dimen/dp_jy_12"
         android:text="东西很不错，漂亮大气，做工精细，安装也很方便，值得购买。"/>
 
 
     <ImageView
+        android:visibility="gone"
         android:id="@+id/img_pinglun"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/chanpin2"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingBottom="@dimen/dp_12"/>
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingBottom="@dimen/dp_jy_12"/>
     <include layout="@layout/cutline"/>
 
 </LinearLayout>

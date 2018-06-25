@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:paddingRight="@dimen/dp_jy_7">
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -11,8 +12,8 @@
         android:orientation="vertical"
         android:background="@mipmap/bg_pop_xuyuan">
         <View
-            android:layout_width="@dimen/dp_1"
-            android:layout_height="@dimen/dp_10"/>
+            android:layout_width="@dimen/dp_jy_1"
+            android:layout_height="@dimen/dp_jy_10"/>
 
 
         <TextView
@@ -22,10 +23,10 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_18"
+            android:paddingLeft="@dimen/dp_jy_18"
             android:drawableLeft="@mipmap/ic_pop_xuyuan_xiaoxi"
             android:textSize="@dimen/sp_12"
-            android:drawablePadding="@dimen/dp_18"
+            android:drawablePadding="@dimen/dp_jy_18"
             android:text="消息"/>
 
         <TextView
@@ -35,10 +36,10 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_18"
+            android:paddingLeft="@dimen/dp_jy_18"
             android:drawableLeft="@mipmap/ic_pop_xuyuan_fabu"
             android:textSize="@dimen/sp_12"
-            android:drawablePadding="@dimen/dp_20"
+            android:drawablePadding="@dimen/dp_jy_20"
             android:text="发布愿望"/>
 
         <TextView
@@ -48,10 +49,10 @@
             android:layout_weight="1"
             android:textColor="@color/black"
             android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_18"
+            android:paddingLeft="@dimen/dp_jy_18"
             android:drawableLeft="@mipmap/ic_pop_xuyuan_pipei"
             android:textSize="@dimen/sp_12"
-            android:drawablePadding="@dimen/dp_18"
+            android:drawablePadding="@dimen/dp_jy_18"
             android:text="匹配愿望"/>
 
 

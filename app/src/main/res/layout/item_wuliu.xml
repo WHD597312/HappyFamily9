@@ -9,12 +9,12 @@
 
     <LinearLayout
 
-        android:layout_width="@dimen/dp_1"
+        android:layout_width="@dimen/dp_jy_1"
         android:layout_height="wrap_content"
         android:layout_alignBottom="@+id/relative"
         android:layout_alignTop="@+id/image"
         android:layout_below="@+id/image"
-        android:layout_marginLeft="@dimen/dp_40"
+        android:layout_marginLeft="@dimen/dp_jy_40"
         android:orientation="vertical">
         <View
             android:id="@+id/view_1"
@@ -32,10 +32,10 @@
     </LinearLayout>
     <ImageView
         android:id="@+id/image"
-        android:layout_width="@dimen/dp_13"
-        android:layout_height="@dimen/dp_13"
+        android:layout_width="@dimen/dp_jy_13"
+        android:layout_height="@dimen/dp_jy_13"
         android:layout_centerVertical="true"
-        android:layout_marginLeft="@dimen/dp_34"
+        android:layout_marginLeft="@dimen/dp_jy_34"
         android:src="@mipmap/weixuanzhong_wuliu3x" />
 
 
@@ -46,7 +46,7 @@
 
         android:layout_toRightOf="@+id/image"
         android:orientation="vertical"
-        android:padding="@dimen/dp_15">
+        android:padding="@dimen/dp_jy_15">
 
 
         <TextView
@@ -54,7 +54,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:ellipsize="none"
-            android:paddingLeft="@dimen/dp_5"
+            android:paddingLeft="@dimen/dp_jy_5"
             android:scrollHorizontally="false"
             android:singleLine="true"
             android:text="需求提交成功"
@@ -67,9 +67,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/title"
-            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_jy_5"
             android:ellipsize="end"
-            android:paddingLeft="@dimen/dp_5"
+            android:paddingLeft="@dimen/dp_jy_5"
             android:singleLine="true"
             android:text="2018.04.02.11:30"
             android:textColor="#66454545"

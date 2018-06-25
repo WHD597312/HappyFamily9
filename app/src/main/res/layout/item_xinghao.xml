@@ -10,15 +10,15 @@
    <TextView
        android:id="@+id/tv_search"
        android:layout_width="wrap_content"
-       android:layout_height="@dimen/dp_40"
+       android:layout_height="@dimen/dp_jy_40"
        android:gravity="center"
        android:textSize="@dimen/sp_13"
        android:textColor="@color/white"
        android:layout_centerHorizontal="true"
        android:background="@drawable/bg_shape_xinghao"
-       android:paddingLeft="@dimen/dp_10"
+       android:paddingLeft="@dimen/dp_jy_10"
        android:singleLine="true"
-       android:paddingRight="@dimen/dp_10"
+       android:paddingRight="@dimen/dp_jy_10"
        android:text="电暖器"/>
 
 </RelativeLayout>

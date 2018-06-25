@@ -6,6 +6,9 @@
 
     <include
         layout="@layout/title_img"/>
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_3" />
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerView"

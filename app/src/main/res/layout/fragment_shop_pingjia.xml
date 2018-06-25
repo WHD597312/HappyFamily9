@@ -11,11 +11,11 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_12"
-        android:paddingLeft="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
+        android:paddingTop="@dimen/dp_jy_12"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12"
         android:background="@color/white"
-        android:layout_marginTop="@dimen/dp_12">
+        android:layout_marginTop="@dimen/dp_jy_12">
         <TextView
             android:id="@+id/tv_pinglun"
             android:layout_width="wrap_content"
@@ -25,10 +25,39 @@
             android:text="评论"/>
 
         <ImageView
+            android:id="@+id/img1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_38"
-            android:src="@mipmap/ic_shop_pinglun_xing"/>
+            android:layout_marginLeft="@dimen/dp_jy_38"
+            android:src="@mipmap/ic_pl_xx_false"/>
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_3"
+            android:layout_toRightOf="@+id/img1"
+            android:src="@mipmap/ic_pl_xx_false"/>
+        <ImageView
+            android:id="@+id/img3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_3"
+            android:layout_toRightOf="@+id/img2"
+            android:src="@mipmap/ic_pl_xx_false"/>
+        <ImageView
+            android:id="@+id/img4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_3"
+            android:layout_toRightOf="@+id/img3"
+            android:src="@mipmap/ic_pl_xx_false"/>
+        <ImageView
+            android:id="@+id/img5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_3"
+            android:layout_toRightOf="@+id/img4"
+            android:src="@mipmap/ic_pl_xx_false"/>
         <TextView
             android:id="@+id/tv_haoping"
             android:layout_width="wrap_content"
@@ -44,11 +73,11 @@
         android:background="@color/white"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:paddingTop="@dimen/dp_12"
-        android:paddingRight="@dimen/dp_12"
-        android:paddingLeft="@dimen/dp_12"
-        app:tagSpacing="@dimen/dp_10"
-        app:lineSpacing="@dimen/dp_10"/>
+        android:paddingTop="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12"
+        android:paddingLeft="@dimen/dp_jy_12"
+        app:tagSpacing="@dimen/dp_jy_10"
+        app:lineSpacing="@dimen/dp_jy_10"/>
     
     <LinearLayout
         android:layout_width="match_parent"
@@ -61,12 +90,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-            android:padding="@dimen/dp_5"
+            android:padding="@dimen/dp_jy_5"
         android:src="@mipmap/ic_pingjia_more_xia"/>
         <com.xr.happyFamily.bao.view.LinearGradientView
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_3"
-            android:layout_marginTop="@dimen/dp_3"/>
+            android:layout_height="@dimen/dp_jy_3"
+            android:layout_marginTop="@dimen/dp_jy_3"/>
     
     </LinearLayout>
 
@@ -74,13 +103,10 @@
 
 
 
-    <View
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_12"
-        android:background="@color/color_gray"/>
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/recyclerview"
         android:layout_width="match_parent"
+        android:layout_marginTop="@dimen/dp_jy_12"
         android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
 </LinearLayout>

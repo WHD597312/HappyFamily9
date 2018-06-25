@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
@@ -8,50 +8,49 @@
     <View
         android:id="@+id/view_dis"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="2"/>
+        android:layout_height="match_parent" />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
+        android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_alignParentBottom="true"
         android:background="@drawable/bg_shape_xinghao_popup">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp_14"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10">
+            android:paddingTop="@dimen/dp_jy_14"
+            android:paddingLeft="@dimen/dp_jy_10"
+            android:paddingRight="@dimen/dp_jy_10">
 
             <ImageView
                 android:id="@+id/img_shop_pic"
-                android:layout_width="@dimen/dp_86"
-                android:layout_height="@dimen/dp_74"
+                android:layout_width="@dimen/dp_jy_86"
+                android:layout_height="@dimen/dp_jy_74"
                 android:src="@mipmap/chanpin2"
                 android:layout_toRightOf="@+id/radio_shop" />
 
             <TextView
-                android:id="@+id/tv_state"
+                android:id="@+id/tv_name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginLeft="@dimen/dp_jy_20"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="取暖器"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_18" />
 
             <TextView
-                android:id="@+id/tv_tel"
+                android:id="@+id/tv_price"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_20"
-                android:layout_below="@+id/tv_state"
-                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginLeft="@dimen/dp_jy_20"
+                android:layout_below="@+id/tv_name"
+                android:layout_marginTop="@dimen/dp_jy_8"
                 android:layout_toRightOf="@+id/img_shop_pic"
-                android:text="￥999"
+                android:text="¥999"
                 android:textColor="#CE5B54"
                 android:textSize="@dimen/sp_18" />
 
@@ -60,7 +59,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dp_3"
+                android:layout_marginRight="@dimen/dp_jy_3"
                 android:src="@mipmap/ic_address_close"/>
 
         </RelativeLayout>
@@ -71,35 +70,124 @@
                 android:layout_height="wrap_content"
                 android:text="型号"
                 android:textColor="@color/shop_title"
-                android:layout_marginLeft="@dimen/dp_12"
-                android:layout_marginTop="@dimen/dp_37"
+                android:layout_marginLeft="@dimen/dp_jy_12"
+                android:layout_marginTop="@dimen/dp_jy_37"
                 android:textSize="@dimen/sp_13" />
-        <com.donkingliang.labels.LabelsView
-            xmlns:app="http://schemas.android.com/apk/res-auto"
+
+        <com.xr.happyFamily.bao.view.FlowTagView
             android:id="@+id/labels"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:background="@color/white"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_12"
-            app:labelBackground="@drawable/selector_xinghao"
-        app:labelTextColor="@drawable/selector_pinglun_text"
-        app:labelTextSize="@dimen/sp_13"
-        app:labelTextPaddingBottom="@dimen/dp_8"
-        app:labelTextPaddingLeft="@dimen/dp_10"
-        app:labelTextPaddingRight="@dimen/dp_10"
-        app:labelTextPaddingTop="@dimen/dp_8"
-        app:lineMargin="@dimen/dp_10"
-        app:wordMargin="@dimen/dp_10"
-        app:selectType="SINGLE_IRREVOCABLY"
-        />
+            android:paddingTop="@dimen/dp_jy_12"
+            android:paddingRight="@dimen/dp_jy_12"
+            android:paddingLeft="@dimen/dp_jy_12"
+            app:tagSpacing="@dimen/dp_jy_10"
+            app:lineSpacing="@dimen/dp_jy_10"/>
+
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_15"/>
+        <include
+            layout="@layout/cutline"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="数量"
+            android:textColor="@color/shop_title"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_13" />
+
+        <LinearLayout
+            android:id="@+id/ll"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_40"
+            android:layout_alignParentRight="true"
+            android:paddingLeft="@dimen/dp_jy_20"
+            android:paddingRight="@dimen/dp_jy_12"
+            android:gravity="right"
+            android:layout_alignBottom="@+id/img_shop_pic">
+
+            <TextView
+                android:id="@+id/tv_shop_reduce"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="match_parent"
+                android:background="@drawable/text_shopcar_main"
+                android:gravity="center"
+                android:text="—"
+                android:layout_marginTop="@dimen/dp_jy_10"
+                android:textColor="@color/shop_title"
+                android:textSize="@dimen/sp_15" />
+
+            <TextView
+                android:id="@+id/tv_shop_num"
+                android:layout_width="@dimen/dp_jy_41"
+                android:layout_height="match_parent"
+                android:layout_marginTop="@dimen/dp_jy_10"
+                android:background="@drawable/text_shopcar_main_no"
+                android:gravity="center"
+                android:text="1"
+                android:textColor="@color/shop_title"
+                android:textSize="@dimen/sp_12" />
+
+            <TextView
+                android:id="@+id/tv_shop_add"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="match_parent"
+
+                android:background="@drawable/text_shopcar_main"
+                android:gravity="center"
+                android:text="+"
+                android:layout_marginTop="@dimen/dp_jy_10"
+                android:textColor="@color/shop_title"
+                android:textSize="@dimen/sp_15" />
+        </LinearLayout>
 
 
 
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:padding="@dimen/dp_jy_12"
+                android:orientation="horizontal">
+                <TextView
+                    android:id="@+id/tv_type_cart"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@drawable/bg_shape_xinghao_left"
+                    android:text="加入购物车"
+                    android:padding="@dimen/dp_jy_12"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    />
+
+                <TextView
+                    android:id="@+id/tv_type_bug"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:layout_marginLeft="@dimen/dp_jy_21"
+                    android:background="@drawable/bg_shape_xinghao_right"
+                    android:text="立即购买"
+                    android:padding="@dimen/dp_jy_12"
+                    android:textSize="@dimen/sp_14"
+                    android:textColor="@color/white"
+                    android:gravity="center"
+                    />
+            </LinearLayout>
 
 
     </LinearLayout>
 
 
 
-</LinearLayout>
+</RelativeLayout>
 
 

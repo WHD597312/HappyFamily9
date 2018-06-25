@@ -12,19 +12,19 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:background="@color/white"
-        android:layout_marginTop="@dimen/dp_50">
+        android:layout_marginTop="@dimen/dp_jy_50">
         
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:paddingTop="@dimen/dp_21"
-            android:paddingLeft="@dimen/dp_10"
-            android:paddingRight="@dimen/dp_10">
+            android:paddingTop="@dimen/dp_jy_21"
+            android:paddingLeft="@dimen/dp_jy_10"
+            android:paddingRight="@dimen/dp_jy_10">
 
             <ImageView
                 android:id="@+id/img_shop_pic"
-                android:layout_width="@dimen/dp_86"
-                android:layout_height="@dimen/dp_74"
+                android:layout_width="@dimen/dp_jy_86"
+                android:layout_height="@dimen/dp_jy_74"
                 android:src="@mipmap/chanpin2"
                 android:layout_toRightOf="@+id/radio_shop" />
 
@@ -32,8 +32,8 @@
                 android:id="@+id/tv_state"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_15"
-                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_jy_15"
+                android:layout_marginTop="@dimen/dp_jy_20"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="正在派件..."
                 android:textColor="#3D9E5D"
@@ -43,9 +43,9 @@
                 android:id="@+id/tv_tel"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_15"
+                android:layout_marginLeft="@dimen/dp_jy_15"
                 android:layout_below="@+id/tv_state"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:layout_toRightOf="@+id/img_shop_pic"
                 android:text="圆通速递：888919282567937017"
                 android:textColor="@color/black"
@@ -55,28 +55,28 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
-                android:layout_marginRight="@dimen/dp_3"
+                android:layout_marginRight="@dimen/dp_jy_3"
                 android:src="@mipmap/dianhua3x"/>
 
         </RelativeLayout>
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_17"/>
+            android:layout_height="@dimen/dp_jy_17"/>
         <include
             layout="@layout/cutline" />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:text="物流动态"
             android:textColor="#3D9E5D"
-            android:layout_marginLeft="@dimen/dp_16"/>
+            android:layout_marginLeft="@dimen/dp_jy_16"/>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/dp_10">
+            android:layout_marginTop="@dimen/dp_jy_10">
 
             <ListView
                 android:id="@+id/lv_list"

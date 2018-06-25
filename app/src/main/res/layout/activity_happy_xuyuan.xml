@@ -12,13 +12,23 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@mipmap/ic_xuyuan_back"
-      android:layout_margin="@dimen/dp_12"/>
+      android:layout_margin="@dimen/dp_jy_12"/>
+
+
+  <TextView
+      android:id="@+id/title_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="许愿墙"
+      android:textColor="@color/white"
+      android:textSize="20sp" />
   <ImageView
       android:id="@+id/img_add"
       android:src="@mipmap/ic_xuyuan_add"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_margin="@dimen/dp_12"
+      android:layout_margin="@dimen/dp_jy_12"
       android:layout_alignParentRight="true"/>
  </RelativeLayout>
  <com.xr.happyFamily.le.view.MyHorizontalScrollView
@@ -92,5 +102,5 @@
 
 <View
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_100"/>
+    android:layout_height="@dimen/dp_jy_100"/>
  </LinearLayout>

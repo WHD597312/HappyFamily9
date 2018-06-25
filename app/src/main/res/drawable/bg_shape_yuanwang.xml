@@ -2,7 +2,7 @@
 <shape xmlns:android="http://schemas.android.com/apk/res/android" >
 
     <!-- 搜索结果分类列表背景 -->
-    <corners  android:radius="@dimen/dp_25"/>
+    <corners  android:radius="@dimen/dp_jy_25"/>
 
     <solid  android:color="#66000000"/>
 

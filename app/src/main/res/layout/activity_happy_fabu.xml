@@ -15,7 +15,7 @@
     <View
         android:id="@+id/view_dis"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_100"
+        android:layout_height="@dimen/dp_jy_100"
         android:background="#99000000" />
 
 
@@ -35,7 +35,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@+id/img_touxiang"
-                android:layout_marginTop="@dimen/dp_30"
+                android:layout_marginTop="@dimen/dp_jy_30"
                 android:background="@color/white" />
 
             <TextView
@@ -43,7 +43,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
-                android:layout_marginLeft="@dimen/dp_130"
+                android:layout_marginLeft="@dimen/dp_jy_130"
                 android:text="昵称"
                 android:textColor="@color/black"
                 android:textSize="@dimen/sp_14" />
@@ -53,7 +53,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignBottom="@id/img_touxiang"
                 android:layout_alignLeft="@id/tv_name"
-                android:layout_marginBottom="@dimen/dp_15"
+                android:layout_marginBottom="@dimen/dp_jy_15"
                 android:orientation="horizontal">
 
                 <TextView
@@ -68,7 +68,7 @@
                     android:id="@+id/tv_xingzuo"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_28"
+                    android:layout_marginLeft="@dimen/dp_jy_28"
                     android:text="金牛座"
                     android:textColor="@color/shop_title"
                     android:textSize="@dimen/sp_12" />
@@ -77,7 +77,7 @@
                     android:id="@+id/tv_shengri"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_28"
+                    android:layout_marginLeft="@dimen/dp_jy_28"
                     android:text="2018.4.1"
                     android:textColor="@color/shop_title"
                     android:textSize="@dimen/sp_12" />
@@ -87,7 +87,7 @@
                 android:id="@+id/img_touxiang"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginLeft="@dimen/dp_jy_12"
                 android:src="@mipmap/ic_fabu_touxiang" />
 
             <ImageView
@@ -96,14 +96,14 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                android:padding="@dimen/dp_12"
+                android:padding="@dimen/dp_jy_12"
                 android:src="@mipmap/ic_fabu_close" />
         </RelativeLayout>
 
 
         <View
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_15"
+            android:layout_height="@dimen/dp_jy_15"
             android:background="@color/white" />
 
         <LinearLayout
@@ -120,18 +120,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:padding="@dimen/dp_12">
+            android:padding="@dimen/dp_jy_12">
 
             <ImageView
-                android:layout_width="@dimen/dp_26"
-                android:layout_height="@dimen/dp_26"
-                android:layout_marginTop="@dimen/dp_3"
+                android:layout_width="@dimen/dp_jy_26"
+                android:layout_height="@dimen/dp_jy_26"
+                android:layout_marginTop="@dimen/dp_jy_3"
                 android:src="@mipmap/ic_fabu_type" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_jy_35"
                 android:text="类型"
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_14"
@@ -141,8 +141,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_35"
-                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_jy_35"
+                android:layout_marginTop="@dimen/dp_jy_20"
                 android:text="TYPE"
                 android:textColor="#851BAE59"
                 android:textSize="@dimen/sp_12" />
@@ -157,9 +157,9 @@
             android:gravity="center"
             android:listSelector="@android:color/transparent"
             android:numColumns="3"
-            android:paddingBottom="@dimen/dp_10"
+            android:paddingBottom="@dimen/dp_jy_10"
             android:stretchMode="columnWidth"
-            android:verticalSpacing="@dimen/dp_15"></GridView>
+            android:verticalSpacing="@dimen/dp_jy_15"></GridView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -176,18 +176,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:padding="@dimen/dp_12">
+            android:padding="@dimen/dp_jy_12">
 
             <ImageView
-                android:layout_width="@dimen/dp_26"
-                android:layout_height="@dimen/dp_26"
-                android:layout_marginTop="@dimen/dp_3"
+                android:layout_width="@dimen/dp_jy_26"
+                android:layout_height="@dimen/dp_jy_26"
+                android:layout_marginTop="@dimen/dp_jy_3"
                 android:src="@mipmap/ic_fabu_price" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_jy_35"
                 android:text="价值区间"
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_14"
@@ -197,8 +197,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_35"
-                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_jy_35"
+                android:layout_marginTop="@dimen/dp_jy_20"
                 android:text="VALUE RANGE"
                 android:textColor="#851BAE59"
                 android:textSize="@dimen/sp_12" />
@@ -209,11 +209,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:paddingBottom="@dimen/dp_12"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingRight="@dimen/dp_12"
-            app:lineSpacing="@dimen/dp_10"
-            app:tagSpacing="@dimen/dp_15" />
+            android:paddingBottom="@dimen/dp_jy_12"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingRight="@dimen/dp_jy_12"
+            app:lineSpacing="@dimen/dp_jy_10"
+            app:tagSpacing="@dimen/dp_jy_15" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -229,18 +229,18 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:background="@color/white"
-            android:padding="@dimen/dp_12">
+            android:padding="@dimen/dp_jy_12">
 
             <ImageView
-                android:layout_width="@dimen/dp_26"
-                android:layout_height="@dimen/dp_26"
-                android:layout_marginTop="@dimen/dp_3"
+                android:layout_width="@dimen/dp_jy_26"
+                android:layout_height="@dimen/dp_jy_26"
+                android:layout_marginTop="@dimen/dp_jy_3"
                 android:src="@mipmap/ic_fabu_yuanwang" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_35"
+                android:layout_marginLeft="@dimen/dp_jy_35"
                 android:text="愿望"
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_14"
@@ -250,8 +250,8 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_35"
-                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginLeft="@dimen/dp_jy_35"
+                android:layout_marginTop="@dimen/dp_jy_20"
                 android:text="WISH"
                 android:textColor="#851BAE59"
                 android:textSize="@dimen/sp_12" />
@@ -266,12 +266,12 @@
 
             <EditText
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_80"
-                android:layout_margin="@dimen/dp_12"
+                android:layout_height="@dimen/dp_jy_80"
+                android:layout_margin="@dimen/dp_jy_12"
                 android:background="@drawable/bg_fabuyuanwang"
                 android:gravity="top"
                 android:hint="说出你的愿望吧"
-                android:padding="@dimen/dp_8"
+                android:padding="@dimen/dp_jy_8"
                 android:textSize="@dimen/sp_12" />
 
             <ImageView
@@ -279,7 +279,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginBottom="@dimen/dp_20"
+                android:layout_marginBottom="@dimen/dp_jy_20"
                 android:src="@mipmap/bg_fabuyuanwang" />
         </LinearLayout>
     </LinearLayout>

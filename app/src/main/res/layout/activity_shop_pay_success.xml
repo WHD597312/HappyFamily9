@@ -7,7 +7,7 @@
         layout="@layout/title"/>
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 
 
@@ -17,8 +17,8 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:background="@color/white"
-        android:padding="@dimen/dp_20"
-        android:layout_marginTop="@dimen/dp_12"
+        android:padding="@dimen/dp_jy_20"
+        android:layout_marginTop="@dimen/dp_jy_12"
         android:gravity="center">
         <TextView
 
@@ -27,7 +27,7 @@
             android:textColor="@color/shop_price"
             android:layout_centerHorizontal="true"
             android:textSize="@dimen/sp_12"
-            android:text="￥"/>
+            android:text="¥"/>
         <TextView
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
@@ -55,13 +55,13 @@
                     android:textColor="@color/shop_context"
                     android:gravity="center"
                     android:textSize="@dimen/sp_15"
-                    android:padding="@dimen/dp_12"
+                    android:padding="@dimen/dp_jy_12"
                     android:text="查看订单"/>
 
                 <View
-                    android:layout_width="@dimen/dp_1"
-                    android:layout_marginTop="@dimen/dp_13"
-                    android:layout_marginBottom="@dimen/dp_13"
+                    android:layout_width="@dimen/dp_jy_1"
+                    android:layout_marginTop="@dimen/dp_jy_13"
+                    android:layout_marginBottom="@dimen/dp_jy_13"
                     android:layout_height="match_parent"
                     android:background="#26000000"/>
 
@@ -71,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:textColor="@color/shop_context"
-                    android:padding="@dimen/dp_12"
+                    android:padding="@dimen/dp_jy_12"
                     android:gravity="center"
                     android:textSize="@dimen/sp_15"
                     android:text="返回首页"/>
@@ -81,7 +81,7 @@
 
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 
 
@@ -99,8 +99,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/bg_cainixihuan"
-                android:layout_marginTop="@dimen/dp_30"
-                android:padding="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_jy_30"
+                android:padding="@dimen/dp_jy_12"
                 android:layout_gravity="center"/>
 
 
@@ -118,7 +118,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_jy_15"
             android:layout_centerInParent="true"
             android:visibility="gone"
             android:gravity="center_horizontal">
@@ -139,7 +139,7 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:scrollbars="none"
-            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_jy_15"
             ></android.support.v7.widget.RecyclerView>
 
         <LinearLayout
@@ -157,10 +157,10 @@
                 android:gravity="center"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="4"
-                android:paddingTop="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_jy_10"
+                android:paddingBottom="@dimen/dp_jy_10"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="@dimen/dp_20"></GridView>
+                android:verticalSpacing="@dimen/dp_jy_20"></GridView>
 
 
         </LinearLayout>

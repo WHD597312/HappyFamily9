@@ -1,0 +1,237 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <include layout="@layout/title_shop" />
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_3" />
+
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:id="@+id/recyclerView">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_52"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:paddingLeft="@dimen/dp_jy_12"
+    >
+
+
+
+        <TextView
+            android:id="@+id/tv_tui"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_address"
+            android:text="退款原因"
+            android:layout_centerVertical="true"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/tv_choose"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:gravity="right"
+            android:layout_centerVertical="true"
+            android:text="请选择"
+            android:padding="@dimen/dp_jy_12"
+            android:drawableRight="@mipmap/ic_shangcheng_xiala"
+            android:drawablePadding="@dimen/dp_jy_12"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_12" />
+
+
+
+    </RelativeLayout>
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_3" />
+
+
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_52"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_address"
+            android:text="退款金额："
+            android:layout_centerVertical="true"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/tv_money"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_jy_8"
+            android:layout_centerVertical="true"
+            android:text="¥500"
+            android:textColor="@color/shop_price"
+            android:textSize="@dimen/sp_14" />
+
+
+
+    </LinearLayout>
+
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_3" />
+
+
+
+    <LinearLayout
+        android:id="@+id/ll_wuliu"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_52"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_address"
+            android:text="物流类型："
+            android:layout_centerVertical="true"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:id="@+id/tv_wuliu_type"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_jy_8"
+            android:layout_centerVertical="true"
+            android:text="请选择物流类型"
+            android:textColor="@color/shop_title"
+            android:textSize="@dimen/sp_14" />
+
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_52"
+        android:background="@color/white"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:gravity="center_vertical"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:orientation="horizontal"
+        >
+
+        <TextView
+
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toRightOf="@+id/img_address"
+            android:text="物流订单："
+            android:layout_centerVertical="true"
+            android:textColor="@color/shop_context"
+            android:textSize="@dimen/sp_14" />
+
+        <EditText
+            android:id="@+id/ed_wuliu_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginLeft="@dimen/dp_jy_8"
+            android:layout_centerVertical="true"
+            android:hint="请填写物流单号"
+            android:background="@null"
+            android:textColor="@color/shop_title"
+            android:textSize="@dimen/sp_14" />
+
+
+
+    </LinearLayout>
+
+<LinearLayout
+    android:visibility="gone"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:background="@color/white">
+
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingBottom="@dimen/dp_jy_18"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingTop="@dimen/dp_jy_17"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:background="@color/white"
+        android:textColor="@color/shop_context"
+        android:textSize="@dimen/sp_14"
+        android:text="上传凭证"/>
+
+
+    <ImageView
+        android:visibility="gone"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/bg_tuihuo_pic"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginBottom="@dimen/dp_jy_18"/>
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_3" />
+
+</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+<TextView
+    android:id="@+id/tv_tijiao"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_44"
+    android:layout_alignParentBottom="true"
+    android:layout_marginBottom="@dimen/dp_jy_20"
+    android:text="提交"
+    android:gravity="center"
+    android:textColor="@color/white"
+    android:textSize="@dimen/sp_14"
+    android:layout_marginLeft="@dimen/dp_jy_12"
+    android:layout_marginRight="@dimen/dp_jy_12"
+    android:background="@drawable/bg_shape_green"/>
+    </RelativeLayout>
+
+
+</LinearLayout>

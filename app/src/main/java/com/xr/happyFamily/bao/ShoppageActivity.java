@@ -510,14 +510,14 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     }
 
     private void getShopData(int id, int page) {
+        Map<String, Object> params = new HashMap<>();
         if (id == 0) {
             llTuijian.setVisibility(View.VISIBLE);
         } else
             llTuijian.setVisibility(View.GONE);
-//        dialog = MyDialog.showDialog(mContext);
-//        dialog.show();
-        Map<String, Object> params = new HashMap<>();
-        params.put("categoryId", id + "");
+
+
+        params.put("categoryId", id+1 + "");
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
         new ShopAsync().execute(params);

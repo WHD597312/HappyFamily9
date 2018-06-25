@@ -6,32 +6,32 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_44"
-        android:layout_marginTop="@dimen/dp_4"
+        android:layout_height="@dimen/dp_jy_44"
+        android:layout_marginTop="@dimen/dp_jy_4"
 
         android:background="@color/white">
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_28"
+            android:layout_height="@dimen/dp_jy_28"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_55"
-            android:layout_marginRight="@dimen/dp_55"
+            android:layout_marginLeft="@dimen/dp_jy_55"
+            android:layout_marginRight="@dimen/dp_jy_55"
             android:background="@drawable/bg_shape_hui">
 
             <ImageView
                 android:id="@+id/image_search"
-                android:layout_width="@dimen/dp_28"
+                android:layout_width="@dimen/dp_jy_28"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:padding="@dimen/dp_4"
+                android:layout_marginLeft="@dimen/dp_jy_5"
+                android:padding="@dimen/dp_jy_4"
                 android:src="@mipmap/sousuo2x" />
 
             <TextView
                 android:id="@+id/tv_search"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_jy_5"
                 android:gravity="center_vertical"
                 android:text="搜索"
                 android:textSize="@dimen/sp_12" />
@@ -40,11 +40,11 @@
 
         <ImageView
             android:id="@+id/image_more"
-            android:layout_width="@dimen/dp_40"
-            android:layout_height="@dimen/dp_40"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_40"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
-            android:padding="@dimen/dp_12"
+            android:padding="@dimen/dp_jy_12"
             android:src="@mipmap/gengduo2x" />
 
     </RelativeLayout>
@@ -53,49 +53,21 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/rv_title"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_44"
-            android:paddingLeft="@dimen/dp_12"
-            android:paddingRight="@dimen/dp_30"
-            android:background="@color/white"
-            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
 
 
 
-        <LinearLayout
-            android:layout_alignParentRight="true"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_44"
-
-            android:gravity="center"
-
-            android:orientation="horizontal">
-            <View
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="match_parent"
-                android:background="@drawable/bg_shape_touming_jianbain"/>
-            <ImageView
-                android:layout_width="@dimen/dp_25"
-                android:layout_height="match_parent"
-                android:id="@id/img_more"
-                android:padding="@dimen/dp_5"
-                android:src="@mipmap/xiala2x"
-                android:background="@color/white"
-                android:layout_centerVertical="true"/>
-            <View
-                android:layout_width="@dimen/dp_12"
-                android:layout_height="match_parent"
-                android:background="@color/white"/>
-        </LinearLayout>
-
-
-
-        <com.xr.happyFamily.bao.view.MyScrollview
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/swipe_content"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/rv_title">
+
+
+        <com.xr.happyFamily.bao.view.MyScrollview
+            android:id="@+id/myScroll"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+           >
 
 
         <LinearLayout
@@ -111,36 +83,37 @@
             <include layout="@layout/shop_banner" />
 
             <LinearLayout
-
+                android:id="@+id/ll_tuijian"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_25"
+                android:layout_marginTop="@dimen/dp_jy_25"
                 android:gravity="center"
                 android:orientation="horizontal">
 
                 <View
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_1"
+                    android:layout_width="@dimen/dp_jy_30"
+                    android:layout_height="@dimen/dp_jy_1"
                     android:background="#22000000" />
 
                 <TextView
+                    android:id="@+id/tv_type"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:paddingLeft="@dimen/dp_5"
-                    android:paddingRight="@dimen/dp_5"
+                    android:paddingLeft="@dimen/dp_jy_5"
+                    android:paddingRight="@dimen/dp_jy_5"
                     android:text="推荐"
                     android:textColor="@color/black" />
 
                 <View
-                    android:layout_width="@dimen/dp_30"
-                    android:layout_height="@dimen/dp_1"
+                    android:layout_width="@dimen/dp_jy_30"
+                    android:layout_height="@dimen/dp_jy_1"
                     android:background="#22000000" />
             </LinearLayout>
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/dp_15">
+                android:layout_marginTop="@dimen/dp_jy_15">
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/rv_shop"
@@ -152,10 +125,48 @@
 
         </com.xr.happyFamily.bao.view.MyScrollview>
 
+        </android.support.v4.widget.SwipeRefreshLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_44"
+            android:paddingLeft="@dimen/dp_jy_12"
+            android:paddingRight="@dimen/dp_jy_30"
+            android:background="@color/white"
+            android:scrollbars="none"></android.support.v7.widget.RecyclerView>
+
+
+
+        <LinearLayout
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_jy_44"
+
+            android:gravity="center"
+
+            android:orientation="horizontal">
+            <View
+                android:layout_width="@dimen/dp_jy_40"
+                android:layout_height="match_parent"
+                android:background="@drawable/bg_shape_touming_jianbain"/>
+            <ImageView
+                android:layout_width="@dimen/dp_jy_25"
+                android:layout_height="match_parent"
+                android:id="@id/img_more"
+                android:padding="@dimen/dp_jy_5"
+                android:src="@mipmap/xiala2x"
+                android:background="@color/white"
+                android:layout_centerVertical="true"/>
+            <View
+                android:layout_width="@dimen/dp_jy_12"
+                android:layout_height="match_parent"
+                android:background="@color/white"/>
+        </LinearLayout>
         <com.xr.happyFamily.bao.view.LinearGradientView
             android:id="@+id/ll_yinying"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_3"
+            android:layout_height="@dimen/dp_jy_3"
             android:layout_below="@id/rv_title"/>
 
         <LinearLayout
@@ -167,10 +178,10 @@
 
             <RelativeLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_44"
+                android:layout_height="@dimen/dp_jy_44"
                 android:orientation="horizontal"
                 android:background="@color/white"
-                android:padding="@dimen/dp_12">
+                android:padding="@dimen/dp_jy_12">
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -181,11 +192,11 @@
                     android:textSize="@dimen/sp_12"/>
                 <ImageView
                     android:id="@+id/img_shang"
-                    android:layout_width="@dimen/dp_25"
-                    android:layout_height="@dimen/dp_20"
+                    android:layout_width="@dimen/dp_jy_25"
+                    android:layout_height="@dimen/dp_jy_20"
                     android:layout_alignParentRight="true"
                     android:rotation="180"
-                    android:padding="@dimen/dp_5"
+                    android:padding="@dimen/dp_jy_5"
                     android:layout_centerVertical="true"
                     android:src="@mipmap/xiala2x" />
             </RelativeLayout>
@@ -198,10 +209,10 @@
                 android:background="#f8f8f8"
                 android:listSelector="@android:color/transparent"
                 android:numColumns="4"
-                android:paddingTop="@dimen/dp_10"
-                android:paddingBottom="@dimen/dp_10"
+                android:paddingTop="@dimen/dp_jy_10"
+                android:paddingBottom="@dimen/dp_jy_10"
                 android:stretchMode="columnWidth"
-                android:verticalSpacing="@dimen/dp_20"></GridView>
+                android:verticalSpacing="@dimen/dp_jy_20"></GridView>
 
             <View
                 android:id="@+id/view_zhe"
@@ -209,6 +220,137 @@
                 android:layout_height="match_parent"
                 android:background="#40000000"/>
 
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_alignParentBottom="true"
+            android:layout_width="match_parent"
+            android:layout_height="50dp"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            >
+            <LinearLayout
+                android:id="@+id/id_bto_jia"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_jy_50"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3"
+                    android:background="@null"
+                    android:layout_marginLeft="@dimen/dp_jy_49"
+                    android:layout_marginRight="@dimen/dp_jy_49"
+                    />
+
+
+                <ImageButton
+                    android:id="@+id/id_bto_jia_img"
+                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/dp_jy_30"
+                    android:layout_height="@dimen/dp_jy_25"
+                    android:background="#00000000"
+                    android:clickable="false"
+                    android:src="@mipmap/jia" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="家"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_bto_le"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_jy_50"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical">
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3"
+                    android:background="@null"
+                    android:layout_marginLeft="@dimen/dp_jy_49"
+                    android:layout_marginRight="@dimen/dp_jy_49"
+                    />
+                <ImageButton
+                    android:id="@+id/id_bto_le_img"
+                    android:scaleType="centerInside"
+                    android:layout_width="@dimen/dp_jy_30"
+                    android:layout_height="@dimen/dp_jy_25"
+                    android:background="#00000000"
+                    android:clickable="false"
+                    android:src="@mipmap/le" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="乐" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_bto_bao"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_jy_50"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3"
+                    android:background="@null"
+                    android:layout_marginLeft="@dimen/dp_jy_49"
+                    android:layout_marginRight="@dimen/dp_jy_49"
+                    />
+                <ImageButton
+                    android:scaleType="centerInside"
+                    android:id="@+id/id_bto_bao_img"
+                    android:layout_width="@dimen/dp_jy_30"
+                    android:layout_height="@dimen/dp_jy_25"
+                    android:background="#00000000"
+                    android:clickable="false"
+                    android:src="@mipmap/bao1" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="宝"
+                    />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/id_bto_zhen"
+                android:layout_width="0dp"
+                android:layout_height="@dimen/dp_jy_50"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:orientation="vertical" >
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3"
+                    android:background="@null"
+                    android:layout_marginLeft="@dimen/dp_jy_49"
+                    android:layout_marginRight="@dimen/dp_jy_49"
+                    />
+                <ImageButton
+                    android:id="@+id/id_bto_zhen_img"
+                    android:layout_width="@dimen/dp_jy_30"
+                    android:layout_height="@dimen/dp_jy_25"
+                    android:background="#00000000"
+
+                    android:clickable="false"
+                    android:src="@mipmap/zhen" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="朕"
+                    />
+            </LinearLayout>
 
         </LinearLayout>
     </RelativeLayout>

@@ -10,6 +10,7 @@ import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.util.Log;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -95,8 +96,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
 
     String goodsName;
     private MyDialog dialog;
-    int page=1;
-    boolean isXiala=false;
+    int page = 1, lastState = -1;
+    boolean isXiala = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -117,8 +118,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 list_shop.clear();
-                isXiala=true;
-                getShopData( 1);
+                isXiala = true;
+                getShopData(1, lastState);
 
             }
         });
@@ -132,7 +133,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 }
                 if ((scrollY + height) == scrollViewMeasuredHeight) {
                     page++;
-                    getShopData( page);
+                    getShopData(page, lastState);
                 }
             }
         });
@@ -147,7 +148,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         recyclerview = (RecyclerView) findViewById(R.id.recyclerview);
         //设置布局管理器为2列，纵向
         list_shop = new ArrayList<>();
-        getShopData( 1);
+        getShopData(1, lastState);
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         shopAdapter = new WaterFallAdapter(this, list_shop);
 
@@ -157,22 +158,19 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         jiageAdapter = new SimpleAdapter(this, getList(),
                 R.layout.item_search_result, from, to);
 
-//        gvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-//            @Override
-//            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-//                if(sign==1){
-//                    list_shop.clear();
-//                    list_shop.addAll(buildData(titles[position]));
-//                    shopAdapter.notifyDataSetChanged();
-//
-//                }else {
-//                    list_shop.clear();
-//                    list_shop.addAll(buildData(titles2[position]));
-//                    shopAdapter.notifyDataSetChanged();
-//                }
-//                llGv.setVisibility(View.GONE);
-//            }
-//        });
+        gvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                lastState = position;
+                if (position == 0) {
+                    getShopData(1, 1);
+                } else {
+                    getShopData(1, 2);
+                }
+
+                llGv.setVisibility(View.GONE);
+            }
+        });
     }
 
 
@@ -206,7 +204,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 img[sign].setVisibility(View.INVISIBLE);
                 sign = 0;
                 img[sign].setVisibility(View.VISIBLE);
-                getShopData(1);
+                getShopData(1, -1);
                 break;
             case R.id.rl_jiage:
                 if (sign == 1) {
@@ -254,17 +252,17 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     }
 
 
-
-
-    private void getShopData( int page) {
-
-        if(!isXiala){
-        dialog = MyDialog.showDialog(ShopSearchResultActivity.this);
-        dialog.show();}
+    private void getShopData(int page, int state) {
+        list_shop.clear();
+        if (!isXiala) {
+            dialog = MyDialog.showDialog(ShopSearchResultActivity.this);
+            dialog.show();
+        }
         Map<String, Object> params = new HashMap<>();
         params.put("goodsName", goodsName);
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
+        params.put("state",state);
         new ShopAsync().execute(params);
     }
 
@@ -274,9 +272,21 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
             Map<String, Object> params = maps[0];
-            String url = "goods/getGoodsByGoodsName";
-            String result = HttpUtils.myPostOkHpptRequest(ShopSearchResultActivity.this, url, params);
+            String url = "/goods/getGoodsByGoodsName";
+            String goodsName = params.get("goodsName").toString();
+            String pageNum = params.get("pageNum").toString();
+            String pageRow = params.get("pageRow").toString();
+            int state=Integer.parseInt(params.get("state").toString());
+
+            url=url+"?goodsName="+goodsName+"&pageNum="+pageNum+"&pageRow="+pageRow;
+            if(state==0) {
+                url=url+"&asc=1";
+            }else if(state==1){
+                url=url+"&desc=1";
+            }
+            String result = HttpUtils.doGet(ShopSearchResultActivity.this, url);
             String code = "";
+
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -312,12 +322,12 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 shopAdapter.notifyDataSetChanged();
                 swipeContent.setRefreshing(false);
                 if (!isData) {
-                    if (page==0){
+                    if (page == 0) {
                         llNodata.setVisibility(View.VISIBLE);
                         recyclerview.setVisibility(View.GONE);
-                    }else
-                    Toast.makeText(ShopSearchResultActivity.this, "无更多数据", Toast.LENGTH_SHORT).show();
-                }else {
+                    } else
+                        Toast.makeText(ShopSearchResultActivity.this, "无更多数据", Toast.LENGTH_SHORT).show();
+                } else {
                     llNodata.setVisibility(View.GONE);
                     recyclerview.setVisibility(View.VISIBLE);
                 }

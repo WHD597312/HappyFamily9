@@ -9,7 +9,7 @@
 
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_44"
+        android:layout_height="@dimen/dp_jy_44"
         android:background="@color/white">
         <!--商城右边有字时的标题-->
         <ImageView
@@ -18,27 +18,28 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:src="@mipmap/fanhui"
-            android:padding="@dimen/dp_12"/>
+            android:padding="@dimen/dp_jy_12"/>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_28"
-            android:layout_marginLeft="@dimen/dp_55"
-            android:layout_marginRight="@dimen/dp_55"
+            android:layout_height="@dimen/dp_jy_28"
+            android:layout_marginLeft="@dimen/dp_jy_55"
+            android:layout_marginRight="@dimen/dp_jy_55"
             android:layout_centerInParent="true"
             android:background="@drawable/bg_shape_hui">
 
             <ImageView
-                android:layout_width="@dimen/dp_28"
+                android:layout_width="@dimen/dp_jy_28"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_5"
-                android:padding="@dimen/dp_4"
+                android:layout_marginLeft="@dimen/dp_jy_5"
+                android:padding="@dimen/dp_jy_4"
                 android:src="@mipmap/sousuo2x" />
 
             <EditText
+                android:id="@+id/ed_goods"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginLeft="@dimen/dp_5"
+                android:layout_marginLeft="@dimen/dp_jy_5"
                 android:background="@null"
                 android:hint="搜索"
                 android:textSize="@dimen/sp_12" />
@@ -52,7 +53,7 @@
             android:layout_centerInParent="true"
             android:text="搜索"
             android:layout_alignParentRight="true"
-            android:padding="@dimen/dp_10"
+            android:padding="@dimen/dp_jy_10"
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_18" />
 
@@ -61,7 +62,7 @@
 
 
     <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_height="@dimen/dp_3"
+        android:layout_height="@dimen/dp_jy_3"
         android:layout_width="match_parent"/>
 
     <LinearLayout
@@ -69,15 +70,15 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/dp_10"
-        android:padding="@dimen/dp_12">
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:padding="@dimen/dp_jy_12">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_14"
             android:drawableLeft="@mipmap/remen2x"
-            android:drawablePadding="@dimen/dp_3"
+            android:drawablePadding="@dimen/dp_jy_3"
             android:text="热门搜索"
             android:textColor="@color/shop_context"
 
@@ -87,19 +88,19 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_12"
             android:textColor="#851BAE59"
-            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginLeft="@dimen/dp_jy_15"
             android:text="TOP SEARCH"/>
         <com.xr.happyFamily.bao.view.FlowTagView
             android:id="@+id/ft_hot"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_10"
-            app:tagSpacing="@dimen/dp_10"
-            app:lineSpacing="@dimen/dp_10"/>
+            android:padding="@dimen/dp_jy_10"
+            app:tagSpacing="@dimen/dp_jy_10"
+            app:lineSpacing="@dimen/dp_jy_10"/>
     </LinearLayout>
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 
     <LinearLayout
@@ -108,15 +109,15 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="vertical"
-        android:layout_marginTop="@dimen/dp_10"
-        android:padding="@dimen/dp_12">
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:padding="@dimen/dp_jy_12">
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_14"
             android:drawableLeft="@mipmap/shijian3x"
-            android:drawablePadding="@dimen/dp_3"
+            android:drawablePadding="@dimen/dp_jy_3"
             android:text="历史搜索"
             android:textColor="@color/shop_context"
 
@@ -126,27 +127,27 @@
             android:layout_height="wrap_content"
             android:textSize="@dimen/sp_12"
             android:textColor="#851BAE59"
-            android:layout_marginLeft="@dimen/dp_15"
+            android:layout_marginLeft="@dimen/dp_jy_15"
             android:text="TOP SEARCH"/>
         <com.xr.happyFamily.bao.view.FlowTagView
             android:id="@+id/ft_his"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:padding="@dimen/dp_10"
-            app:tagSpacing="@dimen/dp_10"
-            app:lineSpacing="@dimen/dp_10"/>
+            android:padding="@dimen/dp_jy_10"
+            app:tagSpacing="@dimen/dp_jy_10"
+            app:lineSpacing="@dimen/dp_jy_10"/>
 
         <ImageView
             android:id="@+id/img_clear"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:src="@mipmap/qingkong3x"/>
 
     </LinearLayout>
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:id="@+id/lg_his"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 </LinearLayout>

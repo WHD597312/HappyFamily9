@@ -3,6 +3,7 @@ package com.xr.happyFamily.bao;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -18,13 +19,26 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bao.view.LinearGradientView;
+import com.xr.happyFamily.bean.HotWordBean;
+import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -72,21 +86,8 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
 
 
         initView();
-        initData();
+        new getHotWordsAsync().execute();
         getHistory();
-
-
-    }
-
-    private void initData() {
-        List<String> list = new ArrayList();
-
-        list.add("电暖器");
-        list.add("空调");
-        list.add("智能传感器");
-        list.add("净水器");
-        list.add("除尘器");
-        adapter_hot.setItems(list);
 
 
     }
@@ -243,5 +244,52 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
     protected void onRestart() {
         super.onRestart();
         getHistory();
+    }
+
+
+    List<HotWordBean> list_hot=new ArrayList<>();
+    class getHotWordsAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String url = "/goods/getHotWords";
+            String result = HttpUtils.doGet(ShopSearchActivity.this, url);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    Log.e("qqqqSize",jsonObject.toString());
+                    code = jsonObject.getString("returnCode");
+                    JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("returnData");
+                    Log.e("qqqqSize",list.size()+"??");
+                    if ("100".equals(code)) {
+                        Gson gson = new Gson();
+                        if (list.size() > 0) {
+                            for (JsonElement user : list) {
+                                //通过反射 得到UserBean.class
+                                HotWordBean userList = gson.fromJson(user, HotWordBean.class);
+                                list_hot.add(userList);
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                List<String> list=new ArrayList<>();
+                for(int i=0;i<list_hot.size();i++){
+                    list.add(list_hot.get(i).getName());
+                }
+                adapter_hot.setItems(list);
+            }
+        }
     }
 }

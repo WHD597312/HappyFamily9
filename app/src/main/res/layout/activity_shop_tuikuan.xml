@@ -9,28 +9,29 @@
 
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center_vertical"
-     android:padding="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_12">
+     android:padding="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_12">
         <ImageView
             android:id="@+id/img_choose"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@mipmap/ic_shop_gou"/>
         <TextView
+            android:id="@+id/tv_tuikuan"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="退款成功"
             android:textColor="@color/shop_context"
             android:textSize="@dimen/sp_14"
             android:layout_weight="1"
-            android:layout_marginLeft="@dimen/dp_8" />
+            android:layout_marginLeft="@dimen/dp_jy_8" />
 
     </LinearLayout>
 
@@ -38,10 +39,10 @@
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="退款金额：￥2500"
+            android:text="退款金额：¥2500"
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12"
-            android:paddingLeft="@dimen/dp_12"/>
+            android:paddingLeft="@dimen/dp_jy_12"/>
 
         <TextView
             android:id="@+id/tv_time"
@@ -51,11 +52,11 @@
             android:text="退款时间：2018-5-8   18：20"
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12"
-            android:padding="@dimen/dp_12"
-            android:layout_marginBottom="@dimen/dp_8"/>
+            android:padding="@dimen/dp_jy_12"
+            android:layout_marginBottom="@dimen/dp_jy_8"/>
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_3" />
+        android:layout_height="@dimen/dp_jy_3" />
 
 
 

@@ -29,6 +29,8 @@ public class TuiKuanSuccessActivity extends AppCompatActivity {
     TextView tvPrice;
     @BindView(R.id.tv_time)
     TextView tvTime;
+    @BindView(R.id.tv_tuikuan)
+    TextView tvTuikuan;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,6 +42,17 @@ public class TuiKuanSuccessActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         titleText.setText("退款成功");
 
+        Bundle bundle=getIntent().getExtras();
+        int sign=bundle.getInt("sign");
+        int money=bundle.getInt("money");
+        String time=bundle.getString("time");
+        if(sign==2){
+            tvTuikuan.setText("退款失败");
+            titleText.setText("退款失败");
+            imgChoose.setImageResource(R.mipmap.ic_pay_result_fail);
+        }
+        tvPrice.setText("退款金额：¥"+money);
+        tvTime.setText(time);
 
     }
 

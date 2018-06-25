@@ -1,11 +1,15 @@
 package com.xr.happyFamily.bao;
 
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.XmlResourceParser;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,9 +27,20 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.CityAdapter;
+import com.xr.happyFamily.bao.bean.City;
+import com.xr.happyFamily.bao.bean.District;
+import com.xr.happyFamily.bao.bean.Province;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
+import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
+
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -58,10 +73,23 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
     EditText edTel;
     @BindView(R.id.ll_moren)
     LinearLayout llMoren;
+    @BindView(R.id.ed_address)
+    EditText edAddress;
     private View contentViewSign;
     private PopupWindow mPopWindow;
     private Context mContext;
-    private Boolean isMoren=true;
+    private Boolean isMoren = true;
+
+    List<Province> list = null;
+    Province province = null;
+
+    List<City> cities = null;
+    City city = null;
+
+    List<District> districts = null;
+    District district = null;
+
+    int sign_sheng = 0, sign_city = 0, isDefault = 1;
 
 
     @Override
@@ -81,18 +109,20 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
     }
 
 
-    @OnClick({R.id.back, R.id.ll_moren, R.id.tv_choose,R.id.title_rightText})
+    @OnClick({R.id.back, R.id.ll_moren, R.id.tv_choose, R.id.title_rightText})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.ll_moren:
-                if(isMoren){
-                    isMoren=false;
+                if (isMoren) {
+                    isMoren = false;
+                    isDefault = 0;
                     imgChoose.setImageResource(R.mipmap.weixuanzhong3x);
-                }else {
-                    isMoren=true;
+                } else {
+                    isMoren = true;
+                    isDefault = 1;
                     imgChoose.setImageResource(R.mipmap.xuanzhong);
                 }
                 break;
@@ -103,7 +133,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                     inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
 
-                new Handler().postDelayed(new Runnable(){
+                new Handler().postDelayed(new Runnable() {
                     public void run() {
                         showPopup();
                     }
@@ -116,8 +146,31 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                     InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                Toast.makeText(this,"保存成功",Toast.LENGTH_SHORT).show();
-                finish();
+                SharedPreferences userSettings = getSharedPreferences("login", 0);
+                String url = userSettings.getString("userId", "1000");
+                Map<String, Object> params = new HashMap<>();
+                if (Utils.isEmpty(edName.getText().toString()))
+                    Toast.makeText(this, "请输入收货人", Toast.LENGTH_SHORT).show();
+                else
+                    params.put("contact", edName.getText().toString());
+                params.put("userId", url);
+                if (Utils.isEmpty(edTel.getText().toString()))
+                    Toast.makeText(this, "请输入联系电话", Toast.LENGTH_SHORT).show();
+                else
+                    params.put("tel", edTel.getText().toString());
+                if (Utils.isEmpty(tvAddress.getText().toString()))
+                    Toast.makeText(this, "请输入所在地址", Toast.LENGTH_SHORT).show();
+                else {
+                    params.put("receiveProvince", tv_sheng.getText().toString());
+                    params.put("receiveCity", tv_shi.getText().toString());
+                    params.put("receiveCounty", tv_qu.getText().toString());
+                }
+                if (Utils.isEmpty(edAddress.getText().toString()))
+                    Toast.makeText(this, "请输入详细地址", Toast.LENGTH_SHORT).show();
+                else
+                    params.put("receiveAddress", edAddress.getText().toString());
+                params.put("isDefault", isDefault + "");
+                new AddReceiveAsync().execute(params);
 
                 break;
         }
@@ -131,13 +184,13 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                 mPopWindow.dismiss();
                 break;
             case R.id.rl_sheng:
-                upData(0, "省份");
+                upData(0);
                 break;
             case R.id.rl_shi:
-                upData(1, "城市");
+                upData(1);
                 break;
             case R.id.rl_qu:
-                upData(2, "区域");
+                upData(2);
                 break;
 
         }
@@ -156,7 +209,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
     private int sing_city = 0;
 
     private void showPopup() {
-
+        parser();
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_city, null);
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
         view_dis = contentViewSign.findViewById(R.id.view_dis);
@@ -177,7 +230,8 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
         rl_shi.setOnClickListener(this);
         rl_qu.setOnClickListener(this);
 
-        data = initData("省份");
+
+
 
         cityAdapter = new CityAdapter(data, this);
         listCity.setAdapter(cityAdapter);
@@ -187,11 +241,14 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                 switch (sing_city) {
                     case 0:
                         tv_sheng.setText(data.get(position));
-                        upData(1, "城市");
+                        sign_sheng = position;
+                        upData(1);
+
                         break;
                     case 1:
                         tv_shi.setText(data.get(position));
-                        upData(2, "区域");
+                        sign_city = position;
+                        upData(2);
                         break;
                     case 2:
                         tv_qu.setText(data.get(position));
@@ -205,7 +262,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
             }
 
         });
-
+        upData(0);
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -240,20 +297,38 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
 
     }
 
-    protected ArrayList<String> initData(String s) {
-        ArrayList<String> mDatas = new ArrayList<String>();
-        for (int i = 0; i < 15; i++) {
-            mDatas.add("A    " + s + i);
-        }
-        return mDatas;
-    }
 
-    private void upData(int i, String title) {
+    private void upData(int i) {
+
         img_city[sing_city].setVisibility(View.INVISIBLE);
         sing_city = i;
         img_city[sing_city].setVisibility(View.VISIBLE);
         data.clear();
-        data.addAll(initData(title));
+        if (i == 0) {
+            for (int a = 0; a < list.size(); a++) {
+                data.add(list.get(a).getName());
+            }
+        } else if (i == 1) {
+//            listCity
+            if (list.size() > 0) {
+                cities = list.get(sign_sheng).getCitys();
+                for (int a = 0; a < cities.size(); a++) {
+                    data.add(cities.get(a).getName());
+                }
+            } else {
+                Toast.makeText(ShopAddAddressActivity.this, "请选择省份", Toast.LENGTH_SHORT).show();
+            }
+        } else if (i == 2) {
+            if (cities.size() > 0) {
+                districts = cities.get(sign_city).getDistricts();
+                for (int a = 0; a < districts.size(); a++) {
+                    data.add(districts.get(a).getName());
+                }
+            } else {
+                Toast.makeText(ShopAddAddressActivity.this, "请选择城市", Toast.LENGTH_SHORT).show();
+            }
+        }
+
         cityAdapter.notifyDataSetChanged();
     }
 
@@ -261,10 +336,130 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
-            if (msg.what==3){
-               showPopup();
+            if (msg.what == 3) {
+                showPopup();
             }
         }
     };
+
+
+    public List<Province> parser() {
+        // 创建解析器，并制定解析的xml文件
+        XmlResourceParser parser = getResources().getXml(R.xml.cities);
+        try {
+            int type = parser.getEventType();
+            while (type != 1) {
+                String tag = parser.getName();//获得标签名
+                switch (type) {
+                    case XmlResourceParser.START_DOCUMENT:
+                        list = new ArrayList<Province>();
+                        break;
+                    case XmlResourceParser.START_TAG:
+                        if ("p".equals(tag)) {
+                            province = new Province();
+                            cities = new ArrayList<City>();
+                            int n = parser.getAttributeCount();
+                            for (int i = 0; i < n; i++) {
+                                //获得属性的名和值
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if ("p_id".equals(name)) {
+                                    province.setId(value);
+                                }
+                            }
+                        }
+                        if ("pn".equals(tag)) {//省名字
+                            province.setName(parser.nextText());
+                        }
+                        if ("c".equals(tag)) {//城市
+                            city = new City();
+                            districts = new ArrayList<District>();
+                            int n = parser.getAttributeCount();
+                            for (int i = 0; i < n; i++) {
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if ("c_id".equals(name)) {
+                                    city.setId(value);
+                                }
+                            }
+                        }
+                        if ("cn".equals(tag)) {
+                            city.setName(parser.nextText());
+                        }
+                        if ("d".equals(tag)) {
+                            district = new District();
+                            int n = parser.getAttributeCount();
+                            for (int i = 0; i < n; i++) {
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if ("d_id".equals(name)) {
+                                    district.setId(value);
+                                }
+                            }
+                            district.setName(parser.nextText());
+                            districts.add(district);
+                        }
+                        break;
+                    case XmlResourceParser.END_TAG:
+                        if ("c".equals(tag)) {
+                            city.setDistricts(districts);
+                            cities.add(city);
+                        }
+                        if ("p".equals(tag)) {
+                            province.setCitys(cities);
+                            list.add(province);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                type = parser.next();
+            }
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        /*catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } */ catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
+    }
+
+    class AddReceiveAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "receive/addReceive";
+            String result = HttpUtils.headerPostOkHpptRequest( mContext,url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Toast.makeText(mContext, "添加地址成功", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        }
+    }
 
 }

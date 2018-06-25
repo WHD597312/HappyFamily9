@@ -1,31 +1,40 @@
 package com.xr.happyFamily.bao;
 
-import android.content.Context;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
+import android.annotation.SuppressLint;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
-import android.support.annotation.RequiresApi;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alipay.sdk.app.PayTask;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.adapter.AddressAdapter;
-import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
-import com.xr.happyFamily.le.view.KeywordsFlow;
+import com.xr.happyFamily.bao.alipay.PayResult;
+import com.xr.happyFamily.bean.OrderListBean;
+import com.xr.happyFamily.le.view.MyHorizontalScrollView;
+import com.xr.happyFamily.le.view.MyHorizontalScrollViewAdapter;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -36,46 +45,134 @@ import butterknife.ButterKnife;
 
 public class TestActivity extends AppCompatActivity {
 
-    private KeywordsFlow keywordsFlow;
-    private String[] keywords;
-
+    String orderNumber;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
-        initView();
-        refreshTags();
+        ButterKnife.bind(this);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
+        Bundle extras = getIntent().getExtras();
+        orderNumber=extras.getString("orderNumber");
+        new payAsync().execute();
+
+
     }
 
-    private void initView() {
-        keywords= new String[]{"我想放假", "我想看电影", "我想去旅游", "我想啪啪啪", "我想放假", "我想看电影", "我想去旅游", "我想啪啪啪", "我想放假", "我想看电影", "我想去旅游", "我想啪啪啪"};
-        keywordsFlow = (KeywordsFlow) findViewById(R.id.keywordsflow);
+    Map<String,String> map=new HashMap<>();
 
-    }
+    private static final int SDK_PAY_FLAG = 1;
 
-    private void refreshTags() {
-        keywordsFlow.setDuration(800l);
-        keywordsFlow.setOnItemClickListener(new View.OnClickListener() {
+  // 订单信息
+    Runnable payRunnable = new Runnable() {
 
-            @Override
-            public void onClick(View v) {
-                String keyword = ((TextView) v).getText().toString();// 获得点击的标签
-                Log.e("qqqqqqqqqqqqq",keyword);
+        @Override
+        public void run() {
+            PayTask alipay = new PayTask(TestActivity.this);
+            Map<String, String> result = alipay.payV2(orderString, true);
+            Message msg = new Message();
+            msg.what = SDK_PAY_FLAG;
+            msg.obj = result;
+            mHandler.sendMessage(msg);
+        }
+    };
+
+
+
+
+
+
+    String orderString;
+
+
+    class payAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            String url = "/alipay/pay?orderNumber=";
+
+            String result = HttpUtils.doGet(TestActivity.this,url+orderNumber);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    orderString = returnData.getString("orderString");
+                }
+
+            } catch (JSONException e) {
+                e.printStackTrace();
             }
-        });
-        // 添加
-        feedKeywordsFlow(keywordsFlow, keywords);
-        keywordsFlow.go2Show(KeywordsFlow.ANIMATION_IN);
-    }
 
-    private static void feedKeywordsFlow(KeywordsFlow keywordsFlow, String[] arr) {
-        Random random = new Random();
-        for (int i = 0; i < KeywordsFlow.MAX; i++) {
-            int ran = random.nextInt(arr.length);
-            String tmp = arr[ran];
-            keywordsFlow.feedKeyword(tmp);
+
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+
+                Thread payThread = new Thread(payRunnable);
+                payThread.start();
+            }
         }
     }
 
+
+
+    @SuppressLint("HandlerLeak")
+    private Handler mHandler = new Handler() {
+        @SuppressWarnings("unused")
+        public void handleMessage(Message msg) {
+            switch (msg.what) {
+                case SDK_PAY_FLAG: {
+                    @SuppressWarnings("unchecked")
+                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
+                    /**
+                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
+                     */
+                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
+                    String resultStatus = payResult.getResultStatus();
+                    // 判断resultStatus 为9000则代表支付成功
+                    if (TextUtils.equals(resultStatus, "9000")) {
+                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
+                        Toast.makeText(TestActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
+                    } else {
+                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
+                        Toast.makeText(TestActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
+                    }
+                    break;
+                }
+//                case SDK_AUTH_FLAG: {
+//                    @SuppressWarnings("unchecked")
+//                    AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
+//                    String resultStatus = authResult.getResultStatus();
+//
+//                    // 判断resultStatus 为“9000”且result_code
+//                    // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
+//                    if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
+//                        // 获取alipay_open_id，调支付时作为参数extern_token 的value
+//                        // 传入，则支付账户为该授权账户
+//                        Toast.makeText(PayDemoActivity.this,
+//                                "授权成功\n" + String.format("authCode:%s", authResult.getAuthCode()), Toast.LENGTH_SHORT)
+//                                .show();
+//                    } else {
+//                        // 其他状态值则为授权失败
+//                        Toast.makeText(PayDemoActivity.this,
+//                                "授权失败" + String.format("authCode:%s", authResult.getAuthCode()), Toast.LENGTH_SHORT).show();
+//
+//                    }
+//                    break;
+//                }
+                default:
+                    break;
+            }
+        };
+    };
 }

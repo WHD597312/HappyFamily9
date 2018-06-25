@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao.view;
 
 import android.content.Context;
+import android.support.v4.widget.NestedScrollView;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.view.ViewConfiguration;
@@ -10,7 +11,7 @@ import android.widget.ScrollView;
  * Created by win7 on 2018/5/30.
  */
 
-public class MyScrollview extends ScrollView {
+public class MyScrollview extends NestedScrollView {
     private int downX;
     private int downY;
     private int mTouchSlop;

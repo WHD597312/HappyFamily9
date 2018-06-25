@@ -1,27 +1,43 @@
 package com.xr.happyFamily.bao.adapter;
 
+import android.app.Activity;
 import android.content.Context;
+import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 
+import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
 import com.xr.happyFamily.bean.ShopCartBean;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
- //购物车列表适配器
+//购物车列表适配器
 
-public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyViewHolder> {
+public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyViewHolder> implements View.OnClickListener {
 
     private Context context;
     private List<ShopCartBean> data;
@@ -29,6 +45,7 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
     private OnDeleteClickListener mOnDeleteClickListener;
     private OnEditClickListener mOnEditClickListener;
     private OnResfreshListener mOnResfreshListener;
+    private boolean isEdit=false;
 
 
     public ShopCartAdapter(Context context, List<ShopCartBean> data){
@@ -48,16 +65,17 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
 
 
 
+        holder.tvShopType.setText(data.get(position).getGoods().getSimpleDescribe());
+        holder.tvShopName.setText(data.get(position).getGoods().getGoodsName());
+        holder.tvShopPrice.setText(data.get(position).getGoodsPrice().getPrice()+"");
+        holder.tvShopNum.setText(data.get(position).getQuantity() + "");
 
-        holder.tvShopType.setText(data.get(position).getDetails());
-        holder.tvShopName.setText(data.get(position).getProductName());
-
-        holder.tvShopPrice.setText(data.get(position).getPrice());
-        holder.tvShopNum.setText(data.get(position).getCount() + "");
-
+        Picasso.with(context)
+                .load(data.get(position).getGoods().getImage())
+                .into(holder.ivShopPic);//此种策略并不会压缩图片
 
         if(mOnResfreshListener != null){
-            boolean isSelect = false;
+            boolean isSelect = true;
             for(int i = 0;i < data.size(); i++){
                 if(!data.get(i).getIsSelect()){
                     isSelect = false;
@@ -87,13 +105,19 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
         holder.view_jian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("qqqqqqq222",position+"?????");
-                if(data.get(position).getCount() > 1) {
-                    int count = data.get(position).getCount() - 1;
+                int i=Integer.parseInt(holder.tvShopNum.getText().toString());
+                if(i>1)
+                    holder.tvShopNum.setText(i-1+"");
+                Map<String, Object> params = new HashMap<>();
+                params.put("priceId", data.get(position).getGoodsPrice().getPriceId());
+                params.put("cartId", data.get(position).getCartId());
+                new subShopAsync().execute(params);
+                if(data.get(position).getQuantity() > 1) {
+                    int count = data.get(position).getQuantity() - 1;
                     if (mOnEditClickListener != null) {
                         mOnEditClickListener.onEditClick(position, data.get(position).getId(), count);
                     }
-                    data.get(position).setCount(count);
+                    data.get(position).setQuantity(count);
                     notifyDataSetChanged();
                 }
             }
@@ -102,13 +126,26 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
         holder.view_jia.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.e("qqqqqqq222",position+"?????");
-                int count = data.get(position).getCount() + 1;
+                int i=Integer.parseInt(holder.tvShopNum.getText().toString());
+                if(i>1)
+                    holder.tvShopNum.setText(i+1+"");
+                Map<String, Object> params = new HashMap<>();
+                params.put("priceId", data.get(position).getGoodsPrice().getPriceId());
+                new addShopAsync().execute(params);
+                int count = data.get(position).getQuantity() + 1;
                 if(mOnEditClickListener != null){
                     mOnEditClickListener.onEditClick(position,data.get(position).getId(),count);
                 }
-                data.get(position).setCount(count);
+                data.get(position).setQuantity(count);
                 notifyDataSetChanged();
+            }
+        });
+
+
+        holder.tvShopNum.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+              showPopup(position);
             }
         });
 
@@ -263,6 +300,163 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
     }
 
 
+
+    @Override
+    public void onClick(View v) {
+        int i=Integer.parseInt(ed_num.getText().toString());
+        switch (v.getId()) {
+            case R.id.tv_quxiao:
+                mPopWindow.dismiss();
+                break;
+            case R.id.tv_shop_reduce:
+                if(i>1)
+                ed_num.setText(i-1+"");
+                break;
+            case R.id.tv_shop_add:
+                    ed_num.setText(i+1+"");
+                break;
+        }
+    }
+
+
+
+    public static boolean isInteger(String value) {
+        try {
+            Integer.parseInt(value);
+            return true;
+        } catch (NumberFormatException e) {
+            return false;
+        }
+    }
+
+    private View contentViewSign;
+    private PopupWindow mPopWindow;
+    private TextView tv_quxiao,tv_queding,tv_context,tv_add,tv_jian;
+    EditText ed_num;
+
+    private void showPopup(final int pos) {
+        contentViewSign = LayoutInflater.from(context).inflate(R.layout.popup_shopcart_num, null);
+        tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
+        tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
+        tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
+        tv_jian = (TextView) contentViewSign.findViewById(R.id.tv_shop_reduce);
+        ed_num = (EditText) contentViewSign.findViewById(R.id.ed_shop_num);
+        tv_add = (TextView) contentViewSign.findViewById(R.id.tv_shop_add);
+        ed_num.setText(data.get(pos).getQuantity()+"");
+        tv_quxiao.setOnClickListener(this);
+        tv_queding.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopWindow.dismiss();
+                data.get(pos).setQuantity(Integer.parseInt(ed_num.getText().toString()));
+                Map<String, Object> params = new HashMap<>();
+                params.put("cartId", data.get(pos).getCartId());
+                params.put("priceId", data.get(pos).getGoodsPrice().getPriceId());
+                params.put("quantity", ed_num.getText().toString());
+                new editAsync().execute(params);
+                notifyDataSetChanged();
+            }
+        });
+        tv_jian.setOnClickListener(this);
+        tv_add.setOnClickListener(this);
+        mPopWindow = new PopupWindow(contentViewSign);
+        mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //点击空白处时，隐藏掉pop窗口
+        mPopWindow.setFocusable(true);
+//        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopWindow.setOutsideTouchable(true);
+        backgroundAlpha(0.5f);
+        //添加pop窗口关闭事件
+        mPopWindow.setOnDismissListener(new ShopCartAdapter.poponDismissListener());
+        mPopWindow.showAtLocation(((Activity)context).getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+    }
+
+
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = ((Activity)context).getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        ((Activity)context).getWindow().setAttributes(lp); //添加pop窗口关闭事件
+    }
+
+
+
+    class poponDismissListener implements PopupWindow.OnDismissListener {
+
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            backgroundAlpha(1f);
+        }
+    }
+
+
+    class editAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "shoppingcart/editNumeberToShoppingCart";
+            String result = HttpUtils.headerPostOkHpptRequest(context, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject content = jsonObject.getJSONObject("returnData");
+
+                    if ("100".equals(code)) {
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+    }
+    class addShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "shoppingcart/addOneToShoppingCart";
+            String result = HttpUtils.headerPostOkHpptRequest(context, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+    }
+
+    class subShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "shoppingcart/subOneToShoppingCart";
+            String result = HttpUtils.headerPostOkHpptRequest(context, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+    }
 
 
 

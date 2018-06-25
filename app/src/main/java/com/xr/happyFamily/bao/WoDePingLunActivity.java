@@ -49,7 +49,6 @@ public class WoDePingLunActivity extends AppCompatActivity {
         titleText.setText("我的评论");
         mDatas=new ArrayList<Map<String, Object>>();
         mDatas = initData("姓名");
-        Log.e("qqqqqqqqqqq111",mDatas.size()+"??");
         pingLunListAdapter = new PingLunListAdapter(WoDePingLunActivity.this, mDatas);
         //      调用按钮返回事件回调的方法
         pingLunListAdapter.buttonSetOnclick(new PingLunListAdapter.ButtonInterface() {

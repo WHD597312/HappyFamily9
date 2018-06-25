@@ -1,17 +1,27 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bean.AddressBean;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -19,14 +29,15 @@ import java.util.Map;
 
 public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHolder> implements View.OnClickListener {
     private Context context;
-    private List<Map<String, Object>> list;
+    private List<AddressBean.ReturnData> list;
     private ButtonInterface buttonInterface;
 
     private int defItem = -1;
     private OnItemListener onItemListener;
     private InnerItemOnclickListener mListener;
+    private MyDialog dialog;
 
-    public AddressAdapter(Context context, List<Map<String, Object>> list) {
+    public AddressAdapter(Context context, List<AddressBean.ReturnData> list) {
         this.context=context;
         this.list=list;
     }
@@ -68,16 +79,26 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        holder.tv_name.setText(list.get(position).get("name").toString());
-        holder.tv_tel.setText(list.get(position).get("tel").toString());
-        holder.tv_address.setText(list.get(position).get("address").toString());
+        holder.tv_name.setText(list.get(position).getContact());
+        holder.tv_tel.setText(list.get(position).getTel());
+        holder.tv_address.setText(list.get(position).getReceiveProvince()+" "+list.get(position).getReceiveCity()+" "+list.get(position).getReceiveCounty()+" "+list.get(position).getReceiveAddress());
         holder.img_bianji.setOnClickListener(this);
         holder.img_del.setOnClickListener(this);
         holder.img_bianji.setTag(position);
         holder.img_del.setTag(position);
+        if(list.get(position).getIsDefault()==1){
+            holder.img_choose.setImageResource(R.mipmap.xuanzhong);
+        }else {
+            holder.img_choose.setImageResource(R.mipmap.weixuanzhong3x);
+        }
         if (defItem != -1) {
             if (defItem == position) {
+                dialog = MyDialog.showDialog(context);
+                dialog.show();
                 holder.img_choose.setImageResource(R.mipmap.xuanzhong);
+                Map<String, Object> params = new HashMap<>();
+                params.put("receiveId", list.get(position).getReceiveId());
+                new setAddressAsync().execute(params);
             } else {
                 holder.img_choose.setImageResource(R.mipmap.weixuanzhong3x);
             }
@@ -149,5 +170,36 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
     }
     public interface MyItemClickListener {
         void onItemClick(View view, int position);
+    }
+
+
+
+    class setAddressAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "receive/setDefaultReceive";
+            String result = HttpUtils.headerPostOkHpptRequest(context, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
+
+            }
+        }
     }
 }

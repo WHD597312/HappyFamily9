@@ -103,13 +103,13 @@ public class XuYuanActivity extends AppCompatActivity implements View.OnClickLis
     }
 
 
-    @OnClick({R.id.img_back,R.id.img_more})
+    @OnClick({R.id.img_back,R.id.img_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_back:
                 finish();
                 break;
-            case R.id.img_more:
+            case R.id.img_add:
                 showPopup();
                 break;
 
@@ -175,7 +175,7 @@ public class XuYuanActivity extends AppCompatActivity implements View.OnClickLis
 
     private void showPopup() {
 
-        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shopcart, null);
+        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_xuyuan, null);
         tv_msg = (TextView) contentViewSign.findViewById(R.id.tv_msg);
         tv_fabu = (TextView) contentViewSign.findViewById(R.id.tv_fabu);
         tv_pipei = (TextView) contentViewSign.findViewById(R.id.tv_pipei);
@@ -209,7 +209,7 @@ public class XuYuanActivity extends AppCompatActivity implements View.OnClickLis
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_msg:
-                startActivity(new Intent(this, ShopCartActivity.class));
+                startActivity(new Intent(this, MsgActivity.class));
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_fabu:
@@ -217,7 +217,7 @@ public class XuYuanActivity extends AppCompatActivity implements View.OnClickLis
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_pipei:
-                startActivity(new Intent(this, ShopShangchengActivity.class));
+                startActivity(new Intent(this, PiPeiActivity.class));
                 mPopWindow.dismiss();
                 break;
         }

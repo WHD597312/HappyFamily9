@@ -1,19 +1,57 @@
 package com.xr.happyFamily.bao;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
+import com.xr.happyFamily.bao.bean.myOrderBean;
+import com.xr.happyFamily.bean.OrderBean;
+import com.xr.happyFamily.bean.WuLiuBean;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.PublicData;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONObject;
+
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -25,6 +63,8 @@ import butterknife.OnClick;
 
 public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnClickListener {
 
+
+    String orderId;
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.title_text)
@@ -41,18 +81,9 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
     TextView tvName;
     @BindView(R.id.tv_tel)
     TextView tvTel;
-    @BindView(R.id.img_shop_pic)
-    ImageView imgShopPic;
-    @BindView(R.id.tv_shop_name)
-    TextView tvShopName;
-    @BindView(R.id.tv_shop_type)
-    TextView tvShopType;
-    @BindView(R.id.tv_shop_price)
-    TextView tvShopPrice;
-    @BindView(R.id.tv_shop_num)
-    TextView tvShopNum;
-    @BindView(R.id.img_tui)
-    ImageView imgTui;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+
     @BindView(R.id.tv_yunfei)
     TextView tvYunfei;
     @BindView(R.id.tv_price)
@@ -67,12 +98,32 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
     TextView tvFukuan;
     @BindView(R.id.tv_fahuo)
     TextView tvFahuo;
-    @BindView(R.id.img_del)
-    ImageView imgDel;
-    @BindView(R.id.img_chakan)
-    ImageView imgChakan;
-    @BindView(R.id.img_queren)
-    ImageView imgQueren;
+    @BindView(R.id.tv_address)
+    TextView tvAddress;
+    @BindView(R.id.tv_wuliu_time)
+    TextView tvWuliuTime;
+    @BindView(R.id.img1)
+    ImageView img1;
+    @BindView(R.id.img2)
+    ImageView img2;
+    @BindView(R.id.img3)
+    ImageView img3;
+    @BindView(R.id.tv_daojishi)
+    TextView tvDaojishi;
+    @BindView(R.id.ll_daifukuan)
+    LinearLayout llDaifukuan;
+    @BindView(R.id.img_tui)
+    ImageView imgTui;
+    @BindView(R.id.rl_bot)
+    RelativeLayout rlBot;
+    @BindView(R.id.rl_wuliu)
+    RelativeLayout rlWuliu;
+    @BindView(R.id.tv_state)
+    TextView tvState;
+    private MyDialog dialog;
+
+    myOrderBean orderBean;
+    DingDanXQAdapter confListAdapter;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -80,31 +131,87 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        mContext = ShopDingdanXQActivity.this;
         setContentView(R.layout.activity_shop_dingdan_xq);
         ButterKnife.bind(this);
         titleRightText.setVisibility(View.GONE);
         titleText.setText("订单详情");
+        confListAdapter = new DingDanXQAdapter(ShopDingdanXQActivity.this, orderDetailsLists);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(confListAdapter);
 
+        orderId = getIntent().getExtras().getString("orderId");
+//        orderId="H201806191500005";
+        dialog = MyDialog.showDialog(mContext);
+        dialog.show();
+        Map<String, Object> map = new HashMap<>();
+        new getOrderAsync().execute(map);
     }
 
 
-    @OnClick({R.id.back,  R.id.img_tui, R.id.tv_dingdan,R.id.img_del,R.id.img_chakan})
+    ArrayList<String> img = new ArrayList<>();
+    ArrayList<Integer> myOrderId = new ArrayList<>();
+    ArrayList<Integer> myPriceId = new ArrayList<>();
+    ArrayList<Integer> myGoodsId = new ArrayList<>();
+
+    @OnClick({R.id.back, R.id.tv_dingdan, R.id.img1, R.id.img2, R.id.img3, R.id.img_tui})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
 
-            case R.id.img_tui:
-                startActivity(new Intent(this,FuWuActivity.class));
-                break;
             case R.id.tv_dingdan:
                 break;
-            case R.id.img_del:
-                showPopup();
+            case R.id.img1:
+                showPopup(1);
                 break;
-            case R.id.img_chakan:
-                startActivity(new Intent(this,WuLiuActivity.class));
+            case R.id.img3:
+                //拨打电话
+                showPopup(2);
+                break;
+            case R.id.img2:
+                switch (state) {
+                    case "1":
+                        startActivity(new Intent(ShopDingdanXQActivity.this, PaySuccessActivity.class));
+                        break;
+                    case "2":
+                        Toast.makeText(ShopDingdanXQActivity.this, "该商品暂未发货", Toast.LENGTH_SHORT).show();
+                    case "3":
+                        Intent intent = new Intent(ShopDingdanXQActivity.this, WuLiuActivity.class);
+                        intent.putExtra("logisticCode", logisticCode);
+                        intent.putExtra("shipperCode", shipperCode);
+                        startActivity(intent);
+                        break;
+                    case "4":
+                        for (int i = 0; i < orderDetailsLists.size(); i++) {
+                            img.add(orderDetailsLists.get(i).getImage());
+                            myGoodsId.add(Integer.parseInt(orderDetailsLists.get(i).getGoodsId()));
+                            myOrderId.add(orderDetailsLists.get(i).getOrderId());
+                            myPriceId.add(orderDetailsLists.get(i).getPriceId());
+                        }
+                        Intent intent1 = new Intent(this, PingLunActivity.class);
+                        intent1.putStringArrayListExtra("img", img);
+                        startActivity(intent1);
+                        break;
+                    case "5":
+                        //退款详情
+                        Intent intent2 = new Intent(this, TuiKuanXQActivity.class);
+                        intent2.putExtra("type", orderNumber);
+                        startActivity(intent2);
+                        break;
+                }
+                break;
+            case R.id.img_tui:
+                //退货
+                Intent intent=new Intent(ShopDingdanXQActivity.this,TuiKuanActivity.class);
+                intent.putExtra("orderNumber", orderNumber);
+                intent.putExtra("type", "XQ");
+                startActivity(intent);
+//                Map<String, Object> params = new HashMap<>();
+//                params.put("orderNumber", orderNumber);
+//                new refundOrderAsync().execute(params);
                 break;
         }
     }
@@ -113,17 +220,40 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
     private View contentViewSign;
     private PopupWindow mPopWindow;
     private Context mContext;
-    private TextView tv_quxiao,tv_queding,tv_context;
+    private TextView tv_quxiao, tv_queding, tv_context;
 
-    private void showPopup() {
-        mContext=ShopDingdanXQActivity.this;
-        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_search, null);
+    private void showPopup(final int sign) {
+
+        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_main, null);
         tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
         tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
         tv_quxiao.setOnClickListener(this);
-        tv_queding.setOnClickListener(this);
-        tv_context.setText("是否确认删除订单？");
+        tv_queding.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (sign == 1) {
+                    mPopWindow.dismiss();
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("orderId", orderId);
+                    new cancelOrderAsync().execute(params);
+                } else {
+                    int checkCallPhonePermission = ContextCompat.checkSelfPermission(mContext, Manifest.permission.CALL_PHONE);
+                    if (checkCallPhonePermission != PackageManager.PERMISSION_GRANTED) {
+                        ActivityCompat.requestPermissions(ShopDingdanXQActivity.this, new String[]{Manifest.permission.CALL_PHONE},
+                                100);
+                        return;
+                    } else {
+                        PublicData publicDate = new PublicData();
+                        Intent intent = new Intent(Intent.ACTION_CALL, Uri.parse("tel:" + publicDate.getTel_kefu()));
+                        startActivity(intent);
+                    }
+                }
+            }
+        });
+        if (sign == 1)
+            tv_context.setText("是否确认取消支付？");
+        else tv_context.setText("是否拨打客服电话？");
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -136,7 +266,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         mPopWindow.setOutsideTouchable(true);
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
-        mPopWindow.setOnDismissListener(new ShopDingdanXQActivity.poponDismissListener());
+        mPopWindow.setOnDismissListener(new poponDismissListener());
         mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
@@ -149,15 +279,11 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
 
     @Override
     public void onClick(View v) {
-        switch (v.getId())
-        {
+        switch (v.getId()) {
             case R.id.tv_quxiao:
                 mPopWindow.dismiss();
                 break;
-            case R.id.tv_queren:
-                mPopWindow.dismiss();
-                finish();
-                break;
+
         }
     }
 
@@ -171,4 +297,233 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         }
 
     }
+
+
+    String money;
+    List<OrderBean.OrderDetailsList> orderDetailsLists = new ArrayList<>();
+    String wuliu, wuliu_time, name, address, tel, postFee, paidAmount, orderNumber, state, paymentSeq;
+    //发货时间  创建时间  付款时间
+    String sendTime, createTime, paymentTime;
+    //物流信息
+    String logisticCode, shipperCode;
+
+
+    class getOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "/order/getOrderByOrderNumber";
+            url = url + "?orderNumber=" + orderId;
+            String result = HttpUtils.doGet(mContext, url);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    money = returnData.get("paidAmount").toString();
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("orderDetailsList");
+                    Gson gson = new Gson();
+                    for (JsonElement user : list) {
+                        //通过反射 得到UserBean.class
+                        OrderBean.OrderDetailsList userList = gson.fromJson(user, OrderBean.OrderDetailsList.class);
+                        orderDetailsLists.add(userList);
+                    }
+                    wuliu = "调用物流接口";
+                    wuliu_time = "调用物流接口或取消";
+                    JSONObject receive = returnData.getJSONObject("receive");
+                    address = receive.get("receiveProvince").toString() + " " + receive.get("receiveCity").toString() + " " +
+                            receive.get("receiveCounty").toString() + " " + receive.get("receiveAddress").toString();
+                    name = receive.get("contact").toString();
+                    tel = receive.get("tel").toString();
+                    state = returnData.get("state").toString();
+                    postFee = returnData.get("postFee").toString();
+                    paidAmount = returnData.get("paidAmount").toString();
+                    orderNumber = returnData.get("orderNumber").toString();
+                    createTime = returnData.get("createTime").toString();
+                    paymentTime = returnData.get("paymentTime").toString();
+                    logisticCode = returnData.get("logisticCode").toString();
+                    shipperCode = returnData.get("shipperCode").toString();
+                    paymentSeq = returnData.get("paymentSeq").toString();
+                    if(returnData.get("sendTime")!=null)
+                        sendTime = returnData.get("sendTime").toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                confListAdapter.notifyDataSetChanged();
+                MyDialog.closeDialog(dialog);
+                Map<String, Object> params = new HashMap<>();
+
+
+                switch (state) {
+                    case "1":
+                        rlWuliu.setVisibility(View.GONE);
+                        img1.setVisibility(View.VISIBLE);
+                        img1.setImageResource(R.mipmap.btn_dd_quxiao);
+                        img2.setImageResource(R.mipmap.btn_dd_pay);
+                        tvDaojishi.setVisibility(View.VISIBLE);
+                        rlWuliu.setVisibility(View.GONE);
+                        DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+
+                        long getNowTimeLong = System.currentTimeMillis();
+
+                            recLen = ((int) (Long.parseLong(createTime)+24*60*60*1000 - getNowTimeLong)) / 1000;//这样得到的差值是级别
+
+                        timer.schedule(task, 1000, 1000);       // timeTask
+                        break;
+                    case "2":
+                        tvState.setText("等待商家发货");
+                        rlWuliu.setVisibility(View.GONE);
+                        img2.setImageResource(R.mipmap.btn_dd_wuliu);
+                        break;
+                    case "3":
+                        tvState.setText("卖家已发货");
+                        img2.setImageResource(R.mipmap.btn_dd_wuliu);
+                        params.put("shipperCode", shipperCode);
+                        params.put("logisticCode", logisticCode);
+                        new expressInfoAsync().execute(params);
+                        break;
+                    case "4":
+                        tvState.setText("已签收");
+                        img2.setImageResource(R.mipmap.btn_dd_pingjia);
+                        params.put("shipperCode", shipperCode);
+                        params.put("logisticCode", logisticCode);
+                        new expressInfoAsync().execute(params);
+                        break;
+//                    case "5":
+//
+//                        img2.setImageResource(R.mipmap.btn_dd_tuikuan);
+//                        break;
+                }
+                tvName.setText(name);
+                tvTel.setText(tel);
+                tvAddress.setText(address);
+                tvChangjian.setText("创建时间:" + createTime);
+                tvFukuan.setText("付款时间:" + paymentTime);
+                tvFahuo.setText("发货时间:" + sendTime);
+                tvZhifubao.setText("支付宝交易号:" + paymentSeq);
+                tvDingdan.setText("订单编号:" + orderNumber);
+                tvYunfei.setText("¥" + postFee);
+                tvPrice.setText("¥" + paidAmount);
+            }
+        }
+    }
+
+
+    class cancelOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "/order/cancelOrder";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    wuliu = returnData.get("paidAmount").toString();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Toast.makeText(mContext, "取消订单成功", Toast.LENGTH_SHORT).show();
+
+            }
+        }
+    }
+
+
+
+
+    class expressInfoAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "/logistics/expressInfo";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("traces");
+                    Gson gson = new Gson();
+                    //通过反射 得到UserBean.class
+                    JsonElement user = list.get(0);
+                    WuLiuBean userList = gson.fromJson(user, WuLiuBean.class);
+                    wuliu = userList.getAcceptStation();
+                    wuliu_time = userList.getAcceptTime();
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                tvWuliu.setText(wuliu);
+                tvWuliuTime.setText(wuliu_time);
+
+            }
+        }
+    }
+
+
+    //距离支付结束时间  单位秒
+    private int recLen;
+    Timer timer = new Timer();
+
+
+    TimerTask task = new TimerTask() {
+        @Override
+        public void run() {
+
+
+            runOnUiThread(new Runnable() {      // UI thread
+                @Override
+                public void run() {
+                    recLen--;
+                    tvDaojishi.setText("" + recLen);
+
+                    long hours = recLen / (60 * 60);
+                    long minutes = (recLen - hours * (60 * 60)) / (60);
+                    long s = (recLen - hours * (60 * 60) - minutes * 60);
+
+                    tvDaojishi.setText(hours + "小时" + minutes + "分" + s + "秒后订单关闭");
+                    if (recLen < 0) {
+                        timer.cancel();
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("orderId", orderId);
+//                    new cancelOrderAsync().execute(params);
+                    }
+                }
+            });
+        }
+    };
 }

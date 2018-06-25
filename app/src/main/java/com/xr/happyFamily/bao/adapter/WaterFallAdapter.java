@@ -1,6 +1,8 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -10,9 +12,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bean.PersonCard;
+import com.xr.happyFamily.bean.ShopBean;
 
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
 
 /**
@@ -22,10 +30,10 @@ import java.util.List;
 public class WaterFallAdapter extends RecyclerView.Adapter {
 
     private Context mContext;
-    private List<PersonCard> mData; //定义数据源
+    private List<ShopBean.ReturnData.MyList> mData; //定义数据源
 
     //定义构造方法，默认传入上下文和数据源
-    public WaterFallAdapter(Context context, List<PersonCard> data) {
+    public WaterFallAdapter(Context context, List<ShopBean.ReturnData.MyList> data) {
         this.mContext = context;
         this.mData = data;
     }
@@ -40,12 +48,19 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         MyViewHolder holder2 = (MyViewHolder) holder;
-        PersonCard personCard = mData.get(position);
-        Log.e("qqqqqqqq2",mData.size()+"???"+personCard.name);
-        int uri = personCard.avatarUrl;
-        holder2.userAvatar.setBackgroundResource(uri);
+        ShopBean.ReturnData.MyList myList = mData.get(position);
+        Log.e("qqqqqqqqqqq333",myList.getImage());
+        String url = myList.getImage();
+        //得到可用的图片
+        Picasso.with(mContext)
+                .load(url)
+                .into(holder2.userAvatar);//此种策略并不会压缩图片
+
+//        Picasso.with(mContext).load(myList.getImage()).into(holder2.userAvatar);
 //        holder2.userAvatar.getLayoutParams().height = personCard.imgHeight; //从数据源中获取图片高度，动态设置到控件上
-        holder2.userName.setText(personCard.name);
+        holder2.tv_name.setText(myList.getNickname());
+        holder2.tv_context.setText(myList.getSimpleDescribe());
+        holder2.tv_price.setText("¥"+myList.getGoodsPrice().get(0).getPrice());
     }
 
     @Override
@@ -59,13 +74,15 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
     //定义自己的ViewHolder，将View的控件引用在成员变量上
     public class MyViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         public ImageView userAvatar;
-        public TextView userName;
+        public TextView tv_name,tv_context,tv_price;
         private MyItemClickListener mListener;
 
         public MyViewHolder(View itemView, MyItemClickListener myItemClickListener) {
             super(itemView);
             userAvatar = (ImageView) itemView.findViewById(R.id.user_avatar);
-            userName = (TextView) itemView.findViewById(R.id.shop_name);
+            tv_name = (TextView) itemView.findViewById(R.id.shop_name);
+            tv_context = (TextView) itemView.findViewById(R.id.shop_context);
+            tv_price = (TextView) itemView.findViewById(R.id.shop_price);
             this.mListener = myItemClickListener;
             itemView.setOnClickListener(this);
         }
@@ -98,5 +115,6 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
     public void setItemClickListener(MyItemClickListener myItemClickListener) {
         this.mItemClickListener = myItemClickListener;
     }
+
 }
 

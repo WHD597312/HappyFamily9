@@ -1,12 +1,13 @@
 package com.xr.happyFamily.bao.fragment;
 
+import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.graphics.Matrix;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,12 +15,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
 import com.xr.happyFamily.bao.adapter.PinglunAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.bean.ShopPinglunBean;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,11 +63,28 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
     FlowTagView ftPinglun;
     @BindView(R.id.img_more)
     ImageView imgMore;
+    String goodsId;
+    @BindView(R.id.img1)
+    ImageView img1;
+    @BindView(R.id.img2)
+    ImageView img2;
+    @BindView(R.id.img3)
+    ImageView img3;
+    @BindView(R.id.img4)
+    ImageView img4;
+    @BindView(R.id.img5)
+    ImageView img5;
 
-    private boolean isMore=false;
+    private boolean isMore = false;
     private EvaluateAdapter adapter_pinglun;
-    private  ArrayList<Map<String,Object>> datas;
-private  PinglunAdapter pinglunAdapter;
+    private ArrayList<Map<String, Object>> datas;
+    private PinglunAdapter pinglunAdapter;
+    List<String> list = new ArrayList();
+    ImageView[] imgs;
+
+    MyDialog dialog;
+
+    String[] tag={"全部","美观","性价比高","包装好","做工精细","使用舒服"};
 
     @Nullable
     @Override
@@ -64,12 +94,13 @@ private  PinglunAdapter pinglunAdapter;
         unbinder = ButterKnife.bind(this, view);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(father);
         recyclerview.setLayoutManager(linearLayoutManager);
+
 //      获取数据，向适配器传数据，绑定适配器
-        datas = initData("姓名");
-       pinglunAdapter = new PinglunAdapter(mContext, datas);
+        imgs = new ImageView[]{img1, img2, img3, img4, img5};
+        pinglunAdapter = new PinglunAdapter(mContext, shopPinglunBeanList);
         recyclerview.setAdapter(pinglunAdapter);
         //      调用按钮返回事件回调的方法
-        adapter_pinglun = new EvaluateAdapter(mContext,R.layout.item_pingjia);
+        adapter_pinglun = new EvaluateAdapter(mContext, R.layout.item_pingjia);
 //        ftPinglun.setOne();
         ftPinglun.setAdapter(adapter_pinglun);
         ftPinglun.setItemClickListener(new FlowTagView.TagItemClickListener() {
@@ -77,27 +108,24 @@ private  PinglunAdapter pinglunAdapter;
             public void itemClick(int position) {
                 adapter_pinglun.setSelection(position);
                 adapter_pinglun.notifyDataSetChanged();
-                String e = adapter_pinglun.getItem(position).toString();
-                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();
-                datas.clear();
-                datas.addAll(initData(e));
-                pinglunAdapter.notifyDataSetChanged();
+
+                getPingLun(tag[position]);
+
 
             }
         });
 
         ftPinglun.setOne();
-        List<String> list = new ArrayList();
-        list.add("全部（2000）");
-        list.add("有图（2000）");
-        list.add("美观（2000）");
-        list.add("性价比高（200）");
-//        list.add("质量好（100）");
-        list.add("包装好（20）");
-        list.add("做工精细（500）");
-        list.add("使用舒服（100）");
+        list.add("全部（0）");
+        list.add("美观（0）");
+        list.add("性价比高（0）");
+        list.add("包装好（0）");
+        list.add("做工精细（0）");
+        list.add("使用舒服（0）");
+
         adapter_pinglun.setItems(list);
 
+        getData();
         return view;
     }
 
@@ -120,35 +148,54 @@ private  PinglunAdapter pinglunAdapter;
         }
     }
 
-    protected ArrayList<Map<String,Object>> initData(String name) {
-        ArrayList<Map<String,Object>> mDatas = new ArrayList<Map<String,Object>>();
-        for (int i = 0; i < 3; i++) {
-            Map<String,Object> map1 = new HashMap<String,Object>();
+    Bundle bundle;
 
-            map1.put("name",name + i);
-            map1.put("pinglun","评论" + i);
-            map1.put("tel",i+":"+123456789);
-            map1.put("time","2018-5-6-11:30");
-            map1.put("pic",R.mipmap.chanpin2);
-            mDatas.add(map1);
-        }
-        return mDatas;
+    private void getData() {
+
+        bundle = this.getArguments();
+
+        // 步骤2:获取某一值
+        goodsId = bundle.getString("goodsId");
+        String userId = bundle.getString("userId");
+        Map<String, Object> params = new HashMap<>();
+        params.put("goodsId", goodsId);
+        new getCountAsync().execute(params);
+        getPingLun("全部");
+
+//
+//        Map<String, Object> params2 = new HashMap<>();
+//        params2.put("userId", userId);
+//        new ShopFragment.getAddressAsync().execute(params2);
+
     }
+
+    private void getPingLun(String tag) {
+        shopPinglunBeanList.clear();
+        dialog = MyDialog.showDialog(mContext);
+        dialog.show();
+        Map<String, Object> params = new HashMap<>();
+        params.put("goodsId", goodsId);
+        if (!"全部".equals(tag))
+            params.put("tag", tag);
+        new getRateAsync().execute(params);
+    }
+
+
 
 
     @OnClick(R.id.img_more)
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_more:
-                if(!isMore){
+                if (!isMore) {
                     ftPinglun.setMore();
                     adapter_pinglun.notifyDataSetChanged();
-                    isMore=true;
+                    isMore = true;
                     imgMore.setImageResource(R.mipmap.ic_pingjia_more);
-                }else {
+                } else {
                     ftPinglun.setOne();
                     adapter_pinglun.notifyDataSetChanged();
-                    isMore=false;
+                    isMore = false;
 
                     imgMore.setImageResource(R.mipmap.ic_pingjia_more_xia);
                 }
@@ -156,5 +203,126 @@ private  PinglunAdapter pinglunAdapter;
         }
     }
 
+    String returnData = "";
+    Receive receive;
 
+    String  average,beautiful="0", total="0", cost="0", fine="0", comfortable="0", satisfaction="0", packing="0";
+
+    class getCountAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "order/getCountRate";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+
+                    average = returnData.getString("average");
+                    total = returnData.getString("total");
+                    beautiful = returnData.getString("beautiful");
+                    cost = returnData.getString("cost");
+                    fine = returnData.getString("fine");
+                    comfortable = returnData.getString("comfortable");
+                    //满意度
+                    satisfaction = returnData.getString("satisfaction");
+                    packing = returnData.getString("packing");
+
+//        list.add("质量好（100）");
+                    list.clear();
+                    list.add("全部（" + total + "）");
+                    list.add("美观（" + beautiful + "）");
+                    list.add("性价比高（" + cost + "）");
+                    list.add("包装好（" + packing + "）");
+                    list.add("做工精细（" + fine + "）");
+                    list.add("使用舒服（" + comfortable + "）");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return "100";
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                if (!"null".equals(returnData)) {
+                    if(!Utils.isEmpty(average+"")) {
+                        Log.e("qqqqqZZZZ",Float.parseFloat(average)+"???");
+                        int ave = (int)(Float.parseFloat(average)*10 + 5)/10;
+                        for (int i = 0; i < ave; i++) {
+                            imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);
+                        }
+                    }
+                    adapter_pinglun.notifyDataSetChanged();
+                    if(total.equals("0"))
+                        tvHaoping.setText("满意度:100%");
+                    else
+                    tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
+//                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                }
+            }
+        }
+    }
+
+
+    List<ShopPinglunBean> shopPinglunBeanList = new ArrayList<>();
+
+    class getRateAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "order/getRateByGoodsIdAndTag";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+
+                    returnData = jsonObject.getString("returnData");
+                    if (!Utils.isEmpty(returnData)) {
+                        JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
+                        JsonArray list = content.getAsJsonArray("returnData");
+                        Gson gson = new Gson();
+                        if(list.size()>0) {
+                            for (JsonElement user : list) {
+                                //通过反射 得到UserBean.class
+                                ShopPinglunBean shopPinglunBean = gson.fromJson(user, ShopPinglunBean.class);
+
+                                shopPinglunBeanList.add(shopPinglunBean);
+                            }
+
+                        }
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+//                Log.e("qqqqqqqqqqqRece",receive.getContact()+"!");
+                MyDialog.closeDialog(dialog);
+                pinglunAdapter.notifyDataSetChanged();
+                if(shopPinglunBeanList.size()==0){
+                    Toast.makeText(context,"此商品暂无评论",Toast.LENGTH_SHORT).show();
+                }
+//                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+            }
+        }
+
+    }
 }

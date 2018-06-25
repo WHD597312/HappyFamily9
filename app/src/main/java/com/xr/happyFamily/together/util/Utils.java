@@ -1,4 +1,4 @@
-package com.xr.happyFamily.login.util;
+package com.xr.happyFamily.together.util;
 import android.widget.Toast;
 import android.content.Context;
 

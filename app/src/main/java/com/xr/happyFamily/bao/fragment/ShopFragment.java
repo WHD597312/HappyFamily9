@@ -1,7 +1,9 @@
 package com.xr.happyFamily.bao.fragment;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.util.Log;
@@ -16,18 +18,32 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.donkingliang.labels.LabelsView;
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
+import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopAddressActivity;
 import com.xr.happyFamily.bao.ShopConfActivity;
-import com.xr.happyFamily.bao.ShopSearchActivity;
-import com.xr.happyFamily.bao.ShopSearchResultActivity;
 import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
+import com.xr.happyFamily.bao.adapter.EvaluateXhAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.bao.bean.GoodsPrice;
+import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -59,6 +75,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     TextView tvWeight;
     @BindView(R.id.tv_xinghao)
     TextView tvXinghao;
+    @BindView(R.id.img_pic)
+    ImageView imgPic;
+    String goodsId;
+    int priceId=0;
+
+
+    List<GoodsPrice> list_price;
+
+    int num=1;
 
 
     @Nullable
@@ -67,7 +92,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragment_shop_shop, container, false);
         unbinder = ButterKnife.bind(this, view);
+        getData();
 
+
+//        tvXinghao.setText(power);
+//        tvPrice.setText(price);
         return view;
     }
 
@@ -85,13 +114,14 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             case R.id.view_dis:
                 mPopWindow.dismiss();
                 break;
+
             default:
                 break;
         }
     }
 
 
-    @OnClick({R.id.img_address,  R.id.tv_xinghao})
+    @OnClick({R.id.img_address, R.id.tv_xinghao})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_address:
@@ -122,22 +152,123 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    private View contentViewSign,view_dis;
+    private View contentViewSign, view_dis;
     private PopupWindow mPopWindow;
     private ImageView img_close;
     private EvaluateAdapter adapter_xinghao;
-    private LabelsView labelsView;
-
+    private FlowTagView labelsView;
+    private TextView tv_price, tv_name,tv_jia,tv_jian,tv_num,tv_cart,tv_buy;
+    private EvaluateXhAdapter adapter_xh;
+    int sign=-1;
     private void showPopup() {
-        Log.e("Qqqqqqqqqqq","111111");
+
+
+//        priceId=list_price.get(0).getPriceId();
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_xinghao, null);
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
         view_dis = contentViewSign.findViewById(R.id.view_dis);
-        labelsView = (LabelsView) contentViewSign.findViewById(R.id.labels);
+        labelsView = (FlowTagView) contentViewSign.findViewById(R.id.labels);
+        adapter_xh = new EvaluateXhAdapter(context, R.layout.item_xinghao);
+        list = new ArrayList<>();
+
+        for (int i = 0; i < list_price.size(); i++) {
+            list.add(list_price.get(i).getPower() + "");
+        }
+        adapter_xh.setItems(list);
+        if(sign!=-1){
+            adapter_xh.setSelection(sign);
+        }
+        labelsView.setAdapter(adapter_xh);
+        labelsView.setOne();
+        labelsView.setItemClickListener(new FlowTagView.TagItemClickListener() {
+            @Override
+            public void itemClick(int position) {
+                sign=position;
+                adapter_xh.setSelection(position);
+                adapter_xh.notifyDataSetChanged();
+                String e = adapter_xh.getItem(position).toString();
+                tv_price.setText("¥"+list_price.get(position).getPrice());
+                tvPrice.setText("¥" + list_price.get(position).getPrice());
+                tvXinghao.setText(list.get(position));
+                price=list_price.get(position).getPrice()+"";
+                priceId=list_price.get(position).getPriceId();
+                goodsId=list_price.get(position).getGoodsId()+"";
+//                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();
+//                datas.clear();
+//                datas.addAll(initData(e));
+//                pinglunAdapter.notifyDataSetChanged();
+
+            }
+        });
+
+        tv_price = (TextView) contentViewSign.findViewById(R.id.tv_price);
+        tv_name = (TextView) contentViewSign.findViewById(R.id.tv_name);
+        tv_jian = (TextView) contentViewSign.findViewById(R.id.tv_shop_reduce);
+        tv_num = (TextView) contentViewSign.findViewById(R.id.tv_shop_num);
+        tv_num.setText(num+"");
+        tv_jia = (TextView) contentViewSign.findViewById(R.id.tv_shop_add);
+        tv_cart = (TextView) contentViewSign.findViewById(R.id.tv_type_cart);
+        tv_buy = (TextView) contentViewSign.findViewById(R.id.tv_type_bug);
+        tv_cart.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(sign!=-1) {
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("priceId", priceId);
+                    params.put("quantity", num);
+                    new addShopAsync().execute(params);
+                }else {
+                    Toast.makeText(mContext,"请选择商品规格",Toast.LENGTH_SHORT).show();
+                }
+
+            }
+        });
+        tv_buy.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(mContext, ShopConfActivity.class);
+                intent.putExtra("type", "XQ");
+                intent.putExtra("goodsId", goodsId);
+                intent.putExtra("num", num+"");
+                intent.putExtra("priceId", priceId+"");
+                intent.putExtra("money", Integer.parseInt(price)*num+"");
+                intent.putExtra("weight", weight + "");
+
+                startActivity(intent);
+            }
+        });
+        try {
+            tv_name.setText(jsonObject.getString("goodsName"));
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+
+        if(sign!=-1){
+            tv_price.setText("¥" + list_price.get(sign).getPrice());
+        }else {
+            tv_price.setText("");
+        }
 //        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
 //        tv_shopcart.setOnClickListener(this);
         img_close.setOnClickListener(this);
         view_dis.setOnClickListener(this);
+        tv_jian.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(num>1){
+                    num--;
+                    tv_num.setText(num+"");
+                }
+            }
+        });
+        tv_jia.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                num++;
+                tv_num.setText(num+"");
+            }
+        });
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
@@ -154,8 +285,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         mPopWindow.showAtLocation(getActivity().getWindow().getDecorView(), Gravity.CENTER, 0, 0);
 //        initView();
 //        initData();
-        setBiaoqian();
+
     }
+
     List<String> list;
 
 
@@ -176,55 +308,180 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    int pos=0;
-    private void setBiaoqian(){
+    int pos = 0;
 
-        list = new ArrayList<>();
-        list.add("Android");
-        list.add("IOS");
-        list.add("前端");
-        list.add("后台");
-        list.add("微信开发");
-        list.add("游戏开发");
-        labelsView.setLabels(list); //直接设置一个字符串数组就可以了。
 
-//LabelsView可以设置任何类型的数据，而不仅仅是String。
-//        ArrayList<TestBean> testList = new ArrayList<>();
-//        testList.add(new TestBean("Android",1));
-//        testList.add(new TestBean("IOS",2));
-//        testList.add(new TestBean("前端",3));
-//        testList.add(new TestBean("后台",4));
-//        testList.add(new TestBean("微信开发",5));
-//        testList.add(new TestBean("游戏开发",6));
-//        labelsView.setLabels(testList, new LabelsView.LabelTextProvider<TestBean>() {
-//            @Override
-//            public CharSequence getLabelText(TextView label, int position, TestBean data) {
-//                //根据data和position返回label需要显示的数据。
-//                return data.getName();
-//            }
-//        });
 
-        //标签的点击监听
-        labelsView.setOnLabelClickListener(new LabelsView.OnLabelClickListener() {
-            @Override
-            public void onLabelClick(TextView label, Object data, int position) {
-                //label是被点击的标签，data是标签所对应的数据，position是标签的位置。
-                tvXinghao.setText(list.get(position));
-                mPopWindow.dismiss();
-                Log.e("Qqqqqqqqqqq","22222222222");
-                pos=position;
+
+    JSONObject jsonObject;
+    String name,type,img,price="0",weight;
+
+    class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "goods/getGoodsById";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+                    jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("goodsPrice");
+
+                    if ("100".equals(code)) {
+                        Gson gson = new Gson();
+                        for (JsonElement user : list) {
+                            //通过反射 得到UserBean.class
+                            GoodsPrice userList = gson.fromJson(user, GoodsPrice.class);
+                            list_price.add(userList);
+                            img = returnData.getString("image");
+                            name = returnData.getString("goodsName");
+                            type = returnData.getString("simpleDescribe");
+                            weight = returnData.getInt("weight")+"";
+                        }
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
             }
-        });
-//标签的选中监听
-        labelsView.setOnLabelSelectChangeListener(new LabelsView.OnLabelSelectChangeListener() {
-            @Override
-            public void onLabelSelectChange(TextView label, Object data, boolean isSelect, int position) {
-                //label是被选中的标签，data是标签所对应的数据，isSelect是是否选中，position是标签的位置。
+            return code;
+        }
 
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+
+                    tvName.setText(name);
+                    tvWeight.setText(weight+"kg");
+                    tvType.setText(type);
+
+                    Picasso.with(mContext)
+                            .load(img)
+                            .into(imgPic);//此种策略并不会压缩图片
+                }
             }
-        });
+        }
 
-        labelsView.setSelects(pos);
-        Log.e("Qqqqqqqqqqq","3333,"+pos);
+
+    String returnData = "";
+    Receive receive;
+
+    class getAddressAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "receive/getDefaultReceive";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    returnData = jsonObject.getString("returnData");
+                    if (!Utils.isEmpty(returnData)) {
+
+                        Gson gson = new Gson();
+                        receive = gson.fromJson(jsonObject.getString("returnData"), Receive.class);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                if (!"null".equals(returnData)) {
+                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                }
+            }
+        }
     }
+
+
+    class addShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "shoppingcart/addOneToShoppingCart";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+
+            try {
+                if (!Utils.isEmpty(result)) {
+
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Toast.makeText(mContext, "已加入购物车", Toast.LENGTH_SHORT).show();
+                mPopWindow.dismiss();
+            }
+        }
+    }
+
+    Bundle bundle;
+
+    private void getData() {
+        list_price = new ArrayList<>();
+        bundle = this.getArguments();
+
+        // 步骤2:获取某一值
+        goodsId = bundle.getString("goodsId");
+        String userId = bundle.getString("userId");
+        Map<String, Object> params = new HashMap<>();
+
+        params.put("goodsId", goodsId);
+        new getShopAsync().execute(params);
+
+        Map<String, Object> params2 = new HashMap<>();
+        params2.put("userId", userId);
+        new getAddressAsync().execute(params2);
+
+    }
+
+    public void sendMessage(ICallBack callBack){
+
+        callBack.get_message_from_Fragment(priceId+"",num);
+        callBack.getPrice(price+"",priceId,num,goodsId,sign);
+
+    }
+    public interface ICallBack {
+        void get_message_from_Fragment(String string,int num);
+        void getPrice(String price,int priceId,int num,String goodId,int sign);
+    }
+
+
+    public void setData(String price,String power,int s){
+        tvPrice.setText("¥"+price);
+        tvXinghao.setText(power);
+
+        sign=s;
+    }
+
+
+
 }

@@ -49,7 +49,7 @@ public class PingLunSuccessActivity extends AppCompatActivity {
                 break;
 
             case R.id.tv_chakan:
-                startActivity(new Intent(this, WoDePingLunActivity.class));
+                startActivity(new Intent(this, ShopDingdanActivity.class));
                 break;
 
         }

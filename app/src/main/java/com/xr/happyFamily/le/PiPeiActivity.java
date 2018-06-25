@@ -60,8 +60,9 @@ public class PiPeiActivity extends AppCompatActivity {
                 new Handler().postDelayed(new Runnable(){
                     public void run() {
                         startActivity(new Intent(PiPeiActivity.this,YouYuanActivity.class));
+                        finish();
                     }
-                }, 1000);
+                }, 2000);
 
             }
         }.start();

@@ -1,6 +1,8 @@
 package com.xr.happyFamily.bao;
 
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -13,10 +15,23 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.gson.Gson;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bean.PersonCard;
+import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -64,7 +79,14 @@ public class PaySuccessActivity extends AppCompatActivity {
     private boolean isMore = false;
     private int sign = 0;
     private ImageView[] img;
-    private List<PersonCard> list_shop;
+    private List<ShopBean.ReturnData.MyList> list_shop;
+
+    String orderId;
+    Context mContext;
+
+    int lastVisibleItem = 0,page=1;
+    boolean isData=true;
+    private MyDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -72,8 +94,13 @@ public class PaySuccessActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        mContext=PaySuccessActivity.this;
         setContentView(R.layout.activity_shop_pay_success);
         ButterKnife.bind(this);
+//        orderId=getIntent().getExtras().getString("orderId");
+        Bundle bundle=getIntent().getExtras();
+
+        orderId=bundle.getString("orderNumber");
 
         init();
 
@@ -82,8 +109,11 @@ public class PaySuccessActivity extends AppCompatActivity {
     private void init() {
         titleText.setText("支付成功");
         back.setVisibility(View.GONE);
+        Map<String,Object> map=new HashMap<>();
+        new getOrderAsync().execute(map);
+
         list_shop = new ArrayList<>();
-        list_shop = buildData("电暖器");
+//        list_shop = buildData("电暖器");
         //设置布局管理器为2列，纵向
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         shopAdapter = new WaterFallAdapter(this, list_shop);
@@ -99,41 +129,30 @@ public class PaySuccessActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 if (sign == 1) {
                     list_shop.clear();
-                    list_shop.addAll(buildData(titles[position]));
+//                    list_shop.addAll(buildData(titles[position]));
                     shopAdapter.notifyDataSetChanged();
 
                 } else {
                     list_shop.clear();
-                    list_shop.addAll(buildData(titles2[position]));
+//                    list_shop.addAll(buildData(titles2[position]));
                     shopAdapter.notifyDataSetChanged();
                 }
                 llGv.setVisibility(View.GONE);
             }
         });
+
+        getShopData(lastVisibleItem,1);
     }
 
 
-    private List<PersonCard> buildData(String name) {
-        String[] names = {name + "1", name + "2", name + "3", name + "4"};
-        int[] imgUrs = {R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4
-        };
-
-        List<PersonCard> list = new ArrayList<>();
-        for (int i = 0; i < 4; i++) {
-            PersonCard p = new PersonCard();
-            p.avatarUrl = imgUrs[i];
-            p.name = names[i];
-            list.add(p);
-        }
-
-        return list;
-    }
 
     @OnClick({R.id.tv_chakan,R.id.tv_shouye})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_chakan:
-                startActivity(new Intent(this, ShopDingdanXQActivity.class));
+                Intent intent=new Intent(this, ShopDingdanXQActivity.class);
+                intent.putExtra("orderId",orderId);
+                startActivity(intent);
                 break;
             case R.id.tv_shouye:
                 startActivity(new Intent(this, ShoppageActivity.class));
@@ -164,5 +183,109 @@ public class PaySuccessActivity extends AppCompatActivity {
             list.add(map);
         }
         return list;
+    }
+
+
+
+
+
+
+    String money;
+    class getOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "order/getOrderByOrderNumber";
+            url=url+"?orderNumber="+orderId;
+            String result = HttpUtils.doGet(mContext, url);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    money = returnData.get("paidAmount").toString();
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                tvPrice.setText(money+"");
+
+            }
+        }
+    }
+
+
+
+
+
+
+
+
+    private void getShopData(int id,int page){
+        dialog = MyDialog.showDialog(mContext);
+        dialog.show();
+        Map<String, Object> params = new HashMap<>();
+        params.put("categoryId", id + "");
+        params.put("pageNum", page + "");
+        params.put("pageRow", "6");
+        new ShopAsync().execute(params);
+    }
+
+    class ShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "goods/getGoodsByGoodsCategory";
+            String result = HttpUtils.myPostOkHpptRequest(mContext, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("list");
+                    if ("100".equals(code)) {
+                        Gson gson = new Gson();
+                        if(list.size()>0) {
+                            isData=true;
+                            for (JsonElement user : list) {
+                                //通过反射 得到UserBean.class
+                                ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
+                                list_shop.add(userList);
+                            }
+                        }else {
+                            page--;
+                            isData=false;
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                shopAdapter.notifyDataSetChanged();
+                if(!isData){
+                    Toast.makeText(PaySuccessActivity.this,"无更多数据",Toast.LENGTH_SHORT).show();
+                }
+                MyDialog.closeDialog(dialog);
+            }
+        }
     }
 }

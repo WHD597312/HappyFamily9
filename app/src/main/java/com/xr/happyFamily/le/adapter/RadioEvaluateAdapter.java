@@ -21,7 +21,7 @@ public class RadioEvaluateAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private List<String> list;
     private int layout;
-    private String[] color={"#ffa6a6","#ff99cb","f79bff","#ca9bff","#9ba4ff","#9bedff","#99f2bf","#a0f789","#f6dd90","#ffc89b"};
+    private String[] color={"#ffa6a6","#ff99cb","#f79bff","#ca9bff","#9ba4ff","#9bedff","#99f2bf","#a0f789","#f6dd90","#ffc89b"};
 
     public RadioEvaluateAdapter(Context context, int layout) {
         this.context = context;

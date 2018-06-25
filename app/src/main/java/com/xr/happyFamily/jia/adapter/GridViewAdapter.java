@@ -23,6 +23,7 @@ public class GridViewAdapter extends ArrayAdapter {
     private List<DeviceChild> mGridData;
 
 
+    int img[]={R.mipmap.t};
     public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
         super(context, resource, objects);
         this.mContext = context;
@@ -50,6 +51,7 @@ public class GridViewAdapter extends ArrayAdapter {
             holder.textView = (TextView) convertView.findViewById(R.id.tv_home_1);
             holder.imageView = (ImageView) convertView.findViewById(R.id.iv_home);
             DeviceChild item = mGridData.get(position);
+            item.setImg(img[0]);
             holder.textView.setText(item.getName());
             Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             return convertView;

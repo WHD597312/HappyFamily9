@@ -180,6 +180,11 @@
             android:theme="@style/AppTheme.NoActionBar"
             android:label="@null" />
         <activity
+            android:name=".login.rigest.RegistFinishActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            android:label="@null" />
+        <activity
         android:name=".jia.ChangeRoomActivity"
         android:label="@null" />
         <activity
@@ -237,5 +242,4 @@
             />
         <activity android:name=".jia.activity.DeviceDetailActivity"/>
     </application>
-
 </manifest>

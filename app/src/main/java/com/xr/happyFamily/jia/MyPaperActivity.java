@@ -59,7 +59,8 @@ public class MyPaperActivity extends AppCompatActivity {
     int count2=0;
     int count3=0;
     int count4=0;
-    int postion;
+    int position;
+    int p;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_viewpape);
@@ -86,7 +87,7 @@ public class MyPaperActivity extends AppCompatActivity {
         }
         Intent intent=getIntent();
         Intent intent1=getIntent();
-        int position =intent.getIntExtra("position",0);
+        position =intent.getIntExtra("position",0);
         int position1 =intent1.getIntExtra("weizhi",position);
         Log.i("ttttt", "---->"+position);
         Log.i("room", "---->: "+str1+".........."+str2+"...."+str3);
@@ -162,7 +163,7 @@ public class MyPaperActivity extends AppCompatActivity {
         myViewPager.setCurrentItem(0);  //初始化显示第一个页面
         myViewPager.setCurrentItem(position);
         myViewPager.setCurrentItem(position1);
-        Log.e("ppppp", "onStart:--> "+postion );
+
 
         myViewPager.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
 
@@ -173,8 +174,7 @@ public class MyPaperActivity extends AppCompatActivity {
 
             @Override
             public void onPageSelected(int position) {
-            int i = (int) position;
-
+            p = position;
             }
 
             @Override
@@ -190,18 +190,17 @@ public class MyPaperActivity extends AppCompatActivity {
         if(requestCode==5000){
             myViewPager.setCurrentItem(0);
         }
-        int a=10;
-        int b=a;
-        int c=requestCode;
-        int d=resultCode;
+
         if (resultCode==6000){
-            String s=data.getStringExtra("roomId");
-            long roomId=Long.parseLong(s);
-            Room room=roomDao.findById(roomId);
-            String roomName=room.getRoomName();
-            Bundle bundle=new Bundle();
-            if ("厨房".equals(roomName)){
-                myViewPager.setCurrentItem(1);
+//            String s=data.getStringExtra("roomId");
+//            long roomId=Long.parseLong(s);
+//            Room room=roomDao.findById(roomId);
+//            String roomName=room.getRoomName();
+
+            if (position!=0){
+                myViewPager.setCurrentItem(position);
+            }else {
+                myViewPager.setCurrentItem(p);
             }
         }
     }

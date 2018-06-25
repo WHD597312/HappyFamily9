@@ -109,7 +109,10 @@ public class AddDeviceActivity extends AppCompatActivity {
         long roomId2=Long.parseLong(roomId);
         Room room=roomDao.findById(roomId2);
         houseId=room.getHouseId();
+        List<DeviceChild> deviceChildren=deviceChildDao.findHouseInRoomDevices(houseId,roomId2);
         Log.i("roomId","-->"+roomId);
+        int size=deviceChildren.size();
+        Log.i("size","-->"+size);
         String apSsid = mWifiAdmin.getWifiConnectedSsid();
         if (apSsid != null) {
             nice_spinner.setText(apSsid);
@@ -157,6 +160,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                     com.xr.happyFamily.login.util.Utils.showToast(AddDeviceActivity.this,"请输入wifi密码");
                     break;
                 }
+//                new AddDeviceAsync().execute("hrrj3335ccf7f6c9fa4");
                 if (!TextUtils.isEmpty(ssid)) {
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
@@ -176,12 +180,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                 String wifiName=nice_spinner.getText().toString();
                 String macAddress=wifiName+mac;
                 if (!TextUtils.isEmpty(macAddress)){
-                    deviceChild=new DeviceChild();
-                    List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-                    long id=deviceChildren.size()+1;
-                    deviceChild.setId(id);
-                    deviceChild.setMacAddress(macAddress);
-                    deviceChild.setName(macAddress);
                     new AddDeviceAsync().execute(macAddress);
                 }
             }
@@ -227,10 +225,15 @@ public class AddDeviceActivity extends AppCompatActivity {
                     break;
                 }
             }
-
             Log.i("deviceChild3","-->"+deviceChild3);
             if (deviceChild3 == null) {
-                deviceChildDao.insert(deviceChild);
+                deviceChild=new DeviceChild();
+                deviceChild.setMacAddress(macAddress);
+                deviceChild.setName(macAddress);
+                deviceChild.setHouseId(houseId);
+                deviceChild.setRoomId(Long.parseLong(roomId));
+                boolean insert=deviceChildDao.insert(deviceChild);
+                Log.i("insert","-->"+insert);
                 Log.i("deviceChild3","-->"+"yes");
                     String topicName2="p99/"+macAddress+"/transfer";
                     boolean success=mqService.subscribe(topicName2,1);
@@ -242,7 +245,13 @@ public class AddDeviceActivity extends AppCompatActivity {
             } else {
                 deviceChildDao.delete(deviceChild3);
                 Log.i("deviceChild3","-->"+"no");
-                deviceChildDao.insert(deviceChild);
+                deviceChild=new DeviceChild();
+                deviceChild.setMacAddress(macAddress);
+                deviceChild.setName(macAddress);
+                deviceChild.setRoomId(Long.parseLong(roomId));
+                deviceChild.setHouseId(houseId);
+                boolean insert=deviceChildDao.insert(deviceChild);
+                Log.i("insert","-->"+insert);
                 String topicName2="p99/"+macAddress+"/transfer";
                 boolean success=mqService.subscribe(topicName2,1);
                 if (success){
@@ -250,7 +259,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                     String payLoad="getType";
                     boolean step2=mqService.publish(topicName,1,payLoad);
                 }
-
             }
             return null;
         }
@@ -383,7 +391,9 @@ public class AddDeviceActivity extends AppCompatActivity {
             switch (code){
                 case 100:
                     Toast.makeText(AddDeviceActivity.this,"添加成功",Toast.LENGTH_LONG).show();
-                    setResult(1);
+                    Intent intent=new Intent();
+                    intent.putExtra("roomId",roomId);
+                    setResult(6000,intent);
                     finish();
                     break;
                 case 2001:

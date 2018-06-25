@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -12,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +27,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
+import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
@@ -71,7 +75,7 @@ public class BathroomFragment extends Fragment {
     ArrayList str1;
     ArrayList str2;
     ArrayList str3;
-
+    long houseId;
     private DeviceChildDaoImpl deviceChildDao;
     private HourseDaoImpl hourseDao;
     @Override
@@ -90,11 +94,10 @@ public class BathroomFragment extends Fragment {
         str2=new ArrayList();
         str3=new ArrayList();
         roomDao = new RoomDaoImpl(getActivity());
-        deviceChildDao=new DeviceChildDaoImpl(getActivity());
-
+        hourseDao=new HourseDaoImpl(getActivity());
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
-        long houseId=hourse.getHouseId();
+         houseId=hourse.getHouseId();
         rooms= roomDao.findByAllRoom();
         for (int i = 0 ;i<rooms.size();i++){
             room=rooms.get(i);
@@ -111,20 +114,18 @@ public class BathroomFragment extends Fragment {
             textViewr.setText(roomName);
         }
 
-        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
-        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
-        mGridView.setAdapter(mGridViewAdapter);
+
         buttonadd.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
 
-//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
-                Intent intent = new Intent();
+
+                Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
                 intent.putExtra("roomId",roomId);
-                startActivityForResult(intent,2);
-                Log.i("dddddd2", "------->: "+roomName+"....."+roomType+"....."+roomId);
+                startActivityForResult(intent,6000);
+                Log.i("dddddd3", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });
         li.setOnClickListener(new View.OnClickListener()
@@ -135,21 +136,17 @@ public class BathroomFragment extends Fragment {
                 startActivityForResult(new Intent(getActivity(), ChangeRoomActivity.class),3);
             }
         });
+        Intent intent=getActivity().getIntent();
+        String refresh=intent.getStringExtra("refresh");
+        if (!TextUtils.isEmpty(refresh)){
+            mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
+            mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
+            mGridView.setAdapter(mGridViewAdapter);
+        }
         return view;
 
     }
-//    @OnClick({R.id.tv_bathroom_gl})
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.tv_bathroom_gl:
-//                showPopupMenu(textViewgl);
-//                break;
-//
-//
-//
-//        }
-//
-//    }
+
 @OnClick({R.id.tv_balcony_gl,R.id.iv_home_fh})
 public void onClick(View view) {
     switch (view.getId()) {
@@ -201,6 +198,28 @@ public void onClick(View view) {
         });
 
         popupMenu.show();
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
+        int size=mGridData.size();
+        Log.i("size","size:"+size);
+        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
+        mGridView.setAdapter(mGridViewAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DeviceChild deviceChild=mGridData.get(position);
+                String deviceName=deviceChild.getName();
+                long deviceId=deviceChild.getId();
+                Intent intent=new Intent(getActivity(), DeviceDetailActivity.class);
+                intent.putExtra("deviceName",deviceName);
+                intent.putExtra("deviceId",deviceId);
+                startActivity(intent);
+            }
+        });
     }
     private String houseName;
     private void buildUpdateHomeDialog() {

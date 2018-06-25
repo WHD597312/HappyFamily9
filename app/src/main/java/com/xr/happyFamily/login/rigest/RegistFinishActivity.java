@@ -85,7 +85,7 @@ public class RegistFinishActivity extends AppCompatActivity {
             gifDrawable.start();
             imageView6.setImageDrawable(gifDrawable);
         }
-//        initbirthday();
+        initbirthday();
         initsex();
         calendar = Calendar.getInstance();
         Log.i("aaaaa1", "----> "+temp);
@@ -196,18 +196,18 @@ public class RegistFinishActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-//                    JSONObject content = jsonObject.getJSONObject("content");
-//                    JSONObject username = content.getJSONObject("username");
-//                    JSONObject sex = content.getJSONObject("sex");
-//                    JSONObject birthday = content.getJSONObject("birthday");
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    if (preferences.contains("username")&&preferences.contains("sex")&&preferences.contains("birthday")) {
-//                        editor.clear().commit();
-//
-//                    }
-//                    editor.putString("username", username + "").commit();
-//                    editor.putString("sex", username + "").commit();
-//                    editor.putString("birthday", username + "").commit();
+                    JSONObject content = jsonObject.getJSONObject("content");
+                    JSONObject username = content.getJSONObject("username");
+                    JSONObject sex = content.getJSONObject("sex");
+                    JSONObject birthday = content.getJSONObject("birthday");
+                    SharedPreferences.Editor editor = preferences.edit();
+                    if (preferences.contains("username")&&preferences.contains("sex")&&preferences.contains("birthday")) {
+                        editor.clear().commit();
+
+                    }
+                    editor.putString("username", username + "").commit();
+                    editor.putString("sex", username + "").commit();
+                    editor.putString("birthday", username + "").commit();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -221,44 +221,44 @@ public class RegistFinishActivity extends AppCompatActivity {
             switch (s) {
 
                 case "100":
-//                    com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "创建成功");
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    String username = editTextf.getText().toString().trim();
-//                    Integer sex = temp;
-//                    Date birthday = calendar.getTime();
-//                    editor.putString("username", username);
-//                    editor.putInt("sex", sex);
-////                   editor.putString("birthday",birthday);
-//                    if (editor.commit()) {
+                    com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "创建成功");
+                    SharedPreferences.Editor editor = preferences.edit();
+                    String username = editTextf.getText().toString().trim();
+                    Integer sex = temp;
+                    Date birthday = calendar.getTime();
+                    editor.putString("username", username);
+                    editor.putInt("sex", sex);
+//                   editor.putString("birthday",birthday);
+                    if (editor.commit()) {
 
 
-                    Context mcontext = RegistFinishActivity.this;
-                    dia = new Dialog(mcontext, R.style.edit_AlertDialog_style);//设置进入时跳出提示框
-                    dia.setContentView(R.layout.activity_regist_dialog);
-                    final ImageView imageView = (ImageView) dia.findViewById(R.id.iv_dialogr);
-                    imageView.setBackgroundResource(R.mipmap.regest_success);
-                    dia.show();
-                    dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
-                    Window w = dia.getWindow();
-                    WindowManager.LayoutParams lp = w.getAttributes();
-                    lp.x = 0;
-                    dia.onWindowAttributesChanged(lp);
+                        Context mcontext = RegistFinishActivity.this;
+                        dia = new Dialog(mcontext, R.style.edit_AlertDialog_style);//设置进入时跳出提示框
+                        dia.setContentView(R.layout.activity_regist_dialog);
+                        final ImageView imageView = (ImageView) dia.findViewById(R.id.iv_dialogr);
+                        imageView.setBackgroundResource(R.mipmap.regest_success);
+                        dia.show();
+                        dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
+                        Window w = dia.getWindow();
+                        WindowManager.LayoutParams lp = w.getAttributes();
+                        lp.x = 0;
+                        dia.onWindowAttributesChanged(lp);
 
-                    final Thread newThread= new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            try {
-                                Thread.sleep(3000);
-                                Intent intent = new Intent(RegistFinishActivity.this, LoginActivity.class);
-                                startActivity(intent);
-                            } catch (InterruptedException e) {
-                                e.printStackTrace();
+                        final Thread newThread = new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                try {
+                                    Thread.sleep(3000);
+                                    Intent intent = new Intent(RegistFinishActivity.this, LoginActivity.class);
+                                    startActivity(intent);
+                                } catch (InterruptedException e) {
+                                    e.printStackTrace();
+                                }
+
                             }
-
-                        }
-                    });
-                    newThread.start();
-
+                        });
+                        newThread.start();
+                    }
                     break;
                 case "10001":
                     com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "账户已存在");

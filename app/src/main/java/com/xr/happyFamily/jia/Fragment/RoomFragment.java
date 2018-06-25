@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -25,6 +26,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
+import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
@@ -53,15 +56,6 @@ public class RoomFragment extends Fragment {
     private GridViewAdapter mGridViewAdapter = null;
     private List<DeviceChild> mGridData = null;
     Unbinder unbinder;
-//    @BindView(R.id.bt_balcony_add)
-//    Button buttonadd;
-//    @BindView(R.id.tv_room_gl)
-//    TextView textViewgl;
-//    @BindView(R.id.gv_room_home)
-//    com.xr.happyFamily.jia.MyGridview mGridView;
-//    @BindView(R.id.room_li)
-//    LinearLayout li;
-//    String roomName,roomType,roomId;
     @BindView(R.id.bt_balcony_add)
     Button buttonadd;
     @BindView(R.id.tv_balcony_gl)
@@ -81,6 +75,7 @@ public class RoomFragment extends Fragment {
     ArrayList str3;
     private DeviceChildDaoImpl deviceChildDao;
     private HourseDaoImpl hourseDao;
+    long houseId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -96,11 +91,10 @@ public class RoomFragment extends Fragment {
         str3=new ArrayList();
         roomDao = new RoomDaoImpl(getActivity());
         hourseDao=new HourseDaoImpl(getActivity());
-        deviceChildDao=new DeviceChildDaoImpl(getActivity());
 
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
-        long houseId=hourse.getHouseId();
+        houseId=hourse.getHouseId();
         rooms= roomDao.findByAllRoom();
         for (int i = 0 ;i<rooms.size();i++){
             room=rooms.get(i);
@@ -115,19 +109,16 @@ public class RoomFragment extends Fragment {
              roomId=bundle.getString("roomId");
             textViewr.setText(roomName);
         }
-        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
-        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
-        mGridView.setAdapter(mGridViewAdapter);
+
         buttonadd.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
-                Intent intent = new Intent();
+                Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
                 intent.putExtra("roomId",roomId);
-                startActivityForResult(intent,5);
-                Log.i("dddddd5", "------->: "+roomName+"....."+roomType+"....."+roomId);
+                startActivityForResult(intent,6000);
+
             }
         });
         li.setOnClickListener(new View.OnClickListener()
@@ -141,28 +132,8 @@ public class RoomFragment extends Fragment {
         return view;
 
     }
-    public static RoomFragment newInstance(int num) {
-        RoomFragment f = new RoomFragment();
 
-        // Supply num input as an argument.
-        Bundle args = new Bundle();
-        args.putInt("num", 3);
-        f.setArguments(args);
 
-        return f;
-    }
-//    @OnClick({R.id.tv_room_gl})
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.tv_room_gl:
-//                showPopupMenu(textViewgl);
-//                break;
-//
-//
-//
-//        }
-//
-//    }
 @OnClick({R.id.tv_balcony_gl,R.id.iv_home_fh})
 public void onClick(View view) {
     switch (view.getId()) {
@@ -176,6 +147,28 @@ public void onClick(View view) {
 
     }
 }
+    @Override
+    public void onStart() {
+        super.onStart();
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
+        int size=mGridData.size();
+        Log.i("size","size:"+size);
+        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
+        mGridView.setAdapter(mGridViewAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DeviceChild deviceChild=mGridData.get(position);
+                String deviceName=deviceChild.getName();
+                long deviceId=deviceChild.getId();
+                Intent intent=new Intent(getActivity(), DeviceDetailActivity.class);
+                intent.putExtra("deviceName",deviceName);
+                intent.putExtra("deviceId",deviceId);
+                startActivity(intent);
+            }
+        });
+    }
     String title;
     private void showPopupMenu(View view) {
         // View当前PopupMenu显示的相对View的位置
@@ -241,8 +234,6 @@ public void onClick(View view) {
                         }
                     }
 
-
-
                 }
             }
         });
@@ -270,54 +261,7 @@ public void onClick(View view) {
         }
 
     }
-        @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        Log.i("bbb", "onActivityResult: "+resultCode);
-        switch (resultCode) {
-
-            case 1:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new KitchenFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
 
 
-                break;
-            case 2:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container,new LivingFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
 
-                break;
-            case 3:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new BathroomFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-                break;
-            case 4:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new RoomFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-
-                break;
-            case 5:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new BalconyFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-                break;
-        }
-    }
 }

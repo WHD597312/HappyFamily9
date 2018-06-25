@@ -8,7 +8,7 @@ import java.io.Serializable;
 
 @Entity
 public class DeviceChild implements Serializable{
-    @Id(autoincrement = false)
+    @Id(autoincrement = true)
     private Long id;
     long houseId;/**设备的房子Id*/
     long roomId;/**设备的房间Id*/
@@ -216,7 +216,7 @@ public class DeviceChild implements Serializable{
     @Generated(hash = 1973447423)
     public DeviceChild() {
     }
-    public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
+    public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.id = id;
         this.houseId = houseId;
         this.roomId = roomId;

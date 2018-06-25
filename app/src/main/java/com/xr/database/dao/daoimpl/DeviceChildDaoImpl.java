@@ -31,8 +31,9 @@ public class DeviceChildDaoImpl {
      * 添加设备
      * @param deviceChild
      */
-    public void insert(DeviceChild deviceChild){
-        deviceChildDao.insert(deviceChild);
+    public boolean insert(DeviceChild deviceChild){
+        long n=deviceChildDao.insert(deviceChild);
+        return n>=1?true:false;
     }
 
     /**

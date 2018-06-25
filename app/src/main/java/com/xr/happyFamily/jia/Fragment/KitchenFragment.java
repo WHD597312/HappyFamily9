@@ -1,11 +1,14 @@
 package com.xr.happyFamily.jia.Fragment;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -28,6 +31,7 @@ import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
+import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
@@ -37,6 +41,7 @@ import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.jia.pojo.TimeTask;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -44,10 +49,12 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -91,7 +98,7 @@ public class KitchenFragment extends Fragment{
     ArrayList str3;
     private DeviceChildDaoImpl deviceChildDao;
     private HourseDaoImpl hourseDao;
-
+    long houseId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -109,11 +116,9 @@ public class KitchenFragment extends Fragment{
         str3=new ArrayList();
         roomDao = new RoomDaoImpl(getActivity());
         hourseDao=new HourseDaoImpl(getActivity());
-        deviceChildDao=new DeviceChildDaoImpl(getActivity());
-
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
-        long houseId=hourse.getHouseId();
+        houseId=hourse.getHouseId();
 
         rooms= roomDao.findByAllRoom();
         for (int i = 0 ;i<rooms.size();i++){
@@ -128,16 +133,13 @@ public class KitchenFragment extends Fragment{
              roomId=bundle.getString("roomId");
             textViewr.setText(roomName);
         }
-        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
-        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
 
-        mGridView.setAdapter(mGridViewAdapter);
         buttonadd.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+
                 Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
                 intent.putExtra("roomId",roomId);
                 startActivityForResult(intent,6000);
@@ -152,23 +154,10 @@ public class KitchenFragment extends Fragment{
                 startActivityForResult(new Intent(getActivity(), ChangeRoomActivity.class),1);
             }
         });
+
         return view;
 
     }
-
-//    @OnClick({R.id.tv_kitchen_gl})
-//    public void onClick(View view) {
-//        switch (view.getId()) {
-//            case R.id.tv_bathroom_gl:
-//                showPopupMenu(textViewgl);
-//                break;
-//
-//
-//
-//        }
-//
-//    }
-
 @OnClick({R.id.tv_balcony_gl,R.id.iv_home_fh})
 public void onClick(View view) {
     switch (view.getId()) {
@@ -179,13 +168,19 @@ public void onClick(View view) {
         case R.id.iv_home_fh:
             startActivityForResult(new Intent(getActivity(), MyPaperActivity.class), 5000);
             break;
-
     }
 }
 
     @Override
     public void onStart() {
+        Log.e("qqqqqqSSS","???????????");
         super.onStart();
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
+        int size=mGridData.size();
+        Log.i("size","size:"+size);
+        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
+        mGridView.setAdapter(mGridViewAdapter);
         mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -295,54 +290,45 @@ public void onClick(View view) {
         }
 
     }
-        @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i("recode", "--->: "+requestCode);
+//    class DeleteDeviceAsync extends AsyncTask<DeviceChild, Void, Integer> {
+//
+//        @Override
+//        protected Integer doInBackground(DeviceChild... deviceChildren) {
+//            int code = 0;
+//            DeviceChild deviceChild = deviceChildren[0];
+//            try {
+//
+//
+//                SharedPreferences preferences = getActivity().getSharedPreferences("my", Context.MODE_PRIVATE);
+//                String userId = preferences.getString("userId", "");
+//                String DeviceUrl =ip+"/family/room/deleteRoom?roomId="+roomId+"&houseID"+houseId;
+//                String result = HttpUtils.getOkHpptRequest(DeviceUrl);
+//                JSONObject jsonObject = new JSONObject(result);
+//                code = jsonObject.getInt("code");
+//                if (code == 100) {
+//
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return code;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(Integer code) {
+//            super.onPostExecute(code);
+//            switch (code) {
+//                case 100:
+//                    com.xr.happyFamily.login.util.Utils.showToast(getContext(), "删除房间成功");
+//
+//                    break;
+//                case 3003:
+//
+//                    break;
+//            }
+//        }
+//    }
 
-        switch (resultCode) {
-            case 1:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new KitchenFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
 
 
-                break;
-            case 2:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container,new LivingFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-                break;
-            case 3:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new BathroomFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-                break;
-            case 4:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new RoomFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-
-                break;
-            case 5:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new BalconyFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-                break;
-        }
-
-    }
 }

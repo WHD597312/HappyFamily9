@@ -68,7 +68,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
     public static void createTable(Database db, boolean ifNotExists) {
         String constraint = ifNotExists? "IF NOT EXISTS ": "";
         db.execSQL("CREATE TABLE " + constraint + "\"DEVICE_CHILD\" (" + //
-                "\"_id\" INTEGER PRIMARY KEY ," + // 0: id
+                "\"_id\" INTEGER PRIMARY KEY AUTOINCREMENT ," + // 0: id
                 "\"HOUSE_ID\" INTEGER NOT NULL ," + // 1: houseId
                 "\"ROOM_ID\" INTEGER NOT NULL ," + // 2: roomId
                 "\"DEVICE_USED_COUNT\" INTEGER NOT NULL ," + // 3: deviceUsedCount

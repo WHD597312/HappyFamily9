@@ -116,17 +116,18 @@ public class DeviceDetailActivity extends AppCompatActivity {
         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
         Log.i("deviceChildren","-->"+deviceChildren.size());
 
-        if (deviceChild==null){
-            deviceChild=new DeviceChild();
-            deviceChild.setId(1L);
-            deviceChild.setMacAddress("hrrj7895ccf7f6c9fa4");
-            deviceChild.setType(2);
-            deviceChild.setDeviceState(1);
-            deviceChild.setRateState("00");
-            deviceChild.setLockState(1);
-            deviceChild.setScreenState(1);
-            deviceChildDao.insert(deviceChild);
-        }
+//        if (deviceChild==null){
+//            deviceChild=new DeviceChild();
+//            long id=deviceChildren.size()+1;
+//            deviceChild.setId(id);
+//            deviceChild.setMacAddress("hrrj7895ccf7f6c9fa4");
+//            deviceChild.setType(2);
+//            deviceChild.setDeviceState(1);
+//            deviceChild.setRateState("00");
+//            deviceChild.setLockState(1);
+//            deviceChild.setScreenState(1);
+//            deviceChildDao.insert(deviceChild);
+//        }
 
         Intent service = new Intent(this, MQService.class);
         startService(service);
@@ -433,7 +434,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
 
             String macAddress=intent.getStringExtra("macAddress");
             Log.i("macAddress","-->"+macAddress);

@@ -12,6 +12,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
@@ -30,6 +31,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
+import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
@@ -52,8 +55,6 @@ import butterknife.Unbinder;
 
 public class BalconyFragment extends Fragment {
     private ImageButton mLeftMenu;
-    private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
-    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
     Dialog dia ;
     private GridViewAdapter mGridViewAdapter = null;
     private List<DeviceChild> mGridData = null;
@@ -79,6 +80,7 @@ public class BalconyFragment extends Fragment {
     ArrayList str3;
     private DeviceChildDaoImpl deviceChildDao;
     private HourseDaoImpl hourseDao;
+    long houseId;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -94,12 +96,12 @@ public class BalconyFragment extends Fragment {
         str2=new ArrayList();
         str3=new ArrayList();
         roomDao = new RoomDaoImpl(getActivity());
-        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+
         hourseDao=new HourseDaoImpl(getActivity());
 
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
-        long houseId=hourse.getHouseId();
+         houseId=hourse.getHouseId();
 
         rooms= roomDao.findByAllRoom();
         for (int i = 0 ;i<rooms.size();i++){
@@ -117,19 +119,17 @@ public class BalconyFragment extends Fragment {
              roomId=bundle.getString("roomId");
             textViewr.setText(roomName);
         }
-        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
-        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
-        mGridView.setAdapter(mGridViewAdapter);
+
         buttonadd.setOnClickListener(new OnClickListener()
         {
             @Override
             public void onClick(View v)
             {
-//                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
-                Intent intent = new Intent();
+
+                Intent intent = new Intent(getActivity(), AddDeviceActivity.class);
                 intent.putExtra("roomId",roomId);
-                startActivityForResult(intent,1);
-                Log.i("dddddd1", "------->: "+roomName+"....."+roomType+"....."+roomId);
+                startActivityForResult(intent,6000);
+                Log.i("dddddd3", "------->: "+roomName+"....."+roomType+"....."+roomId);
             }
         });
         li.setOnClickListener(new OnClickListener()
@@ -160,6 +160,28 @@ public class BalconyFragment extends Fragment {
 //                dia.hide();
         }
 
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        deviceChildDao=new DeviceChildDaoImpl(getActivity());
+        mGridData=deviceChildDao.findHouseInRoomDevices(houseId,Long.parseLong(roomId));
+        int size=mGridData.size();
+        Log.i("size","size:"+size);
+        mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
+        mGridView.setAdapter(mGridViewAdapter);
+        mGridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DeviceChild deviceChild=mGridData.get(position);
+                String deviceName=deviceChild.getName();
+                long deviceId=deviceChild.getId();
+                Intent intent=new Intent(getActivity(), DeviceDetailActivity.class);
+                intent.putExtra("deviceName",deviceName);
+                intent.putExtra("deviceId",deviceId);
+                startActivity(intent);
+            }
+        });
     }
     String title;
     private void showPopupMenu(View view) {
@@ -262,55 +284,6 @@ public class BalconyFragment extends Fragment {
 
                     break;
             }
-        }
-    }
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-
-        switch (resultCode) {
-
-            case 1:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new KitchenFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-
-                break;
-            case 2:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container,new LivingFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-                break;
-            case 3:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new BathroomFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-                break;
-            case 4:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new RoomFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-
-
-                break;
-            case 5:
-                getActivity().getSupportFragmentManager()
-                        .beginTransaction()
-                        .replace(R.id.fragment_container ,new BalconyFragment(), null)
-                        .addToBackStack(null)
-                        .commit();
-                break;
         }
     }
 }

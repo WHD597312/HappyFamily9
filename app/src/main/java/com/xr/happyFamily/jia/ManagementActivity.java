@@ -53,8 +53,6 @@ public class ManagementActivity extends AppCompatActivity {
     private ManagementGridViewAdapter mGridViewAdapter = null;
     private ArrayList<Equipment> mGridData = null;
     String ip = "http://47.98.131.11:8084";
-//String ip = "http://192.168.168.27:8084";
-
     Unbinder unbinder;
     TitleView titleView;
     String  roomType;
@@ -209,13 +207,9 @@ public class ManagementActivity extends AppCompatActivity {
                 params.put("roomName",roomName);
                 params.put("roomType",roomType);
                 params.put("houseId",houseId);
-//                params.put("roomId",roomId);
                 new ManagementActivity.AddroomAsyncTask().execute(params);
-//                startActivity(new Intent(this, AddEquipmentActivity.class));
                 break;
-//            case R.id.iv_mzxing:
-//                startActivity(new Intent(this, QRScannerActivity.class));
-//                break;
+
         }
 
     }

@@ -70,15 +70,6 @@ public class KitchenFragment extends Fragment{
     private GridViewAdapter mGridViewAdapter = null;
     private List<DeviceChild> mGridData = null;
     Unbinder unbinder;
-
-//    @BindView(R.id.bt_balcony_add)
-//    Button buttonadd;
-//    @BindView(R.id.tv_kitchen_gl)
-//    TextView textViewgl;
-//    @BindView(R.id.gv_kitchen_home)
-//    com.xr.happyFamily.jia.MyGridview mGridView;
-//    @BindView(R.id.kitchen_li)
-//    LinearLayout li;
     @BindView(R.id.bt_balcony_add)
     Button buttonadd;
     @BindView(R.id.tv_balcony_gl)

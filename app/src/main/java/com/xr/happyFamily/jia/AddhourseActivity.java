@@ -49,7 +49,7 @@ public class AddhourseActivity extends AppCompatActivity {
     private String addHouseUrl= HttpUtils.ipAddress+"/family/house/registerHouse";
     private String houseName;
     private String houseLocation;
-    
+
     SharedPreferences preferences;
     private String userId;
     Map<String,Object> params=new HashMap<>();

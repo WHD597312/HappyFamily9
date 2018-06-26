@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+        <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+         android:layout_weight="1"
+        >
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="315dp"
+                android:layout_alignParentTop="true"
+                android:src="@mipmap/mypage"
+                android:scaleType="centerCrop"
+                />
+            <TextView
+            android:id="@+id/tv_wd_my1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_28"
+            android:layout_marginTop="@dimen/dp_185"
+            android:text="环境"
+            android:textColor="@color/color_white"
+
+            />
+
+            <TextView
+                android:id="@+id/tv_23_my1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/tv_wd_my1"
+                android:layout_marginLeft="@dimen/dp_37"
+                android:layout_alignBottom="@+id/tv_wd_my1"
+                android:text="23℃"
+                android:textColor="@color/color_white"
+                android:textSize="35sp"
+
+                />
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_wd_my1"
+                android:id="@+id/rl_page"
+                >
+            <ImageView
+                android:id="@+id/iv_my1"
+
+                android:layout_width="350dp"
+                android:layout_height="200dp"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginRight="@dimen/dp_12"
+                android:layout_centerHorizontal="true"
+                android:src="@mipmap/bj_mypage"
+                />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/dp_17"
+                android:layout_marginLeft="@dimen/dp_53"
+                android:text="虚拟体验"
+                android:textSize="20sp"
+                android:textColor="@color/black"
+                android:id="@+id/tv_xnty_my1"
+                />
+            <TextView
+                android:id="@+id/tv_xntye_my1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="VIRTUAL REALITY"
+                android:textSize="9sp"
+                android:layout_below="@+id/tv_xnty_my1"
+                android:layout_alignLeft="@id/tv_xnty_my1"
+                />
+            <ImageView
+                android:id="@+id/iv_mypage"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_166"
+                android:layout_alignTop="@+id/tv_xnty_my1"
+                android:src="@mipmap/mypage_xnty"
+                android:layout_alignLeft="@id/tv_xnty_my1"
+                android:layout_marginLeft="@dimen/dp_133"
+                />
+            <TextView
+
+                android:layout_width="@dimen/dp_105"
+                android:layout_height="wrap_content"
+
+                android:text="八大系列，超凡体验一秒玩转您的宝贝"
+                android:textSize="11sp"
+                android:layout_below="@+id/tv_xntye_my1"
+                android:layout_marginTop="@dimen/dp_23"
+                android:layout_alignLeft="@id/tv_xnty_my1"
+                />
+            </RelativeLayout>
+            <Button
+                android:id="@+id/bt_add_equipment"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/button"
+                android:layout_below="@+id/rl_page"
+                android:layout_marginLeft="@dimen/dp_12"
+                android:layout_marginTop="@dimen/dp_20"
+                android:layout_marginRight="@dimen/dp_12"
+                android:text="+ 添加房间"
+                android:textColor="@color/white"
+                />
+        </RelativeLayout>
+</LinearLayout>

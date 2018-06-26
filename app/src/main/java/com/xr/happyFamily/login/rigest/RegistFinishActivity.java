@@ -89,11 +89,11 @@ public class RegistFinishActivity extends AppCompatActivity {
         initsex();
         calendar = Calendar.getInstance();
         Log.i("aaaaa1", "----> "+temp);
-//        Bundle bundle=getIntent().getExtras();
-//       phone=bundle.getString("phone");
-//       password=bundle.getString("password");
-//
-//        Log.e("asd", "onCreate: "+phone );
+        Bundle bundle=getIntent().getExtras();
+        phone=bundle.getString("phone");
+        password=bundle.getString("password");
+
+        Log.e("asd", "onCreate: "+phone );
     }
     private void initbirthday(){
         textViewb.setOnTouchListener(new View.OnTouchListener() {
@@ -179,7 +179,6 @@ public class RegistFinishActivity extends AppCompatActivity {
                 params.put("birthday",birthday);
                 params.put("phone",phone);
                 params.put("password",password);
-
                 new RegistAsyncTask().execute(params);
                 break;
         }
@@ -196,18 +195,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                    JSONObject content = jsonObject.getJSONObject("content");
-                    JSONObject username = content.getJSONObject("username");
-                    JSONObject sex = content.getJSONObject("sex");
-                    JSONObject birthday = content.getJSONObject("birthday");
-                    SharedPreferences.Editor editor = preferences.edit();
-                    if (preferences.contains("username")&&preferences.contains("sex")&&preferences.contains("birthday")) {
-                        editor.clear().commit();
 
-                    }
-                    editor.putString("username", username + "").commit();
-                    editor.putString("sex", username + "").commit();
-                    editor.putString("birthday", username + "").commit();
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -222,16 +210,6 @@ public class RegistFinishActivity extends AppCompatActivity {
 
                 case "100":
                     com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "创建成功");
-                    SharedPreferences.Editor editor = preferences.edit();
-                    String username = editTextf.getText().toString().trim();
-                    Integer sex = temp;
-                    Date birthday = calendar.getTime();
-                    editor.putString("username", username);
-                    editor.putInt("sex", sex);
-//                   editor.putString("birthday",birthday);
-                    if (editor.commit()) {
-
-
                         Context mcontext = RegistFinishActivity.this;
                         dia = new Dialog(mcontext, R.style.edit_AlertDialog_style);//设置进入时跳出提示框
                         dia.setContentView(R.layout.activity_regist_dialog);
@@ -258,7 +236,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                             }
                         });
                         newThread.start();
-                    }
+
                     break;
                 case "10001":
                     com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "账户已存在");

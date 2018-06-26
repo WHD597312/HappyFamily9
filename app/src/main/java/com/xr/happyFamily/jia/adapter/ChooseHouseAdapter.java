@@ -135,7 +135,7 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
                 @Override
                 public void onClick(View v) {
                     if (onItemListener != null) {
-//                        onItemListener.onClick(v,getLayoutPosition(),data.get(getLayoutPosition()).getGoodsName().toString());
+//                        onItemListener.onClick(v,getLayoutPosition(),data.get(getLayoutPosition()).getHouseName().toString());
                     }
                 }
             });

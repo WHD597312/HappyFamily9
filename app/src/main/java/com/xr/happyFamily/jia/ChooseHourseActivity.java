@@ -14,6 +14,7 @@ import android.widget.TextView;
 
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.adapter.ShopCartAdapter;
 import com.xr.happyFamily.jia.AddhourseActivity;
 import com.xr.happyFamily.jia.adapter.ChooseHouseAdapter;
 import com.xr.happyFamily.jia.adapter.HouseAdapter;
@@ -76,11 +77,21 @@ public class ChooseHourseActivity extends AppCompatActivity {
         adapter = new ChooseHouseAdapter(this, hourses);
         adapter.setClicked(-1);
         recyclerView.setAdapter(adapter);
+
+
     }
 
     @Override
     public void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    protected void onRestart() {
+        adapter.setClicked(1);
+        adapter.notifyDataSetChanged();
+        super.onRestart();
     }
 
     int i =0 ;
@@ -100,6 +111,7 @@ public class ChooseHourseActivity extends AppCompatActivity {
                 }else if (i==1){
                     Intent intent=new Intent(this,AddhourseActivity.class);
                     startActivityForResult(intent,MREQUEST_CODE);
+
                 }
                 break;
         }
@@ -108,8 +120,7 @@ public class ChooseHourseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        int a=10;
-        int b=a;
+
         if (requestCode==MREQUEST_CODE && requestCode==MREQUEST_CODE){
             hourses=hourseDao.findAllHouse();
             Log.i("house","-->"+hourses.size());

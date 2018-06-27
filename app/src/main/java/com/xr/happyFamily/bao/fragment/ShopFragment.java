@@ -188,7 +188,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 adapter_xh.notifyDataSetChanged();
                 String e = adapter_xh.getItem(position).toString();
                 tv_price.setText("¥"+list_price.get(position).getPrice());
-                tvPrice.setText("¥" + ((double)list_price.get(position).getPrice())/100);
+                tvPrice.setText("¥" + list_price.get(position).getPrice());
                 tvXinghao.setText(list.get(position));
                 price=list_price.get(position).getPrice()+"";
                 priceId=list_price.get(position).getPriceId();

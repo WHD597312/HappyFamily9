@@ -208,7 +208,7 @@ public class HttpUtils {
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toJSONString());
 
-            SharedPreferences userSettings = mContext.getSharedPreferences("login", 0);
+            SharedPreferences userSettings = mContext.getSharedPreferences("my", 0);
             String token = userSettings.getString("token", "token");
 
             Request request = new Request.Builder()
@@ -602,7 +602,7 @@ public class HttpUtils {
         String result=null;
         try{
             SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
-//            SharedPreferences userSettings= ge6getSharedPreferences("login", 0);
+//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
             String token =my.getString("token","");
             JSONObject jsonObject = new JSONObject();
             Request request = new Request.Builder()

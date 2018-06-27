@@ -166,7 +166,7 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
         Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings= getSharedPreferences("login", 0);
+        SharedPreferences userSettings= getSharedPreferences("my", 0);
         String url = userSettings.getString("userId","1000");
         params.put("userId", url);
         new AddressAsync().execute(params);

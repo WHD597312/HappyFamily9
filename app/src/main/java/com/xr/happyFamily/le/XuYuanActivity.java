@@ -12,11 +12,6 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShopCartActivity;
-import com.xr.happyFamily.bao.ShopDingdanActivity;
-import com.xr.happyFamily.bao.ShopDingdanXQActivity;
-import com.xr.happyFamily.bao.ShopShangchengActivity;
-import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.le.view.MyHorizontalScrollView;
 import com.xr.happyFamily.le.view.MyHorizontalScrollViewAdapter;
 

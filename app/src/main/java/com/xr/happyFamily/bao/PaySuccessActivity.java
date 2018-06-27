@@ -27,6 +27,7 @@ import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bean.PersonCard;
 import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -155,7 +156,7 @@ public class PaySuccessActivity extends AppCompatActivity {
                 startActivity(intent);
                 break;
             case R.id.tv_shouye:
-                startActivity(new Intent(this, ShoppageActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
                 break;
 
         }

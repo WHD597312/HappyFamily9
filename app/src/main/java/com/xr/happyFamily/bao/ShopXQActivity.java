@@ -120,7 +120,7 @@ public class ShopXQActivity extends AppCompatActivity {
         circle.add("详情");
         Bundle extras = getIntent().getExtras();
         goodsId = extras.getString("goodsId");
-        SharedPreferences userSettings = getSharedPreferences("login", 0);
+        SharedPreferences userSettings = getSharedPreferences("my", 0);
         String userId = userSettings.getString("userId", "1000");
 
         shopFragment = new ShopFragment();
@@ -251,6 +251,7 @@ public class ShopXQActivity extends AppCompatActivity {
 
                 break;
             case R.id.tv_buy:
+                Log.e("qqqqqqqqqqNNNNN22",priceId+"!!!!!!");
                 if (priceId == -1) {
                     shopFragment.sendMessage(new ShopFragment.ICallBack() {
                         @Override
@@ -281,8 +282,11 @@ public class ShopXQActivity extends AppCompatActivity {
                     Intent intent = new Intent(this, ShopConfActivity.class);
                     intent.putExtra("type", (Serializable) "XQ");
                     intent.putExtra("goodsId", goodsId);
-                    intent.putExtra("num", num);
-                    intent.putExtra("priceId", priceId);
+                    intent.putExtra("num", num+"");
+
+                    intent.putExtra("priceId", priceId+"");
+
+                    Log.e("qqqqqqqNNN",num+","+priceId);
                     intent.putExtra("money", Integer.parseInt(price) * num);
                     intent.putExtra("weight", weight + "");
                     startActivity(intent);
@@ -462,6 +466,7 @@ public class ShopXQActivity extends AppCompatActivity {
         labelsView.setItemClickListener(new FlowTagView.TagItemClickListener() {
             @Override
             public void itemClick(int position) {
+                Log.e("qqqqqqNNNN","??????????");
                 sign = position;
                 adapter_xh.setSelection(position);
                 adapter_xh.notifyDataSetChanged();
@@ -470,6 +475,7 @@ public class ShopXQActivity extends AppCompatActivity {
 
                 price = list_price.get(position).getPrice() + "";
                 priceId = list_price.get(position).getPriceId();
+                Log.e("qqqqqqNNNN",priceId+"!!!!!!");
                 goodsId = list_price.get(position).getGoodsId() + "";
                 shopFragment.setData(price, list_price.get(position).getPower() + "", sign);
 //                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();

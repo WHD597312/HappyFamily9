@@ -204,7 +204,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
         Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings = mContext.getSharedPreferences("login", 0);
+        SharedPreferences userSettings = mContext.getSharedPreferences("my", 0);
         String userId = userSettings.getString("userId", "userId");
         params.put("userId", userId);
         params.put("pageNum", page);

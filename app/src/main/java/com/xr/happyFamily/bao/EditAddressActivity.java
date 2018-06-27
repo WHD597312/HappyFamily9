@@ -146,7 +146,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                SharedPreferences userSettings = getSharedPreferences("login", 0);
+                SharedPreferences userSettings = getSharedPreferences("my", 0);
                 String url = userSettings.getString("userId", "1000");
                 Map<String, Object> params = new HashMap<>();
                 params.put("userId", url);

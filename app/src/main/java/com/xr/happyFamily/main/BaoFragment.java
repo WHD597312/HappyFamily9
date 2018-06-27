@@ -43,7 +43,6 @@ import com.xr.happyFamily.bao.ShopDingdanActivity;
 import com.xr.happyFamily.bao.ShopSearchActivity;
 import com.xr.happyFamily.bao.ShopShangchengActivity;
 import com.xr.happyFamily.bao.ShopXQActivity;
-import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;

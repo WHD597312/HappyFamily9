@@ -128,7 +128,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onResume();
         if (preferences.contains("phone") && preferences.contains("password")) {
 //            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            if (preferences.contains("login")) {
+            if (preferences.contains("my")) {
                 startActivity(new Intent(this, HomepageActivity.class));
             }
         }

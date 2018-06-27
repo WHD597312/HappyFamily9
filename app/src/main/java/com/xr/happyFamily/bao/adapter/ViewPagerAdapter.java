@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bean.ShopBannerBean;
 

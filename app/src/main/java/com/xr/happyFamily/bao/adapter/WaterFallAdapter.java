@@ -14,7 +14,6 @@ import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bean.PersonCard;
 import com.xr.happyFamily.bean.ShopBean;
 

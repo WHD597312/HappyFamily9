@@ -130,7 +130,7 @@ public class ShopConfActivity extends AppCompatActivity {
         pay_true.setBounds(0, 0, pay_true.getMinimumWidth(), pay_true.getMinimumHeight());
         pay_false.setBounds(0, 0, pay_false.getMinimumWidth(), pay_false.getMinimumHeight());
         Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings = getSharedPreferences("login", 0);
+        SharedPreferences userSettings = getSharedPreferences("my", 0);
         String url = userSettings.getString("userId", "1000");
         params.put("userId", url);
         new getAddressAsync().execute(params);
@@ -438,7 +438,7 @@ List<PostFreeBean> postFreeBeans=new ArrayList<>();
     protected void onRestart() {
         super.onRestart();
         Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings = getSharedPreferences("login", 0);
+        SharedPreferences userSettings = getSharedPreferences("my", 0);
         String url = userSettings.getString("userId", "1000");
         params.put("userId", url);
         new getAddressAsync().execute(params);

@@ -1,5 +1,6 @@
 package com.xr.happyFamily.jia;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
@@ -27,6 +28,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 
 import org.json.JSONArray;
@@ -57,13 +59,14 @@ public class ManagementActivity extends AppCompatActivity {
     TitleView titleView;
     String  roomType;
     String  roomName;
-    long houseId=0;
     long roomId;
     List<Room> rooms;
+    private SharedPreferences mPositionPreferences;
 
     int mPoistion=-1;
     private RoomDaoImpl roomDao;
     private HourseDaoImpl hourseDao;
+    long houseId;
     @Override
     public void onCreate( Bundle savedInstanceState ) {
         super.onCreate(savedInstanceState);
@@ -73,19 +76,9 @@ public class ManagementActivity extends AppCompatActivity {
         }
         unbinder = ButterKnife.bind(this);
         roomDao= new RoomDaoImpl(getApplicationContext());
-        hourseDao=new HourseDaoImpl(getApplicationContext());
-        rooms = roomDao.findByAllRoom();
-
-        if (!rooms.isEmpty()){
-            Room room=rooms.get(0);
-            houseId=room.getHouseId();
-        }else {
-            List<Hourse> hourses=hourseDao.findAllHouse();
-            if (hourses.size()==1){
-                Hourse hourse=hourses.get(0);
-                houseId=hourse.getHouseId();
-            }
-        }
+       Intent intent=getIntent();
+       houseId=intent.getLongExtra("houseId",0);
+        mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
         Log.e("rrrrrrrrr", "onCreate: ---->"+houseId );
         mGridView = (GridView) findViewById(R.id.gv_management_my);
         mGridData = new ArrayList<>();
@@ -107,6 +100,9 @@ public class ManagementActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> arg0, View view, int position,
                                     long id) {
 
+                String name=localCartoonText[position];
+                roomName=name;
+                roomType=roomName;
 //                view.setBackgroundResource(R.color.color_gray2);
 //              //   gridView中点击 item为选中状态(背景颜色)
 //                for(int n=0;n<mGridData.size();n++){
@@ -120,39 +116,38 @@ public class ManagementActivity extends AppCompatActivity {
                 mPoistion=position;
                 mGridViewAdapter.setSelectedPosition(mPoistion);
                 mGridViewAdapter.notifyDataSetInvalidated();
-                switch (position) {
-                    case 0:
-                        roomType="厨房";
-                        roomName="厨房";
-                        Toast.makeText(ManagementActivity.this,"1",Toast.LENGTH_SHORT).show();
-                        break;
-                    case 1:
-                        roomType="卧室";
-                        roomName="卧室";
-                        Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
-                        break;
-                    case 2:
-                        roomType="客厅";
-                        roomName="客厅";
-                        Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
-                        break;
-                    case 3:
-                        roomType="阳台";
-                        roomName="阳台";
-                        Toast.makeText(ManagementActivity.this,"3",Toast.LENGTH_SHORT).show();
-                        break;
-                    case 4:
-                        roomType="卫生间";
-                        roomName="卫生间";
-                        Toast.makeText(ManagementActivity.this,"4",Toast.LENGTH_SHORT).show();
-                        break;
-
-                    default:
-                        break;
-                }
+//                switch (position) {
+//                    case 0:
+//                        roomType="厨房";
+//                        roomName="厨房";
+//                        Toast.makeText(ManagementActivity.this,"1",Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 1:
+//                        roomType="卧室";
+//                        roomName="卧室";
+//                        Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 2:
+//                        roomType="客厅";
+//                        roomName="客厅";
+//                        Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 3:
+//                        roomType="阳台";
+//                        roomName="阳台";
+//                        Toast.makeText(ManagementActivity.this,"3",Toast.LENGTH_SHORT).show();
+//                        break;
+//                    case 4:
+//                        roomType="卫生间";
+//                        roomName="卫生间";
+//                        Toast.makeText(ManagementActivity.this,"4",Toast.LENGTH_SHORT).show();
+//                        break;
+//
+//                    default:
+//                        break;
+//                }
             }
         });
-
     }
 
     class AddroomAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
@@ -177,6 +172,11 @@ public class ManagementActivity extends AppCompatActivity {
                         room.setHouseId(houseId);
                         room.setRoomType(roomType);
                         roomDao.insert(room);
+                        List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
+                        SharedPreferences.Editor editor=mPositionPreferences.edit();
+                        int postion=rooms.size()+1;
+                        editor.putInt("position",postion);
+                        editor.commit();
                     }
                 }
             } catch (Exception e) {
@@ -192,9 +192,10 @@ public class ManagementActivity extends AppCompatActivity {
                     break;
                 case 100:
                     Toast.makeText(ManagementActivity.this,"添加成功",Toast.LENGTH_SHORT).show();
-                   Intent intent=new Intent(ManagementActivity.this,MyPaperActivity.class);
-                   intent.putExtra("weizhi",rooms.size()+1);
-                   startActivity(intent);
+                    Intent intent=new Intent();
+                    intent.putExtra("houseId",houseId);
+                    setResult(6000,intent);
+                    finish();
                     break;
             }
         }
@@ -209,9 +210,7 @@ public class ManagementActivity extends AppCompatActivity {
                 params.put("houseId",houseId);
                 new ManagementActivity.AddroomAsyncTask().execute(params);
                 break;
-
         }
-
     }
     @Override
     protected void onDestroy() {

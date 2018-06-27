@@ -246,7 +246,7 @@
                 android:layout_below="@+id/image_lock"
                 android:layout_alignLeft="@+id/image_lock"
                 android:layout_alignRight="@+id/image_lock"
-                android:text="解锁"
+                android:text="童锁"
                 android:gravity="center"
                 />
 
@@ -276,7 +276,7 @@
                 android:layout_below="@+id/image_screen"
                 android:layout_alignLeft="@+id/image_screen"
                 android:layout_alignRight="@+id/image_screen"
-                android:text="屏保"
+                android:text="息屏"
                 android:gravity="center"
                 />
         </RelativeLayout>

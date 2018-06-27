@@ -23,14 +23,12 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
@@ -194,7 +192,7 @@ public void onClick(View view) {
                 }
                 if ("删除房间".equals(title)){
                     dia = new Dialog(getActivity(), R.style.edit_AlertDialog_style);//设置进入时跳出提示框
-                    dia.setContentView(R.layout.activity_home_renamedialog);
+                    dia.setContentView(R.layout.popview_delete_home);
 //                    relativeLayoutre.setBackgroundResource(R.drawable.bg_shape);
                     dia.show();
                     dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出

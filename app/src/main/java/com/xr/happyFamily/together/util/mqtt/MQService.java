@@ -143,9 +143,7 @@ public class MQService extends Service {
                 @Override
                 public void messageArrived(String topicName, MqttMessage message) {
                     try {
-
                         new LoadAsyncTask().execute(topicName,message.toString());
-
                     }catch (Exception e){
                         e.printStackTrace();
                     }
@@ -310,10 +308,10 @@ public class MQService extends Service {
                                 deviceChild.setWaramerSetTemp(waramerSetTemp);
                             }
                             if (warmerCurTemp!=-1){
-                                deviceChild.setWarmerCurTemp(warmerCurTemp);
+                                deviceChild.setWarmerCurTemp(warmerCurTemp-128);
                             }
                             if (warmerSampleData!=-1){
-                                deviceChild.setWarmerSampleData(warmerSampleData);
+                                deviceChild.setWarmerSampleData(warmerSampleData-128);
                             }
                             if (warmerRatePower!=-1){
                                 deviceChild.setWarmerRatePower(warmerRatePower);

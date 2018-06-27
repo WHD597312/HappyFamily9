@@ -20,8 +20,8 @@ public class DeviceChild implements Serializable{
     int timerMoudle=-1;/**定时器模式*/
     String mcuVersion;/**MCU版本*/
     String wifiVersion;/**wifi版本*/
-    int waramerSetTemp=-1;/**取暖器设定温度*/
-    int warmerCurTemp=-1;/**取暖器当前温度*/
+    int waramerSetTemp=0;/**取暖器设定温度*/
+    int warmerCurTemp=0;/**取暖器当前温度*/
     int warmerSampleData=-1;/**取暖器采样数据*/
     int warmerRatePower=-1;/**取暖器额定总功率*/
     int warmerCurRunRoatePower=-1;/**取暖器当前运行功率*/
@@ -32,8 +32,8 @@ public class DeviceChild implements Serializable{
     int screenState=-1;/**屏保是否开启 1：开启 0：未开启 */
     int curRunState2=-1;/**机器当前运行状态2  (保留)*/
     int curRunState3=-1;/**机器当前运行状态2  (保留)*/
-    int timerHour=-1;/**定时时间 小时*/
-    int timerMin=-1;/**定时时间 分*/
+    int timerHour=0;/**定时时间 小时*/
+    int timerMin=0;/**定时时间 分*/
     int checkCode=-1;/**校验码*/
     int endCode=-1;/**结束码*/
     int userId=0;/**用户Id*/

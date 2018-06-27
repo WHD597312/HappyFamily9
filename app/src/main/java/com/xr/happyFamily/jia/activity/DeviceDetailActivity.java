@@ -89,6 +89,10 @@ public class DeviceDetailActivity extends AppCompatActivity {
     public static boolean running=false;
     private DeviceChild deviceChild;
     private float curAngle;
+    @BindView(R.id.tv_lock)
+    TextView tv_lock;
+    @BindView(R.id.tv_screen)
+    TextView tv_screen;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -217,7 +221,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     tv_set_temp.setText(temp+"");
                 }
 
-                deviceChild.setWarmerCurTemp(warmerTempSet);
+                deviceChild.setWaramerSetTemp(warmerTempSet);
                 send(deviceChild);
             }
         });
@@ -505,24 +509,25 @@ public class DeviceDetailActivity extends AppCompatActivity {
             image_screen.setImageResource(R.mipmap.screen_open);
         }
     }
-    int sum=0;
+
     public void send(DeviceChild deviceChild){
         try {
+            int sum=0;
             JSONObject jsonObject=new JSONObject();
             JSONArray jsonArray=new JSONArray();
             int headCode=144;
             jsonArray.put(0,headCode);/**头码*/
-            sum+=headCode;
+            sum=sum+headCode;
             int type=deviceChild.getType();
             int typeHigh=type/256;
-            sum+=typeHigh;
+            sum=sum+typeHigh;
             int typeLow=type%256;
-            sum+=typeLow;
+            sum=sum+typeLow;
             int dataLength=6;
-            sum+=dataLength;
+            sum=sum+dataLength;
 
             int busMode=deviceChild.getBusModel();
-            sum+=busMode;
+            sum=sum+busMode;
             jsonArray.put(1,typeHigh);/**类型 高位*/
             jsonArray.put(2,typeLow);/**类型 低位*/
             jsonArray.put(3,busMode);/**商业模式*/
@@ -545,26 +550,26 @@ public class DeviceDetailActivity extends AppCompatActivity {
             x[7]=0;
 
             int dataContent=TenTwoUtil.changeToTen(x);
-            sum+=dataContent;
+            sum=sum+dataContent;
             jsonArray.put(5,dataContent);/**数据内容 开关，功率状态，屏幕状态，屏保状态*/
             int runState2=0;
-            sum+=runState2;
+            sum=sum+runState2;
             jsonArray.put(6,runState2);/**机器当前运行状态2  (保留*/
             int runState3=0;
-            sum+=runState3;
+            sum=sum+runState3;
             jsonArray.put(7,runState3);/**机器当前运行状态3  (保留*/
 
             int timeHour=deviceChild.getTimerHour();
-            sum+=timeHour;
+            sum=sum+timeHour;
             jsonArray.put(8,timeHour);/**定时时间 小时*/
             int timeMin=deviceChild.getTimerMin();
-            sum+=timeMin;
+//            sum=sum+timeMin;
             jsonArray.put(9,0);/**定时时间 分*/
             int waramerSetTemp=deviceChild.getWaramerSetTemp();
-            sum+=waramerSetTemp;
+            sum=sum+waramerSetTemp;
 
             int checkCode=sum%256;
-            jsonArray.put(10,waramerSetTemp);/**设定温度*/
+            jsonArray.put(10,(waramerSetTemp));/**设定温度*/
             jsonArray.put(11,checkCode);/**校验码*/
 
             jsonArray.put(12,9);/**结束码*/

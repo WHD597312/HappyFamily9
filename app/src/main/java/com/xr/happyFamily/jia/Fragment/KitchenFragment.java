@@ -1,14 +1,10 @@
 package com.xr.happyFamily.jia.Fragment;
 
 import android.app.Dialog;
-import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.view.ViewPager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -23,38 +19,27 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
-import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
-import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.jia.pojo.TimeTask;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 
 import org.json.JSONObject;
 
-import java.io.File;
-import java.lang.reflect.Field;
-import java.net.URLEncoder;
-import java.text.Format;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Timer;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -211,7 +196,7 @@ public void onClick(View view) {
                 }
                 if ("删除房间".equals(title)){
                     dia = new Dialog(getActivity(), R.style.edit_AlertDialog_style);//设置进入时跳出提示框
-                    dia.setContentView(R.layout.activity_home_renamedialog);
+                    dia.setContentView(R.layout.popview_delete_home);
 //                    relativeLayoutre.setBackgroundResource(R.drawable.bg_shape);
                     dia.show();
                     dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出

@@ -6,6 +6,7 @@ import android.database.sqlite.SQLiteDatabase;
 import com.xr.database.dao.DBManager;
 import com.xr.database.dao.DaoMaster;
 import com.xr.database.dao.DaoSession;
+import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
 import com.xr.happyFamily.jia.pojo.Room;
 
@@ -53,6 +54,10 @@ public class RoomDaoImpl {
 
     public Room findById(long roomId){
         return roomDao.load(roomId);
+    }
+    public List<Room> findAllRoomInHouse(long houseId){
+        List<Room> rooms=roomDao.queryBuilder().where(RoomDao.Properties.HouseId.eq(houseId)).orderAsc(RoomDao.Properties.RoomId).list();
+        return rooms;
     }
     public List<Room> findByAllRoom(){
         return roomDao.loadAll();

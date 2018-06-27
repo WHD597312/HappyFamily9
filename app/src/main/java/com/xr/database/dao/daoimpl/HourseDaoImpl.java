@@ -24,7 +24,6 @@ public class HourseDaoImpl {
         master=new DaoMaster(db);
         session=master.newSession();
         hourseDao = session.getHourseDao();
-
     }
 
     /**

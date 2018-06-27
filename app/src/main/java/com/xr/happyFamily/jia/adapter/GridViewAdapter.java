@@ -43,7 +43,6 @@ public class GridViewAdapter extends ArrayAdapter {
                 LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
                 convertView = inflater.inflate(layoutResourceId, parent, false);
                 holder = new ViewHolder();
-
                 convertView.setTag(holder);
             } else {
                 holder = (ViewHolder) convertView.getTag();
@@ -56,14 +55,8 @@ public class GridViewAdapter extends ArrayAdapter {
             Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             return convertView;
         }
-
     private class ViewHolder {
-
         TextView textView;
         ImageView imageView;
-
     }
-
-
-
 }

@@ -26,10 +26,8 @@ import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Hourse;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -151,7 +149,7 @@ public class ViewPaperFragment extends Fragment {
                 }
                 if ("删除房间".equals(title)){
                     dia = new Dialog(getActivity(), R.style.edit_AlertDialog_style);//设置进入时跳出提示框
-                    dia.setContentView(R.layout.activity_home_renamedialog);
+                    dia.setContentView(R.layout.popview_delete_home);
 //                    relativeLayoutre.setBackgroundResource(R.drawable.bg_shape);
                     dia.show();
                     dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出

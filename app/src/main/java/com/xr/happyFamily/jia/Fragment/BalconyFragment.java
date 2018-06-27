@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
@@ -15,32 +16,25 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.Button;
 import android.widget.ImageButton;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupMenu;
-import android.widget.RelativeLayout;
-import android.widget.Switch;
 import android.widget.TextView;
-import android.widget.Toast;
 import android.view.View.OnClickListener;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.AddEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
-import com.zhy.http.okhttp.utils.L;
 
 import org.json.JSONObject;
 
@@ -195,7 +189,7 @@ public class BalconyFragment extends Fragment {
             public boolean onMenuItemClick(MenuItem item) {
 //                Toast.makeText(getActivity(), item.getTitle(), Toast.LENGTH_SHORT).show();
 //                Log.i("title", "---->: "+item.getTitle());
-              title = String.valueOf(item.getTitle());
+                title = String.valueOf(item.getTitle());
                 return false;
             }
         });
@@ -208,7 +202,7 @@ public class BalconyFragment extends Fragment {
                 }
                 if ("删除房间".equals(title)){
                     dia = new Dialog(getActivity(), R.style.edit_AlertDialog_style);//设置进入时跳出提示框
-                    dia.setContentView(R.layout.activity_home_renamedialog);
+                    dia.setContentView(R.layout.popview_delete_home);
 //                    relativeLayoutre.setBackgroundResource(R.drawable.bg_shape);
                     dia.show();
                     dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
@@ -235,21 +229,17 @@ public class BalconyFragment extends Fragment {
             @Override
             public void onPositiveClick() {
                 roomName = dialog.getName();
-                if (com.xr.happyFamily.login.util.Utils.isEmpty(roomName)) {
+                if (TextUtils.isEmpty(roomName)) {
                     com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
-
-                    for (int i=0;i<str1.size();i++){
-                        if ("阳台".equals(str1.get(i))){
-                            new ChangeNameAsyncTask().execute();
-                            textViewname.setText(roomName);
-                            dialog.dismiss();
-                        }
-                    }
-
-
-
+                    dialog.dismiss();
                 }
+            }
+        });
+        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
             }
         });
         dialog.show();

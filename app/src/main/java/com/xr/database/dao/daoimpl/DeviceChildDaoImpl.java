@@ -68,4 +68,11 @@ public class DeviceChildDaoImpl {
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId));
         return deviceChildDao.queryBuilder().where(whereCondition).list();
     }
+    public void deleteDeviceInHouseRoom(long houseId,long roomId){
+        List<DeviceChild> deviceChildren=findHouseInRoomDevices(houseId, roomId);
+        if (!deviceChildren.isEmpty()){
+            deviceChildDao.deleteInTx(deviceChildren);
+        }
+
+    }
 }

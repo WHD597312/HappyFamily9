@@ -321,6 +321,7 @@ public class LoginActivity extends AppCompatActivity {
                                     int roomId2 = device.getInt("roomId");
                                     int deviceUsedCount = device.getInt("deviceUsedCount");
                                     DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
+                                    deviceChild.setDeviceId(deviceId);
                                     deviceChild.setImg(img[0]);
                                     deviceChildDao.insert(deviceChild);
                                 }

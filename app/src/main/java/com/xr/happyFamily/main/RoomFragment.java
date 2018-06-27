@@ -34,6 +34,7 @@ import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.jia.view_custom.DeleteDeviceDialog;
 import com.xr.happyFamily.jia.view_custom.DeleteHomeDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -75,6 +76,7 @@ public class RoomFragment extends Fragment{
     private String deleteDeviceUrl= HttpUtils.ipAddress+"/family/device/deleteDevice";
     int mposition;
     DeviceChild mdeledeviceChild;
+    SharedPreferences my;
 
     @Nullable
     @Override
@@ -85,6 +87,7 @@ public class RoomFragment extends Fragment{
         deviceChildDao=new DeviceChildDaoImpl(getActivity());
         Log.i("index","-->"+index);
         mPositionPreferences = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
+        my=getActivity().getSharedPreferences("my",Context.MODE_PRIVATE);
         room=roomDao.findById(roomId);
         Log.i("roomDao","houseId:"+houseId+",roomId:"+roomId);
         if (room!=null){
@@ -115,28 +118,28 @@ public class RoomFragment extends Fragment{
             mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
                 @Override
                 public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    mPosition=position;
                     mdeledeviceChild=mGridData.get(position);
+                    Log.i("mdeledeviceChild","-->"+mdeledeviceChild.getDeviceId());
                     deleteDeviceDialog();
                     return false;
                 }
             });
-
-
         }
         return view;
     }
     private void deleteDeviceDialog() {
-        final DeleteHomeDialog dialog = new DeleteHomeDialog(getActivity());
-        dialog.setOnNegativeClickListener(new DeleteHomeDialog.OnNegativeClickListener() {
+        final DeleteDeviceDialog dialog = new DeleteDeviceDialog(getActivity());
+        dialog.setOnNegativeClickListener(new DeleteDeviceDialog.OnNegativeClickListener() {
             @Override
             public void onNegativeClick() {
                 dialog.dismiss();
             }
         });
-        dialog.setOnPositiveClickListener(new DeleteHomeDialog.OnPositiveClickListener() {
+        dialog.setOnPositiveClickListener(new DeleteDeviceDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-                new DeleteRoomAsync().execute();
+                new DeleteDeviceAsync().execute();
                 dialog.dismiss();
             }
         });
@@ -305,7 +308,6 @@ public class RoomFragment extends Fragment{
                             SharedPreferences.Editor editor=mPositionPreferences.edit();
                             editor.clear();
                             editor.commit();
-
                         }
                         deviceChildDao.deleteDeviceInHouseRoom(houseId,roomId);
                     }
@@ -333,12 +335,15 @@ public class RoomFragment extends Fragment{
     }
 
     class DeleteDeviceAsync extends AsyncTask<Void,Void,Integer>{
-
         @Override
         protected Integer doInBackground(Void... voids) {
             int code=0;
-            long deviceId = mdeledeviceChild.getId();
-            String url=deleteDeviceUrl+"?userId="+houseId+"&roomId="+roomId+"&deviceId"+deviceId;
+            long deviceId=0;
+            String userId=my.getString("userId","");
+            if (mdeledeviceChild!=null){
+                deviceId= mdeledeviceChild.getDeviceId();
+            }
+            String url=deleteDeviceUrl+"?userId="+userId+"&roomId="+roomId+"&deviceId="+deviceId;
             String result=HttpUtils.getOkHpptRequest(url);
             Log.i("result","-->"+result);
             try {
@@ -351,7 +356,6 @@ public class RoomFragment extends Fragment{
                         if (deviceChild!=null){
                             deviceChildDao.delete(deviceChild);
                         }
-
                     }
                 }
             }catch (Exception e){
@@ -365,9 +369,8 @@ public class RoomFragment extends Fragment{
             switch (code){
                 case 100:
                     Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
-                    Intent intent=new Intent(getActivity(),MainActivity.class);
-                    intent.putExtra("houseId", houseId);
-                    startActivity(intent);
+                    mGridData.remove(mdeledeviceChild);
+                    mGridViewAdapter.notifyDataSetChanged();
                     break;
                 default:
                     Toast.makeText(getActivity(),"删除失败",Toast.LENGTH_SHORT).show();

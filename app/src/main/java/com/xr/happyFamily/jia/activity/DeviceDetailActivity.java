@@ -30,6 +30,7 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.TimePicker;
+import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
@@ -438,14 +439,23 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-
             String macAddress=intent.getStringExtra("macAddress");
             Log.i("macAddress","-->"+macAddress);
             DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
+
             if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
-                deviceChild=deviceChild2;
-                Log.i("warmerCurTemp","-->"+deviceChild.getWarmerCurTemp());
-                setMode(deviceChild);
+                if (deviceChild2==null){
+                    Toast.makeText(DeviceDetailActivity.this,"该设备已重置",Toast.LENGTH_SHORT).show();
+                    long houseId=deviceChild.getHouseId();
+                    Intent data=new Intent();
+                    data.putExtra("houseId",houseId);
+                    DeviceDetailActivity.this.setResult(6000,data);
+                    DeviceDetailActivity.this.finish();
+                }else {
+                    deviceChild=deviceChild2;
+                    Log.i("warmerCurTemp","-->"+deviceChild.getWarmerCurTemp());
+                    setMode(deviceChild);
+                }
             }
         }
     }

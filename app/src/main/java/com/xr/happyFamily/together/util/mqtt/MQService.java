@@ -40,18 +40,20 @@ public class MQService extends Service {
     private String host = "tcp://47.98.131.11:1883";
     private String userName = "admin";
     private String passWord = "Xr7891122";
-    String macAddress="hrrj7895ccf7f6c9fa4";/**测试的macAddrsss*/
+    String macAddress = "hrrj7895ccf7f6c9fa4";
+    /**
+     * 测试的macAddrsss
+     */
     private DeviceChildDaoImpl deviceChildDao;
 
     /***
      * 模块类型
      */
-    private int[] moduleType={0X01,0X02,0X03,0X04,0X05,0X06,0X07,0X08};
+    private int[] moduleType = {0X01, 0X02, 0X03, 0X04, 0X05, 0X06, 0X07, 0X08};
     /***
      * 商业模块
      */
-    private int [] bussinessmodule={0XF0,0};
-
+    private int[] bussinessmodule = {0XF0, 0};
 
 
     private ScheduledExecutorService scheduler = Executors.newSingleThreadScheduledExecutor();
@@ -62,11 +64,11 @@ public class MQService extends Service {
 
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
-     * */
+     */
     @Override
     public void onCreate() {
         super.onCreate();
-        clientId=UUID.getUUID(this);
+        clientId = UUID.getUUID(this);
         deviceChildDao = new DeviceChildDaoImpl(this);
         init();
         connect();
@@ -77,6 +79,7 @@ public class MQService extends Service {
     public IBinder onBind(Intent intent) {
         return binder;
     }
+
     public class LocalBinder extends Binder {
 
         public MQService getService() {
@@ -90,7 +93,9 @@ public class MQService extends Service {
         return super.onStartCommand(intent, flags, startId);
     }
 
-    /**销毁服务，则断开MQTT,释放资源*/
+    /**
+     * 销毁服务，则断开MQTT,释放资源
+     */
     @Override
     public void onDestroy() {
         super.onDestroy();
@@ -143,8 +148,8 @@ public class MQService extends Service {
                 @Override
                 public void messageArrived(String topicName, MqttMessage message) {
                     try {
-                        new LoadAsyncTask().execute(topicName,message.toString());
-                    }catch (Exception e){
+                        new LoadAsyncTask().execute(topicName, message.toString());
+                    } catch (Exception e) {
                         e.printStackTrace();
                     }
                 }
@@ -157,9 +162,10 @@ public class MQService extends Service {
     public void connect() {
         new ConAsync().execute();
     }
+
     /**
      * 连接MQTT
-     * */
+     */
     class ConAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
@@ -181,175 +187,189 @@ public class MQService extends Service {
 
     /**
      * 加载MQTT返回的消息
-     * */
-    class LoadAsyncTask extends AsyncTask<String,Void,Object>{
+     */
+    class LoadAsyncTask extends AsyncTask<String, Void, Object> {
 
         @Override
         protected Object doInBackground(String... strings) {
 
-            String topicName=strings[0];/**收到的主题*/
-            String macAddress=null;
+            String topicName = strings[0];/**收到的主题*/
+            String macAddress = null;
 
-            if (topicName.startsWith("p99/warmer")){
+            if (topicName.startsWith("p99/warmer")) {
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
-            }else if (topicName.startsWith("p99")){
+            } else if (topicName.startsWith("p99")) {
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
-            int type=-1;/**产品类型*/
-            int busModel=-1;/**商业模式*/
-            int timerMoudle=-1;/**定时器模式*/
-            String mcuVersion=null;/**MCU版本*/
-            String wifiVersion=null;/**wifi版本*/
-            int waramerSetTemp=-1;/**取暖器设定温度*/
-            int warmerCurTemp=-1;/**取暖器当前温度*/
-            int warmerSampleData=-1;/**取暖器采样数据*/
-            int warmerRatePower=-1;/**取暖器额定总功率*/
-            int warmerCurRunRoatePower=-1;/**取暖器当前运行功率*/
-            int warmerRunState=-1;/**机器当前运行状态*/
-            int deviceState=-1;/**开关机状态 0表示关机，1表示开机*/
-            String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
-            int lockState=-1;/** 屏幕是否锁定 1：锁定 0：未锁定*/
-            int screenState=-1;/**屏保是否开启 1：开启 0：未开启 */
-            int curRunState2=-1;/**机器当前运行状态2  (保留)*/
-            int curRunState3=-1;/**机器当前运行状态2  (保留)*/
-            int timerHour=-1;/**定时时间 小时*/
-            int timerMin=-1;/**定时时间 分*/
-            int checkCode=-1;/**校验码*/
-            int endCode=-1;/**结束码*/
-            String message=strings[1];/**收到的消息*/
-            Log.i("message","-->"+message);
+            int type = -1;/**产品类型*/
+            int busModel = -1;/**商业模式*/
+            int timerMoudle = -1;/**定时器模式*/
+            String mcuVersion = null;/**MCU版本*/
+            String wifiVersion = null;/**wifi版本*/
+            int waramerSetTemp = -1;/**取暖器设定温度*/
+            int warmerCurTemp = -1;/**取暖器当前温度*/
+            int warmerSampleData = -1;/**取暖器采样数据*/
+            int warmerRatePower = -1;/**取暖器额定总功率*/
+            int warmerCurRunRoatePower = -1;/**取暖器当前运行功率*/
+            int warmerRunState = -1;/**机器当前运行状态*/
+            int deviceState = -1;/**开关机状态 0表示关机，1表示开机*/
+            String rateState = null;/**功率状态  11: 3档 10: 2档  01: 1档*/
+            int lockState = -1;/** 屏幕是否锁定 1：锁定 0：未锁定*/
+            int screenState = -1;/**屏保是否开启 1：开启 0：未开启 */
+            int curRunState2 = -1;/**机器当前运行状态2  (保留)*/
+            int curRunState3 = -1;/**机器当前运行状态2  (保留)*/
+            int timerHour = -1;/**定时时间 小时*/
+            int timerMin = -1;/**定时时间 分*/
+            int checkCode = -1;/**校验码*/
+            int endCode = -1;/**结束码*/
+            String message = strings[1];/**收到的消息*/
+            if ("reSet".equals(macAddress))
+                Log.i("message", "-->" + message);
+
+            DeviceChild deviceChild = null;
+            JSONObject messageJsonObject = null;
+            String productType = null;
+            JSONArray messageJsonArray = null;
+            List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+            for (DeviceChild deviceChild2 : deviceChildren) {
+                if (macAddress.equals(deviceChild2.getMacAddress())) {
+                    deviceChild = deviceChild2;
+                    break;
+                }
+            }
             try {
-                JSONObject messageJsonObject=null;
-                if (isGoodJson(message)){
-                    messageJsonObject=new JSONObject(message);
-                }
-                String productType=null;
-                JSONArray messageJsonArray=null;
-                if (messageJsonObject!=null && messageJsonObject.has("productType")){
-                    productType= messageJsonObject.getString("productType");
-                }
-                if (messageJsonObject !=null && messageJsonObject.has("Warmer")){
-                    messageJsonArray=messageJsonObject.getJSONArray("Warmer");
+                if ("reSet".equals(message)) {
+                    if (deviceChild != null) {
+                        deviceChildDao.delete(deviceChild);
+                    }
+                } else {
+                    if (isGoodJson(message)) {
+                        messageJsonObject = new JSONObject(message);
+                    }
+                    if (messageJsonObject != null && messageJsonObject.has("productType")) {
+                        productType = messageJsonObject.getString("productType");
+                    }
+                    if (messageJsonObject != null && messageJsonObject.has("Warmer")) {
+                        messageJsonArray = messageJsonObject.getJSONArray("Warmer");
+                    }
+
+                    if (!TextUtils.isEmpty(productType)) {
+                        type = Integer.parseInt(productType);
+                    } else {
+                        int index = messageJsonArray.getInt(1);
+                        int index2 = messageJsonArray.getInt(2);
+                        String x = "" + index + index2;
+                        type = Integer.parseInt(x);
+                    }
                 }
 
-                if (!TextUtils.isEmpty(productType)){
-                    type=Integer.parseInt(productType);
-                }else {
-                    int index=messageJsonArray.getInt(1);
-                    int index2=messageJsonArray.getInt(2);
-                    String x=""+index+index2;
-                    type=Integer.parseInt(x);
-                }
-
-                DeviceChild deviceChild=null;
-                switch (type){
+                switch (type) {
                     case 1:
                         break;
                     case 2:/**取暖器*/
-                        if (!TextUtils.isEmpty(productType)){
+                        if (!TextUtils.isEmpty(productType)) {
 
-                        }else {
-                            busModel=messageJsonArray.getInt(3);
-                            int mMcuVersion=messageJsonArray.getInt(4);
-                            mcuVersion="v"+mMcuVersion/16+"."+mMcuVersion%16;
-                            int mWifiVersion=messageJsonArray.getInt(5);
-                            wifiVersion="v"+mWifiVersion/16+"."+mWifiVersion%16;
+                        } else {
+                            if (messageJsonArray != null) {
+                                busModel = messageJsonArray.getInt(3);
+                                int mMcuVersion = messageJsonArray.getInt(4);
+                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                                int mWifiVersion = messageJsonArray.getInt(5);
+                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
 
-                            warmerRunState=messageJsonArray.getInt(7);
-                            curRunState2=messageJsonArray.getInt(8);
-                            curRunState3=messageJsonArray.getInt(9);
+                                warmerRunState = messageJsonArray.getInt(7);
+                                curRunState2 = messageJsonArray.getInt(8);
+                                curRunState3 = messageJsonArray.getInt(9);
 
-                            int[] x=TenTwoUtil.changeToTwo(warmerRunState);
-                            deviceState=x[7];
-                            rateState=x[6]+""+x[5];
-                            lockState=x[4];
-                            screenState=x[3];
+                                int[] x = TenTwoUtil.changeToTwo(warmerRunState);
+                                deviceState = x[7];
+                                rateState = x[6] + "" + x[5];
+                                lockState = x[4];
+                                screenState = x[3];
 
-                            waramerSetTemp=messageJsonArray.getInt(10);
-                            warmerCurTemp=messageJsonArray.getInt(11);
+                                waramerSetTemp = messageJsonArray.getInt(10);
+                                warmerCurTemp = messageJsonArray.getInt(11);
 
-                            Log.i("warmerCurTemp","-->"+warmerCurTemp);
+                                Log.i("warmerCurTemp", "-->" + warmerCurTemp);
 
-                            warmerSampleData=messageJsonArray.getInt(12);
-                            warmerRatePower=messageJsonArray.getInt(13);
-                            warmerCurRunRoatePower=messageJsonArray.getInt(14);
+                                warmerSampleData = messageJsonArray.getInt(12);
+                                warmerRatePower = messageJsonArray.getInt(13);
+                                warmerCurRunRoatePower = messageJsonArray.getInt(14);
 
-                            timerHour=messageJsonArray.getInt(15);
-                            timerMin=messageJsonArray.getInt(16);
-                            checkCode=messageJsonArray.getInt(17);
-                            endCode=messageJsonArray.getInt(18);
-                        }
-
-                        List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-                        for (DeviceChild deviceChild2:deviceChildren) {
-                            if (macAddress.equals(deviceChild2.getMacAddress())){
-                                deviceChild=deviceChild2;
-                                break;
+                                timerHour = messageJsonArray.getInt(15);
+                                timerMin = messageJsonArray.getInt(16);
+                                checkCode = messageJsonArray.getInt(17);
+                                endCode = messageJsonArray.getInt(18);
                             }
                         }
-                        if (deviceChild!=null){
-                            if (type!=-1){
+
+
+                        if (deviceChild != null) {
+                            if (type != -1) {
                                 deviceChild.setType(type);
                             }
-                            if (busModel!=-1){
+                            if (busModel != -1) {
                                 deviceChild.setBusModel(busModel);
                             }
-                            if (timerMoudle!=-1){
+                            if (timerMoudle != -1) {
                                 deviceChild.setTimerMoudle(timerMoudle);
                             }
-                            if (!TextUtils.isEmpty(wifiVersion)){
+                            if (!TextUtils.isEmpty(wifiVersion)) {
                                 deviceChild.setWifiVersion(wifiVersion);
                             }
-                            if (!TextUtils.isEmpty(mcuVersion)){
+                            if (!TextUtils.isEmpty(mcuVersion)) {
                                 deviceChild.setMcuVersion(mcuVersion);
                             }
-                            if (waramerSetTemp!=-1){
+                            if (waramerSetTemp != -1) {
                                 deviceChild.setWaramerSetTemp(waramerSetTemp);
                             }
-                            if (warmerCurTemp!=-1){
-                                deviceChild.setWarmerCurTemp(warmerCurTemp-128);
+                            if (warmerCurTemp != -1) {
+                                deviceChild.setWarmerCurTemp(warmerCurTemp - 128);
                             }
-                            if (warmerSampleData!=-1){
-                                deviceChild.setWarmerSampleData(warmerSampleData-128);
+                            if (warmerSampleData != -1) {
+                                deviceChild.setWarmerSampleData(warmerSampleData - 128);
                             }
-                            if (warmerRatePower!=-1){
+                            if (warmerRatePower != -1) {
                                 deviceChild.setWarmerRatePower(warmerRatePower);
                             }
-                            if (warmerCurRunRoatePower!=-1){
+                            if (warmerCurRunRoatePower != -1) {
                                 deviceChild.setWarmerCurRunRoatePower(warmerCurRunRoatePower);
                             }
-                            if (deviceState!=-1){
+                            if (deviceState != -1) {
                                 deviceChild.setDeviceState(deviceState);
                             }
-                            if (!TextUtils.isEmpty(rateState)){
+                            if (!TextUtils.isEmpty(rateState)) {
                                 deviceChild.setRateState(rateState);
                             }
-                            if (lockState!=-1){
+                            if (lockState != -1) {
                                 deviceChild.setLockState(lockState);
                             }
-                            if (screenState!=-1){
+                            if (screenState != -1) {
                                 deviceChild.setScreenState(screenState);
                             }
-                            if (curRunState2!=-1){
+                            if (curRunState2 != -1) {
                                 deviceChild.setCurRunState2(curRunState2);
                             }
-                            if (curRunState3!=-1){
+                            if (curRunState3 != -1) {
                                 deviceChild.setCurRunState3(curRunState3);
                             }
-                            if (timerHour!=-1){
+                            if (timerHour != -1) {
                                 deviceChild.setTimerHour(timerHour);
                             }
-                            if (timerMin!=-1){
+                            if (timerMin != -1) {
                                 deviceChild.setTimerMin(timerMin);
                             }
-                            if (checkCode!=-1){
+                            if (checkCode != -1) {
                                 deviceChild.setCheckCode(checkCode);
                             }
-                            if (endCode!=-1){
+                            if (endCode != -1) {
                                 deviceChild.setEndCode(endCode);
                             }
-                            Log.i("warmerCurTemp2222","-->"+deviceChild.getWarmerCurTemp());
+                            int ss=deviceChild.getDeviceId();
+                            Log.i("ssssss","-->"+ss);
+                            Log.i("warmerCurTemp2222", "-->" + deviceChild.getWarmerCurTemp());
                             deviceChildDao.update(deviceChild);
+                            Log.i("deviceChildDao","-->"+deviceChild.getDeviceId());
                         }
                         break;
                     case 3:
@@ -365,41 +385,41 @@ public class MQService extends Service {
                     case 8:
                         break;
                 }
-
-                if (AddDeviceActivity.running){
+                if (AddDeviceActivity.running) {
                     Intent mqttIntent = new Intent("AddDeviceActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
-                    mqttIntent.putExtra("macAddress",macAddress);
+                    mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                } else if (DeviceDetailActivity.running){
+                } else if (DeviceDetailActivity.running) {
                     Intent mqttIntent = new Intent("DeviceDetailActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
-                    mqttIntent.putExtra("macAddress",macAddress);
+                    mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
     }
+
     /**
      * 获得订阅MQTT的所有主题
-     * */
-    public List<String> getTopicNames(){
-        List<String> list=new ArrayList<>();
-        List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-        for (DeviceChild deviceChild:deviceChildren){
-            String macAddress=deviceChild.getMacAddress();
-            String topicName="p99/warmer/"+macAddress+"/transfer";
+     */
+    public List<String> getTopicNames() {
+        List<String> list = new ArrayList<>();
+        List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+        for (DeviceChild deviceChild : deviceChildren) {
+            String macAddress = deviceChild.getMacAddress();
+            String topicName = "p99/warmer/" + macAddress + "/transfer";
             list.add(topicName);
         }
 //        list.add("warmer/p99"+macAddress+"/set");
-        return  list;
+        return list;
     }
     /**
      * 重新连接MQTT
-     * */
+     */
     private void startReconnect() {
 
         scheduler.scheduleAtFixedRate(new Runnable() {
@@ -425,14 +445,14 @@ public class MQService extends Service {
 
     /**
      * 发送MQTT主题
-     * */
+     */
     public boolean publish(String topicName, int qos, String payload) {
         boolean flag = false;
         if (client != null && client.isConnected()) {
 
             try {
                 MqttMessage message = new MqttMessage(payload.getBytes("utf-8"));
-                qos=1;
+                qos = 1;
                 message.setQos(qos);
                 client.publish(topicName, message);
                 flag = true;
@@ -445,7 +465,7 @@ public class MQService extends Service {
 
     /**
      * 订阅MQTT主题
-     * */
+     */
     public boolean subscribe(String topicName, int qos) {
         boolean flag = false;
         if (client != null && client.isConnected()) {
@@ -456,5 +476,9 @@ public class MQService extends Service {
             }
         }
         return flag;
+    }
+    public void updateDevice(DeviceChild deviceChild){
+        deviceChildDao.update(deviceChild);
+        Log.i("deviceChild2","-->"+deviceChild.getDeviceId());
     }
 }

@@ -23,6 +23,7 @@ import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xr.database.dao.DeviceChildDao;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
@@ -71,6 +72,9 @@ public class RoomFragment extends Fragment{
     Room room;
     private String deleteRoomUrl= HttpUtils.ipAddress+"/family/room/deleteRoom";
     private String updateRoomURl=HttpUtils.ipAddress+"/family/room/changeRoomName";
+    private String deleteDeviceUrl= HttpUtils.ipAddress+"/family/device/deleteDevice";
+    int mposition;
+    DeviceChild mdeledeviceChild;
 
     @Nullable
     @Override
@@ -108,11 +112,36 @@ public class RoomFragment extends Fragment{
                     startActivity(intent);
                 }
             });
-            
+            mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    mdeledeviceChild=mGridData.get(position);
+                    deleteDeviceDialog();
+                    return false;
+                }
+            });
+
+
         }
         return view;
     }
-
+    private void deleteDeviceDialog() {
+        final DeleteHomeDialog dialog = new DeleteHomeDialog(getActivity());
+        dialog.setOnNegativeClickListener(new DeleteHomeDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new DeleteHomeDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                new DeleteRoomAsync().execute();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
     @Override
     public void onStart() {
         super.onStart();
@@ -297,12 +326,55 @@ public class RoomFragment extends Fragment{
                     startActivity(intent);
                     break;
                     default:
-                        Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(),"删除失败",Toast.LENGTH_SHORT).show();
                         break;
             }
         }
     }
 
+    class DeleteDeviceAsync extends AsyncTask<Void,Void,Integer>{
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code=0;
+            long deviceId = mdeledeviceChild.getId();
+            String url=deleteDeviceUrl+"?userId="+houseId+"&roomId="+roomId+"&deviceId"+deviceId;
+            String result=HttpUtils.getOkHpptRequest(url);
+            Log.i("result","-->"+result);
+            try {
+                if (!TextUtils.isEmpty(result)){
+                    JSONObject jsonObject=new JSONObject(result);
+                    String returnCode=jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)){
+                        code=100;
+                        DeviceChild deviceChild= deviceChildDao.findById(deviceId);
+                        if (deviceChild!=null){
+                            deviceChildDao.delete(deviceChild);
+                        }
+
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return code;
+        }
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code){
+                case 100:
+                    Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                    Intent intent=new Intent(getActivity(),MainActivity.class);
+                    intent.putExtra("houseId", houseId);
+                    startActivity(intent);
+                    break;
+                default:
+                    Toast.makeText(getActivity(),"删除失败",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
     class ChangeRoomNameAsyncTask extends AsyncTask<Void, Void, Integer> {
 
         @Override

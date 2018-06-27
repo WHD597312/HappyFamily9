@@ -21,18 +21,18 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        TimeTaskDao.createTable(db, ifNotExists);
         DeviceChildDao.createTable(db, ifNotExists);
-        RoomDao.createTable(db, ifNotExists);
         HourseDao.createTable(db, ifNotExists);
+        RoomDao.createTable(db, ifNotExists);
+        TimeTaskDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        TimeTaskDao.dropTable(db, ifExists);
         DeviceChildDao.dropTable(db, ifExists);
-        RoomDao.dropTable(db, ifExists);
         HourseDao.dropTable(db, ifExists);
+        RoomDao.dropTable(db, ifExists);
+        TimeTaskDao.dropTable(db, ifExists);
     }
 
     /**
@@ -51,10 +51,10 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(TimeTaskDao.class);
         registerDaoClass(DeviceChildDao.class);
-        registerDaoClass(RoomDao.class);
         registerDaoClass(HourseDao.class);
+        registerDaoClass(RoomDao.class);
+        registerDaoClass(TimeTaskDao.class);
     }
 
     public DaoSession newSession() {

@@ -6,10 +6,10 @@
     android:id="@+id/rl_homed_del"
     >
     <TextView
-        android:id="@+id/tv_homed_del"
+        android:id="@+id/tv_device_del"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="确定删除房间吗？"
+        android:text="确定删除设备吗？"
         android:textColor="@color/color_gray4"
         android:textSize="14sp"
         android:layout_centerHorizontal="true"
@@ -17,7 +17,7 @@
         />
 
     <LinearLayout
-        android:layout_below="@+id/tv_homed_del"
+        android:layout_below="@+id/tv_device_del"
         android:layout_marginTop="@dimen/dp_jy_21"
         android:background="@color/color_gray"
         android:layout_marginLeft="@dimen/dp_jy_12"
@@ -26,7 +26,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <TextView
-            android:id="@+id/tv_cancel"
+            android:id="@+id/tv_device_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:textColor="@color/black"
@@ -46,7 +46,7 @@
             android:layout_weight="1"
             />
         <TextView
-            android:id="@+id/tv_ensure"
+            android:id="@+id/tv_device_ensure"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_gravity="center"

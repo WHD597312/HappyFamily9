@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
@@ -30,7 +31,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private HourseDaoImpl hourseDao;
     SharedPreferences mPositionPreferences;
     @BindView(R.id.layout_bottom) LinearLayout layout_bottom;
-    BaoFragment baoFragment;
+    @BindView(R.id.id_bto_jia_img) ImageButton id_bto_jia_img;
+    @BindView(R.id.id_bto_bao_img) ImageButton id_bto_bao_img;
+    private FamilyFragmentManager familyFragmentManager;
+    private BaoFragment baoFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,10 +48,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
 
-        baoFragment=new BaoFragment();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         long houseId=hourse.getHouseId();
-        FamilyFragmentManager familyFragmentManager=new FamilyFragmentManager();
+        familyFragmentManager=new FamilyFragmentManager();
+        baoFragment=new BaoFragment();
         Bundle bundle=new Bundle();
         bundle.putLong("houseId",houseId);
         familyFragmentManager.setArguments(bundle);
@@ -56,14 +60,37 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
     }
 
-    @OnClick({R.id.id_bto_bao_img})
+    @OnClick({R.id.id_bto_jia,R.id.id_bto_bao})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.id_bto_bao_img:
-                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-                fragmentTransaction.replace(R.id.layout_body,baoFragment);
-                fragmentTransaction.commit();
+            case R.id.id_bto_jia:
+                if (mPositionPreferences.contains("position")){
+                    mPositionPreferences.edit().clear().commit();
+                }
+                List<Hourse> hourses=hourseDao.findAllHouse();
+                Hourse hourse=hourses.get(0);
+                long houseId=hourse.getHouseId();
+                Bundle bundle=new Bundle();
+                bundle.putLong("houseId",houseId);
+                familyFragmentManager=new FamilyFragmentManager();
+                familyFragmentManager.setArguments(bundle);
+                FragmentTransaction familyTransaction=fragmentManager.beginTransaction();
+                familyTransaction.replace(R.id.layout_body,familyFragmentManager);
+                familyTransaction.commit();
+                id_bto_jia_img.setImageResource(R.mipmap.jia1);
+                id_bto_bao_img.setImageResource(R.mipmap.bao);
                 break;
+            case  R.id.id_bto_bao:
+                id_bto_jia_img.setImageResource(R.mipmap.jia);
+                id_bto_bao_img.setImageResource(R.mipmap.bao1);
+                FragmentTransaction baoTransaction=fragmentManager.beginTransaction();
+                baoTransaction.replace(R.id.layout_body,baoFragment);
+                baoTransaction.commit();
+                if (mPositionPreferences.contains("position")){
+                    mPositionPreferences.edit().clear().commit();
+                }
+                break;
+
         }
     }
     @Override

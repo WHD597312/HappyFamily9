@@ -3,6 +3,7 @@ package com.xr.happyFamily.jia;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -51,125 +52,69 @@ public class ChangeRoomActivity extends AppCompatActivity {
     ArrayList str1;
     ArrayList str2;
     ArrayList str3;
-    TextView textView ;
+    TextView textView;
+    long houseId;
+
+    private SharedPreferences mPositionPreferences;
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
         setContentView(R.layout.activity_home_change);
         unbinder = ButterKnife.bind(this);
-
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        str1 = new ArrayList();
-        str2 = new ArrayList();
-        str3 = new ArrayList();
-         roomDao = new RoomDaoImpl(getApplicationContext());
-        rooms= roomDao.findByAllRoom();
-        for (int i=0;i<rooms.size();i++){
-            room = rooms.get(i);
-            str1.add(room.getRoomName());
-            str2.add(room.getRoomType());
-            str3.add(room.getRoomId());
-        }
-
+        mPositionPreferences =getSharedPreferences("position", Context.MODE_PRIVATE);
+        Intent intent = getIntent();
+        houseId = intent.getLongExtra("houseId", 0);
+        roomDao = new RoomDaoImpl(getApplicationContext());
+        rooms = roomDao.findAllRoomInHouse(houseId);
         initRoom(); // 初始化
         RoomAdapter adapter = new RoomAdapter(ChangeRoomActivity.this, R.layout.activity_home_change_item, roomList);
-        textView= (TextView) findViewById(R.id.tv_change_1);
+        textView = (TextView) findViewById(R.id.tv_change_1);
 //        ListView listView = (ListView) findViewById(R.id.change_list);
 
         change_list.setAdapter(adapter);
         change_list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                int i=position;
-                Log.i("ppppppp", "---->: "+i);
-
-               Intent intent = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
-               intent.putExtra("position",i+1);
-               startActivity(intent);
-
-
-
-
-//                switch (position){
-//                    case 0:
-//                        Intent intent1 = new Intent();
-//                        ChangeRoomActivity.this.setResult(1,intent1);
-//                        finish();
-//
-////                        Intent intent = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
-////                        intent.putExtra("item",1);
-////                        startActivity(intent);
-//                        break;
-//
-//                    case 1:
-//                        Intent intent2 = new Intent();
-//                        ChangeRoomActivity.this.setResult(2,intent2);
-//                        finish();
-////                        Intent intent1 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
-////                        intent1.putExtra("item",2);
-////                        startActivity(intent1);
-//                        break;
-//                    case 2:
-//                        Intent intent3 = new Intent();
-//                        ChangeRoomActivity.this.setResult(3,intent3);
-//                        finish();
-////                        Intent intent2 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
-////                        intent2.putExtra("item",3);
-////                        startActivity(intent2);
-//                        break;
-//                    case 3:
-//                        Intent intent4 = new Intent();
-//                        ChangeRoomActivity.this.setResult(4,intent4);
-//                        finish();
-////                        Intent intent3 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
-////                        intent3.putExtra("item",4);
-////                        startActivity(intent3);
-//                        break;
-//                    case 4:
-//                        Intent intent5 = new Intent();
-//                        ChangeRoomActivity.this.setResult(5,intent5);
-//                        finish();
-////                        Intent intent5 = new Intent(ChangeRoomActivity.this,MyPaperActivity.class);
-////                        intent5.putExtra("item",5);
-////                        startActivity(intent5);
-//                        break;
-//                }
-
-            }  });
+                Log.i("onItemClick","-->"+position);
+                Intent intent = new Intent();
+                intent.putExtra("houseId",houseId);
+                SharedPreferences.Editor editor=mPositionPreferences.edit();
+                editor.putInt("position",position+1);
+                editor.commit();
+                setResult(6000,intent);
+                finish();
+            }
+        });
     }
 
+    Integer imgs[] = {R.mipmap.chifang, R.mipmap.keting, R.mipmap.weishengjian, R.mipmap.woshi, R.mipmap.yangtai};
+
     private void initRoom() {
-        for ( int i = 0; i<str2.size();i++){
-            if ("厨房".equals(str2.get(i))){
-                Room chufang = new Room((long)0,String.valueOf(str1.get(i)),0,"",R.mipmap.chifang);
-                roomList.add(chufang);
+        for (int i = 0; i < rooms.size(); i++) {
+            Room room = rooms.get(i);
+            String roomType = room.getRoomType();
+            if ("厨房".equals(roomType)) {
+                room.setImgId(imgs[0]);
+                roomList.add(room);
+            } else if ("客厅".equals(roomType)) {
+                room.setImgId(imgs[1]);
+                roomList.add(room);
 
-            }
-            if ("客厅".equals(str2.get(i))){
-                Room keting = new Room((long)0,String.valueOf(str1.get(i)),0,"",R.mipmap.keting);
-                roomList.add(keting);
-
-            }
-            if ("卫生间".equals(str2.get(i))){
-                Room weishengjian = new Room((long)0,String.valueOf(str1.get(i)),0,"",R.mipmap.weishengjian);
-                roomList.add(weishengjian);
-
-            }
-            if ("卧室".equals(str2.get(i))){
-                Room woshi = new Room((long)0,String.valueOf(str1.get(i)),0,"",R.mipmap.woshi);
-                roomList.add(woshi);
-
-            }
-            if ("阳台".equals(str2.get(i))){
-
-                Room yangtai = new Room((long)0,String.valueOf(str1.get(i)),0,"",R.mipmap.yangtai);
-                roomList.add(yangtai);
-
+            } else if ("卫生间".equals(roomType)) {
+                room.setImgId(imgs[2]);
+                roomList.add(room);
+            } else if ("卧室".equals(roomType)) {
+                room.setImgId(imgs[3]);
+                roomList.add(room);
+            } else if ("阳台".equals(roomType)) {
+                room.setImgId(imgs[4]);
+                roomList.add(room);
+            } else {
+                room.setImgId(imgs[4]);
+                roomList.add(room);
             }
         }
-
-
-
     }
 
     @OnClick({R.id.li_change})
@@ -187,11 +132,10 @@ public class ChangeRoomActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (unbinder!=null){
+        if (unbinder != null) {
             unbinder.unbind();
         }
     }
-
 
 
 }

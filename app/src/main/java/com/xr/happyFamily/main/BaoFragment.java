@@ -6,6 +6,8 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -366,19 +368,26 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     /**
      * 第五步: 设置自动播放,每隔PAGER_TIOME秒换一张图片
      */
+    int count=0;
     private void autoPlayView() {
         //自动播放图片
         new Thread(new Runnable() {
             @Override
             public void run() {
-                while (!isStop) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                        }
-                    });
-                    SystemClock.sleep(PAGER_TIOME);
+                int size=shopBannerBeans.size();
+                while (!isStop){
+                    try {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                            }
+                        });
+                        SystemClock.sleep(PAGER_TIOME);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+
                 }
             }
         }).start();
@@ -601,7 +610,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    List<ShopBannerBean> shopBannerBeans = new ArrayList<>();
+    List<ShopBannerBean> shopBannerBeans ;
 
     class getAdByPageAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -614,6 +623,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    shopBannerBeans= new ArrayList<>();
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");

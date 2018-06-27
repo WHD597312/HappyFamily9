@@ -91,8 +91,10 @@ public class ViewPagerAdapter extends PagerAdapter {
                 ImageView iv2 = new ImageView(mContext);
                 viewPager.addView(iv2);
             }
-        } else
-            viewPager.addView(iv);
+        } else if (parent != null) {
+            parent.removeAllViews();
+        }
+        viewPager.addView(iv);
         return iv;
 
     }

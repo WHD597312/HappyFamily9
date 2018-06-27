@@ -26,6 +26,7 @@ import android.widget.Toast;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
@@ -40,6 +41,7 @@ import com.xr.happyFamily.together.util.Utils;
 import org.json.JSONObject;
 
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -68,6 +70,7 @@ public class RoomFragment extends Fragment{
     private SharedPreferences mPositionPreferences;
     Room room;
     private String deleteRoomUrl= HttpUtils.ipAddress+"/family/room/deleteRoom";
+    private String updateRoomURl=HttpUtils.ipAddress+"/family/room/changeRoomName";
 
     @Nullable
     @Override
@@ -115,9 +118,20 @@ public class RoomFragment extends Fragment{
 
     }
 
-    @OnClick({R.id.btn_add_device,R.id.tv_home_manager})
+    @OnClick({R.id.balcony_li,R.id.iv_home_fh,R.id.btn_add_device,R.id.tv_home_manager})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.balcony_li:
+                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
+                intent3.putExtra("houseId",houseId);
+                startActivityForResult(intent3,6000);
+                break;
+            case R.id.iv_home_fh:
+                Intent intent2=new Intent(getActivity(),MainActivity.class);
+                intent2.putExtra("houseId",houseId);
+                mPositionPreferences.edit().clear().commit();
+                startActivity(intent2);
+                break;
             case R.id.tv_home_manager:
                 showPopupMenu(tv_home_manager);
                 break;
@@ -192,7 +206,6 @@ public class RoomFragment extends Fragment{
                 }
             }
         });
-
         popupMenu.show();
     }
     private String houseName;
@@ -209,13 +222,6 @@ public class RoomFragment extends Fragment{
             public void onPositiveClick() {
                 new DeleteRoomAsync().execute();
                 dialog.dismiss();
-
-//                getActivity().setResult(7000);
-//                getActivity().finish();
-//                Intent intent=new Intent(getActivity(), MyPaperActivity.class);
-//                intent.putExtra("result","7000");
-//                intent.putExtra("roomId",roomId);
-//                startActivity(intent);
             }
         });
         dialog.show();
@@ -233,9 +239,11 @@ public class RoomFragment extends Fragment{
             @Override
             public void onPositiveClick() {
                 roomName = dialog.getName();
-                if (Utils.isEmpty(roomName)) {
+                Log.i("roomName","-->"+roomName);
+                if (TextUtils.isEmpty(roomName)) {
                     Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
+                    new ChangeRoomNameAsyncTask().execute();
                     dialog.dismiss();
 
                 }
@@ -267,7 +275,7 @@ public class RoomFragment extends Fragment{
                             SharedPreferences.Editor editor=mPositionPreferences.edit();
                             editor.clear();
                             editor.commit();
-                            
+
                         }
                         deviceChildDao.deleteDeviceInHouseRoom(houseId,roomId);
                     }
@@ -289,6 +297,47 @@ public class RoomFragment extends Fragment{
                     break;
                     default:
                         Toast.makeText(getActivity(),"删除成功",Toast.LENGTH_SHORT).show();
+                        break;
+            }
+        }
+    }
+
+    class ChangeRoomNameAsyncTask extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0;
+            String url = updateRoomURl+"?roomName="+roomName +"&roomId="+roomId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("result2","-->"+result);
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode=jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)){
+                        code=100;
+                        if (room!=null){
+                            room.setRoomName(roomName);
+                            roomDao.update(room);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code){
+                case 100:
+                    Toast.makeText(getActivity(),"修改成功",Toast.LENGTH_SHORT).show();
+                    tv_roomname.setText(roomName);
+                    break;
+                    default:
+                        Toast.makeText(getActivity(),"修改失败",Toast.LENGTH_SHORT).show();
                         break;
             }
         }

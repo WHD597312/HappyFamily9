@@ -17,7 +17,6 @@ public class RoomAdapter extends ArrayAdapter {
     public RoomAdapter(Context context, int textViewResourceId, List<Room> objects) {
        super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
-
     }
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {

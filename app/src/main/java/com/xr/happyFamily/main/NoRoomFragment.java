@@ -34,7 +34,6 @@ public class NoRoomFragment extends Fragment {
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
         houseId=hourse.getHouseId();
-
         return view;
     }
     @OnClick({R.id.btn_add_room})

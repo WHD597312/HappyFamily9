@@ -215,6 +215,7 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             Map<String, Object> params = maps[0];
             String url = "order/getCountRate";
             String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            Log.i("result","-->"+result);
             String code = "";
 
             try {
@@ -223,6 +224,7 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
 
                     average = returnData.getString("average");
+                    Log.i("average2","-->"+average);
                     total = returnData.getString("total");
                     beautiful = returnData.getString("beautiful");
                     cost = returnData.getString("cost");
@@ -251,6 +253,7 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Log.i("average","-->"+average);
                 if (!"null".equals(returnData)) {
                     if(!Utils.isEmpty(average+"")) {
                         int ave = (int)(Float.parseFloat(average)*10 + 5)/10;

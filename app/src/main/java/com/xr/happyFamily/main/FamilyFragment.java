@@ -16,6 +16,8 @@ import android.widget.PopupMenu;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.ChangeRoomActivity;
+import com.xr.happyFamily.jia.ChooseHourseActivity;
 import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
@@ -50,13 +52,22 @@ public class FamilyFragment  extends Fragment{
         return view;
     }
 
-    @OnClick({R.id.btn_add_room})
+    @OnClick({R.id.tv_my_hourse,R.id.btn_add_room,R.id.image_change})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.tv_my_hourse:
+                Intent intent2=new Intent(getActivity(), ChooseHourseActivity.class);
+                startActivity(intent2);
+                break;
             case R.id.btn_add_room:
                 Intent intent=new Intent(getActivity(), ManagementActivity.class);
                 intent.putExtra("houseId",houseId);
                 startActivityForResult(intent,MREQUEST_CODE);
+                break;
+            case R.id.image_change:
+                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
+                intent3.putExtra("houseId",houseId);
+                startActivityForResult(intent3,MREQUEST_CODE);
                 break;
         }
     }

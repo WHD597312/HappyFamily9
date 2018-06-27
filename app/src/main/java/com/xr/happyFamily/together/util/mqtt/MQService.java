@@ -217,7 +217,6 @@ public class MQService extends Service {
             int checkCode=-1;/**校验码*/
             int endCode=-1;/**结束码*/
             String message=strings[1];/**收到的消息*/
-
             Log.i("message","-->"+message);
             try {
                 JSONObject messageJsonObject=null;

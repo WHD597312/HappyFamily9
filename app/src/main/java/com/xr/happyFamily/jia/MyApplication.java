@@ -7,8 +7,6 @@ import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
 
-import com.android.volley.RequestQueue;
-import com.android.volley.toolbox.Volley;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -86,8 +84,7 @@ public class MyApplication extends Application {
             }
         });
 
-        //实例化Volley全局请求队列
-        queue = Volley.newRequestQueue(this);
+
     }
 
     public void addActivity(Activity activity){
@@ -141,13 +138,7 @@ public class MyApplication extends Application {
         }
     }
 
-    //Volley的全局请求队列
-    //外部可以通过这个方法获取请求队列
-    public static RequestQueue getHttpQueue(){
-        return queue;
-    }
 
-    public static RequestQueue queue;
 
 
 }

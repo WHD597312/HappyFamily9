@@ -214,7 +214,11 @@ public class ShopXQActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.img_fenxiang:
-                showPopup();
+//                showPopup();
+                Intent fenxiang = new Intent(Intent.ACTION_SEND);
+                fenxiang.setType("text/plain");
+                fenxiang.putExtra(Intent.EXTRA_TEXT, "测试内容");
+                startActivity(Intent.createChooser(fenxiang, "测试标题"));
                 break;
             case R.id.tv_shopcart:
                 if (priceId == -1) {
@@ -265,8 +269,8 @@ public class ShopXQActivity extends AppCompatActivity {
                                 intent.putExtra("goodsId", myGoodId + "");
                                 intent.putExtra("num", num + "");
                                 intent.putExtra("priceId", priceId + "");
-                                intent.putExtra("money", Integer.parseInt(price) * num + "");
-                                intent.putExtra("weight", weight + "");
+                                intent.putExtra("money", Integer.parseInt(price) * num);
+                                intent.putExtra("weight", weight*num + "");
 
                                 startActivity(intent);
                             }
@@ -279,7 +283,7 @@ public class ShopXQActivity extends AppCompatActivity {
                     intent.putExtra("goodsId", goodsId);
                     intent.putExtra("num", num);
                     intent.putExtra("priceId", priceId);
-                    intent.putExtra("money", Integer.parseInt(price) * num + "");
+                    intent.putExtra("money", Integer.parseInt(price) * num);
                     intent.putExtra("weight", weight + "");
                     startActivity(intent);
                 }
@@ -532,8 +536,8 @@ public class ShopXQActivity extends AppCompatActivity {
                     intent.putExtra("goodsId", goodsId);
                     intent.putExtra("num", num + "");
                     intent.putExtra("priceId", priceId + "");
-                    intent.putExtra("money", Integer.parseInt(price) * num + "");
-                    intent.putExtra("weight", weight + "");
+                    intent.putExtra("money", Integer.parseInt(price) * num );
+                    intent.putExtra("weight", weight*num + "");
                     startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
@@ -640,7 +644,8 @@ public class ShopXQActivity extends AppCompatActivity {
     }
 
     JSONObject jsonObject;
-    String name, type, img, price, weight;
+    String name, type, img, price;
+    double weight;
 
     class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -666,7 +671,7 @@ public class ShopXQActivity extends AppCompatActivity {
                             name = returnData.getString("goodsName");
                             type = returnData.getString("simpleDescribe");
                             price = list_price.get(0).getPrice() + "";
-                            weight = returnData.getInt("weight") + "";
+                            weight = returnData.getDouble("weight") ;
                         }
                     }
                 }

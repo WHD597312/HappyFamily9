@@ -30,11 +30,13 @@
                 android:orientation="vertical"
                 android:layout_marginTop="@dimen/dp_jy_12">
                 <ImageView
+                    android:id="@+id/img"
                     android:paddingTop="@dimen/dp_jy_12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_pay_fail"/>
                 <TextView
+                    android:id="@+id/tv_state"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="请重新支付"
@@ -268,6 +270,7 @@
                 android:layout_weight="1" />
 
             <TextView
+
                 android:id="@+id/tv_chakan"
                 android:layout_width="@dimen/dp_jy_109"
                 android:layout_height="@dimen/dp_jy_49"

@@ -38,7 +38,7 @@
             android:text="正在交易"
             android:paddingRight="@dimen/dp_jy_12"
             android:paddingTop="@dimen/dp_jy_8"
-            android:textColor="@color/black"
+            android:textColor="@color/shop_tuikuan_context"
             android:paddingBottom="@dimen/dp_jy_8"
             android:paddingLeft="@dimen/dp_jy_12"
             android:background="@color/white"

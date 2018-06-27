@@ -37,7 +37,7 @@ public class Goods implements Serializable {
 
     private String colour;
 
-    private Integer weight;
+    private double weight;
 
     private Integer price;
     /**
@@ -181,11 +181,11 @@ public class Goods implements Serializable {
         this.colour = colour;
     }
 
-    public Integer getWeight() {
+    public double getWeight() {
         return weight;
     }
 
-    public void setWeight(Integer weight) {
+    public void setWeight(double weight) {
         this.weight = weight;
     }
 

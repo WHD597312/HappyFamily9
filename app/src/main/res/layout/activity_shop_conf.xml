@@ -321,7 +321,6 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_jy_5"
-                android:text="¥2500"
                 android:textColor="@color/shop_price"
                 android:textSize="@dimen/sp_14" />
 
@@ -337,9 +336,7 @@
                 android:background="@color/shop_price"
                 android:gravity="center"
                 android:text="剁手买"
-                android:textColor="#ffffff"
-
-                />
+                android:textColor="#ffffff" />
         </LinearLayout>
     </RelativeLayout>
 

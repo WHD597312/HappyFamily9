@@ -1,13 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
    android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
 
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical">
 
         <android.support.v4.view.ViewPager
             android:id="@+id/viewPager"
@@ -30,12 +27,14 @@
                 android:layout_width="match_parent" android:layout_height="match_parent">
                 <ImageView
                     android:id="@+id/img1"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_shop_banner"/>
 
                 <ImageView
                     android:id="@+id/img2"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_shop_banner_wei"
@@ -43,13 +42,60 @@
 
                 <ImageView
                     android:id="@+id/img3"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+
+                <ImageView
+                    android:id="@+id/img4"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_shop_banner_wei"
                     android:layout_marginLeft="@dimen/dp_jy_15"/>
 
                 <ImageView
-                    android:id="@+id/img4"
+                    android:id="@+id/img5"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img6"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+
+                    android:id="@+id/img7"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img8"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img9"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img10"
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@mipmap/ic_shop_banner_wei"
@@ -58,4 +104,3 @@
 
         </LinearLayout>
     </LinearLayout>
-</RelativeLayout>

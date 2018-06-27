@@ -18,18 +18,25 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ConfListAdapter;
+import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.bao.bean.Receive;
+import com.xr.happyFamily.bean.OrderBean;
+import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.bean.ShopCartBean;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -88,7 +95,12 @@ public class ShopConfActivity extends AppCompatActivity {
 
     private List<ShopCartBean> mGoPayList = new ArrayList<>();
     List<Map<String, Object>> mlist = new ArrayList<>();
-    String money,weight;
+    int money;
+    Double weight;
+    String type ;
+    ConfListAdapter confListAdapter;
+    DingDanXQAdapter dingDanXQAdapter;
+    private MyDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -99,37 +111,18 @@ public class ShopConfActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_shop_conf);
         ButterKnife.bind(this);
-        Bundle bundle = getIntent().getExtras();
-        String type = bundle.getString("type");
-        if ("Cart".equals(type)) {
-            mGoPayList = (ArrayList<ShopCartBean>) getIntent().getSerializableExtra("mGoPayList");
-            for (int i = 0; i < mGoPayList.size(); i++) {
-                Map<String, Object> map = new HashMap<>();
-                map.put("goodsId", mGoPayList.get(i).getGoods().getGoodsId());
-                map.put("num", mGoPayList.get(i).getQuantity());
-                map.put("priceId", mGoPayList.get(i).getGoodsPrice().getPriceId());
-                map.put("weight", mGoPayList.get(i).getGoods().getWeight());
-                mlist.add(map);
-            }
-        } else {
-            Map<String, Object> map = new HashMap<>();
-            map.put("goodsId", bundle.getString("goodsId"));
-            map.put("num", bundle.getString("num"));
-            map.put("priceId", bundle.getString("priceId"));
-            weight=bundle.getString("weight");
-            mlist.add(map);
-        }
-        money = bundle.getString("money");
+
         mContext = ShopConfActivity.this;
         titleText.setText("确认信息");
         titleRightText.setVisibility(View.GONE);
-        tvShopPrice.setText("¥" + money);
-        tvMoney.setText("¥" + money);
-        ConfListAdapter confListAdapter = new ConfListAdapter(ShopConfActivity.this, mGoPayList);
+
+
+
+        dingDanXQAdapter = new DingDanXQAdapter(ShopConfActivity.this, orderDetailsLists);
         //      调用按钮返回事件回调的方法
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(confListAdapter);
+
 
         tv_pay = new TextView[]{tvZhifubao, tvWeixin, tvYinlian};
         pay_true = getResources().getDrawable(R.mipmap.xuanzhong_shop3x);
@@ -141,8 +134,44 @@ public class ShopConfActivity extends AppCompatActivity {
         String url = userSettings.getString("userId", "1000");
         params.put("userId", url);
         new getAddressAsync().execute(params);
+        Bundle bundle = getIntent().getExtras();
+        type = bundle.getString("type");
+        if("DingDan".equals(type)){
+            recyclerView.setAdapter(dingDanXQAdapter);
+            orderNumber=bundle.get("orderNumber").toString();
+            tvMoney.setText("¥"+bundle.get("money").toString());
+            dialog = MyDialog.showDialog(mContext);
+            dialog.show();
+            Map<String, Object> map = new HashMap<>();
+            new getOrderAsync().execute(map);
+        }
+        else if ("Cart".equals(type)) {
+            money=bundle.getInt("money");
+            weight=bundle.getDouble("weight");
+            mGoPayList = (ArrayList<ShopCartBean>) getIntent().getSerializableExtra("mGoPayList");
+            confListAdapter = new ConfListAdapter(ShopConfActivity.this, mGoPayList);
+            recyclerView.setAdapter(confListAdapter);
+            tvShopPrice.setText("¥"+bundle.get("money").toString());
+            for (int i = 0; i < mGoPayList.size(); i++) {
+                Map<String, Object> map = new HashMap<>();
+                map.put("goodsId", mGoPayList.get(i).getGoods().getGoodsId());
+                map.put("num", mGoPayList.get(i).getQuantity());
+                map.put("priceId", mGoPayList.get(i).getGoodsPrice().getPriceId());
+                map.put("weight", mGoPayList.get(i).getGoods().getWeight());
+                mlist.add(map);
+            }
 
-
+        } else {
+            recyclerView.setAdapter(confListAdapter);
+            Map<String, Object> map = new HashMap<>();
+            map.put("goodsId", bundle.getString("goodsId"));
+            map.put("num", bundle.getString("num"));
+            map.put("priceId", bundle.getString("priceId"));
+            weight=Double.parseDouble(bundle.getString("weight"));
+            mlist.add(map);
+        }
+        money = bundle.getInt("money");
+        tvShopPrice.setText("¥" + money);
     }
 
     @OnClick({R.id.rl_address, R.id.back, R.id.tv_zhifubao, R.id.tv_weixin, R.id.tv_yinlian, R.id.tv_shopcart_submit})
@@ -171,13 +200,16 @@ public class ShopConfActivity extends AppCompatActivity {
                 break;
             case R.id.tv_shopcart_submit:
                 if(isAddress) {
+                    if(type.equals("DingDan")){
+
+                    }
                     Map<String, Object> params = new HashMap<>();
                     params.put("receiveId", receiveId);
                     //支付方式  1：支付宝
                     params.put("paymentId", 1);
                     params.put("orderDetailsList", mlist);
                     //邮费
-                    params.put("postFee", 0);
+                    params.put("postFee", post_fee);
                     new postOrderAsync().execute(params);
                 }
                 else {
@@ -266,15 +298,17 @@ public class ShopConfActivity extends AppCompatActivity {
                 else {
                         isAddress=false;
                         Toast.makeText(mContext,"请先填写默认地址",Toast.LENGTH_SHORT).show();
-
+                    tvConfAddress.setText("地址");
+                    tvConfName.setText("姓名");
+                    tvConfTel.setText("电话");
                     }
             }
         }
     }
 
 
-    String post_fee = "0";
-
+    int post_fee ;
+List<PostFreeBean> postFreeBeans=new ArrayList<>();
     class getPostFeeAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -291,9 +325,14 @@ public class ShopConfActivity extends AppCompatActivity {
                     returnData = jsonObject.getString("returnData");
                     if (!Utils.isEmpty(returnData)) {
                         JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
-                        JsonArray list = content.getAsJsonArray("ExpressList");
-//                        for(int i=0;i<list.size();i++)
-                        post_fee = list.get(0).getAsJsonObject().get("Fee").toString();
+                        JsonArray list = content.getAsJsonArray("RecommendDetail");
+                        Gson gson = new Gson();
+
+                        for(int i=0;i<list.size();i++){
+                            JsonElement use = list.get(i);
+                            PostFreeBean userList = gson.fromJson(use, PostFreeBean.class);
+                            postFreeBeans.add(userList);
+                        }
 
                     }
                 }
@@ -308,12 +347,15 @@ public class ShopConfActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //
-                tvYunfei.setText("+"+post_fee);
+                 post_fee=(int)((postFreeBeans.get(0).getExpressList().get(0).getFee()*10+5)/10);
+                tvYunfei.setText("+="+post_fee);
+                tvMoney.setText("¥" + (money+post_fee));
+//                tvMoney=
             }
         }
     }
 
-    String orderId;
+    String orderId,orderNumber;
 
     class postOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -328,7 +370,7 @@ public class ShopConfActivity extends AppCompatActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     if (!Utils.isEmpty(code) && "100".equals(code)) {
-                        orderId = jsonObject.getString("returnData");
+                        orderNumber = jsonObject.getString("returnData");
                     }
                 }
             } catch (Exception e) {
@@ -342,13 +384,55 @@ public class ShopConfActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Intent intent = new Intent(ShopConfActivity.this, PayActivity.class);
-                intent.putExtra("orderNumber", orderId);
+                intent.putExtra("orderNumber", orderNumber);
                 startActivity(intent);
+                finish();
 
             }
         }
     }
 
+    List<OrderBean.OrderDetailsList> orderDetailsLists = new ArrayList<>();
+    class getOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "/order/getOrderByOrderNumber";
+            url = url + "?orderNumber=" +orderNumber;
+            String result = HttpUtils.doGet(mContext, url);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("orderDetailsList");
+                    Gson gson = new Gson();
+                    for (JsonElement user : list) {
+                        //通过反射 得到UserBean.class
+                        OrderBean.OrderDetailsList userList = gson.fromJson(user, OrderBean.OrderDetailsList.class);
+                        orderDetailsLists.add(userList);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                dingDanXQAdapter.notifyDataSetChanged();
+                MyDialog.closeDialog(dialog);
+            }
+        }
+    }
 
     @Override
     protected void onRestart() {

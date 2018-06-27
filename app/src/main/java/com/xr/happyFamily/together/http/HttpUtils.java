@@ -82,7 +82,7 @@ public class HttpUtils {
             for (Map.Entry<String, Object> param : map.entrySet()) {
                 jsonObject.put(param.getKey(), param.getValue());
             }
-            Log.e(context.toString(),jsonObject.toString());
+            Log.e(context.toString()+"--put---"+url,jsonObject.toString());
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toJSONString());
 
@@ -110,7 +110,7 @@ public class HttpUtils {
 
             if (response.isSuccessful()) {
                 result = response.body().string();
-                Log.e(context.toString(), result);
+                Log.e(context.toString()+"       --get---"+url, result);
             }else {
                 NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
                 Log.e("qqqqqqqqqqqXXXXX","???????");

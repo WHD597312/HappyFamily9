@@ -253,7 +253,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 if (!"null".equals(returnData)) {
                     if(!Utils.isEmpty(average+"")) {
-                        Log.e("qqqqqZZZZ",Float.parseFloat(average)+"???");
                         int ave = (int)(Float.parseFloat(average)*10 + 5)/10;
                         for (int i = 0; i < ave; i++) {
                             imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);

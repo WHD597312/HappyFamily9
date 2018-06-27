@@ -96,6 +96,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
 
     List<OrderListBean.myList> orderBeans = new ArrayList<>();
     private MyDialog dialog;
+    int page=1,lastSign=0;
 
 
     @Override
@@ -117,6 +118,16 @@ public class ShopDingdanActivity extends AppCompatActivity {
         orderDetailsLists = new ArrayList<>();
         dingdanAdapter = new DingdanAdapter(ShopDingdanActivity.this, orderDetailsLists);
         recyclerview.setAdapter(dingdanAdapter);
+        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
+                super.onScrollStateChanged(recyclerView, newState);
+                if(newState==0&&!recyclerView.canScrollVertically(1)){
+                    page++;
+                    getDingDan(lastSign,page);
+                }
+            }
+        });
         //      调用按钮返回事件回调的方法
         dingdanAdapter.buttonSetOnclick(new DingdanAdapter.ButtonInterface() {
             @Override
@@ -131,7 +142,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
 //
 //            }
 //        });
-        getDingDan(0);
+        getDingDan(0,page);
 
     }
 
@@ -145,23 +156,29 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 break;
             case R.id.tv1:
 //                if(isFastClick())
-                upData(0, "全部");
+                lastSign=0;
+                upData(lastSign, "全部");
                 break;
             case R.id.tv2:
+                lastSign=1;
 //                if(isFastClick())
-                upData(1, "待付款");
+                upData(lastSign, "待付款");
                 break;
             case R.id.tv3:
+                lastSign=2;
 //                if(isFastClick())
-                upData(2, "待收货");
+                upData(lastSign, "待收货");
                 break;
             case R.id.tv4:
+                lastSign=3;
 //                if(isFastClick())
-                upData(3, "已收货");
+                upData(lastSign, "已收货");
                 break;
+
             case R.id.tv5:
 //                if(isFastClick())
-                upData(4, "退款/售后");
+                lastSign=4;
+                upData(lastSign, "退款/售后");
                 break;
 
         }
@@ -180,17 +197,17 @@ public class ShopDingdanActivity extends AppCompatActivity {
 //        datas.clear();
 //        datas.addAll(initData(title));
 //        dingdanAdapter.notifyDataSetChanged();
-        getDingDan(sing_title);
+        getDingDan(sing_title,page);
     }
 
-    public void getDingDan(int state) {
+    public void getDingDan(int state,int page) {
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
         Map<String, Object> params = new HashMap<>();
         SharedPreferences userSettings = mContext.getSharedPreferences("login", 0);
         String userId = userSettings.getString("userId", "userId");
         params.put("userId", userId);
-        params.put("pageNum", "1");
+        params.put("pageNum", page);
         if (state == 1)
             params.put("state", 1);
         else if (state == 2)
@@ -241,10 +258,15 @@ public class ShopDingdanActivity extends AppCompatActivity {
                             map.put("state", orderBeans.get(i).getState());
                             map.put("time", orderBeans.get(i).getCreateTime());
 
+
+
 //                            map.put("refundTime", userList.getRefundTime());
                             new getOrderAsync().execute(map);
                             SystemClock.sleep(50);
                         }
+                    }
+                    else {
+
                     }
                 }
 
@@ -260,9 +282,12 @@ public class ShopDingdanActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 if (orderBeans.size() == 0) {
                     dingdanAdapter.notifyDataSetChanged();
-                    MyDialog.closeDialog(dialog);
+
+                    if(page>1)
+                        page--;
                     Toast.makeText(ShopDingdanActivity.this, "无更多数据", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -314,7 +339,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
                         userList.setOrderId(Integer.parseInt(returnData.get("orderId").toString()));
                         userList.setState(state);
                         userList.setTime(time);
-
+                        Log.e("qqqqqqqqqII",returnData.getInt("isRate")+"??");
+                        userList.setIsRate(returnData.getInt("isRate"));
                         if (state.equals("5")) {
                             JSONObject orderRefund = returnData.getJSONObject("orderRefund");
                             userList.setRefundTime(returnData.getString("refundTime"));
@@ -322,8 +348,9 @@ public class ShopDingdanActivity extends AppCompatActivity {
                                 userList.setRefundState(orderRefund.getInt("refundState"));
                         }
 
+                        userList.setLogisticCode(returnData.getString("logisticCode"));
+                        userList.setShipperCode(returnData.getString("shipperCode"));
                         orderDetailsLists.add(userList);
-
                     }
                 }
             } catch (Exception e) {
@@ -338,9 +365,9 @@ public class ShopDingdanActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 
                 if (isFinish) {
+
                     dingdanAdapter.notifyDataSetChanged();
                     MyDialog.closeDialog(dialog);
-
                 }
             }
         }
@@ -364,6 +391,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        upData(0,"返回刷新");
+
+        upData(lastSign,"返回刷新");
     }
 }

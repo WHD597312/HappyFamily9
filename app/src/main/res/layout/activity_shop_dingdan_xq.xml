@@ -90,65 +90,62 @@
     </RelativeLayout>
 
 
-    <com.xr.happyFamily.bao.view.LinearGradientView
+
+            <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_3" />
 
 
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_75"
-        android:background="@color/white"
-        android:layout_marginTop="@dimen/dp_jy_12"
-        android:padding="@dimen/dp_jy_12">
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_75"
+                android:layout_marginTop="@dimen/dp_jy_12"
+                android:background="@color/white"
+                android:padding="@dimen/dp_jy_12">
 
-        <ImageView
-            android:id="@+id/img_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:src="@mipmap/ic_shop_address" />
+                <ImageView
+                    android:id="@+id/img_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerVertical="true"
+                    android:src="@mipmap/ic_shop_address" />
 
-        <TextView
-            android:id="@+id/tv_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_jy_8"
-            android:layout_marginRight="@dimen/dp_jy_8"
-            android:layout_toRightOf="@+id/img_address"
-            android:text="收货人：刘艳强"
-            android:textColor="@color/shop_context"
-            android:textSize="@dimen/sp_12" />
+                <TextView
+                    android:id="@+id/tv_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_jy_8"
+                    android:layout_marginRight="@dimen/dp_jy_8"
+                    android:layout_toRightOf="@+id/img_address"
+                    android:text="收货人：刘艳强"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_12" />
 
-        <TextView
-            android:id="@+id/tv_tel"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
-            android:text="17685399527"
-            android:textColor="@color/shop_context"
-            android:textSize="@dimen/sp_12" />
+                <TextView
+                    android:id="@+id/tv_tel"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentRight="true"
+                    android:text="17685399527"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_12" />
 
-        <TextView
-            android:id="@+id/tv_address"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignLeft="@+id/tv_name"
-            android:layout_alignParentBottom="true"
-            android:layout_marginRight="@dimen/dp_jy_50"
+                <TextView
+                    android:id="@+id/tv_address"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignLeft="@+id/tv_name"
+                    android:layout_alignParentBottom="true"
 
-            android:text="收货地址:浙江省 宁波市 慈溪市 宗汉镇宗汉大道95号大观园"
-            android:textColor="@color/shop_title"
-            android:textSize="@dimen/sp_12" />
+                    android:lines="2"
+                    android:layout_marginRight="@dimen/dp_jy_50"
+                    android:text="收货地址:浙江省 宁波市 慈溪市 宗汉镇宗汉大道95号大观园"
+                    android:textColor="@color/shop_title"
+                    android:textSize="@dimen/sp_12" />
 
-    </RelativeLayout>
+            </RelativeLayout>
 
-    <com.xr.happyFamily.bao.view.LinearGradientView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_3" />
-
-
-    <android.support.v7.widget.RecyclerView
+            <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_jy_10"

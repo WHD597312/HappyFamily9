@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -34,12 +35,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bao.view.MyScrollview;
+import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopPageBean;
 import com.xr.happyFamily.jia.MyPaperActivity;
@@ -69,8 +73,6 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     ImageView imageMore;
 
 
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
     @BindView(R.id.img1)
     ImageView img1;
     @BindView(R.id.img2)
@@ -124,6 +126,9 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     ImageButton idBtoZhenImg;
     @BindView(R.id.id_bto_zhen)
     LinearLayout idBtoZhen;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+
 
     private RecyclerView.LayoutManager shopLayoutManager;
     private LinearLayoutManager titleLayoutManager;
@@ -139,7 +144,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     // 在values文件假下创建了pager_image_ids.xml文件，并定义了4张轮播图对应的id，用于点击事件
     private int[] imgae_ids = new int[]{R.id.pager_image1, R.id.pager_image2, R.id.pager_image3, R.id.pager_image4};
     //轮播点
-    private int[] imgae_dots = new int[]{R.id.img1, R.id.img2, R.id.img3, R.id.img4};
+    private int[] imgae_dots = new int[]{R.id.img1, R.id.img2, R.id.img3, R.id.img4,R.id.img5, R.id.img6, R.id.img7, R.id.img8,R.id.img9, R.id.img10};
     private String[] from = {"title"};
     private int[] to = {R.id.tv_search};
     String[] titles;
@@ -165,14 +170,13 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
             getSupportActionBar().hide();
         }
         unbinder = ButterKnife.bind(this);
-        initData();//初始化数据
-        initView();//初始化View，设置适配器
-        autoPlayView();//开启线程，自动播放
+
 
         init();
         new getHomePageAsync().execute();
         //广告
-//        new getAdByPageAsync().execute();
+        new getAdByPageAsync().execute();
+
     }
 
 
@@ -289,10 +293,14 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
 
         //添加图片到图片列表里
         mImageList = new ArrayList<>();
+//        if (shopBannerBeans.size() == 1) {
+//            isStop = true;
+//        }
         ImageView iv;
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < shopBannerBeans.size(); i++) {
             iv = new ImageView(this);
-            iv.setBackgroundResource(imageRess[i]);//设置图片
+//            iv.setBackgroundResource(imageRess[i]);//设置图片
+            Picasso.with(this).load(shopBannerBeans.get(i).getImage()).into(iv);
             iv.setId(imgae_ids[i]);//顺便给图片设置id
             iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
             mImageList.add(iv);
@@ -326,7 +334,11 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
      * 第三步、给PagerViw设置适配器，并实现自动轮播功能
      */
     public void initView() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(mImageList, viewPager);
+
+        for(int i=0;i<shopBannerBeans.size();i++){
+                findViewById(imgae_dots[i]).setVisibility(View.VISIBLE);
+        }
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(mContext,mImageList, viewPager,shopBannerBeans);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
@@ -336,21 +348,17 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
 
             @Override
             public void onPageSelected(int position) {
-
-                //伪无限循环，滑到最后一张图片又从新进入第一张图片
+//伪无限循环，滑到最后一张图片又从新进入第一张图片
                 int newPosition = position % mImageList.size();
                 ImageView img_new = (ImageView) findViewById(imgae_dots[newPosition]);
-                for (int i = 0; i < 4; i++) {
-
+                for (int i = 0; i < shopBannerBeans.size(); i++) {
                     if (i == newPosition) {
                         img_new.setImageResource(R.mipmap.ic_shop_banner);
                     } else {
                         ImageView img_old = (ImageView) findViewById(imgae_dots[i]);
                         img_old.setImageResource(R.mipmap.ic_shop_banner_wei);
                     }
-
                 }
-
             }
 
             @Override
@@ -382,7 +390,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
-    @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe,R.id.id_bto_bao,R.id.id_bto_jia,R.id.id_bto_zhen})
+    @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe, R.id.id_bto_bao, R.id.id_bto_jia, R.id.id_bto_zhen})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
@@ -517,7 +525,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
             llTuijian.setVisibility(View.GONE);
 
 
-        params.put("categoryId", id+1 + "");
+        params.put("categoryId", id + "");
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
         new ShopAsync().execute(params);
@@ -635,6 +643,8 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
     }
 
 
+    List<ShopBannerBean> shopBannerBeans = new ArrayList<>();
+
     class getAdByPageAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -648,7 +658,18 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    if (returnData.get("list").toString() != "null") {
+                        JsonArray list = content.getAsJsonArray("list");
+                        Gson gson = new Gson();
+                        for (int i = 0; i < list.size(); i++) {
+//                        //通过反射 得到UserBean.class
+                            JsonElement user = list.get(i);
+                            ShopBannerBean userList = gson.fromJson(user, ShopBannerBean.class);
+                            shopBannerBeans.add(userList);
+                        }
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -662,7 +683,10 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-
+                Log.i("qqqqqqqqSSS", shopBannerBeans.size() + "?");
+                initData();//初始化数据
+                initView();//初始化View，设置适配器
+                autoPlayView();//开启线程，自动播放
             }
         }
     }

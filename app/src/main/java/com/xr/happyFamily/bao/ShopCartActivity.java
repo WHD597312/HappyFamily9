@@ -78,7 +78,7 @@ public class ShopCartActivity extends AppCompatActivity {
     private List<String> mHotProductsList = new ArrayList<>();
     private TextView tvShopCartTotalPrice;
     private int mCount, mPosition;
-    private float mTotalPrice1;
+    private int mTotalPrice1;
     private boolean mSelect, isEdit = false;
     private boolean[] isChoose;
 
@@ -139,7 +139,7 @@ public class ShopCartActivity extends AppCompatActivity {
                     Drawable left = ContextCompat.getDrawable(mContext, R.mipmap.weixuanzhong3x);
                     tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
                 }
-                float mTotalPrice = 0;
+                int mTotalPrice = 0;
                 int mTotalNum = 0;
                 mTotalPrice1 = 0;
                 mGoPayList.clear();
@@ -150,6 +150,8 @@ public class ShopCartActivity extends AppCompatActivity {
                         mGoPayList.add(mAllOrderList.get(i));
                     }
                 mTotalPrice1 = mTotalPrice;
+
+                Log.e("qqqqqqqqqqqqPPP",mTotalPrice+"???");
                 tvShopCartTotalPrice.setText(mTotalPrice + "");
             }
         });
@@ -232,8 +234,14 @@ public class ShopCartActivity extends AppCompatActivity {
                         Intent intent = new Intent(ShopCartActivity.this, ShopConfActivity.class);
                         intent.putExtra("type",  "Cart");
                         intent.putExtra("mGoPayList", (Serializable) mGoPayList);
-                        intent.putExtra("money", mTotalPrice1 + "");
-
+                        intent.putExtra("money", mTotalPrice1);
+                        double weight=0;
+                        for(int i=0;i<mGoPayList.size();i++){
+                            double w=mGoPayList.get(i).getGoods().getWeight();
+                            int num=mGoPayList.get(i).getQuantity();
+                            weight=weight+w*num;
+                        }
+                        intent.putExtra("weight", weight);
                         startActivity(intent);
                     }else Toast.makeText(ShopCartActivity.this,"请选择购买商品",Toast.LENGTH_SHORT).show();
 
@@ -314,6 +322,13 @@ public class ShopCartActivity extends AppCompatActivity {
 
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 mShopCartAdapter.notifyDataSetChanged();
+                if(mAllOrderList.size()==0){
+                    Log.e("qqqqqqqqMMM","没了");
+                    Drawable left = ContextCompat.getDrawable(mContext, R.mipmap.weixuanzhong3x);
+                    tvShopCartSelect.setCompoundDrawablesWithIntrinsicBounds(left, null, null, null);
+                    mSelect=false;
+                    tvShopCartTotalPrice.setText("0.0");
+                }
             } else if (!Utils.isEmpty(s) && "10005".equals(s)) {
                 startActivity(new Intent(ShopCartActivity.this, LoginActivity.class));
             }
@@ -350,6 +365,8 @@ public class ShopCartActivity extends AppCompatActivity {
                 mAllOrderList.clear();
                 Map<String, Object> params = new HashMap<>();
                 new addShopAsync().execute(params);
+
+
             } else if (!Utils.isEmpty(s) && "10005".equals(s)) {
                 startActivity(new Intent(ShopCartActivity.this, LoginActivity.class));
             }
@@ -412,6 +429,8 @@ public class ShopCartActivity extends AppCompatActivity {
                 map.put("priceIds",a);
                 new delShopAsync().execute(map);
                 mPopWindow.dismiss();
+
+
             }
         });
         mPopWindow = new PopupWindow(contentViewSign);

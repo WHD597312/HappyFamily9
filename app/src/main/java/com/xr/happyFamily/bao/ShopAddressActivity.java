@@ -28,6 +28,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.AddressAdapter;
 import com.xr.happyFamily.bean.AddressBean;
 import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -63,6 +64,7 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
     private  List<AddressBean.ReturnData> mDatas;
     Context mContext;
     int sign_del=0;
+    private MyDialog dialog;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -161,6 +163,8 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
     }
 
     private void getShopData(){
+        dialog = MyDialog.showDialog(mContext);
+        dialog.show();
         Map<String, Object> params = new HashMap<>();
         SharedPreferences userSettings= getSharedPreferences("login", 0);
         String url = userSettings.getString("userId","1000");
@@ -206,7 +210,7 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-
+                MyDialog.closeDialog(dialog);
                 addressAdapter.notifyDataSetChanged();
             }
         }

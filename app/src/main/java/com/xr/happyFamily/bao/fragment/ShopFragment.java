@@ -188,7 +188,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 adapter_xh.notifyDataSetChanged();
                 String e = adapter_xh.getItem(position).toString();
                 tv_price.setText("¥"+list_price.get(position).getPrice());
-                tvPrice.setText("¥" + list_price.get(position).getPrice());
+                tvPrice.setText("¥" + ((double)list_price.get(position).getPrice())/100);
                 tvXinghao.setText(list.get(position));
                 price=list_price.get(position).getPrice()+"";
                 priceId=list_price.get(position).getPriceId();
@@ -226,15 +226,18 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         tv_buy.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(mContext, ShopConfActivity.class);
-                intent.putExtra("type", "XQ");
-                intent.putExtra("goodsId", goodsId);
-                intent.putExtra("num", num+"");
-                intent.putExtra("priceId", priceId+"");
-                intent.putExtra("money", Integer.parseInt(price)*num+"");
-                intent.putExtra("weight", weight + "");
-
-                startActivity(intent);
+                if (sign != -1) {
+                    Intent intent = new Intent(mContext, ShopConfActivity.class);
+                    intent.putExtra("type", "XQ");
+                    intent.putExtra("goodsId", goodsId);
+                    intent.putExtra("num", num + "");
+                    intent.putExtra("priceId", priceId + "");
+                    intent.putExtra("money", Integer.parseInt(price) * num );
+                    intent.putExtra("weight", weight*num + "");
+                    startActivity(intent);
+                } else {
+                    Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
+                }
             }
         });
         try {
@@ -314,7 +317,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
 
     JSONObject jsonObject;
-    String name,type,img,price="0",weight;
+    String name,type,img,price="0";
+    Double weight;
 
     class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -341,7 +345,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                             img = returnData.getString("image");
                             name = returnData.getString("goodsName");
                             type = returnData.getString("simpleDescribe");
-                            weight = returnData.getInt("weight")+"";
+                            weight = returnData.getDouble("weight");
                         }
 
                     }

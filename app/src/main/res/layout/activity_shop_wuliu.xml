@@ -52,6 +52,8 @@
                 android:textSize="@dimen/sp_12" />
 
             <ImageView
+                android:padding="@dimen/dp_jy_12"
+                android:id="@+id/img_call"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"

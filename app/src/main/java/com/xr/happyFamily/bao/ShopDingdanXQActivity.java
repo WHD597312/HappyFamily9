@@ -32,8 +32,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
+import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.bao.bean.myOrderBean;
 import com.xr.happyFamily.bean.OrderBean;
+import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.bean.WuLiuBean;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.PublicData;
@@ -42,6 +45,7 @@ import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -155,7 +159,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
     ArrayList<Integer> myPriceId = new ArrayList<>();
     ArrayList<Integer> myGoodsId = new ArrayList<>();
 
-    @OnClick({R.id.back, R.id.tv_dingdan, R.id.img1, R.id.img2, R.id.img3, R.id.img_tui})
+    @OnClick({R.id.back, R.id.tv_dingdan, R.id.img1, R.id.img2, R.id.img3, R.id.img_tui,R.id.rl_wuliu})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -174,15 +178,21 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
             case R.id.img2:
                 switch (state) {
                     case "1":
-                        startActivity(new Intent(ShopDingdanXQActivity.this, PaySuccessActivity.class));
+                        Intent intent=new Intent(ShopDingdanXQActivity.this, PayFailActivity.class);
+                        intent.putExtra("type", "DingDan");
+                        intent.putExtra("orderNumber", orderNumber);
+//                        intent.putExtra("orderDetailsLists", (Serializable) orderDetailsLists);
+                        intent.putExtra("money", paidAmount);
+
+                        startActivity(intent);
                         break;
                     case "2":
                         Toast.makeText(ShopDingdanXQActivity.this, "该商品暂未发货", Toast.LENGTH_SHORT).show();
                     case "3":
-                        Intent intent = new Intent(ShopDingdanXQActivity.this, WuLiuActivity.class);
-                        intent.putExtra("logisticCode", logisticCode);
-                        intent.putExtra("shipperCode", shipperCode);
-                        startActivity(intent);
+                        Intent intent3 = new Intent(ShopDingdanXQActivity.this, WuLiuActivity.class);
+                        intent3.putExtra("logisticCode", logisticCode);
+                        intent3.putExtra("shipperCode", shipperCode);
+                        startActivity(intent3);
                         break;
                     case "4":
                         for (int i = 0; i < orderDetailsLists.size(); i++) {
@@ -212,6 +222,13 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
 //                Map<String, Object> params = new HashMap<>();
 //                params.put("orderNumber", orderNumber);
 //                new refundOrderAsync().execute(params);
+                break;
+            case R.id.rl_wuliu:
+                //退货
+                Intent intent3 = new Intent(ShopDingdanXQActivity.this, WuLiuActivity.class);
+                intent3.putExtra("logisticCode", logisticCode);
+                intent3.putExtra("shipperCode", shipperCode);
+                startActivity(intent3);
                 break;
         }
     }
@@ -314,7 +331,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
 
             Map<String, Object> params = maps[0];
             String url = "/order/getOrderByOrderNumber";
-            url = url + "?orderNumber=" + orderId;
+            url = url + "?orderNumber=" +orderId;
             String result = HttpUtils.doGet(mContext, url);
             String code = "";
             try {
@@ -331,8 +348,8 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                         OrderBean.OrderDetailsList userList = gson.fromJson(user, OrderBean.OrderDetailsList.class);
                         orderDetailsLists.add(userList);
                     }
-                    wuliu = "调用物流接口";
-                    wuliu_time = "调用物流接口或取消";
+                    wuliu = "暂无物流信息";
+                    wuliu_time = "暂无物流信息";
                     JSONObject receive = returnData.getJSONObject("receive");
                     address = receive.get("receiveProvince").toString() + " " + receive.get("receiveCity").toString() + " " +
                             receive.get("receiveCounty").toString() + " " + receive.get("receiveAddress").toString();
@@ -349,6 +366,13 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                     paymentSeq = returnData.get("paymentSeq").toString();
                     if(returnData.get("sendTime")!=null)
                         sendTime = returnData.get("sendTime").toString();
+                    if(paymentSeq.equals("null"))
+                        paymentSeq="暂无支付宝交易号";
+                    if(sendTime.equals("null"))
+                        paymentSeq="暂未发货";
+                    if(paymentTime.equals("null"))
+                        paymentSeq="暂未付款";
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -367,6 +391,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
 
                 switch (state) {
                     case "1":
+                        imgTui.setVisibility(View.GONE);
                         rlWuliu.setVisibility(View.GONE);
                         img1.setVisibility(View.VISIBLE);
                         img1.setImageResource(R.mipmap.btn_dd_quxiao);
@@ -382,11 +407,13 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                         timer.schedule(task, 1000, 1000);       // timeTask
                         break;
                     case "2":
+                        imgTui.setVisibility(View.GONE);
                         tvState.setText("等待商家发货");
                         rlWuliu.setVisibility(View.GONE);
                         img2.setImageResource(R.mipmap.btn_dd_wuliu);
                         break;
                     case "3":
+                        imgTui.setVisibility(View.GONE);
                         tvState.setText("卖家已发货");
                         img2.setImageResource(R.mipmap.btn_dd_wuliu);
                         params.put("shipperCode", shipperCode);

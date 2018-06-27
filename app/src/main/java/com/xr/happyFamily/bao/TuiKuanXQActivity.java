@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao;
 
 import android.Manifest;
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -128,6 +129,8 @@ public class TuiKuanXQActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_chexiao:
+                dialog = MyDialog.showDialog(TuiKuanXQActivity.this);
+                dialog.show();
                 Map<String, Object> map = new HashMap<>();
                 map.put("orderId", orderId);
                 new cancelRefundOrderAsync().execute(map);
@@ -142,7 +145,6 @@ public class TuiKuanXQActivity extends AppCompatActivity {
                 intent.putExtra("reason", reason);
                 intent.putExtra("refundTime", refundTime);
                 startActivity(intent);
-                finish();
                 break;
             case R.id.tv_call:
                 showPopup();
@@ -277,6 +279,7 @@ public class TuiKuanXQActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 tvTime.setVisibility(View.GONE);
                 tvWuliu.setText("退款关闭");
                 tvTui.setText("因您撤销退款申请，退款已关闭");

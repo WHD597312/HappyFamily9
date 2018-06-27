@@ -32,6 +32,7 @@ import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.bao.adapter.WuLiuListAdapter;
+import com.xr.happyFamily.bao.util.WuLiuData;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.WuLiuListBean;
 import com.xr.happyFamily.together.MyDialog;
@@ -84,6 +85,7 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
     DingDanXQAdapter confListAdapter;
 
     boolean isXG=true;
+    List<WuLiuListBean> wuLiuListBeanList=new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,6 +96,9 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
         setContentView(R.layout.activity_tuikuan_shenqing);
         ButterKnife.bind(this);
         titleRightText.setVisibility(View.GONE);
+        WuLiuData wuLiuData=new WuLiuData();
+        wuLiuListBeanList.addAll(wuLiuData.getWuLiuListBeanList());
+
 
         tvTui.setText("退货原因");
         orderNumber = getIntent().getExtras().getString("orderNumber");
@@ -119,7 +124,9 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
         Map<String, Object> map = new HashMap<>();
         new getOrderAsync().execute(map);
 
-        new getWuLiuAsync().execute();
+        if(isXG){
+
+        }
     }
 
 
@@ -352,53 +359,53 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
         mPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
-    String wuliu;
-    List<WuLiuListBean> wuLiuListBeanList = new ArrayList<>();
+//    String wuliu;
 
-    class getWuLiuAsync extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-            String url = "/logistics/listShipperCode";
-            String result = HttpUtils.doGet(TuiKuanActivity.this, url);
-
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("returnData");
-                    Gson gson = new Gson();
-                    for (int i = 0; i < list.size(); i++) {
-                        //通过反射 得到UserBean.class
-                        JsonElement use = list.get(i);
-                        WuLiuListBean userList = gson.fromJson(use, WuLiuListBean.class);
-                        if(shipperCode.equals(userList.getCode())){
-                            wuliu=userList.getName();
-                        }
-                        wuLiuListBeanList.add(userList);
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                if(isXG) {
-                    tvWuliuType.setText(wuliu);
-
-                }
-
-            }
-        }
-    }
+//
+//    class getWuLiuAsync extends AsyncTask<Map<String, Object>, Void, String> {
+//        @Override
+//        protected String doInBackground(Map<String, Object>... maps) {
+//
+//            String url = "/logistics/listShipperCode";
+//            String result = HttpUtils.doGet(TuiKuanActivity.this, url);
+//
+//            String code = "";
+//            try {
+//                if (!Utils.isEmpty(result)) {
+//
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    code = jsonObject.getString("returnCode");
+//                    JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
+//                    JsonArray list = content.getAsJsonArray("returnData");
+//                    Gson gson = new Gson();
+//                    for (int i = 0; i < list.size(); i++) {
+//                        //通过反射 得到UserBean.class
+//                        JsonElement use = list.get(i);
+//                        WuLiuListBean userList = gson.fromJson(use, WuLiuListBean.class);
+//                        if(shipperCode.equals(userList.getCode())){
+//                            wuliu=userList.getName();
+//                        }
+//                        wuLiuListBeanList.add(userList);
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return code;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            if (!Utils.isEmpty(s) && "100".equals(s)) {
+//                if(isXG) {
+//                    tvWuliuType.setText(wuliu);
+//
+//                }
+//
+//            }
+//        }
+//    }
 
 
     class refundOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
@@ -527,7 +534,8 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent=new Intent(TuiKuanActivity.this,TuiKuanXQActivity.class);
                 intent.putExtra("orderId",orderNumber);
                 startActivity(intent);
-            }
+                finish();
+            }else
             TuiKuanActivity.this.finish();
         }
         return true;

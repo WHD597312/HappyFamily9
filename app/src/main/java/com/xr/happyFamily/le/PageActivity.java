@@ -11,10 +11,9 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShopSearchActivity;
-import com.xr.happyFamily.bao.ShoppageActivity;
-import com.xr.happyFamily.bao.TestActivity;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
+import com.xr.happyFamily.bao.view.LazyViewPager;
+import com.xr.happyFamily.bean.ShopBannerBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,8 +24,7 @@ import butterknife.OnClick;
 
 public class PageActivity extends AppCompatActivity {
 
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
+
     @BindView(R.id.img1)
     ImageView img1;
     @BindView(R.id.img2)
@@ -37,6 +35,10 @@ public class PageActivity extends AppCompatActivity {
     ImageView img4;
     @BindView(R.id.lineLayout_dot)
     LinearLayout lineLayoutDot;
+    @BindView(R.id.viewPager)
+    ViewPager viewPager;
+    @BindView(R.id.ll_xuyuan)
+    LinearLayout llXuyuan;
 
 
     private List<ImageView> mImageList;//轮播的图片集合
@@ -101,11 +103,12 @@ public class PageActivity extends AppCompatActivity {
             }
         }
     }
+    List<ShopBannerBean> shopBannerBeans = new ArrayList<>();
     /**
      * 第三步、给PagerViw设置适配器，并实现自动轮播功能
      */
     public void initView() {
-        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(mImageList, viewPager);
+        ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(this,mImageList, viewPager,shopBannerBeans);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override

@@ -3,6 +3,7 @@
  */
 package com.xr.happyFamily.bean;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -12,7 +13,7 @@ import java.util.List;
  * @author bejson.com (i@bejson.com)
  * @website http://www.bejson.com/java2pojo/
  */
-public class OrderBean {
+public class OrderBean  implements Serializable {
 
     private int orderId;
     private String orderNumber;
@@ -310,7 +311,7 @@ public class OrderBean {
      * @author bejson.com (i@bejson.com)
      * @website http://www.bejson.com/java2pojo/
      */
-    public class User {
+    public class User  implements Serializable {
 
         private int userId;
         private String username;
@@ -397,7 +398,7 @@ public class OrderBean {
     }
 
 
-    public class OrderRefund {
+    public class OrderRefund  implements Serializable {
 
         private int orderId;
         private String logisticCode;
@@ -448,7 +449,7 @@ public class OrderBean {
      * @author bejson.com (i@bejson.com)
      * @website http://www.bejson.com/java2pojo/
      */
-    public class OrderDetailsList {
+    public class OrderDetailsList implements Serializable {
 
         private int orderDetailsId;
         private int orderId;
@@ -465,7 +466,7 @@ public class OrderBean {
         private String simpleDescribe;
 
         private boolean isFirst,isFinish;
-        private String state,time,shipperCode,refundTime;
+        private String state,time,logisticCode,shipperCode,refundTime;
         int isRate,refundState;
 
         public void setIsRate(int isRate) {
@@ -633,7 +634,7 @@ public class OrderBean {
         }
 
         public void setLogisticCode(String logisticCode) {
-            this.time = logisticCode;
+            this.logisticCode = logisticCode;
         }
 
         public String getLogisticCode() {

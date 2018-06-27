@@ -21,8 +21,10 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.PayFailActivity;
 import com.xr.happyFamily.bao.PaySuccessActivity;
 import com.xr.happyFamily.bao.PingLunActivity;
+import com.xr.happyFamily.bao.ShopConfActivity;
 import com.xr.happyFamily.bao.ShopDingdanXQActivity;
 import com.xr.happyFamily.bao.TestActivity;
 import com.xr.happyFamily.bao.TuiKuanActivity;
@@ -102,6 +104,8 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         final int refundState = list.get(position).getRefundState();
+
+        Log.e("qqqqqqqT222",position+","+list.get(position).getTime()+","+list.get(position).getCreateTime());
         String sd=TimeUtils.getTime(list.get(position).getTime());
 
         holder.tv_time.setText(sd);
@@ -140,11 +144,9 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                 holder.img3.setVisibility(View.VISIBLE);
                 holder.img3.setImageResource(R.mipmap.btn_dd_pingjia);
                 holder.img2.setVisibility(View.INVISIBLE);
-                if (list.get(position).getIsRate() == 1) {
-                    holder.rl_sign.setVisibility(View.GONE);
-                } else {
-                    holder.rl_sign.setVisibility(View.VISIBLE);
-                }
+
+
+
                 break;
             case 5:
                 //申请退款
@@ -187,15 +189,21 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             public void onClick(View v) {
                 switch (Integer.parseInt(list.get(position).getState() + "")) {
                     case 1:
-                        //待支付  去支付
-                        Intent intent = new Intent(context, PayActivity.class);
+                        Intent intent=new Intent(context, PayFailActivity.class);
+                        intent.putExtra("type", "DingDan");
                         intent.putExtra("orderNumber", list.get(position).getOrderNumber());
+//                        intent.putExtra("orderDetailsLists", (Serializable) orderDetailsLists);
+                        intent.putExtra("money", list.get(position).getDetailsAmount());
                         context.startActivity(intent);
                         break;
                     case 2:
                     case 3:
                         //待收货  查看物流
-                        context.startActivity(new Intent(context, WuLiuActivity.class));
+                        Intent intent3 = new Intent(context, WuLiuActivity.class);
+                        intent3.putExtra("logisticCode", list.get(position).getLogisticCode());
+                        intent3.putExtra("shipperCode", list.get(position).getShipperCode());
+                        intent3.putExtra("img", list.get(position).getImage());
+                        context.startActivity(intent3);
                         break;
                     case 4:
                         //已收货  评论
@@ -234,11 +242,11 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                             v.getContext().startActivity(intent2);
                         }
                         else if (refundState == 1) {
-                            Intent intent3=new Intent(context, TuiKuanSuccessActivity.class);
-                            intent3.putExtra("sign",refundState);
-                            intent3.putExtra("money",list.get(position).getDetailsAmount());
-                            intent3.putExtra("time",TimeUtils.getTime(list.get(position).getRefundTime()));
-                            context.startActivity(intent3);
+                            Intent intent5=new Intent(context, TuiKuanSuccessActivity.class);
+                            intent5.putExtra("sign",refundState);
+                            intent5.putExtra("money",list.get(position).getDetailsAmount());
+                            intent5.putExtra("time",TimeUtils.getTime(list.get(position).getRefundTime()));
+                            context.startActivity(intent5);
                         }
                         else if (refundState == 2)
                         {
@@ -314,6 +322,12 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             holder.ll2.setVisibility(View.VISIBLE);
             holder.view2.setVisibility(View.VISIBLE);
             holder.ll3.setVisibility(View.VISIBLE);
+        }
+
+        if (list.get(position).getIsRate() == 1) {
+            holder.rl_sign.setVisibility(View.GONE);
+        } else {
+            holder.rl_sign.setVisibility(View.VISIBLE);
         }
     }
 

@@ -3,6 +3,7 @@ package com.xr.happyFamily.together;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
@@ -34,6 +35,15 @@ public class MyDialog extends Dialog {
         dialog = new MyDialog(context, R.style.MyDialog);//dialog样式
         dialog.setContentView(R.layout.dialog_layout);//dialog布局文件
         dialog.setCanceledOnTouchOutside(false);//点击外部不允许关闭dialog
+
+        ImageView imageView= (ImageView) dialog.findViewById(R.id.back);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
         return dialog;
     }
 

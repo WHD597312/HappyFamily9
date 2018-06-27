@@ -137,6 +137,7 @@ public class PayActivity extends AppCompatActivity {
                         // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
                         Toast.makeText(PayActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
                         Intent intent=new Intent(PayActivity.this, PayFailActivity.class);
+                        intent.putExtra("type","Pay");
                         intent.putExtra("orderNumber",orderNumber);
                         startActivity(intent);
                         finish();

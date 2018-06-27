@@ -9,9 +9,9 @@
        android:layout_width="match_parent"
        android:layout_height="match_parent"
        android:layout_centerVertical="true"
-       android:layout_marginRight="@dimen/dp_12"
-       android:layout_marginLeft="@dimen/dp_12"
-       android:layout_marginTop="@dimen/dp_100"
+       android:layout_marginRight="@dimen/dp_jy_12"
+       android:layout_marginLeft="@dimen/dp_jy_12"
+       android:layout_marginTop="@dimen/dp_jy_100"
        android:layout_centerInParent="true"
        android:background="@mipmap/beijing">
 
@@ -38,7 +38,7 @@
           android:layout_height="wrap_content"
           android:layout_below="@+id/iv_register_tb"
           android:layout_centerHorizontal="true"
-          android:layout_marginTop="@dimen/dp_5"
+          android:layout_marginTop="@dimen/dp_jy_5"
           android:src="@mipmap/daohang"
 
 
@@ -59,7 +59,7 @@
           android:layout_height="wrap_content"
           android:layout_alignLeft="@+id/iv_yuan"
           android:layout_below="@id/iv_yuan"
-          android:layout_marginTop="@dimen/dp_9"
+          android:layout_marginTop="@dimen/dp_jy_9"
           android:text="注册"
           android:textColor="@color/green2"
           android:textSize="7sp" />
@@ -69,7 +69,7 @@
           android:layout_height="wrap_content"
           android:layout_alignRight="@+id/iv_yuanwc"
           android:layout_below="@id/iv_yuanwc"
-          android:layout_marginTop="@dimen/dp_9"
+          android:layout_marginTop="@dimen/dp_jy_9"
           android:text="完成"
           android:textColor="@color/color_gray2"
           android:textSize="7sp" />
@@ -80,20 +80,20 @@
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/image_phone"
          android:layout_alignTop="@+id/image_phone"
-          android:layout_marginLeft="@dimen/dp_14"
+          android:layout_marginLeft="@dimen/dp_jy_14"
           android:background="@null"
-          android:layout_marginBottom="@dimen/dp_5"
+          android:layout_marginBottom="@dimen/dp_jy_5"
           android:hint="输入手机号码"
           android:inputType="phone"
           android:textSize="@dimen/sp_18" />
 
       <ImageView
           android:id="@+id/image_phone"
-          android:layout_width="@dimen/dp_30"
-          android:layout_height="@dimen/dp_30"
+          android:layout_width="@dimen/dp_jy_30"
+          android:layout_height="@dimen/dp_jy_30"
           android:layout_below="@+id/tv_register_zc"
-          android:layout_marginLeft="@dimen/dp_24"
-          android:layout_marginTop="@dimen/dp_56"
+          android:layout_marginLeft="@dimen/dp_jy_24"
+          android:layout_marginTop="@dimen/dp_jy_56"
           android:scaleType="centerInside"
           android:src="@mipmap/wo" />
 
@@ -102,18 +102,18 @@
           android:layout_width="match_parent"
           android:layout_height="1dp"
           android:layout_below="@+id/et_phone"
-          android:layout_marginLeft="@dimen/dp_29"
-          android:layout_marginRight="@dimen/dp_29"
-          android:layout_marginTop="@dimen/dp_1"
+          android:layout_marginLeft="@dimen/dp_jy_29"
+          android:layout_marginRight="@dimen/dp_jy_29"
+          android:layout_marginTop="@dimen/dp_jy_1"
           android:background="@color/color_gray2" />
 
       <EditText
           android:id="@+id/et_code"
-          android:layout_width="@dimen/dp_190"
+          android:layout_width="@dimen/dp_jy_190"
           android:layout_height="wrap_content"
           android:layout_alignLeft="@+id/et_phone"
           android:layout_below="@+id/view1"
-          android:layout_marginTop="@dimen/dp_28"
+          android:layout_marginTop="@dimen/dp_jy_28"
           android:background="@null"
           android:gravity="center_vertical"
           android:hint="请输入验证码"
@@ -122,32 +122,32 @@
 
       <ImageView
           android:id="@+id/image_user"
-          android:layout_width="@dimen/dp_30"
-          android:layout_height="@dimen/dp_30"
+          android:layout_width="@dimen/dp_jy_30"
+          android:layout_height="@dimen/dp_jy_30"
           android:layout_below="@+id/view1"
           android:layout_alignLeft="@+id/image_phone"
-          android:layout_marginTop="@dimen/dp_28"
+          android:layout_marginTop="@dimen/dp_jy_28"
           android:scaleType="centerInside"
           android:src="@mipmap/yaoshi" />
 
       <View
           android:id="@+id/view2"
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp_1"
+          android:layout_height="@dimen/dp_jy_1"
           android:layout_alignRight="@id/et_code"
           android:layout_below="@+id/et_code"
-          android:layout_marginLeft="@dimen/dp_29"
-          android:layout_marginRight="@dimen/dp_10"
-          android:layout_marginTop="@dimen/dp_5"
+          android:layout_marginLeft="@dimen/dp_jy_29"
+          android:layout_marginRight="@dimen/dp_jy_10"
+          android:layout_marginTop="@dimen/dp_jy_5"
           android:background="@color/color_gray2" />
 
       <Button
           android:id="@+id/btn_get_code"
           android:layout_width="wrap_content"
-          android:layout_height="@dimen/dp_30"
+          android:layout_height="@dimen/dp_jy_30"
           android:layout_alignParentRight="true"
           android:layout_alignBottom="@+id/et_code"
-          android:layout_marginRight="@dimen/dp_29"
+          android:layout_marginRight="@dimen/dp_jy_29"
           android:background="@mipmap/anniu3"
           android:text="获取验证码"
           android:textColor="@color/color_black3"
@@ -161,8 +161,8 @@
           android:layout_height="wrap_content"
           android:layout_below="@id/view2"
           android:layout_toRightOf="@+id/image_pwd"
-          android:layout_marginLeft="@dimen/dp_14"
-          android:layout_marginTop="@dimen/dp_28"
+          android:layout_marginLeft="@dimen/dp_jy_14"
+          android:layout_marginTop="@dimen/dp_jy_28"
           android:background="@null"
           android:ems="10"
           android:hint="请输入密码"
@@ -171,30 +171,30 @@
 
       <ImageView
           android:id="@+id/image_pwd"
-          android:layout_width="@dimen/dp_30"
-          android:layout_height="@dimen/dp_30"
+          android:layout_width="@dimen/dp_jy_30"
+          android:layout_height="@dimen/dp_jy_30"
           android:layout_below="@+id/view2"
-          android:layout_marginLeft="@dimen/dp_24"
-          android:layout_marginTop="@dimen/dp_28"
+          android:layout_marginLeft="@dimen/dp_jy_24"
+          android:layout_marginTop="@dimen/dp_jy_28"
           android:scaleType="centerInside"
           android:src="@mipmap/suo" />
 
       <View
           android:id="@+id/view3"
           android:layout_width="match_parent"
-          android:layout_height="@dimen/dp_1"
+          android:layout_height="@dimen/dp_jy_1"
           android:layout_below="@+id/et_password"
-          android:layout_marginLeft="@dimen/dp_29"
-          android:layout_marginRight="@dimen/dp_29"
-          android:layout_marginTop="@dimen/dp_5"
+          android:layout_marginLeft="@dimen/dp_jy_29"
+          android:layout_marginRight="@dimen/dp_jy_29"
+          android:layout_marginTop="@dimen/dp_jy_5"
           android:background="@color/color_gray2" />
 
       <Button
           android:id="@+id/btn_finish"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
-          android:layout_marginLeft="@dimen/dp_35"
-          android:layout_marginRight="@dimen/dp_35"
+          android:layout_marginLeft="@dimen/dp_jy_35"
+          android:layout_marginRight="@dimen/dp_jy_35"
           android:layout_alignParentBottom="true"
           android:background="@mipmap/anniu1"
           android:text="下一步"

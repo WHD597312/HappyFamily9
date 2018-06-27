@@ -33,6 +33,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -232,8 +233,8 @@ public void onClick(View view) {
             @Override
             public void onPositiveClick() {
                 roomName = dialog.getName();
-                if (com.xr.happyFamily.login.util.Utils.isEmpty(roomName)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
+                if (Utils.isEmpty(roomName)) {
+                    Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
 
                     for (int i=0;i<str1.size();i++){
@@ -263,7 +264,7 @@ public void onClick(View view) {
             String result = HttpUtils.getOkHpptRequest(url);
 
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
 

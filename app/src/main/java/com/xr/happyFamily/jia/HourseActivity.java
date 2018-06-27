@@ -26,6 +26,7 @@ import com.xr.happyFamily.jia.pojo.SmartSet;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -94,7 +95,7 @@ public class HourseActivity extends AppCompatActivity {
             String result = HttpUtils.getOkHpptRequest(url);
 
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
 

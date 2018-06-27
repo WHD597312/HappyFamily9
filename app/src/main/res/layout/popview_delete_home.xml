@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_160"
+    android:layout_height="@dimen/dp_jy_160"
     android:background="@drawable/bg_shape"
     android:id="@+id/rl_homed_del"
     >
@@ -13,15 +13,15 @@
         android:textColor="@color/color_gray4"
         android:textSize="14sp"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="@dimen/dp_45"
+        android:layout_marginTop="@dimen/dp_jy_45"
         />
 
     <LinearLayout
         android:layout_below="@+id/tv_homed_del"
-        android:layout_marginTop="@dimen/dp_21"
+        android:layout_marginTop="@dimen/dp_jy_21"
         android:background="@color/color_gray"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
@@ -32,7 +32,7 @@
             android:text="取消"
             android:layout_gravity="center"
             android:gravity="right"
-            android:paddingRight="@dimen/dp_21"
+            android:paddingRight="@dimen/dp_jy_21"
             android:layout_weight="1"
             />
         <TextView
@@ -50,7 +50,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center"
             android:gravity="left"
-            android:paddingLeft="@dimen/dp_21"
+            android:paddingLeft="@dimen/dp_jy_21"
             android:text="确定"
             android:layout_weight="1"
             />

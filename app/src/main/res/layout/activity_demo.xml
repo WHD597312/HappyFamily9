@@ -18,13 +18,13 @@
         >
         <RelativeLayout
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_50"
+            android:layout_height="@dimen/dp_jy_50"
             android:background="#494948">
 
             <ImageView
                 android:id="@+id/img_back"
-                android:layout_width="@dimen/dp_40"
-                android:layout_height="@dimen/dp_40"
+                android:layout_width="@dimen/dp_jy_40"
+                android:layout_height="@dimen/dp_jy_40"
                 android:layout_alignParentLeft="true"
                 android:layout_centerVertical="true"
                 android:scaleType="centerInside"
@@ -39,40 +39,40 @@
                 android:gravity="center"
                 android:text="添加新设备"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp_20" />
+                android:textSize="@dimen/dp_jy_20" />
         </RelativeLayout>
 
         <LinearLayout
             android:id="@+id/add_device_way"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_80"
-            android:layout_marginRight="@dimen/dp_80"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginLeft="@dimen/dp_jy_80"
+            android:layout_marginRight="@dimen/dp_jy_80"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <Button
                 android:id="@+id/btn_wifi"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="@dimen/dp_jy_30"
                 android:layout_weight="1"
                 android:background="@drawable/shape_btnwifi_connect"
                 android:gravity="center"
                 android:text="wifi连接"
                 android:textColor="@color/white"
-                android:textSize="@dimen/dp_18" />
+                android:textSize="@dimen/dp_jy_18" />
 
             <Button
                 android:id="@+id/btn_scan"
                 android:layout_width="0dp"
-                android:layout_height="@dimen/dp_30"
+                android:layout_height="@dimen/dp_jy_30"
                 android:layout_weight="1"
                 android:background="@drawable/shape_btnzxscan_noconnect"
                 android:gravity="center"
                 android:text="二维码连接"
                 android:textColor="@color/color_blue"
-                android:textSize="@dimen/dp_18"
+                android:textSize="@dimen/dp_jy_18"
                 />
         </LinearLayout>
 
@@ -81,37 +81,37 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/dp_50"
-            android:layout_marginRight="@dimen/dp_50"
+            android:layout_marginLeft="@dimen/dp_jy_50"
+            android:layout_marginRight="@dimen/dp_jy_50"
             android:layout_gravity="center_horizontal"
-            android:layout_marginTop="@dimen/dp_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
             >
             <EditText
                 android:id="@+id/et_ssid"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
+                android:layout_height="@dimen/dp_jy_50"
                 android:background="@color/white"
                 android:hint="wifi名称"
-                android:paddingLeft="@dimen/dp_5"
+                android:paddingLeft="@dimen/dp_jy_5"
                 android:inputType="textVisiblePassword"
                 />
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_1"
+                android:layout_height="@dimen/dp_jy_1"
                 android:background="@color/color_dark_gray"
                 />
             <EditText
                 android:id="@+id/et_pswd"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_50"
+                android:layout_height="@dimen/dp_jy_50"
                 android:background="@color/white"
                 android:hint="wifi密码"
-                android:paddingLeft="@dimen/dp_5"
+                android:paddingLeft="@dimen/dp_jy_5"
                 android:inputType="textVisiblePassword"
                 />
             <View
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_1"
+                android:layout_height="@dimen/dp_jy_1"
                 android:background="@color/color_dark_gray"
                 />
             <Button
@@ -121,13 +121,13 @@
                 android:text="开始配置"
                 android:textColor="@color/color_orange"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:background="@color/white"
                 />
             <pl.droidsonroids.gif.GifImageView
                 android:id="@+id/add_image"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_160"
+                android:layout_height="@dimen/dp_jy_160"
                 android:background="@color/white"
                 android:visibility="gone"
                 />
@@ -136,17 +136,17 @@
         <LinearLayout
             android:id="@+id/linearout_add_scan_device"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_150"
+            android:layout_height="@dimen/dp_jy_150"
             android:orientation="vertical"
-            android:layout_marginLeft="@dimen/dp_50"
-            android:layout_marginRight="@dimen/dp_50"
+            android:layout_marginLeft="@dimen/dp_jy_50"
+            android:layout_marginRight="@dimen/dp_jy_50"
             android:layout_gravity="center_horizontal"
             android:visibility="gone"
             >
             <TextView
                 android:id="@+id/tv_result"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_100"
+                android:layout_height="@dimen/dp_jy_100"
                 android:text="通过扫描别人手机的APP设备信息中的二维码直接分享别人的设备"
                 android:layout_gravity="center"
                 android:gravity="center_vertical"
@@ -160,7 +160,7 @@
                 android:text="开始扫描"
                 android:textColor="@color/color_orange"
                 android:gravity="center"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:background="@color/white"
                 />
         </LinearLayout>

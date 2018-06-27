@@ -15,7 +15,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@+id/title_addroom"
-        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginTop="12dp"
         android:text="选择你要创建的房间"
         android:textColor="@color/color_gray4"
@@ -28,13 +28,13 @@
         android:layout_height="match_parent"
         android:layout_below="@+id/tv_managment_room"
         android:layout_centerHorizontal="true"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
-        android:layout_marginTop="@dimen/dp_32"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_32"
         android:gravity="center"
-        android:horizontalSpacing="@dimen/dp_12"
+        android:horizontalSpacing="@dimen/dp_jy_12"
         android:numColumns="4"
-        android:verticalSpacing="@dimen/dp_12">
+        android:verticalSpacing="@dimen/dp_jy_12">
 
     </GridView>
 

@@ -19,7 +19,7 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.login.util.Utils;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
 import org.json.JSONObject;

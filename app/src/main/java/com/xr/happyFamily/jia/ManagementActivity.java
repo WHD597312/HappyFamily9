@@ -30,6 +30,7 @@ import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -158,7 +159,7 @@ public class ManagementActivity extends AppCompatActivity {
             String result = HttpUtils.postOkHpptRequest(ip+"/family/room/registerRoom", params);
             Log.i("aaaaaa", "doInBackground:---> "+result);
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     JSONObject returnData=jsonObject.getJSONObject("returnData");
@@ -188,7 +189,7 @@ public class ManagementActivity extends AppCompatActivity {
             super.onPostExecute(code);
             switch (code) {
                 case 3001:
-                    com.xr.happyFamily.login.util.Utils.showToast(ManagementActivity.this, "添加房间失败，请重试");
+                    Utils.showToast(ManagementActivity.this, "添加房间失败，请重试");
                     break;
                 case 100:
                     Toast.makeText(ManagementActivity.this,"添加成功",Toast.LENGTH_SHORT).show();

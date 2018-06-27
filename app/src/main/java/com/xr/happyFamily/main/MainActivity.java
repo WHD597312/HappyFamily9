@@ -20,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 import butterknife.Unbinder;
 
 public class MainActivity extends AppCompatActivity implements FamilyFragmentManager.CallValueValue{
@@ -29,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private HourseDaoImpl hourseDao;
     SharedPreferences mPositionPreferences;
     @BindView(R.id.layout_bottom) LinearLayout layout_bottom;
+    BaoFragment baoFragment;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -42,6 +44,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         List<Hourse> hourses=hourseDao.findAllHouse();
         Hourse hourse=hourses.get(0);
 
+        baoFragment=new BaoFragment();
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
         long houseId=hourse.getHouseId();
         FamilyFragmentManager familyFragmentManager=new FamilyFragmentManager();
@@ -53,6 +56,16 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
     }
 
+    @OnClick({R.id.id_bto_bao_img})
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.id_bto_bao_img:
+                FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
+                fragmentTransaction.replace(R.id.layout_body,baoFragment);
+                fragmentTransaction.commit();
+                break;
+        }
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

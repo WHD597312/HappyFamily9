@@ -35,6 +35,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -230,7 +231,7 @@ public class BalconyFragment extends Fragment {
             public void onPositiveClick() {
                 roomName = dialog.getName();
                 if (TextUtils.isEmpty(roomName)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
+                    Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
                     dialog.dismiss();
                 }
@@ -254,7 +255,7 @@ public class BalconyFragment extends Fragment {
             String result = HttpUtils.getOkHpptRequest(url);
 
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
 

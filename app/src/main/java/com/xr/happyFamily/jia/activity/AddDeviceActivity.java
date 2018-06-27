@@ -37,6 +37,7 @@ import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 
@@ -171,7 +172,7 @@ public class AddDeviceActivity extends AppCompatActivity {
 //                            + ", " + " mEdtApPassword = " + apPassword);
                 }
                 if (TextUtils.isEmpty(apPassword)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(AddDeviceActivity.this, "请输入wifi密码");
+                    Utils.showToast(AddDeviceActivity.this, "请输入wifi密码");
                     break;
                 }
                 if (!TextUtils.isEmpty(ssid)) {
@@ -336,7 +337,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                                 + " more result(s) without showing\n");
                     }
                 } else {
-                    com.xr.happyFamily.login.util.Utils.showToast(AddDeviceActivity.this, "配置失败");
+                    Utils.showToast(AddDeviceActivity.this, "配置失败");
                     mProgressDialog.dismiss();
                 }
             }

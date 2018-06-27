@@ -35,6 +35,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.DeleteHomeDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -232,8 +233,8 @@ public class RoomFragment extends Fragment{
             @Override
             public void onPositiveClick() {
                 roomName = dialog.getName();
-                if (com.xr.happyFamily.login.util.Utils.isEmpty(roomName)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
+                if (Utils.isEmpty(roomName)) {
+                    Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
                     dialog.dismiss();
 

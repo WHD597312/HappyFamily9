@@ -43,6 +43,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.pojo.SmartTerminalInfo;
 import com.xr.happyFamily.jia.view_custom.SmartTerminalCircle;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 
 import org.json.JSONObject;
@@ -265,10 +266,10 @@ public class Demo extends AppCompatActivity {
 //                    Log.d(TAG, "mBtnConfirm is clicked, mEdtApSsid = " + apSsid
 //                            + ", " + " mEdtApPassword = " + apPassword);
                 }
-                if (com.xr.happyFamily.login.util.Utils.isEmpty(apPassword)){
+                if (Utils.isEmpty(apPassword)){
                     break;
                 }
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(ssid)) {
+                if (!Utils.isEmpty(ssid)) {
 //                    popupWindow();
                     add_image.setVisibility(View.VISIBLE);
                     et_ssid.setEnabled(false);

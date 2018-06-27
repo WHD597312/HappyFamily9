@@ -377,6 +377,7 @@ public class ShoppageActivity extends AppCompatActivity implements View.OnClickL
             @Override
             public void run() {
                 while (!isStop) {
+
                     runOnUiThread(new Runnable() {
                         @Override
                         public void run() {

@@ -32,7 +32,7 @@ public class MyDialog extends Dialog {
     }
     //显示dialog的方法
     public static MyDialog showDialog(Context context){
-        dialog = new MyDialog(context, R.style.MyDialog);//dialog样式
+        dialog = new MyDialog(context, R.style.JyDialog);//dialog样式
         dialog.setContentView(R.layout.dialog_layout);//dialog布局文件
         dialog.setCanceledOnTouchOutside(false);//点击外部不允许关闭dialog
 

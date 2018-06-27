@@ -30,10 +30,11 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
-import com.xr.happyFamily.login.util.Utils;
+
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Mobile;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -264,7 +265,7 @@ public class LoginActivity extends AppCompatActivity {
             String result = HttpUtils.getOkHpptRequest(url);
             Log.i("ffffffff", "--->: " + result);
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     Log.i("fffffffft", "--->: " + code);

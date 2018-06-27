@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -10,8 +11,11 @@
 
     <RelativeLayout
         android:id="@+id/head"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_50">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="8%"
+        app:layout_widthPercent="100%"
+        >
         <ImageView
             android:id="@+id/image_back"
             android:layout_width="@dimen/dp_jy_40"
@@ -31,26 +35,30 @@
             />
     </RelativeLayout>
 
-    <LinearLayout
+    <RelativeLayout
         android:id="@+id/relative"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="87%"
+        app:layout_widthPercent="100%"
         android:layout_below="@+id/head"
-        android:orientation="vertical"
+        android:visibility="visible"
         >
-        <RelativeLayout
+        <!--<RelativeLayout
             android:id="@+id/relative2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            app:layout_heightPercent="70%"
+            app:layout_widthPercent="100%"
             >
-
+-->
             <TextView
                 android:id="@+id/tv_cur_temp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:text="19"
-                android:textColor="@color/white"
+                android:textColor="@color/color_orange"
                 android:textSize="@dimen/sp_30"
                 android:layout_marginLeft="@dimen/dp_jy_25"
                 />
@@ -61,19 +69,17 @@
                 android:text="℃"
                 android:textSize="@dimen/sp_18"
                 android:layout_toRightOf="@+id/tv_cur_temp"
-                android:layout_marginTop="@dimen/dp_jy_10"
-                android:textColor="@color/white"
+                android:textColor="@color/color_orange"
                 />
             <TextView
                 android:id="@+id/tv_cur_desc"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_cur_temp"
-                android:textColor="@color/white"
                 android:text="当前温度"
                 android:layout_alignLeft="@id/tv_cur_temp"
                 android:layout_marginTop="@dimen/dp_jy_5"
-                android:textSize="@dimen/sp_12"
+                android:textSize="@dimen/sp_15"
                 />
 
             <TextView
@@ -101,28 +107,54 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_set_temp"
-                android:textColor="@color/white"
                 android:text="设定温度"
                 android:layout_alignLeft="@id/tv_set_temp"
                 android:layout_alignBottom="@id/tv_cur_desc"
-                android:textSize="@dimen/sp_12"
+                android:textSize="@dimen/sp_15"
                 />
-        </RelativeLayout>
+
+            <TextView
+                android:id="@+id/tv_rate_state"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="高"
+                android:textSize="@dimen/sp_30"
+                android:textColor="@color/color_orange"
+                android:gravity="center"
+                android:layout_centerHorizontal="true"
+                android:layout_alignTop="@+id/tv_set_temp"
+                android:layout_alignBottom="@+id/tv_set_temp"
+                />
+            <TextView
+                android:id="@+id/tv_rate_power"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/tv_rate_state"
+                android:text="功率"
+                android:layout_centerHorizontal="true"
+                android:textSize="@dimen/sp_15"
+                />
+
+     <!--   </RelativeLayout>-->
 
 
         <RelativeLayout
+
             android:id="@+id/layout_body"
-            android:layout_width="wrap_content"
+            android:layout_centerInParent="true"
+
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
             >
 
             <com.xr.happyFamily.jia.view_custom.SmartWheelBar
                 android:id="@+id/semicBar"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_alignParentTop="true"
-                android:background="@mipmap/semicbar_back" />
-
+                android:layout_width="@dimen/dp_jy_260"
+                android:layout_height="@dimen/dp_jy_260"
+                android:layout_centerInParent="true"
+                android:background="@mipmap/semicbar_back"
+                app:mStartAngle="225"
+                />
             <ImageView
                 android:id="@+id/image_switch"
                 android:layout_width="wrap_content"
@@ -132,8 +164,16 @@
                 android:src="@mipmap/image_switch"
                 />
 
-        </RelativeLayout>
+            <View
+                android:id="@+id/imageView"
+                android:layout_width="@dimen/dp_jy_4"
+                android:layout_height="@dimen/dp_jy_21"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:background="@drawable/shape_detail_back" />
 
+
+        </RelativeLayout>
 
         <TextView
             android:id="@+id/tv_outmode"
@@ -141,83 +181,121 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="输出模式"
-            android:textColor="@color/white"
             android:textSize="@dimen/sp_16"
-            android:layout_above="@+id/relative4"
-            android:layout_marginBottom="@dimen/dp_jy_20"
-            />
+            android:layout_below="@+id/layout_body"
+            android:layout_marginTop="@dimen/dp_jy_10"
 
+            />
         <RelativeLayout
+            android:layout_alignParentBottom="true"
             android:id="@+id/relative4"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_jy_20"
-            android:gravity="center">
-
-
+            android:gravity="center"
+            >
             <ImageView
-                android:id="@+id/image_mode"
+                android:id="@+id/image_timer"
                 android:layout_width="@dimen/dp_jy_60"
                 android:layout_height="@dimen/dp_jy_60"
-                android:layout_centerVertical="true"
                 android:scaleType="centerInside"
                 android:src="@mipmap/timer_task"
-
+                />
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_timer"
+                android:layout_alignLeft="@+id/image_timer"
+                android:layout_alignRight="@+id/image_timer"
+                android:text="定时"
+                android:gravity="center"
                 />
 
             <ImageView
-                android:id="@+id/module_task"
+                android:id="@+id/image_rate"
                 android:layout_width="@dimen/dp_jy_60"
                 android:layout_height="@dimen/dp_jy_60"
                 android:layout_marginLeft="@dimen/dp_jy_20"
-                android:layout_toRightOf="@+id/image_mode"
+                android:layout_toRightOf="@+id/image_timer"
                 android:scaleType="centerInside"
-                android:src="@mipmap/module_task" />
-
-
-            <ImageView
-                android:id="@+id/image_mode3"
-                android:layout_width="@dimen/dp_jy_60"
-                android:layout_height="@dimen/dp_jy_60"
-                android:layout_marginLeft="@dimen/dp_jy_20"
-                android:layout_toRightOf="@+id/module_task"
-                android:scaleType="centerInside"
-                android:src="@mipmap/img_lock" />
-
+                android:src="@mipmap/rate_power" />
             <TextView
-                android:id="@+id/tv_mode3"
+                android:id="@+id/tv_power"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_above="@+id/image_mode3"
-                android:layout_alignLeft="@+id/image_mode3"
-                android:layout_alignRight="@+id/image_mode3"
+                android:layout_below="@+id/image_timer"
+                android:layout_alignLeft="@+id/image_rate"
+                android:layout_alignRight="@+id/image_rate"
+                android:text="功率"
                 android:gravity="center"
-                android:text="锁定模式"
-                android:textColor="@color/white"
-                android:visibility="gone" />
+                />
+
 
             <ImageView
-                android:id="@+id/image_mode4"
+                android:id="@+id/image_lock"
                 android:layout_width="@dimen/dp_jy_60"
                 android:layout_height="@dimen/dp_jy_60"
-
                 android:layout_marginLeft="@dimen/dp_jy_20"
-                android:layout_toRightOf="@+id/image_mode3"
+                android:layout_toRightOf="@+id/image_rate"
+                android:scaleType="centerInside"
+                android:src="@mipmap/img_lock" />
+            <TextView
+                android:id="@+id/tv_lock"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_lock"
+                android:layout_alignLeft="@+id/image_lock"
+                android:layout_alignRight="@+id/image_lock"
+                android:text="童锁"
+                android:gravity="center"
+                />
+
+            <TextView
+                android:id="@+id/tv_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/image_lock"
+                android:layout_alignLeft="@+id/image_lock"
+                android:layout_alignRight="@+id/image_lock"
+                android:gravity="center"
+                android:text="锁定模式"
+                />
+
+            <ImageView
+                android:id="@+id/image_screen"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
+                android:layout_marginLeft="@dimen/dp_jy_20"
+                android:layout_toRightOf="@+id/image_lock"
                 android:scaleType="centerInside"
                 android:src="@mipmap/img_screen" />
+            <TextView
+                android:id="@+id/tv_screen"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_screen"
+                android:layout_alignLeft="@+id/image_screen"
+                android:layout_alignRight="@+id/image_screen"
+                android:text="息屏"
+                android:gravity="center"
+                />
         </RelativeLayout>
-    </LinearLayout>
+
+    </RelativeLayout>
+
+
     <TextView
         android:id="@+id/tv_offline"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textColor="@color/white"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="5"
         android:text="设备已离线"
+        app:layout_heightPercent="87%"
+        app:layout_widthPercent="100%"
         android:gravity="center"
         android:textSize="@dimen/sp_25"
         android:layout_centerInParent="true"
         android:visibility="gone"
         />
 
-</LinearLayout>
+</android.support.percent.PercentRelativeLayout>

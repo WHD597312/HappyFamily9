@@ -19,6 +19,7 @@ import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -156,7 +157,7 @@ public class AddRoomActivity extends AppCompatActivity {
             Log.i("aaaaaa", "doInBackground:---> "+result);
 
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     JSONObject returnData=jsonObject.getJSONObject("returnData");
@@ -189,7 +190,7 @@ public class AddRoomActivity extends AppCompatActivity {
             super.onPostExecute(code);
             switch (code) {
                 case 3001:
-                    com.xr.happyFamily.login.util.Utils.showToast(AddRoomActivity.this, "添加房间失败，请重试");
+                    Utils.showToast(AddRoomActivity.this, "添加房间失败，请重试");
                     break;
 
                 case 100:

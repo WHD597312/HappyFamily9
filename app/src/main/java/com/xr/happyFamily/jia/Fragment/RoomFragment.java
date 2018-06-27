@@ -3,7 +3,10 @@ package com.xr.happyFamily.jia.Fragment;
 import android.app.Dialog;
 import android.content.Intent;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
+import android.support.annotation.RequiresApi;
+import android.support.percent.PercentRelativeLayout;
 import android.support.v4.app.Fragment;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -33,6 +36,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -74,14 +78,15 @@ public class RoomFragment extends Fragment {
     private DeviceChildDaoImpl deviceChildDao;
     private HourseDaoImpl hourseDao;
     long houseId;
+    @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
     {
         View view = inflater.inflate(R.layout.activity_home_balcony, container, false);
         unbinder=ButterKnife.bind(this,view);
-        android.support.percent.PercentRelativeLayout percentRelativeLayout=
-                ( android.support.percent.PercentRelativeLayout)view.findViewById(R.id.pr_view);
+        PercentRelativeLayout percentRelativeLayout=
+                ( PercentRelativeLayout)view.findViewById(R.id.pr_view);
         TextView textViewr = (TextView) view.findViewById(R.id.tv_roomname);
         percentRelativeLayout.setBackground(getResources().getDrawable(R.mipmap.bg_room));
         str1=new ArrayList();
@@ -219,8 +224,8 @@ public void onClick(View view) {
             @Override
             public void onPositiveClick() {
                 roomName = dialog.getName();
-                if (com.xr.happyFamily.login.util.Utils.isEmpty(roomName)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(getActivity(), "住所名称不能为空");
+                if (Utils.isEmpty(roomName)) {
+                    Utils.showToast(getActivity(), "住所名称不能为空");
                 } else {
 
                     for (int i=0;i<str1.size();i++){
@@ -247,7 +252,7 @@ public void onClick(View view) {
             String result = HttpUtils.getOkHpptRequest(url);
 
             try {
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
 

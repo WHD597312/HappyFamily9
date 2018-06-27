@@ -17,7 +17,7 @@
         <LinearLayout
             android:id="@+id/wd_li"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_30"
+            android:layout_height="@dimen/dp_jy_30"
             android:orientation="horizontal">
 
             <Button
@@ -26,7 +26,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:paddingRight="@dimen/dp_50"
+                android:paddingRight="@dimen/dp_jy_50"
                 android:text="温度"
                 android:textColor="@color/color_blue_pm25"
 
@@ -48,7 +48,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@null"
-                android:paddingLeft="@dimen/dp_50"
+                android:paddingLeft="@dimen/dp_jy_50"
                 android:text="PM2.5"
                 android:textColor="@color/color_gray2"
                 android:textSize="13sp" />
@@ -62,8 +62,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/wd_li"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_jy_20"
+            android:layout_marginTop="@dimen/dp_jy_20"
             android:text="39℃"
             android:textColor="@color/color_xnty_h"
             android:textSize="23sp" />
@@ -73,7 +73,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/wd_24"
-            android:layout_marginLeft="@dimen/dp_20"
+            android:layout_marginLeft="@dimen/dp_jy_20"
             android:text="当前温度"
             android:textColor="@color/color_gray2"
             android:textSize="12sp" />
@@ -84,16 +84,16 @@
             android:layout_height="30dp"
             android:layout_alignParentRight="true"
             android:layout_below="@+id/wd_li"
-            android:layout_marginRight="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_20"
+            android:layout_marginRight="@dimen/dp_jy_20"
+            android:layout_marginTop="@dimen/dp_jy_20"
             android:src="@mipmap/wd_fs" />
 
 
 
         <ImageView
             android:id="@+id/wd_xh"
-            android:layout_width="@dimen/dp_70"
-            android:layout_height="@dimen/dp_90"
+            android:layout_width="@dimen/dp_jy_70"
+            android:layout_height="@dimen/dp_jy_90"
             android:layout_above="@+id/view_wd"
             android:layout_centerHorizontal="true"
             android:layout_marginBottom="-30dp"
@@ -104,7 +104,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/wd_xh"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_45"
+            android:layout_marginTop="@dimen/dp_jy_45"
             android:text="已联动"
             android:textSize="16sp" />
 
@@ -114,7 +114,7 @@
             android:layout_height="wrap_content"
             android:layout_below="@id/wd_24"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_15"
+            android:layout_marginTop="@dimen/dp_jy_15"
             android:scaleType="centerCrop"
             android:src="@mipmap/pm25_bj" />
 
@@ -125,7 +125,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/iv_wd_bj"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_80"
+            android:layout_marginTop="@dimen/dp_jy_80"
             android:src="@mipmap/pm25_zd" />
 
         <TextView
@@ -144,7 +144,7 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/iv_wd_bj"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_30"
+            android:layout_marginTop="@dimen/dp_jy_30"
             android:text="16℃"
             android:textColor="@color/color_green3"
             android:textSize="25sp" />
@@ -174,7 +174,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@id/iv_wd_bj"
-            android:layout_marginLeft="@dimen/dp_77"
+            android:layout_marginLeft="@dimen/dp_jy_77"
             android:layout_marginTop="-10dp"
             android:text="寒冷"
             android:textColor="@color/color_gray3"
@@ -186,7 +186,7 @@
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
             android:layout_alignTop="@+id/tv_wd_wr"
-            android:layout_marginRight="@dimen/dp_77"
+            android:layout_marginRight="@dimen/dp_jy_77"
             android:text="酷热"
             android:textColor="@color/color_gray3"
             android:textSize="14sp"
@@ -198,9 +198,9 @@
         <View
             android:id="@+id/view_wd"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_1"
+            android:layout_height="@dimen/dp_jy_1"
             android:layout_below="@+id/tv_wd_fc"
-            android:layout_marginTop="@dimen/dp_5"
+            android:layout_marginTop="@dimen/dp_jy_5"
             android:background="@color/color_gray3" />
 
         <TextView
@@ -208,8 +208,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view_wd"
-            android:layout_marginLeft="@dimen/dp_15"
-            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginLeft="@dimen/dp_jy_15"
+            android:layout_marginTop="@dimen/dp_jy_8"
             android:text="智能制冷"
             android:textColor="@color/color_gray2" />
 
@@ -219,7 +219,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/view_wd"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_25"
+            android:layout_marginTop="@dimen/dp_jy_25"
             android:background="@null"
             android:scaleType="fitCenter" />
 

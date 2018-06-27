@@ -18,13 +18,13 @@
         />
     <View
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_30"
+        android:layout_height="@dimen/dp_jy_30"
         android:id="@+id/view2"
         android:layout_below="@id/view1"
         />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:background="@color/white"
         android:id="@+id/view3"
         android:layout_below="@id/view2"
@@ -35,18 +35,18 @@
             android:layout_height="wrap_content"
             android:text="家庭名称"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginLeft="@dimen/dp_jy_12"
             android:textSize="14sp"
             />
         <EditText
             android:id="@+id/et_house_name"
             android:layout_toRightOf="@+id/tv_ahourse_name"
-            android:layout_marginLeft="@dimen/dp_30"
-            android:layout_marginRight="@dimen/dp_12"
-            android:paddingLeft="@dimen/dp_25"
+            android:layout_marginLeft="@dimen/dp_jy_30"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            android:paddingLeft="@dimen/dp_jy_25"
             android:layout_centerVertical="true"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_jy_40"
             android:hint="请输入家庭名称"
             android:background="@null"
             android:textSize="@dimen/sp_16"
@@ -56,15 +56,15 @@
     <View
         android:id="@+id/view4"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
+        android:layout_height="@dimen/dp_jy_1"
         android:background="@color/color_gray2"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
         android:layout_below="@id/view3"
         />
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_jy_50"
         android:layout_below="@id/view4"
         android:id="@+id/view5"
 
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:text="家庭位置"
-            android:layout_marginLeft="@dimen/dp_12"
+            android:layout_marginLeft="@dimen/dp_jy_12"
             android:textSize="14sp"
             />
 
@@ -84,12 +84,12 @@
             android:layout_width="match_parent"
             android:layout_height="37dp"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_30"
-            android:layout_marginRight="@dimen/dp_12"
+            android:layout_marginLeft="@dimen/dp_jy_30"
+            android:layout_marginRight="@dimen/dp_jy_12"
             android:layout_toRightOf="@+id/tv_ahourse_position"
             android:gravity="center_vertical"
             android:hint="请选择家庭位置"
-            android:paddingLeft="@dimen/dp_25"
+            android:paddingLeft="@dimen/dp_jy_25"
             android:textSize="@dimen/sp_16" />
 
 
@@ -97,10 +97,10 @@
     <View
         android:id="@+id/view6"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_1"
+        android:layout_height="@dimen/dp_jy_1"
         android:background="@color/color_gray2"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
         android:layout_below="@id/view5"
         />
     <Button
@@ -112,9 +112,9 @@
         android:text="确定"
         android:textSize="@dimen/sp_16"
         android:textColor="@color/white"
-        android:layout_marginBottom="@dimen/dp_20"
-        android:layout_marginLeft="@dimen/dp_10"
-        android:layout_marginRight="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_jy_20"
+        android:layout_marginLeft="@dimen/dp_jy_10"
+        android:layout_marginRight="@dimen/dp_jy_10"
         android:background="@drawable/shape_add_device"
         />
 </RelativeLayout>

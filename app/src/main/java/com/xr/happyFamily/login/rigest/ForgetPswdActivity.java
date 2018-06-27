@@ -19,6 +19,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -111,15 +112,15 @@ public class ForgetPswdActivity extends AppCompatActivity
                 String code=et_code.getText().toString().trim();
                 String password=et_password.getText().toString().trim();
                 if (TextUtils.isEmpty(phone2)){
-                    com.xr.happyFamily.login.util.Utils.showToast(this,"手机号码不能为空");
+                    Utils.showToast(this,"手机号码不能为空");
                     return;
                 }
                 if (TextUtils.isEmpty(code)){
-                    com.xr.happyFamily.login.util.Utils.showToast(this,"请输入验证码");
+                    Utils.showToast(this,"请输入验证码");
                     return;
                 }
                 if (TextUtils.isEmpty(password)){
-                    com.xr.happyFamily.login.util.Utils.showToast(this,"请输入密码");
+                    Utils.showToast(this,"请输入密码");
                     return;
                 }
 
@@ -134,7 +135,7 @@ public class ForgetPswdActivity extends AppCompatActivity
             case R.id.btn_fg_code:
                 String phone = et_phone.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(this,"手机号码不能为空");
+                    Utils.showToast(this,"手机号码不能为空");
                 } else {
                     SMSSDK.getVerificationCode("86", phone);
                     CountTimer countTimer=new CountTimer(60000,1000);
@@ -152,7 +153,7 @@ public class ForgetPswdActivity extends AppCompatActivity
             Map<String, Object> params = maps[0];
             String result = HttpUtils.postOkHpptRequest(url, params);
             Log.i("back", "--->"+result);
-            if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+            if (!Utils.isEmpty(result)) {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -171,13 +172,13 @@ public class ForgetPswdActivity extends AppCompatActivity
             super.onPostExecute(s);
             switch (s) {
                 case "10003":
-                    com.xr.happyFamily.login.util.Utils.showToast(ForgetPswdActivity.this, "手机验证码错误，请重试");
+                    Utils.showToast(ForgetPswdActivity.this, "手机验证码错误，请重试");
                     break;
                 case "10002":
-                    com.xr.happyFamily.login.util.Utils.showToast(ForgetPswdActivity.this, "账户不存在");
+                    Utils.showToast(ForgetPswdActivity.this, "账户不存在");
                     break;
                 case "100":
-                    com.xr.happyFamily.login.util.Utils.showToast(ForgetPswdActivity.this, "创建成功");
+                    Utils.showToast(ForgetPswdActivity.this, "创建成功");
                     SharedPreferences.Editor editor = preferences.edit();
                     String phone = et_phone.getText().toString().trim();
                     String password = et_password.getText().toString().trim();

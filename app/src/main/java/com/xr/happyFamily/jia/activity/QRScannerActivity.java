@@ -31,6 +31,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.camera.CameraManager;
 import com.xr.happyFamily.together.util.decoding.CaptureActivityHandler;
 import com.xr.happyFamily.together.util.decoding.InactivityTimer;
@@ -175,10 +176,10 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             Toast.makeText(QRScannerActivity.this, "扫描失败!", Toast.LENGTH_SHORT).show();
         } else {
             String content = resultString;
-            if (!com.xr.happyFamily.login.util.Utils.isEmpty(content)) {
+            if (!Utils.isEmpty(content)) {
                 content = new String(Base64.decode(content, Base64.DEFAULT));
                 Toast.makeText(QRScannerActivity.this, content, Toast.LENGTH_SHORT).show();
-                if (!com.xr.happyFamily.login.util.Utils.isEmpty(content)) {
+                if (!Utils.isEmpty(content)) {
 //                    String[] ss = content.split("&");
 //                    String s0 = ss[0];
 //                    String deviceId = s0.substring(s0.indexOf("'") + 1);
@@ -210,7 +211,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             String url = strings[0];
 //            String result = HttpUtils.getOkHpptRequest(url);
             try {
-//                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+//                if (!Utils.isEmpty(result)) {
 //                    JSONObject jsonObject = new JSONObject(result);
 //                    code = jsonObject.getInt("code");
 //                    if (code == 2000) {
@@ -280,14 +281,14 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             super.onPostExecute(code);
             switch (code) {
                 case 2000:
-                    com.xr.happyFamily.login.util.Utils.showToast(QRScannerActivity.this, "创建成功");
+                    Utils.showToast(QRScannerActivity.this, "创建成功");
                     Intent intent2 = new Intent(QRScannerActivity.this, MainActivity.class);
                     intent2.putExtra("deviceList", "deviceList");
                     intent2.putExtra("deviceId", deviceId + "");
                     startActivity(intent2);
                     break;
                 default:
-                    com.xr.happyFamily.login.util.Utils.showToast(QRScannerActivity.this, "创建失败");
+                    Utils.showToast(QRScannerActivity.this, "创建失败");
                     break;
             }
         }
@@ -300,7 +301,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             int code = 0;
             Map<String, Object> params = maps[0];
             String result = HttpUtils.postOkHpptRequest(qrCodeConnectionUrl, params);
-            if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+            if (!Utils.isEmpty(result)) {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("code");
@@ -327,7 +328,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
 //                    startActivity(intent);
                     break;
                 case -3007:
-                    com.xr.happyFamily.login.util.Utils.showToast(QRScannerActivity.this, "分享设备添加失败");
+                    Utils.showToast(QRScannerActivity.this, "分享设备添加失败");
                     break;
             }
         }

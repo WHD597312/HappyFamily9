@@ -20,7 +20,7 @@
     <View
         android:id="@+id/view_null"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_28"
+        android:layout_height="@dimen/dp_jy_28"
         android:background="@null"
 
         />
@@ -34,9 +34,9 @@
     <ImageButton
         android:id="@+id/ib_csj_fh"
         android:layout_width="0dp"
-        android:paddingRight="@dimen/dp_29"
+        android:paddingRight="@dimen/dp_jy_29"
         android:layout_weight="1"
-        android:layout_height="@dimen/dp_30"
+        android:layout_height="@dimen/dp_jy_30"
         android:src="@mipmap/jsq_fh"
         android:background="@null"
 
@@ -47,7 +47,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:gravity="center"
-            android:paddingBottom="@dimen/dp_3"
+            android:paddingBottom="@dimen/dp_jy_3"
             android:text="除湿机虚拟体验"
             android:textColor="@color/white"
             android:textSize="19sp" />
@@ -67,8 +67,8 @@
         android:text="设定湿度"
         android:textSize="15sp"
         android:layout_below="@+id/li_csj"
-        android:layout_marginLeft="@dimen/dp_60"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginLeft="@dimen/dp_jy_60"
+        android:layout_marginTop="@dimen/dp_jy_30"
         />
     <TextView
         android:id="@+id/tv_csj_dqsd"
@@ -79,8 +79,8 @@
         android:layout_alignParentRight="true"
         android:textSize="15sp"
         android:layout_below="@+id/li_csj"
-        android:layout_marginRight="@dimen/dp_60"
-        android:layout_marginTop="@dimen/dp_30"
+        android:layout_marginRight="@dimen/dp_jy_60"
+        android:layout_marginTop="@dimen/dp_jy_30"
         />
     <TextView
         android:id="@+id/tv_csj_29"
@@ -91,7 +91,7 @@
         android:textSize="33sp"
         android:layout_below="@+id/tv_csj_sdsd"
         android:layout_alignLeft="@+id/tv_csj_sdsd"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_jy_10"
 
         />
     <TextView
@@ -103,14 +103,14 @@
         android:text="36"
         android:layout_below="@+id/tv_csj_sdsd"
         android:layout_alignLeft="@+id/tv_csj_dqsd"
-        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginLeft="@dimen/dp_jy_10"
         />
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_above="@+id/li_csj_1"
-        android:layout_marginBottom="@dimen/dp_10"
+        android:layout_marginBottom="@dimen/dp_jy_10"
         >
 
         <ImageView
@@ -147,7 +147,7 @@
         android:layout_height="wrap_content"
         android:orientation="horizontal"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_48"
+        android:layout_marginBottom="@dimen/dp_jy_48"
         >
      <TextView
         android:layout_weight="1"

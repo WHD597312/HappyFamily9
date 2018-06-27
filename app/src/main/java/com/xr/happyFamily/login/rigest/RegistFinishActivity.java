@@ -28,6 +28,7 @@ import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.xnty.SmartSocket;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -161,16 +162,16 @@ public class RegistFinishActivity extends AppCompatActivity {
             case R.id.btn_ffinish:
                 String name = editTextf.getText().toString().trim();
                 if (TextUtils.isEmpty(name)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(this, "昵称不能为空");
+                    Utils.showToast(this, "昵称不能为空");
                     return;
                 }
                 if (temp==-1){
-                    com.xr.happyFamily.login.util.Utils.showToast(this, "性别不能为空");
+                    Utils.showToast(this, "性别不能为空");
                     return;
                 }
 
                 if (TextUtils.isEmpty(birthday)) {
-                    com.xr.happyFamily.login.util.Utils.showToast(this, "生日不能为空");
+                    Utils.showToast(this, "生日不能为空");
                     return;
                 }
                 Map<String,Object> params=new HashMap<>();
@@ -191,7 +192,7 @@ public class RegistFinishActivity extends AppCompatActivity {
             Map<String, Object> params = maps[0];
             String result = HttpUtils.postOkHpptRequest(url, params);
             Log.i("iiiiii", "---->: "+result);
-            if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+            if (!Utils.isEmpty(result)) {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -209,7 +210,7 @@ public class RegistFinishActivity extends AppCompatActivity {
             switch (s) {
 
                 case "100":
-                    com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "创建成功");
+                    Utils.showToast(RegistFinishActivity.this, "创建成功");
                         Context mcontext = RegistFinishActivity.this;
                         dia = new Dialog(mcontext, R.style.edit_AlertDialog_style);//设置进入时跳出提示框
                         dia.setContentView(R.layout.activity_regist_dialog);
@@ -239,7 +240,7 @@ public class RegistFinishActivity extends AppCompatActivity {
 
                     break;
                 case "10001":
-                    com.xr.happyFamily.login.util.Utils.showToast(RegistFinishActivity.this, "账户已存在");
+                    Utils.showToast(RegistFinishActivity.this, "账户已存在");
                     break;
             }
         }

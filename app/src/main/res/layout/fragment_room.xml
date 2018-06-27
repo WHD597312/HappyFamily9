@@ -32,14 +32,14 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_12">
+                android:layout_marginTop="@dimen/dp_jy_12">
 
                 <ImageView
                     android:id="@+id/iv_home_fh"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:paddingRight="@dimen/dp_72"
+                    android:paddingRight="@dimen/dp_jy_72"
                     android:src="@mipmap/house_house"
 
                     />
@@ -63,7 +63,7 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:paddingTop="@dimen/dp_7"
+                        android:paddingTop="@dimen/dp_jy_7"
                         android:src="@mipmap/xiala3x" />
                 </LinearLayout>
 
@@ -73,7 +73,7 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:gravity="right"
-                    android:paddingRight="@dimen/dp_12"
+                    android:paddingRight="@dimen/dp_jy_12"
                     android:text="管理"
                     android:textColor="@color/white"
                     android:textSize="16sp" />
@@ -91,7 +91,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/dp_63"
+                    android:layout_marginTop="@dimen/dp_jy_63"
                     android:textColor="@color/color_white"
 
                     />
@@ -100,8 +100,8 @@
                     android:id="@+id/tv_balcony_wd"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:layout_marginTop="@dimen/dp_63"
+                    android:layout_marginLeft="@dimen/dp_jy_12"
+                    android:layout_marginTop="@dimen/dp_jy_63"
                     android:layout_toRightOf="@id/tv_balcony_wd1"
                     android:text="室温"
                     android:textColor="@color/color_white"
@@ -115,7 +115,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignBottom="@+id/tv_balcony_wd"
                     android:layout_marginBottom="-7dp"
-                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginLeft="@dimen/dp_jy_5"
                     android:layout_toRightOf="@+id/tv_balcony_wd"
                     android:text="23"
                     android:textColor="@color/color_white"
@@ -140,7 +140,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/tv_balcony_wd"
-                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginLeft="@dimen/dp_jy_12"
                     android:layout_toRightOf="@+id/tv_balcony_c"
                     android:text="湿度"
                     android:textColor="@color/color_white"
@@ -153,7 +153,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/tv_balcony_23"
-                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_marginLeft="@dimen/dp_jy_5"
                     android:layout_toRightOf="@id/tv_balcony_shi"
                     android:text="30"
                     android:textColor="@color/color_white"
@@ -175,8 +175,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/tv_balcony_sd"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:layout_marginTop="@dimen/dp_131"
+                    android:layout_marginLeft="@dimen/dp_jy_12"
+                    android:layout_marginTop="@dimen/dp_jy_131"
                     android:text="设备"
                     android:textColor="@color/white"
                     android:textSize="20sp" />
@@ -186,7 +186,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@+id/tv_balcony_eq"
-                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginLeft="@dimen/dp_jy_12"
                     android:text="EQUPMENT"
                     android:textColor="@color/white"
                     android:textSize="11sp"
@@ -196,18 +196,18 @@
                 <com.xr.happyFamily.jia.MyGridview
                     android:id="@+id/gv_balcony_home"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_191"
+                    android:layout_height="@dimen/dp_jy_191"
                     android:layout_below="@id/tv_balcony_eqe"
                     android:layout_centerHorizontal="true"
                     android:layout_marginBottom="26dp"
-                    android:layout_marginLeft="@dimen/dp_12"
-                    android:layout_marginRight="@dimen/dp_12"
-                    android:layout_marginTop="@dimen/dp_48"
-                    android:columnWidth="@dimen/dp_169"
+                    android:layout_marginLeft="@dimen/dp_jy_12"
+                    android:layout_marginRight="@dimen/dp_jy_12"
+                    android:layout_marginTop="@dimen/dp_jy_48"
+                    android:columnWidth="@dimen/dp_jy_169"
                     android:gravity="center"
-                    android:horizontalSpacing="@dimen/dp_12"
+                    android:horizontalSpacing="@dimen/dp_jy_12"
                     android:numColumns="2"
-                    android:verticalSpacing="@dimen/dp_12">
+                    android:verticalSpacing="@dimen/dp_jy_12">
 
                 </com.xr.happyFamily.jia.MyGridview>
 
@@ -222,9 +222,9 @@
     <View
         android:id="@+id/view_balcony"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_15"
-        android:layout_marginLeft="@dimen/dp_49"
-        android:layout_marginRight="@dimen/dp_49"
+        android:layout_height="@dimen/dp_jy_15"
+        android:layout_marginLeft="@dimen/dp_jy_49"
+        android:layout_marginRight="@dimen/dp_jy_49"
         android:background="@null" />
 
     <Button
@@ -232,9 +232,9 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_20"
-        android:layout_marginLeft="@dimen/dp_12"
-        android:layout_marginRight="@dimen/dp_12"
+        android:layout_marginBottom="@dimen/dp_jy_20"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
         android:background="@mipmap/button"
         android:text="+ 添加设备"
         android:textColor="@color/white" />

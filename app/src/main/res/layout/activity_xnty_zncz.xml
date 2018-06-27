@@ -19,7 +19,7 @@
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_45"
+        android:layout_height="@dimen/dp_jy_45"
         android:orientation="horizontal"
         android:background="@color/color_green4"
         >
@@ -27,19 +27,19 @@
             android:id="@+id/iv_zncz_fanh"
         android:layout_weight="1"
         android:layout_width="0dp"
-        android:layout_height="@dimen/dp_40"
+        android:layout_height="@dimen/dp_jy_40"
         android:src="@mipmap/zncz_fh"
             android:scaleType="centerInside"
-        android:paddingTop="@dimen/dp_6"
-        android:paddingRight="@dimen/dp_60"
+        android:paddingTop="@dimen/dp_jy_6"
+        android:paddingRight="@dimen/dp_jy_60"
         />
 
         <TextView
-            android:paddingTop="@dimen/dp_6"
+            android:paddingTop="@dimen/dp_jy_6"
 
             android:layout_weight="1"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_jy_40"
             android:text="智能插座"
             android:textColor="@color/white"
             android:textSize="20sp"
@@ -47,12 +47,12 @@
             />
         <ImageView
             android:id="@+id/iv_zncz_tb"
-            android:paddingTop="@dimen/dp_6"
-            android:paddingLeft="@dimen/dp_60"
+            android:paddingTop="@dimen/dp_jy_6"
+            android:paddingLeft="@dimen/dp_jy_60"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:scaleType="centerInside"
-            android:layout_height="@dimen/dp_40"
+            android:layout_height="@dimen/dp_jy_40"
             android:src="@mipmap/zncz_tb"
             />
 
@@ -67,8 +67,8 @@
             android:id="@+id/tv_zncz_ljsb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_14"
+            android:layout_marginLeft="@dimen/dp_jy_20"
+            android:layout_marginTop="@dimen/dp_jy_14"
             android:textColor="@color/color_green4"
             android:textSize="24sp" />
         <TextView
@@ -76,8 +76,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_20"
-            android:layout_marginTop="@dimen/dp_18"
+            android:layout_marginRight="@dimen/dp_jy_20"
+            android:layout_marginTop="@dimen/dp_jy_18"
             android:textColor="@color/color_gray3"
             android:textSize="15sp" />
         <TextView
@@ -85,7 +85,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_65"
+            android:layout_marginTop="@dimen/dp_jy_65"
             android:text="请添加设备"
             android:textColor="@color/color_gray3"
             android:textSize="15sp" />
@@ -160,13 +160,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_above="@+id/li_zncz"
-            android:layout_marginBottom="@dimen/dp_2">
+            android:layout_marginBottom="@dimen/dp_jy_2">
 
             <ImageView
                 android:id="@+id/iv_zncz_kg"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:layout_weight="1"
                 android:src="@mipmap/zncz_kg"
 
@@ -178,7 +178,7 @@
 
                 <TextView
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_jy_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="17sp"
@@ -189,7 +189,7 @@
                 android:id="@+id/iv_zncz_addwd"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:src="@mipmap/zncz_hq"
                 android:layout_centerHorizontal="true"
 
@@ -199,7 +199,7 @@
                 android:id="@+id/iv_zncz_ds"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_10"
+                android:layout_marginTop="@dimen/dp_jy_10"
                 android:layout_weight="1"
                 android:src="@mipmap/zncz_ds"
 
@@ -212,7 +212,7 @@
 
                 <TextView
                     android:layout_centerHorizontal="true"
-                    android:layout_marginTop="@dimen/dp_20"
+                    android:layout_marginTop="@dimen/dp_jy_20"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textSize="13sp"
@@ -223,7 +223,7 @@
                     android:id="@+id/iv_zncz_addxz"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/dp_10"
+                    android:layout_marginTop="@dimen/dp_jy_10"
                     android:src="@mipmap/zncz_hq"
                     android:layout_centerHorizontal="true"
 
@@ -236,7 +236,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
-            android:layout_marginBottom="@dimen/dp_20"
+            android:layout_marginBottom="@dimen/dp_jy_20"
 
             >
 

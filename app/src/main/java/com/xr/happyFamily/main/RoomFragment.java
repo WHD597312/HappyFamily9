@@ -266,6 +266,7 @@ public class RoomFragment extends Fragment{
                             SharedPreferences.Editor editor=mPositionPreferences.edit();
                             editor.clear();
                             editor.commit();
+                            
                         }
                         deviceChildDao.deleteDeviceInHouseRoom(houseId,roomId);
                     }

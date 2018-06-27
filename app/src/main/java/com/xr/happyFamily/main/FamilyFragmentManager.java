@@ -44,7 +44,6 @@ public class FamilyFragmentManager extends Fragment {
         Bundle bundle = getArguments();
         houseId = bundle.getLong("houseId");
         roomDao = new RoomDaoImpl(getActivity());
-
         rooms = new ArrayList<>();
         List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
         for (int i = 0; i < allRoomInHouse.size(); i++) {

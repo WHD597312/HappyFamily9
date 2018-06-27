@@ -177,26 +177,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(ssid)) {
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
-//                String macAddress="kkkdfddddddd";
-//                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
-//                for (DeviceChild deviceChild2 : deviceChildren) {
-//                    if (macAddress.equals(deviceChild2.getMacAddress())) {
-//                        deviceChildDao.delete(deviceChild2);
-//                        break;
-//                    }
-//                }
-//                deviceChild = new DeviceChild();
-//                deviceChild.setMacAddress(macAddress);
-//                deviceChild.setName(macAddress);
-//                deviceChild.setHouseId(houseId);
-//                deviceChild.setRoomId(roomId);
-//                boolean insert = deviceChildDao.insert(deviceChild);
-//                if (insert){
-//                    Intent intent2 = new Intent(this, MainActivity.class);
-//                    intent2.putExtra("houseId", houseId);
-//                    setResult(6000,intent2);
-//                    finish();
-//                }
                 break;
         }
     }

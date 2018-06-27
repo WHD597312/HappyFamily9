@@ -76,6 +76,7 @@ public class RoomFragment extends Fragment{
         roomDao=new RoomDaoImpl(getActivity());
         deviceChildDao=new DeviceChildDaoImpl(getActivity());
         Log.i("index","-->"+index);
+        mPositionPreferences = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
         room=roomDao.findById(roomId);
         Log.i("roomDao","houseId:"+houseId+",roomId:"+roomId);
         if (room!=null){
@@ -259,6 +260,12 @@ public class RoomFragment extends Fragment{
                         Room room=roomDao.findById(roomId);
                         if (room!=null){
                             roomDao.delete(room);
+                        }
+                        List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
+                        if (rooms.isEmpty()){
+                            SharedPreferences.Editor editor=mPositionPreferences.edit();
+                            editor.clear();
+                            editor.commit();
                         }
                         deviceChildDao.deleteDeviceInHouseRoom(houseId,roomId);
                     }

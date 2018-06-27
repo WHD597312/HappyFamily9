@@ -373,14 +373,14 @@ public class SmartTerminalHumBar extends View {
             canvas.rotate(8, centerX, centerY);
         }
         canvas.save();
-        mPaint.setStrokeWidth(5);
+        mPaint.setStrokeWidth(dip2px(2));
         mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawCircle(centerX, centerY, 20, mPaint);/**画空心圆*/
+        canvas.drawCircle(centerX, centerY, dip2px(5), mPaint);/**画空心圆*/
         canvas.save();
 
 
         float minLength = centerX-60;
-        mPaint.setStrokeWidth(5);
+        mPaint.setStrokeWidth(dip2px(2));
         double TWO_PI=Math.PI*2;
         double minRot=mCurProcess/60  * TWO_PI;
         Log.i("minRot","-->"+minRot);
@@ -471,6 +471,9 @@ public class SmartTerminalHumBar extends View {
     }
 
     private String deviceId;
+    public int dip2px(float dpValue) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getContext().getResources().getDisplayMetrics());
+    }
 
     public void setDeviceId(String deviceId) {
         this.deviceId = deviceId;

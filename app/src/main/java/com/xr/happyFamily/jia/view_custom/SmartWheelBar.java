@@ -1,6 +1,7 @@
 package com.xr.happyFamily.jia.view_custom;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Color;
@@ -19,7 +20,6 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.SmartWheelInfo;
 
 import java.util.List;
-
 
 
 /**
@@ -118,12 +118,19 @@ public class SmartWheelBar extends View {
      **/
     private Paint mBackColorPaint;
 
+    private Paint mPaint;/**刻度画笔*/
     /**
      * 圆盘角度
      **/
-    private volatile float mStartAngle = 0;
-    private int bigCircleRadus=0;/**大圆*/
-    private int smallCircleRadus=0;
+    private float mStartAngle = 30;
+    /**
+     * 大圆
+     */
+    private int bigCircleRadus = 0;
+    /**
+     * 小圆
+     */
+    private int smallCircleRadus = 0;
     private Paint smallPaint;
 
     /**
@@ -162,9 +169,20 @@ public class SmartWheelBar extends View {
 
 
     public SmartWheelBar(Context context, AttributeSet attrs) {
-        super(context, attrs);
+        this(context, attrs, 0);
     }
 
+    public SmartWheelBar(Context context, AttributeSet attrs, int defStyle) {
+        super(context, attrs, defStyle);
+        initAttrs(attrs, defStyle);
+    }
+
+
+    private void initAttrs(AttributeSet attrs, int defStyle) {
+        TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SmartWheelBar, defStyle, 0);
+        mStartAngle = a.getFloat(R.styleable.SmartWheelBar_mStartAngle, 0);
+        a.recycle();
+    }
 
     /**
      * 设置控件为正方形
@@ -178,8 +196,8 @@ public class SmartWheelBar extends View {
         // 中心点
         mCenter = width / 2;
         mDrawWidth = width;
-        bigCircleRadus=min/2;
-        smallCircleRadus=bigCircleRadus/2+50;
+        bigCircleRadus = min / 2;
+        smallCircleRadus = bigCircleRadus / 2 + 50;
         //屏幕的宽度
         setMeasuredDimension(min, min);
         init();
@@ -233,15 +251,18 @@ public class SmartWheelBar extends View {
         mTextPaint.setDither(true);
         //圆形背景的画笔
         mBackColorPaint = new Paint();
-        mBackColorPaint.setColor(Color.RED);
+        mBackColorPaint.setColor(Color.BLUE);
         mBackColorPaint.setAntiAlias(true);
         mBackColorPaint.setDither(true);
 
+        mPaint = new Paint();
+        mPaint.setAntiAlias(true);//去除边缘锯齿，优化绘制效果
+        mPaint.setColor(getResources().getColor(R.color.color_gray2));
+
         smallPaint = new Paint();
-        smallPaint.setColor(Color.BLUE);
+        smallPaint.setColor(Color.WHITE);
         smallPaint.setAntiAlias(true);
         smallPaint.setDither(true);
-
         mRange = new RectF(mCenter - mRangeWidth / 2, mCenter - mRangeWidth / 2, mCenter + mRangeWidth / 2, mCenter + mRangeWidth / 2);
     }
 
@@ -289,40 +310,40 @@ public class SmartWheelBar extends View {
         if (bitInfos == null || bitInfos.size() == 0) {
             return;
         }
-//        for (int i = 0; i < 40; i++) {//总共45个点  所以绘制45次  //绘制一圈的小黑点
-//            if (i==0){
+        float left = getPaddingLeft() + 25 / 2;
+        float top = getPaddingTop() + 25 / 2;
+        float right = mCanvas.getWidth() - getPaddingRight() - 25 / 2;
+        float bottom = mCanvas.getHeight() - getPaddingBottom() - 25 / 2;
+        float centerX = (left + right) / 2;
+        float centerY = (top + bottom) / 2;
+        int mUnreachedWidth = 25;
+
+//        for (int i = 0; i < 80; i++) {//总共45个点  所以绘制45次  //绘制一圈的小黑点
+//            if (i == 0) {
 //                mPaint.setColor(getResources().getColor(R.color.green));
-//                mCanvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
+//                mCanvas.drawRect(mCenter - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
 //                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
 //                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -15, getResources().getDisplayMetrics()), mPaint);
-//            }else {
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), mPaint);
+//            } else {
 //                mPaint.setColor(getResources().getColor(R.color.color_gray2));
 //                mCanvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
 //                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
 //                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -10, getResources().getDisplayMetrics()), mPaint);
+//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -20, getResources().getDisplayMetrics()), mPaint);
 //            }
-//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -10, getResources().getDisplayMetrics()), mPaint);
-
-//            if (i == 37) {
-//                mPaint.setColor(getResources().getColor(R.color.red_normal));
-//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
 //
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()), mPaint);
-//            }
-//            mCanvas.rotate(8, mCenter, mCenter);//360度  绘制72次   每次旋转5度
+//            mCanvas.rotate(4.5f, centerX, centerY);//360度  绘制72次   每次旋转5度
 //        }
 //        mCanvas.save();
         //绘制背景图
+        mBackColorPaint.setColor(Color.parseColor("#00000000"));
         mCanvas.drawCircle(mCenter, mCenter, bigCircleRadus, mBackColorPaint);
 
-        mCanvas.drawCircle(mCenter,mCenter,smallCircleRadus,smallPaint);
+//        mBackColorPaint.setAlpha(1);
+        smallPaint.setColor(Color.parseColor("#00000000"));
+//        smallPaint.setAlpha(1);
+        mCanvas.drawCircle(mCenter, mCenter, smallCircleRadus, smallPaint);
         //画前景图片
         mCanvas.drawBitmap(getFontBitmap(), 0, 0, null);
         //绘制中心图片
@@ -344,7 +365,6 @@ public class SmartWheelBar extends View {
         }
         return fontBitmap;
     }
-
 
 
     /**
@@ -395,19 +415,27 @@ public class SmartWheelBar extends View {
 
         //确定小图片的区域
         Rect rect = new Rect();
-;
+
         //绘制文本
         if (!TextUtils.isEmpty(bitInfos.get(i).text)) {
 
-
-
             mTextPaint.getTextBounds(bitInfos.get(i).text, 0, bitInfos.get(i).text.length(), rect);
             canvas.drawText(bitInfos.get(i).text, mCenter - rect.width() / 2,
-                    getPaddingTop() +TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()) + rect.height(), mTextPaint);
+                    getPaddingTop() + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 30, getResources().getDisplayMetrics()) + rect.height(), mTextPaint);
             canvas.rotate(45, centerX, centerY);
             //画完之后移动回来
 //            canvas.translate(-mCenter, -(rect.bottom + dip2px(2)));
         }
+
+        for (int j = 0; j < 80; j++) {//总共45个点  所以绘制45次  //绘制一圈的小黑点
+            mPaint.setColor(getResources().getColor(R.color.color_gray2));
+            canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+                    getPaddingTop() + 25 + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 6, getResources().getDisplayMetrics()),
+                    centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+                    getPaddingTop() + 25 + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -4, getResources().getDisplayMetrics()), mPaint);
+            canvas.rotate(4.5f, centerX, centerY);//360度  绘制72次   每次旋转5度
+        }
+        canvas.save();
     }
 
 
@@ -417,8 +445,8 @@ public class SmartWheelBar extends View {
 //        if (!mRange.contains(event.getX(), event.getY())) {
 //            return true;
 //        }
-        float x=event.getX();
-        float y=event.getY();
+        float x = event.getX();
+        float y = event.getY();
 
 //        if (event.getAction()==MotionEvent.ACTION_MOVE && isInCiecle(x,y)){
 //            float moveX = event.getX();
@@ -439,10 +467,13 @@ public class SmartWheelBar extends View {
             case MotionEvent.ACTION_DOWN:
                 touchX = event.getX();
                 touchY = event.getY();
-                //按下时的时间
-                nowClick = System.currentTimeMillis();
+                if (isInCiecle(touchX, touchY)) {
+                    //按下时的时间
+                    nowClick = System.currentTimeMillis();
+                }
                 break;
             case MotionEvent.ACTION_MOVE:
+
                 float moveX = event.getX();
                 float moveY = event.getY();
                 //得到旋转的角度
@@ -452,39 +483,63 @@ public class SmartWheelBar extends View {
                 touchY = moveY;
                 //起始角度变化下，然后进行重新绘制
                 mStartAngle += arc;
-                if (isInCiecle(touchX,touchY)){
+                Log.i("mStartAngle", "-->" + mStartAngle);
+                if (mStartAngle >= 360) {
+                    mStartAngle = 0;
+                }
+                if (mStartAngle <= -360) {
+                    mStartAngle = 0;
+                }
+                if (isInCiecle(touchX, touchY)) {
                     onDrawInvalidate();
                 }
-
                 break;
             case MotionEvent.ACTION_UP:
-                if (System.currentTimeMillis() - nowClick <= timeClick) {//此时为点击事件
-                    //落点的角度加上偏移量基于初始的点的位置
-                    checkPosition = calInExactArea(getRoundArc(event.getX(), event.getY()) - mStartAngle);
-                    onDrawInvalidate();
-                    if (mOnWheelCheckListener != null) {
-                        mOnWheelCheckListener.onCheck(checkPosition);
-                    }
+
+                touchX = event.getX();
+                touchY = event.getY();
+
+                //落点的角度加上偏移量基于初始的点的位置
+
+
+                if (mStartAngle % 4.5f != 0) {
+                    int t = (int) (mStartAngle / 4.5f);
+                    mStartAngle = t * 4.5f;
+                    Log.i("mStartAngle3", "-->" + mStartAngle);
                 }
+                checkPosition = calInExactArea(getRoundArc(event.getX(), event.getY()) - mStartAngle);
+
+                onDrawInvalidate();
+                if (mOnWheelCheckListener != null) {
+//                        mOnWheelCheckListener.onCheck(checkPosition);
+                    mOnWheelCheckListener.onChanged(this, mStartAngle);
+                }
+
+
                 break;
         }
         return true;
     }
 
-
-    /**判断落点是否在圆环上*/
-    public boolean isInCiecle(float x,float y){
-        Log.i("x","-->"+x);
-        Log.i("y","-->"+y);
-        float distance = (float) Math.sqrt((x-bigCircleRadus)*(x-bigCircleRadus)+(y-bigCircleRadus)*(y-bigCircleRadus));
-        Log.i("distance","-->"+distance);
-
-        Log.i("smallCircleRadus","-->"+smallCircleRadus);
-        if (distance>=smallCircleRadus && distance<=bigCircleRadus)
+    /**
+     * 判断落点是否在圆环上
+     */
+    /**
+     * 判断落点是否在圆环上
+     */
+    public boolean isInCiecle(float x, float y) {
+        Log.i("x", "-->" + x);
+        Log.i("y", "-->" + y);
+        float distance = (float) Math.sqrt((x - bigCircleRadus) * (x - bigCircleRadus) + (y - bigCircleRadus) * (y - bigCircleRadus));
+        Log.i("distance", "-->" + distance);
+        int smallCircleRadus = bigCircleRadus / 2 + 50;
+        Log.i("smallCircleRadus", "-->" + smallCircleRadus);
+        if (distance >= smallCircleRadus && distance <= bigCircleRadus)
             return true;
         else
             return false;
     }
+
     //根据落点计算角度
     private float getRoundArc(float upX, float upY) {
         float arc = 0;
@@ -515,6 +570,7 @@ public class SmartWheelBar extends View {
                 }
             }
         }
+        Log.i("arc", "-->" + arc);
         return arc;
     }
 
@@ -558,6 +614,14 @@ public class SmartWheelBar extends View {
         }
     }
 
+    public void setmStartAngle(float mStartAngle) {
+        this.mStartAngle = mStartAngle;
+    }
+
+    public float getmStartAngle() {
+        return mStartAngle;
+    }
+
     /**
      * dp转像素
      *
@@ -573,21 +637,19 @@ public class SmartWheelBar extends View {
      **/
     private void onDrawInvalidate() {
         invalidate();
-
     }
 
     public int getCheckPosition() {
         return checkPosition;
     }
 
-
     private OnWheelCheckListener mOnWheelCheckListener;
 
     public void setOnWheelCheckListener(OnWheelCheckListener mOnWheelCheckListener) {
         this.mOnWheelCheckListener = mOnWheelCheckListener;
     }
-
-    public static interface OnWheelCheckListener {
-        void onCheck(int position);
+    public interface OnWheelCheckListener {
+        //        void onCheck(int position);
+        void onChanged(SmartWheelBar wheelBar, float curAngle);
     }
 }

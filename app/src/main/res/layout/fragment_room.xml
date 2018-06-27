@@ -1,0 +1,242 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/pr_view"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/bg_balcony"
+
+    android:orientation="vertical">
+
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_alignParentTop="true"
+        android:orientation="vertical"
+        app:layout_heightPercent="85%"
+        app:layout_widthPercent="100%"
+
+        >
+
+        <RelativeLayout
+
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:focusable="true"
+            android:focusableInTouchMode="true">
+
+            <LinearLayout
+                android:id="@+id/balcony_li1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_12">
+
+                <ImageView
+                    android:id="@+id/iv_home_fh"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingRight="@dimen/dp_72"
+                    android:src="@mipmap/house_house"
+
+                    />
+
+                <LinearLayout
+                    android:id="@+id/balcony_li"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:id="@+id/tv_roomname"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text=""
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/dp_7"
+                        android:src="@mipmap/xiala3x" />
+                </LinearLayout>
+
+                <TextView
+                    android:id="@+id/tv_home_manager"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="right"
+                    android:paddingRight="@dimen/dp_12"
+                    android:text="管理"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_balcony"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentTop="true">
+
+                <TextView
+                    android:id="@+id/tv_balcony_wd1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_63"
+                    android:textColor="@color/color_white"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_balcony_wd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_63"
+                    android:layout_toRightOf="@id/tv_balcony_wd1"
+                    android:text="室温"
+                    android:textColor="@color/color_white"
+                    android:textSize="10sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_balcony_23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tv_balcony_wd"
+                    android:layout_marginBottom="-7dp"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_toRightOf="@+id/tv_balcony_wd"
+                    android:text="23"
+                    android:textColor="@color/color_white"
+                    android:textSize="27sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_balcony_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/tv_balcony_23"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toRightOf="@+id/tv_balcony_23"
+                    android:text="℃"
+                    android:textColor="@color/color_white"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_balcony_shi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/tv_balcony_wd"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_toRightOf="@+id/tv_balcony_c"
+                    android:text="湿度"
+                    android:textColor="@color/color_white"
+                    android:textSize="10sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_balcony_sd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/tv_balcony_23"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_toRightOf="@id/tv_balcony_shi"
+                    android:text="30"
+                    android:textColor="@color/color_white"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/tv_balcony_c"
+                    android:layout_toRightOf="@id/tv_balcony_sd"
+                    android:text="％"
+                    android:textColor="@color/color_white"
+
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_balcony_eq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_balcony_sd"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_131"
+                    android:text="设备"
+                    android:textColor="@color/white"
+                    android:textSize="20sp" />
+
+                <TextView
+                    android:id="@+id/tv_balcony_eqe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_balcony_eq"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:text="EQUPMENT"
+                    android:textColor="@color/white"
+                    android:textSize="11sp"
+
+                    />
+
+                <com.xr.happyFamily.jia.MyGridview
+                    android:id="@+id/gv_balcony_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_191"
+                    android:layout_below="@id/tv_balcony_eqe"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="26dp"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginRight="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_48"
+                    android:columnWidth="@dimen/dp_169"
+                    android:gravity="center"
+                    android:horizontalSpacing="@dimen/dp_12"
+                    android:numColumns="2"
+                    android:verticalSpacing="@dimen/dp_12">
+
+                </com.xr.happyFamily.jia.MyGridview>
+
+            </RelativeLayout>
+
+
+        </RelativeLayout>
+
+    </ScrollView>
+
+
+    <View
+        android:id="@+id/view_balcony"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_15"
+        android:layout_marginLeft="@dimen/dp_49"
+        android:layout_marginRight="@dimen/dp_49"
+        android:background="@null" />
+
+    <Button
+        android:id="@+id/btn_add_device"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_20"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
+        android:background="@mipmap/button"
+        android:text="+ 添加设备"
+        android:textColor="@color/white" />
+
+</android.support.percent.PercentRelativeLayout>

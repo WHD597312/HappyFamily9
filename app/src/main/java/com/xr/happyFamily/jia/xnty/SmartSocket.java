@@ -20,6 +20,7 @@ import android.view.animation.RotateAnimation;
 import android.widget.RelativeLayout;
 import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import butterknife.BindView;
@@ -256,9 +257,13 @@ public class SmartSocket extends AppCompatActivity implements SeekBar.OnSeekBarC
 
     @OnClick({R.id.zncz_adde, R.id.iv_zncz_fanh ,R.id.tv_zncz_qhsb,R.id.iv_zncz_ds ,R.id.iv_b2_qx,R.id.iv_b2_qd
             ,R.id. iv_zncz_addwd,R.id.iv_zncz_qd,R.id.iv_zncz_addxz ,R.id.iv_znczxz_qd,R.id.iv_cnczsd_qd,
-            R.id.iv_znczxz_qx,R.id.iv_znczpm25_qd})
+            R.id.iv_znczxz_qx,R.id.iv_znczpm25_qd ,R.id.iv_zncz_tb})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.iv_zncz_tb:
+
+                startActivity(new Intent(this, Smartsj.class));
+                break;
             case R.id.zncz_adde:
 //                startActivity(new Intent(this, ZnczListActivity.class));//点击跳转到设备列表
                 //添加设备
@@ -285,7 +290,21 @@ public class SmartSocket extends AppCompatActivity implements SeekBar.OnSeekBarC
                 int sh = timepicker1.getValue();
                 int em = timepicker4.getValue();
                 int eh = timepicker3.getValue();
-                textViewds.setText(sh + ":" + sm + "-" + eh + ":" + em);
+//                textViewds.setText(sh + ":" + sm + "-" + eh + ":" + em);
+                if (((eh*60+em)-(sh*60+sm))>0){
+                    if (sm<10&&em<10){
+                        textViewds.setText(sh+":0"+sm+"-"+eh+":0"+em);
+                    }else if (sm>=10&&em<10){
+                        textViewds.setText(sh+":"+sm+"-"+eh+":0"+em);
+                    }else if (sm<10&&em>=10){
+                        textViewds.setText(sh+":0"+sm+"-"+eh+":"+em);
+                    }else if (sm>=10&&em>=10){
+                        textViewds.setText(sh+":"+sm+"-"+eh+":"+em);
+                    }
+
+                }else {
+                    Toast.makeText(this ,"结束时间需要大于开始时间", Toast.LENGTH_SHORT).show();
+                }
                 bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_zncz_addwd://叫出设置湿度界面
@@ -313,18 +332,18 @@ public class SmartSocket extends AppCompatActivity implements SeekBar.OnSeekBarC
 
                 break;
             case R.id.iv_zncz_qd://设定温度确定
-                textView36.setText(String.valueOf(x+5)+"℃");
+                textViewwd.setText(String.valueOf(x+5)+"℃");
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_zncz_qx://取消
                 bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_znczpm25_qd://设定pm25确定
-                textView36.setText(String.valueOf(x));
+                textViewwd.setText(String.valueOf(x));
                 bottomSheetBehavior5.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_cnczsd_qd://设定湿度确定
-                textView36.setText(String.valueOf(x+20));
+                textViewwd.setText(String.valueOf(x+20));
                 bottomSheetBehavior3.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_zncz_addxz://叫出设置限制

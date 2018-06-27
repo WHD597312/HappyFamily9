@@ -1,198 +1,227 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-<LinearLayout
+<android.support.percent.PercentRelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_keting"
+    android:background="@mipmap/bg_room"
     android:orientation="vertical">
 
-<ScrollView
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_jy_460"
-    android:orientation="vertical"
-    android:background="@mipmap/bg_room"
-    >
+    <ScrollView
+        android:layout_width="0dp"
+        android:layout_height="434dp"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="1dp"
+        android:orientation="vertical"
+        app:layout_heightPercent="85%"
+        app:layout_widthPercent="100%">
 
-    <RelativeLayout
-
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:focusable="true"
-        android:focusableInTouchMode="true">
-
-        <LinearLayout
-            android:id="@+id/room_li"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-
-            >
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="卧室"
-                android:textColor="@color/white" />
-            <ImageView
-                android:paddingTop="@dimen/dp_jy_4"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/xiala3x"
-                />
-        </LinearLayout>
         <RelativeLayout
-            android:id="@+id/rl_room"
+
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            >
+            android:focusable="true"
+            android:focusableInTouchMode="true">
 
-            <TextView
-                android:id="@+id/tv_room_wd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_jy_168"
-                android:layout_marginTop="@dimen/dp_jy_63"
-                android:text="室温"
-                android:textColor="@color/color_white"
-
-                />
-
-            <TextView
-                android:id="@+id/tv_room_23"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_room_wd"
-                android:layout_marginLeft="@dimen/dp_jy_27"
-                android:layout_marginTop="@dimen/dp_jy_43"
-                android:text="23"
-                android:textColor="@color/color_white"
-                android:textSize="35sp"
-
-                />
-
-            <TextView
-                android:id="@+id/tv_room_c"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_room_23"
-                android:layout_alignTop="@id/tv_room_23"
-                android:layout_marginLeft="@dimen/dp_jy_42"
-                android:layout_marginTop="@dimen/dp_jy_22"
-                android:text="℃"
-                android:textColor="@color/color_white"
-
-                />
-
-            <TextView
-                android:id="@+id/tv_room_shi"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/tv_room_c"
-                android:layout_alignTop="@id/tv_room_c"
-                android:layout_marginLeft="@dimen/dp_jy_22"
-                android:text="湿度"
-                android:textColor="@color/color_white"
-
-                />
-
-            <TextView
-                android:id="@+id/tv_room_sd"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_room_shi"
-                android:layout_alignTop="@id/tv_room_23"
-                android:layout_marginLeft="@dimen/dp_jy_32"
-                android:text="30"
-                android:textColor="@color/color_white"
-                android:textSize="35sp"
-
-                />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@id/tv_room_sd"
-                android:layout_alignTop="@id/tv_room_c"
-                android:layout_marginLeft="@dimen/dp_jy_42"
-                android:text="％"
-                android:textColor="@color/color_white"
-
-                />
-
-
-            <TextView
-                android:id="@+id/tv_room_eq"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="设备"
-                android:textColor="@color/white"
-                android:textSize="20sp"
-                android:layout_below="@id/tv_room_sd"
-                android:layout_marginTop="@dimen/dp_jy_131"
-                android:layout_marginLeft="@dimen/dp_jy_12"
-                />
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="EQUPMENT"
-                android:textColor="@color/white"
-                android:layout_marginLeft="@dimen/dp_jy_12"
-                android:textSize="11sp"
-                android:layout_below="@+id/tv_room_eq"
-                android:id="@+id/tv_room_eqe"
-
-                />
-
-            <com.xr.happyFamily.jia.MyGridview
-                android:layout_below="@id/tv_room_eqe"
-                android:layout_marginTop="@dimen/dp_jy_48"
-                android:id="@+id/gv_room_home"
+            <LinearLayout
+                android:id="@+id/room_li1"
+                android:layout_marginTop="@dimen/dp_12"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_jy_191"
-                android:layout_marginLeft="@dimen/dp_jy_12"
-                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_height="wrap_content"
                 android:layout_centerHorizontal="true"
-                android:layout_marginBottom="26dp"
-                android:columnWidth="@dimen/dp_jy_169"
-                android:gravity="center"
-                android:horizontalSpacing="@dimen/dp_jy_12"
-                android:numColumns="2"
-                android:verticalSpacing="@dimen/dp_jy_12">
 
-            </com.xr.happyFamily.jia.MyGridview>
+                >
+
+                <TextView
+                    android:id="@+id/tv_room_gl"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:paddingLeft="@dimen/dp_12"
+                    android:text="管理"
+                    android:textColor="@color/white"
+                    android:textSize="16sp" />
+
+                <LinearLayout
+                    android:id="@+id/room_li"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:gravity="center">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="卧室"
+                        android:textColor="@color/white"
+                        android:textSize="16sp" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:paddingTop="@dimen/dp_7"
+                        android:src="@mipmap/xiala3x" />
+                </LinearLayout>
+
+                <ImageView
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1" />
+            </LinearLayout>
+
+            <RelativeLayout
+                android:id="@+id/rl_room"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <TextView
+                    android:id="@+id/tv_room_wd1"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/dp_63"
+                    android:textColor="@color/color_white"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_room_wd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_63"
+                    android:layout_toRightOf="@id/tv_room_wd1"
+                    android:text="室温"
+                    android:textColor="@color/color_white"
+                    android:textSize="10sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_room_23"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@+id/tv_room_wd"
+                    android:layout_marginBottom="-7dp"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_toRightOf="@+id/tv_room_wd"
+                    android:text="23"
+                    android:textColor="@color/color_white"
+                    android:textSize="27sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_room_c"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignBottom="@id/tv_room_23"
+                    android:layout_marginBottom="5dp"
+                    android:layout_toRightOf="@+id/tv_room_23"
+                    android:text="℃"
+                    android:textColor="@color/color_white"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_room_shi"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/tv_room_wd"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_toRightOf="@+id/tv_room_c"
+                    android:text="湿度"
+                    android:textColor="@color/color_white"
+                    android:textSize="10sp"
+
+                    />
+
+                <TextView
+                    android:id="@+id/tv_room_sd"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/tv_room_23"
+                    android:layout_marginLeft="@dimen/dp_5"
+                    android:layout_toRightOf="@id/tv_room_shi"
+                    android:text="30"
+                    android:textColor="@color/color_white"
+                    android:textSize="28sp" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignTop="@id/tv_room_c"
+                    android:layout_toRightOf="@id/tv_room_sd"
+                    android:text="％"
+                    android:textColor="@color/color_white"
+
+                    />
+
+
+                <TextView
+                    android:id="@+id/tv_room_eq"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/tv_room_sd"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_151"
+                    android:text="设备"
+                    android:textColor="@color/white"
+                    android:textSize="15sp" />
+
+                <TextView
+                    android:id="@+id/tv_room_eqe"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/tv_room_eq"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:text="EQUPMENT"
+                    android:textColor="@color/white"
+                    android:textSize="10sp"
+
+                    />
+
+                <com.xr.happyFamily.jia.MyGridview
+                    android:id="@+id/gv_room_home"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_191"
+                    android:layout_below="@id/tv_room_eqe"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginBottom="26dp"
+                    android:layout_marginLeft="@dimen/dp_12"
+                    android:layout_marginRight="@dimen/dp_12"
+                    android:layout_marginTop="@dimen/dp_48"
+                    android:columnWidth="@dimen/dp_169"
+                    android:gravity="center"
+                    android:horizontalSpacing="@dimen/dp_12"
+                    android:numColumns="2"
+                    android:verticalSpacing="@dimen/dp_12">
+
+                </com.xr.happyFamily.jia.MyGridview>
+
+            </RelativeLayout>
+
 
         </RelativeLayout>
 
+    </ScrollView>
 
 
-
-
-
-
-    </RelativeLayout>
-
-</ScrollView>
-
-    <View
-        android:id="@+id/view_room"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_15"
-        android:background="@null"
-        android:layout_marginLeft="@dimen/dp_jy_49"
-        android:layout_marginRight="@dimen/dp_jy_49"
-        />
 
 
     <Button
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_20"
         android:id="@+id/bt_room_add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@mipmap/button"
-        android:layout_marginLeft="@dimen/dp_jy_12"
-        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_12"
+        android:layout_marginRight="@dimen/dp_12"
         android:text="+ 添加设备"
         android:textColor="@color/white"
         />
 
-</LinearLayout>
+</android.support.percent.PercentRelativeLayout>

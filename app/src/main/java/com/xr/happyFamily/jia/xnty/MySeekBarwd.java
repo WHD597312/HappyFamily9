@@ -8,13 +8,14 @@ import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Rect;
+import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
 import android.widget.SeekBar;
 
 import com.xr.happyFamily.R;
 
-public class MySeekBarwd extends SeekBar {
+public class MySeekBarwd extends AppCompatSeekBar {
     /**
      * SeekBar数值文字颜色
      */
@@ -64,6 +65,7 @@ public class MySeekBarwd extends SeekBar {
     private static final int ORIENTATION_TOP = 1;
     private static final int ORIENTATION_BOTTOM = 2;
 
+    private int bgResId;
 
     public MySeekBarwd(Context context) {
         this(context, null);
@@ -141,12 +143,26 @@ public class MySeekBarwd extends SeekBar {
         //绘制文字和背景
         canvas.drawBitmap(mBackgroundBitmap, bgX, bgY, mPaint);
         canvas.drawText(mText, textX, textY, mPaint);
+
+        BitmapFactory.decodeResource(getResources(), bgResId);
     }
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         invalidate();
         return super.onTouchEvent(event);
+    }
+
+    public void setmBackgroundBitmap(Bitmap mBackgroundBitmap) {
+        this.mBackgroundBitmap = mBackgroundBitmap;
+    }
+
+    public void setBgResId(int bgResId) {
+        this.bgResId = bgResId;
+    }
+
+    public int getBgResId() {
+        return bgResId;
     }
 
     /**

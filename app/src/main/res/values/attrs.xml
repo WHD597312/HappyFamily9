@@ -67,23 +67,28 @@
             <enum name="bottom" value="2" />
         </attr>
     </declare-styleable>
-
-    <declare-styleable name="DiffuseView">
-        <attr name="diffuse_color"/>
-        <attr name="diffuse_coreColor"/>
-        <attr name="diffuse_coreImage"/>
-        <attr name="diffuse_coreRadius"/>
-        <attr name="diffuse_width"/>
-        <attr name="diffuse_maxWidth"/>
-        <attr name="diffuse_speed"/>
+    <declare-styleable name="ArcProgressBar">
+        <attr name="arcDistance" format="integer"/>
+        <attr name="arcBgColor" format="color"/>
+        <attr name="dottedDefaultColor" format="color"/>
+        <attr name="dottedRunColor" format="color"/>
+        <attr name="dottedLineCount" format="integer"/>
+        <attr name="dottedLineWidth" format="integer"/>
+        <attr name="dottedLineHeight" format="integer"/>
+        <attr name="lineDistance" format="integer"/>
+        <attr name="progressMax" format="integer"/>
+        <attr name="progressTextSize" format="integer"/>
+        <attr name="progressDesc" format="string"/>
+        <attr name="arcText" format="string"/>
     </declare-styleable>
-
-
+    <declare-styleable name="SmartWheelBar">
+        <attr name="mStartAngle" format="float"/>
+    </declare-styleable>
     <declare-styleable name="RaidoTextView">
-        <attr name="radioTitleText" format="string" />
-        <attr name="radioBackground" format="color"/>
-        <attr name="radioTitleTextSize" format="dimension"/>
-        <attr name="radioTitleTextColor" format="color"/>
-        <attr name="radioCornerSize" format="integer"/>
-    </declare-styleable>
+    <attr name="radioTitleText" format="string" />
+    <attr name="radioBackground" format="color"/>
+    <attr name="radioTitleTextSize" format="dimension"/>
+    <attr name="radioTitleTextColor" format="color"/>
+    <attr name="radioCornerSize" format="integer"/>
+</declare-styleable>
 </resources>

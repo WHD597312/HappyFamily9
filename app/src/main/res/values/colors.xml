@@ -68,8 +68,6 @@
     <color name="color_orange_light">#fb6b39</color>
     <color name="color_black6">#0d0a09</color>
     <color name="color_light_blue1">#00ddff</color>
-
-
     <color name="green3">#4FBA72</color>
     <color name="shop_title">#808080</color>
     <color name="shop_context">#696969</color>
@@ -79,4 +77,5 @@
 
     <color name="happy_green">#65CB90</color>
     <color name="happy_gray">#d7d7d7</color>
+    <color name="color_gray4">#7f7f7f</color>
 </resources>

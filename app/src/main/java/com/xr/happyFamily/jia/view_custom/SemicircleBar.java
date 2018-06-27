@@ -303,129 +303,26 @@ public class SemicircleBar extends View {
         //画锚点
 //        mPointerPaint.setColor(getResources().getColor(R.color.color_black3));
 
-        mPaint.setAntiAlias(true);//去除边缘锯齿，优化绘制效果
-        mPaint.setColor(getResources().getColor(R.color.color_gray2));
-        canvas.save();//保存当前的状态
-
-
-        for (int i = 0; i < 80; i++) {//总共45个点  所以绘制45次  //绘制一圈的小黑点
-                if (i==0){
-                    mPaint.setColor(getResources().getColor(R.color.green));
-                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
-                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -15, getResources().getDisplayMetrics()), mPaint);
-                }else {
-                    mPaint.setColor(getResources().getColor(R.color.color_gray2));
-                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -10, getResources().getDisplayMetrics()), mPaint);
-                }
-//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -10, getResources().getDisplayMetrics()), mPaint);
-
-//            if (i == 37) {
-//                mPaint.setColor(getResources().getColor(R.color.red_normal));
-//                canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                        centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//        mPaint.setAntiAlias(true);//去除边缘锯齿，优化绘制效果
+//        mPaint.setColor(getResources().getColor(R.color.color_gray2));
+//        canvas.save();//保存当前的状态
 //
-//                        getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()), mPaint);
-//            }
-            canvas.rotate(4.5f, centerX, centerY);//360度  绘制72次   每次旋转5度
-        }
-        if (mNumColor == 0) {
-            mPaint.setColor(Color.BLACK);
-        }
-//        mPaint.setColor(getResources().get);
-        mPaint.setTextSize(mNumSize);
-        if (mNumSize == 0) {
-            mPaint.setTextSize((int) TypedValue.applyDimension(
-                    TypedValue.COMPLEX_UNIT_SP, 16, getResources().getDisplayMetrics()));
-        }
-        mPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));
-
-
-        String[]  strs = new String[]{"5", "10", "15", "20", "25", "30", "35","40"};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
-
-        Rect rect = new Rect();
-        canvas.save();
-        for (int i = 0; i < 8; i++) {//绘制6次  每次旋转56度
-            mPaint.getTextBounds(strs[i], 0, strs[i].length(), rect);
-            canvas.drawText(strs[i], centerX - rect.width() / 2,
-                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()) + rect.height(), mPaint);
-            canvas.rotate(45, centerX, centerY);
-        }
-        canvas.save();
-
-
-
-//        for (int i = 0; i < 9; i++) {//绘制6次  每次旋转30度
-//            if (i == 8) {
-//                mPaint.setColor(getResources().getColor(R.color.white));
-//            } else {
-//                mPaint.setColor(getResources().getColor(R.color.color_blank4));
-//            }
-//
-//            mPaint.getTextBounds(strs2[i], 0, strs2[i].length(), rect);
-//            canvas.drawText(strs2[i], centerX - rect.width() / 2,
-//                    getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 20, getResources().getDisplayMetrics()) + rect.height(), mPaint);
-//
-//            canvas.rotate(42.5f, centerX, centerY);
-//        }
-//        canvas.save();
-
-
-//
-//        if (mCurAngle >= 0) {
-//            if (mCurAngle >= 342 && mCurAngle <= 359) {
-//                mCurAngle = 333;
-//            } else if (mCurAngle > 359 && mCurAngle <= 360) {
-//                mCurAngle = 0;
-//                return;
-//            }
-//            for (int i = 0; i < (mCurAngle) / 9; i++) {
-////                if ((i - 1) % 9 == 0) {
-////
-////                    mPaint.setColor(getResources().getColor(R.color.color_orange));
-////
-////                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-////                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-////                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()),
-////
-////                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
-////                } else {
-//                if (i % 5==0){
-//                    mPaint.setColor(getResources().getColor(R.color.color_yellow));
-//
-//                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()),
-//                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()),
-//                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -5, getResources().getDisplayMetrics()), mPaint);
+//        for (int i = 0; i < 80; i++) {//总共45个点  所以绘制45次  //绘制一圈的小黑点
+//                if (i==0){
+//                    mPaint.setColor(getResources().getColor(R.color.green));
+//                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 2, getResources().getDisplayMetrics()),
+//                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -15, getResources().getDisplayMetrics()), mPaint);
 //                }else {
-//                    mPaint.setColor(getResources().getColor(R.color.color_orange));
-//
+//                    mPaint.setColor(getResources().getColor(R.color.color_gray2));
 //                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
 //                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-//                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()),
-//                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
+//                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
+//                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, -10, getResources().getDisplayMetrics()), mPaint);
 //                }
 //
-////                    mPaint.setColor(getResources().getColor(R.color.color_orange));
-////
-////                    canvas.drawRect(centerX - TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-////                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 1, getResources().getDisplayMetrics()),
-////                            centerX + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 3, getResources().getDisplayMetrics()),
-////                            getPaddingTop() + mUnreachedWidth + TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, 15, getResources().getDisplayMetrics()), mPaint);
-//////                }
-//                canvas.rotate(9, centerX, centerY);//360度  绘制60次   每次旋转6度
-//            }
-//            canvas.save();
-//
-//
+//            canvas.rotate(4.5f, centerX, centerY);//360度  绘制72次   每次旋转5度
 //        }
         canvas.save();
 

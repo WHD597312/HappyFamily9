@@ -11,8 +11,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
+import android.widget.SeekBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.xr.happyFamily.R;
+
+import java.util.Timer;
+import java.util.TimerTask;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -21,7 +28,7 @@ import pl.droidsonroids.gif.GifDrawable;
 
 
 
-public class CsjActivity extends AppCompatActivity implements View.OnClickListener {
+public class CsjActivity extends AppCompatActivity implements View.OnClickListener , SeekBar.OnSeekBarChangeListener {
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetBehavior bottomSheetBehavior2;
     private BottomSheetBehavior bottomSheetBehavior3;
@@ -61,24 +68,33 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     TextView textb2;
     @BindView(R.id.tv_b_3)
     TextView textb3;
-/*    @BindView(R.id.iv_b3_qd)
-    ImageView imageViewb3qd;*/
+    @BindView(R.id.iv_cnczsd_qd)
+    ImageView imageViewb3qd;
     @BindView(R.id.tv_csj_29)
     TextView text29;
-
+    @BindView(R.id.tv_csj_36)
+    TextView textView36;
+    private MySeekBarsd mSeekBar2;
     int hour = -1;
     int minute=-1;
+    int i;
+    int x ;
+    private int recLen = 36;
+    TimerTask task;
+    Timer timer;
+
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_csj);
-     unbinder = ButterKnife.bind(this);
+        unbinder = ButterKnife.bind(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         initViews();
         initListeners();
         initTimer();
-
+        mSeekBar2 = (MySeekBarsd) findViewById(R.id.beautySeekBar2);
+        mSeekBar2.setOnSeekBarChangeListener(this);
          rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
         /*imagefs.setAnimation(rotate);
         imagefs.startAnimation(rotate);*/
@@ -94,6 +110,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                     imagefs.setImageResource(R.mipmap.csj_fs);
                     imagefs.clearAnimation();
                     imagefs.setClickable(false);
+                    timer.cancel();
                     textViewkq.setText("关机状态");
                     flag=1;
                 }else {
@@ -101,16 +118,49 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                     imagefs.setImageResource(R.mipmap.csj_fsg);
                     imagefs.startAnimation(rotate);
                     imagefs.setClickable(true);
+                    initstar();
                     textViewkq.setText("开机状态");
                     flag=0;
                 }
             }
         });
+        if ((x+29)<36){
+            i=30;
+            initstar();
+        }
+        try {
+            gifDrawable=new GifDrawable(getResources(),R.mipmap.man2x);
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        if (gifDrawable!=null){
+            gifDrawable.setLoopCount(10000);
+            gifDrawable.start();
+            image.setImageDrawable(gifDrawable);
+        }
 
     }
 
 
-
+    private void  initstar(){//温度提升与温度下降
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                runOnUiThread(new Runnable() {   // UI thread
+                    @Override
+                    public void run() {
+                        recLen--;
+                        textView36.setText(""+recLen);
+                        if (recLen < (x+i)) {
+                            timer.cancel();
+                        }
+                    }
+                });
+            }
+        };
+        timer.schedule(task, 1000, 1000);    // timeTask
+    }
 
 
     private void initTimer(){//设置定时时间
@@ -192,7 +242,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     private int position=-1;
     private int flag=0;
     @OnClick({R.id.ib_csj_fh, R.id.iv_b_qx,R.id.iv_b_qd,R.id.iv_b_2,R.id.iv_b_3,R.id.iv_b_1,R.id.iv_csj_ds
-            , R.id.iv_b2_qx,R.id.tv_csj_29, R.id.iv_b3_qx,R.id.iv_b2_qd,/*R.id.iv_b3_qd*/
+            , R.id.iv_b2_qx,R.id.tv_csj_29, R.id.iv_b3_qx,R.id.iv_b2_qd,R.id.iv_cnczsd_qd
     })
 
     @Override
@@ -260,7 +310,21 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                     minute=0;
                 }
                 textViewkq.setText(hour+"小时"+minute+"分钟后开启");*/
-               textViewds.setText(sh+":"+sm+"——"+eh+":"+em);
+//               textViewds.setText(sh+":"+sm+"——"+eh+":"+em);
+                if (((eh*60+em)-(sh*60+sm))>0){
+                    if (sm<10&&em<10){
+                        textViewds.setText(sh+":0"+sm+"-"+eh+":0"+em);
+                    }else if (sm>=10&&em<10){
+                        textViewds.setText(sh+":"+sm+"-"+eh+":0"+em);
+                    }else if (sm<10&&em>=10){
+                        textViewds.setText(sh+":0"+sm+"-"+eh+":"+em);
+                    }else if (sm>=10&&em>=10){
+                        textViewds.setText(sh+":"+sm+"-"+eh+":"+em);
+                    }
+
+                }else {
+                    Toast.makeText(this ,"结束时间需要大于开始时间", Toast.LENGTH_SHORT).show();
+                }
                 bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_b_qd:
@@ -278,7 +342,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                         e.printStackTrace();
                     }
                     if (gifDrawable!=null){
-                        gifDrawable.setLoopCount(1);
+                        gifDrawable.setLoopCount(10000);
                         gifDrawable.start();
                         image.setImageDrawable(gifDrawable);
                     }
@@ -294,12 +358,13 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                             .into(new GlideDrawableImageViewTarget(image, 1));*/
 
                     try {
-                        gifDrawable=new GifDrawable(getResources(),R.mipmap.zhong2x);
+                        gifDrawable=new GifDrawable(getResources(),R.mipmap.man2x);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     if (gifDrawable!=null){
-                        gifDrawable.setLoopCount(1);
+                        gifDrawable.setLoopCount(10000);
+                        gifDrawable.setSpeed(3.0f);
                         gifDrawable.start();
                         image.setImageDrawable(gifDrawable);
                     }
@@ -315,12 +380,13 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                             .into(new GlideDrawableImageViewTarget(image, 1));*/
 
                     try {
-                        gifDrawable=new GifDrawable(getResources(),R.mipmap.kuai3x);
+                        gifDrawable=new GifDrawable(getResources(),R.mipmap.man2x);
                     }catch (Exception e){
                         e.printStackTrace();
                     }
                     if (gifDrawable!=null){
-                        gifDrawable.setLoopCount(1);
+                        gifDrawable.setLoopCount(10000);
+                        gifDrawable.setSpeed(7.0f);
                         gifDrawable.start();
                         image.setImageDrawable(gifDrawable);
                     }
@@ -379,15 +445,32 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
                 image2.setImageResource(R.mipmap.csj_djnull);
 
                 break;
-     /*       case R.id.iv_b3_qd:
-
+            case R.id.iv_cnczsd_qd:
+                text29.setText(String.valueOf(x+20));
+                timer.cancel();
+                if ((x+20)<36){
+                    i=21;
+                    initstar();
+                }
+                bottomSheetBehavior3.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
-*/
 
         }
     }
 
 
+    public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
+        x=  seekBar.getProgress();
+    }
+    @Override
+    public void onStartTrackingTouch(SeekBar seekBar) {
+
+    }
+
+    @Override
+    public void onStopTrackingTouch(SeekBar seekBar) {
+
+    }
     @Override
     protected void onStart() {
         super.onStart();
@@ -401,6 +484,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
         if (unbinder!=null){
             unbinder.unbind();
         }
+        task.cancel();
     }
 
 

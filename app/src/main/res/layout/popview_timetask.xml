@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_gravity="bottom"
+    android:gravity="bottom"
+    android:background="@drawable/shape_timer_task"
+    android:orientation="vertical"
+    >
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="@dimen/dp_10"
+        android:layout_marginRight="@dimen/dp_10"
+        >
+        <ImageView
+            android:layout_marginTop="@dimen/dp_20"
+            android:id="@+id/image_cancle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/image_cancle"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_20"
+            />
+        <TextView
+            android:id="@+id/tv_timer"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="定时关任务"
+            android:gravity="center"
+            android:layout_centerVertical="true"
+            android:layout_alignTop="@id/image_cancle"
+            android:layout_alignBottom="@id/image_cancle"/>
+        <ImageView
+            android:id="@+id/image_ensure"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:srcCompat="@mipmap/image_ensure"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_20"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_210"
+        >
+
+        <View
+            android:id="@+id/view_hour1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_2"
+            android:layout_marginLeft="@dimen/dp_29"
+            android:layout_marginRight="@dimen/dp_29"
+            android:layout_marginTop="@dimen/dp_79"
+            android:background="@color/color_gray2" />
+        <View
+            android:id="@+id/view_hour2"
+            android:layout_below="@+id/view_hour1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_2"
+            android:layout_marginLeft="@dimen/dp_29"
+            android:layout_marginRight="@dimen/dp_29"
+            android:layout_marginTop="@dimen/dp_48"
+            android:background="@color/color_gray2" />
+       <LinearLayout
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"
+           android:orientation="horizontal"
+           android:layout_centerInParent="true"
+           android:gravity="center"
+           >
+
+
+        <com.xr.happyFamily.jia.view_custom.Timepicker3
+            android:descendantFocusability="blocksDescendants"
+            android:id="@+id/tv_hour"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_208"
+
+            />
+        <com.xr.happyFamily.jia.view_custom.Timepicker3
+            android:descendantFocusability="blocksDescendants"
+            android:layout_toRightOf="@+id/tv_hour"
+            android:id="@+id/tv_min"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_208"
+            />
+       </LinearLayout>
+    </RelativeLayout>
+
+</LinearLayout>

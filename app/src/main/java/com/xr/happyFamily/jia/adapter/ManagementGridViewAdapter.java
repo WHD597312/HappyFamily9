@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -19,7 +20,7 @@ public class ManagementGridViewAdapter extends ArrayAdapter {
     private Context mContext;
     private int layoutResourceId;
     private ArrayList<Equipment> mGridData = new ArrayList<Equipment>();
-
+    private int selectedPosition = 0;// 选中的位置
 
     public ManagementGridViewAdapter(Context context, int resource, ArrayList<Equipment> objects) {
         super(context, resource, objects);
@@ -36,29 +37,40 @@ public class ManagementGridViewAdapter extends ArrayAdapter {
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         ViewHolder holder;
-            if (convertView == null) {
-                LayoutInflater inflater = ((Activity)mContext).getLayoutInflater();
-                convertView = inflater.inflate(layoutResourceId, parent, false);
-                holder = new ViewHolder();
-                holder.textView_management = (TextView) convertView.findViewById(R.id.tv_managment);
-                holder.imageView_management = (ImageView) convertView.findViewById(R.id.iv_management);
-                convertView.setTag(holder);
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-            }
-            Equipment item = mGridData.get(position);
-            holder.textView_management.setText(item.getName());
-            Picasso.with(mContext).load(item.getImgeId()).into(holder.imageView_management);
-            return convertView;
+        if (convertView == null) {
+            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
+            convertView = inflater.inflate(layoutResourceId, parent, false);
+            holder = new ViewHolder();
+
+            convertView.setTag(holder);
+        } else {
+            holder = (ViewHolder) convertView.getTag();
         }
 
-    private class ViewHolder {
+        holder.textView_management = (TextView) convertView.findViewById(R.id.tv_managment);
+        holder.imageView_management = (ImageView) convertView.findViewById(R.id.iv_management);
+        holder.linearLayout = (LinearLayout) convertView.findViewById(R.id.li_item_addroom);
+        Equipment item = mGridData.get(position);
+        holder.textView_management.setText(item.getName());
+        Picasso.with(mContext).load(item.getImgeId()).into(holder.imageView_management);
+        if (selectedPosition == position) {
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color_gray2));
+        } else {
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
+        }
+        return convertView;
+    }
 
+    public void setSelectedPosition(int position) {
+        selectedPosition = position;
+    }
+
+    private class ViewHolder {
+        LinearLayout linearLayout;
         TextView textView_management;
         ImageView imageView_management;
 
     }
-
 
 
 }

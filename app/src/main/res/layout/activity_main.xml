@@ -7,17 +7,10 @@
     android:layout_height="match_parent"
     tools:context=".jia.MainActivity">
 
-<com.xr.happyFamily.jia.xnty.CircleSeekBar
-    android:layout_width="@dimen/dp_jy_280"
-    android:layout_height="@dimen/dp_jy_280"
-    app:mCurAngle="0"
-    app:wheel_cur_process="0"
-    app:wheel_max_process="360"
-    app:wheel_pointer_radius="@dimen/dp_jy_20"
-    app:wheel_reached_width="@dimen/dp_jy_20"
-    app:wheel_unreached_color="#1a1414"
-    app:wheel_unreached_width="@dimen/dp_jy_20"
-    android:layout_centerHorizontal="true"
-    />
+ <ImageView
+     android:id="@+id/image1"
+     android:layout_width="wrap_content"
+     android:layout_height="wrap_content"
 
+     />
 </RelativeLayout>

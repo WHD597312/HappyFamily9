@@ -378,12 +378,12 @@ public class SmartTerminalBar extends View {
             canvas.rotate(8, centerX, centerY);
         }
         canvas.save();
-        mPaint.setStrokeWidth(5);
+        mPaint.setStrokeWidth(dip2px(2));
         mPaint.setStyle(Paint.Style.STROKE);
-        canvas.drawCircle(centerX, centerY, 20, mPaint);/**画空心圆*/
+        canvas.drawCircle(centerX, centerY, dip2px(5), mPaint);/**画空心圆*/
         canvas.save();
 
-        mPaint.setStrokeWidth(5);
+        mPaint.setStrokeWidth(dip2px(2));
 //        mPaint=new Paint(Paint.ANTI_ALIAS_FLAG);
         mPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         float secLength = centerX - 20;
@@ -485,6 +485,9 @@ public class SmartTerminalBar extends View {
 
     }
 
+    public int dip2px(float dpValue) {
+        return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getContext().getResources().getDisplayMetrics());
+    }
     private String deviceId;
 
     public void setDeviceId(String deviceId) {

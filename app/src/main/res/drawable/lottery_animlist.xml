@@ -3,29 +3,4 @@
     android:oneshot="false">
 
 
-    <item
-        android:drawable="@mipmap/img01"
-        android:duration="250" />
-    <item
-        android:drawable="@mipmap/img02"
-        android:duration="250" />
-
-    <item
-        android:drawable="@mipmap/img03"
-        android:duration="250" />
-    <item
-        android:drawable="@mipmap/img04"
-        android:duration="250" />
-    <item
-        android:drawable="@mipmap/img05"
-        android:duration="250" />
-    <item
-        android:drawable="@mipmap/img06"
-        android:duration="250" />
-    <item
-        android:drawable="@mipmap/img07"
-        android:duration="250" />
-    <item
-        android:drawable="@mipmap/img08"
-        android:duration="250" />
 </animation-list>

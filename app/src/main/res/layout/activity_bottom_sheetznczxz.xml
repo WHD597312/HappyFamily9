@@ -58,7 +58,7 @@
         app:textBackground="@mipmap/csj_bz"
         app:textColor="@color/white"
         app:textOrientation="top"
-        app:textSize="19sp" />
+        app:textSize="15sp" />
 
 
 </RelativeLayout>

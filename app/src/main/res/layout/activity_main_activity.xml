@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".main.MainActivity">
+
+    <LinearLayout
+        android:id="@+id/layout_body"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:orientation="vertical"
+        />
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:id="@+id/id_bto_jia"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_49"
+                android:layout_marginRight="@dimen/dp_49"
+                />
+
+
+            <ImageButton
+                android:id="@+id/id_bto_jia_img"
+                android:scaleType="centerInside"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/jia1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="家"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_bto_le"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_49"
+                android:layout_marginRight="@dimen/dp_49"
+                />
+            <ImageButton
+                android:id="@+id/id_bto_le_img"
+                android:scaleType="centerInside"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/le" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="乐" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_bto_bao"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_49"
+                android:layout_marginRight="@dimen/dp_49"
+                />
+            <ImageButton
+                android:scaleType="centerInside"
+                android:id="@+id/id_bto_bao_img"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/bao" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="宝"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_bto_zhen"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_49"
+                android:layout_marginRight="@dimen/dp_49"
+                />
+            <ImageButton
+                android:id="@+id/id_bto_zhen_img"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/zhen" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="朕"
+                />
+        </LinearLayout>
+
+    </LinearLayout>
+
+</LinearLayout>

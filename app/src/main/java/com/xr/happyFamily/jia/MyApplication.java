@@ -45,7 +45,7 @@ public class MyApplication extends Application {
         StrictMode.setVmPolicy(builder.build());
        // builder.detectFileUriExposure();
 
-        SMSSDK.initSDK(this,"24c373291db44","eb329179014e3063ce241d718e8693da");
+        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
         activities=new ArrayList<>();
         fragments=new ArrayList<>();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

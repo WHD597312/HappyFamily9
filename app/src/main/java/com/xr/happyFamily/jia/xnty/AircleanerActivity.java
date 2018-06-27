@@ -11,7 +11,12 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
+
 import com.xr.happyFamily.R;
+
+import org.w3c.dom.Text;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -147,6 +152,8 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
     TextView textViewkg;
     @BindView(R.id.tv_kqjh_fs)
     TextView textViewfs;
+    @BindView(R.id.tv_kqjh_sm)
+    TextView textViewsm;
     @BindView(R.id.tv_kqjh_ds)
     TextView textViewds;
     @BindView(R.id.tm_ks1)
@@ -183,6 +190,8 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
     TextView textb2;
     @BindView(R.id.tv_b_3)
     TextView textb3;
+    @BindView(R.id.iv_kqjh_sm)
+    ImageView imageViewsm;
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetBehavior bottomSheetBehavior2;
 
@@ -193,7 +202,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xnty_kqjhq);
         unbinder = ButterKnife.bind(this);
-
+        imageViewsm.setTag("close");
          initTimer();//定时设置
          initViews();//上拉列表
 
@@ -293,10 +302,12 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
         image27r.startAnimation(anim3r);
         image28r.startAnimation(anim3r);
          animairleft = AnimationUtils.loadAnimation(this, R.anim.airleft);
-        imageairl.startAnimation(animairleft);
+
          animairright = AnimationUtils.loadAnimation(this, R.anim.airright);
-        imageairr.startAnimation(animairright);
+
          animairmiddle = AnimationUtils.loadAnimation(this, R.anim.airmiddle);
+        imageairr.startAnimation(animairright);
+        imageairl.startAnimation(animairleft);
         imageairm.startAnimation(animairmiddle);
         rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_kqjh);
         /*imagefs.setAnimation(rotate);
@@ -575,13 +586,126 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
     int position=-1;
 
     @OnClick({R.id.iv_kqjh_fh, R.id.iv_kqjh_fs,R.id.iv_kqjh_ds,R.id.iv_b_qx,R.id.iv_b2_qx,R.id.iv_b_2,R.id.iv_b_1,R.id.iv_b_3,R.id.iv_b_qd
-         ,R.id.iv_b2_qd,R.id.tv_b_1,R.id.tv_b_2,R.id.tv_b_3
+         ,R.id.iv_b2_qd,R.id.tv_b_1,R.id.tv_b_2,R.id.tv_b_3 ,R.id.iv_kqjh_sm
     })
 
 
     public void onClick(View v) {
         switch (v.getId()) {
 
+            case R.id.iv_kqjh_sm://叫出风速页面
+               if ("close".equals(imageViewsm.getTag())){
+                   imageViewsm.setImageResource(R.mipmap.kqjh_sm);
+                   anim.setDuration(2800);
+                   anim1.setDuration(1900);
+                   anim2.setDuration(1400);
+                   anim3.setDuration(1600);
+                   anim4.setDuration(1800);
+                   animr.setDuration(2800);
+                   animr1.setDuration(1900);
+                   anim2r.setDuration(1400);
+                   anim3r.setDuration(1600);
+                   anim4r.setDuration(1800);
+                   animairleft.setDuration(2000);
+                   animairmiddle.setDuration(2000);
+                   animairright.setDuration(2000);
+                   rotate.setDuration(2000);//设置动画持续周期
+                   rotate.setRepeatCount(-1);//设置重复次数
+                   imageairr.startAnimation(animairright);
+                   imageairl.startAnimation(animairleft);
+                   imageairm.startAnimation(animairmiddle);
+                   image1.startAnimation(anim);
+                   image6.startAnimation(anim);
+                   image3.startAnimation(anim);
+                   image7.startAnimation(anim);
+                   image11.startAnimation(anim);
+                   image21.startAnimation(anim);
+                   image3.startAnimation(anim);
+                   image12.startAnimation(anim);
+
+
+                   image8.startAnimation(anim);
+                   image10.startAnimation(anim);
+
+                   image4.startAnimation(anim1);
+                   image5.startAnimation(anim1);
+
+                   image2.startAnimation(anim1);
+                   image13.startAnimation(anim1);
+                   image9.startAnimation(anim1);
+
+
+                   image23.startAnimation(anim2);
+
+                   image17.startAnimation(anim2);
+                   image20.startAnimation(anim2);
+
+                   image15.startAnimation(anim2);
+
+                   image19.startAnimation(anim2);
+                   image14.startAnimation(anim2);
+
+
+                   image18.startAnimation(anim4);
+                   image22.startAnimation(anim4);
+                   image16.startAnimation(anim4);
+                   image24.startAnimation(anim4);
+
+                   image25.startAnimation(anim3);
+                   image26.startAnimation(anim3);
+                   image27.startAnimation(anim3);
+                   image28.startAnimation(anim3);
+
+
+                   image1r.startAnimation(animr);
+                   image6r.startAnimation(animr);
+                   image3r.startAnimation(animr);
+                   image7r.startAnimation(animr);
+                   image11r.startAnimation(animr);
+                   image21r.startAnimation(animr);
+                   image3r.startAnimation(animr);
+                   image12r.startAnimation(animr);
+                   image8r.startAnimation(animr);
+                   image10r.startAnimation(animr);
+
+                   image4r.startAnimation(animr1);
+                   image5r.startAnimation(animr1);
+
+                   image2r.startAnimation(animr1);
+                   image13r.startAnimation(animr1);
+                   image9r.startAnimation(animr1);
+
+
+
+                   image23r.startAnimation(anim2r);
+
+                   image17r.startAnimation(anim2r);
+                   image20r.startAnimation(anim2r);
+
+                   image15r.startAnimation(anim2r);
+
+                   image19r.startAnimation(anim2r);
+                   image14r.startAnimation(anim2r);
+
+
+                   image18r.startAnimation(anim4r);
+                   image22r.startAnimation(anim4r);
+                   image16r.startAnimation(anim4r);
+                   image24r.startAnimation(anim4r);
+
+                   image25r.startAnimation(anim3r);
+                   image26r.startAnimation(anim3r);
+                   image27r.startAnimation(anim3r);
+                   image28r.startAnimation(anim3r);
+                   textViewfs.setText("风速1级");
+                   imageViewsm.setTag("open");
+                   textViewsm.setTextColor(getResources().getColor(R.color.color_green5));
+               }else if ("open".equals(imageViewsm.getTag())){
+                   imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                   imageViewsm.setTag("close");
+                   textViewsm.setTextColor(getResources().getColor(R.color.color_gray2));
+               }
+                break;
             case R.id.iv_kqjh_fs://叫出风速页面
                 if (bottomSheetBehavior.getState() == BottomSheetBehavior.STATE_EXPANDED) {
                     // bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);按键可在隐藏
@@ -610,35 +734,50 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                 int sh= timepicker1.getValue();
                 int em = timepicker4.getValue();
                 int eh = timepicker3.getValue();
-                if (eh>sh&&em>sm){//倒计时效果
-                     hour = eh-sh;
-                     minute = em-sm;
-                }else if (eh>sh &&em<sm)
-                    {
-                    hour = eh-sh-1;
-                    minute = 60-sm+em;
-                }else if (eh>sh &&em==sm)
-                {
-                    hour = eh-sh;
-                    minute = 0;
+//                if (eh>sh&&em>sm){//倒计时效果
+//                     hour = eh-sh;
+//                     minute = em-sm;
+//                }else if (eh>sh &&em<sm)
+//                    {
+//                    hour = eh-sh-1;
+//                    minute = 60-sm+em;
+//                }else if (eh>sh &&em==sm)
+//                {
+//                    hour = eh-sh;
+//                    minute = 0;
+//                }
+//                else if (eh==sh&&em>=sm){
+//                    hour=0;
+//                    minute=em-sm;
+//                }else if (eh==sh&&em<sm){
+//                    hour=23;
+//                    minute=60-sm+em;
+//                }else if (eh<sh&&em<sm){
+//                    hour=23-sh+eh;
+//                    minute=60-sm+em;
+//                }else if (eh<sh&&em>sm){
+//                    hour=24-sh+eh;
+//                    minute=em-sm;
+//                }else if (eh<sh&&em==sm){
+//                    hour=24-sh+eh;
+//                    minute=0;
+//                }
+//                textViewds.setText(hour+"小时"+minute+"分钟后开启");
+                if (((eh*60+em)-(sh*60+sm))>0){
+                    if (sm<10&&em<10){
+                        textViewds.setText(sh+":0"+sm+"-"+eh+":0"+em);
+                    }else if (sm>=10&&em<10){
+                        textViewds.setText(sh+":"+sm+"-"+eh+":0"+em);
+                    }else if (sm<10&&em>=10){
+                        textViewds.setText(sh+":0"+sm+"-"+eh+":"+em);
+                    }else if (sm>=10&&em>=10){
+                        textViewds.setText(sh+":"+sm+"-"+eh+":"+em);
+                    }
+
+                }else {
+                    Toast.makeText(this ,"结束时间需要大于开始时间", Toast.LENGTH_SHORT).show();
                 }
-                else if (eh==sh&&em>=sm){
-                    hour=0;
-                    minute=em-sm;
-                }else if (eh==sh&&em<sm){
-                    hour=23;
-                    minute=60-sm+em;
-                }else if (eh<sh&&em<sm){
-                    hour=23-sh+eh;
-                    minute=60-sm+em;
-                }else if (eh<sh&&em>sm){
-                    hour=24-sh+eh;
-                    minute=em-sm;
-                }else if (eh<sh&&em==sm){
-                    hour=24-sh+eh;
-                    minute=0;
-                }
-                textViewds.setText(hour+"小时"+minute+"分钟后开启");
+
                 bottomSheetBehavior2.setState(BottomSheetBehavior.STATE_HIDDEN);
                 break;
             case R.id.iv_b_qd:
@@ -654,8 +793,14 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     anim2r.setDuration(1400);
                     anim3r.setDuration(1600);
                     anim4r.setDuration(1800);
+                    animairleft.setDuration(2000);
+                    animairmiddle.setDuration(2000);
+                    animairright.setDuration(2000);
                     rotate.setDuration(2000);//设置动画持续周期
                     rotate.setRepeatCount(-1);//设置重复次数
+                    imageairr.startAnimation(animairright);
+                    imageairl.startAnimation(animairleft);
+                    imageairm.startAnimation(animairmiddle);
                     image1.startAnimation(anim);
                     image6.startAnimation(anim);
                     image3.startAnimation(anim);
@@ -739,6 +884,8 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     image27r.startAnimation(anim3r);
                     image28r.startAnimation(anim3r);
                     textViewfs.setText("风速1级");
+                    imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                    imageViewsm.setTag("close");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }else if (position==1){
 
@@ -762,6 +909,12 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     anim3r.setRepeatCount(-1);//设置重复次数
                     anim4r.setDuration(1800);
                     anim4r.setRepeatCount(-1);//设置重复次数
+                    animairleft.setDuration(1300);
+                    animairmiddle.setDuration(1300);
+                    animairright.setDuration(1300);
+                    imageairr.startAnimation(animairright);
+                    imageairl.startAnimation(animairleft);
+                    imageairm.startAnimation(animairmiddle);
                     image1.startAnimation(anim);
                     image6.startAnimation(anim);
                     image3.startAnimation(anim);
@@ -847,6 +1000,8 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     rotate.setDuration(1000);//设置动画持续周期
                     rotate.setRepeatCount(-1);//设置重复次数
                     textViewfs.setText("风速2级");
+                    imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                    imageViewsm.setTag("close");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                     }else{
                     anim.setDuration(1000);
@@ -859,6 +1014,12 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     anim2r.setDuration(500);
                     anim3r.setDuration(400);
                     anim4r.setDuration(600);
+                    animairleft.setDuration(800);
+                    animairmiddle.setDuration(800);
+                    animairright.setDuration(800);
+                    imageairr.startAnimation(animairright);
+                    imageairl.startAnimation(animairleft);
+                    imageairm.startAnimation(animairmiddle);
                     image1.startAnimation(anim);
                     image6.startAnimation(anim);
                     image3.startAnimation(anim);
@@ -944,6 +1105,8 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     rotate.setDuration(500);//设置动画持续周期
                     rotate.setRepeatCount(-1);//设置重复次数
                     textViewfs.setText("风速3级");
+                    imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                    imageViewsm.setTag("close");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }
                 break;

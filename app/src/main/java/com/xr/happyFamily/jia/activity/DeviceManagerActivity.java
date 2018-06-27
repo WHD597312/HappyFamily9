@@ -32,6 +32,7 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
+import butterknife.OnLongClick;
 import butterknife.Unbinder;
 
 public class DeviceManagerActivity extends AppCompatActivity {
@@ -45,8 +46,7 @@ public class DeviceManagerActivity extends AppCompatActivity {
     private ArrayList<Equipment> mGridData = null;
     Unbinder unbinder;
     TitleView titleView;
-    @BindView(R.id.managment_spinner)
-    NiceSpinner managment_spinner;
+
 
     private List<String> titleList = new ArrayList<>();
 
@@ -75,11 +75,10 @@ public class DeviceManagerActivity extends AppCompatActivity {
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
-        managment_spinner.attachDataSource(titleList);
+
     }
 
     @OnClick({R.id.bt_management_ok})
@@ -91,6 +90,7 @@ public class DeviceManagerActivity extends AppCompatActivity {
                 break;
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();

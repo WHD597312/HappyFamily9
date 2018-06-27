@@ -1,44 +1,41 @@
 package com.xr.happyFamily.login.login;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
 import android.text.method.PasswordTransformationMethod;
 import android.text.method.TransformationMethod;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.tencent.mm.sdk.modelmsg.SendAuth;
-import com.tencent.mm.sdk.openapi.IWXAPI;
+import com.xr.database.dao.HourseDao;
+import com.xr.database.dao.RoomDao;
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShopCartActivity;
-import com.xr.happyFamily.bao.ShoppageActivity;
-import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.HomepageActivity;
-import com.xr.happyFamily.jia.MainActivity;
-import com.xr.happyFamily.jia.MenuActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
-import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
-import com.xr.happyFamily.jia.xnty.AircleanerActivity;
-import com.xr.happyFamily.jia.xnty.CsjActivity;
-import com.xr.happyFamily.jia.xnty.HeaterActivity;
-import com.xr.happyFamily.jia.xnty.MySeekBar;
-import com.xr.happyFamily.jia.xnty.SmartSocket;
-import com.xr.happyFamily.jia.xnty.WaterPurifierActivity;
-import com.xr.happyFamily.jia.xnty.ZnPm25Activity;
-import com.xr.happyFamily.jia.xnty.ZnSdActivity;
-import com.xr.happyFamily.jia.xnty.ZnWdActivity;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
+import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.login.util.Utils;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Mobile;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
@@ -58,7 +55,8 @@ public class LoginActivity extends AppCompatActivity {
     EditText et_name;
     @BindView(R.id.et_pswd)
     EditText et_pswd;
-    String url = "";
+    String url = "http://47.98.131.11:8084/login/auth";
+    String ip = "http://47.98.131.11:8084";
     @BindView(R.id.image_seepwd)
     ImageView imageView;
     @BindView(R.id.image_wx)
@@ -66,16 +64,20 @@ public class LoginActivity extends AppCompatActivity {
     @BindView(R.id.imageView6)
     ImageView imageView6;
     boolean isHideFirst = true;
-    IWXAPI wxapi;
-
+    private HourseDaoImpl hourseDao;
+    private RoomDaoImpl roomDao;
+    private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
+
+    SharedPreferences mPositionPreferences;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
-       unbinder = ButterKnife.bind(this);
-       imageView.setImageResource(R.mipmap.yanjing13x);
-        if (getSupportActionBar() != null){
+        unbinder = ButterKnife.bind(this);
+        imageView.setImageResource(R.mipmap.yanjing13x);
+        if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
         preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -83,8 +85,14 @@ public class LoginActivity extends AppCompatActivity {
         if (application == null) {
             application = (MyApplication) getApplication();
         }
+        mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
 
         application.addActivity(this);
+        et_name.setText(preferences.getString("phone", ""));
+        et_pswd.setText(preferences.getString("password", ""));
+        hourseDao = new HourseDaoImpl(getApplicationContext());
+        roomDao = new RoomDaoImpl(getApplicationContext());
+        deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
     }
 
     SharedPreferences preferences;
@@ -93,15 +101,15 @@ public class LoginActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         try {
-            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao);
-        }catch (Exception e){
+            gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
+        } catch (Exception e) {
             e.printStackTrace();
         }
-        if (gifDrawable!=null){
+        if (gifDrawable != null) {
             gifDrawable.start();
             imageView6.setImageDrawable(gifDrawable);
         }
-        if (preferences.contains("phone")){
+        if (preferences.contains("phone")) {
             String phone = preferences.getString("phone", "");
             et_name.setText(phone);
             et_pswd.setText("");
@@ -117,41 +125,42 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
-        if (preferences.contains("phone") && preferences.contains("password")){
+        if (preferences.contains("phone") && preferences.contains("password")) {
 //            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            if (preferences.contains("login")){
-                startActivity(new Intent(this,MainActivity.class));
+            if (preferences.contains("login")) {
+                startActivity(new Intent(this, HomepageActivity.class));
             }
         }
     }
 
-    @OnClick({R.id.btn_login, R.id.tv_register,R.id.tv_forget_pswd,R.id.image_seepwd ,R.id.image_wx})
+    @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
-                startActivity(new Intent(this, HeaterActivity.class));
+                startActivity(new Intent(this, RegistActivity.class));
                 break;
             case R.id.btn_login:
                 String phone = et_name.getText().toString().trim();
                 String password = et_pswd.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this, "账号码不能为空");
-                    return;
+                    break;
+                } else if (!Mobile.isMobile(phone)) {
+                    Utils.showToast(this, "手机号码不合法");
+                    break;
                 }
                 if (TextUtils.isEmpty(password)) {
                     Utils.showToast(this, "请输入密码");
-                    return;
-                }else{
-                    startActivity(new Intent(this, ShoppageActivity.class));
+                    break;
                 }
 
-               Map<String, Object> params = new HashMap<>();
+                Map<String, Object> params = new HashMap<>();
                 params.put("phone", phone);
                 params.put("password", password);
                 new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
-                startActivity(new Intent(this, WaterPurifierActivity.class));
+                startActivity(new Intent(this, ForgetPswdActivity.class));
                 break;
 
             case R.id.image_seepwd:
@@ -174,15 +183,12 @@ public class LoginActivity extends AppCompatActivity {
                 et_pswd.setSelection(index);
                 break;
             case R.id.image_wx:
-                SendAuth.Req req = new SendAuth.Req();
-                req.scope = "snsapi_userinfo"; //授权域，snsapi_userinfo 表示获取用户个人信息
-                req.state = "wechat_sdk_demo_test";
-                wxapi.sendReq(req);
+
                 break;
         }
     }
 
-   @Override
+    @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             application.removeAllActivity();//**退出主页面*//*
@@ -190,6 +196,9 @@ public class LoginActivity extends AppCompatActivity {
         }
         return super.onKeyDown(keyCode, event);
     }
+
+    String userId;
+
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -200,25 +209,19 @@ public class LoginActivity extends AppCompatActivity {
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getInt("code");
-                    JSONObject content=jsonObject.getJSONObject("content");
-                    int userId=content.getInt("userId");
-                    String phone=content.getString("phone");
-                    String password=content.getString("password");
-                    if (code==2000){
-                        SharedPreferences.Editor editor=preferences.edit();
-                        if (preferences.contains("phone")){
-                            String phone2=preferences.getString("phone","");
-                            if (!phone2.equals(phone)){
-                               // new DeviceGroupDaoImpl(LoginActivity.this).deleteAll();
-                               // new DeviceChildDaoImpl(LoginActivity.this).deleteAll();
-                            }
-                        }
-                        if (!preferences.contains("password")) {
-                            editor.putString("phone",phone);
-                            editor.putString("password",password);
-                        }
-                        editor.putString("userId",userId+"");
+                    code = jsonObject.getInt("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    if (code == 100) {
+                        userId = returnData.getString("userId");
+                        String token = returnData.getString("token");
+                        SharedPreferences.Editor editor = preferences.edit();
+                        String phone = et_name.getText().toString().trim();
+                        String password = et_pswd.getText().toString().trim();
+                        Log.i("phone", "---->: " + phone + ",,,," + password);
+                        editor.putString("phone", phone);
+                        editor.putString("userId", userId);
+                        editor.putString("password", password);
+                        editor.putString("token", token);
                         editor.commit();
                     }
                 }
@@ -232,26 +235,140 @@ public class LoginActivity extends AppCompatActivity {
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
             switch (code) {
-                case -1006:
+                case 10002:
                     Utils.showToast(LoginActivity.this, "手机号码未注册");
                     break;
-                case -1005:
+                case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
-                    et_name.setText("");
                     et_pswd.setText("");
                     break;
-                case 2000:
-                    Utils.showToast(LoginActivity.this, "登录成功");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_NEW_TASK);
-                    startActivity(intent);
+                case 100:
+
+                    new hourseAsyncTask().execute();
+
                     break;
             }
         }
     }
 
+    long Id = -1;
+    int img[] = {R.mipmap.t};
+
+    class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+//            Map<String, Object> params = maps[0];
+            String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("ffffffff", "--->: " + result);
+            try {
+                if (!com.xr.happyFamily.login.util.Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    Log.i("fffffffft", "--->: " + code);
+//                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
+
+                    if (code == 100) {
+                        hourseDao.deleteAll();
+                        roomDao.deleteAll();
+                        deviceChildDao.deleteAll();
+                        JSONArray returnData = jsonObject.getJSONArray("returnData");
+                        for (int i = 0; i < returnData.length(); i++) {
+                            JSONObject houseObject = returnData.getJSONObject(i);
+                            int id = houseObject.getInt("id");
+                            Log.i("rrrr", "doInBackground:--> " + id);
+                            String houseName = houseObject.getString("houseName");
+                            String houseAddress = houseObject.getString("houseAddress");
+                            int userId = houseObject.getInt("userId");
+                            Hourse hourse = hourseDao.findById((long) id);
+                            if (hourse != null) {
+                                hourse.setHouseName(houseName);
+                                hourse.setHouseAddress(houseAddress);
+                                hourse.setUserId(userId);
+                                hourseDao.update(hourse);
+                            } else {
+                                hourse = new Hourse((long) id, houseName, houseAddress, userId);
+                                hourseDao.insert(hourse);
+                                Log.i("dddddd1", "doInBackground:---> " + hourse);
+                            }
+                            JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
+
+                            Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
+                            for (int j = 0; j < roomDevices.length(); j++) {
+                                JSONObject roomObject = roomDevices.getJSONObject(j);
+                                int roomId = roomObject.getInt("roomId");
+                                Id = roomId;
+                                String roomName = roomObject.getString("roomName");
+                                int houseId = roomObject.getInt("houseId");
+                                String roomType = roomObject.getString("roomType");
+
+                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0);
+                                Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
+                                roomDao.insert(room);
+
+                                JSONArray deviceList = roomObject.getJSONArray("deviceList");
+                                for (int k = 0; k < deviceList.length(); k++) {
+                                    JSONObject device = deviceList.getJSONObject(k);
+                                    int deviceId = device.getInt("deviceId");
+                                    String deviceName = device.getString("deviceName");
+                                    int deviceType = device.getInt("deviceType");
+                                    String deviceMacAddress = device.getString("deviceMacAddress");
+                                    int houseId2 = device.getInt("houseId");
+                                    int userId2 = device.getInt("userId");
+                                    int roomId2 = device.getInt("roomId");
+                                    int deviceUsedCount = device.getInt("deviceUsedCount");
+                                    DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
+                                    deviceChild.setImg(img[0]);
+                                    deviceChildDao.insert(deviceChild);
+                                }
+                            }
+                        }
+//                        JSONArray roomDevices=returnData.getJSONArray("roomDevices");
 
 
+//                        id = returnData.getInt("id");
+//                        String houseAddress = returnData.getString("houseAddress");
+//                        String houseName = returnData.getString("houseName");
+////                        Integer userId = returnData.getInt("userId");
+////                        Integer roomId = roomDevices.getInt("roomId");
+////                        SharedPreferences.Editor editor = preferences.edit();
+////                        editor.putInt("id",
+//////                        editor.putString("houseAddress", houseAddress);
+//////                        editor.putInt("roomId", roomId);
+//////                        editor.putString("houseName", houseName);
+//////                        editor.commit();
+
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+
+        }
+
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 1005:
+                    Utils.showToast(LoginActivity.this, "查询失败");
+                    break;
+                case 100:
+                    if (mPositionPreferences.contains("position")){
+                        mPositionPreferences.edit().clear().commit();
+                    }
+                    Utils.showToast(LoginActivity.this, "请求成功");
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    break;
+
+            }
+        }
+    }
 
     @Override
     protected void onDestroy() {

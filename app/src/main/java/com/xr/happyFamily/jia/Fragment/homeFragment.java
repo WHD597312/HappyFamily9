@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,14 +14,24 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.AddEquipmentActivity;
+import com.xr.happyFamily.jia.AddRoomActivity;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
+import com.xr.happyFamily.jia.ChooseHourseActivity;
+import com.xr.happyFamily.jia.HourseActivity;
+import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyPaperActivity;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Equipment;
 import java.util.ArrayList;
+import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -28,11 +39,11 @@ import butterknife.Unbinder;
 
 public class homeFragment extends Fragment {
 
-    private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
-    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
+//    private String[] localCartoonText = {"客厅", "厨房", "卧室", "阳台", "阳台", "阳台",};
+//    private Integer[] img = {R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t, R.mipmap.t};
 
     private GridViewAdapter mGridViewAdapter = null;
-    private ArrayList<Equipment> mGridData = null;
+    private List<DeviceChild> mGridData = null;
     Unbinder unbinder;
     @BindView(R.id.bt_mypage_add)
     Button buttonadd;
@@ -40,7 +51,12 @@ public class homeFragment extends Fragment {
     RelativeLayout relativeLayout;
     @BindView(R.id.gv_home_my)
     com.xr.happyFamily.jia.MyGridview mGridView;
-
+    @BindView(R.id.gv_home_my1)
+    com.xr.happyFamily.jia.MyGridview mGridView1;
+    String roomName,roomType,roomId;
+    public static final int MREQUEST_CODE=2;
+    private DeviceChildDaoImpl deviceChildDao;
+    private HourseDaoImpl hourseDao;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState)
@@ -48,24 +64,54 @@ public class homeFragment extends Fragment {
         View view = inflater.inflate(R.layout.activity_home_mypage, container, false);
         unbinder=ButterKnife.bind(this,view);
         mGridData = new ArrayList<>();
-        for (int i = 0; i < img.length; i++) {
-            Equipment item = new Equipment();
-            item.setName(localCartoonText[i]);
-            item.setImgeId(img[i]);
-            mGridData.add(item);
+//        for (int i = 0; i < img.length; i++) {
+//            Equipment item = new Equipment();
+//            item.setName(localCartoonText[i]);
+//            item.setImgeId(img[i]);
+//            mGridData.add(item);
+//        }
+        Bundle bundle=getArguments();
+        if (bundle!=null){
+        roomName=bundle.getString("roomName");
+         roomType=bundle.getString("roomType");
+         roomId=bundle.getString("roomId");
+
         }
         mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
         mGridView.setAdapter(mGridViewAdapter);
-        buttonadd.setOnClickListener(new OnClickListener()
-        {
+        mGridView1.setAdapter(mGridViewAdapter);
+        buttonadd.setOnClickListener(new OnClickListener() {
             @Override
-            public void onClick(View v)
-            {
-                startActivity(new Intent(getActivity(), AddEquipmentActivity.class));
+            public void onClick(View v) {
+                Intent intent=new Intent(getActivity(), ManagementActivity.class);
+                startActivityForResult(intent,MREQUEST_CODE);
             }
         });
 
         return view;
+    }
+    @OnClick({R.id.image_change,R.id.tv_my_hourse})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.image_change:
+                startActivity(new Intent(getActivity(), ChangeRoomActivity.class));
+                break;
+            case R.id.tv_my_hourse:
+                startActivity(new Intent(getActivity(), ChooseHourseActivity.class));
+                break;
+
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode==MREQUEST_CODE && resultCode==MREQUEST_CODE){
+
+            int a=10;
+            int n=a;
+
+        }
     }
 
     public void onActivityCreated(Bundle savedInstanceState) {
@@ -74,16 +120,17 @@ public class homeFragment extends Fragment {
 
 
 
-        
+
         relativeLayout.setOnClickListener(new OnClickListener() {
 
             @Override
             public void onClick(View v) {
-//                Intent intent = Intent(getActivity(), ChangeEquipmentActivity);
-//                startActivity(intent);
+                Intent intent = new Intent(getActivity(), ChangeEquipmentActivity.class);
+                startActivity(intent);
             }
         });
 
     }
+
 
 }

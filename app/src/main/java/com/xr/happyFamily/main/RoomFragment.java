@@ -1,8 +1,10 @@
 package com.xr.happyFamily.main;
 
 import android.app.Dialog;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -77,6 +79,20 @@ public class RoomFragment extends Fragment{
     int mposition;
     DeviceChild mdeledeviceChild;
     SharedPreferences my;
+    public static boolean running=false;
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        Log.i("RoomFragment","onCreate");
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+        Log.i("RoomFragment","onDestroy");
+        Log.i("RoomFragment","-->"+room.getRoomType());
+    }
 
     @Nullable
     @Override
@@ -112,7 +128,7 @@ public class RoomFragment extends Fragment{
                     Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
                     intent.putExtra("deviceName", deviceName);
                     intent.putExtra("deviceId", deviceId);
-                    startActivity(intent);
+                    startActivityForResult(intent,6000);
                 }
             });
             mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -145,12 +161,16 @@ public class RoomFragment extends Fragment{
         });
         dialog.show();
     }
+    MessageReceiver receiver;
     @Override
     public void onStart() {
         super.onStart();
-
+        running=true;
+        Log.i("RoomFragment","onStart");
+        IntentFilter intentFilter = new IntentFilter("RoomFragment");
+        receiver = new MessageReceiver();
+        getActivity().registerReceiver(receiver, intentFilter);
     }
-
     @OnClick({R.id.balcony_li,R.id.iv_home_fh,R.id.btn_add_device,R.id.tv_home_manager})
     public void onClick(View view){
         switch (view.getId()){
@@ -174,7 +194,6 @@ public class RoomFragment extends Fragment{
                 intent.putExtra("roomId",roomId);
                 startActivityForResult(intent,6000);
                 break;
-
         }
     }
 
@@ -188,9 +207,7 @@ public class RoomFragment extends Fragment{
 
     public void setRoomId(long roomId) {
         this.roomId = roomId;
-
     }
-
 
     public long getRoomId() {
         return roomId;
@@ -202,6 +219,21 @@ public class RoomFragment extends Fragment{
 
     public int getmPosition() {
         return mPosition;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        running=false;
+        if (receiver!=null){
+            Log.i("RoomFragment","onStop");
+            getActivity().unregisterReceiver(receiver);
+        }
     }
 
     @Override
@@ -278,7 +310,6 @@ public class RoomFragment extends Fragment{
                 } else {
                     new ChangeRoomNameAsyncTask().execute();
                     dialog.dismiss();
-
                 }
             }
         });
@@ -418,8 +449,20 @@ public class RoomFragment extends Fragment{
             }
         }
     }
-
-
-
-
+    class MessageReceiver extends BroadcastReceiver{
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String macAddress=intent.getStringExtra("macAddress");
+            String deviceChild2=intent.getStringExtra("deviceChild");
+            for (int i = 0; i < mGridData.size(); i++) {
+                DeviceChild deviceChild=mGridData.get(i);
+                String mac=deviceChild.getMacAddress();
+                if (mac.equals(macAddress) && "null".equals(deviceChild2)){
+                    mGridViewAdapter.remove(deviceChild);
+                    mGridViewAdapter.notifyDataSetChanged();
+                    break;
+                }
+            }
+        }
+    }
 }

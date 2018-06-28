@@ -180,6 +180,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(ssid)) {
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
+
                 break;
         }
     }
@@ -436,7 +437,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 String userId = my.getString("userId", "");
                 params.put("userId", userId);
                 new AddDeviceInOldRoomAsync().execute(params);
-                AddDeviceActivity.running = false;
+                AddDeviceActivity.running=false;
             }
         }
     }

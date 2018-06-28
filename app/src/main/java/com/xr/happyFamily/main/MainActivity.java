@@ -9,12 +9,15 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.Hourse;
 
 import java.util.List;
@@ -35,14 +38,21 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     @BindView(R.id.id_bto_bao_img) ImageButton id_bto_bao_img;
     private FamilyFragmentManager familyFragmentManager;
     private BaoFragment baoFragment;
+    private MyApplication application;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getSupportActionBar() != null){
             getSupportActionBar().hide();
         }
+
+
         setContentView(R.layout.activity_main_activity);
         unbinder=ButterKnife.bind(this);
+        if (application==null){
+            application= (MyApplication) getApplication();
+            application.addActivity(this);
+        }
         fragmentManager=getSupportFragmentManager();
         hourseDao=new HourseDaoImpl(getApplicationContext());
         List<Hourse> hourses=hourseDao.findAllHouse();
@@ -97,6 +107,16 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         }
     }
+
+
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeAllActivity();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -107,6 +127,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             mPositionPreferences.edit().clear().commit();
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -129,7 +150,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             fragmentTransaction.commit();
         }
     }
-
     @Override
     public void setPosition(int position) {
         Log.i("position222","-->"+position);

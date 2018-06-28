@@ -82,13 +82,6 @@
             android:layout_height="@dimen/dp_jy_208"
 
             />
-        <com.xr.happyFamily.jia.view_custom.Timepicker3
-            android:descendantFocusability="blocksDescendants"
-            android:layout_toRightOf="@+id/tv_hour"
-            android:id="@+id/tv_min"
-            android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_jy_208"
-            />
        </LinearLayout>
     </RelativeLayout>
 

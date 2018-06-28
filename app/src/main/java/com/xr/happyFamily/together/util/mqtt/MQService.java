@@ -15,6 +15,8 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.main.FamilyFragmentManager;
+import com.xr.happyFamily.main.RoomFragment;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -223,8 +225,9 @@ public class MQService extends Service {
             int checkCode = -1;/**校验码*/
             int endCode = -1;/**结束码*/
             String message = strings[1];/**收到的消息*/
+            Log.i("mmm","-->"+message);
             if ("reSet".equals(macAddress))
-                Log.i("message", "-->" + message);
+                Log.i("message22222222", "-->" + message);
 
             DeviceChild deviceChild = null;
             JSONObject messageJsonObject = null;
@@ -241,6 +244,7 @@ public class MQService extends Service {
                 if ("reSet".equals(message)) {
                     if (deviceChild != null) {
                         deviceChildDao.delete(deviceChild);
+                        deviceChild=null;
                     }
                 } else {
                     if (isGoodJson(message)) {
@@ -368,6 +372,8 @@ public class MQService extends Service {
                             int ss=deviceChild.getDeviceId();
                             Log.i("ssssss","-->"+ss);
                             Log.i("warmerCurTemp2222", "-->" + deviceChild.getWarmerCurTemp());
+                            int deviceUsedCount=deviceChild.getDeviceUsedCount();
+                            deviceChild.setDeviceUsedCount(deviceUsedCount+1);
                             deviceChildDao.update(deviceChild);
                             Log.i("deviceChildDao","-->"+deviceChild.getDeviceId());
                         }
@@ -385,6 +391,7 @@ public class MQService extends Service {
                     case 8:
                         break;
                 }
+                Log.i("FamilyFragmentManager","-->"+FamilyFragmentManager.running);
                 if (AddDeviceActivity.running) {
                     Intent mqttIntent = new Intent("AddDeviceActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
@@ -395,6 +402,13 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
+                }else if (FamilyFragmentManager.running){
+                    if ("reSet".equals(message)){
+                        Intent mqttIntent = new Intent("RoomFragment");
+                        mqttIntent.putExtra("deviceChild", "null");
+                        mqttIntent.putExtra("macAddress", macAddress);
+                        sendBroadcast(mqttIntent);
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();

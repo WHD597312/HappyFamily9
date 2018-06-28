@@ -104,13 +104,6 @@ public class ZnWdActivity extends AppCompatActivity {
 
     }
 
-
-
-
-
-
-
-
     int change = 0;
 
     @OnClick({R.id.bt_wd_sd,R.id.bt_wd_pm25,R.id.bt_wd_wd})
@@ -136,7 +129,6 @@ public class ZnWdActivity extends AppCompatActivity {
                         gifDrawable1=new GifDrawable(getResources(),R.mipmap.sd_sd);
                         gifDrawable2=new GifDrawable(getResources(),R.mipmap.pm25_xh);
                         gifDrawable3=new GifDrawable(getResources(),R.mipmap.sd_kqjhq);
-
 
                 }catch (Exception e){
                     e.printStackTrace();

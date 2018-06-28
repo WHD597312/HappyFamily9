@@ -17,25 +17,25 @@ public class DeviceChild implements Serializable{
     int busModel;/**商业模式*/
     String macAddress;/**mac地址*/
     String name;/**设备名称*/
-    int timerMoudle=-1;/**定时器模式*/
+    int timerMoudle=0;/**定时器模式*/
     String mcuVersion;/**MCU版本*/
     String wifiVersion;/**wifi版本*/
     int waramerSetTemp=0;/**取暖器设定温度*/
     int warmerCurTemp=0;/**取暖器当前温度*/
-    int warmerSampleData=-1;/**取暖器采样数据*/
-    int warmerRatePower=-1;/**取暖器额定总功率*/
-    int warmerCurRunRoatePower=-1;/**取暖器当前运行功率*/
-    int warmerRunState=-1;/**机器当前运行状态*/
-    int deviceState=-1;/**开关机状态 0表示关机，1表示开机*/
+    int warmerSampleData=0;/**取暖器采样数据*/
+    int warmerRatePower=0;/**取暖器额定总功率*/
+    int warmerCurRunRoatePower=0;/**取暖器当前运行功率*/
+    int warmerRunState=0;/**机器当前运行状态*/
+    int deviceState=0;/**开关机状态 0表示关机，1表示开机*/
     String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
-    int lockState=-1;/** 屏幕是否锁定 1：锁定 0：未锁定*/
-    int screenState=-1;/**屏保是否开启 1：开启 0：未开启 */
-    int curRunState2=-1;/**机器当前运行状态2  (保留)*/
-    int curRunState3=-1;/**机器当前运行状态2  (保留)*/
+    int lockState=0;/** 屏幕是否锁定 1：锁定 0：未锁定*/
+    int screenState=0;/**屏保是否开启 1：开启 0：未开启 */
+    int curRunState2=0;/**机器当前运行状态2  (保留)*/
+    int curRunState3=0;/**机器当前运行状态2  (保留)*/
     int timerHour=0;/**定时时间 小时*/
     int timerMin=0;/**定时时间 分*/
-    int checkCode=-1;/**校验码*/
-    int endCode=-1;/**结束码*/
+    int checkCode=0;/**校验码*/
+    int endCode=0;/**结束码*/
     int userId=0;/**用户Id*/
     int img;/**设备标志图片*/
     int deviceId;/**设备Id*/

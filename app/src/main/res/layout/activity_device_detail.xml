@@ -130,7 +130,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_rate_state"
-                android:text="功率"
+                android:text="档位"
                 android:layout_centerHorizontal="true"
                 android:textSize="@dimen/sp_15"
                 />
@@ -226,7 +226,7 @@
                 android:layout_below="@+id/image_timer"
                 android:layout_alignLeft="@+id/image_rate"
                 android:layout_alignRight="@+id/image_rate"
-                android:text="功率"
+                android:text="档位"
                 android:gravity="center"
                 />
 
@@ -260,7 +260,6 @@
                 android:gravity="center"
                 android:text="锁定模式"
                 />
-
             <ImageView
                 android:id="@+id/image_screen"
                 android:layout_width="@dimen/dp_jy_60"

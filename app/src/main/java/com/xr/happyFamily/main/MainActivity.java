@@ -60,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         long houseId=intent.getLongExtra("houseId",0);
         if (houseId==0){
             Hourse hourse=hourses.get(0);
+            
             houseId=hourse.getHouseId();
         }
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();

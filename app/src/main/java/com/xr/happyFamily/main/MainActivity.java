@@ -46,10 +46,14 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         fragmentManager=getSupportFragmentManager();
         hourseDao=new HourseDaoImpl(getApplicationContext());
         List<Hourse> hourses=hourseDao.findAllHouse();
-        Hourse hourse=hourses.get(0);
-
+        Intent intent=getIntent();
+        long houseId=intent.getLongExtra("houseId",0);
+        if (houseId==0){
+            Hourse hourse=hourses.get(0);
+            houseId=hourse.getHouseId();
+        }
         FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        long houseId=hourse.getHouseId();
+
         familyFragmentManager=new FamilyFragmentManager();
         baoFragment=new BaoFragment();
         Bundle bundle=new Bundle();

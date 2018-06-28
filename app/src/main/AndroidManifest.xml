@@ -111,6 +111,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".jia.RenameHourseActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".jia.ChooseHourseActivity"
             android:label=""
             android:screenOrientation="portrait"
@@ -130,10 +135,7 @@
         <activity android:name=".jia.ManagementActivity" />
         <activity android:name=".jia.ChangeEquipmentActivity" />
         <activity android:name=".jia.activity.AddDeviceActivity" />
-        <activity
-            android:name=".jia.MainActivity"
-            android:hardwareAccelerated="true"
-            android:label="@string/app_name" />
+
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
             android:hardwareAccelerated="true"
@@ -236,9 +238,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.activity.DeviceDetailActivity" />
         <activity android:name=".main.MainActivity"></activity>
-        <activity android:name=".jia.activity.AddDeviceActivity">
 
-        </activity>
 
         <activity android:name=".bao.TestActivity">
 

@@ -1,7 +1,6 @@
 package com.xr.happyFamily.jia.activity;
 
 import android.Manifest;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
@@ -16,35 +15,29 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
-import android.util.Log;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Toast;
-
 import com.google.zxing.BarcodeFormat;
 import com.google.zxing.Result;
-
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.camera.CameraManager;
 import com.xr.happyFamily.together.util.decoding.CaptureActivityHandler;
 import com.xr.happyFamily.together.util.decoding.InactivityTimer;
 import com.xr.happyFamily.together.util.view.ViewfinderView;
-
 import org.json.JSONObject;
-
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Vector;
-
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;

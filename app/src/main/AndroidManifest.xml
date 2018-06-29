@@ -134,7 +134,8 @@
         <activity
             android:name=".jia.MainActivity"
             android:hardwareAccelerated="true"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:theme="@style/App_NoTouch"/>
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
             android:hardwareAccelerated="true"
@@ -220,14 +221,11 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".bao.ShoppageActivity"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".bao.ShopXQActivity"
             android:label=""
+            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -237,37 +235,62 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.activity.DeviceDetailActivity" />
         <activity android:name=".main.MainActivity"></activity>
-        <activity android:name=".jia.activity.AddDeviceActivity">
-
-        </activity>
-
         <activity android:name=".bao.TestActivity">
 
         </activity>
 
-        <activity android:name=".bao.ShopCartActivity"></activity>
-        <activity android:name=".bao.WuLiuActivity"></activity>
-        <activity android:name=".bao.ShopAddressActivity"></activity>
-        <activity android:name=".bao.ShopAddAddressActivity"></activity>
-        <activity android:name=".bao.ShopConfActivity"></activity>
-        <activity android:name=".bao.ShopDingdanActivity"></activity>
-        <activity android:name=".bao.ShopSearchActivity"
-            android:launchMode="singleTask"  ></activity>
-        <activity android:name=".bao.ShopShangchengActivity"></activity>
-        <activity android:name=".bao.ShopDingdanXQActivity"></activity>
-        <activity android:name=".bao.ShopSearchResultActivity"></activity>
-        <activity android:name=".bao.EditAddressActivity"></activity>
-        <activity android:name=".bao.TuiKuanActivity"
-            android:launchMode="singleTask"  ></activity>
-        <activity android:name=".bao.TuiKuanXQActivity"></activity>
-        <activity android:name=".bao.PingLunActivity"
-            android:launchMode="singleTask"></activity>
-        <activity android:name=".bao.PingLunSuccessActivity"></activity>
-        <activity android:name=".bao.WoDePingLunActivity"></activity>
-        <activity android:name=".bao.TuiKuanSuccessActivity"></activity>
-        <activity android:name=".bao.PaySuccessActivity"></activity>
-        <activity android:name=".bao.PayFailActivity"></activity>
-        <activity android:name=".bao.alipay.PayActivity">
+        <activity
+            android:name=".bao.ShopCartActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".bao.WuLiuActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".bao.ShopAddressActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".bao.ShopAddAddressActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".bao.ShopConfActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".bao.ShopDingdanActivity"
+            android:launchMode="singleTop"
+             android:theme="@style/App_NoTouch" />/>
+        <activity
+            android:name=".bao.ShopSearchActivity"
+            android:launchMode="singleTask" />
+        <activity
+            android:name=".bao.ShopShangchengActivity"
+            android:launchMode="singleTop" />
+        <activity
+            android:name=".bao.ShopDingdanXQActivity"
+            android:launchMode="singleTop" />
+        <activity android:name=".bao.ShopSearchResultActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".bao.EditAddressActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".bao.TuiKuanActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".bao.TuiKuanXQActivity"
+            android:launchMode="singleTop"/>
+        <activity
+            android:name=".bao.PingLunActivity"
+            android:launchMode="singleTask" />
+        <activity android:name=".bao.PingLunSuccessActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".bao.WoDePingLunActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".bao.TuiKuanSuccessActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".bao.PaySuccessActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".bao.PayFailActivity"
+            android:launchMode="singleTop"/>
+        <activity android:name=".bao.alipay.PayActivity"
+            android:launchMode="singleTop">
 
         </activity>
 

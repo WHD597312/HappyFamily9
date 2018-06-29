@@ -79,6 +79,8 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
         else
             holder.tv_name.setText(list.get(position).getUsername());
 
+
+        if((list.get(position).getComment())!=null)
         holder.tv_pinglun.setText(list.get(position).getComment().toString());
         if (list.get(position).getImage() == null) {
             holder.img_touxiang.setImageResource(R.mipmap.ic_touxiang_moren);

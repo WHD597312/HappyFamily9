@@ -1,6 +1,8 @@
 package com.xr.happyFamily.bao;
 
 import android.Manifest;
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -145,7 +147,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(confListAdapter);
 
-        orderId = getIntent().getExtras().getString("orderId");
+        orderNumber = getIntent().getExtras().getString("orderId");
 //        orderId="H201806191500005";
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
@@ -167,6 +169,13 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 break;
 
             case R.id.tv_dingdan:
+                //获取剪贴板管理器：
+                ClipboardManager cm = (ClipboardManager) getSystemService(Context.CLIPBOARD_SERVICE);
+                // 创建普通字符型ClipData
+                ClipData mClipData = ClipData.newPlainText("Label", orderNumber);
+                // 将ClipData内容放到系统剪贴板里。
+                cm.setPrimaryClip(mClipData);
+                Toast.makeText(mContext,"复制成功",Toast.LENGTH_SHORT).show();
                 break;
             case R.id.img1:
                 showPopup(1);
@@ -188,8 +197,10 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                         break;
                     case "2":
                         Toast.makeText(ShopDingdanXQActivity.this, "该商品暂未发货", Toast.LENGTH_SHORT).show();
+                        break;
                     case "3":
                         Intent intent3 = new Intent(ShopDingdanXQActivity.this, WuLiuActivity.class);
+                        intent3.putExtra("orderNumber",orderNumber);
                         intent3.putExtra("logisticCode", logisticCode);
                         intent3.putExtra("shipperCode", shipperCode);
                         startActivity(intent3);
@@ -224,8 +235,8 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
 //                new refundOrderAsync().execute(params);
                 break;
             case R.id.rl_wuliu:
-                //退货
                 Intent intent3 = new Intent(ShopDingdanXQActivity.this, WuLiuActivity.class);
+                intent3.putExtra("orderNumber",orderNumber);
                 intent3.putExtra("logisticCode", logisticCode);
                 intent3.putExtra("shipperCode", shipperCode);
                 startActivity(intent3);
@@ -268,9 +279,13 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 }
             }
         });
-        if (sign == 1)
+        if (sign == 1) {
+            ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("取消支付");
             tv_context.setText("是否确认取消支付？");
-        else tv_context.setText("是否拨打客服电话？");
+        }
+        else {
+            ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("拨打客服");
+            tv_context.setText("是否拨打客服电话？");};
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
         mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -331,7 +346,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
 
             Map<String, Object> params = maps[0];
             String url = "/order/getOrderByOrderNumber";
-            url = url + "?orderNumber=" +orderId;
+            url = url + "?orderNumber=" +orderNumber;
             String result = HttpUtils.doGet(mContext, url);
             String code = "";
             try {
@@ -358,7 +373,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                     state = returnData.get("state").toString();
                     postFee = returnData.get("postFee").toString();
                     paidAmount = returnData.get("paidAmount").toString();
-                    orderNumber = returnData.get("orderNumber").toString();
+                    orderId = returnData.get("orderId").toString();
                     createTime = returnData.get("createTime").toString();
                     paymentTime = returnData.get("paymentTime").toString();
                     logisticCode = returnData.get("logisticCode").toString();
@@ -366,12 +381,13 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                     paymentSeq = returnData.get("paymentSeq").toString();
                     if(returnData.get("sendTime")!=null)
                         sendTime = returnData.get("sendTime").toString();
+
                     if(paymentSeq.equals("null"))
                         paymentSeq="暂无支付宝交易号";
                     if(sendTime.equals("null"))
-                        paymentSeq="暂未发货";
+                        sendTime="暂未发货";
                     if(paymentTime.equals("null"))
-                        paymentSeq="暂未付款";
+                        paymentTime="暂未付款";
 
                 }
             } catch (Exception e) {
@@ -472,6 +488,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                finish();
                 Toast.makeText(mContext, "取消订单成功", Toast.LENGTH_SHORT).show();
 
             }
@@ -545,8 +562,9 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                     tvDaojishi.setText(hours + "小时" + minutes + "分" + s + "秒后订单关闭");
                     if (recLen < 0) {
                         timer.cancel();
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("orderId", orderId);
+                        finish();
+//                        Map<String, Object> params = new HashMap<>();
+//                        params.put("orderId", orderId);
 //                    new cancelOrderAsync().execute(params);
                     }
                 }

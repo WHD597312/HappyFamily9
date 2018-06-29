@@ -120,6 +120,7 @@ public class ShopShangchengActivity extends AppCompatActivity {
             }
         });
 
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("拨打客服");
         tv_context.setText("是否拨打客服电话？");
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);

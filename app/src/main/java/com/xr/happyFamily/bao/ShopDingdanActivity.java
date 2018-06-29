@@ -199,7 +199,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
 //        dingdanAdapter.notifyDataSetChanged();
         getDingDan(sing_title,page);
     }
-
+    dingDanAsync dingDanAsync;
     public void getDingDan(int state,int page) {
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
@@ -217,7 +217,13 @@ public class ShopDingdanActivity extends AppCompatActivity {
         else if (state == 4)
             params.put("state", 5);
         params.put("pageRow", "10");
-        new dingDanAsync().execute(params);
+        if(dingDanAsync !=null && dingDanAsync.getStatus() == AsyncTask.Status.RUNNING){
+            dingDanAsync.cancel(true);
+        }else {
+            dingDanAsync=new dingDanAsync();
+            dingDanAsync.execute(params);
+        }
+
     }
 
     String orderId;
@@ -232,6 +238,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 url = url + entry.getKey() + "=" + entry.getValue() + "&";
             }
             url = url.substring(0, url.length() - 1);
+            Log.e("qqqqqqEEE",url);
             String result = HttpUtils.doGet(mContext, url);
             String code = "";
             try {
@@ -247,9 +254,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         orderBeans.clear();
 
+                        Log.e("qqqqqqqEEE",list.size()+"?");
                         for (int i = 0; i < list.size(); i++) {
 //                        //通过反射 得到UserBean.class
                             JsonElement user = list.get(i);
+                            Log.e("qqqqqqqEEE",i+":"+user.toString());
                             OrderListBean.myList userList = gson.fromJson(user, OrderListBean.myList.class);
                             orderBeans.add(userList);
                             orderId = orderBeans.get(i).getOrderNumber();
@@ -282,8 +291,9 @@ public class ShopDingdanActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
+
                 if (orderBeans.size() == 0) {
+                    MyDialog.closeDialog(dialog);
                     dingdanAdapter.notifyDataSetChanged();
 
                     if(page>1)

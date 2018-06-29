@@ -82,7 +82,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
     List<String> list = new ArrayList();
     ImageView[] imgs;
 
-    MyDialog dialog;
 
     String[] tag={"全部","美观","性价比高","包装好","做工精细","使用舒服"};
 
@@ -171,8 +170,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
 
     private void getPingLun(String tag) {
         shopPinglunBeanList.clear();
-        dialog = MyDialog.showDialog(mContext);
-        dialog.show();
         Map<String, Object> params = new HashMap<>();
         params.put("goodsId", goodsId);
         if (!"全部".equals(tag))
@@ -219,6 +216,7 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
 
             try {
                 if (!Utils.isEmpty(result)) {
+                    code="100";
                     JSONObject jsonObject = new JSONObject(result);
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
 
@@ -244,7 +242,7 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return "100";
+            return code;
         }
 
         @Override
@@ -314,8 +312,9 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //                Log.e("qqqqqqqqqqqRece",receive.getContact()+"!");
-                MyDialog.closeDialog(dialog);
                 pinglunAdapter.notifyDataSetChanged();
+                Log.e("qqqqqqqqqqSSSS",shopPinglunBeanList.size()+"?");
+                Log.e("qqqqqqqqqqSSSS",shopPinglunBeanList.get(0).getComment());
                 if(shopPinglunBeanList.size()==0){
                     Toast.makeText(context,"此商品暂无评论",Toast.LENGTH_SHORT).show();
                 }

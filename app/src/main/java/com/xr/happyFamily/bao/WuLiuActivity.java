@@ -10,6 +10,8 @@ import android.os.Bundle;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -28,13 +30,19 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.adapter.DingdanAdapter;
 import com.xr.happyFamily.bao.adapter.TimeLineAdapter;
+import com.xr.happyFamily.bao.adapter.WuLiuListAdapter;
+import com.xr.happyFamily.bao.adapter.WuLiuXQAdapter;
 import com.xr.happyFamily.bao.util.WuLiuData;
+import com.xr.happyFamily.bao.view.MyListView;
+import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.WuLiuBean;
 import com.xr.happyFamily.bean.WuLiuListBean;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.PublicData;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -54,29 +62,35 @@ import butterknife.OnClick;
 
 public class WuLiuActivity extends AppCompatActivity {
 
+
     @BindView(R.id.back)
     ImageView back;
     @BindView(R.id.title_text)
     TextView titleText;
     @BindView(R.id.title_rightText)
     TextView titleRightText;
-    @BindView(R.id.img_shop_pic)
-    ImageView imgShopPic;
     @BindView(R.id.tv_state)
     TextView tvState;
+    @BindView(R.id.tv_time)
+    TextView tvTime;
     @BindView(R.id.tv_tel)
     TextView tvTel;
-    @BindView(R.id.lv_list)
-    ListView lvList;
+    @BindView(R.id.tv_call)
+    TextView tvCall;
     @BindView(R.id.img_call)
     ImageView imgCall;
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.lv_list)
+    MyListView lvList;
     private TimeLineAdapter adapter;
-
+    private WuLiuXQAdapter wuLiuListAdapter;
     String logisticCode, shipperCode, describe;
     private MyDialog dialog;
     String wuliu;
     List<WuLiuListBean> wuLiuListBeanList = new ArrayList<>();
-    String tel="0";
+    String tel = "0";
+    String orderNumber;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -84,6 +98,7 @@ public class WuLiuActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        mContext = WuLiuActivity.this;
         setContentView(R.layout.activity_shop_wuliu);
         ButterKnife.bind(this);
         lvList.setDividerHeight(0);
@@ -95,13 +110,21 @@ public class WuLiuActivity extends AppCompatActivity {
         WuLiuData wuLiuData = new WuLiuData();
         wuLiuListBeanList.addAll(wuLiuData.getWuLiuListBeanList());
 
-
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+//      获取数据，向适配器传数据，绑定适配器
+        orderDetailsLists = new ArrayList<>();
+        wuLiuListAdapter = new WuLiuXQAdapter(mContext, orderDetailsLists);
+        recyclerView.setAdapter(wuLiuListAdapter);
         Bundle bundle = getIntent().getExtras();
         logisticCode = bundle.get("logisticCode").toString();
         shipperCode = bundle.get("shipperCode").toString();
+        orderNumber = bundle.get("orderNumber").toString();
+
+        Log.e("qqqqqqqqqNNNN",orderNumber);
         for (int i = 0; i < wuLiuListBeanList.size(); i++) {
             if (shipperCode.equals(wuLiuListBeanList.get(i).getCode()))
-                tvTel.setText(wuLiuListBeanList.get(i).getName() + ": " + logisticCode);
+                tvTel.setText(wuLiuListBeanList.get(i).getName() + " " + logisticCode);
         }
         dialog = MyDialog.showDialog(this);
         dialog.show();
@@ -110,22 +133,25 @@ public class WuLiuActivity extends AppCompatActivity {
         params.put("logisticCode", logisticCode);
         new expressInfoAsync().execute(params);
 
+
+        new getOrderAsync().execute();
+
     }
 
     List<Map<String, Object>> wuliuList = new ArrayList<Map<String, Object>>();
 
 
-    @OnClick({R.id.back,R.id.img_call})
+    @OnClick({R.id.back, R.id.img_call})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 finish();
                 break;
             case R.id.img_call:
-                if(tel.equals("0"))
-                    Toast.makeText(WuLiuActivity.this,"暂无配送员联系方式",Toast.LENGTH_SHORT).show();
+                if (tel.equals("0"))
+                    Toast.makeText(WuLiuActivity.this, "暂无配送员联系方式", Toast.LENGTH_SHORT).show();
                 else
-                showPopup();
+                    showPopup();
                 break;
         }
     }
@@ -188,6 +214,7 @@ public class WuLiuActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 tvState.setText(describe);
                 adapter.notifyDataSetChanged();
+                tvCall.setText(tel);
 //                tvWuliu.setText(wuliu);
 //                tvWuliuTime.setText(wuliu_time);
 
@@ -199,8 +226,9 @@ public class WuLiuActivity extends AppCompatActivity {
     private PopupWindow mPopWindow;
     private Context mContext;
     private TextView tv_quxiao, tv_queding, tv_context;
+
     private void showPopup() {
-        mContext=WuLiuActivity.this;
+
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_main, null);
         tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
@@ -227,7 +255,7 @@ public class WuLiuActivity extends AppCompatActivity {
                 }
             }
         });
-
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("拨打电话");
         tv_context.setText("是否拨打快递员电话？");
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -253,8 +281,6 @@ public class WuLiuActivity extends AppCompatActivity {
     }
 
 
-
-
     class poponDismissListener implements PopupWindow.OnDismissListener {
 
         @Override
@@ -265,4 +291,51 @@ public class WuLiuActivity extends AppCompatActivity {
 
     }
 
+
+    String time;
+    List<OrderBean.OrderDetailsList> orderDetailsLists = new ArrayList<>();
+
+
+    class getOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+
+            String url = "/order/getOrderByOrderNumber";
+            url = url + "?orderNumber=" + orderNumber;
+            String result = HttpUtils.doGet(mContext, url);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    time = returnData.get("sendTime").toString();
+                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("orderDetailsList");
+                    Gson gson = new Gson();
+                    for (JsonElement user : list) {
+                        //通过反射 得到UserBean.class
+                        OrderBean.OrderDetailsList userList = gson.fromJson(user, OrderBean.OrderDetailsList.class);
+                        orderDetailsLists.add(userList);
+                    }
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                wuLiuListAdapter.notifyDataSetChanged();
+                if(!"null".equals(time))
+                tvTime.setText(TimeUtils.getTime(time));
+            }
+        }
+    }
 }

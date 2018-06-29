@@ -35,6 +35,7 @@ import com.xr.happyFamily.bao.bean.ShoppingCart;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -69,18 +70,14 @@ public class ShopCartActivity extends AppCompatActivity {
 
     private TextView tvShopCartSubmit, tvShopCartSelect;
     private Context mContext;
-    private RecyclerView rlvShopCart, rlvHotProducts;
+    private RecyclerView rlvShopCart;
     private ShopCartAdapter mShopCartAdapter;
-    private LinearLayout llPay;
-    private RelativeLayout rlHaveProduct;
     private List<ShopCartBean> mAllOrderList = new ArrayList<>();
     private ArrayList<ShopCartBean> mGoPayList = new ArrayList<>();
-    private List<String> mHotProductsList = new ArrayList<>();
     private TextView tvShopCartTotalPrice;
-    private int mCount, mPosition;
     private int mTotalPrice1;
     private boolean mSelect, isEdit = false;
-    private boolean[] isChoose;
+    private MyDialog dialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,14 +89,11 @@ public class ShopCartActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        Map<String, Object> params = new HashMap<>();
-        new addShopAsync().execute(params);
+       getData();
         titleText.setText("购物车");
         tvShopCartSelect = (TextView) findViewById(R.id.tv_shopcart_addselect);
         tvShopCartTotalPrice = (TextView) findViewById(R.id.tv_shopcart_totalprice);
-        rlHaveProduct = (RelativeLayout) findViewById(R.id.rl_shopcart_have);
         rlvShopCart = (RecyclerView) findViewById(R.id.rlv_shopcart);
-        llPay = (LinearLayout) findViewById(R.id.ll_pay);
 //        RelativeLayout.LayoutParams lp = new RelativeLayout.LayoutParams(RelativeLayout.LayoutParams.FILL_PARENT, RelativeLayout.LayoutParams.WRAP_CONTENT);
 //        lp.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
 //        llPay.setLayoutParams(lp);
@@ -118,14 +112,7 @@ public class ShopCartActivity extends AppCompatActivity {
 
             }
         });
-        //修改数量接口
-        mShopCartAdapter.setOnEditClickListener(new ShopCartAdapter.OnEditClickListener() {
-            @Override
-            public void onEditClick(int position, int cartid, int count) {
-                mCount = count;
-                mPosition = position;
-            }
-        });
+
         mShopCartAdapter.setOnItemClickListener(onItemOnClickListener);
         //实时监控全选按钮
         mShopCartAdapter.setResfreshListener(new ShopCartAdapter.OnResfreshListener() {
@@ -195,7 +182,7 @@ public class ShopCartActivity extends AppCompatActivity {
         @Override
         public void onItemLongOnClick(View view, int pos) {
 
-            mPosition = pos;
+//            mPosition = pos;
             Toast.makeText(ShopCartActivity.this, "点击" + pos, Toast.LENGTH_SHORT).show();
 
         }
@@ -259,18 +246,22 @@ public class ShopCartActivity extends AppCompatActivity {
     }
 
     public void upDataUI() {
-        if (!isEdit) {
-            titleRightText.setText("完成");
-            tvShopCartSubmit.setText("删除");
-            tvSum.setVisibility(View.GONE);
-            tvShopCartTotalPrice.setVisibility(View.GONE);
-            isEdit = true;
-        } else {
-            titleRightText.setText("编辑");
-            tvShopCartSubmit.setText("狠心买");
-            tvSum.setVisibility(View.VISIBLE);
-            tvShopCartTotalPrice.setVisibility(View.VISIBLE);
-            isEdit = false;
+        if(shoppingCartList.size()==0){
+            Toast.makeText(mContext,"购物车内暂无商品",Toast.LENGTH_SHORT).show();
+        }else {
+            if (!isEdit) {
+                titleRightText.setText("完成");
+                tvShopCartSubmit.setText("删除");
+                tvSum.setVisibility(View.GONE);
+                tvShopCartTotalPrice.setVisibility(View.GONE);
+                isEdit = true;
+            } else {
+                titleRightText.setText("编辑");
+                tvShopCartSubmit.setText("狠心买");
+                tvSum.setVisibility(View.VISIBLE);
+                tvShopCartTotalPrice.setVisibility(View.VISIBLE);
+                isEdit = false;
+            }
         }
     }
 
@@ -321,6 +312,7 @@ public class ShopCartActivity extends AppCompatActivity {
             super.onPostExecute(s);
 
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 mShopCartAdapter.notifyDataSetChanged();
                 if(mAllOrderList.size()==0){
                     Log.e("qqqqqqqqMMM","没了");
@@ -362,10 +354,7 @@ public class ShopCartActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                mAllOrderList.clear();
-                Map<String, Object> params = new HashMap<>();
-                new addShopAsync().execute(params);
-
+               getData();
 
             } else if (!Utils.isEmpty(s) && "10005".equals(s)) {
                 startActivity(new Intent(ShopCartActivity.this, LoginActivity.class));
@@ -376,14 +365,19 @@ public class ShopCartActivity extends AppCompatActivity {
     @Override
     protected void onRestart() {
         super.onRestart();
-        mAllOrderList.clear();
-        Map<String, Object> params = new HashMap<>();
-        new addShopAsync().execute(params);
+        getData();
     }
 
 
 
 
+    private void getData(){
+        dialog = MyDialog.showDialog(mContext);
+        dialog.show();
+        mAllOrderList.clear();
+        Map<String, Object> params = new HashMap<>();
+        new addShopAsync().execute(params);
+    }
 
 
 
@@ -405,7 +399,8 @@ public class ShopCartActivity extends AppCompatActivity {
         tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
         tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
-        tv_context.setText("是否删除商品");
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("删除商品");
+        tv_context.setText("是否删除商品？");
         tv_quxiao.setText("否");
         tv_queding  .setText("是");
 //        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);

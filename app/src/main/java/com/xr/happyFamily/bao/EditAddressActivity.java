@@ -30,6 +30,7 @@ import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -117,6 +118,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         edAddress.setText(receiveAddress);
 
         llMoren.setVisibility(View.GONE);
+        findViewById(R.id.lg_bottom).setVisibility(View.GONE);
     }
 
     @OnClick({R.id.back, R.id.tv_choose, R.id.title_rightText})
@@ -151,16 +153,24 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                 Map<String, Object> params = new HashMap<>();
                 params.put("userId", url);
                 params.put("receiveId", receiveId);
-                if (Utils.isEmpty(edName.getText().toString()))
+                if (Utils.isEmpty(edName.getText().toString())) {
                     Toast.makeText(this, "请输入收货人", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 else
                     params.put("contact", edName.getText().toString());
-                if (Utils.isEmpty(edTel.getText().toString()))
+                if (Utils.isEmpty(edTel.getText().toString())) {
                     Toast.makeText(this, "请输入联系电话", Toast.LENGTH_SHORT).show();
-                else
+                    break;
+                }
+                else if(Mobile.isMobile(edTel.getText().toString()))
                     params.put("tel", edTel.getText().toString());
-                if (Utils.isEmpty(tvAddress.getText().toString()))
+                else
+                    Toast.makeText(this, "请输入正确联系电话", Toast.LENGTH_SHORT).show();
+                if (Utils.isEmpty(tvAddress.getText().toString())) {
                     Toast.makeText(this, "请输入所在地址", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 else {
                     params.put("receiveProvince", receiveProvince);
                     params.put("receiveCity", receiveCity);

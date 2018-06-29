@@ -279,9 +279,9 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             int state=Integer.parseInt(params.get("state").toString());
 
             url=url+"?goodsName="+goodsName+"&pageNum="+pageNum+"&pageRow="+pageRow;
-            if(state==0) {
+            if(state==1) {
                 url=url+"&asc=1";
-            }else if(state==1){
+            }else if(state==2){
                 url=url+"&desc=1";
             }
             String result = HttpUtils.doGet(ShopSearchResultActivity.this, url);

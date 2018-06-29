@@ -157,7 +157,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
     private boolean isFirst = true;
     SimpleAdapter moreAdapter;
-    List<Map<String, Object>> list_more = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> list_more;
 
 
     @Nullable
@@ -174,12 +174,22 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         return view;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        Log.e("qqqqqqqqqqSSSS","onStop");
+    }
 
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        Log.e("qqqqqqqqqqqqqSSS","onDes");
+    }
 
     private void init() {
         list_title = new ArrayList<>();
         list_shop = new ArrayList<>();
-
+        list_more = new ArrayList<>();
         mainTitleAdapter = new MainTitleAdapter(mContext, list_title);
 
 
@@ -371,13 +381,16 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             @Override
             public void run() {
                 while (!isStop) {
-                    new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                        }
-                    });
-                    SystemClock.sleep(PAGER_TIOME);
+                    if(getActivity()!=null) {
+                        getActivity().runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                            }
+                        });
+                        SystemClock.sleep(PAGER_TIOME);
+                    }
+
                 }
             }
         }).start();
@@ -647,4 +660,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             }
         }
     }
+
+
 }

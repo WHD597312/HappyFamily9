@@ -16,14 +16,13 @@ import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.PopupWindow;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,27 +35,18 @@ import com.xr.happyFamily.esptouch.IEsptouchListener;
 import com.xr.happyFamily.esptouch.IEsptouchResult;
 import com.xr.happyFamily.esptouch.IEsptouchTask;
 import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
-import com.xr.happyFamily.jia.MainActivity;
+
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.jia.pojo.SmartTerminalInfo;
-import com.xr.happyFamily.jia.view_custom.SmartTerminalCircle;
-import com.xr.happyFamily.together.http.HttpUtils;
+
 import com.xr.happyFamily.together.util.Utils;
 
-
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import butterknife.Unbinder;
+
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 

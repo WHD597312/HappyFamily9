@@ -73,6 +73,9 @@ public class DeviceChildDaoImpl {
         if (!deviceChildren.isEmpty()){
             deviceChildDao.deleteInTx(deviceChildren);
         }
-
+    }
+    public List<DeviceChild> findHouseCommonDevices(long houseId){
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.DeviceUsedCount.ge(5));
+        return deviceChildDao.queryBuilder().where(whereCondition).limit(4).list();
     }
 }

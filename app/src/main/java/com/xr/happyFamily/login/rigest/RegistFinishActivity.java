@@ -24,7 +24,6 @@ import android.widget.TextView;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.UserBean;
-import com.xr.happyFamily.jia.MainActivity;
 import com.xr.happyFamily.jia.xnty.SmartSocket;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;

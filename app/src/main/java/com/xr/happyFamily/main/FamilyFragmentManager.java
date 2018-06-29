@@ -34,60 +34,69 @@ public class FamilyFragmentManager extends Fragment {
     List<Room> rooms;
     private SharedPreferences mPositionPreferences;
     SharedPreferences roomPreferences;
+    public static boolean running=false;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        view = inflater.inflate(R.layout.fragment_family_manager, container, false);
-        viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-        roomPreferences = getActivity().getSharedPreferences("room", Context.MODE_PRIVATE);
-        mPositionPreferences = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
-        Bundle bundle = getArguments();
-        houseId = bundle.getLong("houseId");
-        roomDao = new RoomDaoImpl(getActivity());
-        rooms = new ArrayList<>();
-        List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
-        for (int i = 0; i < allRoomInHouse.size(); i++) {
-            Room room = allRoomInHouse.get(i);
-            rooms.add(room);
-        }
 
-        fragmentList = new ArrayList<>();
-        if (rooms.isEmpty()) {
-            NoRoomFragment noRoomFragment = new NoRoomFragment();
-            fragmentList.add(noRoomFragment);
-        } else {
-            FamilyFragment familyFragment = new FamilyFragment();
-            fragmentList.add(familyFragment);
-        }
-        Log.i("roomtList", "-->" + rooms.size());
-        for (int i = 0; i < rooms.size(); i++) {
-            RoomFragment roomFragment=new RoomFragment();
-            roomFragment.setRoomId(rooms.get(i).getRoomId());
-            fragmentList.add(roomFragment);
-            Log.i("qqqqqq",rooms.get(i).getRoomName());
-        }
-        Log.i("fragmentList", "-->" + fragmentList.size());
-        FragmentStatePagerAdapter adapter = new FamilyAdapter(getFragmentManager(), fragmentList);
-        viewPager.setAdapter(adapter);
-        MyOnPageChangeListener listener = new MyOnPageChangeListener(getActivity(), viewPager, fragmentList.size());
-        viewPager.addOnPageChangeListener(listener);
-        if (mPositionPreferences.contains("position")) {
-            int position = mPositionPreferences.getInt("position", 0);
-            viewPager.setCurrentItem(position);
-            if (callValueValue != null) {
-                callValueValue.setPosition(position);
+        if (view==null){
+            view = inflater.inflate(R.layout.fragment_family_manager, container, false);
+            viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+            roomPreferences = getActivity().getSharedPreferences("room", Context.MODE_PRIVATE);
+            mPositionPreferences = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
+            Bundle bundle = getArguments();
+            houseId = bundle.getLong("houseId");
+            roomDao = new RoomDaoImpl(getActivity());
+            rooms = new ArrayList<>();
+            List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
+            for (int i = 0; i < allRoomInHouse.size(); i++) {
+                Room room = allRoomInHouse.get(i);
+                rooms.add(room);
             }
-            listener.onPageSelected(position);
-        } else {
-            viewPager.setCurrentItem(0);
-            listener.onPageSelected(0);
+
+            fragmentList = new ArrayList<>();
+            if (rooms.isEmpty()) {
+                NoRoomFragment noRoomFragment = new NoRoomFragment();
+                noRoomFragment.setHouseId(houseId);
+                fragmentList.add(noRoomFragment);
+            } else {
+                FamilyFragment familyFragment = new FamilyFragment();
+                familyFragment.setHouseId(houseId);
+                fragmentList.add(familyFragment);
+            }
+            Log.i("roomtList", "-->" + rooms.size());
+            for (int i = 0; i < rooms.size(); i++) {
+                RoomFragment roomFragment=new RoomFragment();
+                roomFragment.setRoomId(rooms.get(i).getRoomId());
+                fragmentList.add(roomFragment);
+                Log.i("qqqqqq",rooms.get(i).getRoomName());
+            }
+            Log.i("fragmentList", "-->" + fragmentList.size());
+            FragmentStatePagerAdapter adapter = new FamilyAdapter(getFragmentManager(), fragmentList);
+            viewPager.setAdapter(adapter);
+            MyOnPageChangeListener listener = new MyOnPageChangeListener(getActivity(), viewPager, fragmentList.size());
+            viewPager.addOnPageChangeListener(listener);
+            if (mPositionPreferences.contains("position")) {
+                int position = mPositionPreferences.getInt("position", 0);
+                viewPager.setCurrentItem(position);
+                if (callValueValue != null) {
+                    callValueValue.setPosition(position);
+                }
+                listener.onPageSelected(position);
+            } else {
+                viewPager.setCurrentItem(0);
+                listener.onPageSelected(0);
+            }
         }
         return view;
     }
 
+
     @Override
     public void onStart() {
         super.onStart();
+        running=true;
     }
     @Override
     public void onAttach(Context context) {
@@ -97,6 +106,17 @@ public class FamilyFragmentManager extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+        if (view!=null){
+            if (null != view) {
+                ((ViewGroup) view.getParent()).removeView(view);
+            }
+        }
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        running=false;
     }
 
     //实现页面变化监听器OnPageChangeListener
@@ -146,6 +166,7 @@ public class FamilyFragmentManager extends Fragment {
             if (callValueValue != null) {
                 callValueValue.setPosition(poistion);
             }
+
             if (poistion>0){
 //                Room room=rooms.get(poistion-1);
 //                long houseId=room.getHouseId();
@@ -203,12 +224,10 @@ public class FamilyFragmentManager extends Fragment {
                     long roomId=room.getRoomId();
                     String name=room.getRoomName();
                     Log.i("handleMessage", "handleMessage: "+name);
-
                 }
             }catch (Exception e){
                 e.printStackTrace();
             }
         }
     };
-
 }

@@ -1,8 +1,8 @@
 package com.xr.happyFamily.jia;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -11,22 +11,13 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.adapter.ShopCartAdapter;
-import com.xr.happyFamily.jia.AddhourseActivity;
 import com.xr.happyFamily.jia.adapter.ChooseHouseAdapter;
-import com.xr.happyFamily.jia.adapter.HouseAdapter;
 import com.xr.happyFamily.jia.pojo.Hourse;
-import com.xr.happyFamily.jia.titleview.TitleView;
-import com.xr.happyFamily.together.http.HttpUtils;
-
-import org.json.JSONObject;
+import com.xr.happyFamily.main.MainActivity;
 
 import java.util.List;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,15 +25,14 @@ import butterknife.Unbinder;
 
 public class ChooseHourseActivity extends AppCompatActivity {
     Unbinder unbinder;
-    TitleView titleView;
+
     String ip = "http://47.98.131.11:8084;";
     SharedPreferences preferences;
-    String houseName;
-    String houseAddress;
+
     private HourseDaoImpl hourseDao;
    @BindView(R.id.lv_hourse_choose)
    RecyclerView recyclerView;
-//    @BindView(R.id.iv_hourse_c)
+
     ImageView imageView1;
     @BindView(R.id.tv_hourse_choose)
     TextView textViewh;
@@ -50,7 +40,9 @@ public class ChooseHourseActivity extends AppCompatActivity {
     TextView textViewbj;
     @BindView(R.id.tv_hourse_jtgl)
     TextView textViewgl;
-    List<Hourse> hourses;
+    List<Hourse> houses;
+    Hourse house;
+    Context context;
     ChooseHouseAdapter adapter;
     public static  final int MREQUEST_CODE=1;
 
@@ -61,29 +53,29 @@ public class ChooseHourseActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_house_choose);
         unbinder = ButterKnife.bind(this);
-        titleView = (TitleView) findViewById(R.id.title_choose);
-        titleView.setTitleText("家庭选择");
         imageView1= (ImageView) findViewById(R.id.iv_hourse_c);
-//        preferences = getSharedPreferences("my", MODE_PRIVATE);
-//        houseName=preferences.getString("phone", "");
-//        houseAddress=preferences.getString("password", "");
-
         hourseDao=new HourseDaoImpl(getApplicationContext());
-        hourses = hourseDao.findAllHouse();
-
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        adapter = new ChooseHouseAdapter(this, hourses);
+        houses = hourseDao.findAllHouse();
+        adapter = new ChooseHouseAdapter(this, houses);
         adapter.setClicked(-1);
         recyclerView.setAdapter(adapter);
-
-
+        adapter.setSign(2);
     }
+
+
 
     @Override
     public void onStart() {
         super.onStart();
+
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
 
     }
 
@@ -95,12 +87,13 @@ public class ChooseHourseActivity extends AppCompatActivity {
     }
 
     int i =0 ;
-    @OnClick({R.id.tv_hourse_jtgl})
+    @OnClick({R.id.tv_hourse_jtgl,R.id.iv_choose_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_hourse_jtgl:
 //                imageView1.setImageResource(R.mipmap.hourse_xz);
                 if (i==0){
+                    adapter.setSign(1);
                     textViewh.setText("家庭");
                     textViewbj.setText("添加");
                     textViewgl.setText("新建家庭");
@@ -108,11 +101,16 @@ public class ChooseHourseActivity extends AppCompatActivity {
                     adapter.setClicked(1);
                     adapter.notifyDataSetChanged();
                     i=1;
+
                 }else if (i==1){
+
                     Intent intent=new Intent(this,AddhourseActivity.class);
                     startActivityForResult(intent,MREQUEST_CODE);
 
                 }
+                break;
+            case R.id.iv_choose_back:
+                startActivity(new Intent(this,MainActivity.class));
                 break;
         }
     }
@@ -121,13 +119,15 @@ public class ChooseHourseActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
+
         if (requestCode==MREQUEST_CODE && requestCode==MREQUEST_CODE){
-            hourses=hourseDao.findAllHouse();
-            Log.i("house","-->"+hourses.size());
-            adapter = new ChooseHouseAdapter(this, hourses);
+            houses=hourseDao.findAllHouse();
+            Log.i("house","-->"+houses.size());
+            adapter = new ChooseHouseAdapter(this, houses);
             adapter.setClicked(-1);
             recyclerView.setAdapter(adapter);
         }
+
     }
     @Override
     protected void onDestroy() {

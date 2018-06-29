@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bean.ShopBannerBean;
 
@@ -68,46 +69,32 @@ public class ViewPagerAdapter extends PagerAdapter {
         // 把position对应位置的ImageView添加到ViewPager中
 
         ImageView iv = images.get(position % images.size());
+
+
         ViewPager parent = (ViewPager) iv.getParent();
-//        if (images.size() == 2) {
-//            if (position % images.size() == 0) {
-//                iv = new ImageView(mContext);
-////                iv.setBackgroundResource(imageRess[i]);//设置图片
-//                Picasso.with(mContext).load(shopBannerBeans.get(0).getImage()).into(iv);
-//                iv.setId(imgae_ids[0]);//顺便给图片设置id
-//                iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
-//                viewPager.addView(iv);
-//            } else if (position % images.size() == 1) {
-//                iv = new ImageView(mContext);
-////                iv.setBackgroundResource(imageRess[i]);//设置图片
-//                Picasso.with(mContext).load(shopBannerBeans.get(1).getImage()).into(iv);
-//                iv.setId(imgae_ids[1]);//顺便给图片设置id
-//                iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
-//                viewPager.addView(iv);
-//            } else {
-//                ImageView iv2 = new ImageView(mContext);
-//                viewPager.addView(iv2);
-//            }
-//        } else {
-            if(parent!=null){
-                Log.e("qqqqqqqqqq",position+"??");
+        if (images.size() == 2) {
+            if (position % images.size() == 0) {
                 iv = new ImageView(mContext);
 //                iv.setBackgroundResource(imageRess[i]);//设置图片
-                Picasso.with(mContext).load(shopBannerBeans.get(position % images.size()).getImage()).into(iv);
-                iv.setId(imgae_ids[position % images.size()]);//顺便给图片设置id
+                Picasso.with(mContext).load(shopBannerBeans.get(0).getImage()).into(iv);
+                iv.setId(imgae_ids[0]);//顺便给图片设置id
                 iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
                 viewPager.addView(iv);
-            }
-            else {
+            } else if (position % images.size() == 1) {
                 iv = new ImageView(mContext);
 //                iv.setBackgroundResource(imageRess[i]);//设置图片
-                Picasso.with(mContext).load(shopBannerBeans.get(position % images.size()).getImage()).into(iv);
-                iv.setId(imgae_ids[position % images.size()]);//顺便给图片设置id
+                Picasso.with(mContext).load(shopBannerBeans.get(1).getImage()).into(iv);
+                iv.setId(imgae_ids[1]);//顺便给图片设置id
                 iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
                 viewPager.addView(iv);
+            } else {
+                ImageView iv2 = new ImageView(mContext);
+                viewPager.addView(iv2);
             }
-
-
+        } else if (parent != null) {
+            parent.removeAllViews();
+        }
+        viewPager.addView(iv);
         return iv;
 
     }

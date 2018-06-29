@@ -14,8 +14,6 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
-import com.android.volley.VolleyError;
-import com.android.volley.toolbox.StringRequest;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.zhy.http.okhttp.OkHttpUtils;
@@ -419,9 +417,12 @@ public class HttpUtils {
 
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toJSONString());
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+            String token = my.getString("token", "token");
 
             Request request = new Request.Builder()
                     .addHeader("client","android-xr")
+                    .addHeader("authorization",token)
                     .url(url)
                     .post(requestBody)
                     .build();
@@ -651,34 +652,5 @@ public class HttpUtils {
         }
         return result;
     }
-
-
-
-    //创建一个Get请求
-    private void volley_Get(final Context context, String url, Map<String, Object> map) {
-
-        //Get方式访问时须将请求参数写在url里
-        StringRequest request = new StringRequest(com.android.volley.Request.Method.GET, url, new com.android.volley.Response.Listener<String>() {
-            @Override
-            public void onResponse(String s) {//请求成功回调
-
-                Toast.makeText(context, s, Toast.LENGTH_SHORT).show();
-
-            }
-        }, new com.android.volley.Response.ErrorListener() {//请求失败回调
-            @Override
-            public void onErrorResponse(VolleyError volleyError) {
-
-                Toast.makeText(context, "请求失败", Toast.LENGTH_SHORT).show();
-
-            }
-        });
-
-        //设置请求标签
-        request.setTag("abcGet");
-        //将请求添加到队列
-        MyApplication.getHttpQueue().add(request);
-    }
-
 
 }

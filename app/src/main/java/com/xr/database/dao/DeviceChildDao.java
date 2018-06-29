@@ -53,6 +53,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property EndCode = new Property(26, int.class, "endCode", false, "END_CODE");
         public final static Property UserId = new Property(27, int.class, "userId", false, "USER_ID");
         public final static Property Img = new Property(28, int.class, "img", false, "IMG");
+        public final static Property DeviceId = new Property(29, int.class, "deviceId", false, "DEVICE_ID");
     }
 
 
@@ -96,7 +97,8 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"CHECK_CODE\" INTEGER NOT NULL ," + // 25: checkCode
                 "\"END_CODE\" INTEGER NOT NULL ," + // 26: endCode
                 "\"USER_ID\" INTEGER NOT NULL ," + // 27: userId
-                "\"IMG\" INTEGER NOT NULL );"); // 28: img
+                "\"IMG\" INTEGER NOT NULL ," + // 28: img
+                "\"DEVICE_ID\" INTEGER NOT NULL );"); // 29: deviceId
     }
 
     /** Drops the underlying database table. */
@@ -161,6 +163,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(27, entity.getEndCode());
         stmt.bindLong(28, entity.getUserId());
         stmt.bindLong(29, entity.getImg());
+        stmt.bindLong(30, entity.getDeviceId());
     }
 
     @Override
@@ -219,6 +222,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(27, entity.getEndCode());
         stmt.bindLong(28, entity.getUserId());
         stmt.bindLong(29, entity.getImg());
+        stmt.bindLong(30, entity.getDeviceId());
     }
 
     @Override
@@ -257,7 +261,8 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.getInt(offset + 25), // checkCode
             cursor.getInt(offset + 26), // endCode
             cursor.getInt(offset + 27), // userId
-            cursor.getInt(offset + 28) // img
+            cursor.getInt(offset + 28), // img
+            cursor.getInt(offset + 29) // deviceId
         );
         return entity;
     }
@@ -293,6 +298,7 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setEndCode(cursor.getInt(offset + 26));
         entity.setUserId(cursor.getInt(offset + 27));
         entity.setImg(cursor.getInt(offset + 28));
+        entity.setDeviceId(cursor.getInt(offset + 29));
      }
     
     @Override

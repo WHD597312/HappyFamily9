@@ -29,6 +29,7 @@
             android:id="@+id/tv_cancel"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:textColor="@color/black"
             android:text="取消"
             android:layout_gravity="center"
             android:gravity="right"
@@ -51,6 +52,7 @@
             android:layout_gravity="center"
             android:gravity="left"
             android:paddingLeft="@dimen/dp_jy_21"
+            android:textColor="@color/black"
             android:text="确定"
             android:layout_weight="1"
             />

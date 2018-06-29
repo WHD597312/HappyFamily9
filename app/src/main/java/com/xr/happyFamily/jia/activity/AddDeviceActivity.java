@@ -87,6 +87,7 @@ public class AddDeviceActivity extends AppCompatActivity {
     DeviceChild deviceChild = null;
     SharedPreferences my;
     private RoomDaoImpl roomDao;
+    private SharedPreferences macAddressPreferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +96,7 @@ public class AddDeviceActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        macAddressPreferences=getSharedPreferences("macAddress",Context.MODE_PRIVATE);
         unbinder = ButterKnife.bind(this);
         application = (MyApplication) getApplicationContext();
         if (application != null) {
@@ -178,6 +180,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(ssid)) {
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
+
                 break;
         }
     }
@@ -375,8 +378,15 @@ public class AddDeviceActivity extends AppCompatActivity {
                         JSONObject returnData = jsonObject.getJSONObject("returnData");
                         int deviceType = returnData.getInt("deviceType");
                         String deviceMacAddress = returnData.getString("deviceMacAddress");
-                        code = Integer.parseInt(returnCode);
+                        int deviceId=returnData.getInt("deviceId");
+                        if (deviceChild!=null){
+                            Log.i("deviceChild","-->"+deviceChild.getDeviceId());
+                            deviceChild.setDeviceId(deviceId);
+                            mqService.updateDevice(deviceChild);
+                            Log.i("deviceChild2","-->"+deviceChild.getDeviceId());
+                        }
                         String macAddress = deviceMacAddress;
+                        code = Integer.parseInt(returnCode);
                         String topicName = "";
                         if (2 == deviceType) {
                             topicName = "p99/warmer/" + macAddress + "/transfer";
@@ -427,7 +437,7 @@ public class AddDeviceActivity extends AppCompatActivity {
                 String userId = my.getString("userId", "");
                 params.put("userId", userId);
                 new AddDeviceInOldRoomAsync().execute(params);
-                AddDeviceActivity.running = false;
+                AddDeviceActivity.running=false;
             }
         }
     }

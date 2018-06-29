@@ -4,9 +4,12 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.Fragment.BalconyFragment;
 import com.xr.happyFamily.jia.Fragment.BathroomFragment;
@@ -36,6 +39,7 @@ public class ChangeEquipmentActivity extends AppCompatActivity {
     private List<String> mData = new ArrayList<String>(Arrays.asList("智能终端升级版", "户外空调", "智能插座基础版", "空气净化器","除湿机","取暖器","净水器","户外监测仪"));
     private Context context;
     Unbinder unbinder ;
+    private MyApplication application;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -43,6 +47,10 @@ public class ChangeEquipmentActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         context = this;
+        if (application==null){
+            application= (MyApplication) getApplication();
+            application.addActivity(this);
+        }
         setContentView(R.layout.activity_home_xnsb);
         unbinder = ButterKnife.bind(this);
         ListView listView = (ListView) findViewById(R.id.xnsb_list);
@@ -91,9 +99,15 @@ public class ChangeEquipmentActivity extends AppCompatActivity {
             case R.id.ib_xnty:
               finish();
                 break;
-
         }
-
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeActivity(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     @Override
     protected void onDestroy() {

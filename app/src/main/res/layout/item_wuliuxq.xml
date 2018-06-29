@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:orientation="horizontal"
+    android:padding="@dimen/dp_jy_12">
+
+
+
+
+        <ImageView
+            android:id="@+id/img_shop_pic"
+            android:layout_width="@dimen/dp_jy_88"
+            android:layout_height="@dimen/dp_jy_88"
+            android:layout_centerVertical="true"
+
+            android:layout_toRightOf="@+id/radio_shop"
+            android:src="@mipmap/chanpin2" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_88"
+            android:gravity="center_vertical"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_shop_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignTop="@+id/img_shop_pic"
+                android:layout_marginLeft="@dimen/dp_jy_17"
+                android:layout_toRightOf="@+id/img_shop_pic"
+                android:text="电暖气  银色"
+                android:textColor="@color/shop_context"
+                android:textSize="@dimen/sp_14" />
+
+            <TextView
+                android:id="@+id/tv_shop_type"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_shop_name"
+                android:layout_marginLeft="@dimen/dp_jy_17"
+                android:layout_marginTop="@dimen/dp_jy_8"
+                android:layout_toRightOf="@+id/img_shop_pic"
+                android:text=""
+                android:singleLine="true"
+                android:ellipsize="end"
+
+                android:textColor="@color/shop_type"
+                android:textSize="12sp" />
+
+        </LinearLayout>
+
+
+
+
+
+
+    <!--<View-->
+    <!--android:layout_width="match_parent"-->
+    <!--android:layout_height="@dimen/dp_jy_5"-->
+    <!--android:background="@color/white"/>-->
+    <!--<LinearLayout-->
+    <!--android:layout_width="wrap_content"-->
+    <!--android:layout_height="wrap_content"-->
+    <!--android:background="@color/white">-->
+    <!--<include layout="@layout/cutline"/>-->
+    <!--</LinearLayout>-->
+
+
+    <com.xr.happyFamily.bao.view.LinearGradientView
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_1" />
+
+</LinearLayout>
+
+

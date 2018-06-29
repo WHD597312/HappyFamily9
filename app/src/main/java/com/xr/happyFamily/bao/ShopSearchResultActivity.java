@@ -3,6 +3,7 @@ package com.xr.happyFamily.bao;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.support.v4.widget.NestedScrollView;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -120,6 +121,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 list_shop.clear();
                 isXiala = true;
                 getShopData(1, lastState);
+                CountTimer countTimer=new CountTimer(5000,1000);
+                countTimer.start();
 
             }
         });
@@ -200,7 +203,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.rl_zonghe:
-
+                llGv.setVisibility(View.GONE);
                 img[sign].setVisibility(View.INVISIBLE);
                 sign = 0;
                 img[sign].setVisibility(View.VISIBLE);
@@ -333,6 +336,32 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 }
                 MyDialog.closeDialog(dialog);
             }
+        }
+    }
+
+
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+        @Override
+        public void onFinish() {
+            swipeContent.setRefreshing(false);
+            Toast.makeText(ShopSearchResultActivity.this,"加载超时请重试",Toast.LENGTH_SHORT).show();
         }
     }
 }

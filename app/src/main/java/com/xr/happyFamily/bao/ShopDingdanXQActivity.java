@@ -262,6 +262,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
             public void onClick(View v) {
                 if (sign == 1) {
                     mPopWindow.dismiss();
+                    dialog.show();
                     Map<String, Object> params = new HashMap<>();
                     params.put("orderId", orderId);
                     new cancelOrderAsync().execute(params);
@@ -488,6 +489,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 finish();
                 Toast.makeText(mContext, "取消订单成功", Toast.LENGTH_SHORT).show();
 
@@ -562,6 +564,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                     tvDaojishi.setText(hours + "小时" + minutes + "分" + s + "秒后订单关闭");
                     if (recLen < 0) {
                         timer.cancel();
+//                        Toast.makeText(mContext,"该订单已超时",)
                         finish();
 //                        Map<String, Object> params = new HashMap<>();
 //                        params.put("orderId", orderId);

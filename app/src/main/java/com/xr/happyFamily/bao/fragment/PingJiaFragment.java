@@ -316,8 +316,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //                Log.e("qqqqqqqqqqqRece",receive.getContact()+"!");
                 pinglunAdapter.notifyDataSetChanged();
-                Log.e("qqqqqqqqqqSSSS",shopPinglunBeanList.size()+"?");
-                Log.e("qqqqqqqqqqSSSS",shopPinglunBeanList.get(0).getComment());
                 if(shopPinglunBeanList.size()==0){
                     Toast.makeText(context,"此商品暂无评论",Toast.LENGTH_SHORT).show();
                 }

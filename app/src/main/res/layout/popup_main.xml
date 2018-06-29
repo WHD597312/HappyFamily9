@@ -1,16 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="match_parent"
     android:gravity="center"
-    android:background="@drawable/bg_shape_search">
+    >
 
     <RelativeLayout
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_jy_170"
+        android:layout_height="@dimen/dp_jy_157"
         android:orientation="vertical"
+        android:background="@drawable/bg_shape_search"
         >
 
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_17"
+            android:layout_marginTop="@dimen/dp_jy_26"
+            android:layout_centerHorizontal="true"
+            android:textColor="#E6444444"/>
 
 
         <TextView
@@ -18,27 +27,31 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:textColor="#7F7F7F"
+            android:layout_below="@+id/tv_title"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_jy_44"
-            android:textSize="@dimen/sp_12"
-            android:text="确定清空历史记录吗？"/>
+
+            android:layout_marginTop="@dimen/dp_jy_20"
+            android:textSize="@dimen/sp_15" />
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_62"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_jy_35"
             android:orientation="horizontal"
-            android:background="@drawable/bg_shape_search_button"
+            android:layout_centerHorizontal="true"
             android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp_jy_15"
             android:gravity="center"
           >
 
             <TextView
                 android:id="@+id/tv_quxiao"
-                android:layout_width="0dp"
+                android:background="@drawable/bg_shape_pop_left5"
+                android:layout_width="@dimen/dp_jy_145"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="#7F7F7F"
+                android:textColor="#797979"
                 android:gravity="center"
-                android:textSize="@dimen/sp_12"
+                android:textSize="@dimen/sp_15"
+                android:layout_marginLeft="@dimen/dp_jy_20"
 
            android:text="取消"/>
 
@@ -51,12 +64,15 @@
 
             <TextView
                 android:id="@+id/tv_queren"
-                android:layout_width="0dp"
+                android:layout_width="@dimen/dp_jy_145"
+                android:background="@drawable/bg_shape_pop_right5"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:textColor="#7F7F7F"
+                android:textColor="@color/white"
                 android:gravity="center"
-                android:textSize="@dimen/sp_12"
+                android:textSize="@dimen/sp_15"
+                android:layout_marginLeft="@dimen/dp_jy_20"
+                android:layout_marginRight="@dimen/dp_jy_20"
                 android:text="确认"/>
 
         </LinearLayout>

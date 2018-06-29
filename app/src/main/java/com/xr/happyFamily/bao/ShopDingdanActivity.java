@@ -108,6 +108,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop_dingdan);
         ButterKnife.bind(this);
         mContext = ShopDingdanActivity.this;
+
         titleText.setText("我的订单");
         titleRightText.setVisibility(View.GONE);
         view_title = new View[]{view1, view2, view3, view4, view5};
@@ -157,20 +158,24 @@ public class ShopDingdanActivity extends AppCompatActivity {
             case R.id.tv1:
 //                if(isFastClick())
                 lastSign=0;
+                page=1;
                 upData(lastSign, "全部");
                 break;
             case R.id.tv2:
                 lastSign=1;
+                page=1;
 //                if(isFastClick())
                 upData(lastSign, "待付款");
                 break;
             case R.id.tv3:
                 lastSign=2;
+                page=1;
 //                if(isFastClick())
                 upData(lastSign, "待收货");
                 break;
             case R.id.tv4:
                 lastSign=3;
+                page=1;
 //                if(isFastClick())
                 upData(lastSign, "已收货");
                 break;
@@ -178,6 +183,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
             case R.id.tv5:
 //                if(isFastClick())
                 lastSign=4;
+                page=1;
                 upData(lastSign, "退款/售后");
                 break;
 
@@ -202,6 +208,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     dingDanAsync dingDanAsync;
     public void getDingDan(int state,int page) {
         dialog = MyDialog.showDialog(mContext);
+
         dialog.show();
         Map<String, Object> params = new HashMap<>();
         SharedPreferences userSettings = mContext.getSharedPreferences("my", 0);
@@ -375,9 +382,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 
                 if (isFinish) {
-
-                    dingdanAdapter.notifyDataSetChanged();
                     MyDialog.closeDialog(dialog);
+                    dingdanAdapter.notifyDataSetChanged();
                 }
             }
         }

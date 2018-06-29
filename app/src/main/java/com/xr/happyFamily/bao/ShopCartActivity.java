@@ -139,7 +139,7 @@ public class ShopCartActivity extends AppCompatActivity {
                 mTotalPrice1 = mTotalPrice;
 
                 Log.e("qqqqqqqqqqqqPPP",mTotalPrice+"???");
-                tvShopCartTotalPrice.setText(mTotalPrice + "");
+                tvShopCartTotalPrice.setText("¥"+mTotalPrice);
             }
         });
 
@@ -246,7 +246,7 @@ public class ShopCartActivity extends AppCompatActivity {
     }
 
     public void upDataUI() {
-        if(shoppingCartList.size()==0){
+        if(mAllOrderList.size()==0){
             Toast.makeText(mContext,"购物车内暂无商品",Toast.LENGTH_SHORT).show();
         }else {
             if (!isEdit) {

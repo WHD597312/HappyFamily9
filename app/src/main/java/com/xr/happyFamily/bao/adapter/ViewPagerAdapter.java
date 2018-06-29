@@ -14,7 +14,6 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bean.ShopBannerBean;
 
@@ -69,32 +68,46 @@ public class ViewPagerAdapter extends PagerAdapter {
         // 把position对应位置的ImageView添加到ViewPager中
 
         ImageView iv = images.get(position % images.size());
-
-
         ViewPager parent = (ViewPager) iv.getParent();
-        if (images.size() == 2) {
-            if (position % images.size() == 0) {
+//        if (images.size() == 2) {
+//            if (position % images.size() == 0) {
+//                iv = new ImageView(mContext);
+////                iv.setBackgroundResource(imageRess[i]);//设置图片
+//                Picasso.with(mContext).load(shopBannerBeans.get(0).getImage()).into(iv);
+//                iv.setId(imgae_ids[0]);//顺便给图片设置id
+//                iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
+//                viewPager.addView(iv);
+//            } else if (position % images.size() == 1) {
+//                iv = new ImageView(mContext);
+////                iv.setBackgroundResource(imageRess[i]);//设置图片
+//                Picasso.with(mContext).load(shopBannerBeans.get(1).getImage()).into(iv);
+//                iv.setId(imgae_ids[1]);//顺便给图片设置id
+//                iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
+//                viewPager.addView(iv);
+//            } else {
+//                ImageView iv2 = new ImageView(mContext);
+//                viewPager.addView(iv2);
+//            }
+//        } else {
+            if(parent!=null){
+                Log.e("qqqqqqqqqq",position+"??");
                 iv = new ImageView(mContext);
 //                iv.setBackgroundResource(imageRess[i]);//设置图片
-                Picasso.with(mContext).load(shopBannerBeans.get(0).getImage()).into(iv);
-                iv.setId(imgae_ids[0]);//顺便给图片设置id
+                Picasso.with(mContext).load(shopBannerBeans.get(position % images.size()).getImage()).into(iv);
+                iv.setId(imgae_ids[position % images.size()]);//顺便给图片设置id
                 iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
                 viewPager.addView(iv);
-            } else if (position % images.size() == 1) {
-                iv = new ImageView(mContext);
-//                iv.setBackgroundResource(imageRess[i]);//设置图片
-                Picasso.with(mContext).load(shopBannerBeans.get(1).getImage()).into(iv);
-                iv.setId(imgae_ids[1]);//顺便给图片设置id
-                iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
-                viewPager.addView(iv);
-            } else {
-                ImageView iv2 = new ImageView(mContext);
-                viewPager.addView(iv2);
             }
-        } else if (parent != null) {
-            parent.removeAllViews();
-        }
-        viewPager.addView(iv);
+            else {
+                iv = new ImageView(mContext);
+//                iv.setBackgroundResource(imageRess[i]);//设置图片
+                Picasso.with(mContext).load(shopBannerBeans.get(position % images.size()).getImage()).into(iv);
+                iv.setId(imgae_ids[position % images.size()]);//顺便给图片设置id
+                iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
+                viewPager.addView(iv);
+            }
+
+
         return iv;
 
     }
@@ -115,25 +128,16 @@ public class ViewPagerAdapter extends PagerAdapter {
     }
 
 
-    private int[] imgae_ids = new int[]{R.id.pager_image1, R.id.pager_image2, R.id.pager_image3, R.id.pager_image4};
+    private int[] imgae_ids = new int[]{R.id.pager_image1, R.id.pager_image2, R.id.pager_image3, R.id.pager_image4,R.id.pager_image5,R.id.pager_image6,R.id.pager_image7,R.id.pager_image8,R.id.pager_image9,R.id.pager_image10};
 
     private class pagerImageOnClick implements View.OnClickListener {
 
         @Override
         public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.pager_image1:
-                    Toast.makeText(mContext, "图片1被点击", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.pager_image2:
-                    Toast.makeText(mContext, "图片2被点击", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.pager_image3:
-                    Toast.makeText(mContext, "图片3被点击", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.pager_image4:
-                    Toast.makeText(mContext, "图片4被点击", Toast.LENGTH_SHORT).show();
-                    break;
+            for(int i=0;i<imgae_ids.length;i++){
+                if (v.getId()==imgae_ids[i]){
+                    Toast.makeText(mContext, "图片"+(i+1)+"被点击", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }

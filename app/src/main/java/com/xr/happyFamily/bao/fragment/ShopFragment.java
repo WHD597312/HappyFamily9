@@ -41,6 +41,8 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -95,6 +97,18 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         getData();
 
 
+        Calendar c = Calendar.getInstance();//
+
+//        int mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
+//
+//        Calendar  calendar =Calendar. getInstance();
+//        calendar.add( Calendar. DATE, +1); //向前走一天
+//        Date date= calendar.getTime();
+//        System. out .println("前一天时间为" +date .toString());
+//
+//
+//        tvTime.setText("23.00前下单，预计明天（"+date .toString() +"送达");
+
 //        tvXinghao.setText(power);
 //        tvPrice.setText(price);
         return view;
@@ -121,10 +135,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    @OnClick({R.id.img_address, R.id.tv_xinghao})
+    @OnClick({R.id.img_address, R.id.tv_xinghao,R.id.tv_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_address:
+            case R.id.tv_address:
                 startActivityForResult(new Intent(getActivity(), ShopAddressActivity.class), 101);
                 break;
             case R.id.tv_xinghao:
@@ -139,18 +154,25 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
      * resultCode：表示的是启动后的Activity回传值时的resultCode值
      * data：表示的是启动后的Activity回传过来的Intent对象
      */
+    String address="没有地址信息，请点击后添加地址信息";
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && resultCode == 111) {
-            String address = data.getStringExtra("address");// 拿到返回过来的地址
+            address = data.getStringExtra("address");// 拿到返回过来的地址
             // 把得到的数据显示到输入框内
             tvAddress.setText(address);
 
         }
-
     }
 
+    @Override
+    public void onResume() {
+        Map<String, Object> params2 = new HashMap<>();
+        params2.put("userId", userId);
+        new getAddressAsync().execute(params2);
+        super.onResume();
+    }
 
     private View contentViewSign, view_dis;
     private PopupWindow mPopWindow;
@@ -234,6 +256,10 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     intent.putExtra("priceId", priceId + "");
                     intent.putExtra("money", Integer.parseInt(price) * num );
                     intent.putExtra("weight", weight*num + "");
+                    intent.putExtra("price", price);
+                    intent.putExtra("context", type);
+                    intent.putExtra("img", img);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
@@ -411,6 +437,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 if (!"null".equals(returnData)) {
                     tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                 }
+                else {
+                    tvAddress.setText("没有地址信息，请点击后添加地址");
+                }
             }
         }
     }
@@ -448,6 +477,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
     Bundle bundle;
+    String userId;
 
     private void getData() {
         list_price = new ArrayList<>();
@@ -455,7 +485,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
         // 步骤2:获取某一值
         goodsId = bundle.getString("goodsId");
-        String userId = bundle.getString("userId");
+        userId = bundle.getString("userId");
         Map<String, Object> params = new HashMap<>();
 
         params.put("goodsId", goodsId);
@@ -482,9 +512,10 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     public void setData(String price,String power,int s){
         tvPrice.setText("¥"+price);
         tvXinghao.setText(power);
-
+        this.price=price;
         sign=s;
     }
+
 
 
 

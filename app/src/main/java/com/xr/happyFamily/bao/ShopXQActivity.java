@@ -271,6 +271,10 @@ public class ShopXQActivity extends AppCompatActivity {
                                 intent.putExtra("num", num + "");
                                 intent.putExtra("priceId", priceId + "");
                                 intent.putExtra("money", Integer.parseInt(price) * num);
+                                intent.putExtra("price", price);
+                                intent.putExtra("context", type);
+                                intent.putExtra("name", name);
+                                intent.putExtra("img", img);
                                 intent.putExtra("weight", weight*num + "");
 
                                 startActivity(intent);
@@ -283,12 +287,15 @@ public class ShopXQActivity extends AppCompatActivity {
                     intent.putExtra("type", (Serializable) "XQ");
                     intent.putExtra("goodsId", goodsId);
                     intent.putExtra("num", num+"");
-
+                    intent.putExtra("img", img);
                     intent.putExtra("priceId", priceId+"");
 
                     Log.e("qqqqqqqNNN",num+","+priceId);
                     intent.putExtra("money", Integer.parseInt(price) * num);
                     intent.putExtra("weight", weight + "");
+                    intent.putExtra("price", price);
+                    intent.putExtra("context", type);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                 }
 
@@ -544,6 +551,10 @@ public class ShopXQActivity extends AppCompatActivity {
                     intent.putExtra("priceId", priceId + "");
                     intent.putExtra("money", Integer.parseInt(price) * num );
                     intent.putExtra("weight", weight*num + "");
+                    intent.putExtra("price", price);
+                    intent.putExtra("context", type);
+                    intent.putExtra("img", img);
+                    intent.putExtra("name", name);
                     startActivity(intent);
                 } else {
                     Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
@@ -695,6 +706,12 @@ public class ShopXQActivity extends AppCompatActivity {
             }
         }
     }
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+    }
+
 
 
 }

@@ -72,6 +72,12 @@
         <item name="android:backgroundDimAmount">0.6</item>
     </style>
 
+    <style name="App_NoTouch" parent="AppTheme">
+        <item name="android:windowNoTitle">true</item>
+        <item name="android:windowEnableSplitTouch">false</item>
+        <item name="android:splitMotionEvents">false</item>
+    </style>
+
     <declare-styleable name="DiffuseView">
         <attr name="diffuse_color"/>
         <attr name="diffuse_coreColor"/>

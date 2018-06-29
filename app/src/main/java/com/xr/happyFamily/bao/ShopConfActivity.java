@@ -25,6 +25,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ConfListAdapter;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.bao.alipay.PayActivity;
+import com.xr.happyFamily.bao.bean.Goods;
+import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.PostFreeBean;
@@ -102,6 +104,8 @@ public class ShopConfActivity extends AppCompatActivity {
     DingDanXQAdapter dingDanXQAdapter;
     private MyDialog dialog;
 
+    boolean isShopData=false,isPrice=false;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,8 +120,8 @@ public class ShopConfActivity extends AppCompatActivity {
         titleText.setText("确认信息");
         titleRightText.setVisibility(View.GONE);
 
-
-
+        dialog = MyDialog.showDialog(mContext);
+        dialog.show();
         dingDanXQAdapter = new DingDanXQAdapter(ShopConfActivity.this, orderDetailsLists);
         //      调用按钮返回事件回调的方法
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -140,12 +144,11 @@ public class ShopConfActivity extends AppCompatActivity {
             recyclerView.setAdapter(dingDanXQAdapter);
             orderNumber=bundle.get("orderNumber").toString();
             tvMoney.setText("¥"+bundle.get("money").toString());
-            dialog = MyDialog.showDialog(mContext);
-            dialog.show();
             Map<String, Object> map = new HashMap<>();
             new getOrderAsync().execute(map);
         }
         else if ("Cart".equals(type)) {
+            isShopData=true;
             money=bundle.getInt("money");
             weight=bundle.getDouble("weight");
             mGoPayList = (ArrayList<ShopCartBean>) getIntent().getSerializableExtra("mGoPayList");
@@ -162,6 +165,20 @@ public class ShopConfActivity extends AppCompatActivity {
             }
 
         } else {
+            isShopData=true;
+            ShopCartBean shopCartBean=new ShopCartBean();
+            Goods goods=new Goods();
+            goods.setGoodsName(bundle.getString("name"));
+            goods.setSimpleDescribe(bundle.getString("context"));
+            goods.setImage(bundle.getString("img"));
+            ShopCartBean.GoodsPrice goodsPrice = new ShopCartBean.GoodsPrice();
+            Log.e("qqqqqqqqqPPP",bundle.getString("price")+"?");
+            goodsPrice.setPrice(Integer.parseInt(bundle.getString("price")));
+            shopCartBean.setGoods(goods);
+            shopCartBean.setGoodsPrice(goodsPrice);
+            shopCartBean.setQuantity(Integer.parseInt(bundle.getString("num")));
+            mGoPayList.add(shopCartBean);
+            confListAdapter = new ConfListAdapter(ShopConfActivity.this, mGoPayList);
             recyclerView.setAdapter(confListAdapter);
             Map<String, Object> map = new HashMap<>();
             map.put("goodsId", bundle.getString("goodsId"));
@@ -308,7 +325,7 @@ public class ShopConfActivity extends AppCompatActivity {
 
 
     int post_fee ;
-List<PostFreeBean> postFreeBeans=new ArrayList<>();
+    List<PostFreeBean> postFreeBeans=new ArrayList<>();
     class getPostFeeAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -317,7 +334,6 @@ List<PostFreeBean> postFreeBeans=new ArrayList<>();
             String url = "logistics/getPostFee";
             String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
             String code = "";
-
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -347,10 +363,13 @@ List<PostFreeBean> postFreeBeans=new ArrayList<>();
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //
+                isPrice=true;
                  post_fee=(int)((postFreeBeans.get(0).getExpressList().get(0).getFee()*10+5)/10);
-                tvYunfei.setText("+="+post_fee);
+                tvYunfei.setText("+¥"+post_fee);
                 tvMoney.setText("¥" + (money+post_fee));
 //                tvMoney=
+                if(isPrice&&isShopData)
+                    MyDialog.closeDialog(dialog);
             }
         }
     }
@@ -428,7 +447,10 @@ List<PostFreeBean> postFreeBeans=new ArrayList<>();
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                isShopData=true;
                 dingDanXQAdapter.notifyDataSetChanged();
+
+                if(isShopData&&isAddress)
                 MyDialog.closeDialog(dialog);
             }
         }

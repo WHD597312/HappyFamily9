@@ -30,7 +30,7 @@
                     android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@mipmap/ic_shop_banner"/>
+                    android:src="@mipmap/ic_shop_banner_wei"/>
 
                 <ImageView
                     android:id="@+id/img2"

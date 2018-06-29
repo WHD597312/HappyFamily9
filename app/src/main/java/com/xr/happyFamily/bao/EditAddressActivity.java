@@ -176,8 +176,10 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     params.put("receiveCity", receiveCity);
                     params.put("receiveCounty", receiveCounty);
                 }
-                if (Utils.isEmpty(edAddress.getText().toString()))
+                if (Utils.isEmpty(edAddress.getText().toString())){
                     Toast.makeText(this, "请输入详细地址", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 else
                     params.put("receiveAddress", edAddress.getText().toString());
                 params.put("isDefault", isDefault + "");

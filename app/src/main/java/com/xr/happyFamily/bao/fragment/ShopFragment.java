@@ -34,17 +34,20 @@ import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Locale;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -81,6 +84,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     ImageView imgPic;
     String goodsId;
     int priceId=0;
+    String receiveId="0";
 
 
     List<GoodsPrice> list_price;
@@ -160,8 +164,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && resultCode == 111) {
             address = data.getStringExtra("address");// 拿到返回过来的地址
+            receiveId=data.getStringExtra("receiveId");
+            Log.e("qqqqqqqqRRR",receiveId+"???");
             // 把得到的数据显示到输入框内
             tvAddress.setText(address);
+
 
         }
     }
@@ -396,8 +403,14 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                             .load(img)
                             .into(imgPic);//此种策略并不会压缩图片
                 }
-            }
+
+            isWeight=true;
+            if(isAddress)
+                getTime();
         }
+            }
+
+
 
 
     String returnData = "";
@@ -436,6 +449,10 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 if (!"null".equals(returnData)) {
                     tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                    isAddress=true;
+                    receiveId=receive.getReceiveId()+"";
+                    if(isWeight)
+                        getTime();
                 }
                 else {
                     tvAddress.setText("没有地址信息，请点击后添加地址");
@@ -518,5 +535,64 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
 
 
+    long time,recLen;
+    List<PostFreeBean> postFreeBeans=new ArrayList<>();
+    class getPostFeeAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
 
+            Map<String, Object> params = maps[0];
+            String url = "logistics/getPostFee";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    returnData = jsonObject.getString("returnData");
+                    if (!Utils.isEmpty(returnData)) {
+                        JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                        JsonArray list = content.getAsJsonArray("RecommendDetail");
+                        Gson gson = new Gson();
+
+                        for(int i=0;i<list.size();i++){
+                            JsonElement use = list.get(i);
+                            PostFreeBean userList = gson.fromJson(use, PostFreeBean.class);
+                            postFreeBeans.add(userList);
+                        }
+                        time=(long)(((int)postFreeBeans.get(0).getExpressList().get(0).getEstimatedDeliveryTime())+1)*60*60*1000;
+
+                        Log.e("qqqqqqqqTTT111111",time+"???");
+                        long getNowTimeLong = System.currentTimeMillis();
+
+                        recLen =  time+ getNowTimeLong ;//这样得到的差值是级别
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Date date = new Date(recLen);
+                SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault());
+                String time=format.format(date);
+                tvTime.setText("23.00前下单，预计（"+time.substring(5,time.length())+"）送达");
+            }
+        }
+    }
+
+    boolean isWeight=false,isAddress=false;
+    public void getTime(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("goodsName", "hello");
+        map.put("receiveId", receive.getReceiveId());
+        map.put("weight", weight);
+        new getPostFeeAsync().execute(map);
+    }
 }

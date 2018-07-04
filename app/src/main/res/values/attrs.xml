@@ -91,4 +91,16 @@
     <attr name="radioTitleTextColor" format="color"/>
     <attr name="radioCornerSize" format="integer"/>
 </declare-styleable>
+
+
+
+    <!--时钟测试-->
+    <declare-styleable name="TasksCompletedView">
+        <attr name="taskradius" format="dimension"/>
+        <attr name="taskstrokeWidth" format="dimension"/>
+        <attr name="taskcircleColor" format="color"/>
+        <attr name="taskringColor" format="color"/>
+        <attr name="taskringBgColor" format="color"/>
+    </declare-styleable>
+
 </resources>

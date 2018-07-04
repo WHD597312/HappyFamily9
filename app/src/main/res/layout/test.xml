@@ -1,7 +1,139 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-   android:layout_width="match_parent"
+    android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tc="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="@dimen/dp_jy_50"
+     android:background="@color/white">
+  <!--右边有图片时的标题-->
+  <ImageView
+      android:id="@+id/back"
+      android:layout_width="@dimen/dp_jy_40"
+      android:layout_height="@dimen/dp_jy_40"
+      android:padding="@dimen/dp_jy_10"
+      android:layout_centerVertical="true"
+      android:src="@mipmap/fanhui"/>
 
+  <TextView
+      android:id="@+id/title_text"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="情侣闹钟"
+      android:textColor="@color/shop_title"
+      android:textSize="@dimen/sp_18" />
+
+  <ImageView
+      android:id="@+id/img_right"
+      android:layout_width="@dimen/dp_jy_40"
+      android:layout_height="@dimen/dp_jy_40"
+      android:padding="@dimen/dp_jy_10"
+      android:layout_centerVertical="true"
+      android:layout_toLeftOf="@id/title_rightText"
+      android:src="@mipmap/ic_clock_msg"/>
+
+  <TextView
+      android:id="@+id/title_rightText"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:text="编辑"
+      android:layout_alignParentRight="true"
+      android:padding="@dimen/dp_jy_10"
+      android:textColor="#A1A1A1"
+      android:textSize="@dimen/sp_14" />
+
+ </RelativeLayout>
+
+ <com.xr.happyFamily.bao.view.MyScrollview
+     android:layout_width="match_parent"
+     android:layout_height="match_parent">
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="match_parent"
+      android:orientation="vertical"
+      android:background="@color/white">
+
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content">
+
+
+  
+
+
+  <com.xr.happyFamily.le.view.TimeBar
+      android:id="@+id/arcprogressBar"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/iv_wd_bj"
+      android:background="@null"
+      android:layout_centerHorizontal="true"
+      android:padding="@dimen/dp_jy_10"/>
+  <RelativeLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:layout_alignTop="@+id/arcprogressBar"
+      android:layout_alignBottom="@+id/arcprogressBar"
+      >
+
+   <ImageView
+       android:layout_above="@+id/tc_time"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_centerHorizontal="true"
+
+       android:src="@mipmap/bg_qinglv"/>
+
+   <TextClock
+       android:id="@+id/tc_time"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textSize="60sp"
+       android:format24Hour ="HH:mm"
+       android:format12Hour ="hh:mm"
+       android:layout_centerInParent="true"
+       android:textColor="#ff7a73"/>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textColor="#9e9e9e"
+       android:text="感冒好了么?别忘记吃药"
+       android:layout_centerHorizontal="true"
+       android:textSize="@dimen/sp_12"
+       android:layout_below="@+id/tc_time"/>
+  </RelativeLayout>
+ </RelativeLayout>
+
+ <android.support.v7.widget.RecyclerView
+     android:id="@+id/recyclerView"
+     android:layout_width="match_parent"
+     android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
+
+   <RelativeLayout
+       android:layout_width="match_parent"
+       android:layout_height="wrap_content">
+    <ImageView
+        android:id="@+id/img_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_add_qinglv"
+        android:layout_centerInParent="true"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_toRightOf="@+id/img_add"
+        android:layout_centerVertical="true"
+        android:textColor="#A7A7A7"
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:text="选择老婆，添加闹钟"/>
+   </RelativeLayout>
+
+  </LinearLayout>
+ </com.xr.happyFamily.bao.view.MyScrollview>
  </LinearLayout>

@@ -34,7 +34,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
-import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.bao.bean.myOrderBean;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.ShopBean;

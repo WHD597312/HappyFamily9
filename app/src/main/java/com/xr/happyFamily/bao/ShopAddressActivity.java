@@ -166,7 +166,7 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
         Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings= getSharedPreferences("login", 0);
+        SharedPreferences userSettings= getSharedPreferences("my", 0);
         String url = userSettings.getString("userId","1000");
         params.put("userId", url);
         new AddressAsync().execute(params);
@@ -259,6 +259,7 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
         tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
         tv_context.setText("确定删除收货地址？");
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("收货地址");
 //        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
 //        tv_shopcart.setOnClickListener(this);
         tv_quxiao.setOnClickListener(this);

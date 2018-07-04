@@ -120,7 +120,7 @@ public class ShopCartBean implements Serializable {
          * @author bejson.com (i@bejson.com)
          * @website http://www.bejson.com/java2pojo/
          */
-        public class GoodsPrice implements Serializable {
+        public static class GoodsPrice implements Serializable {
 
             private int priceId;
             private int goodsId;

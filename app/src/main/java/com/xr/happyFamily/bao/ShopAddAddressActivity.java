@@ -31,6 +31,7 @@ import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -92,6 +93,8 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
     int sign_sheng = 0, sign_city = 0, isDefault = 1;
 
 
+
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -146,7 +149,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                     InputMethodManager inputmanger = (InputMethodManager) getSystemService(Context.INPUT_METHOD_SERVICE);
                     inputmanger.hideSoftInputFromWindow(view.getWindowToken(), 0);
                 }
-                SharedPreferences userSettings = getSharedPreferences("login", 0);
+                SharedPreferences userSettings = getSharedPreferences("my", 0);
                 String url = userSettings.getString("userId", "1000");
                 Map<String, Object> params = new HashMap<>();
                 if (Utils.isEmpty(edName.getText().toString()))
@@ -154,22 +157,33 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                 else
                     params.put("contact", edName.getText().toString());
                 params.put("userId", url);
-                if (Utils.isEmpty(edTel.getText().toString()))
+                if (Utils.isEmpty(edTel.getText().toString())){
                     Toast.makeText(this, "请输入联系电话", Toast.LENGTH_SHORT).show();
-                else
+                    break;
+                }
+                else if(Mobile.isMobile(edTel.getText().toString()))
                     params.put("tel", edTel.getText().toString());
-                if (Utils.isEmpty(tvAddress.getText().toString()))
+                else
+                    Toast.makeText(this, "请输入正确联系电话", Toast.LENGTH_SHORT).show();
+                if (Utils.isEmpty(tvAddress.getText().toString())) {
                     Toast.makeText(this, "请输入所在地址", Toast.LENGTH_SHORT).show();
+                    break;
+
+                }
                 else {
                     params.put("receiveProvince", tv_sheng.getText().toString());
                     params.put("receiveCity", tv_shi.getText().toString());
                     params.put("receiveCounty", tv_qu.getText().toString());
                 }
-                if (Utils.isEmpty(edAddress.getText().toString()))
+                if (Utils.isEmpty(edAddress.getText().toString())) {
                     Toast.makeText(this, "请输入详细地址", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 else
                     params.put("receiveAddress", edAddress.getText().toString());
                 params.put("isDefault", isDefault + "");
+
+                Log.e("qqqqqqqDDDD","1111111111111");
                 new AddReceiveAsync().execute(params);
 
                 break;

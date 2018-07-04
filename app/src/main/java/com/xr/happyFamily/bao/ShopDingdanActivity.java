@@ -108,6 +108,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
         setContentView(R.layout.activity_shop_dingdan);
         ButterKnife.bind(this);
         mContext = ShopDingdanActivity.this;
+
         titleText.setText("我的订单");
         titleRightText.setVisibility(View.GONE);
         view_title = new View[]{view1, view2, view3, view4, view5};
@@ -157,20 +158,24 @@ public class ShopDingdanActivity extends AppCompatActivity {
             case R.id.tv1:
 //                if(isFastClick())
                 lastSign=0;
+                page=1;
                 upData(lastSign, "全部");
                 break;
             case R.id.tv2:
                 lastSign=1;
+                page=1;
 //                if(isFastClick())
                 upData(lastSign, "待付款");
                 break;
             case R.id.tv3:
                 lastSign=2;
+                page=1;
 //                if(isFastClick())
                 upData(lastSign, "待收货");
                 break;
             case R.id.tv4:
                 lastSign=3;
+                page=1;
 //                if(isFastClick())
                 upData(lastSign, "已收货");
                 break;
@@ -178,6 +183,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
             case R.id.tv5:
 //                if(isFastClick())
                 lastSign=4;
+                page=1;
                 upData(lastSign, "退款/售后");
                 break;
 
@@ -199,12 +205,13 @@ public class ShopDingdanActivity extends AppCompatActivity {
 //        dingdanAdapter.notifyDataSetChanged();
         getDingDan(sing_title,page);
     }
-
+    dingDanAsync dingDanAsync;
     public void getDingDan(int state,int page) {
         dialog = MyDialog.showDialog(mContext);
+
         dialog.show();
         Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings = mContext.getSharedPreferences("login", 0);
+        SharedPreferences userSettings = mContext.getSharedPreferences("my", 0);
         String userId = userSettings.getString("userId", "userId");
         params.put("userId", userId);
         params.put("pageNum", page);
@@ -217,7 +224,13 @@ public class ShopDingdanActivity extends AppCompatActivity {
         else if (state == 4)
             params.put("state", 5);
         params.put("pageRow", "10");
-        new dingDanAsync().execute(params);
+        if(dingDanAsync !=null && dingDanAsync.getStatus() == AsyncTask.Status.RUNNING){
+            dingDanAsync.cancel(true);
+        }else {
+            dingDanAsync=new dingDanAsync();
+            dingDanAsync.execute(params);
+        }
+
     }
 
     String orderId;
@@ -232,6 +245,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 url = url + entry.getKey() + "=" + entry.getValue() + "&";
             }
             url = url.substring(0, url.length() - 1);
+            Log.e("qqqqqqEEE",url);
             String result = HttpUtils.doGet(mContext, url);
             String code = "";
             try {
@@ -247,9 +261,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         orderBeans.clear();
 
+                        Log.e("qqqqqqqEEE",list.size()+"?");
                         for (int i = 0; i < list.size(); i++) {
 //                        //通过反射 得到UserBean.class
                             JsonElement user = list.get(i);
+                            Log.e("qqqqqqqEEE",i+":"+user.toString());
                             OrderListBean.myList userList = gson.fromJson(user, OrderListBean.myList.class);
                             orderBeans.add(userList);
                             orderId = orderBeans.get(i).getOrderNumber();
@@ -282,8 +298,9 @@ public class ShopDingdanActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
+
                 if (orderBeans.size() == 0) {
+                    MyDialog.closeDialog(dialog);
                     dingdanAdapter.notifyDataSetChanged();
 
                     if(page>1)
@@ -365,9 +382,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 
                 if (isFinish) {
-
-                    dingdanAdapter.notifyDataSetChanged();
                     MyDialog.closeDialog(dialog);
+                    dingdanAdapter.notifyDataSetChanged();
                 }
             }
         }

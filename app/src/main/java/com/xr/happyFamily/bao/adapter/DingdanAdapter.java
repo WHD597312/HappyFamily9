@@ -197,12 +197,14 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                         context.startActivity(intent);
                         break;
                     case 2:
+                        Toast.makeText(context, "该商品暂未发货", Toast.LENGTH_SHORT).show();
+                        break;
                     case 3:
                         //待收货  查看物流
                         Intent intent3 = new Intent(context, WuLiuActivity.class);
                         intent3.putExtra("logisticCode", list.get(position).getLogisticCode());
                         intent3.putExtra("shipperCode", list.get(position).getShipperCode());
-                        intent3.putExtra("img", list.get(position).getImage());
+                        intent3.putExtra("orderNumber",list.get(position).getOrderNumber());
                         context.startActivity(intent3);
                         break;
                     case 4:
@@ -480,7 +482,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Toast.makeText(context, "取消订单成功", Toast.LENGTH_SHORT).show();
                 for (int i = 0; i < list.size(); i++) {
-                    if (list.get(i).getOrderId() == list.get(pos).getOrderId()) ;
+                    if (list.get(i).getOrderId() == list.get(pos).getOrderId())
                     list.get(i).setState("6");
                 }
                 notifyDataSetChanged();

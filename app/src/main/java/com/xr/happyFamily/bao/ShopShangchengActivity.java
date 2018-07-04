@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.PublicData;
 
 import butterknife.BindView;
@@ -80,7 +81,9 @@ public class ShopShangchengActivity extends AppCompatActivity {
                 showPopup();
                 break;
             case R.id.tv_guanyu:
-
+                Intent intent1=new Intent(this, MainActivity.class);
+                intent1.putExtra("sign","PaySuccess");
+                startActivity(intent1);
                 break;
         }
     }
@@ -120,6 +123,7 @@ public class ShopShangchengActivity extends AppCompatActivity {
             }
         });
 
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("拨打客服");
         tv_context.setText("是否拨打客服电话？");
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);

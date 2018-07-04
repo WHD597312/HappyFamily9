@@ -6,8 +6,7 @@ import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
@@ -45,7 +44,6 @@ import com.xr.happyFamily.bao.ShopDingdanActivity;
 import com.xr.happyFamily.bao.ShopSearchActivity;
 import com.xr.happyFamily.bao.ShopShangchengActivity;
 import com.xr.happyFamily.bao.ShopXQActivity;
-import com.xr.happyFamily.bao.ShoppageActivity;
 import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
@@ -132,7 +130,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.ll_nodata)
     LinearLayout llNodata;
 
-
     private RecyclerView.LayoutManager shopLayoutManager;
     private LinearLayoutManager titleLayoutManager;
     private WaterFallAdapter shopAdapter;
@@ -142,10 +139,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     private TextView tv_shopcart, tv_dingdan, tv_shangcheng;
 
     private List<ImageView> mImageList;//轮播的图片集合
-    private boolean isStop = false;//线程是否停止
+    private boolean isStop;//线程是否停止
     private static int PAGER_TIOME = 2500;//间隔时间
     // 在values文件假下创建了pager_image_ids.xml文件，并定义了4张轮播图对应的id，用于点击事件
-    private int[] imgae_ids = new int[]{R.id.pager_image1, R.id.pager_image2, R.id.pager_image3, R.id.pager_image4};
+//    private int[] imgae_ids = new int[]{R.id.pager_image1, R.id.pager_image2, R.id.pager_image3, R.id.pager_image4};
     //轮播点
     private int[] imgae_dots = new int[]{R.id.img1, R.id.img2, R.id.img3, R.id.img4, R.id.img5, R.id.img6, R.id.img7, R.id.img8, R.id.img9, R.id.img10};
     private String[] from = {"title"};
@@ -160,8 +157,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
     private boolean isFirst = true;
     SimpleAdapter moreAdapter;
-    List<Map<String, Object>> list_more = new ArrayList<Map<String, Object>>();
+    List<Map<String, Object>> list_more;
 
+    int lastBanner=0;
+
+    //判断三个后台数据是否获取完成
+    boolean isBanner=false,isShopData=false,isPage=false;
 
     @Nullable
     @Override
@@ -170,19 +171,33 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.activity_shop_mypage, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getContext();
+        dialog = MyDialog.showDialog(mContext);
+        isStop = false;
         init();
+        homePage = new ArrayList<>();
         new getHomePageAsync().execute();
         //广告
+        shopBannerBeans = new ArrayList<>();
         new getAdByPageAsync().execute();
         return view;
     }
 
+    @Override
+    public void onStop() {
 
+        super.onStop();
+        Log.e("qqqqqqLL", lastVisibleItem + "??");
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+    }
 
     private void init() {
         list_title = new ArrayList<>();
         list_shop = new ArrayList<>();
-
+        list_more = new ArrayList<>();
         mainTitleAdapter = new MainTitleAdapter(mContext, list_title);
 
 
@@ -233,7 +248,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             public void onRefresh() {
                 list_shop.clear();
                 getShopData(lastVisibleItem, 1);
-
+                CountTimer countTimer=new CountTimer(5000,1000);
+                countTimer.start();
             }
         });
 
@@ -242,8 +258,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(View view, int position) {
                 mainTitleAdapter.setPosition(position); //传递当前的点击位置
                 mainTitleAdapter.notifyDataSetChanged(); //通知刷新
-                dialog = MyDialog.showDialog(mContext);
-                dialog.show();
                 list_shop.clear();
                 lastVisibleItem = position;
                 page = 1;
@@ -261,8 +275,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 llNodata.setVisibility(View.GONE);
                 rvTitle.setVisibility(View.VISIBLE);
+
+                MoveToPosition(titleLayoutManager,rvTitle,position);
+
                 mainTitleAdapter.setPosition(position);
                 mainTitleAdapter.notifyDataSetChanged();
+                lastVisibleItem = position;
                 list_shop.clear();
                 getShopData(lastVisibleItem, 1);
 
@@ -271,10 +289,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         });
 
 
-        dialog = MyDialog.showDialog(mContext);
-        dialog.show();
 
+        ((ImageView)view.findViewById(imgae_dots[lastBanner])).setImageResource(R.mipmap.ic_shop_banner);;
         getShopData(lastVisibleItem, 1);
+        mainTitleAdapter.setPosition(lastVisibleItem); //传递当前的点击位置
+        mainTitleAdapter.notifyDataSetChanged(); //通知刷新
 
     }
 
@@ -284,48 +303,24 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
      */
     public void initData() {
         //初始化和图片
-        int[] imageRess = new int[]{R.mipmap.banner_shop3x, R.mipmap.banner_shop3x, R.mipmap.banner_shop3x, R.mipmap.banner_shop3x};
 
         //添加图片到图片列表里
         mImageList = new ArrayList<>();
-//        if (shopBannerBeans.size() == 1) {
-//            isStop = true;
-//        }
+        if (shopBannerBeans.size() == 1) {
+            isStop = true;
+        }
         ImageView iv;
         for (int i = 0; i < shopBannerBeans.size(); i++) {
             iv = new ImageView(mContext);
 //            iv.setBackgroundResource(imageRess[i]);//设置图片
             Picasso.with(mContext).load(shopBannerBeans.get(i).getImage()).into(iv);
-            iv.setId(imgae_ids[i]);//顺便给图片设置id
-            iv.setOnClickListener(new pagerImageOnClick());//设置图片点击事件
+//            iv.setId(imgae_ids[i]);//顺便给图片设置id
             mImageList.add(iv);
         }
     }
 
 
 
-
-    //图片点击事件
-    private class pagerImageOnClick implements View.OnClickListener {
-
-        @Override
-        public void onClick(View v) {
-            switch (v.getId()) {
-                case R.id.pager_image1:
-                    Toast.makeText(mContext, "图片1被点击", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.pager_image2:
-                    Toast.makeText(mContext, "图片2被点击", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.pager_image3:
-                    Toast.makeText(mContext, "图片3被点击", Toast.LENGTH_SHORT).show();
-                    break;
-                case R.id.pager_image4:
-                    Toast.makeText(mContext, "图片4被点击", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    }
 
     /**
      * 第三步、给PagerViw设置适配器，并实现自动轮播功能
@@ -352,10 +347,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                     if (i == newPosition) {
                         img_new.setImageResource(R.mipmap.ic_shop_banner);
                     } else {
-                        ImageView img_old = (ImageView)view.findViewById(imgae_dots[i]);
+                        ImageView img_old = (ImageView) view.findViewById(imgae_dots[i]);
                         img_old.setImageResource(R.mipmap.ic_shop_banner_wei);
                     }
                 }
+                lastBanner=position%shopBannerBeans.size();
             }
 
             @Override
@@ -365,33 +361,36 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         });
     }
 
+    Thread thread;
+
+
     /**
      * 第五步: 设置自动播放,每隔PAGER_TIOME秒换一张图片
      */
-    int count=0;
     private void autoPlayView() {
         //自动播放图片
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                int size=shopBannerBeans.size();
-                while (!isStop){
-                    try {
-                        getActivity().runOnUiThread(new Runnable() {
-                            @Override
-                            public void run() {
-                                viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                            }
-                        });
-                        SystemClock.sleep(PAGER_TIOME);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
+        if(thread==null) {
+            thread = new Thread(new Runnable() {
+                        @Override
+                        public void run() {
+                            while (!isStop) {
+                                if (getActivity() != null) {
+                                    getActivity().runOnUiThread(new Runnable() {
+                                        @Override
+                                        public void run() {
+                                            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
+                                        }
+                                    });
+                                    SystemClock.sleep(PAGER_TIOME);
+                                }
 
-                }
-            }
-        }).start();
+                            }
+                        }
+                    });
+            thread.start();
+        }
     }
+
 
 
     @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe})
@@ -482,16 +481,13 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     }
 
 
-
-
     private void getShopData(int id, int page) {
+        dialog.show();
         Map<String, Object> params = new HashMap<>();
         if (id == 0) {
             llTuijian.setVisibility(View.VISIBLE);
         } else
             llTuijian.setVisibility(View.GONE);
-
-
         params.put("categoryId", id + "");
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
@@ -538,19 +534,20 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                isShopData=true;
                 shopAdapter.notifyDataSetChanged();
                 swipeContent.setRefreshing(false);
                 if (!isData) {
                     Toast.makeText(mContext, "无更多数据", Toast.LENGTH_SHORT).show();
                 }
+                if(isShopData&&isBanner&&isPage)
                 MyDialog.closeDialog(dialog);
             }
         }
     }
 
 
-    List<ShopPageBean> homePage = new ArrayList<>();
-
+    List<ShopPageBean> homePage;
     class getHomePageAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -585,11 +582,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                isPage=true;
                 titles = new String[homePage.size() + 1];
                 Map<String, Object> map = null;
                 list_more.clear();
                 list_title.clear();
-
                 titles[0] = "全部";
                 list_title.add(titles[0]);
                 map = new HashMap<String, Object>();
@@ -605,12 +602,14 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
                 mainTitleAdapter.notifyDataSetChanged();
                 moreAdapter.notifyDataSetChanged();
+                if(isShopData&&isBanner&&isPage)
+                    MyDialog.closeDialog(dialog);
             }
         }
     }
 
 
-    List<ShopBannerBean> shopBannerBeans ;
+    List<ShopBannerBean> shopBannerBeans;
 
     class getAdByPageAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -623,7 +622,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
-                    shopBannerBeans= new ArrayList<>();
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -631,6 +629,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                     if (returnData.get("list").toString() != "null") {
                         JsonArray list = content.getAsJsonArray("list");
                         Gson gson = new Gson();
+                        shopBannerBeans.clear();
                         for (int i = 0; i < list.size(); i++) {
 //                        //通过反射 得到UserBean.class
                             JsonElement user = list.get(i);
@@ -651,11 +650,59 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                Log.i("qqqqqqqqSSS", shopBannerBeans.size() + "?");
+                isBanner=true;
                 initData();//初始化数据
                 initView();//初始化View，设置适配器
                 autoPlayView();//开启线程，自动播放
+
+                if(isShopData&&isBanner&&isPage)
+                    MyDialog.closeDialog(dialog);
             }
         }
     }
+
+
+
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+        @Override
+        public void onFinish() {
+            swipeContent.setRefreshing(false);
+            Toast.makeText(mContext,"加载超时请重试",Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    public static void MoveToPosition(LinearLayoutManager manager, RecyclerView mRecyclerView, int n) {
+
+
+        int firstItem = manager.findFirstVisibleItemPosition();
+        int lastItem = manager.findLastVisibleItemPosition();
+        if (n <= firstItem) {
+            mRecyclerView.scrollToPosition(n);
+        } else if (n <= lastItem) {
+            int top = mRecyclerView.getChildAt(n - firstItem).getTop();
+            mRecyclerView.scrollBy(0, top);
+        } else {
+            mRecyclerView.scrollToPosition(n);
+        }
+
+    }
+
 }

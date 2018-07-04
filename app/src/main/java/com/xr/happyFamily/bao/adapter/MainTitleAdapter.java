@@ -23,6 +23,7 @@ public class MainTitleAdapter extends RecyclerView.Adapter<MainTitleAdapter.View
     private int mPosition = 0;
     public void setPosition(int position) {
         mPosition = position;
+
     }
 
     public MainTitleAdapter(Context context, List<String> datas) {
@@ -44,6 +45,7 @@ public class MainTitleAdapter extends RecyclerView.Adapter<MainTitleAdapter.View
     public void onBindViewHolder(ViewHolder holder, int position) {
         if (mPosition == position){
             holder.img.setVisibility(View.VISIBLE);
+            holder.img.setFocusable(true);
         } else {
             holder.img.setVisibility(View.INVISIBLE);
         }
@@ -87,5 +89,7 @@ public class MainTitleAdapter extends RecyclerView.Adapter<MainTitleAdapter.View
     public interface MyItemClickListener {
         void onItemClick(View view, int position);
     }
+
+
 
 }

@@ -144,15 +144,16 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
     private View contentViewSign;
     private PopupWindow mPopWindow;
     private Context mContext;
-    private TextView tv_quxiao, tv_queding;
+    private TextView tv_quxiao, tv_queding,tv_context;
 
     private void showPopup() {
         mContext = ShopSearchActivity.this;
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_main, null);
         tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
-//        tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
-//        tv_context.setText("确定删除收货地址？");
+        tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
+        tv_context.setText("确定删除收货地址？");
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("收货地址");
         tv_quxiao.setOnClickListener(this);
         tv_queding.setOnClickListener(this);
         mPopWindow = new PopupWindow(contentViewSign);

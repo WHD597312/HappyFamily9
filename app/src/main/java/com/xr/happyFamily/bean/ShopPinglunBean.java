@@ -11,6 +11,8 @@ package com.xr.happyFamily.bean;
  */
 public class ShopPinglunBean {
 
+
+
     private int rateId;
     private String comment;
     private String image;
@@ -21,6 +23,7 @@ public class ShopPinglunBean {
     private String tag;
     private String username;
     private String headImgUrl;
+    private long createTime;
     private boolean anonymous;
     public void setRateId(int rateId) {
         this.rateId = rateId;
@@ -90,6 +93,13 @@ public class ShopPinglunBean {
     }
     public String getHeadImgUrl() {
         return headImgUrl;
+    }
+
+    public void setCreateTime(long createTime) {
+        this.createTime = createTime;
+    }
+    public long getCreateTime() {
+        return createTime;
     }
 
     public void setAnonymous(boolean anonymous) {

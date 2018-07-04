@@ -249,58 +249,97 @@ public class HttpUtils {
     }
 
 
-
-    private static int TimeOut = 5;
-
-    public static String doGet(Context context, String url) {
-        Context mContext = context;
-        String result = null;
-        OkHttpClient okHttp = null;
-        if (okHttp == null) {
-            okHttp = new OkHttpClient.Builder()
-                    .readTimeout(TimeOut, TimeUnit.SECONDS)
-                    .connectTimeout(TimeOut, TimeUnit.SECONDS)
-                    .writeTimeout(TimeOut, TimeUnit.SECONDS)
-                    .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
-                    .build();
-        }
-        try {
-            SharedPreferences userSettings = mContext.getSharedPreferences("my", 0);
-            String token = userSettings.getString("token", "token");
-            Log.e("qqqqqqHHHHH222222222",httpUrl+url);
-            url=httpUrl+url;
+    public static String doGet(Context context,String url) {
+//        File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//杩欓噷涓轰簡鏂逛究鐩存帴鎶婃枃浠舵斁鍦ㄤ簡SD鍗℃牴鐩綍鐨凥ttpCache涓紝涓€鑸斁鍦╟ontext.getCacheDir()涓?
+//        int cacheSize = 10 * 1024 * 1024;//璁剧疆缂撳瓨鏂囦欢澶у皬涓?0M
+//        Cache cache = new Cache(httpCacheDirectory, cacheSize);
+        url=httpUrl+url;
+        String result=null;
+        try{
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("login", 0);
+            String token =my.getString("token","");
+            JSONObject jsonObject = new JSONObject();
             Request request = new Request.Builder()
+                    .addHeader("authorization",token)
                     .url(url)
-                    .addHeader("Content-Type", "application/json")
-                    .addHeader("authorization", token)
                     .get()
+                    .tag(1)
                     .build();
 
-            Response response = okHttp.newCall(request).execute();
-            if (response.isSuccessful()) {
-                result = response.body().string();
-                Log.e(context.toString(), result);
-            }else {
-                Log.e("qqqqqqqqqqqXXXXX","???????");
-            }
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(3, TimeUnit.SECONDS)//璁剧疆杩炴帴瓒呮椂
+                    .readTimeout(5, TimeUnit.SECONDS)//璇诲彇瓒呮椂
+                    .writeTimeout(5, TimeUnit.SECONDS)//鍐欏叆瓒呮椂
+                    .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//娣诲姞鑷畾涔夌紦瀛樻嫤鎴櫒锛堝悗闈㈣瑙ｏ級锛屾敞鎰忚繖閲岄渶瑕佷娇鐢?addNetworkInterceptor
+                    .build();
 
-            String code = "0";
-            org.json.JSONObject jsonObject1 = new org.json.JSONObject(result);
-            code = jsonObject1.getString("returnCode");
-            if (!code.equals("100")) {
-                Toast.makeText(mContext, url+":"+jsonObject1.getString("returnMsg"), Toast.LENGTH_SHORT).show();
+            Response response=okHttpClient.newCall(request).execute();
+
+            if(response.isSuccessful()){
+                Log.e("qqqqqqqqXXXX","111111");
+                result= response.body().string();
+            }else {
+                Log.e("qqqqqqqqXXXX","222222222");
+                NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
             }
-            if (code.equals("10005")) {
-                mContext.startActivity(new Intent(mContext, LoginActivity.class));
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        } catch (JSONException e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
         return result;
-
     }
+
+    private static int TimeOut = 5;
+
+//    public static String doGet(Context context, String url) {
+//        Context mContext = context;
+//        String result = null;
+//        OkHttpClient okHttp = null;
+//        if (okHttp == null) {
+//            okHttp = new OkHttpClient.Builder()
+//                    .readTimeout(TimeOut, TimeUnit.SECONDS)
+//                    .connectTimeout(TimeOut, TimeUnit.SECONDS)
+//                    .writeTimeout(TimeOut, TimeUnit.SECONDS)
+//                    .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
+//                    .build();
+//        }
+//        try {
+//            SharedPreferences userSettings = mContext.getSharedPreferences("my", Context.MODE_PRIVATE);
+//            String token = userSettings.getString("token", "token");
+//            Log.e("qqqqqqHHHHH222222222",httpUrl+url);
+//            url=httpUrl+url;
+//            Request request = new Request.Builder()
+//                    .url(url)
+//                    .addHeader("Content-Type", "application/json")
+//                    .addHeader("authorization", token)
+//                    .get()
+//                    .build();
+//
+//            Response response = okHttp.newCall(request).execute();
+//            if (response.isSuccessful()) {
+//                result = response.body().string();
+//                Log.e(context.toString(), result);
+//            }else {
+//                Log.e("qqqqqqqqqqqXXXXX","???????");
+//            }
+//
+//            String code = "0";
+//            org.json.JSONObject jsonObject1 = new org.json.JSONObject(result);
+//            code = jsonObject1.getString("returnCode");
+//            if (!code.equals("100")) {
+//                Toast.makeText(mContext, url+":"+jsonObject1.getString("returnMsg"), Toast.LENGTH_SHORT).show();
+//            }
+//            if (code.equals("10005")) {
+//                mContext.startActivity(new Intent(mContext, LoginActivity.class));
+//            }
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//        } catch (JSONException e) {
+//            e.printStackTrace();
+//        }
+//        return result;
+//
+//    }
 
     /**
      * 自定义callback
@@ -603,7 +642,7 @@ public class HttpUtils {
         String result=null;
         try{
             SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
-//            SharedPreferences userSettings= ge6getSharedPreferences("login", 0);
+//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
             String token =my.getString("token","");
             JSONObject jsonObject = new JSONObject();
             Request request = new Request.Builder()

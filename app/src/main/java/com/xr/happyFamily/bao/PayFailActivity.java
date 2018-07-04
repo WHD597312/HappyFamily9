@@ -90,6 +90,8 @@ public class PayFailActivity extends AppCompatActivity {
         tv_pay = new TextView[]{tvZhifubao, tvWeixin, tvYinlian};
         pay_true = getResources().getDrawable(R.mipmap.xuanzhong_shop3x);
         pay_false = getResources().getDrawable(R.mipmap.weixuanzhong3x);
+        pay_true.setBounds(0, 0, pay_true.getMinimumWidth(), pay_true.getMinimumHeight());
+        pay_false.setBounds(0, 0, pay_false.getMinimumWidth(), pay_false.getMinimumHeight());
         init();
 
     }
@@ -114,13 +116,24 @@ public class PayFailActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tv_chakan, R.id.tv_zhifubao, R.id.tv_weixin, R.id.tv_yinlian})
+    @OnClick({R.id.tv_zhifu, R.id.back,R.id.tv_chakan, R.id.tv_zhifubao, R.id.tv_weixin, R.id.tv_yinlian})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.tv_chakan:
-                Intent intent = new Intent(this, ShopDingdanXQActivity.class);
-                intent.putExtra("orderId", orderNumber);
+            case R.id.back:
+                finish();
+                break;
+            case R.id.tv_zhifu:
+                Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
+                intent.putExtra("orderNumber", orderNumber);
                 startActivity(intent);
+
+                finish();
+                break;
+            case R.id.tv_chakan:
+                Intent intent2 = new Intent(this, ShopDingdanXQActivity.class);
+                intent2.putExtra("orderId", orderNumber);
+                startActivity(intent2);
+                finish();
                 break;
             case R.id.tv_zhifubao:
                 tvZhifubao.setCompoundDrawables(null, null, pay_true, null);
@@ -184,25 +197,5 @@ public class PayFailActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.tv_zhifu, R.id.back, R.id.tv_chakan})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.back:
-                finish();
-                break;
-            case R.id.tv_zhifu:
-                Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
-                intent.putExtra("orderNumber", orderNumber);
-                startActivity(intent);
-                finish();
-                break;
-            case R.id.tv_chakan:
-                Intent intent2 = new Intent(PayFailActivity.this, ShopDingdanXQActivity.class);
-                intent2.putExtra("orderId", orderNumber);
-                startActivity(intent2);
-                break;
-        }
-
-    }
 
 }

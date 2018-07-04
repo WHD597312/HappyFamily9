@@ -9,7 +9,7 @@ repositories {
 }
 
 greendao {
-    schemaVersion 15
+    schemaVersion 16
     daoPackage 'com.xr.database.dao'
     targetGenDir 'src/main/java'
 }
@@ -76,8 +76,8 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.2'
     implementation 'com.github.PhilJay:MPAndroidChart:v3.0.2'
     compile 'org.jsoup:jsoup:1.11.2'
-//    compile 'com.google.zxing:core:3.2.1'
-//    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
+    //    compile 'com.google.zxing:core:3.2.1'
+    //    compile 'com.journeyapps:zxing-android-embedded:3.3.0'
     implementation name: 'SMSSDK-2.1.2', ext: 'aar'
     implementation name: 'SMSSDKGUI-2.1.2', ext: 'aar'
     implementation 'com.contrarywind:Android-PickerView:3.2.5'
@@ -94,5 +94,9 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'pl.droidsonroids.gif:android-gif-drawable:1.2.2'
     implementation files('libs/zxing.jar')
-    implementation 'com.android.support:percent:24.2.0'
+    implementation 'com.android.support:percent:25.2.0'
+    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
+        exclude group: 'com.android.support', module: 'support-annotations'
+    })
+    implementation files('libs/ShareSDK-QQ-2.8.1.jar')
 }

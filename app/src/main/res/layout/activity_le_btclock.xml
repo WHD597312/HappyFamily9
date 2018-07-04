@@ -1,0 +1,174 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".le.BtClock.TimeClockActivity">
+
+    <LinearLayout
+        android:id="@+id/layout_le_body"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="9"
+        android:orientation="vertical"
+        />
+    <LinearLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white"
+        android:orientation="horizontal"
+        >
+        <LinearLayout
+            android:id="@+id/id_bto_sg"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_jy_49"
+                android:layout_marginRight="@dimen/dp_jy_49"
+                />
+
+
+            <ImageButton
+                android:id="@+id/id_bto_sg_img"
+                android:scaleType="centerInside"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="@dimen/dp_jy_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/bt_sgjj1" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="时光简记"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_bto_pt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical">
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_jy_49"
+                android:layout_marginRight="@dimen/dp_jy_49"
+                />
+            <ImageButton
+                android:id="@+id/id_bto_pt_img"
+                android:scaleType="centerInside"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="@dimen/dp_jy_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/bt_pt" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="普通模式" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_bto_qz"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_jy_49"
+                android:layout_marginRight="@dimen/dp_jy_49"
+                />
+            <ImageButton
+                android:scaleType="centerInside"
+                android:id="@+id/id_bto_qz_img"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="@dimen/dp_jy_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/bt_qz" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="群组模式"
+                />
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/id_bto_ql"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_jy_49"
+                android:layout_marginRight="@dimen/dp_jy_49"
+                />
+            <ImageButton
+                android:id="@+id/id_bto_ql_img"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="@dimen/dp_jy_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/bt_ql" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="情侣模式"
+                />
+        </LinearLayout>
+        <LinearLayout
+            android:id="@+id/id_bto_zl"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:orientation="vertical" >
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@null"
+                android:layout_marginLeft="@dimen/dp_jy_49"
+                android:layout_marginRight="@dimen/dp_jy_49"
+                />
+            <ImageButton
+                android:id="@+id/id_bto_zl_img"
+                android:layout_width="@dimen/dp_jy_30"
+                android:layout_height="@dimen/dp_jy_25"
+                android:background="#00000000"
+                android:clickable="false"
+                android:src="@mipmap/bt_zl" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="制懒模式"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+</LinearLayout>

@@ -9,50 +9,42 @@
         android:id="@+id/tv_device_del"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="确定删除设备吗？"
+        android:text="确定要将它删除吗？"
         android:textColor="@color/color_gray4"
-        android:textSize="14sp"
+        android:textSize="16sp"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_jy_45"
         />
 
     <LinearLayout
         android:layout_below="@+id/tv_device_del"
-        android:layout_marginTop="@dimen/dp_jy_21"
-        android:background="@color/color_gray"
-        android:layout_marginLeft="@dimen/dp_jy_12"
-        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_31"
+        android:layout_marginLeft="@dimen/dp_jy_20"
+        android:layout_marginRight="@dimen/dp_jy_20"
         android:orientation="horizontal"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
-        <TextView
+        <Button
             android:id="@+id/tv_device_cancel"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:textColor="@color/black"
+            android:layout_height="@dimen/dp_jy_35"
+            android:background="@drawable/bg_shape_anniugray"
             android:text="取消"
+            android:layout_marginRight="@dimen/dp_jy_12"
             android:layout_gravity="center"
-            android:gravity="right"
-            android:paddingRight="@dimen/dp_jy_21"
-            android:layout_weight="1"
-            />
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:text="|"
-            android:textColor="@color/color_gray2"
-            android:textSize="26sp"
             android:gravity="center"
             android:layout_weight="1"
             />
-        <TextView
+
+        <Button
             android:id="@+id/tv_device_ensure"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_jy_35"
             android:layout_gravity="center"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp_jy_21"
-            android:textColor="@color/black"
+            android:gravity="center"
+            android:background="@drawable/shape_detail_back"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:textColor="@color/white"
             android:text="确定"
             android:layout_weight="1"
             />

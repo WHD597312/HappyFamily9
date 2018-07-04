@@ -64,7 +64,7 @@ public class RegistFinishActivity extends AppCompatActivity {
     @BindView(R.id.btn_ffinish)
     Button buttonf;
     GifDrawable gifDrawable;
-
+    int firstClick = 1;
     int temp=-1;
     SharedPreferences preferences;
     Calendar calendar;
@@ -154,32 +154,34 @@ public class RegistFinishActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_birthday:
-                int a=10;
-                int b=a;
                 datePicker.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_ffinish:
-                String name = editTextf.getText().toString().trim();
-                if (TextUtils.isEmpty(name)) {
-                    Utils.showToast(this, "昵称不能为空");
-                    return;
-                }
-                if (temp==-1){
-                    Utils.showToast(this, "性别不能为空");
-                    return;
+                if (firstClick==1){
+                    String name = editTextf.getText().toString().trim();
+                    if (TextUtils.isEmpty(name)) {
+                        Utils.showToast(this, "昵称不能为空");
+                        return;
+                    }
+                    if (temp==-1){
+                        Utils.showToast(this, "性别不能为空");
+                        return;
+                    }
+
+                    if (TextUtils.isEmpty(birthday)) {
+                        Utils.showToast(this, "生日不能为空");
+                        return;
+                    }
+                    Map<String,Object> params=new HashMap<>();
+                    params.put("username",name);
+                    params.put("sex",temp);
+                    params.put("birthday",birthday);
+                    params.put("phone",phone);
+                    params.put("password",password);
+                    new RegistAsyncTask().execute(params);
+                    firstClick=0;
                 }
 
-                if (TextUtils.isEmpty(birthday)) {
-                    Utils.showToast(this, "生日不能为空");
-                    return;
-                }
-                Map<String,Object> params=new HashMap<>();
-                params.put("username",name);
-                params.put("sex",temp);
-                params.put("birthday",birthday);
-                params.put("phone",phone);
-                params.put("password",password);
-                new RegistAsyncTask().execute(params);
                 break;
         }
     }
@@ -216,7 +218,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                         final ImageView imageView = (ImageView) dia.findViewById(R.id.iv_dialogr);
                         imageView.setBackgroundResource(R.mipmap.regest_success);
                         dia.show();
-                        dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
+                    dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
                         Window w = dia.getWindow();
                         WindowManager.LayoutParams lp = w.getAttributes();
                         lp.x = 0;

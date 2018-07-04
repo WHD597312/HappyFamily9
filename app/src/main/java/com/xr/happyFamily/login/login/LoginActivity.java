@@ -1,10 +1,13 @@
 package com.xr.happyFamily.login.login;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,7 +18,10 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
+import com.mob.tools.utils.UIHandler;
+import com.tencent.connect.auth.QQToken;
 import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
@@ -46,9 +52,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.tencent.qq.QQ;
+import cn.sharesdk.wechat.friends.Wechat;
 import pl.droidsonroids.gif.GifDrawable;
 
-public class LoginActivity extends AppCompatActivity {
+import static android.R.attr.action;
+
+public class LoginActivity extends AppCompatActivity implements PlatformActionListener, Handler.Callback, View.OnClickListener {
 
     Unbinder unbinder;
     MyApplication application;
@@ -69,7 +82,7 @@ public class LoginActivity extends AppCompatActivity {
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
-
+    int firstClick = 1;
     SharedPreferences mPositionPreferences;
 
     @Override
@@ -134,31 +147,36 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
+    @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx,R.id.image_qq})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_register:
                 startActivity(new Intent(this, RegistActivity.class));
                 break;
             case R.id.btn_login:
-                String phone = et_name.getText().toString().trim();
-                String password = et_pswd.getText().toString().trim();
-                if (TextUtils.isEmpty(phone)) {
-                    Utils.showToast(this, "账号码不能为空");
-                    break;
-                } else if (!Mobile.isMobile(phone)) {
-                    Utils.showToast(this, "手机号码不合法");
-                    break;
-                }
-                if (TextUtils.isEmpty(password)) {
-                    Utils.showToast(this, "请输入密码");
-                    break;
+
+                if (firstClick==1){
+                    String phone = et_name.getText().toString().trim();
+                    String password = et_pswd.getText().toString().trim();
+                    if (TextUtils.isEmpty(phone)) {
+                        Utils.showToast(this, "账号码不能为空");
+                        break;
+                    } else if (!Mobile.isMobile(phone)) {
+                        Utils.showToast(this, "手机号码不合法");
+                        break;
+                    }
+                    if (TextUtils.isEmpty(password)) {
+                        Utils.showToast(this, "请输入密码");
+                        break;
+                    }
+
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("phone", phone);
+                    params.put("password", password);
+                    new LoginAsyncTask().execute(params);
+                    firstClick=0;
                 }
 
-                Map<String, Object> params = new HashMap<>();
-                params.put("phone", phone);
-                params.put("password", password);
-                new LoginAsyncTask().execute(params);
                 break;
             case R.id.tv_forget_pswd:
                 startActivity(new Intent(this, ForgetPswdActivity.class));
@@ -184,7 +202,16 @@ public class LoginActivity extends AppCompatActivity {
                 et_pswd.setSelection(index);
                 break;
             case R.id.image_wx:
-
+                Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                wechat.setPlatformActionListener(this);
+                wechat.SSOSetting(false);
+                authorize(wechat, 1);
+                break;
+            case R.id.image_qq:
+                Platform qq = ShareSDK.getPlatform(QQ.NAME);
+                qq.setPlatformActionListener(this);
+                qq.SSOSetting(false);
+                authorize(qq, 2);
                 break;
         }
     }
@@ -371,6 +398,106 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+    private static final int MSG_ACTION_CCALLBACK = 0;
+    private ProgressDialog progressDialog;
+    /******三方登录逻辑*******/
+    private void authorize(Platform plat, int type) {
+        switch (type) {
+            case 1:
+                showProgressDialog("正在打开微信，请稍后...");
+                break;
+            case 2:
+                showProgressDialog("正在打开QQ，请稍后...");
+                break;
+
+        }
+        if (plat.isValid()) { //如果授权就删除授权资料
+            plat.removeAccount();
+        }
+        plat.showUser(null);//授权并获取用户信息
+    }
+
+    //登陆授权成功的回调
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> res) {
+        Message msg = new Message();
+        msg.what = MSG_ACTION_CCALLBACK;
+        msg.arg1 = 1;
+        msg.arg2 = action;
+        msg.obj = platform;
+        UIHandler.sendMessage(msg, this);   //发送消息
+
+    }
+
+    //登陆授权错误的回调
+    @Override
+    public void onError(Platform platform, int i, Throwable t) {
+        Message msg = new Message();
+        msg.what = MSG_ACTION_CCALLBACK;
+        msg.arg1 = 2;
+        msg.arg2 = action;
+        msg.obj = t;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    //登陆授权取消的回调
+    @Override
+    public void onCancel(Platform platform, int i) {
+        Message msg = new Message();
+        msg.what = MSG_ACTION_CCALLBACK;
+        msg.arg1 = 3;
+        msg.arg2 = action;
+        msg.obj = platform;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    //登陆发送的handle消息在这里处理
+    @Override
+    public boolean handleMessage(Message message) {
+        hideProgressDialog();
+        switch (message.arg1) {
+            case 1: { // 成功
+                Toast.makeText(LoginActivity.this, "授权登陆成功", Toast.LENGTH_SHORT).show();
+
+                //获取用户资料
+                Platform platform = (Platform) message.obj;
+                String userId = platform.getDb().getUserId();//获取用户账号
+                String userName = platform.getDb().getUserName();//获取用户名字
+                String userIcon = platform.getDb().getUserIcon();//获取用户头像
+                String userGender = platform.getDb().getUserGender(); //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
+                Toast.makeText(LoginActivity.this, "用户信息为--用户名：" + userName + "  性别：" + userGender, Toast.LENGTH_SHORT).show();
+
+                //下面就可以利用获取的用户信息登录自己的服务器或者做自己想做的事啦!
+                //。。。
+
+            }
+            break;
+            case 2: { // 失败
+                Toast.makeText(LoginActivity.this, "授权登陆失败", Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case 3: { // 取消
+                Toast.makeText(LoginActivity.this, "授权登陆取消", Toast.LENGTH_SHORT).show();
+            }
+            break;
+        }
+        return false;
+    }
+
+    //显示dialog
+    public void showProgressDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    //隐藏dialog
+    public void hideProgressDialog() {
+        if (progressDialog != null)
+            progressDialog.dismiss();
+    }
+
 
     @Override
     protected void onDestroy() {

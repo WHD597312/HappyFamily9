@@ -53,6 +53,7 @@ public class RingReceiver extends BroadcastReceiver{
 
             }
         });
+        
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
     }

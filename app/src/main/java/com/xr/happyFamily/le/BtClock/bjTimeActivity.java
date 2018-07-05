@@ -1,8 +1,13 @@
 package com.xr.happyFamily.le.BtClock;
 
+import android.app.AlarmManager;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -21,6 +26,7 @@ import com.xr.happyFamily.jia.xnty.Timepicker;
 import com.xr.happyFamily.le.pojo.Time;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 import butterknife.BindView;
@@ -32,16 +38,16 @@ public class bjTimeActivity extends AppCompatActivity {
     Timepicker timepicker1;
     @BindView(R.id.time_lebj2)
     Timepicker timepicker2;
-    @BindView(R.id.rl_bj_day)
-    RelativeLayout rl_add_day;
-    @BindView(R.id.tv_lebj_week)
-    TextView tv_lesd_week;
+
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
     int hour, minutes;
     SharedPreferences preferences;
     String userId;
+    private AlarmManager am;
+    private PendingIntent pendingIntent;
+    private NotificationManager notificationManager;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -56,14 +62,15 @@ public class bjTimeActivity extends AppCompatActivity {
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
 //        userId= preferences.getString("userId","");
         times=timeDao.findByAllTime();
+
        Intent intent = getIntent();
       String day= intent.getStringExtra("day");
        int hour= intent.getIntExtra("hour",0);
        int minutes=intent.getIntExtra("minutes",0);
        int position = intent.getIntExtra("position",0);
        time=times.get(position);
-        tv_lesd_week.setText(day);
-        week=day;
+
+
         timepicker1.setMaxValue(23);
         timepicker1.setMinValue(00);
         timepicker1.setValue(hour);
@@ -74,15 +81,26 @@ public class bjTimeActivity extends AppCompatActivity {
         timepicker2.setValue(minutes);
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timepicker2.setNumberPickerDividerColor(timepicker2);
+        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
+        //获取通知管理器
+        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        AlarmManager am = (AlarmManager)
+            getSystemService(Context.ALARM_SERVICE);
+//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//            am.setExact(AlarmManager.RTC_WAKEUP, TimeUtils
+//                    .stringToLong(recordTime, TimeUtils.NO_SECOND_FORMAT), sender);
+//        }else {
+//            am.set(AlarmManager.RTC_WAKEUP, TimeUtils
+//                    .stringToLong(recordTime, TimeUtils.NO_SECOND_FORMAT), sender);
+//        }
+
     }
 
-    @OnClick({R.id.rl_bj_day, R.id.tv_lrbj_qx, R.id.tv_lrbj_qd})
+    @OnClick({ R.id.tv_lrbj_qx, R.id.tv_lrbj_qd})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.rl_bj_day:
-                initPopup();
-                week=" ";
-                break;
+
+
             case R.id.tv_lrbj_qx:
                 finish();
                 break;
@@ -91,11 +109,19 @@ public class bjTimeActivity extends AppCompatActivity {
                 minutes = timepicker2.getValue();
                 Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
 //                time.setUserId(Long.parseLong(userId));
-
                 time.setHour(hour);
                 time.setMinutes(minutes);
-                time.setDay(week);
                 timeDao.update(time);
+
+//                Calendar calendar=Calendar.getInstance();
+//                int hour1=calendar.get(Calendar.HOUR_OF_DAY);
+//                int minute1=calendar.get(Calendar.MINUTE);
+                Calendar c=Calendar.getInstance();//c：当前系统时间
+                c.set(Calendar.HOUR_OF_DAY,hour);//把小时设为你选择的小时
+                c.set(Calendar.MINUTE,minutes);
+                PendingIntent pendingIntent= PendingIntent.getBroadcast(this,0x101,new Intent("com.zking.android29_alarm_notification.RING"),0);//上下文 请求码  启动哪一个广播 标志位
+                am.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
+                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
                 Intent intent = new Intent(this,TimeClockActivity.class);
                 intent.putExtra("fragid",1);
                 startActivity(intent);
@@ -103,208 +129,7 @@ public class bjTimeActivity extends AppCompatActivity {
         }
     }
 
-    private boolean mIsShowing = false;
-    private PopupWindow popupWindow;
-    ImageView image1, image2, image3, image4, image5, image6, image7, image8;
-    RelativeLayout relativeLayout1, relativeLayout2, relativeLayout3, relativeLayout4, relativeLayout5,
-            relativeLayout6, relativeLayout7, relativeLayout8;
-    Button buttonqx, buttonqd;
-    List<String> weeks;
-    String week=" ";
 
-    private void initPopup() {
-        if (popupWindow != null && popupWindow.isShowing()) {
-            return;
-        }
-        weeks=new ArrayList<>();
-        View parent = ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-        View pop = View.inflate(this, R.layout.fragment_addday_poup, null);
-        image1 = (ImageView) pop.findViewById(R.id.iv_add_day1);
-        image2 = (ImageView) pop.findViewById(R.id.iv_add_day2);
-        image3 = (ImageView) pop.findViewById(R.id.iv_add_day3);
-        image4 = (ImageView) pop.findViewById(R.id.iv_add_day4);
-        image5 = (ImageView) pop.findViewById(R.id.iv_add_day5);
-        image6 = (ImageView) pop.findViewById(R.id.iv_add_day6);
-        image7 = (ImageView) pop.findViewById(R.id.iv_add_day7);
-        image8 = (ImageView) pop.findViewById(R.id.iv_add_no);
-        relativeLayout1 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r1);
-        relativeLayout2 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r2);
-        relativeLayout3 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r3);
-        relativeLayout4 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r4);
-        relativeLayout5 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r5);
-        relativeLayout6 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r6);
-        relativeLayout7 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r7);
-        relativeLayout8 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r8);
-        buttonqd = (Button) pop.findViewById(R.id.bt_addday_qd);
-        buttonqx = (Button) pop.findViewById(R.id.bt_addday_qx);
-        image1.setTag("close");
-        image2.setTag("close");
-        image3.setTag("close");
-        image4.setTag("close");
-        image5.setTag("close");
-        image6.setTag("close");
-        image7.setTag("close");
-        image8.setTag("close");
-//        popupWindow = new PopupWindow(pop, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-        popupWindow = new PopupWindow(pop, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        //点击空白处时，隐藏掉pop窗口
-        popupWindow.setFocusable(true);
-        popupWindow.setTouchable(true);
-        popupWindow.setOutsideTouchable(true);
-//        popupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-        ColorDrawable dw = new ColorDrawable(0x30000000);
-        popupWindow.setBackgroundDrawable(dw);
-        popupWindow.setAnimationStyle(R.style.Popupwindow);
-        popupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-//        mIsShowing = false;
-        View.OnClickListener listener = new View.OnClickListener() {
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.bt_addday_qx:
-                        popupWindow.dismiss();
-                        weeks.clear();
-                        break;
-                    case R.id.bt_addday_qd:
-                        weeks.clear();
-                        if ("open".equals(image1.getTag())) {
-                            weeks.add(" 周一 ");
-                        }
-                        if ("open".equals(image2.getTag())) {
-                            weeks.add(" 周二 ");
-                        }
-                        if ("open".equals(image3.getTag())) {
-                            weeks.add(" 周三 ");
-                        }
-                        if ("open".equals(image4.getTag())) {
-                            weeks.add(" 周四 ");
-                        }
-                        if ("open".equals(image5.getTag())) {
-                            weeks.add(" 周五 ");
-                        }
-                        if ("open".equals(image6.getTag())) {
-                            weeks.add(" 周六 ");
-                        }
-                        if ("open".equals(image7.getTag())) {
-                            weeks.add(" 周日 ");
-                        }
-                        if ("open".equals(image8.getTag())) {
-                            weeks.add(" 不重复 ");
-                        }
-                        for (int i=0;i<weeks.size();i++){
-                            week += weeks.get(i);
-                        }
-                        tv_lesd_week.setText(week);
-                        popupWindow.dismiss();
-                        break;
-                    case R.id.rl_addday_r8:
-                        if ("close".equals(image8.getTag())) {
-                            image8.setImageResource(R.mipmap.lrclock_dh);
-                            image1.setImageResource(0);
-                            image2.setImageResource(0);
-                            image3.setImageResource(0);
-                            image4.setImageResource(0);
-                            image5.setImageResource(0);
-                            image6.setImageResource(0);
-                            image7.setImageResource(0);
-                            image8.setTag("open");
-                            image7.setTag("close");
-                            image6.setTag("close");
-                            image5.setTag("close");
-                            image4.setTag("close");
-                            image3.setTag("close");
-                            image2.setTag("close");
-                            image1.setTag("close");
-
-                        } else if ("open".equals(image8.getTag())) {
-                            image8.setImageResource(0);
-                            image8.setTag("close");
-                        }
-
-                        break;
-                    case R.id.rl_addday_r7:
-                        if ("close".equals(image7.getTag())) {
-                            image8.setImageResource(0);
-                            image7.setImageResource(R.mipmap.lrclock_dh);
-                            image7.setTag("open");
-                        } else if ("open".equals(image7.getTag())) {
-                            image7.setImageResource(0);
-                            image7.setTag("close");
-                        }
-                        break;
-                    case R.id.rl_addday_r1:
-                        if ("close".equals(image1.getTag())) {
-                            image8.setImageResource(0);
-                            image1.setImageResource(R.mipmap.lrclock_dh);
-                            image1.setTag("open");
-                        } else if ("open".equals(image1.getTag())) {
-                            image1.setImageResource(0);
-                            image1.setTag("close");
-                        }
-                        break;
-                    case R.id.rl_addday_r2:
-                        if ("close".equals(image2.getTag())) {
-                            image8.setImageResource(0);
-                            image2.setImageResource(R.mipmap.lrclock_dh);
-                            image2.setTag("open");
-                        } else if ("open".equals(image2.getTag())) {
-                            image2.setImageResource(0);
-                            image2.setTag("close");
-                        }
-                        break;
-                    case R.id.rl_addday_r3:
-                        if ("close".equals(image3.getTag())) {
-                            image8.setImageResource(0);
-                            image3.setImageResource(R.mipmap.lrclock_dh);
-                            image3.setTag("open");
-                        } else if ("open".equals(image3.getTag())) {
-                            image3.setImageResource(0);
-                            image3.setTag("close");
-                        }
-                        break;
-                    case R.id.rl_addday_r4:
-                        if ("close".equals(image4.getTag())) {
-                            image8.setImageResource(0);
-                            image4.setImageResource(R.mipmap.lrclock_dh);
-                            image4.setTag("open");
-                        } else if ("open".equals(image4.getTag())) {
-                            image4.setImageResource(0);
-                            image4.setTag("close");
-                        }
-                        break;
-                    case R.id.rl_addday_r5:
-                        if ("close".equals(image5.getTag())) {
-                            image8.setImageResource(0);
-                            image5.setImageResource(R.mipmap.lrclock_dh);
-                            image5.setTag("open");
-                        } else if ("open".equals(image5.getTag())) {
-                            image5.setImageResource(0);
-                            image5.setTag("close");
-                        }
-                        break;
-                    case R.id.rl_addday_r6:
-                        if ("close".equals(image6.getTag())) {
-                            image8.setImageResource(0);
-                            image6.setImageResource(R.mipmap.lrclock_dh);
-                            image6.setTag("open");
-                        } else if ("open".equals(image6.getTag())) {
-                            image6.setImageResource(0);
-                            image6.setTag("close");
-                        }
-                        break;
-                }
-            }
-        };
-        relativeLayout1.setOnClickListener(listener);
-        relativeLayout2.setOnClickListener(listener);
-        relativeLayout3.setOnClickListener(listener);
-        relativeLayout4.setOnClickListener(listener);
-        relativeLayout5.setOnClickListener(listener);
-        relativeLayout6.setOnClickListener(listener);
-        relativeLayout7.setOnClickListener(listener);
-        relativeLayout8.setOnClickListener(listener);
-        buttonqd.setOnClickListener(listener);
-        buttonqx.setOnClickListener(listener);
-    }
 
 
 }

@@ -34,8 +34,8 @@ public class TimeClockActivity extends AppCompatActivity {
     private LeFragmentManager leFragmentManager;
     private CommonClockFragment commonClockFragment;
     Unbinder unbinder;
-    @BindView(R.id.id_bto_pt_img)
-    ImageView id_bto_pt_img;
+    @BindView(R.id.id_bto_zl_img)
+    ImageView id_bto_zl_img;
     @BindView(R.id.id_bto_sg_img)
     ImageView id_bto_sg_img;
     @Override
@@ -55,25 +55,25 @@ public class TimeClockActivity extends AppCompatActivity {
         if (fragid==1){
             fragmentTransaction.replace(R.id.layout_le_body, commonClockFragment);
             fragmentTransaction.commit();
-            id_bto_pt_img.setImageResource(R.mipmap.bt_pt1);
+            id_bto_zl_img.setImageResource(R.mipmap.bt_zl1);
             id_bto_sg_img.setImageResource(R.mipmap.bt_sgjj);
         }else {
             fragmentTransaction.replace(R.id.layout_le_body, leFragmentManager);
             fragmentTransaction.commit();
         }
     }
-    @OnClick({R.id.id_bto_pt,R.id.id_bto_sg})
+    @OnClick({R.id.id_bto_zl,R.id.id_bto_sg})
     public  void  onClick(View view){
         switch(view.getId()){
-            case R.id.id_bto_pt:
-                id_bto_pt_img.setImageResource(R.mipmap.bt_pt1);
+            case R.id.id_bto_zl:
+                id_bto_zl_img.setImageResource(R.mipmap.bt_zl1);
                 id_bto_sg_img.setImageResource(R.mipmap.bt_sgjj);
                 FragmentTransaction commonTransaction = fragmentManager.beginTransaction();
                 commonTransaction.replace(R.id.layout_le_body,commonClockFragment);
                 commonTransaction.commit();
                 break;
             case R.id.id_bto_sg:
-                id_bto_pt_img.setImageResource(R.mipmap.bt_pt);
+                id_bto_zl_img.setImageResource(R.mipmap.bt_zl);
                 id_bto_sg_img.setImageResource(R.mipmap.bt_sgjj1);
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 fragmentTransaction.replace(R.id.layout_le_body,leFragmentManager);

@@ -1,7 +1,11 @@
 package com.xr.happyFamily.le.BtClock;
 
+import android.app.Activity;
 import android.app.AlarmManager;
+import android.app.Notification;
+import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.app.TimePickerDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -17,10 +21,16 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.TimePicker;
+
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.adapter.ChooseTimeAdapter;
 import com.xr.happyFamily.le.pojo.Time;
+import com.xr.happyFamily.main.MainActivity;
+
+import android.support.v7.app.NotificationCompat;
+import java.util.Calendar;
 import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -32,6 +42,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class CommonClockFragment extends Fragment {
     View view;
     Unbinder unbinder;
+    Context context;
     @BindView(R.id.commonclock_recyc)
     RecyclerView recyclerView;
    @BindView(R.id.iv_le_clock_add)
@@ -42,6 +53,17 @@ public class CommonClockFragment extends Fragment {
    SharedPreferences preferences;
    ChooseTimeAdapter adapter;
    String userId;
+    private AlarmManager am;
+    private PendingIntent pendingIntent;
+    private NotificationManager notificationManager;
+
+
+    @Override
+    public void onCreate(@Nullable Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        context=getActivity();
+    }
+
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_le_comonclock, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -51,7 +73,6 @@ public class CommonClockFragment extends Fragment {
 //        preferences= getActivity().getSharedPreferences("my",MODE_PRIVATE);
 //        userId= preferences.getString("userId","");
 //        Log.i("userid", "onCreateView: "+userId);
-
 //        time.setUserId(Long.parseLong(userId));
         times = timeDao.findByAllTime();
         Log.i("userid", "onCreateView: "+times.size());
@@ -59,14 +80,46 @@ public class CommonClockFragment extends Fragment {
         adapter = new ChooseTimeAdapter(getActivity(),times);
         recyclerView.addItemDecoration(new SpaceItemDecoration(30));
         recyclerView.setAdapter(adapter);
-//        int id=dbOperator.getAlarmId(time);//获得新添加时钟在数据库的id
-//        Intent intent=new Intent(this, AlarmReciever.class);
-//        intent.putExtra("_id",id);
-//        PendingIntent pendingIntent = PendingIntent.getBroadcast(getActivity(),id,intent,0);
-//        AlarmManager alarmManager = (AlarmManager)getActivity().getSystemService(Context.ALARM_SERVICE);
-//        alarmManager.set(AlarmManager.RTC_WAKEUP,alarm.getAlarmTime().getTimeInMillis(),pendingIntent);
+
+
+
+
+
         return view;
     }
+
+
+
+    //周期闹钟
+    public void setAlarmRepeat(View view){
+        //获取当前系统时间
+        Calendar calendar=Calendar.getInstance();
+        int hour=calendar.get(Calendar.HOUR_OF_DAY);
+        int minute=calendar.get(Calendar.MINUTE);
+
+        //1.弹出时间对话框
+        TimePickerDialog timePickerDialog=new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
+            @Override
+            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
+                Calendar c=Calendar.getInstance();
+                c.set(Calendar.HOUR_OF_DAY,hourOfDay);
+                c.set(Calendar.MINUTE,minute);
+                //2.获取到时间      hourOfDay       minute
+                //3.设置闹钟
+                pendingIntent = PendingIntent.getBroadcast(getActivity(),0x102,new Intent("com.xr.happyFamily.le.BtClock.RING"),0);
+                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
+            }
+        },hour,minute,true);
+        timePickerDialog.show();
+    }
+
+    //取消周期闹钟
+    public void cancelAlarmRepeat(View view){
+        am.cancel(pendingIntent);
+    }
+
+
+
 
     @Override
     public void onStart() {

@@ -32,7 +32,7 @@ public class DeleteDeviceDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popview_delete_device);
+        setContentView(R.layout.fragment_le_zldialog2);
         ButterKnife.bind(this);
     }
 

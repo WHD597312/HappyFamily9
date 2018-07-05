@@ -75,41 +75,7 @@
 
             />
     </RelativeLayout>
-  <RelativeLayout
-      android:id="@+id/rl_add_day"
-      android:layout_marginTop="@dimen/dp_jy_12"
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp_jy_45"
-      android:background="@color/white"
 
-      >
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_marginLeft="@dimen/dp_jy_12"
-          android:text="重复"
-          android:textColor="@color/black"
-          />
-      <TextView
-          android:id="@+id/tv_lesd_week"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_centerVertical="true"
-          android:layout_alignParentRight="true"
-          android:layout_marginRight="@dimen/dp_jy_35"
-          android:text=""
-          android:textColor="@color/color_gray2"
-          />
-      <ImageView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:src="@mipmap/hourse_xz"
-          android:layout_alignParentRight="true"
-          android:layout_centerVertical="true"
-          android:layout_marginRight="@dimen/dp_jy_12"
-          />
-  </RelativeLayout>
     <RelativeLayout
         android:layout_marginTop="@dimen/dp_jy_12"
         android:layout_width="match_parent"

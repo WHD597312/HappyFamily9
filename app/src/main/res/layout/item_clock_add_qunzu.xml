@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+
+   <ImageView
+       android:id="@+id/img_touxiang"
+       android:layout_width="@dimen/dp_jy_68"
+       android:layout_height="@dimen/dp_jy_68"
+       android:padding="@dimen/dp_jy_3"
+       android:src="@mipmap/ic_fabu_touxiang"
+       android:layout_centerHorizontal="true"
+       android:layout_marginTop="@dimen/dp_jy_15"/>
+
+   <ImageView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:src="@mipmap/ic_clock_qunzu_false"
+       android:layout_alignRight="@+id/img_touxiang"
+       android:layout_alignTop="@+id/img_touxiang"
+       android:layout_marginLeft="@dimen/dp_jy_20"/>
+
+
+   <TextView
+       android:id="@+id/tv_name"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textSize="@dimen/sp_12"
+       android:textColor="@drawable/selector_more_text"
+       android:layout_centerHorizontal="true"
+       android:layout_below="@id/img_touxiang"
+       android:text="小花"/>
+
+</RelativeLayout>

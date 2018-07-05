@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.alipay.PayActivity;
@@ -125,18 +126,21 @@ public class PayFailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_zhifu:
-                if(sign_pay==0) {
-                    Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
-                    intent.putExtra("orderNumber", orderNumber);
-                    startActivity(intent);
-                }
-                else if(sign_pay==1){
-                    Intent intent = new Intent(PayFailActivity.this, WXPayActiviy.class);
-                    intent.putExtra("orderNumber", orderNumber);
-                    startActivity(intent);
-                }
+                if(sign_pay==2){
+                    Toast.makeText(mContext,"银联",Toast.LENGTH_SHORT).show();
+                }else {
+                    if (sign_pay == 0) {
+                        Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
+                        intent.putExtra("orderNumber", orderNumber);
+                        startActivity(intent);
+                    } else if (sign_pay == 1) {
+                        Intent intent = new Intent(PayFailActivity.this, WXPayActiviy.class);
+                        intent.putExtra("orderNumber", orderNumber);
+                        startActivity(intent);
+                    }
 
-                finish();
+                    finish();
+                }
                 break;
             case R.id.tv_chakan:
                 Intent intent2 = new Intent(this, ShopDingdanXQActivity.class);
@@ -197,9 +201,13 @@ public class PayFailActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                if(tvMoney!=null)
                 tvMoney.setText("¥"+paidAmount);
+                if(tvJine!=null)
                 tvJine.setText("¥"+totalAmount);
+                if (tvNum!=null)
                 tvNum.setText(orderNumber);
+                if (tvAdd!=null)
                 tvAdd.setText(address);
             }
         }

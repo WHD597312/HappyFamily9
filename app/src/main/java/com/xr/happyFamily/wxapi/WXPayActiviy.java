@@ -10,11 +10,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
-import android.widget.Toast;
 
-import com.tencent.mm.opensdk.constants.ConstantsAPI;
-import com.tencent.mm.opensdk.modelbase.BaseReq;
-import com.tencent.mm.opensdk.modelbase.BaseResp;
 import com.tencent.mm.opensdk.modelpay.PayReq;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.IWXAPIEventHandler;
@@ -25,6 +21,7 @@ import com.xr.happyFamily.bao.PaySuccessActivity;
 import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.ActivityManagerApplication;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -37,6 +34,7 @@ public class WXPayActiviy  extends AppCompatActivity {
 
     String orderNumber;
     private IWXAPI iwxapi;
+    SharedPreferences preferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -47,6 +45,12 @@ public class WXPayActiviy  extends AppCompatActivity {
         }
         Bundle extras = getIntent().getExtras();
         orderNumber = extras.getString("orderNumber");
+        ActivityManagerApplication.addDestoryActivity(this,"WXPayActivity");
+
+        preferences = getSharedPreferences("order", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("orderNumber", orderNumber);
+        editor.commit();
 
         iwxapi = WXAPIFactory.createWXAPI(this, appid,false); //初始化微信api
         iwxapi.registerApp(appid); //注册appid  appid可以在开发平台获取
@@ -55,17 +59,7 @@ public class WXPayActiviy  extends AppCompatActivity {
 
     }
 
-    public class MyReceiver extends BroadcastReceiver {
-        public MyReceiver() {
-        }
 
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            int returenCode=Integer.parseInt(intent.getExtras().get("returnCode").toString());
-            Log.e("qqqqqqqqCCC",returenCode+"???");
-        }
-
-    }
 
     String appid="wx44acbeed9571e8cf";
     PayReq request;
@@ -81,11 +75,13 @@ public class WXPayActiviy  extends AppCompatActivity {
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
+
+                    Log.e("qqqqqqqqqqRRRRR",result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
 
 
-                   request = new PayReq();
+                    request = new PayReq();
                     request.appId = returnData.getString("appid");
                     request.partnerId = returnData.getString("partnerid");
                     request.prepayId = returnData.getString("prepayid");

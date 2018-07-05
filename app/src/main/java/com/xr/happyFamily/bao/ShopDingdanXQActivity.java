@@ -454,7 +454,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 tvChangjian.setText("创建时间:" + createTime);
                 tvFukuan.setText("付款时间:" + paymentTime);
                 tvFahuo.setText("发货时间:" + sendTime);
-                tvZhifubao.setText("支付宝交易号:" + paymentSeq);
+                tvZhifubao.setText("交易号:" + paymentSeq);
                 tvDingdan.setText("订单编号:" + orderNumber);
                 tvYunfei.setText("¥" + postFee);
                 tvPrice.setText("¥" + paidAmount);

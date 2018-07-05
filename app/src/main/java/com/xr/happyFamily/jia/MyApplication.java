@@ -6,12 +6,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
-
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
+import cn.sharesdk.framework.ShareSDK;
 import cn.smssdk.SMSSDK;
 import okhttp3.OkHttpClient;
 import okhttp3.Protocol;
@@ -46,7 +44,10 @@ public class MyApplication extends Application {
         StrictMode.setVmPolicy(builder.build());
        // builder.detectFileUriExposure();
 
-        SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
+           ShareSDK.initSDK(this);
+            SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
+
+
         activities=new ArrayList<>();
         fragments=new ArrayList<>();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {

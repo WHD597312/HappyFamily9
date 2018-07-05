@@ -1,0 +1,274 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+    <LinearLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_shape"
+        android:orientation="vertical"
+        android:paddingLeft="16dp"
+        android:paddingRight="16dp">
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r8"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:id="@+id/tv_drugcycle_8"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+
+                android:drawableRight="@null"
+                android:text="不重复"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_no"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r7"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期日"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+               />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期一"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期二"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+               />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期三"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+              />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期四"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r5"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期五"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+                />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+
+        <RelativeLayout
+            android:id="@+id/rl_addday_r6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:id="@+id/tv_drugcycle_6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="10dp"
+                android:layout_marginTop="10dp"
+                android:drawableRight="@null"
+                android:text="星期六"
+                android:textColor="@color/color_black3"
+                android:textSize="16sp" />
+
+            <ImageView
+                android:id="@+id/iv_add_day6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_12"
+                android:layout_marginTop="20dp"
+                android:scaleType="centerCrop"
+              />
+        </RelativeLayout>
+
+        <TextView style="@style/horizontal_line_style" />
+<LinearLayout
+    android:layout_marginTop="@dimen/dp_jy_12"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+      <Button
+          android:id="@+id/bt_addday_qx"
+          android:layout_width="@dimen/dp_jy_119"
+          android:layout_height="@dimen/dp_jy_40"
+          android:background="@drawable/bg_shape_anniugray"
+          android:layout_marginRight="@dimen/dp_jy_5"
+          android:layout_weight="1"
+          android:text="取消"
+          android:textColor="@color/white"
+          />
+    <Button
+        android:id="@+id/bt_addday_qd"
+        android:layout_width="@dimen/dp_jy_119"
+        android:layout_height="@dimen/dp_jy_40"
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:layout_weight="1"
+        android:background="@drawable/bg_shape_anniugreen"
+        android:text="确定"
+        android:textColor="@color/white"
+        />
+    </LinearLayout>
+
+    <TextView
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_20" />
+    </LinearLayout>

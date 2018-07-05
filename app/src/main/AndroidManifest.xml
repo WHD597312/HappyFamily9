@@ -2,8 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     package="com.xr.happyFamily">
-
-    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <!--ShareSDK需要权限start-->
+    <uses-permission android:name="android.permission.MANAGE_ACCOUNTS"/>
+    <uses-permission android:name="android.permission.GET_ACCOUNTS"/>
+    <!-- 蓝牙分享所需的权限 -->
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+    <!--ShareSDK需要权限end-->
     <uses-permission android:name="android.permission.READ_CONTACTS" />
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
@@ -21,7 +26,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
     <!-- Normal Permissions 不需要运行时注册 -->
     <!-- 获取运营商信息，用于支持提供运营商信息相关的接口 -->
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
@@ -77,9 +81,10 @@
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
-
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
-    <uses-permission android:name="android.permission.INTERNET" />
+
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <application
         android:name=".jia.MyApplication"
@@ -90,10 +95,39 @@
         android:roundIcon="@mipmap/app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".login.login.LoginActivity">
+        <activity android:name=".le.BtClock.TimeClockActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+            <intent-filter>
+                <data android:scheme="tencent100371282" />
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <category android:name="android.intent.category.DEFAULT" />
+            </intent-filter>
+
 
         </activity>
+        <activity android:name=".le.BtClock.RingActivity"></activity>
+        <!--注册静态广播-->
+        <receiver android:name=".le.BtClock.RingReceiver"
+            android:enabled="true"
+            android:exported="true"
+            >
+            <intent-filter>
+                <action android:name="com.zking.android29_alarm_notification.RING">
 
+                </action>
+            </intent-filter>
+        </receiver>
+
+        <activity
+            android:name=".login.login.wxapi.WXEntryActivity"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait" />
         <service
             android:name=".together.util.mqtt.MQService"
             android:enabled="true"
@@ -104,8 +138,28 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+       <activity
+        android:name=".jia.ManageHourseActivity"
+        android:label=""
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".jia.xnty.HeaterActivity"
+        android:name=".jia.xnty.HeaterActivity"
+        android:label=""
+        android:screenOrientation="portrait"
+        android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".le.BtClock.bjTimeActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jia.RenameHourseActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".le.BtClock.addTimeActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -129,11 +183,7 @@
         <activity android:name=".jia.ManagementActivity" />
         <activity android:name=".jia.ChangeEquipmentActivity" />
         <activity android:name=".jia.activity.AddDeviceActivity" />
-        <activity
-            android:name=".jia.MainActivity"
-            android:hardwareAccelerated="true"
-            android:label="@string/app_name"
-            android:theme="@style/App_NoTouch" />
+
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
             android:hardwareAccelerated="true"
@@ -219,11 +269,9 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".bao.ShopXQActivity"
             android:label=""
-            android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -233,99 +281,45 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.activity.DeviceDetailActivity" />
         <activity android:name=".main.MainActivity"></activity>
+
+
         <activity android:name=".bao.TestActivity">
 
         </activity>
 
-        <activity
-            android:name=".bao.ShopCartActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.WuLiuActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.ShopAddressActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.ShopAddAddressActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.ShopConfActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.ShopDingdanActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/App_NoTouch" />/>
-        <activity
-            android:name=".bao.ShopSearchActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".bao.ShopShangchengActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.ShopDingdanXQActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.ShopSearchResultActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.EditAddressActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.TuiKuanActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".bao.TuiKuanXQActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.PingLunActivity"
-            android:launchMode="singleTask" />
-        <activity
-            android:name=".bao.PingLunSuccessActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.WoDePingLunActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.TuiKuanSuccessActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.PaySuccessActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.PayFailActivity"
-            android:launchMode="singleTop" />
-        <activity
-            android:name=".bao.alipay.PayActivity"
-            android:launchMode="singleTop">
+        <activity android:name=".bao.ShopCartActivity"></activity>
+        <activity android:name=".bao.WuLiuActivity"></activity>
+        <activity android:name=".bao.ShopAddressActivity"></activity>
+        <activity android:name=".bao.ShopAddAddressActivity"></activity>
+        <activity android:name=".bao.ShopConfActivity"></activity>
+        <activity android:name=".bao.ShopDingdanActivity"></activity>
+        <activity android:name=".bao.ShopSearchActivity"
+            android:launchMode="singleTask"  ></activity>
+        <activity android:name=".bao.ShopShangchengActivity"></activity>
+        <activity android:name=".bao.ShopDingdanXQActivity"></activity>
+        <activity android:name=".bao.ShopSearchResultActivity"></activity>
+        <activity android:name=".bao.EditAddressActivity"></activity>
+        <activity android:name=".bao.TuiKuanActivity"
+            android:launchMode="singleTask"  ></activity>
+        <activity android:name=".bao.TuiKuanXQActivity"></activity>
+        <activity android:name=".bao.PingLunActivity"
+            android:launchMode="singleTask"></activity>
+        <activity android:name=".bao.PingLunSuccessActivity"></activity>
+        <activity android:name=".bao.WoDePingLunActivity"></activity>
+        <activity android:name=".bao.TuiKuanSuccessActivity"></activity>
+        <activity android:name=".bao.PaySuccessActivity"></activity>
+        <activity android:name=".bao.PayFailActivity"></activity>
+        <activity android:name=".bao.alipay.PayActivity">
 
         </activity>
-
-        <activity
-            android:name=".wxapi.WXPayActiviy"
-            android:exported="true"
-            android:launchMode="singleTop">
-            <intent-filter>
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <data android:scheme="wx44acbeed9571e8cf"/>
-            </intent-filter>
-        </activity>
-
-        <activity
-            android:name=".wxapi.WXPayEntryActivity"
-            android:exported="true"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="adjustPan|stateHidden" />
 
         <activity android:name=".le.PageActivity">
 
         </activity>
 
-        <activity
-            android:name=".le.FaBuActivity"
-            android:screenOrientation="portrait"
-            android:windowSoftInputMode="stateVisible|adjustPan">
+        <activity android:name=".le.FaBuActivity"
+            android:windowSoftInputMode="stateVisible|adjustPan"
+            android:screenOrientation="portrait">
 
         </activity>
         <activity android:name=".le.XuYuanActivity"></activity>
@@ -336,12 +330,7 @@
         <activity android:name=".le.HistoryActivity"></activity>
 
 
-        <activity android:name=".le.ClockActivity">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+
     </application>
 
 </manifest>

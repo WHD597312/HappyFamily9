@@ -7,7 +7,6 @@ import java.lang.reflect.Field;
 import android.content.res.TypedArray;
 import android.graphics.Color;
 import android.graphics.Paint;
-import android.graphics.Rect;
 import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.util.Log;
@@ -18,11 +17,12 @@ import android.widget.NumberPicker;
 import com.xr.happyFamily.R;
 
 public class Timepicker extends NumberPicker {
-    View view1;
-    public Timepicker(Context context, AttributeSet attrs,
-                              int defStyleAttr) {
-        super(context, attrs, defStyleAttr);
 
+    public Timepicker(Context context, AttributeSet attrs, int defStyleAttr) {
+        super(context, attrs, defStyleAttr);
+//        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.Timepicker, defStyleAttr, 0);
+//        mColor = a.getColor(R.styleable.Timepicker_timepicker_color,mColor);
+//        a.recycle();
     }
 
 
@@ -44,7 +44,9 @@ public class Timepicker extends NumberPicker {
     public void addView(View child, android.view.ViewGroup.LayoutParams params) {
         this.addView(child, -1, params);
     }
-
+    public void setColor(int colorId){
+//        mColor = colorId;
+    }
     @Override
     public void addView(View child, int index,
                         android.view.ViewGroup.LayoutParams params) {
@@ -56,10 +58,13 @@ public class Timepicker extends NumberPicker {
     /**
      * 设置TimePicker的属性 颜色 大小
      * @param view
-     */
+//     */
+//    int mColor = getResources().getColor(R.color.green2);
     public void setNumberPicker(View view) {
         if (view instanceof EditText) {
-           ((EditText) view).setTextColor(this.getResources().getColor(R.color.green2));
+//              int color=mColor;
+            int color=   getResources().getColor(R.color.green2);
+           ((EditText) view).setTextColor(color);
             ((EditText) view).setTextSize(18);
         }
     }

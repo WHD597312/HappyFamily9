@@ -140,7 +140,7 @@
             android:layout_toRightOf="@id/tv2"
             android:layout_alignTop="@id/tv2"
             android:layout_marginLeft="@dimen/dp_jy_8"
-            android:text="23.00前下单，预计明天（05月06日）送达"/>
+            android:text="预计到达时间：请先填写地址信息"/>
 
         <TextView
 

@@ -32,19 +32,9 @@
       android:layout_height="@dimen/dp_jy_40"
       android:padding="@dimen/dp_jy_10"
       android:layout_centerVertical="true"
-      android:layout_toLeftOf="@id/title_rightText"
+      android:layout_alignParentRight="true"
       android:src="@mipmap/ic_clock_msg"/>
 
-  <TextView
-      android:id="@+id/title_rightText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:text="编辑"
-      android:layout_alignParentRight="true"
-      android:padding="@dimen/dp_jy_10"
-      android:textColor="#A1A1A1"
-      android:textSize="@dimen/sp_14" />
 
  </RelativeLayout>
 
@@ -123,6 +113,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/ic_add_qinglv"
+        android:paddingTop="@dimen/dp_jy_20"
+        android:paddingBottom="@dimen/dp_jy_20"
         android:layout_centerInParent="true"/>
     <TextView
         android:layout_width="wrap_content"

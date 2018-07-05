@@ -418,6 +418,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                 new cancelOrderAsync().execute(params);
             }
         });
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("取消订单");
         tv_context.setText("是否确认取消订单？");
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);

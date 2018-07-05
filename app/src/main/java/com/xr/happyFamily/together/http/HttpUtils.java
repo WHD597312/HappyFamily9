@@ -277,10 +277,8 @@ public class HttpUtils {
             Response response=okHttpClient.newCall(request).execute();
 
             if(response.isSuccessful()){
-                Log.e("qqqqqqqqXXXX","111111");
                 result= response.body().string();
             }else {
-                Log.e("qqqqqqqqXXXX","222222222");
                 NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
             }
         }catch (Exception e){

@@ -37,7 +37,7 @@ public class PayActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.test);
+        setContentView(R.layout.activity_pay);
         ButterKnife.bind(this);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();

@@ -17,6 +17,8 @@ import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.wxapi.WXPayActiviy;
+import com.xr.happyFamily.wxapi.WXPayEntryActivity;
 
 import org.json.JSONObject;
 
@@ -123,9 +125,16 @@ public class PayFailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.tv_zhifu:
-                Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
-                intent.putExtra("orderNumber", orderNumber);
-                startActivity(intent);
+                if(sign_pay==0) {
+                    Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
+                    intent.putExtra("orderNumber", orderNumber);
+                    startActivity(intent);
+                }
+                else if(sign_pay==1){
+                    Intent intent = new Intent(PayFailActivity.this, WXPayActiviy.class);
+                    intent.putExtra("orderNumber", orderNumber);
+                    startActivity(intent);
+                }
 
                 finish();
                 break;

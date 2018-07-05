@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_jy_12"
+    android:layout_marginLeft="@dimen/dp_jy_12"
+    android:layout_marginRight="@dimen/dp_jy_12"
+    android:id="@+id/rl_item"
+    android:background="@drawable/bg_shape_clock_qinglv5"
+    android:padding="@dimen/dp_jy_12">
+
+
+      <TextView
+          android:id="@+id/tv_time"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:textColor="@color/black"
+          android:textSize="@dimen/sp_30"
+          android:text="08:00"/>
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_alignLeft="@id/tv_time"
+       android:layout_below="@id/tv_time"
+       android:id="@+id/tv_name"
+       android:text="二宝"
+       android:textColor="#414141"/>
+      <TextView
+          android:id="@+id/tv_context"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:text="起床啦，起床啦"
+          android:textColor="#A7A7A7"
+          android:layout_toRightOf="@+id/tv_time"
+          android:layout_alignTop="@+id/tv_time"
+          android:layout_alignBottom="@+id/tv_time"
+          android:gravity="center"
+          android:layout_marginLeft="@dimen/dp_jy_12"
+          android:textSize="@dimen/sp_12"/>
+   
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:id="@+id/tv_day"
+       android:textColor="#fe9890"
+       android:layout_alignTop="@id/tv_name"
+       android:layout_alignLeft="@id/tv_context"
+       android:textSize="@dimen/sp_12"
+       android:text="每天"/>
+
+   <ImageView
+       android:id="@+id/img_btn"
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:checked="false"
+       android:layout_centerVertical="true"
+       android:layout_alignParentRight="true" android:button="@null"
+       android:background="@drawable/btn_qinglv_true"
+       />
+
+</RelativeLayout>

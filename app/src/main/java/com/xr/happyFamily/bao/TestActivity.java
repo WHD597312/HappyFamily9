@@ -20,8 +20,11 @@ import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.alipay.PayResult;
 import com.xr.happyFamily.bean.OrderListBean;
+import com.xr.happyFamily.jia.xnty.ArcProgressBar;
+import com.xr.happyFamily.le.view.CompletedView;
 import com.xr.happyFamily.le.view.MyHorizontalScrollView;
 import com.xr.happyFamily.le.view.MyHorizontalScrollViewAdapter;
+import com.xr.happyFamily.le.view.TimeBar;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -46,7 +49,9 @@ import butterknife.ButterKnife;
 public class TestActivity extends AppCompatActivity {
 
     String orderNumber;
-
+    private TimeBar timeBar;
+    int change = 0;
+    int i;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -55,124 +60,10 @@ public class TestActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        Bundle extras = getIntent().getExtras();
-        orderNumber=extras.getString("orderNumber");
-        new payAsync().execute();
+
+        timeBar = (TimeBar) findViewById(R.id.arcprogressBar);
 
 
     }
 
-    Map<String,String> map=new HashMap<>();
-
-    private static final int SDK_PAY_FLAG = 1;
-
-  // 订单信息
-    Runnable payRunnable = new Runnable() {
-
-        @Override
-        public void run() {
-            PayTask alipay = new PayTask(TestActivity.this);
-            Map<String, String> result = alipay.payV2(orderString, true);
-            Message msg = new Message();
-            msg.what = SDK_PAY_FLAG;
-            msg.obj = result;
-            mHandler.sendMessage(msg);
-        }
-    };
-
-
-
-
-
-
-    String orderString;
-
-
-    class payAsync extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-            String url = "/alipay/pay?orderNumber=";
-
-            String result = HttpUtils.doGet(TestActivity.this,url+orderNumber);
-            String code = "";
-
-            try {
-                if (!Utils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    orderString = returnData.getString("orderString");
-                }
-
-            } catch (JSONException e) {
-                e.printStackTrace();
-            }
-
-
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-
-                Thread payThread = new Thread(payRunnable);
-                payThread.start();
-            }
-        }
-    }
-
-
-
-    @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
-        @SuppressWarnings("unused")
-        public void handleMessage(Message msg) {
-            switch (msg.what) {
-                case SDK_PAY_FLAG: {
-                    @SuppressWarnings("unchecked")
-                    PayResult payResult = new PayResult((Map<String, String>) msg.obj);
-                    /**
-                     对于支付结果，请商户依赖服务端的异步通知结果。同步通知结果，仅作为支付结束的通知。
-                     */
-                    String resultInfo = payResult.getResult();// 同步返回需要验证的信息
-                    String resultStatus = payResult.getResultStatus();
-                    // 判断resultStatus 为9000则代表支付成功
-                    if (TextUtils.equals(resultStatus, "9000")) {
-                        // 该笔订单是否真实支付成功，需要依赖服务端的异步通知。
-                        Toast.makeText(TestActivity.this, "支付成功", Toast.LENGTH_SHORT).show();
-                    } else {
-                        // 该笔订单真实的支付结果，需要依赖服务端的异步通知。
-                        Toast.makeText(TestActivity.this, "支付失败", Toast.LENGTH_SHORT).show();
-                    }
-                    break;
-                }
-//                case SDK_AUTH_FLAG: {
-//                    @SuppressWarnings("unchecked")
-//                    AuthResult authResult = new AuthResult((Map<String, String>) msg.obj, true);
-//                    String resultStatus = authResult.getResultStatus();
-//
-//                    // 判断resultStatus 为“9000”且result_code
-//                    // 为“200”则代表授权成功，具体状态码代表含义可参考授权接口文档
-//                    if (TextUtils.equals(resultStatus, "9000") && TextUtils.equals(authResult.getResultCode(), "200")) {
-//                        // 获取alipay_open_id，调支付时作为参数extern_token 的value
-//                        // 传入，则支付账户为该授权账户
-//                        Toast.makeText(PayDemoActivity.this,
-//                                "授权成功\n" + String.format("authCode:%s", authResult.getAuthCode()), Toast.LENGTH_SHORT)
-//                                .show();
-//                    } else {
-//                        // 其他状态值则为授权失败
-//                        Toast.makeText(PayDemoActivity.this,
-//                                "授权失败" + String.format("authCode:%s", authResult.getAuthCode()), Toast.LENGTH_SHORT).show();
-//
-//                    }
-//                    break;
-//                }
-                default:
-                    break;
-            }
-        };
-    };
 }

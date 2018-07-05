@@ -22,7 +22,7 @@
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:layout_centerInParent="true"
-      android:text="情侣闹钟"
+      android:text="群组闹钟"
       android:textColor="@color/shop_title"
       android:textSize="@dimen/sp_18" />
 
@@ -32,19 +32,10 @@
       android:layout_height="@dimen/dp_jy_40"
       android:padding="@dimen/dp_jy_10"
       android:layout_centerVertical="true"
-      android:layout_toLeftOf="@id/title_rightText"
+      android:layout_alignParentRight="true"
       android:src="@mipmap/ic_clock_msg"/>
 
-  <TextView
-      android:id="@+id/title_rightText"
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:text="编辑"
-      android:layout_alignParentRight="true"
-      android:padding="@dimen/dp_jy_10"
-      android:textColor="#A1A1A1"
-      android:textSize="@dimen/sp_14" />
+
 
  </RelativeLayout>
 
@@ -93,10 +84,9 @@
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:textSize="60sp"
-       android:format24Hour ="HH:mm"
-       android:format12Hour ="hh:mm"
+
        android:layout_centerInParent="true"
-       android:textColor="#ff7a73"/>
+       android:textColor="#3682ff"/>
 
    <TextView
        android:layout_width="wrap_content"
@@ -111,27 +101,24 @@
 
  <android.support.v7.widget.RecyclerView
      android:id="@+id/recyclerView"
+     android:background="@color/color_gray"
      android:layout_width="match_parent"
      android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 
    <RelativeLayout
+       android:background="@color/color_gray"
        android:layout_width="match_parent"
        android:layout_height="wrap_content">
     <ImageView
         android:id="@+id/img_add"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:src="@mipmap/ic_add_qinglv"
+        android:src="@mipmap/ic_add_qunzu"
+        android:paddingBottom="@dimen/dp_jy_20"
+        android:paddingTop="@dimen/dp_jy_20"
         android:layout_centerInParent="true"/>
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_toRightOf="@+id/img_add"
-        android:layout_centerVertical="true"
-        android:textColor="#A7A7A7"
-        android:layout_marginLeft="@dimen/dp_jy_5"
-        android:text="选择老婆，添加闹钟"/>
+
    </RelativeLayout>
 
   </LinearLayout>

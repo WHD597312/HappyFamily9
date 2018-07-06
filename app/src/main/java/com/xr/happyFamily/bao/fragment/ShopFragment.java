@@ -83,13 +83,13 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     @BindView(R.id.img_pic)
     ImageView imgPic;
     String goodsId;
-    int priceId=0;
-    String receiveId="0";
+    int priceId = 0;
+    String receiveId = "0";
 
 
     List<GoodsPrice> list_price;
 
-    int num=1;
+    int num = 1;
 
 
     @Nullable
@@ -139,7 +139,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    @OnClick({R.id.img_address, R.id.tv_xinghao,R.id.tv_address})
+    @OnClick({R.id.img_address, R.id.tv_xinghao, R.id.tv_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.img_address:
@@ -158,14 +158,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
      * resultCode：表示的是启动后的Activity回传值时的resultCode值
      * data：表示的是启动后的Activity回传过来的Intent对象
      */
-    String address="没有地址信息，请点击后添加地址信息";
+    String address = "没有地址信息，请点击后添加地址信息";
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == 101 && resultCode == 111) {
             address = data.getStringExtra("address");// 拿到返回过来的地址
-            receiveId=data.getStringExtra("receiveId");
-            Log.e("qqqqqqqqRRR",receiveId+"???");
+            receiveId = data.getStringExtra("receiveId");
+            Log.e("qqqqqqqqRRR", receiveId + "???");
             // 把得到的数据显示到输入框内
             tvAddress.setText(address);
 
@@ -186,9 +187,10 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     private ImageView img_close;
     private EvaluateAdapter adapter_xinghao;
     private FlowTagView labelsView;
-    private TextView tv_price, tv_name,tv_jia,tv_jian,tv_num,tv_cart,tv_buy;
+    private TextView tv_price, tv_name, tv_jia, tv_jian, tv_num, tv_cart, tv_buy;
     private EvaluateXhAdapter adapter_xh;
-    int sign=-1;
+    int sign = -1;
+
     private void showPopup() {
 
 
@@ -204,7 +206,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             list.add(list_price.get(i).getPower() + "");
         }
         adapter_xh.setItems(list);
-        if(sign!=-1){
+        if (sign != -1) {
             adapter_xh.setSelection(sign);
         }
         labelsView.setAdapter(adapter_xh);
@@ -212,16 +214,16 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         labelsView.setItemClickListener(new FlowTagView.TagItemClickListener() {
             @Override
             public void itemClick(int position) {
-                sign=position;
+                sign = position;
                 adapter_xh.setSelection(position);
                 adapter_xh.notifyDataSetChanged();
                 String e = adapter_xh.getItem(position).toString();
-                tv_price.setText("¥"+list_price.get(position).getPrice());
+                tv_price.setText("¥" + list_price.get(position).getPrice());
                 tvPrice.setText("¥" + list_price.get(position).getPrice());
                 tvXinghao.setText(list.get(position));
-                price=list_price.get(position).getPrice()+"";
-                priceId=list_price.get(position).getPriceId();
-                goodsId=list_price.get(position).getGoodsId()+"";
+                price = list_price.get(position).getPrice() + "";
+                priceId = list_price.get(position).getPriceId();
+                goodsId = list_price.get(position).getGoodsId() + "";
 //                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();
 //                datas.clear();
 //                datas.addAll(initData(e));
@@ -234,20 +236,20 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         tv_name = (TextView) contentViewSign.findViewById(R.id.tv_name);
         tv_jian = (TextView) contentViewSign.findViewById(R.id.tv_shop_reduce);
         tv_num = (TextView) contentViewSign.findViewById(R.id.tv_shop_num);
-        tv_num.setText(num+"");
+        tv_num.setText(num + "");
         tv_jia = (TextView) contentViewSign.findViewById(R.id.tv_shop_add);
         tv_cart = (TextView) contentViewSign.findViewById(R.id.tv_type_cart);
         tv_buy = (TextView) contentViewSign.findViewById(R.id.tv_type_bug);
         tv_cart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(sign!=-1) {
+                if (sign != -1) {
                     Map<String, Object> params = new HashMap<>();
                     params.put("priceId", priceId);
                     params.put("quantity", num);
                     new addShopAsync().execute(params);
-                }else {
-                    Toast.makeText(mContext,"请选择商品规格",Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
                 }
 
             }
@@ -261,8 +263,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     intent.putExtra("goodsId", goodsId);
                     intent.putExtra("num", num + "");
                     intent.putExtra("priceId", priceId + "");
-                    intent.putExtra("money", Integer.parseInt(price) * num );
-                    intent.putExtra("weight", weight*num + "");
+                    intent.putExtra("money", Integer.parseInt(price) * num);
+                    intent.putExtra("weight", weight * num + "");
                     intent.putExtra("price", price);
                     intent.putExtra("context", type);
                     intent.putExtra("img", img);
@@ -280,9 +282,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         }
 
 
-        if(sign!=-1){
+        if (sign != -1) {
             tv_price.setText("¥" + list_price.get(sign).getPrice());
-        }else {
+        } else {
             tv_price.setText("");
         }
 //        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
@@ -292,9 +294,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         tv_jian.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if(num>1){
+                if (num > 1) {
                     num--;
-                    tv_num.setText(num+"");
+                    tv_num.setText(num + "");
                 }
             }
         });
@@ -302,7 +304,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             @Override
             public void onClick(View v) {
                 num++;
-                tv_num.setText(num+"");
+                tv_num.setText(num + "");
             }
         });
         mPopWindow = new PopupWindow(contentViewSign);
@@ -347,10 +349,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     int pos = 0;
 
 
-
-
     JSONObject jsonObject;
-    String name,type,img,price="0";
+    String name, type, img, price = "0";
     Double weight;
 
     class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
@@ -394,23 +394,23 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             super.onPostExecute(s);
 
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-
+                if (tvName != null)
                     tvName.setText(name);
-                    tvWeight.setText(weight+"kg");
+                if (tvWeight != null)
+                    tvWeight.setText(weight + "kg");
+                if (tvType != null)
                     tvType.setText(type);
 
-                    Picasso.with(mContext)
-                            .load(img)
-                            .into(imgPic);//此种策略并不会压缩图片
-                }
-
-            isWeight=true;
-            if(isAddress)
-                getTime();
-        }
+                Picasso.with(mContext)
+                        .load(img)
+                        .into(imgPic);//此种策略并不会压缩图片
             }
 
-
+            isWeight = true;
+            if (isAddress)
+                getTime();
+        }
+    }
 
 
     String returnData = "";
@@ -448,14 +448,16 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 if (!"null".equals(returnData)) {
-                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
-                    isAddress=true;
-                    receiveId=receive.getReceiveId()+"";
-                    if(isWeight)
+                    if (tvAddress != null)
+                        tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                    isAddress = true;
+
+                    receiveId = receive.getReceiveId() + "";
+                    if (isWeight)
                         getTime();
-                }
-                else {
-                    tvAddress.setText("没有地址信息，请点击后添加地址");
+                } else {
+                    if (tvAddress != null)
+                        tvAddress.setText("没有地址信息，请点击后添加地址");
                 }
             }
         }
@@ -514,29 +516,31 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     }
 
-    public void sendMessage(ICallBack callBack){
+    public void sendMessage(ICallBack callBack) {
 
-        callBack.get_message_from_Fragment(priceId+"",num);
-        callBack.getPrice(price+"",priceId,num,goodsId,sign);
+        callBack.get_message_from_Fragment(priceId + "", num);
+        callBack.getPrice(price + "", priceId, num, goodsId, sign);
 
     }
+
     public interface ICallBack {
-        void get_message_from_Fragment(String string,int num);
-        void getPrice(String price,int priceId,int num,String goodId,int sign);
+        void get_message_from_Fragment(String string, int num);
+
+        void getPrice(String price, int priceId, int num, String goodId, int sign);
     }
 
 
-    public void setData(String price,String power,int s){
-        tvPrice.setText("¥"+price);
+    public void setData(String price, String power, int s) {
+        tvPrice.setText("¥" + price);
         tvXinghao.setText(power);
-        this.price=price;
-        sign=s;
+        this.price = price;
+        sign = s;
     }
 
 
+    long time, recLen;
+    List<PostFreeBean> postFreeBeans = new ArrayList<>();
 
-    long time,recLen;
-    List<PostFreeBean> postFreeBeans=new ArrayList<>();
     class getPostFeeAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -555,17 +559,17 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                         JsonArray list = content.getAsJsonArray("RecommendDetail");
                         Gson gson = new Gson();
 
-                        for(int i=0;i<list.size();i++){
+                        for (int i = 0; i < list.size(); i++) {
                             JsonElement use = list.get(i);
                             PostFreeBean userList = gson.fromJson(use, PostFreeBean.class);
                             postFreeBeans.add(userList);
                         }
-                        time=(long)(((int)postFreeBeans.get(0).getExpressList().get(0).getEstimatedDeliveryTime())+1)*60*60*1000;
+                        time = (long) (((int) postFreeBeans.get(0).getExpressList().get(0).getEstimatedDeliveryTime()) + 1) * 60 * 60 * 1000;
 
-                        Log.e("qqqqqqqqTTT111111",time+"???");
+                        Log.e("qqqqqqqqTTT111111", time + "???");
                         long getNowTimeLong = System.currentTimeMillis();
 
-                        recLen =  time+ getNowTimeLong ;//这样得到的差值是级别
+                        recLen = time + getNowTimeLong;//这样得到的差值是级别
 
                     }
                 }
@@ -581,14 +585,16 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Date date = new Date(recLen);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault());
-                String time=format.format(date);
-                tvTime.setText("23.00前下单，预计（"+time.substring(5,time.length())+"）送达");
+                String time = format.format(date);
+                if (tvTime!=null)
+                    tvTime.setText("23.00前下单，预计（" + time.substring(5, time.length()) + "）送达");
             }
         }
     }
 
-    boolean isWeight=false,isAddress=false;
-    public void getTime(){
+    boolean isWeight = false, isAddress = false;
+
+    public void getTime() {
         Map<String, Object> map = new HashMap<>();
         map.put("goodsName", "hello");
         map.put("receiveId", receive.getReceiveId());

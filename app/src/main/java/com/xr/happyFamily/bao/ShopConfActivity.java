@@ -34,6 +34,7 @@ import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.wxapi.WXPayActiviy;
 
 import org.json.JSONObject;
 
@@ -402,10 +403,21 @@ public class ShopConfActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                Intent intent = new Intent(ShopConfActivity.this, PayActivity.class);
-                intent.putExtra("orderNumber", orderNumber);
-                startActivity(intent);
-                finish();
+                if(sign_pay==2){
+                    Toast.makeText(mContext,"银联",Toast.LENGTH_SHORT).show();
+                }else {
+                    if (sign_pay == 0) {
+                        Intent intent = new Intent(ShopConfActivity.this, PayActivity.class);
+                        intent.putExtra("orderNumber", orderNumber);
+                        startActivity(intent);
+                    } else if (sign_pay == 1) {
+                        Intent intent = new Intent(ShopConfActivity.this, WXPayActiviy.class);
+                        intent.putExtra("orderNumber", orderNumber);
+                        startActivity(intent);
+                    }
+
+                    finish();
+                }
 
             }
         }

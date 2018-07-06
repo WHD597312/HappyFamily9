@@ -221,6 +221,7 @@ public class PaySuccessActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                if (tvPrice!=null)
                 tvPrice.setText(money+"");
 
             }
@@ -283,10 +284,12 @@ public class PaySuccessActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                if (shopAdapter!=null)
                 shopAdapter.notifyDataSetChanged();
                 if(!isData){
                     Toast.makeText(PaySuccessActivity.this,"无更多数据",Toast.LENGTH_SHORT).show();
                 }
+                if (dialog!=null)
                 MyDialog.closeDialog(dialog);
             }
         }

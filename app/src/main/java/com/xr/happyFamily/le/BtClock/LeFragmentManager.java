@@ -11,6 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.jia.adapter.FamilyAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
 
@@ -21,7 +22,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-public class LeFragmentManager extends Fragment {
+public class LeFragmentManager extends BaseFragment {
     List<Fragment> TimeList;
 
     View view;

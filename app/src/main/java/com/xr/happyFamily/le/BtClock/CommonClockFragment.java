@@ -25,6 +25,7 @@ import android.widget.TimePicker;
 
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.le.adapter.ChooseTimeAdapter;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.main.MainActivity;
@@ -39,7 +40,7 @@ import butterknife.Unbinder;
 
 import static android.content.Context.MODE_PRIVATE;
 
-public class CommonClockFragment extends Fragment {
+public class CommonClockFragment extends BaseFragment {
     View view;
     Unbinder unbinder;
     Context context;

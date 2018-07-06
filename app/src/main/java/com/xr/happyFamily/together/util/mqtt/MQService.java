@@ -410,6 +410,8 @@ public class MQService extends Service {
                         sendBroadcast(mqttIntent);
                     }
                 }
+
+                //标记  运行控件
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,6 +1,7 @@
 package com.xr.happyFamily.le.fragment;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -15,6 +16,9 @@ import android.widget.TextView;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.le.adapter.ClockQinglvAdapter;
+
+import com.xr.happyFamily.le.clock.MsgActivity;
+import com.xr.happyFamily.le.clock.QinglvAddActivity;
 import com.xr.happyFamily.le.view.TimeBar;
 
 import java.util.ArrayList;
@@ -135,13 +139,19 @@ public class QingLvFragment extends BaseFragment  {
 
     boolean isDel=false;
 
-    @OnClick({R.id.back, R.id.img_right})
+    @OnClick({R.id.back, R.id.img_right,R.id.img_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
                 getActivity().finish();
                 break;
             case R.id.img_right:
+                getActivity().startActivity(new Intent(getActivity(), MsgActivity.class));
+                break;
+            case R.id.img_add:
+                Intent intent=new Intent(getActivity(), QinglvAddActivity.class);
+                intent.putExtra("type","qinglv");
+                getActivity().startActivity(intent);
 
                 break;
 

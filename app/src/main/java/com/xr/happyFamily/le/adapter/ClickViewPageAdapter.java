@@ -21,7 +21,6 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
     private List<BaseFragment> fragments;
     final int PAGE_COUNT=4;
     private Context context;
-    private String tabTitles[]=new String[]{"时光简记","普通模式","群组模式","情侣模式","制赖模式"};
     public ClickViewPageAdapter(FragmentManager fm, List<BaseFragment> fragments,Context context) {
         super(fm);
         this.fragments = fragments;
@@ -49,22 +48,15 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
                 tv.setText("时光简记");
                 break;
             case 1:
-                iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon2));
-                tv.setText("普通模式");
-                break;
-            case 2:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon3));
-
                 tv.setText("群组模式");
                 break;
-            case 3:
+            case 2:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon4));
-
                 tv.setText("情侣模式");
                 break;
-            case 4:
+            case 3:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon5));
-
                 tv.setText("制赖模式");
                 break;
         }

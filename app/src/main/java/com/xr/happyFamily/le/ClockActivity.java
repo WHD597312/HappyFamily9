@@ -3,6 +3,7 @@ package com.xr.happyFamily.le;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -47,6 +48,8 @@ import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
 import com.xr.happyFamily.bao.fragment.XiangQingFragment;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.le.BtClock.CommonClockFragment;
+import com.xr.happyFamily.le.BtClock.LeFragmentManager;
 import com.xr.happyFamily.le.adapter.ClickViewPageAdapter;
 import com.xr.happyFamily.le.fragment.PuTongFragment;
 import com.xr.happyFamily.le.fragment.QingLvFragment;
@@ -90,7 +93,9 @@ public class ClockActivity extends AppCompatActivity {
     TabLayout tl_flower;
 
 
-    private Context mContext;
+    private Context mContext=ClockActivity.this;
+    SharedPreferences preferences;
+    String userId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,23 +107,21 @@ public class ClockActivity extends AppCompatActivity {
         setContentView(R.layout.activity_clock);
         ButterKnife.bind(this);
         initView();
+        initData();
     }
 
     private void initView() {
         circle.add("时光简记");
-        circle.add("普通模式");
         circle.add("群组模式");
         circle.add("情侣模式");
         circle.add("制赖模式");
         Bundle extras = getIntent().getExtras();
 
 
-
-        fragmentList.add(new ShiGuangFragment());
-        fragmentList.add(new PuTongFragment());
+        fragmentList.add(new LeFragmentManager());
         fragmentList.add(new QunZuFragment());
         fragmentList.add(new QingLvFragment());
-        fragmentList.add(new ZhiLaiFragment());
+        fragmentList.add(new CommonClockFragment());
         ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList,this);
         vp_flower.setAdapter(tabAdapter);
         tl_flower.setupWithViewPager(vp_flower);
@@ -129,7 +132,7 @@ public class ClockActivity extends AppCompatActivity {
             //这里是初始化时，默认item0被选中，setSelected（true）是为了给图片和文字设置选中效果，代码在文章最后贴出
             if (i == 0) {
                 ((ImageView) tab.getCustomView().findViewById(R.id.tab_iv)).setSelected(true);
-                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setSelected(true);
+                ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
             }
 
         }
@@ -143,13 +146,11 @@ public class ClockActivity extends AppCompatActivity {
                 switch (tab.getPosition()){
                     case 0: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
                         break;
-                    case 1: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
+                    case 1: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#3682ff"));
                         break;
-                    case 2: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#3682ff"));
+                    case 2: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#ff7a73"));
                         break;
-                    case 3: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#ff7a73"));
-                        break;
-                    case 4: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
+                    case 3: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
                         break;
                 }
 
@@ -168,8 +169,6 @@ public class ClockActivity extends AppCompatActivity {
                         break;
                     case 3: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#8c8c8c"));
                         break;
-                    case 4: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#8c8c8c"));
-                        break;
                 }
 
             }
@@ -182,58 +181,12 @@ public class ClockActivity extends AppCompatActivity {
 //        initTab();
     }
 
-    private void initTab() {
-        tl_flower.setTabGravity(TabLayout.GRAVITY_FILL);
-        tl_flower.setTabMode(TabLayout.MODE_FIXED);
-        tl_flower.setTabTextColors(ContextCompat.getColor(this, R.color.black), ContextCompat.getColor(this, R.color.green3));
-        tl_flower.setSelectedTabIndicatorColor(ContextCompat.getColor(this, R.color.green3));
-        tl_flower.setupWithViewPager(vp_flower);
-        for (int i = 0; i < circle.size(); i++) {
-            tl_flower.getTabAt(i).setText(circle.get(i));
-        }
-        reflex(tl_flower);
-    }
 
-    public static void reflex(final TabLayout tabLayout) {
-        tabLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                try {
-                    //拿到tabLayout的mTabStrip属性
-                    Field mTabStripField = tabLayout.getClass().getDeclaredField("mTabStrip");
-                    mTabStripField.setAccessible(true);
-                    LinearLayout mTabStrip = (LinearLayout) mTabStripField.get(tabLayout);
-                    int dp10 = dp2px(tabLayout.getContext(), 10);
-                    for (int i = 0; i < mTabStrip.getChildCount(); i++) {
-                        View tabView = mTabStrip.getChildAt(i);
-                        //拿到tabView的mTextView属性
-                        Field mTextViewField = tabView.getClass().getDeclaredField("mTextView");
-                        mTextViewField.setAccessible(true);
-                        TextView mTextView = (TextView) mTextViewField.get(tabView);
-                        tabView.setPadding(0, 0, 0, 0);
-                        //因为我想要的效果是   字多宽线就多宽，所以测量mTextView的宽度
-                        int width = 0;
-                        width = mTextView.getWidth();
-                        if (width == 0) {
-                            mTextView.measure(0, 0);
-                            width = mTextView.getMeasuredWidth();
-                        }
-                        LinearLayout.LayoutParams params = (LinearLayout.LayoutParams) tabView.getLayoutParams();
-                        params.width = width;
-                        params.leftMargin = dp10;
-                        params.rightMargin = dp10;
-                        tabView.setLayoutParams(params);
-                        tabView.invalidate();
-                    }
-                } catch (NoSuchFieldException e) {
-                    e.printStackTrace();
-                } catch (IllegalAccessException e) {
-                    e.printStackTrace();
-                }
-            }
-        });
+    public void initData(){
+        preferences = this.getSharedPreferences("my", MODE_PRIVATE);
+        userId= preferences.getString("userId","");
+        new getClocksByUserId().execute();
     }
-
 
     /**
      * dp转px
@@ -244,5 +197,45 @@ public class ClockActivity extends AppCompatActivity {
     }
 
 
+    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+
+            String url = "/happy/clock/getClocksByUserId";
+            url = url + "?userId=" + userId;
+            String result = HttpUtils.doGet(mContext, url);
+            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    String retrunData=jsonObject.getString("returnData");
+                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("clockCommons");
+//                    Gson gson = new Gson();
+//                    for (JsonElement user : list) {
+//                        //通过反射 得到UserBean.class
+//                        ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
+//                        list_friend.add(userList);
+//                    }
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+
+            }
+        }
+    }
 
 }

@@ -1,6 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout
+<LinearLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
 
-</android.support.constraint.ConstraintLayout>
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:textColor="#9e9e9e"
+        android:textSize="@dimen/sp_10"
+        android:text="time"
+        android:layout_marginTop="@dimen/dp_jy_20"/>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_5"
+        android:id="@+id/view_line"/>
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_marginTop="@dimen/dp_jy_10"
+    android:orientation="horizontal"
+    android:paddingBottom="@dimen/dp_jy_8"
+    android:paddingLeft="@dimen/dp_jy_15"
+    android:paddingRight="@dimen/dp_jy_15"
+    android:gravity="center_vertical"
+    android:background="@mipmap/bg_clock_msg">
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_name"
+        android:textSize="@dimen/sp_12"
+        android:text="“你瞅啥”"
+        android:textColor="#3393ED"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_12"
+        android:text="已拉你进入群"
+        android:textColor="#666666"/>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/tv_context"
+        android:textSize="@dimen/sp_12"
+        android:text="【都是大傻逼】"
+        android:ellipsize="start"
+        android:lines="1"
+        android:textColor="#666666"/>
+</LinearLayout>
+</LinearLayout>

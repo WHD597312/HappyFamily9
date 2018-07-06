@@ -6,6 +6,7 @@
     android:layout_marginTop="@dimen/dp_jy_10">
 
     <RelativeLayout
+        android:id="@+id/rl_item"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_74"
         android:background="@color/white"
@@ -14,7 +15,7 @@
             android:id="@+id/img_touxiang"
             android:layout_width="@dimen/dp_jy_55"
             android:layout_height="@dimen/dp_jy_55"
-            android:src="@mipmap/ic_fabu_touxiang"/>
+            android:src="@mipmap/ic_touxiang_moren"/>
 
         <TextView
             android:layout_width="wrap_content"
@@ -40,7 +41,7 @@
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:id="@+id/tv_old"
+            android:id="@+id/tv_age"
             android:layout_toRightOf="@id/tv_sex"
             android:layout_alignTop="@id/tv_sex"
             android:layout_marginLeft="@dimen/dp_jy_10"

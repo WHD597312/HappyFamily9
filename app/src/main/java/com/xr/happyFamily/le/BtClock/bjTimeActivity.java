@@ -200,10 +200,12 @@ public class bjTimeActivity extends AppCompatActivity {
 
             }
         });
-        WindowManager.LayoutParams lp = getWindow().getAttributes();
-        lp.alpha = 1; //0.0-1.0
-        getWindow().setAttributes(lp);
+
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
+        Window w = dialog.getWindow();
+        WindowManager.LayoutParams lp = w.getAttributes();
+        lp.x = 0;
+        dialog.onWindowAttributesChanged(lp);
     }
 }

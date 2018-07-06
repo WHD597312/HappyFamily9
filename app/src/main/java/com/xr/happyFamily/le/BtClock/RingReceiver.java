@@ -7,6 +7,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.Window;
 import android.view.WindowManager;
 
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
@@ -74,6 +75,11 @@ public class RingReceiver extends BroadcastReceiver{
         dialog.setCancelable(false);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
+        Window w = dialog.getWindow();
+        WindowManager.LayoutParams lp = w.getAttributes();
+        lp.x = 0;
+        dialog.onWindowAttributesChanged(lp);
+        
     }
 
 }

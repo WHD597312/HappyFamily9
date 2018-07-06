@@ -10,6 +10,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -41,7 +42,7 @@ public class addTimeActivity extends AppCompatActivity {
     Timepicker timepicker1;
     @BindView(R.id.time_le2)
     Timepicker timepicker2;
-
+    @BindView(R.id.tv_addtime_bq) TextView tv_addtime_bq;
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
@@ -81,7 +82,7 @@ public class addTimeActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
     }
 
-    @OnClick({ R.id.tv_lrsd_qx, R.id.tv_lrsd_qd})
+    @OnClick({ R.id.tv_lrsd_qx, R.id.tv_lrsd_qd,R.id.rl_addtime_bq})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -97,20 +98,46 @@ public class addTimeActivity extends AppCompatActivity {
                 }
                 time.setHour(hour);
                 time.setMinutes(minutes);
+                time.setOpen(true);
                 timeDao.insert(time);
                 Calendar c=Calendar.getInstance();//c：当前系统时间
                 c.set(Calendar.HOUR_OF_DAY,hour);//把小时设为你选择的小时
                 c.set(Calendar.MINUTE,minutes);
-                PendingIntent pendingIntent= PendingIntent.getBroadcast(this,0x101,new Intent("com.zking.android29_alarm_notification.RING"),0);//上下文 请求码  启动哪一个广播 标志位
-                am.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
+//                PendingIntent pendingIntent= PendingIntent.getBroadcast(this,0x101,new Intent("com.zking.android29_alarm_notification.RING"),0);//上下文 请求码  启动哪一个广播 标志位
+//                am.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
+//                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
+                Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
+                intent1.putExtra("hour",hour);
+                intent1.putExtra("minutes",minutes);
+                AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+                Calendar calendar = Calendar.getInstance();
+                PendingIntent sender = PendingIntent.getBroadcast(this, 0x101, intent1, PendingIntent
+                        .FLAG_CANCEL_CURRENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(),
+                            0, sender);
+                } else {
+                    am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                }
                 setResult(600);
                 finish();
+                break;
+            case R.id.rl_addtime_bq:
+                Intent intent2 = new Intent(this,bqOfColckActivity.class);
+                startActivityForResult(intent2,666);
                 break;
         }
     }
 
-
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==666){
+            Intent intent=getIntent();
+            String text=intent.getStringExtra("text");
+            tv_addtime_bq.setText(text);
+        }
+    }
 
 
 

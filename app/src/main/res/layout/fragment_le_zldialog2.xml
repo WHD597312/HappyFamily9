@@ -53,6 +53,7 @@
         android:id="@+id/tv_zl_jg"
         android:layout_width="@dimen/dp_jy_90"
         android:layout_height="wrap_content"
+        android:maxLength="6"
         android:textSize="25sp"
         android:layout_alignBottom="@+id/tv_zl_js"
         android:layout_toRightOf="@+id/tv_zl_js"
@@ -171,6 +172,7 @@
                 android:layout_height="@dimen/dp_jy_55"
                 android:layout_weight="1"
                 android:layout_marginRight="@dimen/dp_jy_12"
+                android:src="@mipmap/bt_zlwdh"
                 android:background="@drawable/bg_le_btanniu1"
                 />
         </LinearLayout>

@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 搜索结果分类列表背景 -->
+    <corners  android:radius="@dimen/dp_jy_8"/>
+
+    <stroke android:color="#b0b0b0"
+        android:width="@dimen/dp_jy_1"/>
+
+
+</shape>

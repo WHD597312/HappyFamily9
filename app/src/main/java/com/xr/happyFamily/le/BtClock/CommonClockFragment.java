@@ -53,9 +53,6 @@ public class CommonClockFragment extends Fragment {
    SharedPreferences preferences;
    ChooseTimeAdapter adapter;
    String userId;
-    private AlarmManager am;
-    private PendingIntent pendingIntent;
-    private NotificationManager notificationManager;
 
 
     @Override
@@ -78,45 +75,18 @@ public class CommonClockFragment extends Fragment {
         Log.i("userid", "onCreateView: "+times.size());
 //        Log.i("userid", "onCreateView: "+times.get(0).getDay()+"...."+times.get(0).getHour()+"...."+times.get(0).getMinutes());
         adapter = new ChooseTimeAdapter(getActivity(),times);
-        recyclerView.addItemDecoration(new SpaceItemDecoration(30));
+//        recyclerView.addItemDecoration(new SpaceItemDecoration(30));
         recyclerView.setAdapter(adapter);
-
-
-
-
 
         return view;
     }
 
 
 
-    //周期闹钟
-    public void setAlarmRepeat(View view){
-        //获取当前系统时间
-        Calendar calendar=Calendar.getInstance();
-        int hour=calendar.get(Calendar.HOUR_OF_DAY);
-        int minute=calendar.get(Calendar.MINUTE);
 
-        //1.弹出时间对话框
-        TimePickerDialog timePickerDialog=new TimePickerDialog(getActivity(), new TimePickerDialog.OnTimeSetListener() {
-            @Override
-            public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
-                Calendar c=Calendar.getInstance();
-                c.set(Calendar.HOUR_OF_DAY,hourOfDay);
-                c.set(Calendar.MINUTE,minute);
-                //2.获取到时间      hourOfDay       minute
-                //3.设置闹钟
-                pendingIntent = PendingIntent.getBroadcast(getActivity(),0x102,new Intent("com.xr.happyFamily.le.BtClock.RING"),0);
-                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
-            }
-        },hour,minute,true);
-        timePickerDialog.show();
-    }
 
-    //取消周期闹钟
-    public void cancelAlarmRepeat(View view){
-        am.cancel(pendingIntent);
-    }
+
+
 
 
 
@@ -149,23 +119,23 @@ public class CommonClockFragment extends Fragment {
     }
 
     //控制item的间距
-    class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-        int mSpace;
-
-        @Override
-        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-            super.getItemOffsets(outRect, view, parent, state);
-//            outRect.left = mSpace;
-//            outRect.right = mSpace;
-            outRect.bottom = mSpace;
-            if (parent.getChildAdapterPosition(view) == 0) {
-                outRect.top = mSpace;
-            }
-
-        }
-
-        public SpaceItemDecoration(int space) {
-            this.mSpace = space;
-        }
-    }
+//    class SpaceItemDecoration extends RecyclerView.ItemDecoration {
+//        int mSpace;
+//
+//        @Override
+//        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
+//            super.getItemOffsets(outRect, view, parent, state);
+////            outRect.left = mSpace;
+////            outRect.right = mSpace;
+//            outRect.bottom = mSpace;
+//            if (parent.getChildAdapterPosition(view) == 0) {
+//                outRect.top = mSpace;
+//            }
+//
+//        }
+//
+//        public SpaceItemDecoration(int space) {
+//            this.mSpace = space;
+//        }
+//    }
 }

@@ -11,7 +11,9 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.Switch;
 
@@ -38,30 +40,39 @@ public class TimeClockActivity extends AppCompatActivity {
     ImageView id_bto_zl_img;
     @BindView(R.id.id_bto_sg_img)
     ImageView id_bto_sg_img;
-    @Override
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_le_btclock);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        unbinder= ButterKnife.bind(this);
-        Intent intent=getIntent();
-        int fragid=intent.getIntExtra("fragid",0);
-        fragmentManager=getSupportFragmentManager();
-        leFragmentManager=new LeFragmentManager();
-        commonClockFragment= new CommonClockFragment();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        if (fragid==1){
+        unbinder = ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        int fragid = intent.getIntExtra("fragid", 0);
+        fragmentManager = getSupportFragmentManager();
+        leFragmentManager = new LeFragmentManager();
+        commonClockFragment = new CommonClockFragment();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (fragid == 1) {
             fragmentTransaction.replace(R.id.layout_le_body, commonClockFragment);
             fragmentTransaction.commit();
             id_bto_zl_img.setImageResource(R.mipmap.bt_zl1);
             id_bto_sg_img.setImageResource(R.mipmap.bt_sgjj);
-        }else {
+        } else {
             fragmentTransaction.replace(R.id.layout_le_body, leFragmentManager);
             fragmentTransaction.commit();
         }
+
+
     }
+
+
+
+
+
     @OnClick({R.id.id_bto_zl,R.id.id_bto_sg})
     public  void  onClick(View view){
         switch(view.getId()){

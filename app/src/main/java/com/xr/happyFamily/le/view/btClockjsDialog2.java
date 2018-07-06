@@ -2,18 +2,20 @@ package com.xr.happyFamily.le.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
+import android.widget.Button;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.together.util.Utils;
+
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -21,56 +23,56 @@ import butterknife.OnClick;
 
 
 /**
- * 制懒闹钟计算关闭
+ * 制懒闹钟脑筋急转弯关闭
  */
-public class btClockjsDialog extends Dialog {
+public class btClockjsDialog2 extends Dialog {
 
 
-    @BindView(R.id.tv_zl_js)
-    TextView tv_zl_js;
-    @BindView(R.id.tv_zl_jg)
-    TextView tv_zl_jg;
+    @BindView(R.id.tv_zl_time)
+    TextView tv_zl_time;
+    @BindView(R.id.tv_zl_njwt)
+    TextView tv_zl_njwt;
+    @BindView(R.id.tv_zl_xx1)
+    TextView tv_zl_xx1;
+    @BindView(R.id.tv_zl_xx2)
+    TextView tv_zl_x2;
+    @BindView(R.id.tv_zl_xx3)
+    TextView tv_zl_xx3;
+    @BindView(R.id.iv_zl_njxx1)
+    ImageView iv_zl_njxx1;
+    @BindView(R.id.iv_zl_njxx2)
+    ImageView iv_zl_njxx2;
+    @BindView(R.id.iv_zl_njxx3)
+    ImageView iv_zl_njxx3;
+    @BindView(R.id.bt_zl_njqd)
+    Button bt_zl_njqd;
+
     private String name;
-    int x;
-    int y;
+
     String text;
     Context mcontext;
     private MediaPlayer mediaPlayer;
 //    public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;//定义屏蔽参数
-    public btClockjsDialog(@NonNull Context context) {
+    public btClockjsDialog2(@NonNull Context context) {
         super(context, R.style.MyDialog);
         mcontext=context;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_le_zldialog2);
+        setContentView(R.layout.fragment_le_zldialog3);
         ButterKnife.bind(this);
-        x= (int)((Math.random()+0.1)*1000);
-        y= (int)((Math.random()+0.1)*1000);
-        tv_zl_js.setText(x+"×"+y+"=");
+//        Calendar calendar = Calendar.getInstance();
+//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//        int minute=calendar.get(Calendar.MINUTE);
+//        tv_zl_time.setText(hour+":"+minute);
         mediaPlayer = MediaPlayer.create(mcontext, R.raw.music1);
         mediaPlayer.start();//一进来就播放
         mediaPlayer.setLooping(true);
-//        this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED, FLAG_HOMEKEY_DISPATCHED); //onCreate中实现
-
-
+        iv_zl_njxx1.setTag("open");
+        iv_zl_njxx2.setTag("close");
+        iv_zl_njxx3.setTag("close");
     }
-//    @Override
-//    public boolean onKeyDown(int keyCode, KeyEvent event) {
-//// TODO Auto-generated method stub
-//        switch(keyCode){
-//            case KeyEvent.KEYCODE_BACK:
-//            case KeyEvent.KEYCODE_HOME:
-//            case KeyEvent.KEYCODE_MENU:
-//            case KeyEvent.KEYCODE_VOLUME_DOWN:
-//            case KeyEvent.KEYCODE_VOLUME_UP:
-//            case KeyEvent.KEYCODE_VOLUME_MUTE:
-//                return true;
-//            default:
-//                return false;
-//        }}
-
 
 
 
@@ -81,12 +83,7 @@ public class btClockjsDialog extends Dialog {
 
     }
 
-    public int getX(){
-        return  x;
-    }
-    public int getY(){
-        return y;
-    }
+
    public String getText(){
         return text;
    }
@@ -98,74 +95,63 @@ public class btClockjsDialog extends Dialog {
         this.name = name;
     }
 
-    @OnClick({R.id.ib_zl_sc, R.id.ib_zl_qd,R.id.bt_zl_sz1,R.id.bt_zl_sz2,R.id.bt_zl_sz3,R.id.bt_zl_sz4,
-            R.id.bt_zl_sz5,R.id.bt_zl_sz6,R.id.bt_zl_sz7,R.id.bt_zl_sz8,R.id.bt_zl_sz9,R.id.bt_zl_sz0})
+    @OnClick({R.id.iv_zl_njxx1,R.id.iv_zl_njxx2,R.id.iv_zl_njxx3,R.id.bt_zl_njqd})
     public void onClick(View view){
         switch(view.getId()){
             case R.id.ib_zl_sc:
                 if (onNegativeClickListener!=null){
                     onNegativeClickListener.onNegativeClick();
                 }
-                tv_zl_jg.setText("");
+
                 break;
             case R.id.ib_zl_qd:
                 if (onPositiveClickListener!=null){
 
                     onPositiveClickListener.onPositiveClick();
                 }
-                text=String.valueOf(tv_zl_jg.getText());
-                if (!Utils.isEmpty(text)){
-                int z = x*y;
-                int a=Integer.parseInt(text);
-                    Log.i("ttttt", "onClick:---> "+z+"...."+a);
-                if (z==a){
+
+
+            {
                    dismiss();
                    mediaPlayer.stop();
-                }else {
+                }
                     Toast.makeText(mcontext,"输入错误请从新输入",Toast.LENGTH_SHORT).show();
+
+
+                break;
+
+            case R.id.iv_zl_njxx1:
+                if ("close".equals(iv_zl_njxx1.getTag())){
+                    iv_zl_njxx1.setImageResource(R.mipmap.bt_zlzd);
+                    iv_zl_njxx1.setTag("open");
+                    iv_zl_njxx2.setTag("close");
+                    iv_zl_njxx3.setTag("close");
                 }
+                break;
+
+            case R.id.iv_zl_njxx2:
+                if ("close".equals(iv_zl_njxx2.getTag())){
+                    iv_zl_njxx2.setImageResource(R.mipmap.bt_zlzd);
+                    iv_zl_njxx2.setTag("open");
+                    iv_zl_njxx1.setTag("close");
+                    iv_zl_njxx3.setTag("close");
                 }
                 break;
 
-            case R.id.bt_zl_sz1:
-                tv_zl_jg.append("1");
+            case R.id.iv_zl_njxx3:
+                if ("close".equals(iv_zl_njxx3.getTag())){
+                    iv_zl_njxx3.setImageResource(R.mipmap.bt_zlzd);
+                    iv_zl_njxx3.setTag("open");
+                    iv_zl_njxx1.setTag("close");
+                    iv_zl_njxx2.setTag("close");
+                }
                 break;
 
-            case R.id.bt_zl_sz2:
-                tv_zl_jg.append("2");
+            case R.id.bt_zl_njqd:
+
                 break;
 
-            case R.id.bt_zl_sz3:
-                tv_zl_jg.append("3");
-                break;
 
-            case R.id.bt_zl_sz4:
-                tv_zl_jg.append("4");
-                break;
-
-            case R.id.bt_zl_sz5:
-                tv_zl_jg.append("5");
-                break;
-
-            case R.id.bt_zl_sz6:
-                tv_zl_jg.append("6");
-                break;
-
-            case R.id.bt_zl_sz7:
-                tv_zl_jg.append("7");
-                break;
-
-            case R.id.bt_zl_sz8:
-                tv_zl_jg.append("8");
-                break;
-
-            case R.id.bt_zl_sz9:
-                tv_zl_jg.append("9");
-                break;
-
-            case R.id.bt_zl_sz0:
-                tv_zl_jg.append("0");
-                break;
         }
     }
     private   OnKeyListener onKeyListener;

@@ -11,6 +11,27 @@ public class Time {
     int hour;
     int minutes;
     String day;
+    String lable;
+    String Style;
+    boolean open;
+    public boolean getOpen() {
+        return this.open;
+    }
+    public void setOpen(boolean open) {
+        this.open = open;
+    }
+    public String getStyle() {
+        return this.Style;
+    }
+    public void setStyle(String Style) {
+        this.Style = Style;
+    }
+    public String getLable() {
+        return this.lable;
+    }
+    public void setLable(String lable) {
+        this.lable = lable;
+    }
     public String getDay() {
         return this.day;
     }
@@ -35,16 +56,20 @@ public class Time {
     public void setId(Long Id) {
         this.Id = Id;
     }
-    @Generated(hash = 1161402333)
-    public Time(Long Id, int hour, int minutes, String day) {
+    @Generated(hash = 1704753356)
+    public Time(Long Id, int hour, int minutes, String day, String lable,
+            String Style, boolean open) {
         this.Id = Id;
         this.hour = hour;
         this.minutes = minutes;
         this.day = day;
+        this.lable = lable;
+        this.Style = Style;
+        this.open = open;
     }
     @Generated(hash = 37380482)
     public Time() {
     }
-
+   
     
 }

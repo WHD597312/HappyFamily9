@@ -101,6 +101,8 @@ public class ShopXQActivity extends AppCompatActivity {
     ArrayList<ShopCartBean> mGoPayList = new ArrayList<>();
     private MyDialog dialog;
 
+    public static boolean running=false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,6 +114,18 @@ public class ShopXQActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initView();
         setmTitle();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        running=true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
     }
 
     private void initView() {

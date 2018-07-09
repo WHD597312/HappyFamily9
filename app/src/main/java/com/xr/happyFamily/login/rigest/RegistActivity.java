@@ -54,6 +54,7 @@ public class RegistActivity extends AppCompatActivity {
     ImageView imageView6;
     GifDrawable gifDrawable;
     Context mContext;
+    int firstClick = 1;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -116,29 +117,33 @@ public class RegistActivity extends AppCompatActivity {
         switch (view.getId()){
 
             case R.id.btn_finish:
-                String phone2 = et_phone.getText().toString().trim();
-                String code=et_code.getText().toString().trim();
-                String password=et_password.getText().toString().trim();
-                if (TextUtils.isEmpty(phone2)){
-                    Utils.showToast(this,"手机号码不能为空");
-                    return;
-                }
-                if (TextUtils.isEmpty(code)){
-                    Utils.showToast(this,"请输入验证码");
-                    return;
-                }
-                if (TextUtils.isEmpty(password)){
-                    Utils.showToast(this,"请输入密码");
-                    return;
-                }
+                if (firstClick==1){
+                    String phone2 = et_phone.getText().toString().trim();
+                    String code=et_code.getText().toString().trim();
+                    String password=et_password.getText().toString().trim();
+                    if (TextUtils.isEmpty(phone2)){
+                        Utils.showToast(this,"手机号码不能为空");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(code)){
+                        Utils.showToast(this,"请输入验证码");
+                        return;
+                    }
+                    if (TextUtils.isEmpty(password)){
+                        Utils.showToast(this,"请输入密码");
+                        return;
+                    }
 
-                Map<String,Object> params=new HashMap<>();
-                params.put("phone",phone2);
-                params.put("code",code);
-                params.put("password",password);
+                    Map<String,Object> params=new HashMap<>();
+                    params.put("phone",phone2);
+                    params.put("code",code);
+                    params.put("password",password);
 
-                new RegistAsyncTask().execute(params);
+                    new RegistAsyncTask().execute(params);
 //                new getShopAsync().execute(params);
+                    firstClick=0;
+                }
+
                 break;
             case R.id.btn_get_code:
                 String phone = et_phone.getText().toString().trim();

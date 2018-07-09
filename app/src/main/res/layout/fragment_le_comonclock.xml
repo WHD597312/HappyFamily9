@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:paddingRight="@dimen/dp_jy_60"
+            android:layout_gravity="center"
+            android:src="@mipmap/fanhui"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:text="制赖闹钟"
+            android:textSize="20sp"
+            android:textColor="@color/black"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+        <ImageView
+            android:id="@+id/iv_le_clock_add"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:paddingLeft="@dimen/dp_jy_60"
+            android:layout_gravity="center"
+            android:src="@mipmap/clock_add"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/commonclock_recyc"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        />
+
+
+
+</LinearLayout>

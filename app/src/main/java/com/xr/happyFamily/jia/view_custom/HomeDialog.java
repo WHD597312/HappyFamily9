@@ -5,10 +5,8 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
-
 import com.xr.happyFamily.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;

@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+        <TextView
+            android:id="@+id/tv_le_bqqx"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:paddingRight="@dimen/dp_jy_60"
+            android:layout_gravity="center"
+            android:textSize="@dimen/sp_15"
+            android:text="取消"
+            android:paddingLeft="@dimen/dp_jy_20"
+            android:textColor="@color/green2"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:text="标签"
+            android:textSize="20sp"
+            android:textColor="@color/color_black3"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_le_bqqd"
+            android:textSize="@dimen/sp_15"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:gravity="center"
+            android:layout_gravity="center"
+            android:paddingLeft="@dimen/dp_jy_45"
+            android:text="确定"
+            android:textColor="@color/green2"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <EditText
+        android:id="@+id/et_le_bq"
+        android:hint="请输入你要添加标签的内容"
+        android:layout_width="match_parent"
+        android:layout_height="206dp"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_20"
+        android:background="@null"
+        android:gravity="top|left"
+        android:inputType="textMultiLine" />
+</LinearLayout>

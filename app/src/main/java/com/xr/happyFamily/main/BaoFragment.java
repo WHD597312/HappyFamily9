@@ -684,6 +684,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         @Override
         public void onFinish() {
             swipeContent.setRefreshing(false);
+            MyDialog.closeDialog(dialog);
             Toast.makeText(mContext,"加载超时请重试",Toast.LENGTH_SHORT).show();
         }
     }

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:id="@+id/sdclock_layout_mian"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@color/white"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_lrbj_qx"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingRight="@dimen/dp_jy_60"
+            android:text="取消" />
+
+        <TextView
+            android:id="@+id/tv_bt_title"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="编辑闹钟"
+            android:textColor="@color/black"
+            android:textSize="20sp" />
+
+        <TextView
+            android:id="@+id/tv_lrbj_qd"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:paddingLeft="@dimen/dp_jy_60"
+            android:text="完成"
+            android:textColor="@color/green2" />
+
+    </LinearLayout>
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        >
+
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_centerVertical="true"
+            android:background="@color/white"
+            />
+        <com.xr.happyFamily.jia.xnty.Timepicker
+            android:id="@+id/time_lebj1"
+            android:descendantFocusability="blocksDescendants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_75"
+            />
+        <com.xr.happyFamily.jia.xnty.Timepicker
+            android:id="@+id/time_lebj2"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_jy_75"
+            android:descendantFocusability="blocksDescendants"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bjtime_bq"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@color/white"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:text="标签"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/tv_bjtime_bq"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_jy_35"
+            android:text="别忘了明天的会议"
+            android:textColor="@color/color_gray2"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/hourse_xz"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/horizontal_line_style"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_bjtime_gb"
+
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@color/white"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:text="关闭方式"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:id="@+id/tv_bjtime_gb"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_jy_35"
+            android:text="听歌识曲"
+            android:textColor="@color/color_gray2"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/hourse_xz"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/horizontal_line_style"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@color/white"
+
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:text="铃声"
+            android:textColor="@color/black"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_jy_35"
+            android:text="狼爱上羊"
+            android:textColor="@color/color_gray2"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/hourse_xz"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+    </RelativeLayout>
+</LinearLayout>

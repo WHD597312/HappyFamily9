@@ -35,10 +35,6 @@ public class ChooseHourseActivity extends AppCompatActivity {
 
     ImageView imageView1;
     @BindView(R.id.tv_hourse_choose)
-    TextView textViewh;
-    @BindView(R.id.tv_hourse_bj)
-    TextView textViewbj;
-    @BindView(R.id.tv_hourse_jtgl)
     TextView textViewgl;
     List<Hourse> houses;
     Hourse house;
@@ -81,33 +77,18 @@ public class ChooseHourseActivity extends AppCompatActivity {
 
     @Override
     protected void onRestart() {
-        adapter.setClicked(1);
-        adapter.notifyDataSetChanged();
         super.onRestart();
     }
 
     int i =0 ;
-    @OnClick({R.id.tv_hourse_jtgl,R.id.iv_choose_back})
+    @OnClick({R.id.tv_hourse_gl,R.id.iv_choose_back})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.tv_hourse_jtgl:
-//                imageView1.setImageResource(R.mipmap.hourse_xz);
-                if (i==0){
-                    adapter.setSign(1);
-                    textViewh.setText("家庭");
-                    textViewbj.setText("添加");
-                    textViewgl.setText("新建家庭");
-                    textViewgl.setTextColor(getResources().getColor(R.color.green2));
-                    adapter.setClicked(1);
-                    adapter.notifyDataSetChanged();
-                    i=1;
+            case R.id.tv_hourse_gl:
 
-                }else if (i==1){
+                    Intent intent=new Intent(this,ManageHourseActivity.class);
+                    startActivity(intent);
 
-                    Intent intent=new Intent(this,AddhourseActivity.class);
-                    startActivityForResult(intent,MREQUEST_CODE);
-
-                }
                 break;
             case R.id.iv_choose_back:
                 startActivity(new Intent(this,MainActivity.class));
@@ -115,20 +96,7 @@ public class ChooseHourseActivity extends AppCompatActivity {
         }
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
 
-
-        if (requestCode==MREQUEST_CODE && requestCode==MREQUEST_CODE){
-            houses=hourseDao.findAllHouse();
-            Log.i("house","-->"+houses.size());
-            adapter = new ChooseHouseAdapter(this, houses);
-            adapter.setClicked(-1);
-            recyclerView.setAdapter(adapter);
-        }
-
-    }
     @Override
     protected void onDestroy() {
         super.onDestroy();

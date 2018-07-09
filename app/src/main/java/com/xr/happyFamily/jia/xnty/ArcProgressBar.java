@@ -195,11 +195,11 @@ public class ArcProgressBar extends View {
         // 内部虚线的内部半径
         mInsideDottedLineRadius = mExternalDottedLineRadius - mDottedLineWidth;
 
-        mRountRect = new RectF();
-        mRountRect.left = (float) (2 * mArcCenterX - 2 * aDistance) / 2 - mArcWidth / 2 + 40;
-        mRountRect.top = (float) (mArcCenterX + bDistance) - 20;
-        mRountRect.right = (float) (2 * mArcCenterX - (2 * mArcCenterX - 2 * aDistance) / 2) - mArcWidth / 2 - 40;
-        mRountRect.bottom = (float) (mArcRadius + mArcRadius) - 20;
+//        mRountRect = new RectF();
+//        mRountRect.left = (float) (2 * mArcCenterX - 2 * aDistance) / 2 - mArcWidth / 2 + 40;
+//        mRountRect.top = (float) (mArcCenterX + bDistance) - 20;
+//        mRountRect.right = (float) (2 * mArcCenterX - (2 * mArcCenterX - 2 * aDistance) / 2) - mArcWidth / 2 - 40;
+//        mRountRect.bottom = (float) (mArcRadius + mArcRadius) - 20;
     }
 
     @Override

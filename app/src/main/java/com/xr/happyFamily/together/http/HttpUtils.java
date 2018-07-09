@@ -644,19 +644,17 @@ public class HttpUtils {
             String token =my.getString("token","");
             JSONObject jsonObject = new JSONObject();
             Request request = new Request.Builder()
-                    .addHeader("authorization",token)
+                    .addHeader("authorization","1022_6f226c22ba904a9188322dc8f79bba53")
                     .url(url)
                     .get()
                     .tag(1)
                     .build();
-
             OkHttpClient okHttpClient = new OkHttpClient.Builder()
                     .connectTimeout(3, TimeUnit.SECONDS)//设置连接超时
                     .readTimeout(5, TimeUnit.SECONDS)//读取超时
                     .writeTimeout(5, TimeUnit.SECONDS)//写入超时
                     .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
                     .build();
-
             Response response=okHttpClient.newCall(request).execute();
 
             if(response.isSuccessful()){

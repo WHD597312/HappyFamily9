@@ -19,10 +19,6 @@ import butterknife.OnClick;
  */
 public class DeleteDeviceDialog extends Dialog {
 
-    @BindView(R.id.tv_device_cancel)
-    TextView tv_cancel;
-    @BindView(R.id.tv_device_ensure)
-    TextView tv_ensure;
     private String name;
     Context context;
     public DeleteDeviceDialog(@NonNull Context context) {

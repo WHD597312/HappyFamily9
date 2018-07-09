@@ -434,6 +434,8 @@ public class MQService extends Service {
                     mqttIntent.putExtra("sharedId", sharedId);
                     sendBroadcast(mqttIntent);
                 }
+
+                //标记  运行控件
             } catch (Exception e) {
                 e.printStackTrace();
             }

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@mipmap/swdjs_bj"
+    android:orientation="vertical">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@null"
+        android:orientation="horizontal">
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingRight="@dimen/dp_jy_60"
+            android:src="@mipmap/fanhui_white3x" />
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="死亡倒计时"
+            android:textColor="@color/white"
+            android:textSize="20sp" />
+
+        <ImageView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingLeft="@dimen/dp_jy_60" />
+
+    </LinearLayout>
+ <RelativeLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:layout_marginTop="@dimen/dp_jy_200"
+     >
+     <TextView
+         android:id="@+id/tv_sw_sm"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_centerHorizontal="true"
+         android:text="你还有80余年的寿命"
+         android:textColor="@color/white"
+         android:textSize="@dimen/sp_15"
+         />
+     <TextView
+         android:id="@+id/tv_sw_sj"
+         android:layout_below="@+id/tv_sw_sm"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:text="在剩余的时间了,你还可以"
+         android:layout_marginTop="@dimen/dp_jy_20"
+         android:layout_marginLeft="@dimen/dp_jy_12"
+         android:textColor="@color/white"
+         />
+     <RelativeLayout
+         android:id="@+id/rl_swdjs_r1"
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/tv_sw_sj"
+         android:layout_marginLeft="@dimen/dp_jy_12"
+         android:layout_marginTop="@dimen/dp_jy_20"
+         >
+
+     <ImageView
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:src="@mipmap/swdjs_fk"
+         />
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/white"
+             android:text="睡29200次觉"
+             android:layout_centerInParent="true"
+             />
+     </RelativeLayout>
+     <RelativeLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/tv_sw_sj"
+         android:layout_alignParentRight="true"
+         android:layout_marginRight="@dimen/dp_jy_12"
+         android:layout_marginTop="@dimen/dp_jy_20"
+         >
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@mipmap/swdjs_fk"
+             />
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/white"
+             android:text="有4160个周末"
+             android:layout_centerInParent="true"
+             />
+     </RelativeLayout>
+     <RelativeLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/rl_swdjs_r1"
+         android:layout_marginLeft="@dimen/dp_jy_12"
+         android:layout_marginTop="@dimen/dp_jy_20"
+         >
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@mipmap/swdjs_fk"
+             />
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/white"
+             android:text="吃29.2吨粮食"
+             android:layout_centerInParent="true"
+             />
+     </RelativeLayout>
+     <RelativeLayout
+         android:layout_width="wrap_content"
+         android:layout_height="wrap_content"
+         android:layout_below="@+id/rl_swdjs_r1"
+         android:layout_marginRight="@dimen/dp_jy_12"
+         android:layout_marginTop="@dimen/dp_jy_20"
+         android:layout_alignParentRight="true"
+         >
+
+         <ImageView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:src="@mipmap/swdjs_fk"
+             />
+         <TextView
+             android:layout_width="wrap_content"
+             android:layout_height="wrap_content"
+             android:textColor="@color/white"
+             android:text="赚500万"
+             android:layout_centerInParent="true"
+             />
+     </RelativeLayout>
+ </RelativeLayout>
+  <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/bt_sgjs_lb2"
+      android:layout_marginTop="@dimen/dp_jy_16"
+      android:layout_gravity="center"
+      />
+
+
+</LinearLayout>

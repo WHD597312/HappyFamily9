@@ -644,7 +644,7 @@ public class HttpUtils {
             String token =my.getString("token","");
             JSONObject jsonObject = new JSONObject();
             Request request = new Request.Builder()
-                    .addHeader("authorization",token)
+                    .addHeader("authorization","1022_6f226c22ba904a9188322dc8f79bba53")
                     .url(url)
                     .get()
                     .tag(1)

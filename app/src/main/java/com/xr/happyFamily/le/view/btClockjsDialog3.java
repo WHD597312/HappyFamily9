@@ -7,7 +7,6 @@ import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.ImageView;
 import com.xr.happyFamily.R;
-import java.util.Calendar;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -35,7 +34,7 @@ public class btClockjsDialog3 extends Dialog {
 
     String text;
     Context mcontext;
-
+    int flag;
     public btClockjsDialog3(@NonNull Context context) {
         super(context, R.style.MyDialog);
         mcontext=context;
@@ -49,6 +48,7 @@ public class btClockjsDialog3 extends Dialog {
         iv_zl_xz2.setTag("close");
         iv_zl_xz3.setTag("close");
         text="听歌识曲";
+        flag=1;
     }
 
 
@@ -70,6 +70,9 @@ public class btClockjsDialog3 extends Dialog {
 
     public void setName(String name) {
         this.name = name;
+    }
+    public int getFlag(){
+        return flag;
     }
 
     @OnClick({R.id.rl_zl_tgsq,R.id.rl_zl_njjzw,R.id.rl_zl_sys,R.id.bt_zl_qd,R.id.bt_zl_qx})
@@ -99,6 +102,7 @@ public class btClockjsDialog3 extends Dialog {
                     iv_zl_xz2.setTag("close");
                     iv_zl_xz3.setTag("close");
                     text="听歌识曲";
+                    flag=1;
                 }
                 break;
 
@@ -110,7 +114,8 @@ public class btClockjsDialog3 extends Dialog {
                     iv_zl_xz2.setTag("open");
                     iv_zl_xz1.setTag("close");
                     iv_zl_xz3.setTag("close");
-                    text="脑筋急转弯";
+                    text="百科小知识";
+                    flag=2;
                 }
                 break;
 
@@ -123,6 +128,7 @@ public class btClockjsDialog3 extends Dialog {
                     iv_zl_xz1.setTag("close");
                     iv_zl_xz2.setTag("close");
                     text="算一算";
+                    flag=3;
                 }
                 break;
 

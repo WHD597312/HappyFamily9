@@ -13,7 +13,11 @@ import android.view.WindowManager;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.pojo.Time;
+import com.xr.happyFamily.le.utils.WakeAndLock;
 import com.xr.happyFamily.le.view.btClockjsDialog;
+import com.xr.happyFamily.le.view.btClockjsDialog2;
+import com.xr.happyFamily.le.view.btClockjsDialog3;
+import com.xr.happyFamily.le.view.btClockjsDialog4;
 
 import java.util.List;
 
@@ -22,7 +26,12 @@ public class RingReceiver extends BroadcastReceiver{
     Context mContext;
     private MediaPlayer mediaPlayer;
     btClockjsDialog dialog;
+    btClockjsDialog2 dialog2;
+    btClockjsDialog4 dialog4;
+
     private TimeDaoImpl timeDao;
+
+    private String op = "on";
     public void onReceive(Context context, Intent intent) {
         //广播的名字:包名+随便取一个名字
         if("com.zking.android29_alarm_notification.RING".equals(intent.getAction())){
@@ -40,22 +49,84 @@ public class RingReceiver extends BroadcastReceiver{
             if (!times.isEmpty()){
                 Time time=times.get(0);
                 if (time.getOpen()){
-                    clolkDialog();
-                }else {
+                    if (time.getFlag()==1){
+                        clolkDialog1();
+                    }else if (time.getFlag()==2){
+                        clolkDialog2();
+                    }else if (time.getFlag()==3){
+                        clolkDialog3();
+                    }
 
                 }
             }
+//            android.util.Log.i("cxq", "ScreenControlBroadcast");
+//            op = intent.getStringExtra("screen");
+//            WakeAndLock wakeAndLock = new WakeAndLock(mContext);
+//            if (op.equals("on")) {
+//                wakeAndLock.screenOn();
+//            }
+
+
 
 //            mediaPlayer = MediaPlayer.create(context, R.raw.music1);
 //            mediaPlayer.start();//一进来就播放
         }
     }
-    private void clolkDialog() {
+    private void clolkDialog1() {//听歌识曲
+        dialog4 = new btClockjsDialog4(mContext);
+
+
+        dialog4.setOnNegativeClickListener(new btClockjsDialog4.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+//                dialog.dismiss();
+            }
+        });
+        dialog4.setOnPositiveClickListener(new btClockjsDialog4.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+
+
+            }
+        });
+
+        dialog4.setCanceledOnTouchOutside(false);
+        dialog4.setCancelable(false);
+        dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog4.show();
+
+
+    }
+    private void clolkDialog2() {//脑筋急转弯
+        dialog2 = new btClockjsDialog2(mContext);
+
+
+        dialog2.setOnNegativeClickListener(new btClockjsDialog2.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+//                dialog.dismiss();
+            }
+        });
+        dialog2.setOnPositiveClickListener(new btClockjsDialog2.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+
+
+            }
+        });
+        dialog2.setCanceledOnTouchOutside(false);
+        dialog2.setCancelable(false);
+        dialog2.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog2.show();
+
+
+    }
+    private void clolkDialog3() {//算一算
         dialog = new btClockjsDialog(mContext);
-           int x=  dialog.getX();
-           int y = dialog.getY();
-           final String text1= dialog.getText();
-           int z =x*y;
+        int x=  dialog.getX();
+        int y = dialog.getY();
+        final String text1= dialog.getText();
+        int z =x*y;
 
         dialog.setOnNegativeClickListener(new btClockjsDialog.OnNegativeClickListener() {
             @Override
@@ -75,11 +146,8 @@ public class RingReceiver extends BroadcastReceiver{
         dialog.setCancelable(false);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-        Window w = dialog.getWindow();
-        WindowManager.LayoutParams lp = w.getAttributes();
-        lp.x = 0;
-        dialog.onWindowAttributesChanged(lp);
-        
+
+
     }
 
 }

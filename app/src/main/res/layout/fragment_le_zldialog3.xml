@@ -2,8 +2,6 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:background="@drawable/bg_shape"
-    android:layout_marginLeft="@dimen/dp_jy_12"
-    android:layout_marginRight="@dimen/dp_jy_12"
     android:orientation="vertical"
     android:layout_height="wrap_content">
     <LinearLayout
@@ -37,7 +35,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:text="脑筋急转弯"
+            android:text="百科小知识"
             android:layout_gravity="center"
             android:gravity="center"
             android:textSize="@dimen/sp_16"
@@ -49,14 +47,14 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/color_gray2"
+        android:background="#f5f5f5"
         android:layout_marginTop="@dimen/dp_jy_35"
         android:orientation="vertical"
         >
         <TextView
             android:id="@+id/tv_zl_njwt"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:text="冬瓜、黄瓜、西瓜、南瓜都能吃，什么瓜不能吃?"
             android:layout_marginLeft="@dimen/dp_jy_12"
             android:layout_marginTop="@dimen/dp_jy_12"
@@ -67,7 +65,7 @@
 
     </LinearLayout>
     <RelativeLayout
-        android:layout_width="wrap_content"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content">
 
 
@@ -129,8 +127,9 @@
     <Button
         android:id="@+id/bt_zl_njqd"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/dp_jy_35"
+        android:layout_height="@dimen/dp_jy_45"
+        android:layout_marginTop="@dimen/dp_jy_20"
+        android:layout_marginBottom="@dimen/dp_jy_35"
         android:background="#ba77ff"
         android:text="确定"
         android:textColor="@color/white"

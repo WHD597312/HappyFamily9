@@ -265,9 +265,11 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
             switch (code) {
                 case 10002:
                     Utils.showToast(LoginActivity.this, "手机号码未注册");
+                    firstClick=1;
                     break;
                 case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
+                    firstClick=1;
                     et_pswd.setText("");
                     break;
                 case 100:

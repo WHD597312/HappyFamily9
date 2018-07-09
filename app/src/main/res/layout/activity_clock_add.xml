@@ -33,7 +33,7 @@
             android:textSize="20sp" />
 
         <TextView
-            android:id="@+id/tv_lrsd_qd"
+            android:id="@+id/tv_lrsd_q"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_35"
             android:layout_gravity="center"

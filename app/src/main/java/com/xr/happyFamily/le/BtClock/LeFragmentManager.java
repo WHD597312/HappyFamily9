@@ -1,5 +1,6 @@
 package com.xr.happyFamily.le.BtClock;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -14,6 +15,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.jia.adapter.FamilyAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
+import com.xr.happyFamily.main.FamilyFragmentManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,10 +45,40 @@ public class LeFragmentManager extends BaseFragment {
             DeathCountFragment deathCountFragment = new DeathCountFragment();
             TimeList.add(deathCountFragment);
             FragmentStatePagerAdapter adapter = new FamilyAdapter(getFragmentManager(), TimeList);
-
             viewPager.setAdapter(adapter);
             viewPager.setCurrentItem(0);
+
+            viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    if (callValueValue != null) {
+                        callValueValue.setPosition(position);
+                    }
+                }
+
+                @Override
+                public void onPageScrollStateChanged(int state) {
+
+                }
+            });
         }
         return view;
+    }
+
+    @Override
+    public void onAttach(Context context) {
+        super.onAttach(context);
+        callValueValue = (CallValueValue) getActivity();
+    }
+
+
+    CallValueValue callValueValue;
+    public interface CallValueValue {
+        public void setPosition(int position);
     }
 }

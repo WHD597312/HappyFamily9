@@ -15,6 +15,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.xr.happyFamily.R;
@@ -28,7 +29,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class TimeClockActivity extends AppCompatActivity {
+public class TimeClockActivity extends AppCompatActivity implements LeFragmentManager.CallValueValue {
     private TimeRemFragment timeRemFragment;
     FragmentManager fragmentManager;
     private ViewPager mViewpaper;
@@ -40,6 +41,8 @@ public class TimeClockActivity extends AppCompatActivity {
     ImageView id_bto_zl_img;
     @BindView(R.id.id_bto_sg_img)
     ImageView id_bto_sg_img;
+
+    @BindView(R.id.layout_bottom) LinearLayout layout_bottom;
 
 
     public void onCreate(Bundle savedInstanceState) {
@@ -93,9 +96,14 @@ public class TimeClockActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    @Override
+    public void setPosition(int position) {
+        if (position>=1){
+            layout_bottom.setVisibility(View.GONE);
+        }else if(position==0){
+            layout_bottom.setVisibility(View.VISIBLE);
+        }
+    };
 
 
     //实现页面变化监听器OnPageChangeListener

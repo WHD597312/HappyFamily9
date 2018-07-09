@@ -110,9 +110,11 @@ public class bjTimeActivity extends AppCompatActivity {
                     time.setLable("别忘了明天的会议");
                 }
                 if (Utils.isEmpty(time.getStyle())){
-                    time.setLable("听歌识曲");
+                    time.setStyle("听歌识曲");
+                    time.setFlag(1);
                 }
                 time.setOpen(true);
+
                 timeDao.update(time);
 
 //                Calendar calendar=Calendar.getInstance();
@@ -193,8 +195,10 @@ public class bjTimeActivity extends AppCompatActivity {
             @Override
             public void onPositiveClick() {
                String text=dialog.getText();
+               int flag = dialog.getFlag();
                 tv_bjtime_gb.setText(text);
                    time.setStyle(text);
+                   time.setFlag(flag);
                    dialog.dismiss();
 
 

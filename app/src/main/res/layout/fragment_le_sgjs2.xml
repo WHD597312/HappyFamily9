@@ -149,7 +149,13 @@
              />
      </RelativeLayout>
  </RelativeLayout>
-
+  <ImageView
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/bt_sgjs_lb2"
+      android:layout_marginTop="@dimen/dp_jy_16"
+      android:layout_gravity="center"
+      />
 
 
 </LinearLayout>

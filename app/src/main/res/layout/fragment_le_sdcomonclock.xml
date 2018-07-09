@@ -116,6 +116,7 @@
         android:layout_height="1dp"
         style="@style/horizontal_line_style"
         />
+
     <RelativeLayout
         android:id="@+id/rl_sdtime_gb"
 
@@ -124,32 +125,32 @@
         android:background="@color/white"
 
         >
+
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_marginLeft="@dimen/dp_jy_12"
             android:text="关闭方式"
-            android:textColor="@color/black"
-            />
+            android:textColor="@color/black" />
+
         <TextView
             android:id="@+id/tv_sdtime_gb"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_jy_35"
-            android:text="脑筋急转弯"
-            android:textColor="@color/color_gray2"
-            />
+            android:text="听歌识曲"
+            android:textColor="@color/color_gray2" />
+
         <ImageView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/hourse_xz"
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:layout_marginRight="@dimen/dp_jy_12"
-            />
+            android:src="@mipmap/hourse_xz" />
     </RelativeLayout>
     <TextView
         android:layout_width="match_parent"

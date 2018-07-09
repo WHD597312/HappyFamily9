@@ -13,12 +13,19 @@ public class Time {
     String day;
     String lable;
     String Style;
+    int flag;
     boolean open;
     public boolean getOpen() {
         return this.open;
     }
     public void setOpen(boolean open) {
         this.open = open;
+    }
+    public int getFlag() {
+        return this.flag;
+    }
+    public void setFlag(int flag) {
+        this.flag = flag;
     }
     public String getStyle() {
         return this.Style;
@@ -56,20 +63,22 @@ public class Time {
     public void setId(Long Id) {
         this.Id = Id;
     }
-    @Generated(hash = 1704753356)
+    @Generated(hash = 1101508372)
     public Time(Long Id, int hour, int minutes, String day, String lable,
-            String Style, boolean open) {
+            String Style, int flag, boolean open) {
         this.Id = Id;
         this.hour = hour;
         this.minutes = minutes;
         this.day = day;
         this.lable = lable;
         this.Style = Style;
+        this.flag = flag;
         this.open = open;
     }
     @Generated(hash = 37380482)
     public Time() {
     }
+   
    
     
 }

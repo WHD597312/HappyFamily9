@@ -87,7 +87,7 @@
             android:layout_marginLeft="@dimen/dp_jy_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="脑筋急转弯"
+            android:text="百科小知识"
 
             />
         <ImageView

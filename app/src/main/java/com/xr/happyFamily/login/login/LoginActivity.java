@@ -161,6 +161,7 @@ public class LoginActivity extends AppCompatActivity {
                     break;
                 }
                if (firstClick==1){
+                    
                    Map<String, Object> params = new HashMap<>();
                    params.put("phone", phone);
                    params.put("password", password);

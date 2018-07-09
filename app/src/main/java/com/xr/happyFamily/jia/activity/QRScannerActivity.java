@@ -94,7 +94,6 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
         }
 
         viewfinderView = (ViewfinderView) findViewById(R.id.viewfinder_view);
-
         unbinder = ButterKnife.bind(this);
         init();
 
@@ -270,9 +269,18 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                             DeviceChild deviceChild = new DeviceChild();
                             deviceChild.setDeviceId(Integer.parseInt(deviceId));
                             deviceChild.setMacAddress(macAddress);
+                            deviceChild.setUserId(Integer.parseInt(userId));
                             deviceChild.setType(Integer.parseInt(typeType));
                             deviceChild.setName(deviceName);
                             deviceChild.setShareId(Long.MAX_VALUE);
+
+                            List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                            for (DeviceChild deviceChild2 : deviceChildren) {
+                                if (macAddress.equals(deviceChild2.getMacAddress())) {
+                                    deviceChildDao.delete(deviceChild2);
+                                    break;
+                                }
+                            }
                             deviceChildDao.insert(deviceChild);
                             int deviceType = deviceChild.getType();
 
@@ -291,7 +299,6 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                                 if (!success2) {
                                     mqService.subscribe(offlineTopicName, 1);
                                 }
-
                             }
                         }
                     }

@@ -766,13 +766,16 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 String returnCode=jsonObject.getString("returnCode");
                 if ("100".equals(returnCode)){
                     code=100;
+                    
                 }
                 Log.i("result","-->"+result);
             }catch (Exception e){
                 e.printStackTrace();
             }
+            
             return code;
         }
+        
 
         @Override
         protected void onPostExecute(Integer code) {

@@ -9,14 +9,14 @@ repositories {
 }
 
 greendao {
-    schemaVersion 15
+    schemaVersion 16
     daoPackage 'com.xr.database.dao'
     targetGenDir 'src/main/java'
 }
 android {
     signingConfigs {
         release {
-            storeFile file('D:/android/copy/HappyFamily/p99.jks')
+            storeFile file('F:/android/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
@@ -64,7 +64,6 @@ android {
     }
 }
 
-
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation 'com.android.support:support-v4:25.4.0'
@@ -107,10 +106,4 @@ dependencies {
     implementation files('libs/zxing.jar')
     implementation 'com.android.support:percent:24.2.0'
     implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-    implementation 'com.android.support:percent:25.2.0'
-    androidTestCompile('com.android.support.test.espresso:espresso-core:2.2.2', {
-        exclude group: 'com.android.support', module: 'support-annotations'
-    })
-    implementation 'com.tencent.mm.opensdk:wechat-sdk-android-with-mta:+'
-    implementation files('libs/ShareSDK-QQ-2.8.1.jar')
 }

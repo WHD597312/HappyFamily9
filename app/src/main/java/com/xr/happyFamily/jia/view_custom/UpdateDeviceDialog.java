@@ -22,7 +22,7 @@ import butterknife.OnClick;
  * 创建新家
  */
 public class UpdateDeviceDialog extends Dialog {
-    @BindView(R.id.et_homed_name)
+    @BindView(R.id.et_name)
     EditText et_name;
     @BindView(R.id.tv_dialog_qx)
     TextView button_cancel;
@@ -31,7 +31,6 @@ public class UpdateDeviceDialog extends Dialog {
     private String name;
     public UpdateDeviceDialog(@NonNull Context context) {
         super(context, R.style.MyDialog);
-
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -115,7 +115,6 @@ public class ClockActivity extends AppCompatActivity {
         }
         mContext = ClockActivity.this;
         setContentView(R.layout.activity_clock);
-        
         ButterKnife.bind(this);
 
         initView();

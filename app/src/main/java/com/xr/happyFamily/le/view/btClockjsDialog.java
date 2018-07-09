@@ -10,17 +10,12 @@ import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.SeekBar;
+
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.together.util.Utils;
-
-import java.util.List;
-import java.util.Map;
 import java.util.Random;
 
 import butterknife.BindView;

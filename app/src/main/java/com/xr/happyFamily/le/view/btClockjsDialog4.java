@@ -16,21 +16,11 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
-
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bean.ShopBean;
-import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
-
 import org.json.JSONObject;
-
 import java.io.IOException;
-import java.util.List;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -62,10 +52,6 @@ public class btClockjsDialog4 extends Dialog {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.fragment_le_zldialog4);
         ButterKnife.bind(this);
-//        Calendar calendar = Calendar.getInstance();
-//        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//        int minute=calendar.get(Calendar.MINUTE);
-//        tv_zl_time.setText(hour+":"+minute);
        new getMusicAsync().execute();
         audioMa = (AudioManager)mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume

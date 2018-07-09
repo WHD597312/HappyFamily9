@@ -155,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
                 break;
             case R.id.btn_login:
 
-                if (firstClick==1){
+
                     String phone = et_name.getText().toString().trim();
                     String password = et_pswd.getText().toString().trim();
                     if (TextUtils.isEmpty(phone)) {
@@ -169,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
                         Utils.showToast(this, "请输入密码");
                         break;
                     }
-
+                if (firstClick==1){
                     Map<String, Object> params = new HashMap<>();
                     params.put("phone", phone);
                     params.put("password", password);

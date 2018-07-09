@@ -32,7 +32,7 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     private Context context;
     private List<ClickFriendBean> data;
     private ButtonInterface buttonInterface;
-
+    private int selPosition=-1;
     private int defItem = -1;
     private OnItemListener onItemListener;
     private int type = 0;
@@ -79,7 +79,10 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     }
 
 
-
+    public void setSelection(int position){
+        this.selPosition = position;
+        notifyDataSetChanged();
+    }
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
@@ -94,14 +97,20 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
         final int[] sign = {0};
         final Drawable drawable_false = context.getResources().getDrawable(R.mipmap.ic_clock_qinglv_false);
         final Drawable drawable_true = context.getResources().getDrawable(R.mipmap.ic_clock_qinglv_true);
-        drawable_false.setBounds(0, 0, drawable_false.getMinimumWidth(), drawable_false.getMinimumHeight());
         drawable_true.setBounds(0, 0, drawable_true.getMinimumWidth(), drawable_true.getMinimumHeight());
-
-
+        drawable_false.setBounds(0, 0, drawable_false.getMinimumWidth(), drawable_false.getMinimumHeight());
+        if (selPosition==position)
+        {
+            holder.tv_name.setCompoundDrawables(null, null, drawable_true, null);
+        }else
+        {
+            holder.tv_name.setCompoundDrawables(null, null, drawable_false, null);
+        }
 
         holder.tv_name.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                setSelection(position);
                 if (sign[0] == 1) {
                     sign[0] = 0;
                     holder.tv_name.setCompoundDrawables(null, null, drawable_false, null);
@@ -112,9 +121,6 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
 
             }
         });
-
-
-
 
     }
 
@@ -157,5 +163,12 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
 
 
 
+    public String getMember(){
+        String member="0";
+        if (selPosition != -1) {
+        member=data.get(selPosition).getUserId()+"";
+        }
+        return member;
+    }
 
 }

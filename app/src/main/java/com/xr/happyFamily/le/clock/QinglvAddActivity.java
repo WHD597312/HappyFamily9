@@ -16,19 +16,24 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.le.adapter.ClockAddQinglvAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
+import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.QinglvTimepicker;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -77,6 +82,10 @@ public class QinglvAddActivity extends AppCompatActivity {
     ClockAddQinglvAdapter qinglvAdapter;
     String uesrId;
     MyDialog dialog;
+    Context mContext=QinglvAddActivity.this;
+    private ClockDaoImpl clockBeanDao;
+    private UserInfosDaoImpl userInfosDao;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +95,9 @@ public class QinglvAddActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         timeDao = new TimeDaoImpl(getApplicationContext());
+        clockBeanDao=new ClockDaoImpl(getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(getApplicationContext());
+
         times = new ArrayList<>();
 
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
@@ -149,15 +161,17 @@ public class QinglvAddActivity extends AppCompatActivity {
                 map.put("flag","别忘了明天的会议");
                 map.put("music","狼爱上羊");
                 map.put("switchs",1);
-//                String member=qinglvAdapter.getMember();
-//                if("0".equals(member)){
-//                    break;
-//                }else
-//                    map.put("clockMember",userId+","+member);
-//                Log.e("qqqqqqqMMMM",member);
-//                map.put("clockCreater",userId);
-//                map.put("clockType",2);
-//                new addClock().execute(map);
+                String member=qinglvAdapter.getMember();
+                if("0".equals(member)){
+                    break;
+                }else
+
+                    map.put("clockMember",userId+","+member);
+                Log.e("qqqqqqqMMMM",member);
+                map.put("clockCreater",userId);
+                map.put("clockType",3);
+                dialog.show();
+                new addClock().execute(map);
                 break;
         }
     }
@@ -412,6 +426,93 @@ public class QinglvAddActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 qinglvAdapter.notifyDataSetChanged();
 
+            }
+        }
+    }
+
+
+
+    class addClock extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "/happy/clock/addClock";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            Log.e("qqqqqqqRRR",result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                new getClocksByUserId().execute();
+            }
+        }
+    }
+
+
+
+
+    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+
+            String url = "/happy/clock/getClocksByUserId";
+            url = url + "?userId=" + userId;
+            String result = HttpUtils.doGet(mContext, url);
+            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    String retrunData=jsonObject.getString("returnData");
+                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("clockLovers");
+                    Gson gson = new Gson();
+                    clockBeanDao.deleteAll();
+                    userInfosDao.deleteAll();
+                    for (JsonElement user : list) {
+                        ClockBean userList = gson.fromJson(user, ClockBean.class);
+                        clockBeanDao.insert(userList);
+                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
+                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
+                        for (JsonElement myUserInfo : userInfoList) {
+                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
+                            userInfo1.setClockId(userList.getClockId());
+                            userInfosDao.insert(userInfo1);
+
+                        }
+                    }
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
+                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }

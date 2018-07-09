@@ -463,8 +463,6 @@ public class QunzuAddActivity extends AppCompatActivity {
     class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-
-
             String url = "/happy/clock/getClocksByUserId";
             url = url + "?userId=" + userId;
             String result = HttpUtils.doGet(mContext, url);
@@ -489,11 +487,8 @@ public class QunzuAddActivity extends AppCompatActivity {
                             UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
                             userInfo1.setClockId(userList.getClockId());
                             userInfosDao.insert(userInfo1);
-
                         }
                     }
-
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

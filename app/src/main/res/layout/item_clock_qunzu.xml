@@ -43,7 +43,7 @@
         android:layout_alignTop="@id/img1"
         android:layout_toRightOf="@id/img1"
         android:src="@mipmap/ic_touxiang_moren"
-        android:layout_marginLeft="@dimen/dp_jy_2"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         />
 
     <ImageView
@@ -55,7 +55,7 @@
         android:layout_alignTop="@id/img2"
         android:layout_toRightOf="@id/img2"
         android:src="@mipmap/ic_touxiang_moren"
-        android:layout_marginLeft="@dimen/dp_jy_2"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         />
 
     <ImageView
@@ -67,7 +67,7 @@
         android:layout_alignTop="@id/img3"
         android:layout_toRightOf="@id/img3"
         android:src="@mipmap/ic_touxiang_moren"
-        android:layout_marginLeft="@dimen/dp_jy_2"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         />
 
     <ImageView
@@ -79,7 +79,7 @@
         android:layout_alignTop="@id/img4"
         android:layout_toRightOf="@id/img4"
         android:src="@mipmap/ic_touxiang_moren"
-        android:layout_marginLeft="@dimen/dp_jy_2"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         />
       <TextView
           android:id="@+id/tv_context"

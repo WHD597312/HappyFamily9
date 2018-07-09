@@ -773,6 +773,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             }
             return code;
         }
+        
 
         @Override
         protected void onPostExecute(Integer code) {

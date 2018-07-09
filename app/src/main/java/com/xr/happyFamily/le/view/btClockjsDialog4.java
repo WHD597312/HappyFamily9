@@ -47,7 +47,7 @@ public class btClockjsDialog4 extends Dialog {
         super(context, R.style.MyDialog);
         mcontext=context;
     }
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -58,8 +58,6 @@ public class btClockjsDialog4 extends Dialog {
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
     }
-
-
 
 
     @Override

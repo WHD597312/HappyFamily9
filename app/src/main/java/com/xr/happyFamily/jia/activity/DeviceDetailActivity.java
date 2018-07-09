@@ -772,6 +772,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             }catch (Exception e){
                 e.printStackTrace();
             }
+            
             return code;
         }
         

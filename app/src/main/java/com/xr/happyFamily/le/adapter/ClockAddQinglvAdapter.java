@@ -83,7 +83,7 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        Log.e("qqqqqqIII",data.get(position).getHeadImgUrl());
+
         if(!Utils.isEmpty(data.get(position).getHeadImgUrl()))
         Picasso.with(context)
                 .load(data.get(position).getHeadImgUrl())

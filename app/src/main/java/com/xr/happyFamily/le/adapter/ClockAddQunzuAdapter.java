@@ -36,9 +36,11 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
     private OnItemListener onItemListener;
     private int type = 0;
 
+
     public ClockAddQunzuAdapter(Context context, List<ClickFriendBean> list) {
         this.context = context;
         this.data = list;
+
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -82,6 +84,7 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
         if(!Utils.isEmpty(data.get(position).getHeadImgUrl()))
             Picasso.with(context)
                     .load(data.get(position).getHeadImgUrl())
@@ -91,18 +94,17 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
 //        holder.tv_context.setText(data.get(position).get("context").toString());
         final int[] sign = {0};
 
-
-
-
         holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (sign[0] == 1) {
                     sign[0] = 0;
                     holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_false);
+                    data.get(position).setMemSign(0);
                 } else {
                     sign[0] = 1;
                     holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_true);
+                    data.get(position).setMemSign(1);
                 }
 
             }
@@ -152,11 +154,18 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
     }
 
 
-//    public String getMember(){
-//        for(int i=0;i<data.size();i++){
-//            String str=
-//        }
-//        return
-//    }
+    public String getMember(){
+        String str="";
+        for(int i=0;i<data.size();i++){
+            if (data.get(i).getMemSign()==1)
+            str=str+data.get(i).getUserId()+",";
+        }
+        if(str.length()<1){
+            Toast.makeText(context,"请选择添加成员",Toast.LENGTH_SHORT).show();
+            str="00";
+        }
+        return str.substring(0,str.length()-1);
+
+    }
 
 }

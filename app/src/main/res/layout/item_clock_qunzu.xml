@@ -24,61 +24,61 @@
         android:text="08:00"/>
     <ImageView
         android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_jy_39"
+        android:layout_height="@dimen/dp_jy_39"
         android:layout_alignLeft="@id/tv_time"
         android:layout_below="@id/tv_time"
         android:id="@+id/img1"
-        android:src="@mipmap/ic_touxiang_qunzu"
+        android:src="@mipmap/ic_touxiang_moren"
         android:layout_marginTop="@dimen/dp_jy_5"
         />
 
     <ImageView
         android:visibility="gone"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_jy_39"
+        android:layout_height="@dimen/dp_jy_39"
 
         android:layout_below="@id/tv_time"
         android:id="@+id/img2"
         android:layout_alignTop="@id/img1"
         android:layout_toRightOf="@id/img1"
-        android:src="@mipmap/ic_touxiang_qunzu"
+        android:src="@mipmap/ic_touxiang_moren"
         android:layout_marginLeft="@dimen/dp_jy_2"
         />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_jy_39"
+        android:layout_height="@dimen/dp_jy_39"
         android:visibility="gone"
         android:layout_below="@id/tv_time"
         android:id="@+id/img3"
         android:layout_alignTop="@id/img2"
         android:layout_toRightOf="@id/img2"
-        android:src="@mipmap/ic_touxiang_qunzu"
+        android:src="@mipmap/ic_touxiang_moren"
         android:layout_marginLeft="@dimen/dp_jy_2"
         />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_jy_39"
+        android:layout_height="@dimen/dp_jy_39"
         android:visibility="gone"
         android:layout_below="@id/tv_time"
         android:id="@+id/img4"
         android:layout_alignTop="@id/img3"
         android:layout_toRightOf="@id/img3"
-        android:src="@mipmap/ic_touxiang_qunzu"
+        android:src="@mipmap/ic_touxiang_moren"
         android:layout_marginLeft="@dimen/dp_jy_2"
         />
 
     <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="@dimen/dp_jy_39"
+        android:layout_height="@dimen/dp_jy_39"
         android:visibility="gone"
         android:layout_below="@id/tv_time"
         android:id="@+id/img5"
         android:layout_alignTop="@id/img4"
         android:layout_toRightOf="@id/img4"
-        android:src="@mipmap/ic_touxiang_qunzu"
+        android:src="@mipmap/ic_touxiang_moren"
         android:layout_marginLeft="@dimen/dp_jy_2"
         />
       <TextView

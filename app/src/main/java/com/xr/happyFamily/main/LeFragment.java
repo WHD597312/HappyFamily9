@@ -1,12 +1,15 @@
 package com.xr.happyFamily.main;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -19,10 +22,14 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.le.ClockActivity;
+import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -37,6 +44,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.content.Context.MODE_PRIVATE;
 
 public class LeFragment extends Fragment {
 
@@ -81,6 +90,12 @@ public class LeFragment extends Fragment {
     Unbinder unbinder;
     private MyDialog dialog;
 
+
+    SharedPreferences preferences;
+    String userId;
+    private ClockDaoImpl clockBeanDao;
+    private UserInfosDaoImpl userInfosDao;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -94,6 +109,12 @@ public class LeFragment extends Fragment {
         dialog.show();
 
         new getAdByPageAsync().execute();
+
+        clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
+        preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        userId= preferences.getString("userId","");
+        new getClocksByUserId().execute();
         return view;
     }
 
@@ -248,6 +269,59 @@ public class LeFragment extends Fragment {
                 initView();//初始化View，设置适配器
                 autoPlayView();//开启线程，自动播放
 
+
+            }
+        }
+    }
+
+
+
+
+    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+
+            String url = "/happy/clock/getClocksByUserId";
+            url = url + "?userId=" + userId;
+            String result = HttpUtils.doGet(getActivity(), url);
+            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    String retrunData=jsonObject.getString("returnData");
+                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("clockGroup");
+                    Gson gson = new Gson();
+                    clockBeanDao.deleteAll();
+                    userInfosDao.deleteAll();
+                    for (JsonElement user : list) {
+                        ClockBean userList = gson.fromJson(user, ClockBean.class);
+                        clockBeanDao.insert(userList);
+                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
+                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
+                        for (JsonElement myUserInfo : userInfoList) {
+                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
+                            userInfo1.setClockId(userList.getClockId());
+                            userInfosDao.insert(userInfo1);
+
+                        }
+                    }
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
 
             }
         }

@@ -16,17 +16,22 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.adapter.ClockAddQunzuAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
+import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.QunzuTimepicker;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -75,6 +80,10 @@ public class QunzuAddActivity extends AppCompatActivity {
 
     ClockAddQunzuAdapter qunzuAdapter;
     MyDialog dialog;
+    Context mContext=QunzuAddActivity.this;
+
+    private ClockDaoImpl clockBeanDao;
+    private UserInfosDaoImpl userInfosDao;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -85,6 +94,8 @@ public class QunzuAddActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         timeDao = new TimeDaoImpl(getApplicationContext());
+        clockBeanDao=new ClockDaoImpl(getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(getApplicationContext());
         times = new ArrayList<>();
 
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
@@ -119,12 +130,13 @@ public class QunzuAddActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_add:
-                startActivity(new Intent(QunzuAddActivity.this,FriendFindActivity.class));
+                startActivity(new Intent(mContext,FriendFindActivity.class));
                 break;
             case R.id.tv_lrsd_qx:
                 finish();
                 break;
             case R.id.tv_lrsd_qd:
+
                 hour = timeLe1.getValue();
                 minutes = timeLe2.getValue();
 //                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
@@ -149,11 +161,17 @@ public class QunzuAddActivity extends AppCompatActivity {
                 map.put("flag","别忘了明天的会议");
                 map.put("music","狼爱上羊");
                 map.put("switchs",1);
+                String member=qunzuAdapter.getMember();
+                if("0".equals(member)){
+                    break;
+                }else
 
-//                map.put("clockMember",qunzuAdapter.getMember());
+                map.put("clockMember",userId+","+member);
+                Log.e("qqqqqqqMMMM",member);
                 map.put("clockCreater",userId);
                 map.put("clockType",2);
-                finish();
+                dialog.show();
+                new addClock().execute(map);
                 break;
         }
     }
@@ -372,7 +390,7 @@ public class QunzuAddActivity extends AppCompatActivity {
 
             String url = "/happy/clock/getClockFriends";
             url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(QunzuAddActivity.this, url);
+            String result = HttpUtils.doGet(mContext, url);
             Log.e("qqqqqqqqRRR",userId+"?"+result);
             String code = "";
             try {
@@ -386,6 +404,7 @@ public class QunzuAddActivity extends AppCompatActivity {
                     for (JsonElement user : list) {
                         //通过反射 得到UserBean.class
                         ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
+                        userList.setMemSign(0);
                         list_friend.add(userList);
                     }
 
@@ -404,6 +423,91 @@ public class QunzuAddActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 qunzuAdapter.notifyDataSetChanged();
 
+            }
+        }
+    }
+
+    class addClock extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+            Map<String, Object> params = maps[0];
+            String url = "/happy/clock/addClock";
+            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            Log.e("qqqqqqqRRR",result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                new getClocksByUserId().execute();
+            }
+        }
+    }
+
+
+
+
+    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+
+
+            String url = "/happy/clock/getClocksByUserId";
+            url = url + "?userId=" + userId;
+            String result = HttpUtils.doGet(mContext, url);
+            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+                    String retrunData=jsonObject.getString("returnData");
+                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
+                    JsonArray list = content.getAsJsonArray("clockGroup");
+                    Gson gson = new Gson();
+                    clockBeanDao.deleteAll();
+                    userInfosDao.deleteAll();
+                    for (JsonElement user : list) {
+                        ClockBean userList = gson.fromJson(user, ClockBean.class);
+                        clockBeanDao.insert(userList);
+                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
+                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
+                        for (JsonElement myUserInfo : userInfoList) {
+                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
+                            userInfo1.setClockId(userList.getClockId());
+                            userInfosDao.insert(userInfo1);
+
+                        }
+                    }
+
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
+                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
+                finish();
             }
         }
     }

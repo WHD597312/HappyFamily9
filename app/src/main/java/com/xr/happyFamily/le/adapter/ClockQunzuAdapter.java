@@ -55,11 +55,8 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
         this.context = context;
         this.clockBeanList = clockBeanList;
         this.userInfoList = userInfoList;
+        getData();
     }
-
-
-
-
 
 
 
@@ -91,19 +88,25 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
     }
 
 
-    public void getData(){
+    public void getData() {
+        clockBeanList=new ArrayList<>();
         clockBeanDao=new ClockDaoImpl(context.getApplicationContext());
-        userInfosDao=new UserInfosDaoImpl(context.getApplicationContext());
-        clockBeanList=clockBeanDao.findAll();
-        userInfoList=userInfosDao.findAll();
+        userInfosDao = new UserInfosDaoImpl(context.getApplicationContext());
+        List<ClockBean> allClockList=clockBeanDao.findAll();
+        for(int i=0;i<allClockList.size();i++){
+            if (allClockList.get(i).getClockType()==2)
+                clockBeanList.add(allClockList.get(i));
+        }
 
-        Log.e("qqqqqqqSSSNNNNNNNNN",clockBeanList.size()+"???");
+        Log.e("qqqqqqSSSSQQQ",clockBeanList.size()+"??????"+allClockList.size());
+
+        userInfoList = userInfosDao.findAll();
     }
 
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        getData();
+
         String hourStr="";
         int hour=clockBeanList.get(position).getClockHour();
         if(hour<10){

@@ -78,7 +78,7 @@ public class QunZuFragment extends BaseFragment  {
         tcTime.setFormat12Hour(null);
         tcTime.setFormat24Hour("HH:mm");
 
-        List<Map<String, Object>> qunzuList = new ArrayList<>();
+
 
         clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
         userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
@@ -89,19 +89,6 @@ public class QunZuFragment extends BaseFragment  {
 
     }
 
-
-    public String setStringTime(int h, int m) {
-        String str = "";
-        if (h < 10)
-            str = "0" + h;
-        else
-            str = h + "";
-        if (m < 10)
-            str = str + ":0" + m;
-        else
-            str = str + ":" + m;
-        return str;
-    }
 
     @Override
     public void onDestroyView() {
@@ -138,6 +125,7 @@ public class QunZuFragment extends BaseFragment  {
         userInfoList=new ArrayList<>();
         allClockList=clockBeanDao.findAll();
         allUserInfoList=userInfosDao.findAll();
+        Log.e("qqqqqqqqqxxxxx",allClockList.size()+"???");
         for(int i=0;i<allClockList.size();i++){
             if (allClockList.get(i).getClockType()==2) {
                 clockBeanList.add(allClockList.get(i));

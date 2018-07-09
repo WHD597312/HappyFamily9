@@ -86,7 +86,7 @@ import butterknife.Unbinder;
  * Created by win7 on 2018/5/22.
  */
 
-public class ClockActivity extends AppCompatActivity {
+public class ClockActivity extends AppCompatActivity implements LeFragmentManager.CallValueValue{
 
 
     ;
@@ -209,6 +209,17 @@ public class ClockActivity extends AppCompatActivity {
     public void upData(){
         qunZuFragment.upData();
     }
+    public void upQinglvData(){
+        qingLvFragment.upData();
+    }
 
 
+    @Override
+    public void setPosition(int position) {
+        if (position>=1){
+            tl_flower.setVisibility(View.GONE);
+        }else if(position==0){
+            tl_flower.setVisibility(View.VISIBLE);
+        }
+    }
 }

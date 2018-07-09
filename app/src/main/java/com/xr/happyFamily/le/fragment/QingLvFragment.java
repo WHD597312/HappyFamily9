@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,12 +14,18 @@ import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.adapter.ClockQinglvAdapter;
 
+import com.xr.happyFamily.le.adapter.ClockQunzuAdapter;
 import com.xr.happyFamily.le.clock.MsgActivity;
 import com.xr.happyFamily.le.clock.QinglvAddActivity;
+import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.TimeBar;
 
 import java.util.ArrayList;
@@ -57,6 +64,8 @@ public class QingLvFragment extends BaseFragment  {
 
     private TimeBar timeBar;
     private ClockQinglvAdapter qinglvAdapter;
+    private ClockDaoImpl clockBeanDao;
+    private UserInfosDaoImpl userInfosDao;
 
     @Nullable
     @Override
@@ -65,71 +74,18 @@ public class QingLvFragment extends BaseFragment  {
         View view = inflater.inflate(R.layout.fragment_clock_qinglv, container, false);
         unbinder = ButterKnife.bind(this, view);
         timeBar = (TimeBar) view.findViewById(R.id.arcprogressBar);
-        List<Map<String, Object>> qinglvList = new ArrayList<>();
         tcTime.setFormat12Hour(null);
         tcTime.setFormat24Hour("HH:mm");
-        int[][] time = new int[3][2];
-        int[] h = new int[3];
-        int[] m = new int[3];
-        h[0] = 8;
-        m[0] = 30;
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("name", "亲爱的");
-        map1.put("time", setStringTime(h[0], m[0]));
-        map1.put("context", "起床啦，起床啦");
-        map1.put("day", "周一 周二 周三 周四 周五");
-        map1.put("sign", 1);
 
-        h[1] = 12;
-        m[1] = 00;
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("name", "二宝");
-        map2.put("time", setStringTime(h[1], m[1]));
-        map2.put("context", "睡觉");
-        map2.put("day", "周一");
-        map2.put("sign", 0);
+        clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
 
-        h[2] = 22;
-        m[2] = 30;
-        Map<String, Object> map3 = new HashMap<>();
-        map3.put("name", "二宝");
-        map3.put("time", setStringTime(h[2], m[2]));
-        map3.put("context", "打飞机时间");
-        map3.put("day", "每天");
-        map3.put("sign", 1);
 
-        qinglvList.add(map1);
-        qinglvList.add(map2);
-        qinglvList.add(map3);
 
-        for (int i = 0; i < 3; i++) {
-            time[i][0] = h[i];
-            time[i][1] = m[i];
-        }
-
-        timeBar.setTime(time,1);
-
-        qinglvAdapter = new ClockQinglvAdapter(getActivity(), qinglvList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(qinglvAdapter);
         return view;
 
     }
 
-
-    public String setStringTime(int h, int m) {
-        String str = "";
-        if (h < 10)
-            str = "0" + h;
-        else
-            str = h + "";
-        if (m < 10)
-            str = str + ":0" + m;
-        else
-            str = str + ":" + m;
-        return str;
-    }
 
     @Override
     public void onDestroyView() {
@@ -158,4 +114,46 @@ public class QingLvFragment extends BaseFragment  {
         }
     }
 
+    List<ClockBean> clockBeanList;
+    List<UserInfo> userInfoList;
+
+    List<ClockBean> allClockList;
+    List<UserInfo> allUserInfoList;
+    private void upClock(){
+        clockBeanList=new ArrayList<>();
+        userInfoList=new ArrayList<>();
+        allClockList=clockBeanDao.findAll();
+        allUserInfoList=userInfosDao.findAll();
+        Log.e("qqqqqqqqqxxxxx",allClockList.size()+"???");
+        for(int i=0;i<allClockList.size();i++){
+            if (allClockList.get(i).getClockType()==3) {
+                clockBeanList.add(allClockList.get(i));
+                for(int j=0;j<allUserInfoList.size();j++){
+                    if (allUserInfoList.get(j).getClockId()==allClockList.get(i).getClockId())
+                        userInfoList.add(allUserInfoList.get(j));
+                }
+            }
+        }
+
+        Log.e("qqqqqqqqqxxxxx",clockBeanList.size()+"?");
+        int[][] time=new int[clockBeanList.size()][2];
+        for(int i=0;i<clockBeanList.size();i++){
+            time[i][0]=clockBeanList.get(i).getClockHour();
+            time[i][1]=clockBeanList.get(i).getClockMinute();
+        }
+        timeBar.setTime(time,1);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        upClock();
+        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList,userInfoList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(qinglvAdapter);
+    }
+
+    public void upData(){
+        upClock();
+    }
 }

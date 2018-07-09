@@ -11,10 +11,12 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -27,6 +29,7 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQunzuAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
 import com.xr.happyFamily.le.pojo.ClockBean;
@@ -40,7 +43,6 @@ import com.xr.happyFamily.together.util.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -67,6 +69,10 @@ public class QunzuAddActivity extends AppCompatActivity {
     LinearLayout sdclockLayoutMian;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.tv_tag)
+    TextView tvTag;
+    @BindView(R.id.rl_bjtime_bq)
+    RelativeLayout rlBjtimeBq;
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
@@ -80,7 +86,7 @@ public class QunzuAddActivity extends AppCompatActivity {
 
     ClockAddQunzuAdapter qunzuAdapter;
     MyDialog dialog;
-    Context mContext=QunzuAddActivity.this;
+    Context mContext = QunzuAddActivity.this;
 
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
@@ -94,12 +100,12 @@ public class QunzuAddActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         timeDao = new TimeDaoImpl(getApplicationContext());
-        clockBeanDao=new ClockDaoImpl(getApplicationContext());
-        userInfosDao=new UserInfosDaoImpl(getApplicationContext());
+        clockBeanDao = new ClockDaoImpl(getApplicationContext());
+        userInfosDao = new UserInfosDaoImpl(getApplicationContext());
         times = new ArrayList<>();
 
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
-        userId= preferences.getString("userId","");
+        userId = preferences.getString("userId", "");
 
         times = timeDao.findByAllTime();
         timeLe1.setMaxValue(23);
@@ -117,8 +123,8 @@ public class QunzuAddActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 
-        qunzuAdapter=new ClockAddQunzuAdapter(this,list_friend);
-         mLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
+        qunzuAdapter = new ClockAddQunzuAdapter(this, list_friend);
+        mLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(qunzuAdapter);
         dialog = MyDialog.showDialog(this);
@@ -126,14 +132,18 @@ public class QunzuAddActivity extends AppCompatActivity {
         new getClockFriends().execute();
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd,R.id.img_add})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_add:
-                startActivity(new Intent(mContext,FriendFindActivity.class));
+                startActivity(new Intent(mContext, FriendFindActivity.class));
                 break;
             case R.id.tv_lrsd_qx:
                 finish();
+                break;
+            case R.id.rl_bjtime_bq:
+                Intent intent2 = new Intent(this, bqOfColckActivity.class);
+                startActivityForResult(intent2, 101);
                 break;
             case R.id.tv_lrsd_qd:
 
@@ -154,22 +164,27 @@ public class QunzuAddActivity extends AppCompatActivity {
 //                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
 //                setResult(600);
 
-                Map map=new HashMap();
-                map.put("clockHour",hour);
-                map.put("clockMinute",minutes);
-                map.put("clockDay","0");
-                map.put("flag","别忘了明天的会议");
-                map.put("music","狼爱上羊");
-                map.put("switchs",1);
-                String member=qunzuAdapter.getMember();
-                if("0".equals(member)){
+                Map map = new HashMap();
+                map.put("clockHour", hour);
+                map.put("clockMinute", minutes);
+                map.put("clockDay", "0");
+                if("请填写标签".equals(tvTag.getText().toString()))
+                {
+                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
                     break;
                 }else
+                    map.put("flag", tvTag.getText().toString());
+                map.put("music", "狼爱上羊");
+                map.put("switchs", 1);
+                String member = qunzuAdapter.getMember();
+                if ("0".equals(member)) {
+                    break;
+                } else
 
-                map.put("clockMember",userId+","+member);
-                Log.e("qqqqqqqMMMM",member);
-                map.put("clockCreater",userId);
-                map.put("clockType",2);
+                    map.put("clockMember", userId + "," + member);
+                Log.e("qqqqqqqMMMM", member);
+                map.put("clockCreater", userId);
+                map.put("clockType", 2);
                 dialog.show();
                 new addClock().execute(map);
                 break;
@@ -382,7 +397,8 @@ public class QunzuAddActivity extends AppCompatActivity {
 //        buttonqx.setOnClickListener(listener);
 //    }
 
-    List<ClickFriendBean> list_friend=new ArrayList<>();
+    List<ClickFriendBean> list_friend = new ArrayList<>();
+
     class getClockFriends extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -391,7 +407,7 @@ public class QunzuAddActivity extends AppCompatActivity {
             String url = "/happy/clock/getClockFriends";
             url = url + "?userId=" + userId;
             String result = HttpUtils.doGet(mContext, url);
-            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            Log.e("qqqqqqqqRRR", userId + "?" + result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
@@ -434,7 +450,7 @@ public class QunzuAddActivity extends AppCompatActivity {
             Map<String, Object> params = maps[0];
             String url = "/happy/clock/addClock";
             String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
-            Log.e("qqqqqqqRRR",result);
+            Log.e("qqqqqqqRRR", result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
@@ -458,23 +474,19 @@ public class QunzuAddActivity extends AppCompatActivity {
     }
 
 
-
-
     class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-
-
             String url = "/happy/clock/getClocksByUserId";
             url = url + "?userId=" + userId;
             String result = HttpUtils.doGet(mContext, url);
-            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            Log.e("qqqqqqqqRRR", userId + "?" + result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                    String retrunData=jsonObject.getString("returnData");
+                    String retrunData = jsonObject.getString("returnData");
                     JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
                     JsonArray list = content.getAsJsonArray("clockGroup");
                     Gson gson = new Gson();
@@ -489,11 +501,8 @@ public class QunzuAddActivity extends AppCompatActivity {
                             UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
                             userInfo1.setClockId(userList.getClockId());
                             userInfosDao.insert(userInfo1);
-
                         }
                     }
-
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -509,6 +518,18 @@ public class QunzuAddActivity extends AppCompatActivity {
                 Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
                 finish();
             }
+        }
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (resultCode == 666&&requestCode == 101 ) {
+            String text = data.getStringExtra("text");
+            Log.i("text", "onCreate: -->22222"+text);
+            tvTag.setText(text);
         }
     }
 }

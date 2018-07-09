@@ -3,6 +3,7 @@ package com.xr.happyFamily.jia.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -37,6 +38,7 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
     private int type = 0;
     private String shopId;
     private int clicked;
+    private SharedPreferences mPositionPreferences;
 
     public ChooseHouseAdapter(Context context, List<Hourse> list) {
         this.context = context;
@@ -114,8 +116,9 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
                     intent.putExtra("houseAddress", houseAddress);
                     intent.putExtra("houseId", houseId);
                     context.startActivity(intent);
-
                 } else if (sign == 2) {
+                    mPositionPreferences = context.getSharedPreferences("position", Context.MODE_PRIVATE);
+                    mPositionPreferences.edit().clear().commit();
                     HourseDaoImpl hourseDao = new HourseDaoImpl(context);
                     List<Hourse> houses = hourseDao.findAllHouse();
                     Hourse house = houses.get(position);

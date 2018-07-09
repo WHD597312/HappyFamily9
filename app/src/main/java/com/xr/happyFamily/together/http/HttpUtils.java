@@ -671,9 +671,13 @@ public class HttpUtils {
     }
 
     public static String upLoadFile(String url, String fileNmae, File file) {
+        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
+        String token =my.getString("token","");
         String result = null;
         try {
             com.squareup.okhttp.Response response = OkHttpUtils.post()
+                    .addHeader("authorization",token)
                     .addHeader(" content-type", "multipart/form-data")
                     .addFile("file", fileNmae, file)
                     .url(url)

@@ -3,6 +3,8 @@ package com.xr.happyFamily.le.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
+import android.os.Message;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -16,38 +18,52 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.squareup.picasso.Picasso;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
+import com.xr.happyFamily.le.ClockActivity;
+import com.xr.happyFamily.le.clock.QunzuAddActivity;
+import com.xr.happyFamily.le.fragment.QunZuFragment;
+import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 //快递列表适配器
 
 public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.MyViewHolder> implements View.OnClickListener {
-    private Context context;
-    private List<Map<String, Object>> data;
+    private ClockActivity context;
     private ButtonInterface buttonInterface;
-
+    List<ClockBean> clockBeanList;
+    List<UserInfo> userInfoList;
     private int defItem = -1;
-    private OnItemListener onItemListener;
+
     private int type = 0;
+    private ClockDaoImpl clockBeanDao;
+    private UserInfosDaoImpl userInfosDao;
 
-    public ClockQunzuAdapter(Context context, List<Map<String, Object>> list) {
+    public ClockQunzuAdapter(ClockActivity context, List<ClockBean> clockBeanList,List<UserInfo> userInfoList) {
         this.context = context;
-        this.data = list;
-    }
-
-    public void setOnItemListener(OnItemListener onItemListener) {
-        this.onItemListener = onItemListener;
+        this.clockBeanList = clockBeanList;
+        this.userInfoList = userInfoList;
     }
 
 
-    public interface OnItemListener {
-        void onClick(View v, int pos, String projectc);
-    }
 
-    public void setDefSelect(int position) {
+
+
+
+
+        public void setDefSelect(int position) {
         this.defItem = position;
         notifyDataSetChanged();
     }
@@ -75,18 +91,58 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
     }
 
 
+    public void getData(){
+        clockBeanDao=new ClockDaoImpl(context.getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(context.getApplicationContext());
+        clockBeanList=clockBeanDao.findAll();
+        userInfoList=userInfosDao.findAll();
+
+        Log.e("qqqqqqqSSSNNNNNNNNN",clockBeanList.size()+"???");
+    }
 
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        holder.tv_time.setText(data.get(position).get("time").toString());
-        holder.tv_context.setText(data.get(position).get("context").toString());
+        getData();
+        String hourStr="";
+        int hour=clockBeanList.get(position).getClockHour();
+        if(hour<10){
+            hourStr="0"+hour;
+        }else hourStr=hour+"";
+        String minStr="";
+        int min=clockBeanList.get(position).getClockMinute();
+        if(min<10){
+            minStr="0"+min;
+        }else minStr=min+"";
+        holder.tv_time.setText(hourStr+":"+minStr);
+        holder.tv_context.setText(clockBeanList.get(position).getFlag());
 
-        for(int i=0;i<Integer.parseInt(data.get(position).get("size").toString());i++){
+        List<UserInfo> myUserInfoList=new ArrayList<>();
+
+            for(int j=0;j<userInfoList.size();j++){
+                if (userInfoList.get(j).getClockId()==clockBeanList.get(position).getClockId())
+                    myUserInfoList.add(userInfoList.get(j));
+            }
+
+            int size=0;
+        if(myUserInfoList.size()<5) {
+           size=myUserInfoList.size();
+        }else
+            size=5;
+        for(int a=0;a<5;a++)
+            holder.imgs[a].setVisibility(View.GONE);
+        for (int i = 0; i < size; i++) {
+
             holder.imgs[i].setVisibility(View.VISIBLE);
+
+            if (!Utils.isEmpty(myUserInfoList.get(i).getHeadImgUrl()))
+                Picasso.with(context)
+                        .load(myUserInfoList.get(position).getHeadImgUrl())
+                        .error(R.mipmap.ic_touxiang_moren)
+                        .into(holder.imgs[i]);
         }
 
-        final int[] sign = {Integer.parseInt(data.get(position).get("sign") + "")};
+        final int[] sign = {Integer.parseInt(clockBeanList.get(position).getSwitchs() + "")};
 
 
             if (sign[0] == 0)
@@ -111,25 +167,16 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
             }
         });
 
-        holder.img_btn.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                showPopup();
-                return false;
-            }
-        });
-
         holder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Toast.makeText(context,"查看详情"+position,Toast.LENGTH_SHORT).show();
             }
         });
-
         holder.rl_item.setOnLongClickListener(new View.OnLongClickListener() {
             @Override
             public boolean onLongClick(View v) {
-                showPopup();
+                showPopup(position);
                 return false;
             }
         });
@@ -148,7 +195,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
 
     @Override
     public int getItemCount() {
-        return data.size();
+        return clockBeanList.size();
     }
 
     /**
@@ -188,7 +235,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
     private PopupWindow mPopWindow;
     private TextView tv_quxiao, tv_queding, tv_context;
 
-    private void showPopup() {
+    private void showPopup(final int pos) {
         contentViewSign = LayoutInflater.from(context).inflate(R.layout.popup_main, null);
         tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
@@ -202,9 +249,11 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
         tv_queding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context, "删除闹钟成功", Toast.LENGTH_SHORT).show();
-                mPopWindow.dismiss();
-                notifyDataSetChanged();
+                delPos=pos;
+                clockCreater=clockBeanList.get(pos).getClockCreater();
+                clockId=clockBeanList.get(pos).getClockId();
+                new deleteClock().execute();
+
                 //刷新数据
             }
         });
@@ -243,4 +292,42 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
         }
 
     }
+
+
+
+    private int clockCreater , clockId,delPos;
+    class deleteClock extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String url = "/happy/clock/deleteClock";
+            url=url+"?clockCreater="+clockCreater+"&clockId="+clockId;
+            String result = HttpUtils.doGet(context, url);
+            Log.e("qqqqqqqRRR",result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Toast.makeText(context, "删除闹钟成功", Toast.LENGTH_SHORT).show();
+                clockBeanDao.delete(clockBeanList.get(delPos));
+                clockBeanList.remove(clockBeanList.get(delPos));
+                context.upData();
+                mPopWindow.dismiss();
+                notifyDataSetChanged();
+            }
+        }
+    }
+
 }

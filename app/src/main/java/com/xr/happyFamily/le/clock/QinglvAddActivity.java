@@ -40,6 +40,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -73,7 +74,7 @@ public class QinglvAddActivity extends AppCompatActivity {
     private AlarmManager am;
     private PendingIntent pendingIntent;
     private NotificationManager notificationManager;
-    ClockAddQinglvAdapter addQinglvAdapter;
+    ClockAddQinglvAdapter qinglvAdapter;
     String uesrId;
     MyDialog dialog;
     @Override
@@ -108,10 +109,10 @@ public class QinglvAddActivity extends AppCompatActivity {
         dialog = MyDialog.showDialog(this);
         dialog.show();
         new getClockFriends().execute();
-        addQinglvAdapter = new ClockAddQinglvAdapter(this, list_friend);
+        qinglvAdapter = new ClockAddQinglvAdapter(this, list_friend);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(addQinglvAdapter);
+        recyclerView.setAdapter(qinglvAdapter);
     }
 
     @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd,R.id.img_add})
@@ -126,21 +127,37 @@ public class QinglvAddActivity extends AppCompatActivity {
             case R.id.tv_lrsd_qd:
                 hour = timeLe1.getValue();
                 minutes = timeLe2.getValue();
-                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
-                if (time == null) {
-                    time = new Time();
-                }
-                time.setHour(hour);
-                time.setMinutes(minutes);
-                timeDao.insert(time);
-                Calendar c = Calendar.getInstance();//c：当前系统时间
-                c.set(Calendar.HOUR_OF_DAY, hour);//把小时设为你选择的小时
-                c.set(Calendar.MINUTE, minutes);
-                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0x101, new Intent("com.zking.android29_alarm_notification.RING"), 0);//上下文 请求码  启动哪一个广播 标志位
-                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
-                setResult(600);
-                finish();
+//                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
+//                if (time == null) {
+//                    time = new Time();
+//                }
+//                time.setHour(hour);
+//                time.setMinutes(minutes);
+//                timeDao.insert(time);
+//                Calendar c = Calendar.getInstance();//c：当前系统时间
+//                c.set(Calendar.HOUR_OF_DAY, hour);//把小时设为你选择的小时
+//                c.set(Calendar.MINUTE, minutes);
+//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0x101, new Intent("com.zking.android29_alarm_notification.RING"), 0);//上下文 请求码  启动哪一个广播 标志位
+//                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
+//                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
+//                setResult(600);
+
+                Map map=new HashMap();
+                map.put("clockHour",hour);
+                map.put("clockMinute",minutes);
+                map.put("clockDay","0");
+                map.put("flag","别忘了明天的会议");
+                map.put("music","狼爱上羊");
+                map.put("switchs",1);
+//                String member=qinglvAdapter.getMember();
+//                if("0".equals(member)){
+//                    break;
+//                }else
+//                    map.put("clockMember",userId+","+member);
+//                Log.e("qqqqqqqMMMM",member);
+//                map.put("clockCreater",userId);
+//                map.put("clockType",2);
+//                new addClock().execute(map);
                 break;
         }
     }
@@ -376,6 +393,7 @@ public class QinglvAddActivity extends AppCompatActivity {
                     for (JsonElement user : list) {
                         //通过反射 得到UserBean.class
                         ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
+                        userList.setMemSign(0);
                         list_friend.add(userList);
                     }
 
@@ -392,10 +410,9 @@ public class QinglvAddActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
-                addQinglvAdapter.notifyDataSetChanged();
+                qinglvAdapter.notifyDataSetChanged();
 
             }
         }
     }
-
 }

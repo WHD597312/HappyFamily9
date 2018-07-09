@@ -19,6 +19,15 @@ public class ClickFriendBean implements Serializable{
     private String phone;
     private boolean sex;
     private int age;
+    private int memSign;
+    public void setMemSign(int memSign) {
+        this.memSign = memSign;
+    }
+    public int getMemSign() {
+        return memSign;
+    }
+
+
     public void setUserId(int userId) {
         this.userId = userId;
     }

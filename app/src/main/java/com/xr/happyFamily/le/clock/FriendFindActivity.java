@@ -110,6 +110,7 @@ public class FriendFindActivity extends AppCompatActivity {
                     for (JsonElement user : list) {
                         //通过反射 得到UserBean.class
                         ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
+                        userList.setMemSign(0);
                         list_friend.add(userList);
                     }
 

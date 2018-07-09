@@ -137,6 +137,7 @@ public class FriendAddActivity extends AppCompatActivity {
                     for (JsonElement user : list) {
                         //通过反射 得到UserBean.class
                         ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
+                        userList.setMemSign(0);
                         list_friend.add(userList);
                     }
 
@@ -151,10 +152,9 @@ public class FriendAddActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            MyDialog.closeDialog(dialog);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
                Toast.makeText(mContext,"发送好友申请成功",Toast.LENGTH_SHORT).show();
-
             }else { Toast.makeText(mContext,returnMsg,Toast.LENGTH_SHORT).show();
 
             }

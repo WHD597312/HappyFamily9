@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -13,13 +14,19 @@ import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
 
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQunzuAdapter;
 import com.xr.happyFamily.le.adapter.ClockQinglvAdapter;
 import com.xr.happyFamily.le.adapter.ClockQunzuAdapter;
+import com.xr.happyFamily.le.bean.MyClockBean;
 import com.xr.happyFamily.le.clock.MsgActivity;
 import com.xr.happyFamily.le.clock.QunzuAddActivity;
+import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.TimeBar;
 
 import java.util.ArrayList;
@@ -58,6 +65,9 @@ public class QunZuFragment extends BaseFragment  {
 
     private TimeBar timeBar;
     private ClockQunzuAdapter qunzuAdapter;
+    private ClockDaoImpl clockBeanDao;
+    private UserInfosDaoImpl userInfosDao;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -70,48 +80,11 @@ public class QunZuFragment extends BaseFragment  {
 
         List<Map<String, Object>> qunzuList = new ArrayList<>();
 
-        int[][] time = new int[3][2];
-        int[] h = new int[3];
-        int[] m = new int[3];
-        h[0] = 6;
-        m[0] = 30;
-        Map<String, Object> map1 = new HashMap<>();
-        map1.put("size", 3);
-        map1.put("time", setStringTime(h[0], m[0]));
-        map1.put("context", "起床啦，起床啦");
-        map1.put("sign", 0);
+        clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
 
-        h[1] = 9;
-        m[1] = 00;
-        Map<String, Object> map2 = new HashMap<>();
-        map2.put("size", 2);
-        map2.put("time", setStringTime(h[1], m[1]));
-        map2.put("context", "睡觉");
-        map2.put("sign", 1);
 
-        h[2] = 19;
-        m[2] = 30;
-        Map<String, Object> map3 = new HashMap<>();
-        map3.put("size", 4);
-        map3.put("time", setStringTime(h[2], m[2]));
-        map3.put("context", "打飞机时间");
-        map3.put("sign", 1);
 
-        qunzuList.add(map1);
-        qunzuList.add(map2);
-        qunzuList.add(map3);
-
-        for (int i = 0; i < 3; i++) {
-            time[i][0] = h[i];
-            time[i][1] = m[i];
-        }
-
-        timeBar.setTime(time,0);
-
-        qunzuAdapter = new ClockQunzuAdapter(getActivity(), qunzuList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(qunzuAdapter);
         return view;
 
     }
@@ -154,4 +127,45 @@ public class QunZuFragment extends BaseFragment  {
         }
     }
 
+
+    List<ClockBean> clockBeanList;
+    List<UserInfo> userInfoList;
+
+    List<ClockBean> allClockList;
+    List<UserInfo> allUserInfoList;
+    private void upClock(){
+        clockBeanList=new ArrayList<>();
+        userInfoList=new ArrayList<>();
+        allClockList=clockBeanDao.findAll();
+        allUserInfoList=userInfosDao.findAll();
+        for(int i=0;i<allClockList.size();i++){
+            if (allClockList.get(i).getClockType()==2) {
+                clockBeanList.add(allClockList.get(i));
+                for(int j=0;j<allUserInfoList.size();j++){
+                    if (allUserInfoList.get(j).getClockId()==allClockList.get(i).getClockId())
+                        userInfoList.add(allUserInfoList.get(j));
+                }
+            }
+        }
+        Log.e("qqqqqqqSSS",clockBeanList.size()+"????222222");
+        int[][] time=new int[clockBeanList.size()][2];
+        for(int i=0;i<clockBeanList.size();i++){
+            time[i][0]=clockBeanList.get(i).getClockHour();
+            time[i][1]=clockBeanList.get(i).getClockMinute();
+        }
+        timeBar.setTime(time,0);
+    }
+    @Override
+    public void onStart() {
+        super.onStart();
+        upClock();
+        qunzuAdapter = new ClockQunzuAdapter((ClockActivity) getActivity(), clockBeanList,userInfoList);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(qunzuAdapter);
+    }
+
+    public void upData(){
+        upClock();
+    }
 }

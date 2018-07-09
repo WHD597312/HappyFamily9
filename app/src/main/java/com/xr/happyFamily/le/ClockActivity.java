@@ -14,6 +14,7 @@ import android.graphics.drawable.GradientDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.print.PrinterId;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -37,6 +38,9 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
+import com.xr.database.dao.ClockBeanDao;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopConfActivity;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
@@ -56,6 +60,8 @@ import com.xr.happyFamily.le.fragment.QingLvFragment;
 import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.fragment.ShiGuangFragment;
 import com.xr.happyFamily.le.fragment.ZhiLaiFragment;
+import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.NoSrcollViewPage;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -97,6 +103,10 @@ public class ClockActivity extends AppCompatActivity {
     SharedPreferences preferences;
     String userId;
 
+    QunZuFragment qunZuFragment=new QunZuFragment();
+    QingLvFragment qingLvFragment=new QingLvFragment();
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -106,6 +116,7 @@ public class ClockActivity extends AppCompatActivity {
         mContext = ClockActivity.this;
         setContentView(R.layout.activity_clock);
         ButterKnife.bind(this);
+
         initView();
         initData();
     }
@@ -116,11 +127,9 @@ public class ClockActivity extends AppCompatActivity {
         circle.add("情侣模式");
         circle.add("制赖模式");
         Bundle extras = getIntent().getExtras();
-
-
         fragmentList.add(new LeFragmentManager());
-        fragmentList.add(new QunZuFragment());
-        fragmentList.add(new QingLvFragment());
+        fragmentList.add(qunZuFragment);
+        fragmentList.add(qingLvFragment);
         fragmentList.add(new CommonClockFragment());
         ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList,this);
         vp_flower.setAdapter(tabAdapter);
@@ -185,7 +194,7 @@ public class ClockActivity extends AppCompatActivity {
     public void initData(){
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId= preferences.getString("userId","");
-        new getClocksByUserId().execute();
+
     }
 
     /**
@@ -197,45 +206,9 @@ public class ClockActivity extends AppCompatActivity {
     }
 
 
-    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-
-            String url = "/happy/clock/getClocksByUserId";
-            url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(mContext, url);
-            Log.e("qqqqqqqqRRR",userId+"?"+result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    String retrunData=jsonObject.getString("returnData");
-                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("clockCommons");
-//                    Gson gson = new Gson();
-//                    for (JsonElement user : list) {
-//                        //通过反射 得到UserBean.class
-//                        ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
-//                        list_friend.add(userList);
-//                    }
-
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-
-            }
-        }
+    public void upData(){
+        qunZuFragment.upData();
     }
+
 
 }

@@ -42,10 +42,12 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
     private int type = 0;
     private String shopId;
     private int clicked;
+    private TimeDaoImpl timeDao;
 
     public ChooseTimeAdapter(Context context, List<Time> list) {
         this.context = context;
         this.data = list;
+        timeDao=new TimeDaoImpl(context);
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -89,13 +91,55 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
     }
 
     @Override
-    public void onBindViewHolder(MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 //        holder.tv_shop_type.setText(data.get(position).getGoods().getSimpleDescribe());
+        final Time time=data.get(position);
         holder.tv_time.setText(data.get(position).getHour()+":"+data.get(position).getMinutes());
         holder.tv_day1.setText(data.get(position).getDay());
         Log.i("day", "onBindViewHolder:--> "+data.get(position).getDay());
 
 
+
+//        tv_time = (TextView) view.findViewById(R.id.tv_clock_time);
+//        tv_day1= (TextView) view.findViewById(R.id.tv_clock_week1);
+//        img_kg = (ImageView) view.findViewById(R.id.iv_clock_kg);
+//        img_kg.setTag("open");
+//        rl_d1 = (RelativeLayout) view.findViewById(R.id.rl_le_commonitem);
+//            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it2);
+//            itemView.setOnClickListener(new View.OnClickListener() {
+//                @Override
+//                public void onClick(View v) {
+//
+//                        Intent intent = new  Intent(context,RenameHourseActivity.class);
+//                        intent.putExtra("houseName",houseName);
+//                        intent.putExtra("houseAddress",houseAddress);
+//                        startActivity(intent);
+//
+//                }
+//            });
+
+        holder.img_kg.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                boolean open=time.getOpen();
+                if (open){
+                    holder.img_kg.setImageResource(R.mipmap.bt_kgg);
+                    time.setOpen(false);
+                    timeDao.update(time);
+                }else {
+                    holder.img_kg.setImageResource(R.mipmap.bt_kg);
+                    time.setOpen(true);
+                    timeDao.update(time);
+                }
+//                if ("open".equals(img_kg.getTag())) {
+//                    img_kg.setImageResource(R.mipmap.bt_kgg);
+//                    img_kg.setTag("close");
+//                }else if ("close".equals(img_kg.getTag())){
+//                    img_kg.setImageResource(R.mipmap.bt_kg);
+//                    img_kg.setTag("open");
+//                }
+            }
+        });
 
         holder.rl_d1.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -191,32 +235,32 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
             tv_time = (TextView) view.findViewById(R.id.tv_clock_time);
             tv_day1= (TextView) view.findViewById(R.id.tv_clock_week1);
             img_kg = (ImageView) view.findViewById(R.id.iv_clock_kg);
-            img_kg.setTag("open");
+//            img_kg.setTag("open");
             rl_d1 = (RelativeLayout) view.findViewById(R.id.rl_le_commonitem);
 //            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it2);
-//            itemView.setOnClickListener(new View.OnClickListener() {
+////            itemView.setOnClickListener(new View.OnClickListener() {
+////                @Override
+////                public void onClick(View v) {
+////
+////                        Intent intent = new  Intent(context,RenameHourseActivity.class);
+////                        intent.putExtra("houseName",houseName);
+////                        intent.putExtra("houseAddress",houseAddress);
+////                        startActivity(intent);
+////
+////                }
+////            });
+//            img_kg.setOnClickListener(new View.OnClickListener() {
 //                @Override
 //                public void onClick(View v) {
-//
-//                        Intent intent = new  Intent(context,RenameHourseActivity.class);
-//                        intent.putExtra("houseName",houseName);
-//                        intent.putExtra("houseAddress",houseAddress);
-//                        startActivity(intent);
-//
+//                    if ("open".equals(img_kg.getTag())) {
+//                        img_kg.setImageResource(R.mipmap.bt_kgg);
+//                        img_kg.setTag("close");
+//                    }else if ("close".equals(img_kg.getTag())){
+//                        img_kg.setImageResource(R.mipmap.bt_kg);
+//                        img_kg.setTag("open");
+//                    }
 //                }
 //            });
-            img_kg.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if ("open".equals(img_kg.getTag())) {
-                        img_kg.setImageResource(R.mipmap.bt_kgg);
-                        img_kg.setTag("close");
-                    }else if ("close".equals(img_kg.getTag())){
-                        img_kg.setImageResource(R.mipmap.bt_kg);
-                        img_kg.setTag("open");
-                    }
-                }
-            });
         }
     }
 

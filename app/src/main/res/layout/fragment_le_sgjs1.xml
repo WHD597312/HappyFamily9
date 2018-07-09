@@ -60,7 +60,15 @@
         android:gravity="center"
         android:text="如果你的生活规律，在健康的状态下，你还可以或500年"
         android:textSize="@dimen/sp_12" />
+    <ImageView
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/bt_sgjs_lb1"
+        android:layout_gravity="center"
+        />
     <LinearLayout
+        android:layout_marginTop="@dimen/dp_jy_5"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <RelativeLayout

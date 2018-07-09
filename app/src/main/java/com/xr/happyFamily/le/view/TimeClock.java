@@ -92,7 +92,7 @@ public class TimeClock extends View {
         int height = getMeasuredHeight();
         int width = getMeasuredWidth();
         x =width / 2 ;
-        y =width / 4+200;
+        y =width / 4+170;
 //        r = (int) x - 5;
 
         r =(int)((7*x)/10 );

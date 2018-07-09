@@ -19,10 +19,6 @@ import butterknife.OnClick;
  */
 public class DeleteDeviceDialog extends Dialog {
 
-    @BindView(R.id.tv_device_cancel)
-    TextView tv_cancel;
-    @BindView(R.id.tv_device_ensure)
-    TextView tv_ensure;
     private String name;
     Context context;
     public DeleteDeviceDialog(@NonNull Context context) {
@@ -32,7 +28,7 @@ public class DeleteDeviceDialog extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_le_zldialog2);
+        setContentView(R.layout.popview_delete_device);
         ButterKnife.bind(this);
     }
 

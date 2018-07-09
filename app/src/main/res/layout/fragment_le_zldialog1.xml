@@ -5,17 +5,17 @@
     android:layout_marginLeft="@dimen/dp_jy_12"
     android:layout_marginRight="@dimen/dp_jy_12"
     android:orientation="vertical"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_100"
+        android:layout_height="@dimen/dp_jy_70"
         android:orientation="vertical"
-        android:background="@color/color_gray2"
+        android:background="#ececec"
         >
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_jy_20"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:text="赖床证专业户"
             android:textSize="20sp"
             android:layout_gravity="center"
@@ -26,7 +26,7 @@
             android:text="选择闹钟关闭方式"
             android:layout_gravity="center"
             android:textSize="13sp"
-            android:layout_marginTop="@dimen/dp_jy_12"
+            android:layout_marginTop="@dimen/dp_jy_10"
             />
 
     </LinearLayout>
@@ -87,14 +87,14 @@
             android:layout_marginLeft="@dimen/dp_jy_12"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="脑筋急转弯"
+            android:text="百科小知识"
 
             />
         <ImageView
             android:id="@+id/iv_zl_xz2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/lrclock_dh"
+
             android:layout_alignBottom="@+id/iv_zl_njjzw"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_47"
@@ -132,7 +132,7 @@
             android:id="@+id/iv_zl_xz3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@mipmap/lrclock_dh"
+
             android:layout_alignBottom="@+id/iv_zl_sys"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_47"
@@ -147,23 +147,23 @@
      <Button
          android:id="@+id/bt_zl_qd"
          android:layout_width="match_parent"
-         android:layout_height="wrap_content"
+         android:layout_height="@dimen/dp_jy_40"
          android:background="@drawable/bg_shape_anniugreen"
          android:layout_marginRight="@dimen/dp_jy_35"
          android:layout_marginLeft="@dimen/dp_jy_35"
-         android:layout_marginTop="@dimen/dp_jy_22"
+         android:layout_marginTop="@dimen/dp_jy_12"
          android:text="确定"
          android:textColor="@color/white"
          />
     <Button
         android:id="@+id/bt_zl_qx"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@drawable/bg_shape"
+        android:layout_height="@dimen/dp_jy_40"
+        android:background="@drawable/bg_l_btanniu3"
         android:layout_marginRight="@dimen/dp_jy_35"
         android:layout_marginLeft="@dimen/dp_jy_35"
-        android:layout_marginTop="@dimen/dp_jy_22"
+        android:layout_marginTop="@dimen/dp_jy_12"
         android:text="取消"
-
+        android:layout_marginBottom="@dimen/dp_jy_20"
         />
 </LinearLayout>

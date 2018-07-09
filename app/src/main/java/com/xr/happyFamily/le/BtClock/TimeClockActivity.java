@@ -11,8 +11,11 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.Switch;
 
 import com.xr.happyFamily.R;
@@ -26,7 +29,7 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 
 
-public class TimeClockActivity extends AppCompatActivity {
+public class TimeClockActivity extends AppCompatActivity implements LeFragmentManager.CallValueValue {
     private TimeRemFragment timeRemFragment;
     FragmentManager fragmentManager;
     private ViewPager mViewpaper;
@@ -38,30 +41,41 @@ public class TimeClockActivity extends AppCompatActivity {
     ImageView id_bto_zl_img;
     @BindView(R.id.id_bto_sg_img)
     ImageView id_bto_sg_img;
-    @Override
+
+    @BindView(R.id.layout_bottom) LinearLayout layout_bottom;
+
+
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_le_btclock);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        unbinder= ButterKnife.bind(this);
-        Intent intent=getIntent();
-        int fragid=intent.getIntExtra("fragid",0);
-        fragmentManager=getSupportFragmentManager();
-        leFragmentManager=new LeFragmentManager();
-        commonClockFragment= new CommonClockFragment();
-        FragmentTransaction fragmentTransaction=fragmentManager.beginTransaction();
-        if (fragid==1){
+        unbinder = ButterKnife.bind(this);
+
+        Intent intent = getIntent();
+        int fragid = intent.getIntExtra("fragid", 0);
+        fragmentManager = getSupportFragmentManager();
+        leFragmentManager = new LeFragmentManager();
+        commonClockFragment = new CommonClockFragment();
+        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+        if (fragid == 1) {
             fragmentTransaction.replace(R.id.layout_le_body, commonClockFragment);
             fragmentTransaction.commit();
             id_bto_zl_img.setImageResource(R.mipmap.bt_zl1);
             id_bto_sg_img.setImageResource(R.mipmap.bt_sgjj);
-        }else {
+        } else {
             fragmentTransaction.replace(R.id.layout_le_body, leFragmentManager);
             fragmentTransaction.commit();
         }
+
+
     }
+
+
+
+
+
     @OnClick({R.id.id_bto_zl,R.id.id_bto_sg})
     public  void  onClick(View view){
         switch(view.getId()){
@@ -82,9 +96,14 @@ public class TimeClockActivity extends AppCompatActivity {
         }
     }
 
-
-
-
+    @Override
+    public void setPosition(int position) {
+        if (position>=1){
+            layout_bottom.setVisibility(View.GONE);
+        }else if(position==0){
+            layout_bottom.setVisibility(View.VISIBLE);
+        }
+    };
 
 
     //实现页面变化监听器OnPageChangeListener

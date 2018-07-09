@@ -19,6 +19,7 @@ import com.xr.happyFamily.le.view.btClockjsDialog2;
 import com.xr.happyFamily.le.view.btClockjsDialog3;
 import com.xr.happyFamily.le.view.btClockjsDialog4;
 
+import java.util.Calendar;
 import java.util.List;
 
 
@@ -45,20 +46,26 @@ public class RingReceiver extends BroadcastReceiver{
             //跳转到Activity中
             int hour=intent.getIntExtra("hour",0);
             int minutes=intent.getIntExtra("minutes",0);
-            List<Time> times=timeDao.findTimesByHourAndMin(hour,minutes);
-            if (!times.isEmpty()){
-                Time time=times.get(0);
-                if (time.getOpen()){
-                    if (time.getFlag()==1){
-                        clolkDialog1();
-                    }else if (time.getFlag()==2){
-                        clolkDialog2();
-                    }else if (time.getFlag()==3){
-                        clolkDialog3();
-                    }
+            Calendar calendar=Calendar.getInstance();
+                int hour1=calendar.get(Calendar.HOUR_OF_DAY);
+            int minute1=calendar.get(Calendar.MINUTE);
+            if (hour1==hour&&minute1==minutes){
+                List<Time> times=timeDao.findTimesByHourAndMin(hour,minutes);
+                if (!times.isEmpty()){
+                    Time time=times.get(0);
+                    if (time.getOpen()){
+                        if (time.getFlag()==1){
+                            clolkDialog1();
+                        }else if (time.getFlag()==2){
+                            clolkDialog2();
+                        }else if (time.getFlag()==3){
+                            clolkDialog3();
+                        }
 
+                    }
                 }
             }
+
 //            android.util.Log.i("cxq", "ScreenControlBroadcast");
 //            op = intent.getStringExtra("screen");
 //            WakeAndLock wakeAndLock = new WakeAndLock(mContext);

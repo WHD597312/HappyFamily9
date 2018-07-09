@@ -10,6 +10,7 @@ import android.content.res.Resources;
 import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -19,6 +20,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -27,6 +29,7 @@ import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.NumberPicker;
+import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -38,18 +41,23 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.SmartWheelInfo;
+import com.xr.happyFamily.jia.view_custom.DeviceChildDialog;
 import com.xr.happyFamily.jia.view_custom.SemicircleBar;
 import com.xr.happyFamily.jia.view_custom.SmartWheelBar;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
+import com.xr.happyFamily.jia.view_custom.UpdateDeviceDialog;
 import com.xr.happyFamily.jia.xnty.Timepicker;
 import com.xr.happyFamily.jia.xnty.Timepicker2;
+import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.lang.reflect.Field;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -81,6 +89,9 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @BindView(R.id.semicBar)
     SmartWheelBar wheelBar;
     @BindView(R.id.relative4) RelativeLayout relative4;/**底部布局*/
+    @BindView(R.id.image_more) ImageView image_more;/**修改设备名称 分享设备*/
+    @BindView(R.id.relative) RelativeLayout relative;/**设备详情*/
+    @BindView(R.id.tv_offline) TextView tv_offline;/**设备离线*/
     private List<String> list=new ArrayList<>();
     Unbinder unbinder;
     Timepicker3 tv_timer_hour;
@@ -97,6 +108,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
     TextView tv_screen;
     private long houseId;
     private MyApplication application;
+    private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,7 +125,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         WindowManager wm = (WindowManager)this.getSystemService(Context.WINDOW_SERVICE);
         int width = wm.getDefaultDisplay().getWidth();
         Log.w("width","width"+width);
-//
+
         RelativeLayout.LayoutParams params=new RelativeLayout.LayoutParams(width,width);
         params.leftMargin=100;
         params.rightMargin=100;
@@ -125,7 +138,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         tv_title.setText(deviceName);
         long deviceId=intent.getLongExtra("deviceId",0);
         deviceChild=deviceChildDao.findById(deviceId);
-        houseId=deviceChild.getHouseId();
+        houseId=intent.getLongExtra("houseId",0);
         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
         Log.i("deviceChildren","-->"+deviceChildren.size());
 
@@ -142,7 +155,15 @@ public class DeviceDetailActivity extends AppCompatActivity {
         super.onStart();
         running=true;
         if (deviceChild!=null){
-            setMode(deviceChild);
+            boolean online=deviceChild.getOnline();
+            if (online){
+                relative.setVisibility(View.VISIBLE);
+                tv_offline.setVisibility(View.GONE);
+                setMode(deviceChild);
+            }else {
+                relative.setVisibility(View.GONE);
+                tv_offline.setVisibility(View.VISIBLE);
+            }
         }
         curAngle=wheelBar.getmStartAngle();
         if (curAngle>0){/**顺时钟转*/
@@ -213,9 +234,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
         });
     }
     int deviceState;
-    @OnClick({R.id.image_back,R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
+    @OnClick({R.id.image_more,R.id.image_back,R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.image_more:
+                showPopupMenu(image_more);
+                break;
             case R.id.image_back:
                 Intent intent=new Intent();
                 intent.putExtra("houseId",houseId);
@@ -444,21 +468,34 @@ public class DeviceDetailActivity extends AppCompatActivity {
             String macAddress=intent.getStringExtra("macAddress");
             Log.i("macAddress","-->"+macAddress);
             DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
-            if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
-                if (deviceChild2==null){
-                    Toast.makeText(DeviceDetailActivity.this,"该设备已重置",Toast.LENGTH_SHORT).show();
-                    long houseId=deviceChild.getHouseId();
-                    Intent data=new Intent();
-                    data.putExtra("houseId",houseId);
-                    DeviceDetailActivity.this.setResult(6000,data);
-                    DeviceDetailActivity.this.finish();
-
-                }else {
-                    deviceChild=deviceChild2;
-                    Log.i("warmerCurTemp","-->"+deviceChild.getWarmerCurTemp());
-                    setMode(deviceChild);
+            String noNet=intent.getStringExtra("noNet");
+            if (!TextUtils.isEmpty(noNet)){
+                relative.setVisibility(View.GONE);
+                tv_offline.setVisibility(View.VISIBLE);
+            }else {
+                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
+                    if (deviceChild2==null){
+                        Toast.makeText(DeviceDetailActivity.this,"该设备已重置",Toast.LENGTH_SHORT).show();
+                        long houseId=deviceChild.getHouseId();
+                        Intent data=new Intent();
+                        data.putExtra("houseId",houseId);
+                        DeviceDetailActivity.this.setResult(6000,data);
+                        DeviceDetailActivity.this.finish();
+                    }else {
+                        deviceChild=deviceChild2;
+                        boolean online=deviceChild.getOnline();
+                        if (online){
+                            relative.setVisibility(View.VISIBLE);
+                            tv_offline.setVisibility(View.GONE);
+                            setMode(deviceChild);
+                        }else {
+                            relative.setVisibility(View.GONE);
+                            tv_offline.setVisibility(View.VISIBLE);
+                        }
+                    }
                 }
             }
+
         }
     }
     private void setMode(DeviceChild deviceChild){
@@ -477,9 +514,17 @@ public class DeviceDetailActivity extends AppCompatActivity {
         if (deviceState==0){
             image_switch.setImageResource(R.mipmap.image_switch);
             image_rate.setImageResource(R.mipmap.rate_power);
+            Message msg=handler.obtainMessage();
+            msg.arg1=0;
+            msg.what=0;
+            handler.sendMessage(msg);
         }else if (deviceState==1){
             image_switch.setImageResource(R.mipmap.image_open);
             image_rate.setImageResource(R.mipmap.rate_open);
+            Message msg=handler.obtainMessage();
+            msg.arg1=0;
+            msg.what=1;
+            handler.sendMessage(msg);
         }
         if (timerHour==0){
             Log.i("timer","-->"+"timer");
@@ -571,6 +616,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             x[6]=0;
             x[7]=0;
 
+
             int dataContent=TenTwoUtil.changeToTen(x);
             sum=sum+dataContent;
             jsonArray.put(5,dataContent);/**数据内容 开关，功率状态，屏幕状态，屏保状态*/
@@ -603,6 +649,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 boolean success=mqService.publish(topicName,1,s);
                 if (success){
                     Log.i("success","-->"+success);
+                    int deviceState2=deviceChild.getDeviceState();
+                    Log.i("deviceState2","-->"+deviceState2);
                     deviceChildDao.update(deviceChild);
                 }
             }
@@ -616,6 +664,15 @@ public class DeviceDetailActivity extends AppCompatActivity {
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             switch (msg.arg1){
+                case 0:
+                    int flag=msg.what;
+                    if (flag==1){
+                        wheelBar.setCanTouch(true);
+                    }else if (flag==0){
+                        wheelBar.setCanTouch(false);
+                    }
+                    wheelBar.invalidate();
+                    break;
                 case 1:
                     int temp=msg.what;
                     tv_set_temp.setText(temp+"");
@@ -641,6 +698,96 @@ public class DeviceDetailActivity extends AppCompatActivity {
         }
     };
 
+    String title;
+    private void showPopupMenu(View view) {
+        // View当前PopupMenu显示的相对View的位置
+        PopupMenu popupMenu = new PopupMenu(this, view);
+        // menu布局
+        popupMenu.getMenuInflater().inflate(R.menu.device_menu, popupMenu.getMenu());
+        // menu的item点击事件
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                title = String.valueOf(item.getTitle());
+                return false;
+            }
+        });
+        // PopupMenu关闭事件
+        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+            @Override
+            public void onDismiss(PopupMenu menu) {
+                if ("修改名称".equals(title)){
+                    buildUpdateDeviceDialog();
+                }
+                if ("分享设备".equals(title)){
+                    Intent intent=new Intent(DeviceDetailActivity.this,ShareDeviceActivity.class);
+                    long id=deviceChild.getId();
+                    intent.putExtra("deviceId",id);
+                    startActivity(intent);
+                }
+            }
+        });
+        popupMenu.show();
+    }
+    String deviceName;
+    private void buildUpdateDeviceDialog() {
+        final UpdateDeviceDialog dialog = new UpdateDeviceDialog(this);
+        dialog.setOnNegativeClickListener(new UpdateDeviceDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new UpdateDeviceDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                deviceName = dialog.getName();
+                if (TextUtils.isEmpty(deviceName)) {
+                    Utils.showToast(DeviceDetailActivity.this, "设备名称不能为空");
+                } else {
+                    new UpdateDeviceAsync().execute();
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    class UpdateDeviceAsync extends AsyncTask<Void,Void,Integer>{
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code=0;
+            try {
+                int deviceId=deviceChild.getDeviceId();
+                String url=updateDeviceNameUrl+"?deviceName="+ URLEncoder.encode(deviceName,"utf-8")+"&deviceId="+deviceId;
+                String result=HttpUtils.getOkHpptRequest(url);
+                JSONObject jsonObject=new JSONObject(result);
+                String returnCode=jsonObject.getString("returnCode");
+                if ("100".equals(returnCode)){
+                    code=100;
+                }
+                Log.i("result","-->"+result);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code){
+                case 100:
+                    Utils.showToast(DeviceDetailActivity.this, "修改成功");
+                    tv_title.setText(deviceName);
+                    break;
+                    default:
+                        Utils.showToast(DeviceDetailActivity.this, "修改失败");
+                        break;
+            }
+        }
+    }
     @Override
     protected void onStop() {
         super.onStop();

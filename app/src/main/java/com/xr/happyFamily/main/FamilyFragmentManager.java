@@ -10,18 +10,23 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentPagerAdapter;
 import android.support.v4.app.FragmentStatePagerAdapter;
 import android.support.v4.view.ViewPager;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.adapter.FamilyAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Room;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
 
 
 public class FamilyFragmentManager extends Fragment {
@@ -35,6 +40,9 @@ public class FamilyFragmentManager extends Fragment {
     private SharedPreferences mPositionPreferences;
     SharedPreferences roomPreferences;
     public static boolean running=false;
+    private DeviceChildDaoImpl deviceChildDao;
+    private List<DeviceChild> shareChildren;
+    SharedPreferences preferences;
 
     @Nullable
     @Override
@@ -43,20 +51,28 @@ public class FamilyFragmentManager extends Fragment {
         if (view==null){
             view = inflater.inflate(R.layout.fragment_family_manager, container, false);
             viewPager = (ViewPager) view.findViewById(R.id.viewPager);
-            roomPreferences = getActivity().getSharedPreferences("room", Context.MODE_PRIVATE);
-            mPositionPreferences = getActivity().getSharedPreferences("position", Context.MODE_PRIVATE);
+            roomPreferences = getActivity().getSharedPreferences("room", MODE_PRIVATE);
+            mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
             Bundle bundle = getArguments();
             houseId = bundle.getLong("houseId");
             roomDao = new RoomDaoImpl(getActivity());
+            deviceChildDao=new DeviceChildDaoImpl(getActivity());
             rooms = new ArrayList<>();
             List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
+            preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+            String userIdStr=preferences.getString("userId","");
+            if (!TextUtils.isEmpty(userIdStr)){
+                int userId=Integer.parseInt(userIdStr);
+                shareChildren=deviceChildDao.findShareDevice(userId);
+            }
+
             for (int i = 0; i < allRoomInHouse.size(); i++) {
                 Room room = allRoomInHouse.get(i);
                 rooms.add(room);
             }
 
             fragmentList = new ArrayList<>();
-            if (rooms.isEmpty()) {
+            if (rooms.isEmpty() && shareChildren.isEmpty()) {
                 NoRoomFragment noRoomFragment = new NoRoomFragment();
                 noRoomFragment.setHouseId(houseId);
                 fragmentList.add(noRoomFragment);

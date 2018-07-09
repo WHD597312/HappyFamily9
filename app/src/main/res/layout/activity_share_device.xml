@@ -14,12 +14,11 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_jy_60">
             <ImageView
-                android:id="@+id/img_back"
-                android:layout_width="@dimen/dp_jy_40"
-                android:layout_height="@dimen/dp_jy_40"
+                android:id="@+id/back"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
                 android:src="@mipmap/fanhui"
-                android:scaleType="centerInside"
-                android:layout_marginLeft="@dimen/dp_jy_6"
+                android:padding="10dp"
                 android:layout_centerVertical="true"
                 />
             <TextView
@@ -102,9 +101,12 @@
 
         <ImageView
             android:id="@+id/img_qrCode"
+            android:layout_below="@+id/btn_update_version"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:layout_width="@dimen/dp_jy_250"
             android:layout_height="@dimen/dp_jy_250"
-            android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:layout_centerHorizontal="true"
             android:scaleType="centerCrop"
             android:src="@drawable/ic_launcher_background" />
 

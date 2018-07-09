@@ -6,7 +6,7 @@
     >
 
     <TextView
-        android:id="@+id/tv_home_1"
+        android:id="@+id/tv_device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_jy_14"
@@ -17,20 +17,20 @@
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/tv_home_2"
+        android:id="@+id/tv_device_type"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_home_1"
+        android:layout_below="@+id/tv_device_name"
         android:layout_marginLeft="@dimen/dp_jy_14"
         android:layout_marginTop="@dimen/dp_jy_10"
         android:text="智能终端"
         android:textColor="@color/black" />
 
     <TextView
-        android:id="@+id/tv_home_3"
+        android:id="@+id/tv_device_switch"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/tv_home_2"
+        android:layout_below="@+id/tv_device_type"
         android:layout_marginLeft="@dimen/dp_jy_14"
         android:layout_marginTop="@dimen/dp_jy_21"
         android:text="电源开"
@@ -40,7 +40,7 @@
         android:layout_width="3dp"
         android:layout_height="@dimen/dp_jy_10"
         android:background="@null"
-        android:layout_below="@+id/tv_home_3"
+        android:layout_below="@+id/tv_device_switch"
         android:layout_marginLeft="@dimen/dp_jy_9"
 
         />
@@ -49,7 +49,7 @@
         android:id="@+id/iv_home"
         android:layout_width="100dp"
         android:layout_height="@dimen/dp_jy_86"
-        android:layout_alignTop="@id/tv_home_1"
+        android:layout_alignTop="@id/tv_device_name"
         android:layout_marginLeft="@dimen/dp_jy_84"
         android:src="@mipmap/t" />
 

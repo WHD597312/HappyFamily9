@@ -35,11 +35,13 @@ import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -69,7 +71,7 @@ public class LoginActivity extends AppCompatActivity {
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
-
+    int firstClick=1;
     SharedPreferences mPositionPreferences;
 
     @Override
@@ -101,6 +103,10 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+//        if (preferences.contains("phone") && preferences.contains("password")){
+////            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+//            startActivity(new Intent(this,MainActivity.class));
+//        }
         try {
             gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
         } catch (Exception e) {
@@ -154,11 +160,13 @@ public class LoginActivity extends AppCompatActivity {
                     Utils.showToast(this, "请输入密码");
                     break;
                 }
-
-                Map<String, Object> params = new HashMap<>();
-                params.put("phone", phone);
-                params.put("password", password);
-                new LoginAsyncTask().execute(params);
+               if (firstClick==1){
+                   Map<String, Object> params = new HashMap<>();
+                   params.put("phone", phone);
+                   params.put("password", password);
+                   new LoginAsyncTask().execute(params);
+                   firstClick=0;
+               }
                 break;
             case R.id.tv_forget_pswd:
                 startActivity(new Intent(this, ForgetPswdActivity.class));
@@ -213,6 +221,7 @@ public class LoginActivity extends AppCompatActivity {
                     code = jsonObject.getInt("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
                     if (code == 100) {
+                        String username=returnData.getString("username");
                         userId = returnData.getString("userId");
                         String token = returnData.getString("token");
                         SharedPreferences.Editor editor = preferences.edit();
@@ -223,7 +232,15 @@ public class LoginActivity extends AppCompatActivity {
                         editor.putString("userId", userId);
                         editor.putString("password", password);
                         editor.putString("token", token);
-                        editor.commit();
+                        editor.putString("username",username);
+                        boolean success=editor.commit();
+
+                        if (success){
+                            Map<String,Object> params2=new HashMap<>();
+                            params2.put("userId",userId);
+                            new LoadUserAsync().execute(params2);
+                        }
+
                     }
                 }
             } catch (Exception e) {
@@ -238,17 +255,48 @@ public class LoginActivity extends AppCompatActivity {
             switch (code) {
                 case 10002:
                     Utils.showToast(LoginActivity.this, "手机号码未注册");
+                    firstClick=1;
                     break;
                 case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
+                    firstClick=1;
                     et_pswd.setText("");
                     break;
                 case 100:
-
-                    new hourseAsyncTask().execute();
-
                     break;
             }
+        }
+    }
+
+    class LoadUserAsync extends AsyncTask<Map<String,Object>,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Map<String, Object>... maps) {
+            Map<String,Object> params=maps[0];
+            String url=HttpUtils.ipAddress+"/login/getInfo";
+            String result=HttpUtils.postOkHpptRequest(url,params);
+            try {
+                Log.i("result","-->"+result);
+                if (!TextUtils.isEmpty(result)){
+                    JSONObject jsonObject=new JSONObject(result);
+                    SharedPreferences.Editor editor=preferences.edit();
+                    boolean sex=jsonObject.getBoolean("sex");
+                    if (jsonObject.has("headImgUrl")){
+                        String headImgUrl=jsonObject.getString("headImgUrl");
+                        editor.putString("headImgUrl",headImgUrl);
+                    }
+                    String birthday=jsonObject.getString("birthday");
+                    editor.putBoolean("sex",sex);
+                    editor.putString("birthday",birthday);
+                    boolean success=editor.commit();
+                    if (success){
+                        new hourseAsyncTask().execute();
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
@@ -326,7 +374,43 @@ public class LoginActivity extends AppCompatActivity {
                                     deviceChildDao.insert(deviceChild);
                                 }
                             }
+                            JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
+                            for (int x = 0; x < deviceShareds.length(); x++) {
+                                JSONObject jsonObject2=deviceShareds.getJSONObject(x);
+                                int deviceId=jsonObject2.getInt("deviceId");
+                                String deviceName=jsonObject2.getString("deviceName");
+                                int deviceType=jsonObject2.getInt("deviceType");
+                                int roomId=jsonObject2.getInt("roomId");
+                                String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
+                                DeviceChild deviceChild2=null;
+                                for (DeviceChild deviceChild:deviceChildren){
+                                    int deviceId2=deviceChild.getDeviceId();
+                                    if (deviceId2==deviceId){
+                                        deviceChild2=deviceChild;
+                                        break;
+                                    }
+                                }
+                               if (deviceChild2!=null){
+                                   deviceChildDao.update(deviceChild2);
+                               }else if (deviceChild2==null){
+                                   if (deviceChild2==null){
+                                       deviceChild2=new DeviceChild();
+                                       deviceChild2.setUserId(userId);
+                                       deviceChild2.setShareId(Long.MAX_VALUE);
+                                       deviceChild2.setName(deviceName);
+                                       deviceChild2.setDeviceId(deviceId);
+                                       deviceChild2.setMacAddress(deviceMacAddress);
+                                       deviceChild2.setType(deviceType);
+                                       deviceChild2.setRoomId(roomId);
+                                       deviceChildDao.insert(deviceChild2);
+                                   }
+                               }
+
+                            }
                         }
+//                        JSONArray deviceShareds=jsonObject.getJSONArray("deviceCommons");
+
 //                        JSONArray roomDevices=returnData.getJSONArray("roomDevices");
 
 

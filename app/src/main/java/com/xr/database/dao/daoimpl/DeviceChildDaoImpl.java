@@ -74,8 +74,13 @@ public class DeviceChildDaoImpl {
             deviceChildDao.deleteInTx(deviceChildren);
         }
     }
+    /**查询家里面的常用设备*/
     public List<DeviceChild> findHouseCommonDevices(long houseId){
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.DeviceUsedCount.ge(5));
         return deviceChildDao.queryBuilder().where(whereCondition).limit(4).list();
+    }
+    public List<DeviceChild> findShareDevice(int userId){
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.UserId.eq(userId),DeviceChildDao.Properties.ShareId.eq(Long.MAX_VALUE));
+        return deviceChildDao.queryBuilder().where(whereCondition).orderDesc(DeviceChildDao.Properties.DeviceId).list();
     }
 }

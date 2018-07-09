@@ -47,16 +47,42 @@ public class GridViewAdapter extends ArrayAdapter {
             } else {
                 holder = (ViewHolder) convertView.getTag();
             }
-            holder.textView = (TextView) convertView.findViewById(R.id.tv_home_1);
+            holder.tv_device_name = (TextView) convertView.findViewById(R.id.tv_device_name);
             holder.imageView = (ImageView) convertView.findViewById(R.id.iv_home);
+            holder.tv_device_switch= (TextView) convertView.findViewById(R.id.tv_device_switch);
+            holder.tv_device_type= (TextView) convertView.findViewById(R.id.tv_device_type);
             DeviceChild item = mGridData.get(position);
-            item.setImg(img[0]);
-            holder.textView.setText(item.getName());
-            Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
+            if (item!=null){
+                int type=item.getType();
+                if (type==2){
+                    holder.tv_device_type.setText("取暖器");
+                    boolean online=item.getOnline();
+                    int deviceState=item.getDeviceState();
+
+                    if (online){
+                        if (deviceState==1){
+                            holder.tv_device_switch.setText("电源开");
+                        }else if (deviceState==0){
+                            holder.tv_device_switch.setText("电源关");
+                        }
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                    }else {
+                        holder.tv_device_switch.setText("离线");
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                    }
+
+                }
+                item.setImg(img[0]);
+                holder.tv_device_name.setText(item.getName());
+                Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
+            }
+
             return convertView;
         }
     private class ViewHolder {
-        TextView textView;
+        TextView tv_device_switch;/**设备开关*/
+        TextView tv_device_type;/**设备类型*/
+        TextView tv_device_name;/**设备名称*/
         ImageView imageView;
     }
 }

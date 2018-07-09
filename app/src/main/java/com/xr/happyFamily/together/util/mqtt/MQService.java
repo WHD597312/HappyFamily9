@@ -16,7 +16,6 @@ import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.main.FamilyFragmentManager;
-import com.xr.happyFamily.main.RoomFragment;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -177,7 +176,11 @@ public class MQService extends Service {
                 List<String> topicNames = getTopicNames();
                 if (!topicNames.isEmpty()) {
                     for (String topicName : topicNames) {
-                        client.subscribe(topicName, 1);
+                        if(!TextUtils.isEmpty(topicName)){
+                            Thread.sleep(200);
+                            client.subscribe(topicName, 1);
+                            Log.i("client","-->"+topicName);
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -196,8 +199,8 @@ public class MQService extends Service {
         protected Object doInBackground(String... strings) {
 
             String topicName = strings[0];/**收到的主题*/
+            Log.i("topicName","-->:"+topicName);
             String macAddress = null;
-
             if (topicName.startsWith("p99/warmer")) {
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99")) {
@@ -225,28 +228,43 @@ public class MQService extends Service {
             int checkCode = -1;/**校验码*/
             int endCode = -1;/**结束码*/
             String message = strings[1];/**收到的消息*/
+            long sharedId=-1;/**分享的设备*/
+
             Log.i("mmm","-->"+message);
-            if ("reSet".equals(macAddress))
-                Log.i("message22222222", "-->" + message);
+
+
 
             DeviceChild deviceChild = null;
             JSONObject messageJsonObject = null;
             String productType = null;
             JSONArray messageJsonArray = null;
-            List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
-            for (DeviceChild deviceChild2 : deviceChildren) {
-                if (macAddress.equals(deviceChild2.getMacAddress())) {
-                    deviceChild = deviceChild2;
-                    break;
+            if (AddDeviceActivity.running){
+
+            }else {
+                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+                for (DeviceChild deviceChild2 : deviceChildren) {
+                    if (macAddress.equals(deviceChild2.getMacAddress())) {
+                        deviceChild = deviceChild2;
+                        break;
+                    }
                 }
             }
+
             try {
                 if ("reSet".equals(message)) {
                     if (deviceChild != null) {
+                        long sharedId2=deviceChild.getShareId();
+                        if (sharedId2==Long.MAX_VALUE){
+                            sharedId=sharedId2;
+                        }
                         deviceChildDao.delete(deviceChild);
                         deviceChild=null;
                     }
-                } else {
+                }else if ("offline".equals(message)){
+                    if (deviceChild!=null){
+                        deviceChild.setOnline(false);
+                    }
+                }else {
                     if (isGoodJson(message)) {
                         messageJsonObject = new JSONObject(message);
                     }
@@ -275,6 +293,7 @@ public class MQService extends Service {
 
                         } else {
                             if (messageJsonArray != null) {
+
                                 busModel = messageJsonArray.getInt(3);
                                 int mMcuVersion = messageJsonArray.getInt(4);
                                 mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
@@ -306,7 +325,6 @@ public class MQService extends Service {
                                 endCode = messageJsonArray.getInt(18);
                             }
                         }
-
 
                         if (deviceChild != null) {
                             if (type != -1) {
@@ -374,6 +392,11 @@ public class MQService extends Service {
                             Log.i("warmerCurTemp2222", "-->" + deviceChild.getWarmerCurTemp());
                             int deviceUsedCount=deviceChild.getDeviceUsedCount();
                             deviceChild.setDeviceUsedCount(deviceUsedCount+1);
+                            deviceChild.setOnline(true);
+                            long shareId2=deviceChild.getShareId();
+                            if (shareId2==Long.MAX_VALUE){
+                                sharedId=Long.MAX_VALUE;
+                            }
                             deviceChildDao.update(deviceChild);
                             Log.i("deviceChildDao","-->"+deviceChild.getDeviceId());
                         }
@@ -393,22 +416,23 @@ public class MQService extends Service {
                 }
                 Log.i("FamilyFragmentManager","-->"+FamilyFragmentManager.running);
                 if (AddDeviceActivity.running) {
-                    Intent mqttIntent = new Intent("AddDeviceActivity");
-                    mqttIntent.putExtra("deviceChild", deviceChild);
-                    mqttIntent.putExtra("macAddress", macAddress);
-                    sendBroadcast(mqttIntent);
+                    if (type!=-1){
+                        Intent mqttIntent = new Intent("AddDeviceActivity");
+                        mqttIntent.putExtra("type", type);
+                        mqttIntent.putExtra("macAddress", macAddress);
+                        sendBroadcast(mqttIntent);
+                    }
                 } else if (DeviceDetailActivity.running) {
                     Intent mqttIntent = new Intent("DeviceDetailActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
                 }else if (FamilyFragmentManager.running){
-                    if ("reSet".equals(message)){
-                        Intent mqttIntent = new Intent("RoomFragment");
-                        mqttIntent.putExtra("deviceChild", "null");
-                        mqttIntent.putExtra("macAddress", macAddress);
-                        sendBroadcast(mqttIntent);
-                    }
+                    Intent mqttIntent = new Intent("RoomFragment");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    mqttIntent.putExtra("sharedId", sharedId);
+                    sendBroadcast(mqttIntent);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -425,8 +449,17 @@ public class MQService extends Service {
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
         for (DeviceChild deviceChild : deviceChildren) {
             String macAddress = deviceChild.getMacAddress();
-            String topicName = "p99/warmer/" + macAddress + "/transfer";
-            list.add(topicName);
+            int type=deviceChild.getType();
+            String onlineTopicName="";
+            String offlineTopicName="";
+            switch (type){
+                case 2:
+                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                    offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                    break;
+            }
+            list.add(onlineTopicName);
+            list.add(offlineTopicName);
         }
 //        list.add("warmer/p99"+macAddress+"/set");
         return list;

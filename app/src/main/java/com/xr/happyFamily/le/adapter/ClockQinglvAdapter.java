@@ -54,6 +54,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         this.context = context;
         this.clockBeanList = clockBeanList;
         this.userInfoList = userInfoList;
+        getData();
     }
 
 
@@ -95,7 +96,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        getData();
+
         String hourStr="";
         int hour=clockBeanList.get(position).getClockHour();
         if(hour<10){
@@ -309,7 +310,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 Toast.makeText(context, "删除闹钟成功", Toast.LENGTH_SHORT).show();
                 clockBeanDao.delete(clockBeanList.get(delPos));
                 clockBeanList.remove(clockBeanList.get(delPos));
-                context.upData();
+                context.upQinglvData();
                 mPopWindow.dismiss();
                 notifyDataSetChanged();
             }

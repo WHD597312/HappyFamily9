@@ -55,6 +55,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
         this.context = context;
         this.clockBeanList = clockBeanList;
         this.userInfoList = userInfoList;
+        getData();
     }
 
 
@@ -105,7 +106,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
-        getData();
+
         String hourStr="";
         int hour=clockBeanList.get(position).getClockHour();
         if(hour<10){

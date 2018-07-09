@@ -88,6 +88,7 @@
     </RelativeLayout>
 
     <RelativeLayout
+        android:id="@+id/rl_bjtime_bq"
         android:layout_marginTop="@dimen/dp_jy_12"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_45"
@@ -103,12 +104,13 @@
             android:textColor="@color/black"
             />
         <TextView
+            android:id="@+id/tv_tag"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_35"
-            android:text="别忘了明天的会议"
+            android:text="请填写标签"
             android:textColor="@color/color_gray2"
             />
         <ImageView

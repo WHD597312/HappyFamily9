@@ -45,6 +45,18 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
     Unbinder unbinder;
     FragmentManager fragmentManager;
+    @BindView(R.id.layout_body)
+    LinearLayout layoutBody;
+    @BindView(R.id.id_bto_jia)
+    LinearLayout idBtoJia;
+    @BindView(R.id.id_bto_le_img)
+    ImageButton idBtoLeImg;
+    @BindView(R.id.id_bto_le)
+    LinearLayout idBtoLe;
+    @BindView(R.id.id_bto_bao)
+    LinearLayout idBtoBao;
+    @BindView(R.id.id_bto_zhen)
+    LinearLayout idBtoZhen;
     private HourseDaoImpl hourseDao;
     SharedPreferences mPositionPreferences;
     @BindView(R.id.layout_bottom)
@@ -53,10 +65,13 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     ImageButton id_bto_jia_img;
     @BindView(R.id.id_bto_bao_img)
     ImageButton id_bto_bao_img;
-    @BindView(R.id.id_bto_zhen_img) ImageButton id_bto_zhen_img;/**朕*/
+    @BindView(R.id.id_bto_zhen_img)
+    ImageButton id_bto_zhen_img;/**朕*/
+
     private FamilyFragmentManager familyFragmentManager;
     private BaoFragment baoFragment;/**宝的页面*/
     private ZhenFragment zhenFragment;/**朕的页面*/
+    private LeFragment leFragment;
     private MyApplication application;
     SharedPreferences preferences;
 
@@ -100,6 +115,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
 
         familyFragmentManager = new FamilyFragmentManager();
+        leFragment = new LeFragment();
         baoFragment = new BaoFragment();
         zhenFragment=new ZhenFragment();
 
@@ -127,7 +143,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         }
     }
 
-    @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_zhen})
+    @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_bto_jia:
@@ -147,14 +163,28 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 id_bto_jia_img.setImageResource(R.mipmap.jia1);
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+                idBtoLeImg.setImageResource(R.mipmap.le);
                 break;
             case R.id.id_bto_bao:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
                 id_bto_bao_img.setImageResource(R.mipmap.bao1);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+                idBtoLeImg.setImageResource(R.mipmap.le);
                 FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
                 baoTransaction.replace(R.id.layout_body, baoFragment);
                 baoTransaction.commit();
+                if (mPositionPreferences.contains("position")) {
+                    mPositionPreferences.edit().clear().commit();
+                }
+                break;
+            case R.id.id_bto_le:
+                id_bto_jia_img.setImageResource(R.mipmap.jia);
+                id_bto_bao_img.setImageResource(R.mipmap.bao);
+                idBtoLeImg.setImageResource(R.mipmap.le1);
+                id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+                FragmentTransaction leTransaction = fragmentManager.beginTransaction();
+                leTransaction.replace(R.id.layout_body, leFragment);
+                leTransaction.commit();
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
@@ -163,6 +193,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen1);
+                idBtoLeImg.setImageResource(R.mipmap.le);
                 FragmentTransaction zhenTransaction = fragmentManager.beginTransaction();
                 zhenTransaction.replace(R.id.layout_body, zhenFragment);
                 zhenTransaction.commit();

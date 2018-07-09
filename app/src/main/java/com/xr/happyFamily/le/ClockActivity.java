@@ -87,9 +87,6 @@ import butterknife.Unbinder;
  */
 
 public class ClockActivity extends AppCompatActivity implements LeFragmentManager.CallValueValue{
-
-
-    ;
     Unbinder unbinder;
     List<String> circle = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();
@@ -119,6 +116,9 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
 
         initView();
         initData();
+
+        Intent intent = getIntent();
+        int fragid = intent.getIntExtra("fragid", 0);
     }
 
     private void initView() {

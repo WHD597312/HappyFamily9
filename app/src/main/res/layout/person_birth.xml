@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_80"
+    android:background="@color/white"
+    >
+
+    <TextView
+        android:id="@+id/tv_birth"
+        android:layout_width="wrap_content"
+        android:layout_height="60dp"
+        android:layout_centerVertical="true"
+        android:text="生日"
+        android:gravity="center_vertical"
+        android:textSize="@dimen/sp_16"
+        />
+
+    <TextView
+        android:id="@+id/tv_birthday"
+        android:layout_width="wrap_content"
+        android:layout_height="@dimen/dp_jy_40"
+        android:layout_centerVertical="true"
+        android:layout_alignTop="@+id/tv_birth"
+        android:layout_alignBottom="@+id/tv_birth"
+        android:text="2018年9月5日"
+        android:gravity="center"
+        android:textSize="@dimen/sp_16"
+        android:layout_toRightOf="@+id/tv_birth"
+        android:layout_marginLeft="@dimen/dp_jy_40"
+        />
+</RelativeLayout>

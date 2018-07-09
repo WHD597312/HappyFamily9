@@ -40,7 +40,7 @@ public class TimeRemFragment extends Fragment {
             String url=ip+"/happy/clock/getClockLazyRiddle";
             String result= HttpUtils.getOkHpptRequest(url);
             Log.i("result","-->"+result);
-            
+
             try {
                 if (!TextUtils.isEmpty(result)){
                     JSONObject jsonObject=new JSONObject(result);

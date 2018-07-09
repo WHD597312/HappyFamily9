@@ -162,6 +162,8 @@ public class SmartWheelBar extends View {
 
     private float mCheckBitmapWidth = 300;//1080p下的270
 
+    private boolean isCanTouch;
+
 
     public SmartWheelBar(Context context) {
         this(context, null);
@@ -181,6 +183,7 @@ public class SmartWheelBar extends View {
     private void initAttrs(AttributeSet attrs, int defStyle) {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SmartWheelBar, defStyle, 0);
         mStartAngle = a.getFloat(R.styleable.SmartWheelBar_mStartAngle, 0);
+        isCanTouch=a.getBoolean(R.styleable.SmartWheelBar_isCanTouch,true);
         a.recycle();
     }
 
@@ -304,6 +307,14 @@ public class SmartWheelBar extends View {
             itemCanvas.rotate(tmpAngle, mCenter, mCenter);
         }
         return bitInfos.get(position).info.itemBitmap;
+    }
+
+    public void setCanTouch(boolean canTouch) {
+        this.isCanTouch = canTouch;
+    }
+
+    public boolean isCanTouch() {
+        return isCanTouch;
     }
 
     private void drawCanvas() {
@@ -465,57 +476,60 @@ public class SmartWheelBar extends View {
 //        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
-                touchX = event.getX();
-                touchY = event.getY();
-                if (isInCiecle(touchX, touchY)) {
-                    //按下时的时间
-                    nowClick = System.currentTimeMillis();
+                if (isCanTouch){
+                    touchX = event.getX();
+                    touchY = event.getY();
+                    if (isInCiecle(touchX, touchY)) {
+                        //按下时的时间
+                        nowClick = System.currentTimeMillis();
+                    }
                 }
+
                 break;
             case MotionEvent.ACTION_MOVE:
+                if (isCanTouch){
+                    float moveX = event.getX();
+                    float moveY = event.getY();
+                    //得到旋转的角度
+                    float arc = getRoundArc(touchX, touchY, moveX, moveY);
+                    //重新赋值
+                    touchX = moveX;
+                    touchY = moveY;
+                    //起始角度变化下，然后进行重新绘制
+                    mStartAngle += arc;
+                    Log.i("mStartAngle", "-->" + mStartAngle);
+                    if (mStartAngle >= 360) {
+                        mStartAngle = 0;
+                    }
+                    if (mStartAngle <= -360) {
+                        mStartAngle = 0;
+                    }
+                    if (isInCiecle(touchX, touchY)) {
+                        onDrawInvalidate();
+                    }
+                }
 
-                float moveX = event.getX();
-                float moveY = event.getY();
-                //得到旋转的角度
-                float arc = getRoundArc(touchX, touchY, moveX, moveY);
-                //重新赋值
-                touchX = moveX;
-                touchY = moveY;
-                //起始角度变化下，然后进行重新绘制
-                mStartAngle += arc;
-                Log.i("mStartAngle", "-->" + mStartAngle);
-                if (mStartAngle >= 360) {
-                    mStartAngle = 0;
-                }
-                if (mStartAngle <= -360) {
-                    mStartAngle = 0;
-                }
-                if (isInCiecle(touchX, touchY)) {
-                    onDrawInvalidate();
-                }
                 break;
             case MotionEvent.ACTION_UP:
+                    touchX = event.getX();
+                    touchY = event.getY();
 
-                touchX = event.getX();
-                touchY = event.getY();
+                    //落点的角度加上偏移量基于初始的点的位置
 
-                //落点的角度加上偏移量基于初始的点的位置
+                    if (mStartAngle % 4.5f != 0) {
+                        int t = (int) (mStartAngle / 4.5f);
+                        mStartAngle = t * 4.5f;
+                        Log.i("mStartAngle3", "-->" + mStartAngle);
+                    }
+                    checkPosition = calInExactArea(getRoundArc(event.getX(), event.getY()) - mStartAngle);
 
-
-                if (mStartAngle % 4.5f != 0) {
-                    int t = (int) (mStartAngle / 4.5f);
-                    mStartAngle = t * 4.5f;
-                    Log.i("mStartAngle3", "-->" + mStartAngle);
-                }
-                checkPosition = calInExactArea(getRoundArc(event.getX(), event.getY()) - mStartAngle);
-
-                onDrawInvalidate();
-                if (mOnWheelCheckListener != null) {
+                    onDrawInvalidate();
+                    if (mOnWheelCheckListener != null) {
 //                        mOnWheelCheckListener.onCheck(checkPosition);
-                    mOnWheelCheckListener.onChanged(this, mStartAngle);
-                }
-
-
+                        if (isCanTouch){
+                            mOnWheelCheckListener.onChanged(this, mStartAngle);
+                        }
+                    }
                 break;
         }
         return true;

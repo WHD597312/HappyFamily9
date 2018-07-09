@@ -11,22 +11,14 @@ import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
-
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.xnty.Timepicker;
 import com.xr.happyFamily.le.pojo.Time;
-import com.xr.happyFamily.le.view.btClockjsDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog3;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -143,6 +135,7 @@ public class bjTimeActivity extends AppCompatActivity {
                 Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
                 intent1.putExtra("hour",hour);
                 intent1.putExtra("minutes",minutes);
+                Log.e("time", "onClick: "+hour+"...."+minutes );
                 PendingIntent sender = PendingIntent.getBroadcast(this, 0x101, intent1,
                         PendingIntent.FLAG_CANCEL_CURRENT);
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {

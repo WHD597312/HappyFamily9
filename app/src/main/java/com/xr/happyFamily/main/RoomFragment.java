@@ -334,11 +334,26 @@ public class RoomFragment extends Fragment{
                         if (room!=null){
                             roomDao.delete(room);
                         }
+
                         List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
                         if (rooms.isEmpty()){
                             SharedPreferences.Editor editor=mPositionPreferences.edit();
                             editor.clear();
                             editor.commit();
+                        }else {
+                            if (mPositionPreferences.contains("position")){
+                                int position=mPositionPreferences.getInt("position",0);
+                                if (position>1){
+                                    SharedPreferences.Editor editor=mPositionPreferences.edit();
+                                    editor.putInt("position",position-1);
+                                    editor.commit();
+                                }else if (position==1){
+                                    SharedPreferences.Editor editor=mPositionPreferences.edit();
+                                    editor.putInt("position",1);
+                                    editor.commit();
+                                }
+                            }
+
                         }
                         deviceChildDao.deleteDeviceInHouseRoom(houseId,roomId);
                     }
@@ -453,16 +468,32 @@ public class RoomFragment extends Fragment{
         @Override
         public void onReceive(Context context, Intent intent) {
             String macAddress=intent.getStringExtra("macAddress");
-            String deviceChild2=intent.getStringExtra("deviceChild");
-            for (int i = 0; i < mGridData.size(); i++) {
-                DeviceChild deviceChild=mGridData.get(i);
-                String mac=deviceChild.getMacAddress();
-                if (mac.equals(macAddress) && "null".equals(deviceChild2)){
-                    mGridViewAdapter.remove(deviceChild);
-                    mGridViewAdapter.notifyDataSetChanged();
-                    break;
+            String noNet=intent.getStringExtra("noNet");
+            DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
+            if (!TextUtils.isEmpty(noNet)){
+                for (int i = 0; i < mGridData.size(); i++) {
+                    DeviceChild deviceChild=mGridData.get(i);
+                    deviceChild.setOnline(false);
+                    mGridData.set(i,deviceChild);
+                }
+                mGridViewAdapter.notifyDataSetChanged();
+            }else {
+                for (int i = 0; i < mGridData.size(); i++) {
+                    DeviceChild deviceChild=mGridData.get(i);
+                    String mac=deviceChild.getMacAddress();
+                    if (mac.equals(macAddress) && deviceChild2==null){
+                        Toast.makeText(getActivity(),"该设备已重置",Toast.LENGTH_SHORT).show();
+                        mGridViewAdapter.remove(deviceChild);
+                        mGridViewAdapter.notifyDataSetChanged();
+                        break;
+                    }else if (mac.equals(macAddress) && deviceChild2!=null){
+                        mGridData.set(i,deviceChild2);
+                        mGridViewAdapter.notifyDataSetChanged();
+                        break;
+                    }
                 }
             }
+
         }
     }
 }

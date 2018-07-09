@@ -10,6 +10,7 @@ import java.io.Serializable;
 public class DeviceChild implements Serializable{
     @Id(autoincrement = true)
     private Long id;
+    private boolean online;/**设备离线状态*/
     long houseId;/**设备的房子Id*/
     long roomId;/**设备的房间Id*/
     int deviceUsedCount;/**设备被用户使用的次数*/
@@ -39,6 +40,7 @@ public class DeviceChild implements Serializable{
     int userId=0;/**用户Id*/
     int img;/**设备标志图片*/
     int deviceId;/**设备Id*/
+    long shareId;/**分享设备*/
     public int getEndCode() {
         return this.endCode;
     }
@@ -219,6 +221,18 @@ public class DeviceChild implements Serializable{
     public void setDeviceId(int deviceId) {
         this.deviceId = deviceId;
     }
+    public long getShareId() {
+        return this.shareId;
+    }
+    public void setShareId(long shareId) {
+        this.shareId = shareId;
+    }
+    public boolean getOnline() {
+        return this.online;
+    }
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
    
     @Generated(hash = 1973447423)
     public DeviceChild() {
@@ -233,13 +247,14 @@ public class DeviceChild implements Serializable{
         this.name = name;
         this.userId = userId;
     }
-    @Generated(hash = 1883157887)
-    public DeviceChild(Long id, long houseId, long roomId, int deviceUsedCount, int type, int busModel, String macAddress, String name,
-            int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
+    @Generated(hash = 42437245)
+    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, int type, int busModel, String macAddress,
+            String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
             int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState, int deviceState, String rateState, int lockState,
             int screenState, int curRunState2, int curRunState3, int timerHour, int timerMin, int checkCode, int endCode, int userId, int img,
-            int deviceId) {
+            int deviceId, long shareId) {
         this.id = id;
+        this.online = online;
         this.houseId = houseId;
         this.roomId = roomId;
         this.deviceUsedCount = deviceUsedCount;
@@ -269,5 +284,6 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
         this.img = img;
         this.deviceId = deviceId;
+        this.shareId = shareId;
     }
 }

@@ -1,587 +1,209 @@
 package com.xr.happyFamily.jia.activity;
 
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
-import android.os.Handler;
-import android.os.Message;
+import android.location.LocationManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.text.InputType;
-import android.text.TextUtils;
 import android.util.Log;
-import android.view.View;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
 
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
-import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.amap.api.location.AMapLocation;
+import com.amap.api.location.AMapLocationClient;
+import com.amap.api.location.AMapLocationClientOption;
+import com.amap.api.location.AMapLocationListener;
+import com.amap.api.location.AMapLocationQualityReport;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.esptouch.EspWifiAdminSimple;
-import com.xr.happyFamily.esptouch.EsptouchTask;
-import com.xr.happyFamily.esptouch.IEsptouchListener;
-import com.xr.happyFamily.esptouch.IEsptouchResult;
-import com.xr.happyFamily.esptouch.IEsptouchTask;
-import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
-
-import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.jia.pojo.DeviceChild;
-
-import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
+import com.xr.happyFamily.together.util.location.Utils;
 
 import java.util.List;
 
-import butterknife.BindView;
-import butterknife.ButterKnife;
-import butterknife.OnClick;
-
-import pl.droidsonroids.gif.GifDrawable;
-import pl.droidsonroids.gif.GifImageView;
-
-public class Demo extends AppCompatActivity {
-
-    private boolean running=false;
-    MyApplication application;
-    @BindView(R.id.btn_wifi)
-    Button btn_wifi;
-    @BindView(R.id.btn_scan)
-    Button btn_scan;
-    @BindView(R.id.tv_result)
-    TextView tv_result;
-    @BindView(R.id.et_ssid)
-    EditText et_ssid;
-    @BindView(R.id.et_pswd)
-    EditText et_pswd;
-    @BindView(R.id.btn_match)
-    Button btn_match;
-    String group;
-    String groupPosition;
-    private long houseId;
-    @BindView(R.id.add_image) pl.droidsonroids.gif.GifImageView add_image;
-//    private DeviceGroupDaoImpl deviceGroupDao;
-    private DeviceChildDaoImpl deviceChildDao;
-
-    int[] wifi_drawables = {R.drawable.shape_btnwifi_connect, R.drawable.shape_btnwifi_noconnect};
-    int[] wifi_colors = new int[2];
-
-    int[] scan_drawables = {R.drawable.shape_btnzxscan_connect, R.drawable.shape_btnzxscan_noconnect};
-    @BindView(R.id.linearout_add_wifi_device)
-    LinearLayout linearout_add_wifi_device;
-    @BindView(R.id.linearout_add_scan_device)
-    LinearLayout linearout_add_scan_device;
-    @BindView(R.id.img_back)
-    ImageView img_back;
-    @BindView(R.id.linear) LinearLayout linear;
-    int[] visibilities = {View.GONE, View.VISIBLE};
-    int visibility;
-    int wifi_drawable;
-    int wifi_color;
-
-    int scan_drawable;
+public class Demo extends CheckPermissionsActivity{
+    private AMapLocationClient locationClient = null;
+    private AMapLocationClientOption locationOption = null;
 
 
-    private String userId;
-    private String wifiConnectionUrl = "http://47.98.131.11:8082/warmer/v1.0/device/registerDevice";
-    private String qrCodeConnectionUrl = "http://47.98.131.11:8082/warmer/v1.0/device/createShareDevice";
 
-//    private AddDeviceDialog addDeviceDialog;
-
-    GifDrawable gifDrawable;
-    int getAlpha;
-    int getAlpha2;
-
-    float alpha=0;
-    WindowManager.LayoutParams lp;
-    private RoomDaoImpl roomDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_demo);
-        ButterKnife.bind(this);
-        add_image= (GifImageView) findViewById(R.id.add_image);
-
-
-
-//       Room room=new Room();
-//       room.setRoomId(1L);
-//       room.setRoomName("whd");
-//        roomDao.insert(room);
-//
-//        Room room2=new Room();
-//        room2.setRoomId(2L);
-//        room2.setRoomName("whd2");
-//        roomDao.insert(room2);
-//
-//        Room room3=new Room();
-//        room3.setRoomId(3L);
-//        room3.setRoomName("whd3");
-//        roomDao.insert(room3);
-
-        getAlpha=linear.getBackground().mutate().getAlpha();
-        getAlpha2=add_image.getBackground().mutate().getAlpha();
-
-
-
-        mWifiAdmin = new EspWifiAdminSimple(this);
-        SharedPreferences my = getSharedPreferences("my", MODE_PRIVATE);
-        userId = my.getString("userId", "");
-        for (int i = 0; i < wifi_colors.length; i++) {
-            if (0 == i) {
-                wifi_colors[0] = getResources().getColor(R.color.white);
-            } else if (1 == i) {
-                wifi_colors[1] = getResources().getColor(R.color.color_blue);
-            }
-        }
-        if (application == null) {
-            application = (MyApplication) getApplication();
-        }
-        application.addActivity(this);
-
-
-
-        String wifi = "wifi";
-
-        if (!TextUtils.isEmpty(wifi)) {
-            if ("wifi".equals(wifi)) {
-                linearout_add_wifi_device.setVisibility(View.VISIBLE);
-                linearout_add_scan_device.setVisibility(View.GONE);
-                btn_wifi.setVisibility(View.GONE);
-                btn_scan.setVisibility(View.GONE);
-
-
-            } else if ("share".equals(wifi)) {
-                linearout_add_scan_device.setVisibility(View.VISIBLE);
-                linearout_add_wifi_device.setVisibility(View.GONE);
-                btn_wifi.setVisibility(View.GONE);
-                btn_scan.setVisibility(View.GONE);
-            }
-            btn_wifi.setVisibility(View.GONE);
-            btn_scan.setVisibility(View.GONE);
-        }
-        et_pswd.setInputType(InputType.TYPE_TEXT_VARIATION_VISIBLE_PASSWORD);
+        initLocation();
+        startLocation();//开始定位
+    }
+    /**
+     * 初始化定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void initLocation(){
+        //初始化client
+        locationClient = new AMapLocationClient(getApplicationContext());
+        locationOption = getDefaultOption();
+        //设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 设置定位监听
+        locationClient.setLocationListener(locationListener);
+    }
+    /**
+     * 默认的定位参数
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private AMapLocationClientOption getDefaultOption(){
+        AMapLocationClientOption mOption = new AMapLocationClientOption();
+        mOption.setLocationMode(AMapLocationClientOption.AMapLocationMode.Hight_Accuracy);//可选，设置定位模式，可选的模式有高精度、仅设备、仅网络。默认为高精度模式
+        mOption.setGpsFirst(false);//可选，设置是否gps优先，只在高精度模式下有效。默认关闭
+        mOption.setHttpTimeOut(30000);//可选，设置网络请求超时时间。默认为30秒。在仅设备模式下无效
+        mOption.setInterval(2000);//可选，设置定位间隔。默认为2秒
+        mOption.setNeedAddress(true);//可选，设置是否返回逆地理地址信息。默认是true
+        mOption.setOnceLocation(false);//可选，设置是否单次定位。默认是false
+        mOption.setOnceLocationLatest(false);//可选，设置是否等待wifi刷新，默认为false.如果设置为true,会自动变为单次定位，持续定位时不要使用
+        AMapLocationClientOption.setLocationProtocol(AMapLocationClientOption.AMapLocationProtocol.HTTP);//可选， 设置网络请求的协议。可选HTTP或者HTTPS。默认为HTTP
+        mOption.setSensorEnable(false);//可选，设置是否使用传感器。默认是false
+        mOption.setWifiScan(true); //可选，设置是否开启wifi扫描。默认为true，如果设置为false会同时停止主动刷新，停止以后完全依赖于系统刷新，定位位置可能存在误差
+        mOption.setLocationCacheEnable(true); //可选，设置是否使用缓存定位，默认为true
+        return mOption;
     }
 
-    @OnClick({R.id.img_back, R.id.btn_wifi, R.id.btn_scan, R.id.btn_scan2, R.id.btn_match})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.img_back:
-                Log.i("dialog","sssssss");
-                if (gifDrawable!=null && gifDrawable.isPlaying()){
-                    gifDrawable.stop();
-                    add_image.setVisibility(View.GONE);
-                    et_ssid.setEnabled(true);
-                    et_pswd.setEnabled(true);
-                    btn_match.setEnabled(true);
-                    break;
-                }
-                finish();
-                break;
-            case R.id.btn_wifi:
-                wifi_drawable = wifi_drawables[1];
-                wifi_drawables[1] = wifi_drawables[0];
-                wifi_drawables[0] = wifi_drawable;
-
-                scan_drawable = scan_drawables[0];
-                scan_drawables[0] = scan_drawables[1];
-                scan_drawables[1] = scan_drawable;
-
-                wifi_color = wifi_colors[1];
-                wifi_colors[1] = wifi_colors[0];
-                wifi_colors[0] = wifi_color;
-
-                btn_wifi.setBackgroundResource(wifi_drawable);
-                btn_scan.setBackgroundResource(scan_drawable);
-                btn_wifi.setTextColor(wifi_colors[0]);
-                btn_scan.setTextColor(wifi_colors[1]);
-                linearout_add_wifi_device.setVisibility(View.GONE);
-
-                visibility = visibilities[1];
-                visibilities[1] = visibilities[0];
-                visibilities[0] = visibility;
-                linearout_add_wifi_device.setVisibility(visibilities[1]);
-                linearout_add_scan_device.setVisibility(visibilities[0]);
-                break;
-            case R.id.btn_scan:
-                wifi_drawable = wifi_drawables[1];
-                wifi_drawables[1] = wifi_drawables[0];
-                wifi_drawables[0] = wifi_drawable;
-
-                scan_drawable = scan_drawables[0];
-                scan_drawables[0] = scan_drawables[1];
-                scan_drawables[1] = scan_drawable;
-
-                wifi_color = wifi_colors[1];
-                wifi_colors[1] = wifi_colors[0];
-                wifi_colors[0] = wifi_color;
-
-                btn_wifi.setBackgroundResource(wifi_drawable);
-                btn_scan.setBackgroundResource(scan_drawable);
-                btn_wifi.setTextColor(wifi_colors[0]);
-                btn_scan.setTextColor(wifi_colors[1]);
-
-                visibility = visibilities[1];
-                visibilities[1] = visibilities[0];
-                visibilities[0] = visibility;
-                linearout_add_wifi_device.setVisibility(visibilities[1]);
-                linearout_add_scan_device.setVisibility(visibilities[0]);
-                break;
-            case R.id.btn_scan2:
-                startActivity(new Intent(this,QRScannerActivity.class));
-//                scanQrCode();
-//                sharedDeviceId="userId";
-//                Map<String,Object> params2=new HashMap<>();
-//                params2.put("deviceId","1067");
-//                params2.put("userId",userId);
-//                new QrCodeAsync().execute(params2);
-                break;
-            case R.id.btn_match:
-
-                String ssid = et_ssid.getText().toString();
-                String apPassword = et_pswd.getText().toString();
-                String apBssid = mWifiAdmin.getWifiConnectedBssid();
-                String taskResultCountStr = "1";
-                if (__IEsptouchTask.DEBUG) {
-//                    Log.d(TAG, "mBtnConfirm is clicked, mEdtApSsid = " + apSsid
-//                            + ", " + " mEdtApPassword = " + apPassword);
-                }
-                if (Utils.isEmpty(apPassword)){
-                    break;
-                }
-                if (!Utils.isEmpty(ssid)) {
-//                    popupWindow();
-                    add_image.setVisibility(View.VISIBLE);
-                    et_ssid.setEnabled(false);
-                    et_pswd.setEnabled(false);
-                    btn_match.setEnabled(false);
-                    try {
-                        gifDrawable=new GifDrawable(getResources(),R.mipmap.touxiang3);
-                    }catch (Exception e){
-                        e.printStackTrace();
-                    }
-                    if (gifDrawable!=null){
-                        gifDrawable.start();
-                        add_image.setImageDrawable(gifDrawable);
-                    }
-
-
-//                    lp.alpha = 0.4f;
-//                    getWindow().setAttributes(lp);
-//                    linear.getBackground().mutate().setAlpha(100);
-
-                    add_image.getBackground().mutate().setAlpha(0);
-//                    add_image.getBackground().mutate().setAlpha((int) alpha);
-
-//                    WindowManager.LayoutParams lp=getWindow().getAttributes();
-//                    lp.alpha = 0.4f;
-//                    getWindow().setAttributes(lp);
-
-                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
-//                    String macAddress="vlinks_test18d634d6d3c6";
-//                    Map<String, Object> params = new HashMap<>();
-//                    params.put("deviceName", "设备3");
-//                    params.put("houseId", houseId);
-//                    params.put("masterControllerUserId", Integer.parseInt(userId));
-//                    params.put("type", 1);
-//                    params.put("macAddress", macAddress);
-//                    new WifiConectionAsync().execute(params);
-
-                }
-                break;
-        }
-    }
-
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        // display the connected ap's ssid
-        String apSsid = mWifiAdmin.getWifiConnectedSsid();
-        if (apSsid != null) {
-            et_ssid.setText(apSsid);
-        } else {
-            et_ssid.setText("");
-        }
-        // check whether the wifi is connected
-        boolean isApSsidEmpty = TextUtils.isEmpty(apSsid);
-        btn_match.setEnabled(!isApSsidEmpty);
-        SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
-        if (wifi.contains(et_ssid.getText().toString())) {
-            String pswd = wifi.getString(et_ssid.getText().toString(), "");
-            et_pswd.setText(pswd);
-            et_pswd.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
-        }
-        Log.i("AddDevice","-->"+"onResume");
-
-        running=true;
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        Log.i("AddDevice","-->"+"onPause");
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        Log.i("AddDevice","-->"+"onStop");
-        running=false;
-    }
-
-    String shareDeviceId;
-    String shareContent;
-    String shareMacAddress;
-
-//    @Override
-//    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-//        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-//        if (intentResult != null) {
-//            if (intentResult.getContents() == null) {
-//                Toast.makeText(this, "内容为空", Toast.LENGTH_LONG).show();
-//            } else {
-//                String content = intentResult.getContents();
-//                if (!Utils.isEmpty(content)) {
-//                    content = new String(Base64.decode(content, Base64.DEFAULT));
-//                    if (!Utils.isEmpty(content)) {
-//                        String[] ss = content.split("&");
-//                        String s0 = ss[0];
-//                        String deviceId = s0.substring(s0.indexOf("'") + 1);
-//                        String s2 = ss[2];
-//                        String macAddress = s2.substring(s2.indexOf("'") + 1);
-//                        shareMacAddress = macAddress;
-//                        Map<String, Object> params = new HashMap<>();
-//                        params.put("deviceId", deviceId);
-//                        params.put("userId", userId);
-//                        new QrCodeAsync().execute(params);
-//                    }
-//
-//
-//                }
-////                tv_result.setText(content);
-//            }
-//        } else {
-//            super.onActivityResult(requestCode, resultCode, data);
-//        }
-//    }
-
-//    class LoadUserInfoAsync extends AsyncTask<String,Void,Void>{
-//
-//        @Override
-//        protected Void doInBackground(String.. voids) {
-//            return null;
-//        }
-//    }
-
-//    /**
-//     * 扫描二维码
-//     */
-//    public void scanQrCode() {
-//
-//        IntentIntegrator integrator = new IntentIntegrator(AddDeviceActivity.this);
-//        integrator.setDesiredBarcodeFormats(IntentIntegrator.QR_CODE_TYPES);
-//        integrator.setCaptureActivity(ScanActivity.class);
-//        integrator.setPrompt("请扫描二维码"); //底部的提示文字，设为""可以置空
-//        integrator.setCameraId(0); //前置或者后置摄像头
-//        integrator.setBeepEnabled(true); //扫描成功的「哔哔」声，默认开启
-//        integrator.setBarcodeImageEnabled(true);//是否保留扫码成功时候的截图
-//        integrator.initiateScan();
-//    }
-
-    private static final String TAG = "Esptouch";
-    private EspWifiAdminSimple mWifiAdmin;
-
-
-
-
-
-    private void onEsptoucResultAddedPerform(final IEsptouchResult result) {
-        runOnUiThread(new Runnable() {
-
-            @Override
-            public void run() {
-                String text = result.getBssid() + " is connected to the wifi";
-//                Toast.makeText(AddDeviceActivity.this, text,
-//                        Toast.LENGTH_LONG).show();
-            }
-
-        });
-    }
-
-    private IEsptouchListener myListener = new IEsptouchListener() {
-
+    /**
+     * 定位监听
+     */
+    AMapLocationListener locationListener = new AMapLocationListener() {
         @Override
-        public void onEsptouchResultAdded(final IEsptouchResult result) {
-            onEsptoucResultAddedPerform(result);
+        public void onLocationChanged(AMapLocation location) {
+            if (null != location) {
+
+                StringBuffer sb = new StringBuffer();
+                //errCode等于0代表定位成功，其他的为定位失败，具体的可以参照官网定位错误码说明
+                if(location.getErrorCode() == 0){
+                    sb.append("定位成功" + "\n");
+                    sb.append("定位类型: " + location.getLocationType() + "\n");
+                    sb.append("经    度    : " + location.getLongitude() + "\n");
+                    sb.append("纬    度    : " + location.getLatitude() + "\n");
+                    sb.append("精    度    : " + location.getAccuracy() + "米" + "\n");
+                    sb.append("提供者    : " + location.getProvider() + "\n");
+
+                    sb.append("速    度    : " + location.getSpeed() + "米/秒" + "\n");
+                    sb.append("角    度    : " + location.getBearing() + "\n");
+                    // 获取当前提供定位服务的卫星个数
+                    sb.append("星    数    : " + location.getSatellites() + "\n");
+                    sb.append("国    家    : " + location.getCountry() + "\n");
+                    sb.append("省            : " + location.getProvince() + "\n");
+                    sb.append("市            : " + location.getCity() + "\n");
+                    sb.append("城市编码 : " + location.getCityCode() + "\n");
+
+                    sb.append("区            : " + location.getDistrict() + "\n");
+                    sb.append("区域 码   : " + location.getAdCode() + "\n");
+                    sb.append("地    址    : " + location.getAddress() + "\n");
+                    sb.append("兴趣点    : " + location.getPoiName() + "\n");
+                    //定位完成的时间
+                    sb.append("定位时间: " + Utils.formatUTC(location.getTime(), "yyyy-MM-dd HH:mm:ss") + "\n");
+                } else {
+                    //定位失败
+                    sb.append("定位失败" + "\n");
+                    sb.append("错误码:" + location.getErrorCode() + "\n");
+                    sb.append("错误信息:" + location.getErrorInfo() + "\n");
+                    sb.append("错误描述:" + location.getLocationDetail() + "\n");
+                }
+                sb.append("***定位质量报告***").append("\n");
+                sb.append("* WIFI开关：").append(location.getLocationQualityReport().isWifiAble() ? "开启":"关闭").append("\n");
+                sb.append("* GPS状态：").append(getGPSStatusString(location.getLocationQualityReport().getGPSStatus())).append("\n");
+                sb.append("* GPS星数：").append(location.getLocationQualityReport().getGPSSatellites()).append("\n");
+                sb.append("****************").append("\n");
+                //定位之后的回调时间
+                sb.append("回调时间: " + Utils.formatUTC(System.currentTimeMillis(), "yyyy-MM-dd HH:mm:ss") + "\n");
+
+                //解析定位结果，
+                String result = sb.toString();
+                Log.i("reSult","-->"+result);
+
+                if ("定位失败".equals(result)){
+
+                }
+
+                String s=location.getProvince();
+
+                String district=location.getDistrict();
+                Log.i("district","-->"+district);
+            }
         }
     };
 
-    private int type;
-    int count = 0;
-
-
-    private class EsptouchAsyncTask3 extends AsyncTask<String, Void, List<IEsptouchResult>> {
-
-
-        private IEsptouchTask mEsptouchTask;
-        // without the lock, if the user tap confirm and cancel quickly enough,
-        // the bug will arise. the reason is follows:
-        // 0. task is starting created, but not finished
-        // 1. the task is cancel for the task hasn't been created, it do nothing
-        // 2. task is created
-        // 3. Oops, the task should be cancelled, but it is running
-        private final Object mLock = new Object();
-
-        @Override
-        protected void onPreExecute() {
-//            popupWindow();
-//            addDeviceDialog=new AddDeviceDialog(AddDeviceActivity.this);
-//            addDeviceDialog.setCanceledOnTouchOutside(false);
-//            addDeviceDialog.show();
-
-//            mProgressDialog = new ProgressDialog(AddDeviceActivity.this);
-//            mProgressDialog
-//                    .setMessage("正在配置, 请耐心等待...");
-//            mProgressDialog.setCanceledOnTouchOutside(false);
-//            mProgressDialog.setOnCancelListener(new DialogInterface.OnCancelListener() {
-//                @Override
-//                public void onCancel(DialogInterface dialog) {
-//                    synchronized (mLock) {
-//                        if (__IEsptouchTask.DEBUG) {
-//                            Log.i(TAG, "progress dialog is canceled");
-//                        }
-//                        if (mEsptouchTask != null) {
-//                            mEsptouchTask.interrupt();
-//                        }
-//                    }
-//                }
-//            });
-//            mProgressDialog.setButton(DialogInterface.BUTTON_POSITIVE,
-//                    "Waiting...", new DialogInterface.OnClickListener() {
-//                        @Override
-//                        public void onClick(DialogInterface dialog, int which) {
-//                        }
-//                    });
-//            mProgressDialog.show();
-//            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-//                    .setEnabled(false);
+    /**
+     * 获取GPS状态的字符串
+     * @param statusCode GPS状态码
+     * @return
+     */
+    private String getGPSStatusString(int statusCode){
+        String str = "";
+        switch (statusCode){
+            case AMapLocationQualityReport.GPS_STATUS_OK:
+                str = "GPS状态正常";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_NOGPSPROVIDER:
+                str = "手机中没有GPS Provider，无法进行GPS定位";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_OFF:
+                str = "GPS关闭，建议开启GPS，提高定位质量";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_MODE_SAVING:
+                str = "选择的定位模式中不包含GPS定位，建议选择包含GPS定位的模式，提高定位质量";
+                break;
+            case AMapLocationQualityReport.GPS_STATUS_NOGPSPERMISSION:
+                str = "没有GPS定位权限，建议开启gps定位权限";
+                break;
         }
+        return str;
+    }
+    /**
+     * 开始定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void startLocation(){
+        //根据控件的选择，重新设置定位参数
+//        resetOption();
+        // 设置定位参数
+        locationClient.setLocationOption(locationOption);
+        // 启动定位
+        locationClient.startLocation();
+    }
 
-        @Override
-        protected List<IEsptouchResult> doInBackground(String... params) {
-            int taskResultCount = -1;
-            synchronized (mLock) {
-                // !!!NOTICE
+    /**
+     * 停止定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void stopLocation(){
+        // 停止定位
+        locationClient.stopLocation();
+    }
 
-                String apSsid = mWifiAdmin.getWifiConnectedSsidAscii(params[0]);
-                String apBssid = params[1];
-                String apPassword = params[2];
-                String taskResultCountStr = params[3];
-                taskResultCount = Integer.parseInt(taskResultCountStr);
-                mEsptouchTask = new EsptouchTask(apSsid, apBssid, apPassword, Demo.this);
-                mEsptouchTask.setEsptouchListener(myListener);
-            }
-            List<IEsptouchResult> resultList = mEsptouchTask.executeForResults(taskResultCount);
-            return resultList;
-        }
-
-        @Override
-        protected void onPostExecute(List<IEsptouchResult> result) {
-//            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE)
-//                    .setEnabled(true);
-//            mProgressDialog.getButton(DialogInterface.BUTTON_POSITIVE).setText(
-//                    "确认");
-            IEsptouchResult firstResult = result.get(0);
-            // check whether the task is cancelled and no results received
-            if (!firstResult.isCancelled()) {
-                int count = 0;
-                // max results to be displayed, if it is more than maxDisplayCount,
-                // just show the count of redundant ones
-                final int maxDisplayCount = 5;
-                // the task received some results including cancelled while
-                // executing before receiving enough results
-                if (firstResult.isSuc()) {
-                    StringBuilder sb = new StringBuilder();
-                    for (IEsptouchResult resultInList : result) {
-                        //                String ssid=et_ssid.getText().toString();
-                        DeviceChild deviceChild = new DeviceChild();
-                        String ssid = resultInList.getBssid();
-                        if (!TextUtils.isEmpty(ssid)) {
-                            String s = ssid.substring(0, 1);
-                            type = Integer.parseInt(s);
-                            if (type == 0)
-                                type = 2;
-                        }
-
-                        sb.append("配置成功");
-                        count++;
-                        if (count >= maxDisplayCount) {
-                            break;
-                        }
-                    }
-                    if (count < result.size()) {
-                        sb.append("\nthere's " + (result.size() - count)
-                                + " more result(s) without showing\n");
-                    }
-                    Toast.makeText(Demo.this,"配置成功",Toast.LENGTH_SHORT).show();
-//                    mProgressDialog.setMessage(sb.toString());
-                } else {
-
-
-                    if (running){
-                        if (gifDrawable!=null && gifDrawable.isPlaying()){
-                            gifDrawable.stop();
-                            if (add_image!=null){
-                                add_image.setVisibility(View.GONE);
-                                et_ssid.setEnabled(true);
-                                et_pswd.setEnabled(true);
-                                btn_match.setEnabled(true);
-                            }
-                        }
-                        Toast.makeText(Demo.this,"配置失败",Toast.LENGTH_SHORT).show();
-//                        Utils.showToast(AddDeviceActivity.this,"配置失败");
-                    }
-//                    mProgressDialog.setMessage("配置失败");
-                }
-            }
+    /**
+     * 销毁定位
+     *
+     * @since 2.8.0
+     * @author hongming.wang
+     *
+     */
+    private void destroyLocation(){
+        if (null != locationClient) {
+            /**
+             * 如果AMapLocationClient是在当前Activity实例化的，
+             * 在Activity的onDestroy中一定要执行AMapLocationClient的onDestroy
+             */
+            locationClient.onDestroy();
+            locationClient = null;
+            locationOption = null;
         }
     }
 
-    @Override
-    public void onBackPressed() {
-        if (gifDrawable!=null && gifDrawable.isPlaying()){
-            gifDrawable.stop();
-            add_image.setVisibility(View.GONE);
-            et_ssid.setEnabled(true);
-            et_pswd.setEnabled(true);
-            btn_match.setEnabled(true);
-            return;
-        }
-
-        finish();
-    }
-
-
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-    }
 }

@@ -24,11 +24,9 @@ import com.mob.tools.utils.UIHandler;
 import com.tencent.connect.auth.QQToken;
 import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
-import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
-import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
@@ -157,7 +155,7 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
                 break;
             case R.id.btn_login:
 
-                if (firstClick==1){
+
                     String phone = et_name.getText().toString().trim();
                     String password = et_pswd.getText().toString().trim();
                     if (TextUtils.isEmpty(phone)) {
@@ -171,7 +169,7 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
                         Utils.showToast(this, "请输入密码");
                         break;
                     }
-
+                if (firstClick==1){
                     Map<String, Object> params = new HashMap<>();
                     params.put("phone", phone);
                     params.put("password", password);
@@ -277,12 +275,6 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
                 case 100:
 
                     new hourseAsyncTask().execute();
-
-                    //每次登陆后清除上次登录信息里闹钟的数据
-                    ClockDaoImpl clockBeanDao=new ClockDaoImpl(LoginActivity.this.getApplicationContext());
-                    UserInfosDaoImpl userInfosDao=new UserInfosDaoImpl(LoginActivity.this.getApplicationContext());
-                    clockBeanDao.deleteAll();
-                    userInfosDao.deleteAll();
 
                     break;
             }

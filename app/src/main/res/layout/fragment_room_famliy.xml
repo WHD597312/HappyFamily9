@@ -170,7 +170,7 @@
                     />
 
                 <com.xr.happyFamily.jia.MyGridview
-                    android:id="@+id/gv_home_my1"
+                    android:id="@+id/gv_share_view"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/dp_jy_191"
                     android:layout_below="@id/tv_eqe_my1"

@@ -47,6 +47,7 @@ public class btClockjsDialog4 extends Dialog {
         super(context, R.style.MyDialog);
         mcontext=context;
     }
+    
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

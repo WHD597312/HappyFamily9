@@ -186,7 +186,6 @@ public class AddDeviceActivity extends AppCompatActivity {
                 startActivity(intent2);
                 break;
             case R.id.bt_add_finish:
-
                 String ssid = nice_spinner.getText().toString();
                 String apPassword = et_wifi.getText().toString();
                 String apBssid = mWifiAdmin.getWifiConnectedBssid();

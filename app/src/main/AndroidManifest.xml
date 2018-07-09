@@ -176,8 +176,7 @@
         <activity
             android:name=".main.MainActivity"
             android:hardwareAccelerated="true"
-            android:label="@string/app_name"
-            android:theme="@style/App_NoTouch" />
+            android:label="@string/app_name" />
         <activity
             android:name=".jia.activity.ShareDeviceActivity"
             android:screenOrientation="portrait"
@@ -300,8 +299,7 @@
             android:launchMode="singleTop" />
         <activity
             android:name=".bao.ShopDingdanActivity"
-            android:launchMode="singleTop"
-            android:theme="@style/App_NoTouch" />
+            android:launchMode="singleTop" />
         />
         <activity
             android:name=".bao.ShopSearchActivity"

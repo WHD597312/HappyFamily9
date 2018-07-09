@@ -375,6 +375,39 @@ public class LoginActivity extends AppCompatActivity {
                                     deviceChildDao.insert(deviceChild);
                                 }
                             }
+                            JSONArray deviceCommons=houseObject.getJSONArray("deviceCommons");
+                            for (int j = 0; j < deviceCommons.length(); j++) {
+                                JSONObject jsonObject3=deviceCommons.getJSONObject(j);
+                                int deviceId=jsonObject3.getInt("deviceId");
+                                String deviceName=jsonObject3.getString("deviceName");
+                                int deviceType=jsonObject3.getInt("deviceType");
+                                int roomId=jsonObject3.getInt("roomId");
+                                String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
+                                DeviceChild deviceChild2=null;
+                                for (DeviceChild deviceChild:deviceChildren){
+                                    int deviceId2=deviceChild.getDeviceId();
+                                    if (deviceId2==deviceId){
+                                        deviceChild2=deviceChild;
+                                        break;
+                                    }
+                                }
+                                if (deviceChild2!=null){
+                                    deviceChildDao.update(deviceChild2);
+                                }else if (deviceChild2==null){
+                                    if (deviceChild2==null){
+                                        deviceChild2=new DeviceChild();
+                                        deviceChild2.setUserId(userId);
+                                        deviceChild2.setShareId(Long.MAX_VALUE);
+                                        deviceChild2.setName(deviceName);
+                                        deviceChild2.setDeviceId(deviceId);
+                                        deviceChild2.setMacAddress(deviceMacAddress);
+                                        deviceChild2.setType(deviceType);
+                                        deviceChild2.setRoomId(roomId);
+                                        deviceChildDao.insert(deviceChild2);
+                                    }
+                                }
+                            }
                             JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
                             for (int x = 0; x < deviceShareds.length(); x++) {
                                 JSONObject jsonObject2=deviceShareds.getJSONObject(x);

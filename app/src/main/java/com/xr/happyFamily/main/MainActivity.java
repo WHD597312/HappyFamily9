@@ -1,12 +1,15 @@
 package com.xr.happyFamily.main;
 
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -22,14 +25,22 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.receiver.MQTTMessageReveiver;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.util.HashMap;
@@ -58,6 +69,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     @BindView(R.id.id_bto_zhen)
     LinearLayout idBtoZhen;
     private HourseDaoImpl hourseDao;
+    private RoomDaoImpl roomDao;
     SharedPreferences mPositionPreferences;
     @BindView(R.id.layout_bottom)
     LinearLayout layout_bottom;
@@ -74,11 +86,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private LeFragment leFragment;
     private MyApplication application;
     SharedPreferences preferences;
+    private DeviceChildDaoImpl deviceChildDao;
+
 
     //其他activity跳转回主界面时的标记
     private String sign = "0";
 
     private MQTTMessageReveiver myReceiver;
+    private  boolean isBound;
+    String load;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -94,6 +110,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             startService(service);
         }
 
+        roomDao=new RoomDaoImpl(getApplicationContext());
+        deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
 
@@ -106,6 +124,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         hourseDao = new HourseDaoImpl(getApplicationContext());
         List<Hourse> hourses = hourseDao.findAllHouse();
         Intent intent = getIntent();
+        load=intent.getStringExtra("load");
+        String login=intent.getStringExtra("login");
+
+//        if (!TextUtils.isEmpty(load) && TextUtils.isEmpty(login)){
+//            Intent service = new Intent(this, MQService.class);
+//            startService(service);
+//            isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+//        }
+
         long houseId = intent.getLongExtra("houseId", 0);
         if (houseId == 0) {
             Hourse hourse = hourses.get(0);
@@ -139,8 +166,49 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (preferences.contains("headImgUrl")){
             new LoadUserImageAsync().execute();
         }
+//        if (TextUtils.isEmpty(sign) && TextUtils.isEmpty(login)){
+//            new hourseAsyncTask().execute();
+//        }
     }
 
+//    MQService mqService;
+//    private boolean bound=false;
+//    ServiceConnection connection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+//            mqService = binder.getService();
+//            bound = true;
+//            List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+//            for (DeviceChild deviceChild : deviceChildren) {
+//                String macAddress = deviceChild.getMacAddress();
+//                int type=deviceChild.getType();
+//                String onlineTopicName="";
+//                String offlineTopicName="";
+//                switch (type){
+//                    case 2:
+//                        onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+//                        offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+//                        mqService.subscribe(onlineTopicName,1);
+//                        mqService.subscribe(offlineTopicName,1);
+//                        break;
+//                }
+//
+//            }
+//        }
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//            bound = false;
+//        }
+//    };
+    class LoadAync extends AsyncTask<Void,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Void... voids) {
+
+            return null;
+        }
+    }
     @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -223,19 +291,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (myReceiver!=null){
             unregisterReceiver(myReceiver);
         }
+//        if (isBound){
+//            unbindService(connection);
+//        }
     }
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 6000) {
-            String room = data.getStringExtra("room");
-            if (!TextUtils.isEmpty(room)) {
-                mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
-                if (mPositionPreferences.contains("position")) {
-                    mPositionPreferences.edit().clear().commit();
-                }
-            }
             long houseId = data.getLongExtra("houseId", 0);
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             FamilyFragmentManager familyFragmentManager = new FamilyFragmentManager();
@@ -282,6 +346,182 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 e.printStackTrace();
             }
             return null;
+        }
+    }
+
+    int img[] = {R.mipmap.t};
+    class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+//            Map<String, Object> params = maps[0];
+            String userId3=preferences.getString("userId","");
+            String url =HttpUtils.ipAddress + "/family/house/getHouseDeviceByUser?userId=" + userId3;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("ffffffff", "--->: " + result);
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    Log.i("fffffffft", "--->: " + code);
+//                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
+
+                    if (code == 100) {
+                        hourseDao.deleteAll();
+                        roomDao.deleteAll();
+                        deviceChildDao.deleteAll();
+                        JSONArray returnData = jsonObject.getJSONArray("returnData");
+                        for (int i = 0; i < returnData.length(); i++) {
+                            JSONObject houseObject = returnData.getJSONObject(i);
+                            int id = houseObject.getInt("id");
+                            Log.i("rrrr", "doInBackground:--> " + id);
+                            String houseName = houseObject.getString("houseName");
+                            String houseAddress = houseObject.getString("houseAddress");
+                            int userId = houseObject.getInt("userId");
+                            Hourse hourse = hourseDao.findById((long) id);
+                            if (hourse != null) {
+                                hourse.setHouseName(houseName);
+                                hourse.setHouseAddress(houseAddress);
+                                hourse.setUserId(userId);
+                                hourseDao.update(hourse);
+                            } else {
+                                hourse = new Hourse((long) id, houseName, houseAddress, userId);
+                                hourseDao.insert(hourse);
+                                Log.i("dddddd1", "doInBackground:---> " + hourse);
+                            }
+                            JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
+
+                            Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
+                            for (int j = 0; j < roomDevices.length(); j++) {
+                                JSONObject roomObject = roomDevices.getJSONObject(j);
+                                int roomId = roomObject.getInt("roomId");
+                                String roomName = roomObject.getString("roomName");
+                                int houseId = roomObject.getInt("houseId");
+                                String roomType = roomObject.getString("roomType");
+
+                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0);
+                                Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
+                                roomDao.insert(room);
+
+                                JSONArray deviceList = roomObject.getJSONArray("deviceList");
+                                for (int k = 0; k < deviceList.length(); k++) {
+                                    JSONObject device = deviceList.getJSONObject(k);
+                                    int deviceId = device.getInt("deviceId");
+                                    String deviceName = device.getString("deviceName");
+                                    int deviceType = device.getInt("deviceType");
+                                    String deviceMacAddress = device.getString("deviceMacAddress");
+                                    int houseId2 = device.getInt("houseId");
+                                    int userId2 = device.getInt("userId");
+                                    int roomId2 = device.getInt("roomId");
+                                    int deviceUsedCount = device.getInt("deviceUsedCount");
+                                    DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
+                                    deviceChild.setDeviceId(deviceId);
+                                    deviceChild.setImg(img[0]);
+                                    deviceChildDao.insert(deviceChild);
+                                }
+                            }
+                            JSONArray deviceCommons=houseObject.getJSONArray("deviceCommons");
+                            for (int j = 0; j < deviceCommons.length(); j++) {
+                                JSONObject jsonObject3=deviceCommons.getJSONObject(j);
+                                int deviceId=jsonObject3.getInt("deviceId");
+                                String deviceName=jsonObject3.getString("deviceName");
+                                int deviceType=jsonObject3.getInt("deviceType");
+                                int roomId=jsonObject3.getInt("roomId");
+                                String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
+                                DeviceChild deviceChild2=null;
+                                for (DeviceChild deviceChild:deviceChildren){
+                                    int deviceId2=deviceChild.getDeviceId();
+                                    if (deviceId2==deviceId){
+                                        deviceChild2=deviceChild;
+                                        break;
+                                    }
+                                }
+                                if (deviceChild2!=null){
+                                    deviceChildDao.update(deviceChild2);
+                                }else if (deviceChild2==null){
+                                    if (deviceChild2==null){
+                                        deviceChild2=new DeviceChild();
+                                        deviceChild2.setUserId(userId);
+                                        deviceChild2.setShareId(Long.MAX_VALUE);
+                                        deviceChild2.setName(deviceName);
+                                        deviceChild2.setDeviceId(deviceId);
+                                        deviceChild2.setMacAddress(deviceMacAddress);
+                                        deviceChild2.setType(deviceType);
+                                        deviceChild2.setRoomId(roomId);
+                                        deviceChildDao.insert(deviceChild2);
+                                    }
+                                }
+                            }
+                            JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
+                            for (int x = 0; x < deviceShareds.length(); x++) {
+                                JSONObject jsonObject2=deviceShareds.getJSONObject(x);
+                                int deviceId=jsonObject2.getInt("deviceId");
+                                String deviceName=jsonObject2.getString("deviceName");
+                                int deviceType=jsonObject2.getInt("deviceType");
+                                int roomId=jsonObject2.getInt("roomId");
+                                String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
+                                DeviceChild deviceChild2=null;
+                                for (DeviceChild deviceChild:deviceChildren){
+                                    int deviceId2=deviceChild.getDeviceId();
+                                    if (deviceId2==deviceId){
+                                        deviceChild2=deviceChild;
+                                        break;
+                                    }
+                                }
+                                if (deviceChild2!=null){
+                                    deviceChildDao.update(deviceChild2);
+                                }else if (deviceChild2==null){
+                                    if (deviceChild2==null){
+                                        deviceChild2=new DeviceChild();
+                                        deviceChild2.setUserId(userId);
+                                        deviceChild2.setShareId(Long.MAX_VALUE);
+                                        deviceChild2.setName(deviceName);
+                                        deviceChild2.setDeviceId(deviceId);
+                                        deviceChild2.setMacAddress(deviceMacAddress);
+                                        deviceChild2.setType(deviceType);
+                                        deviceChild2.setRoomId(roomId);
+                                        deviceChildDao.insert(deviceChild2);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+
+        }
+
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 1005:
+                    Utils.showToast(MainActivity.this, "加载失败");
+                    break;
+                case 100:
+                    if (mPositionPreferences.contains("position")){
+                        mPositionPreferences.edit().clear().commit();
+                    }
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    familyFragmentManager = new FamilyFragmentManager();
+                    Bundle bundle = new Bundle();
+                    List<Hourse> hourses = hourseDao.findAllHouse();
+                    Hourse hourse = hourses.get(0);
+                    long houseId = hourse.getHouseId();
+                    bundle.putLong("houseId", houseId);
+                    familyFragmentManager.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+                   fragmentTransaction.commit();
+//                    Intent service = new Intent(MainActivity.this, MQService.class);
+//                    startService(service);
+//                    isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+                    break;
+            }
         }
     }
 }

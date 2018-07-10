@@ -129,6 +129,7 @@ public class RoomFragment extends Fragment{
                     Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
                     intent.putExtra("deviceName", deviceName);
                     intent.putExtra("deviceId", deviceId);
+                    intent.putExtra("houseId",houseId);
                     startActivityForResult(intent,6000);
                 }
             });

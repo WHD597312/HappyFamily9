@@ -97,7 +97,6 @@ public class ManageHourseActivity extends AppCompatActivity {
                     Intent intent=new Intent(this,AddhourseActivity.class);
                     startActivityForResult(intent,MREQUEST_CODE);
 
-
                 break;
             case R.id.iv_choose_back1:
                 startActivity(new Intent(this,ChooseHourseActivity.class));
@@ -111,6 +110,16 @@ public class ManageHourseActivity extends AppCompatActivity {
         super.onDestroy();
         if (unbinder != null) {
             unbinder.unbind();
+        }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==MREQUEST_CODE){
+            houses = hourseDao.findAllHouse();
+            adapter = new ChooseHouseAdapter(this, houses);
+            recyclerView.setAdapter(adapter);
         }
     }
 }

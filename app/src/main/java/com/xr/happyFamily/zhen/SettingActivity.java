@@ -60,6 +60,8 @@ public class SettingActivity extends AppCompatActivity {
                 if(preferences.contains("password")){
                     preferences.edit().remove("password").commit();
                 }
+                SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
+                mPositionPreferences.edit().clear().commit();
                 Intent exit=new Intent(this, LoginActivity.class);
                 startActivity(exit);
                 break;

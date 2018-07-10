@@ -170,6 +170,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".jia.ManageHourseActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
             android:name=".jia.ChooseHourseActivity"
             android:label=""
             android:screenOrientation="portrait"
@@ -305,6 +311,7 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+
         <activity
             android:name=".bao.FuWuActivity"
             android:label=""

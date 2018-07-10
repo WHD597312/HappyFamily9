@@ -70,7 +70,6 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setText("离线");
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
-
                 }
                 item.setImg(img[0]);
                 holder.tv_device_name.setText(item.getName());

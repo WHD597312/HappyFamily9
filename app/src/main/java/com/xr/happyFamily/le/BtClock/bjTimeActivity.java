@@ -144,9 +144,11 @@ public class bjTimeActivity extends AppCompatActivity {
                 } else {
                         am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
                     }
-                Intent intent = new Intent(this,TimeClockActivity.class);
-                intent.putExtra("fragid",1);
-                startActivity(intent);
+//                Intent intent = new Intent(this,TimeClockActivity.class);
+//                intent.putExtra("fragid",1);
+//                startActivity(intent);
+                setResult(600);
+                finish();
                 break;
             case R.id.rl_bjtime_bq:
                 Intent intent2 = new Intent(this,bqOfColckActivity.class);
@@ -199,11 +201,12 @@ public class bjTimeActivity extends AppCompatActivity {
             }
         });
 
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog.setCanceledOnTouchOutside(false);
+//        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-        Window w = dialog.getWindow();
-        WindowManager.LayoutParams lp = w.getAttributes();
-        lp.x = 0;
-        dialog.onWindowAttributesChanged(lp);
+//        Window w = dialog.getWindow();
+//        WindowManager.LayoutParams lp = w.getAttributes();
+//        lp.x = 0;
+//        dialog.onWindowAttributesChanged(lp);
     }
 }

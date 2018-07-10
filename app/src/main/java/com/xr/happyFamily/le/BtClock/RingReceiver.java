@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.media.MediaPlayer;
+import android.os.PowerManager;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Window;
@@ -50,6 +51,17 @@ public class RingReceiver extends BroadcastReceiver{
                 int hour1=calendar.get(Calendar.HOUR_OF_DAY);
             int minute1=calendar.get(Calendar.MINUTE);
             if (hour1==hour&&minute1==minutes){
+                PowerManager pm = (PowerManager)mContext.getSystemService(Context.POWER_SERVICE);
+/*        PARTIAL_WAKE_LOCK:保持CPU 运转，屏幕和键盘灯有可能是关闭的。
+        SCREEN_DIM_WAKE_LOCK：保持CPU 运转，允许保持屏幕显示但有可能是灰的，允许关闭键盘灯
+        SCREEN_BRIGHT_WAKE_LOCK：保持CPU 运转，允许保持屏幕高亮显示，允许关闭键盘灯
+        FULL_WAKE_LOCK：保持CPU 运转，保持屏幕高亮显示，键盘灯也保持亮度
+        ACQUIRE_CAUSES_WAKEUP：强制使屏幕亮起，这种锁主要针对一些必须通知用户的操作.
+                ON_AFTER_RELEASE：当锁被释放时，保持屏幕亮起一段时间*/
+                PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK  | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE , "wjc");
+                wakeLock.acquire();
+//wakeLock.acquire(1000);
+                wakeLock.release();
                 List<Time> times=timeDao.findTimesByHourAndMin(hour,minutes);
                 if (!times.isEmpty()){
                     Time time=times.get(0);
@@ -93,7 +105,6 @@ public class RingReceiver extends BroadcastReceiver{
             @Override
             public void onPositiveClick() {
 
-
             }
         });
 
@@ -101,8 +112,6 @@ public class RingReceiver extends BroadcastReceiver{
         dialog4.setCancelable(false);
         dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog4.show();
-
-
     }
     private void clolkDialog2() {//脑筋急转弯
         dialog2 = new btClockjsDialog2(mContext);
@@ -145,16 +154,12 @@ public class RingReceiver extends BroadcastReceiver{
             @Override
             public void onPositiveClick() {
 
-
             }
         });
-
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
-
-
     }
 
 }

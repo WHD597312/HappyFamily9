@@ -98,9 +98,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private String sign = "0";
 
     private MQTTMessageReveiver myReceiver;
-    private  boolean isBound;
     String load;
-    private boolean isBound = false;
 
     public static boolean running = false;
     @Override
@@ -309,12 +307,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             unregisterReceiver(myReceiver);
         }
 
-        if (isBound) {
-            unbindService(connection);
-        }
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-        }
+
     }
 
     @Override

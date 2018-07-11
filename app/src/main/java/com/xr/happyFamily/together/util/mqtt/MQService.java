@@ -454,13 +454,10 @@ public class MQService extends Service {
                 }
                 Log.e("qqqqqqqqqqqRRRR", message + "??");
                 if (message.contains("senderRemark") && message.contains("senderAge") && message.contains("senderSex")) {
-
-
                     Gson gson = new Gson();
-
                     FriendData user = gson.fromJson(message, FriendData.class);
                     friendDataDao.insert(user);
-                    Log.e("qqqqqqqqqqqRRRR", "111111??");
+
                     NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                     //创建通知建设类
                     Notification.Builder builder = new Notification.Builder(getApplicationContext());
@@ -484,6 +481,11 @@ public class MQService extends Service {
                     //显示在通知栏
                     manager.notify(0, notification);
                 }
+                if(macAddress.equals("clockuniversal")){
+                    Log.e("qqqqqqqqMMM",message);
+                }else if(macAddress.equals("+")){
+                    Log.e("qqqqqqqqMMM",message);
+                }
 
 
                 //标记  运行控件
@@ -505,6 +507,7 @@ public class MQService extends Service {
         String userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
         String friendTopic = "p99/+/" + userId + "_" + userName + "/friend";
+        String clockTopic = "p99/clockuniversal/" + userId + "_" + userName;
         for (DeviceChild deviceChild : deviceChildren) {
             String macAddress = deviceChild.getMacAddress();
             int type = deviceChild.getType();
@@ -520,6 +523,7 @@ public class MQService extends Service {
             list.add(offlineTopicName);
         }
         list.add(friendTopic);
+        list.add(clockTopic);
 //        list.add("warmer/p99"+macAddress+"/set");
         return list;
     }

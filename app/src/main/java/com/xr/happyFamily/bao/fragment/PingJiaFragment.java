@@ -253,18 +253,20 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Log.i("average","-->"+average);
                 if (!"null".equals(returnData)) {
-                    if(!Utils.isEmpty(average+"")) {
-                        int ave = (int)(Float.parseFloat(average)*10 + 5)/10;
+                    if (!Utils.isEmpty(average + "")) {
+                        int ave = (int) (Float.parseFloat(average) * 10 + 5) / 10;
                         for (int i = 0; i < ave; i++) {
                             imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);
                         }
                     }
                     adapter_pinglun.notifyDataSetChanged();
-                    if(total.equals("0"))
-                        tvHaoping.setText("满意度:100%");
-                    else
-                    tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
+                    if (tvHaoping != null) {
+                        if (total.equals("0"))
+                            tvHaoping.setText("满意度:100%");
+                        else
+                            tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
 //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                    }
                 }
             }
         }

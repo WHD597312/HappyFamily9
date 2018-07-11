@@ -1,11 +1,18 @@
 package com.xr.happyFamily.le.view;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -14,8 +21,13 @@ import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.together.util.Utils;
+
+import java.util.Calendar;
+import java.util.List;
 import java.util.Random;
 
 import butterknife.BindView;
@@ -40,6 +52,10 @@ public class btClockjsDialog extends Dialog {
     Context mcontext;
     private MediaPlayer mediaPlayer;
     private AudioManager audioMa;
+    SharedPreferences preferences;
+    TimeDaoImpl timeDao;
+    List<Time> times;
+    Time time;
 //        public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;//定义屏蔽参数
     public btClockjsDialog(@NonNull Context context) {
         super(context, R.style.MyDialog);
@@ -55,17 +71,52 @@ public class btClockjsDialog extends Dialog {
         x = (int) (random.nextInt(900)) + 100;
         y = (int) (random.nextInt(900)) + 100;
         tv_zl_js.setText(x + "×" + y + "=");
-
-
-        mediaPlayer = MediaPlayer.create(mcontext, R.raw.music2);
-        mediaPlayer.start();//一进来就播放
-        mediaPlayer.setLooping(true);
+        Calendar calendar = Calendar.getInstance();
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int minute=calendar.get(Calendar.MINUTE);
+        timeDao= new TimeDaoImpl(mcontext.getApplicationContext());
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext);
+        String url = sharedPreferences.getString("pref_alarm_ringtone","");
+        times= timeDao.findTimesByHourAndMin(hour,minute);
+        time=times.get(0);
+        String name =  time.getRingName();
+        if ("睡猫觉".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.music1);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("芙蓉雨".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.music2);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("浪人琵琶".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.lrpp);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }
+        else if ("阿里郎".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.all);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }
+        else if ("that girl".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.girl);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("expression".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.ex);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("系统自带".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, Uri.parse(url));
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }
 
         audioMa = (AudioManager)mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
 //        this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED, FLAG_HOMEKEY_DISPATCHED); //onCreate中实现
-
+        preferences = mcontext.getSharedPreferences("this", mcontext.MODE_PRIVATE);
 
     }
 //    @Override
@@ -145,6 +196,20 @@ public class btClockjsDialog extends Dialog {
                     if (z == a) {
                         dismiss();
                         mediaPlayer.stop();
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("first",2);
+                        editor.apply();
+                        Calendar c=Calendar.getInstance();//c：当前系统时间
+                        AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
+                        Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
+
+                        PendingIntent sender = PendingIntent.getBroadcast(mcontext, 0x101, intent1,
+                                PendingIntent.FLAG_CANCEL_CURRENT);
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                            am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
+                        } else {
+                            am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                        }
                     } else {
                         Toast.makeText(mcontext, "输入错误请从新输入", Toast.LENGTH_SHORT).show();
                     }

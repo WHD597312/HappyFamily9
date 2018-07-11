@@ -1,225 +1,148 @@
 package com.xr.happyFamily.le.BtClock;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.graphics.Color;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.ColorDrawable;
-import android.os.AsyncTask;
-import android.os.Build;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewGroup;
-import android.view.Window;
-import android.view.WindowManager;
-import android.widget.Button;
-import android.widget.ImageView;
-import android.widget.PopupWindow;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.xnty.Timepicker;
+import com.xr.happyFamily.le.adapter.ChooseRingAdapter;
+import com.xr.happyFamily.le.adapter.ChooseTimeAdapter;
 import com.xr.happyFamily.le.pojo.Time;
-import com.xr.happyFamily.le.view.btClockjsDialog3;
-import com.xr.happyFamily.login.login.LoginActivity;
-import com.xr.happyFamily.together.http.HttpUtils;
-import com.xr.happyFamily.together.util.Utils;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import android.preference.PreferenceActivity;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class addTimeActivity extends AppCompatActivity {
-    @BindView(R.id.time_lebj1)
-    Timepicker timepicker1;
-    @BindView(R.id.time_lebj2)
-    Timepicker timepicker2;
-    @BindView(R.id.tv_bjtime_bq) TextView tv_bjtime_bq;
-    @BindView(R.id.tv_bjtime_gb) TextView tv_bjtime_gb;
-    @BindView(R.id.tv_bt_title) TextView tv_bt_title;
-    @BindView(R.id.tv_bjclock_ring) TextView tv_bjclock_ring;
+public class clockRingActivity extends Activity {
+
+    @BindView(R.id.colockring_recyc)
+    RecyclerView recyclerView;
     private TimeDaoImpl timeDao;
-    List<Time> times;
+    private List<String> mData = new ArrayList<String>(Arrays.asList("睡猫觉", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"));
+    ChooseRingAdapter adapter;
     Time time;
     int hour, minutes;
-    SharedPreferences preferences;
     String userId;
-    String lable ,style;
-    String ip = "http://47.98.131.11:8084";
-    private AlarmManager am;
-    private PendingIntent pendingIntent;
-    private NotificationManager notificationManager;
+    public static final String ALARM_RINGTONE    = "pref_alarm_ringtone";
+
+    private Preference mAlarmSoundsPref;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.fragment_le_bjcomonclock);
+        setContentView(R.layout.fragment_le_clockring);
         ButterKnife.bind(this);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        tv_bt_title.setText("添加闹钟");
-        timeDao = new TimeDaoImpl(getApplicationContext());
-        times = new ArrayList<>();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(clockRingActivity.this);
+        recyclerView.setLayoutManager(linearLayoutManager);
 
-        preferences = this.getSharedPreferences("this", MODE_PRIVATE);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("first",1);
-        editor.apply();
-//        userId= preferences.getString("userId","");
-        times = timeDao.findByAllTime();
-        time=new Time();
-        timepicker1.setMaxValue(23);
-        timepicker1.setMinValue(00);
-        timepicker1.setValue(49);
-//        timepicker1.setBackgroundColor(Color.WHITE);
-        timepicker1.setNumberPickerDividerColor(timepicker1);
-        timepicker2.setMaxValue(59);
-        timepicker2.setMinValue(00);
-        timepicker2.setValue(49);
-//        timepicker2.setBackgroundColor(Color.WHITE);
-        timepicker2.setNumberPickerDividerColor(timepicker2);
-        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        //获取通知管理器
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+        adapter = new ChooseRingAdapter(clockRingActivity.this,mData);
+        recyclerView.setAdapter(adapter);
     }
 
-    @OnClick({R.id.tv_lrbj_qx, R.id.tv_lrbj_qd ,R.id.rl_bjtime_bq,R.id.rl_bjtime_gb})
+
+
+
+
+
+
+    @OnClick({R.id.iv_ring_fh, R.id.rl_clock_xt})
     public void onClick(View view) {
         switch (view.getId()) {
 
-            case R.id.tv_lrbj_qx:
+            case R.id.iv_ring_fh:
+                int pos = adapter.getLastPos();
+                Intent intent = new Intent();
+                intent.putExtra("pos",pos);
+                setResult(111,intent);
                 finish();
                 break;
-            case R.id.tv_lrbj_qd:
-
-                hour = timepicker1.getValue();
-                minutes = timepicker2.getValue();
-                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
-                time.setHour(hour);
-                time.setMinutes(minutes);
-                if (Utils.isEmpty(time.getLable())){
-                    time.setLable("别忘了明天的会议");
-                }
-                if (Utils.isEmpty(time.getStyle())){
-                    time.setStyle("听歌识曲");
-                    time.setFlag(1);
-                }
-                int sumMin=hour*60 +minutes;
-                time.setSumMin(sumMin);
-                time.setOpen(true);
-                timeDao.insert(time);
-                Calendar c=Calendar.getInstance();//c：当前系统时间
-//                    c.set(Calendar.HOUR_OF_DAY,hour);//把小时设为你选择的小时
-//                    c.set(Calendar.MINUTE,minutes);
-//                PendingIntent pendingIntent= PendingIntent.getBroadcast(this,0x101,new Intent("com.zking.android29_alarm_notification.RING"),0);//上下文 请求码  启动哪一个广播 标志位
-//                am.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-//                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
-                //发送广播。。。响铃
-                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
-
-                PendingIntent sender = PendingIntent.getBroadcast(addTimeActivity.this, 0x101, intent1,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-                } else {
-                    am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
-                }
-                Utils.showToast(addTimeActivity.this, "添加闹铃成功");
-//                setResult(600);
-                finish();
-
+            case R.id.rl_clock_xt:
+                doPickAlarmRingtone();
                 break;
-            case R.id.rl_bjtime_bq:
-                //跳转到标签
-                Intent intent2 = new Intent(this,bqOfColckActivity.class);
-                startActivityForResult(intent2,666);
-                break;
-            case R.id.rl_bjtime_gb:
-                //选择关闭方式
-                clolkDialog1();
-                break;
+
         }
     }
-    String text1;
+    private String alarmStr;
+    private static final int ALARM_RINGTONE_PICKED = 3;
+    private void doPickAlarmRingtone(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        alarmStr = sharedPreferences.getString(ALARM_RINGTONE, null);
+
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        // Allow user to pick 'Default'
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+        // Show only ringtones
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
+        //set the default Notification value
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        // Don't show 'Silent'
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+
+        Uri alarmUri;
+        if (alarmStr != null) {
+            alarmUri = Uri.parse(alarmStr);
+            // Put checkmark next to the current ringtone for this contact
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, alarmUri);
+        } else {
+            // Otherwise pick default ringtone Uri so that something is selected.
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            // Put checkmark next to the current ringtone for this contact
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, alarmUri);
+        }
+
+        startActivityForResult(intent, ALARM_RINGTONE_PICKED);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==666){
-            Intent intent=getIntent();
-            text1=intent.getStringExtra("text");
-            tv_bjtime_bq.setText(text1);
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (resultCode != RESULT_OK) {
+            return;
         }
-        if (resultCode==111){
-            List<String> mData = new ArrayList<String>(Arrays.asList("睡猫觉", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"));
-            Intent intent = getIntent();
-            int pos=intent.getIntExtra("pos",0);
-            String text=mData.get(pos);
-            tv_bjclock_ring.setText(text);
-            time.setRingName(text);
+
+        switch (requestCode) {
+
+            case ALARM_RINGTONE_PICKED:{
+                Uri pickedUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if(null == pickedUri){
+
+                    editor.putString(ALARM_RINGTONE, null);
+                    editor.commit();
+                }else{
+                    Ringtone ringtone =  RingtoneManager.getRingtone(clockRingActivity.this, pickedUri);
+                    String strRingtone = ringtone.getTitle(clockRingActivity.this);
+                    editor.putString(ALARM_RINGTONE, pickedUri.toString());
+                    editor.commit();
+
+                }
+                break;
+            }
+
+
+            default:break;
         }
     }
-    int flag1=1;
-    btClockjsDialog3 dialog;
-    private void clolkDialog1() {
-        dialog = new btClockjsDialog3(this);
-//        Window dialogWindow = dialog.getWindow();
-//        WindowManager.LayoutParams lp = dialogWindow.getAttributes();
-//        dialogWindow.setGravity(Gravity.CENTER_HORIZONTAL | Gravity.TOP);
-//        lp.x = 0; // 新位置X坐标
-//        lp.y = 0; // 新位置Y坐标
-//        lp.width = 500; // 宽度
-//        lp.height = 500; // 高度
-//        lp.alpha =1f; // 透明度
-//        dialogWindow.setAttributes(lp);
-        dialog.setOnNegativeClickListener(new btClockjsDialog3.OnNegativeClickListener() {
-            @Override
-            public void onNegativeClick() {
-                dialog.dismiss();
-            }
-        });
-        dialog.setOnPositiveClickListener(new btClockjsDialog3.OnPositiveClickListener() {
-            @Override
-            public void onPositiveClick() {
-                String text=dialog.getText();
-                Log.e("text", "onPositiveClick: "+text );
-               flag1 = dialog.getFlag();
-                tv_bjtime_gb.setText(text);
-                time.setStyle(text);
-                time.setFlag(flag1);
-                dialog.dismiss();
-
-
-            }
-        });
-        dialog.setCanceledOnTouchOutside(false);
-//        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        dialog.show();
-//        Window w = dialog.getWindow();
-//        WindowManager.LayoutParams lp = w.getAttributes();
-//        lp.x = 0;
-//        dialog.onWindowAttributesChanged(lp);
-    }
-
 
 //
 //    private boolean mIsShowing = false;

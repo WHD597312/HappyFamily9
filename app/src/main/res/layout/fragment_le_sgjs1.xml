@@ -11,6 +11,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_sgjs_fh"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_20"
             android:layout_gravity="center"
@@ -43,6 +44,7 @@
         android:layout_height="@dimen/dp_jy_300" />
 
     <TextView
+        android:id="@+id/tv_sgjs_liveyear"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
@@ -53,12 +55,13 @@
         android:textSize="@dimen/sp_18" />
 
     <TextView
+        android:id="@+id/tv_sjjs_canlive"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_jy_6"
         android:gravity="center"
-        android:text="如果你的生活规律，在健康的状态下，你还可以或500年"
+        android:text="如果你的生活规律，在健康的状态下，你还可以活500年"
         android:textSize="@dimen/sp_12" />
     <ImageView
         android:layout_marginTop="@dimen/dp_jy_10"
@@ -89,6 +92,7 @@
                 android:layout_marginTop="@dimen/dp_jy_12"
                 />
             <TextView
+                android:id="@+id/tv_sgjs_year"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="23"
@@ -117,6 +121,7 @@
                 android:layout_marginTop="@dimen/dp_jy_12"
                 />
             <TextView
+                android:id="@+id/tv_sgjs_month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="5"
@@ -144,6 +149,7 @@
                 android:layout_marginTop="@dimen/dp_jy_12"
                 />
             <TextView
+                android:id="@+id/tv_sgjs_day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="1"
@@ -171,6 +177,7 @@
                 android:layout_marginTop="@dimen/dp_jy_12"
                 />
             <TextView
+                android:id="@+id/tv_sgjs_hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="3"
@@ -199,6 +206,7 @@
                 android:layout_marginTop="@dimen/dp_jy_12"
                 />
             <TextView
+                android:id="@+id/tv_sgjs_minutes"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="20"

@@ -12,7 +12,7 @@
         android:background="@color/white"
         >
         <ImageView
-            android:id="@+id/iv_comm_fh"
+            android:id="@+id/iv_ring_fh"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_20"
             android:paddingRight="@dimen/dp_jy_60"
@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_35"
-            android:text="制赖闹钟"
+            android:text="铃声"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_gravity="center"
@@ -31,18 +31,49 @@
             android:gravity="center"
             />
         <ImageView
-            android:id="@+id/iv_le_clock_add"
+
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_20"
             android:paddingLeft="@dimen/dp_jy_60"
             android:layout_gravity="center"
-            android:src="@mipmap/clock_add"
             android:layout_weight="1"
             />
 
     </LinearLayout>
+    <RelativeLayout
+        android:id="@+id/rl_clock_xt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:layout_marginBottom="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:background="@color/white"
+
+        >
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="自定义铃声"
+        android:textColor="@color/color_black3"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/hourse_xz"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+    </RelativeLayout>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="默认铃声"
+        android:layout_marginBottom="@dimen/dp_jy_12"
+        />
     <android.support.v7.widget.RecyclerView
-        android:id="@+id/commonclock_recyc"
+        android:id="@+id/colockring_recyc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
 

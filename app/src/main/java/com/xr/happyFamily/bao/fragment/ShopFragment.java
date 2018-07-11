@@ -401,9 +401,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 if (tvType != null)
                     tvType.setText(type);
 
-                Picasso.with(mContext)
-                        .load(img)
-                        .into(imgPic);//此种策略并不会压缩图片
+                if (imgPic!=null) {
+                    Picasso.with(mContext)
+                            .load(img)
+                            .into(imgPic);//此种策略并不会压缩图片
+                }
             }
 
             isWeight = true;

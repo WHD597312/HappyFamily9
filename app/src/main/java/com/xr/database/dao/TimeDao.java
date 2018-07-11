@@ -30,8 +30,10 @@ public class TimeDao extends AbstractDao<Time, Long> {
         public final static Property Day = new Property(3, String.class, "day", false, "DAY");
         public final static Property Lable = new Property(4, String.class, "lable", false, "LABLE");
         public final static Property Style = new Property(5, String.class, "Style", false, "STYLE");
-        public final static Property Flag = new Property(6, int.class, "flag", false, "FLAG");
-        public final static Property Open = new Property(7, boolean.class, "open", false, "OPEN");
+        public final static Property RingName = new Property(6, String.class, "ringName", false, "RING_NAME");
+        public final static Property SumMin = new Property(7, int.class, "sumMin", false, "SUM_MIN");
+        public final static Property Flag = new Property(8, int.class, "flag", false, "FLAG");
+        public final static Property Open = new Property(9, boolean.class, "open", false, "OPEN");
     }
 
 
@@ -53,8 +55,10 @@ public class TimeDao extends AbstractDao<Time, Long> {
                 "\"DAY\" TEXT," + // 3: day
                 "\"LABLE\" TEXT," + // 4: lable
                 "\"STYLE\" TEXT," + // 5: Style
-                "\"FLAG\" INTEGER NOT NULL ," + // 6: flag
-                "\"OPEN\" INTEGER NOT NULL );"); // 7: open
+                "\"RING_NAME\" TEXT," + // 6: ringName
+                "\"SUM_MIN\" INTEGER NOT NULL ," + // 7: sumMin
+                "\"FLAG\" INTEGER NOT NULL ," + // 8: flag
+                "\"OPEN\" INTEGER NOT NULL );"); // 9: open
     }
 
     /** Drops the underlying database table. */
@@ -88,8 +92,14 @@ public class TimeDao extends AbstractDao<Time, Long> {
         if (Style != null) {
             stmt.bindString(6, Style);
         }
-        stmt.bindLong(7, entity.getFlag());
-        stmt.bindLong(8, entity.getOpen() ? 1L: 0L);
+ 
+        String ringName = entity.getRingName();
+        if (ringName != null) {
+            stmt.bindString(7, ringName);
+        }
+        stmt.bindLong(8, entity.getSumMin());
+        stmt.bindLong(9, entity.getFlag());
+        stmt.bindLong(10, entity.getOpen() ? 1L: 0L);
     }
 
     @Override
@@ -117,8 +127,14 @@ public class TimeDao extends AbstractDao<Time, Long> {
         if (Style != null) {
             stmt.bindString(6, Style);
         }
-        stmt.bindLong(7, entity.getFlag());
-        stmt.bindLong(8, entity.getOpen() ? 1L: 0L);
+ 
+        String ringName = entity.getRingName();
+        if (ringName != null) {
+            stmt.bindString(7, ringName);
+        }
+        stmt.bindLong(8, entity.getSumMin());
+        stmt.bindLong(9, entity.getFlag());
+        stmt.bindLong(10, entity.getOpen() ? 1L: 0L);
     }
 
     @Override
@@ -135,8 +151,10 @@ public class TimeDao extends AbstractDao<Time, Long> {
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // day
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // lable
             cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // Style
-            cursor.getInt(offset + 6), // flag
-            cursor.getShort(offset + 7) != 0 // open
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // ringName
+            cursor.getInt(offset + 7), // sumMin
+            cursor.getInt(offset + 8), // flag
+            cursor.getShort(offset + 9) != 0 // open
         );
         return entity;
     }
@@ -149,8 +167,10 @@ public class TimeDao extends AbstractDao<Time, Long> {
         entity.setDay(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setLable(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
         entity.setStyle(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setFlag(cursor.getInt(offset + 6));
-        entity.setOpen(cursor.getShort(offset + 7) != 0);
+        entity.setRingName(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setSumMin(cursor.getInt(offset + 7));
+        entity.setFlag(cursor.getInt(offset + 8));
+        entity.setOpen(cursor.getShort(offset + 9) != 0);
      }
     
     @Override

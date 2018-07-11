@@ -3,4 +3,16 @@
     <string name="provider_settings_message">Your GPS seems to be disabled, do you want to enable it?</string>
     <string name="provider_settings_yes">Yes</string>
     <string name="provider_settings_no">No</string>
+
+<string name="hello">Hello World, SoundSettingMainActivity!</string>
+
+<string name="pref_title_notification_ringtone">选择短信铃声</string>
+<string name="pref_summary_notification_ringtone">默认短信铃声</string>
+<string name="pref_title_phone_ringtone">选择手机铃声</string>
+<string name="pref_summary_phone_ringtone">默认手机铃声</string>
+<string name="pref_title_alarm_ringtone">选择闹钟铃声</string>
+<string name="pref_summary_alarm_ringtone">默认闹钟铃声</string>
+<string name="pref_title_sdcard_ringtone">选择Sdcard中的铃声</string>
+<string name="pref_summary_sdcard_ringtone">默认Sdcard铃声</string>
+<string name="select_ringtone_slient">静音</string>
 </resources>

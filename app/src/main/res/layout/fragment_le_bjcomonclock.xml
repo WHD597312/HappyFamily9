@@ -157,6 +157,7 @@
         style="@style/horizontal_line_style"
         />
     <RelativeLayout
+        android:id="@+id/rl_bjcoloc"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_45"
         android:background="@color/white"
@@ -171,12 +172,13 @@
             android:textColor="@color/black"
             />
         <TextView
+            android:id="@+id/tv_bjclock_ring"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_35"
-            android:text="狼爱上羊"
+            android:text="睡猫觉"
             android:textColor="@color/color_gray2"
             />
         <ImageView

@@ -1,6 +1,8 @@
 package com.xr.happyFamily.le.view;
 
+import android.app.AlarmManager;
 import android.app.Dialog;
+import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -8,6 +10,7 @@ import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -21,6 +24,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.together.http.HttpUtils;
 import org.json.JSONObject;
 import java.io.IOException;
+import java.util.Calendar;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -42,7 +47,7 @@ public class btClockjsDialog4 extends Dialog {
     String text;
     Context mcontext;
     private MediaPlayer mediaPlayer;
-
+    SharedPreferences preferences;
     public btClockjsDialog4(@NonNull Context context) {
         super(context, R.style.MyDialog);
         mcontext=context;
@@ -57,6 +62,7 @@ public class btClockjsDialog4 extends Dialog {
         audioMa = (AudioManager)mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
+        preferences = mcontext.getSharedPreferences("this", mcontext.MODE_PRIVATE);
     }
 
 
@@ -91,11 +97,23 @@ public class btClockjsDialog4 extends Dialog {
                 if (name.equals(songName)){
                     mediaPlayer.stop();
                     dismiss();
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putInt("first",2);
+                    editor.apply();
+                    Calendar c=Calendar.getInstance();//c：当前系统时间
+                    AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
+                    Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
+
+                    PendingIntent sender = PendingIntent.getBroadcast(mcontext, 0x101, intent1,
+                            PendingIntent.FLAG_CANCEL_CURRENT);
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
+                    } else {
+                        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                    }
                 }else {
                     Toast.makeText(mcontext, "输入错误请从新输入", Toast.LENGTH_SHORT).show();
-//                    mediaPlayer.stop();
 
-//                    new getMusicAsync().execute();
                 }
                 break;
 

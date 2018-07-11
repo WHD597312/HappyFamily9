@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/swdjs_bj"
@@ -12,6 +12,7 @@
         android:orientation="horizontal">
 
         <ImageView
+            android:id="@+id/iv_sgjs_fh2"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_20"
             android:layout_gravity="center"
@@ -40,9 +41,11 @@
  <RelativeLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content"
-     android:layout_marginTop="@dimen/dp_jy_200"
+     android:layout_marginBottom="@dimen/dp_jy_20"
+     android:layout_above="@+id/iv_sw_bz"
      >
      <TextView
+
          android:id="@+id/tv_sw_sm"
          android:layout_width="wrap_content"
          android:layout_height="wrap_content"
@@ -76,6 +79,7 @@
          android:src="@mipmap/swdjs_fk"
          />
          <TextView
+             android:id="@+id/tv_sw_sjj"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:textColor="@color/white"
@@ -98,6 +102,7 @@
              android:src="@mipmap/swdjs_fk"
              />
          <TextView
+             android:id="@+id/tv_sw_week"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:textColor="@color/white"
@@ -119,6 +124,7 @@
              android:src="@mipmap/swdjs_fk"
              />
          <TextView
+             android:id="@+id/tv_sw_eat"
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:textColor="@color/white"
@@ -141,6 +147,7 @@
              android:src="@mipmap/swdjs_fk"
              />
          <TextView
+
              android:layout_width="wrap_content"
              android:layout_height="wrap_content"
              android:textColor="@color/white"
@@ -150,12 +157,15 @@
      </RelativeLayout>
  </RelativeLayout>
   <ImageView
+      android:id="@+id/iv_sw_bz"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
       android:src="@mipmap/bt_sgjs_lb2"
       android:layout_marginTop="@dimen/dp_jy_16"
-      android:layout_gravity="center"
+      android:layout_centerHorizontal="true"
+      android:layout_alignParentBottom="true"
+      android:layout_marginBottom="@dimen/dp_jy_45"
       />
 
 
-</LinearLayout>
+</RelativeLayout>

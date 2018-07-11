@@ -179,12 +179,7 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".jia.ManageHourseActivity"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+    
         <activity
             android:name=".jia.ChooseHourseActivity"
             android:label=""

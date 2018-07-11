@@ -185,6 +185,7 @@ public class btClockjsDialog extends Dialog {
                 tv_zl_jg.setText("");
                 break;
             case R.id.ib_zl_qd:
+                //确定键
                 if (onPositiveClickListener != null) {
 
                     onPositiveClickListener.onPositiveClick();
@@ -198,7 +199,7 @@ public class btClockjsDialog extends Dialog {
                         dismiss();
                         mediaPlayer.stop();
                         SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("first",2);
+                        editor.putInt("first",1);
                         editor.apply();
                         Calendar c=Calendar.getInstance();//c：当前系统时间
                         AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
@@ -209,7 +210,7 @@ public class btClockjsDialog extends Dialog {
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                             am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
                         } else {
-                            am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                            am.set(AlarmManager.RTC_WAKEUP,  c.getTimeInMillis(), sender);
                         }
                     } else {
                         Toast.makeText(mcontext, "输入错误请从新输入", Toast.LENGTH_SHORT).show();

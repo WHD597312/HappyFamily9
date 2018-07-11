@@ -74,6 +74,7 @@ public class bjTimeActivity extends AppCompatActivity {
        time=times.get(position);
        lable=time.getLable();
        style=time.getStyle();
+       tv_bjtime_gb.setText(style);
        //闹钟数字
         timepicker1.setMaxValue(23);
         timepicker1.setMinValue(00);

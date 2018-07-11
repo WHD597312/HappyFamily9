@@ -198,7 +198,7 @@ public class TimeClock extends View {
 
         //绘制时钟,以12整点为0°参照点
         canvas.rotate(hourAngle, x, y);
-        canvas.drawLine(x, y, x, y - r + 230, paintHour);
+        canvas.drawLine(x, y, x, y - r + 200, paintHour);
         canvas.save();
         canvas.restore();
         //这里画好了时钟，我们需要再将画布转回来,继续以12整点为0°参照点

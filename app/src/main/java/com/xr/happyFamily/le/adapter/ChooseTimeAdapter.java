@@ -98,6 +98,15 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
         holder.tv_time.setText(data.get(position).getHour()+":"+data.get(position).getMinutes());
         holder.tv_day1.setText(data.get(position).getDay());
         Log.i("day", "onBindViewHolder:--> "+data.get(position).getDay());
+        final boolean[] open = {time.getOpen()};
+
+           if (open[0]){
+               holder.img_kg.setImageResource(R.mipmap.bt_kg);
+           }else {
+               holder.img_kg.setImageResource(R.mipmap.bt_kgg);
+
+           }
+
 
 
 
@@ -122,12 +131,14 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
         holder.img_kg.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                boolean open=time.getOpen();
-                if (open){
+
+                if (open[0]){
                     holder.img_kg.setImageResource(R.mipmap.bt_kgg);
+                    open[0] =false;
                     time.setOpen(false);
                     timeDao.update(time);
                 }else {
+                    open[0] =true;
                     holder.img_kg.setImageResource(R.mipmap.bt_kg);
                     time.setOpen(true);
                     timeDao.update(time);

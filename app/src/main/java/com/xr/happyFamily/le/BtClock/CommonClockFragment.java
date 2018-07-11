@@ -77,33 +77,8 @@ public class CommonClockFragment extends BaseFragment {
 //        Log.i("userid", "onCreateView: "+userId);
 //        time.setUserId(Long.parseLong(userId));
         times = timeDao.findByAllTime();
-////        Log.i("userid", "onCreateView: "+times.size());
-//////        Log.i("userid", "onCreateView: "+times.get(0).getDay()+"...."+times.get(0).getHour()+"...."+times.get(0).getMinutes());
-////        adapter = new ChooseTimeAdapter(getActivity(),times);
-//////        recyclerView.addItemDecoration(new SpaceItemDecoration(30));
-////        recyclerView.setAdapter(adapter);
-//        for (int i=0;i<times.size();i++){
-//            time= times.get(i);
-//            int hour = time.getHour();
-//            int minutes = time.getMinutes();
-
-//            Calendar c=Calendar.getInstance();//c：当前系统时间
-//            c.set(Calendar.HOUR_OF_DAY,hour);//把小时设为你选择的小时
-//            c.set(Calendar.MINUTE,minutes);
-//            AlarmManager am = (AlarmManager) getActivity().getSystemService(Context.ALARM_SERVICE);
-//            Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
-//            PendingIntent sender = PendingIntent.getBroadcast(getActivity(), 0x101, intent1,
-//                    PendingIntent.FLAG_CANCEL_CURRENT);
-//            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-//                am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-//
-//            } else {
-//                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
-//            }
-//        }
-
-
-
+        adapter = new ChooseTimeAdapter(getActivity(),times);
+        recyclerView.setAdapter(adapter);
         return view;
     }
 

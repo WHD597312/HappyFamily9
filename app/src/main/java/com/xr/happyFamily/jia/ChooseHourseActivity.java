@@ -11,6 +11,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.adapter.ChooseHouseAdapter;
@@ -18,6 +19,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.main.MainActivity;
 
 import java.util.List;
+
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -30,8 +32,8 @@ public class ChooseHourseActivity extends AppCompatActivity {
     SharedPreferences preferences;
 
     private HourseDaoImpl hourseDao;
-   @BindView(R.id.lv_hourse_choose)
-   RecyclerView recyclerView;
+    @BindView(R.id.lv_hourse_choose)
+    RecyclerView recyclerView;
 
     ImageView imageView1;
     @BindView(R.id.tv_hourse_choose)
@@ -40,8 +42,7 @@ public class ChooseHourseActivity extends AppCompatActivity {
     Hourse house;
     Context context;
     ChooseHouseAdapter adapter;
-    public static  final int MREQUEST_CODE=1;
-
+    public static final int MREQUEST_CODE = 1;
 
 
     protected void onCreate(Bundle savadInstanceState) {
@@ -49,8 +50,8 @@ public class ChooseHourseActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_house_choose);
         unbinder = ButterKnife.bind(this);
-        imageView1= (ImageView) findViewById(R.id.iv_hourse_c);
-        hourseDao=new HourseDaoImpl(getApplicationContext());
+        imageView1 = (ImageView) findViewById(R.id.iv_hourse_c);
+        hourseDao = new HourseDaoImpl(getApplicationContext());
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
@@ -60,7 +61,6 @@ public class ChooseHourseActivity extends AppCompatActivity {
         recyclerView.setAdapter(adapter);
         adapter.setSign(2);
     }
-
 
 
     @Override
@@ -80,18 +80,19 @@ public class ChooseHourseActivity extends AppCompatActivity {
         super.onRestart();
     }
 
-    int i =0 ;
-    @OnClick({R.id.tv_hourse_gl,R.id.iv_choose_back})
+    int i = 0;
+
+    @OnClick({R.id.tv_hourse_gl, R.id.iv_choose_back})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_hourse_gl:
 
-                    Intent intent=new Intent(this,ManageHourseActivity.class);
-                    startActivity(intent);
+                Intent intent = new Intent(this, ManageHourseActivity.class);
+                startActivity(intent);
 
                 break;
             case R.id.iv_choose_back:
-                startActivity(new Intent(this,MainActivity.class));
+                startActivity(new Intent(this, MainActivity.class));
                 break;
         }
     }
@@ -103,5 +104,11 @@ public class ChooseHourseActivity extends AppCompatActivity {
         if (unbinder != null) {
             unbinder.unbind();
         }
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
     }
 }

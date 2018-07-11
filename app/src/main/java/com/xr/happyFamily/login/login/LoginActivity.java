@@ -103,10 +103,12 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-//        if (preferences.contains("phone") && preferences.contains("password")){
-////            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-//            startActivity(new Intent(this,MainActivity.class));
-//        }
+        if (preferences.contains("phone") && preferences.contains("password")){
+//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            Intent intent=new Intent(this,MainActivity.class);
+            intent.putExtra("load","load");
+            startActivity(intent);
+        }
         try {
             gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
         } catch (Exception e) {
@@ -480,12 +482,13 @@ public class LoginActivity extends AppCompatActivity {
                     if (mPositionPreferences.contains("position")){
                         mPositionPreferences.edit().clear().commit();
                     }
-                    Utils.showToast(LoginActivity.this, "请求成功");
+                    Utils.showToast(LoginActivity.this, "登录成功");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("load","load");
+                    intent.putExtra("login","login");
                     startActivity(intent);
                     break;
-
             }
         }
     }

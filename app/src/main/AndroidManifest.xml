@@ -180,6 +180,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".jia.ManageHourseActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
             android:name=".jia.ChooseHourseActivity"
             android:label=""
             android:screenOrientation="portrait"
@@ -201,8 +207,7 @@
         <activity android:name=".jia.activity.AddDeviceActivity" />
 
 
-        <receiver
-            android:name=".le.BtClock.RingReceiver"
+        <receiver android:name=".le.BtClock.RingReceiver"
             android:enabled="true"
             android:exported="true"
             >

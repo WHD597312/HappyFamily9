@@ -131,7 +131,6 @@ public class MQService extends Service {
 
             //设置回调
             client.setCallback(new MqttCallback() {
-
                 @Override
                 public void connectionLost(Throwable cause) {
                     //连接丢失后，一般在这里面进行重连
@@ -177,7 +176,6 @@ public class MQService extends Service {
                 if (!topicNames.isEmpty()) {
                     for (String topicName : topicNames) {
                         if(!TextUtils.isEmpty(topicName)){
-                            Thread.sleep(200);
                             client.subscribe(topicName, 1);
                             Log.i("client","-->"+topicName);
                         }
@@ -231,8 +229,6 @@ public class MQService extends Service {
             long sharedId=-1;/**分享的设备*/
 
             Log.i("mmm","-->"+message);
-
-
 
             DeviceChild deviceChild = null;
             JSONObject messageJsonObject = null;

@@ -3,6 +3,7 @@ package com.xr.happyFamily.le.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -26,6 +27,7 @@ import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.le.ClockActivity;
+import com.xr.happyFamily.le.clock.QinglvEditActivity;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -33,6 +35,7 @@ import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -50,14 +53,15 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
     private int type = 0;
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
-    public ClockQinglvAdapter(ClockActivity context, List<ClockBean> clockBeanList,List<UserInfo> userInfoList) {
+    private String userId;
+
+    public ClockQinglvAdapter(ClockActivity context, List<ClockBean> clockBeanList, List<UserInfo> userInfoList,String userId) {
         this.context = context;
         this.clockBeanList = clockBeanList;
         this.userInfoList = userInfoList;
+        this.userId=userId;
         getData();
     }
-
-
 
 
     public interface OnItemListener {
@@ -92,40 +96,47 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
     }
 
 
-
-
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        String hourStr="";
-        int hour=clockBeanList.get(position).getClockHour();
-        if(hour<10){
-            hourStr="0"+hour;
-        }else hourStr=hour+"";
-        String minStr="";
-        int min=clockBeanList.get(position).getClockMinute();
-        if(min<10){
-            minStr="0"+min;
-        }else minStr=min+"";
-        holder.tv_time.setText(hourStr+":"+minStr);
+        String hourStr = "";
+        int hour = clockBeanList.get(position).getClockHour();
+        if (hour < 10) {
+            hourStr = "0" + hour;
+        } else hourStr = hour + "";
+        String minStr = "";
+        int min = clockBeanList.get(position).getClockMinute();
+        if (min < 10) {
+            minStr = "0" + min;
+        } else minStr = min + "";
+        holder.tv_time.setText(hourStr + ":" + minStr);
         holder.tv_context.setText(clockBeanList.get(position).getFlag());
 
-        List<UserInfo> myUserInfoList=new ArrayList<>();
-
-        for(int j=0;j<userInfoList.size();j++){
-            if (userInfoList.get(j).getClockId()==clockBeanList.get(position).getClockId())
-                myUserInfoList.add(userInfoList.get(j));
-        }
 
 
+        final List<UserInfo> myUserInfoList=userInfosDao.findUserInfoByClockId(clockBeanList.get(position).getClockId());
+        holder.tv_name.setText(myUserInfoList.get(1).getUsername());
 
         final int[] sign = {Integer.parseInt(clockBeanList.get(position).getSwitchs() + "")};
 
 
+
+
+        if(!(clockBeanList.get(position).getClockCreater()+"").equals(userId))
+        {
+            holder.img_btn.setVisibility(View.GONE);
+            if (sign[0] == 0) {
+                holder.tv_context.setTextColor(Color.parseColor("#CECECE"));
+                holder.tv_name.setTextColor(Color.parseColor("#828282"));
+                holder.tv_time.setTextColor(Color.parseColor("#828282"));
+            }
+        }else {
             if (sign[0] == 0)
                 holder.img_btn.setImageResource(R.drawable.btn_clock_false);
             else
                 holder.img_btn.setImageResource(R.drawable.btn_qinglv_true);
+
+        }
 
 
         holder.img_btn.setOnClickListener(new View.OnClickListener() {
@@ -147,7 +158,10 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         holder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"查看详情"+position,Toast.LENGTH_SHORT).show();
+                Intent intent = new Intent(context, QinglvEditActivity.class);
+                intent.putExtra("clock", clockBeanList.get(position));
+                intent.putExtra("uesr", (Serializable) myUserInfoList);
+                context.startActivity(intent);
             }
         });
 
@@ -171,20 +185,19 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
     }
 
 
-
-    public void getData(){
-        clockBeanList=new ArrayList<>();
-        clockBeanDao=new ClockDaoImpl(context.getApplicationContext());
-        userInfosDao=new UserInfosDaoImpl(context.getApplicationContext());
-        List<ClockBean> allClockList=clockBeanDao.findAll();
-        for(int i=0;i<allClockList.size();i++){
-            if (allClockList.get(i).getClockType()==3)
+    public void getData() {
+        clockBeanList = new ArrayList<>();
+        clockBeanDao = new ClockDaoImpl(context.getApplicationContext());
+        userInfosDao = new UserInfosDaoImpl(context.getApplicationContext());
+        List<ClockBean> allClockList = clockBeanDao.findAll();
+        for (int i = 0; i < allClockList.size(); i++) {
+            if (allClockList.get(i).getClockType() == 3)
                 clockBeanList.add(allClockList.get(i));
         }
 
-        userInfoList=userInfosDao.findAll();
+        userInfoList = userInfosDao.findAll();
 
-        Log.e("qqqqqqqSSSNNNNNNNNN",clockBeanList.size()+"???");
+        Log.e("qqqqqqqSSSNNNNNNNNN", clockBeanList.size() + "???");
     }
 
 
@@ -209,14 +222,12 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
             tv_time = (TextView) view.findViewById(R.id.tv_time);
             tv_context = (TextView) view.findViewById(R.id.tv_context);
             tv_name = (TextView) view.findViewById(R.id.tv_name);
-            rl_item= (RelativeLayout) view.findViewById(R.id.rl_item);
+            rl_item = (RelativeLayout) view.findViewById(R.id.rl_item);
 
         }
 
 
     }
-
-
 
 
     private View contentViewSign;
@@ -237,9 +248,9 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         tv_queding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                delPos=pos;
-                clockCreater=clockBeanList.get(pos).getClockCreater();
-                clockId=clockBeanList.get(pos).getClockId();
+                delPos = pos;
+                clockCreater = clockBeanList.get(pos).getClockCreater();
+                clockId = clockBeanList.get(pos).getClockId();
                 new deleteClock().execute();
                 //刷新数据
             }
@@ -281,15 +292,15 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
     }
 
 
+    private int clockCreater, clockId, delPos;
 
-    private int clockCreater , clockId,delPos;
     class deleteClock extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
             String url = "/happy/clock/deleteClock";
-            url=url+"?clockCreater="+clockCreater+"&clockId="+clockId;
+            url = url + "?clockCreater=" + clockCreater + "&clockId=" + clockId;
             String result = HttpUtils.doGet(context, url);
-            Log.e("qqqqqqqRRR",result);
+            Log.e("qqqqqqqRRR", result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {

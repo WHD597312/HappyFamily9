@@ -247,6 +247,7 @@ public class LoginActivity extends AppCompatActivity implements PlatformActionLi
                         String password = et_pswd.getText().toString().trim();
                         Log.i("phone", "---->: " + phone + ",,,," + password);
                         editor.putString("phone", phone);
+                        editor.putString("username", returnData.getString("username"));
                         editor.putString("userId", userId);
                         editor.putString("password", password);
                         editor.putString("token", token);

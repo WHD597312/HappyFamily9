@@ -43,6 +43,7 @@ import com.xr.happyFamily.together.util.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,14 +109,19 @@ public class QunzuAddActivity extends AppCompatActivity {
         userId = preferences.getString("userId", "");
 
         times = timeDao.findByAllTime();
+        Calendar calendar = Calendar.getInstance();
+        //小时
+        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+//分钟
+        int minute = calendar.get(Calendar.MINUTE);
         timeLe1.setMaxValue(23);
         timeLe1.setMinValue(00);
-        timeLe1.setValue(49);
+        timeLe1.setValue(hour);
 //        timepicker1.setBackgroundColor(Color.WHITE);
         timeLe1.setNumberPickerDividerColor(timeLe1);
         timeLe2.setMaxValue(59);
         timeLe2.setMinValue(00);
-        timeLe2.setValue(49);
+        timeLe2.setValue(minute);
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timeLe2.setNumberPickerDividerColor(timeLe2);
         am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);

@@ -4,6 +4,6 @@
     <!-- 搜索结果分类列表背景 -->
     <corners  android:radius="@dimen/dp_jy_2"/>
 
-    <solid  android:color="#ff7a73"/>
+    <solid  android:color="#3393ED"/>
 
 </shape>

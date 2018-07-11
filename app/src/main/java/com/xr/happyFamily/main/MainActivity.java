@@ -1,12 +1,16 @@
 package com.xr.happyFamily.main;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.IBinder;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -22,10 +26,13 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.google.gson.Gson;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.le.bean.MsgFriendBean;
+import com.xr.happyFamily.le.clock.MsgActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
@@ -79,6 +86,9 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private String sign = "0";
 
     private MQTTMessageReveiver myReceiver;
+    private boolean isBound = false;
+    MessageReceiver receiver;
+    public static boolean running = false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,6 +151,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (preferences.contains("headImgUrl")){
             new LoadUserImageAsync().execute();
         }
+//        Intent service = new Intent(MainActivity.this, MQService.class);
+//        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+//        IntentFilter intentFilter = new IntentFilter("Friend");
+//        receiver = new MessageReceiver();
+//        registerReceiver(receiver, intentFilter);
     }
 
     @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
@@ -214,6 +229,18 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     }
 
     @Override
+    protected void onStart() {
+        super.onStart();
+        running=true;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (unbinder != null) {
@@ -224,6 +251,13 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         }
         if (myReceiver!=null){
             unregisterReceiver(myReceiver);
+        }
+
+        if (isBound) {
+            unbindService(connection);
+        }
+        if (receiver != null) {
+            unregisterReceiver(receiver);
         }
     }
 
@@ -284,6 +318,49 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 e.printStackTrace();
             }
             return null;
+        }
+    }
+
+
+    //好友mqtt订阅
+    String userId, userName;
+    MQService mqService;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            userId = preferences.getString("userId", "");
+            userName = preferences.getString("username", "");
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            String str = "+/" + userId + "_" + userName;
+            new FriendAsync().execute(str);
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
+    private class FriendAsync extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... macs) {
+            String macAddress = macs[0];
+            Log.i("deviceChild3", "-->" + "yes");
+            String topicName2 = "p99/" + macAddress + "/friend";
+            if (mqService != null) {
+                boolean success = mqService.subscribe(topicName2, 1);
+            }
+            return null;
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String msg = intent.getStringExtra("msg");
+            Log.e("qqqqqqqqqqqMSGNNN",msg);
+
         }
     }
 }

@@ -1,7 +1,11 @@
 package com.xr.happyFamily.together.util.mqtt;
 
+import android.app.Notification;
+import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.IBinder;
@@ -9,13 +13,20 @@ import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.google.gson.Gson;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
+import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.le.bean.MsgFriendBean;
+import com.xr.happyFamily.le.clock.MsgActivity;
+import com.xr.happyFamily.le.pojo.FriendData;
 import com.xr.happyFamily.main.FamilyFragmentManager;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -46,6 +57,7 @@ public class MQService extends Service {
      * 测试的macAddrsss
      */
     private DeviceChildDaoImpl deviceChildDao;
+    private FriendDataDaoImpl friendDataDao;
 
     /***
      * 模块类型
@@ -71,6 +83,8 @@ public class MQService extends Service {
         super.onCreate();
         clientId = UUID.getUUID(this);
         deviceChildDao = new DeviceChildDaoImpl(this);
+        friendDataDao = new FriendDataDaoImpl(this);
+        friendDataDao.deleteAll();
         init();
         connect();
     }
@@ -176,10 +190,10 @@ public class MQService extends Service {
                 List<String> topicNames = getTopicNames();
                 if (!topicNames.isEmpty()) {
                     for (String topicName : topicNames) {
-                        if(!TextUtils.isEmpty(topicName)){
+                        if (!TextUtils.isEmpty(topicName)) {
                             Thread.sleep(200);
                             client.subscribe(topicName, 1);
-                            Log.i("client","-->"+topicName);
+                            Log.i("client", "-->" + topicName);
                         }
                     }
                 }
@@ -199,7 +213,7 @@ public class MQService extends Service {
         protected Object doInBackground(String... strings) {
 
             String topicName = strings[0];/**收到的主题*/
-            Log.i("topicName","-->:"+topicName);
+            Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
             if (topicName.startsWith("p99/warmer")) {
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
@@ -228,19 +242,19 @@ public class MQService extends Service {
             int checkCode = -1;/**校验码*/
             int endCode = -1;/**结束码*/
             String message = strings[1];/**收到的消息*/
-            long sharedId=-1;/**分享的设备*/
+            long sharedId = -1;/**分享的设备*/
 
-            Log.i("mmm","-->"+message);
-
-
+            Log.i("mmm", "-->" + message);
 
             DeviceChild deviceChild = null;
             JSONObject messageJsonObject = null;
             String productType = null;
             JSONArray messageJsonArray = null;
-            if (AddDeviceActivity.running){
+            if (AddDeviceActivity.running) {
 
-            }else {
+            } else if (MsgActivity.running) {
+
+            } else {
                 List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
                 for (DeviceChild deviceChild2 : deviceChildren) {
                     if (macAddress.equals(deviceChild2.getMacAddress())) {
@@ -253,19 +267,19 @@ public class MQService extends Service {
             try {
                 if ("reSet".equals(message)) {
                     if (deviceChild != null) {
-                        long sharedId2=deviceChild.getShareId();
-                        if (sharedId2==Long.MAX_VALUE){
-                            sharedId=sharedId2;
+                        long sharedId2 = deviceChild.getShareId();
+                        if (sharedId2 == Long.MAX_VALUE) {
+                            sharedId = sharedId2;
                         }
                         deviceChildDao.delete(deviceChild);
-                        deviceChild=null;
+                        deviceChild = null;
                     }
-                }else if ("offline".equals(message)){
-                    if (deviceChild!=null){
+                } else if ("offline".equals(message)) {
+                    if (deviceChild != null) {
                         deviceChild.setOnline(false);
                     }
-                }else {
-                    if (isGoodJson(message)) {
+                } else {
+                    if (MsgActivity.running == false && isGoodJson(message)) {
                         messageJsonObject = new JSONObject(message);
                     }
                     if (messageJsonObject != null && messageJsonObject.has("productType")) {
@@ -278,10 +292,13 @@ public class MQService extends Service {
                     if (!TextUtils.isEmpty(productType)) {
                         type = Integer.parseInt(productType);
                     } else {
-                        int index = messageJsonArray.getInt(1);
-                        int index2 = messageJsonArray.getInt(2);
-                        String x = "" + index + index2;
-                        type = Integer.parseInt(x);
+                        if (messageJsonArray != null) {
+                            int index = messageJsonArray.getInt(1);
+                            int index2 = messageJsonArray.getInt(2);
+                            String x = "" + index + index2;
+                            type = Integer.parseInt(x);
+                        }
+
                     }
                 }
 
@@ -387,18 +404,18 @@ public class MQService extends Service {
                             if (endCode != -1) {
                                 deviceChild.setEndCode(endCode);
                             }
-                            int ss=deviceChild.getDeviceId();
-                            Log.i("ssssss","-->"+ss);
+                            int ss = deviceChild.getDeviceId();
+                            Log.i("ssssss", "-->" + ss);
                             Log.i("warmerCurTemp2222", "-->" + deviceChild.getWarmerCurTemp());
-                            int deviceUsedCount=deviceChild.getDeviceUsedCount();
-                            deviceChild.setDeviceUsedCount(deviceUsedCount+1);
+                            int deviceUsedCount = deviceChild.getDeviceUsedCount();
+                            deviceChild.setDeviceUsedCount(deviceUsedCount + 1);
                             deviceChild.setOnline(true);
-                            long shareId2=deviceChild.getShareId();
-                            if (shareId2==Long.MAX_VALUE){
-                                sharedId=Long.MAX_VALUE;
+                            long shareId2 = deviceChild.getShareId();
+                            if (shareId2 == Long.MAX_VALUE) {
+                                sharedId = Long.MAX_VALUE;
                             }
                             deviceChildDao.update(deviceChild);
-                            Log.i("deviceChildDao","-->"+deviceChild.getDeviceId());
+                            Log.i("deviceChildDao", "-->" + deviceChild.getDeviceId());
                         }
                         break;
                     case 3:
@@ -414,9 +431,9 @@ public class MQService extends Service {
                     case 8:
                         break;
                 }
-                Log.i("FamilyFragmentManager","-->"+FamilyFragmentManager.running);
+                Log.i("FamilyFragmentManager", "-->" + FamilyFragmentManager.running);
                 if (AddDeviceActivity.running) {
-                    if (type!=-1){
+                    if (type != -1) {
                         Intent mqttIntent = new Intent("AddDeviceActivity");
                         mqttIntent.putExtra("type", type);
                         mqttIntent.putExtra("macAddress", macAddress);
@@ -427,13 +444,50 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (FamilyFragmentManager.running){
+                } else if (FamilyFragmentManager.running) {
                     Intent mqttIntent = new Intent("RoomFragment");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     mqttIntent.putExtra("sharedId", sharedId);
                     sendBroadcast(mqttIntent);
+                } else if (MsgActivity.running) {
+                    Intent mqttIntent = new Intent("Friend");
+                    mqttIntent.putExtra("msg", message);
+                    sendBroadcast(mqttIntent);
                 }
+                Log.e("qqqqqqqqqqqRRRR", message + "??");
+                if (message.contains("senderRemark") && message.contains("senderAge") && message.contains("senderSex")) {
+
+
+                    Gson gson = new Gson();
+
+                    FriendData user = gson.fromJson(message, FriendData.class);
+                    friendDataDao.insert(user);
+                    Log.e("qqqqqqqqqqqRRRR", "111111??");
+                    NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    //创建通知建设类
+                    Notification.Builder builder = new Notification.Builder(getApplicationContext());
+                    //设置跳转的页面
+                    PendingIntent intent = PendingIntent.getActivity(getApplicationContext(),
+                            100, new Intent(getApplicationContext(), MsgActivity.class),
+                            PendingIntent.FLAG_CANCEL_CURRENT);
+                    //设置通知栏标题
+                    builder.setContentTitle("新的好友请求");
+                    //设置通知栏内容
+                    builder.setContentText(user.getSenderName() + "请求加你为好友");
+                    //设置跳转
+                    builder.setContentIntent(intent);
+                    //设置图标
+                    builder.setSmallIcon(R.mipmap.ic_launcher);
+                    //设置
+                    builder.setDefaults(Notification.DEFAULT_ALL);
+                    //创建通知类
+                    Notification notification = builder.build();
+                    notification.flags = Notification.FLAG_AUTO_CANCEL;
+                    //显示在通知栏
+                    manager.notify(0, notification);
+                }
+
 
                 //标记  运行控件
             } catch (Exception e) {
@@ -449,23 +503,30 @@ public class MQService extends Service {
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+        SharedPreferences preferences;
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        String userId = preferences.getString("userId", "");
+        String userName = preferences.getString("username", "");
+        String friendTopic = "p99/+/" + userId + "_" + userName + "/friend";
         for (DeviceChild deviceChild : deviceChildren) {
             String macAddress = deviceChild.getMacAddress();
-            int type=deviceChild.getType();
-            String onlineTopicName="";
-            String offlineTopicName="";
-            switch (type){
+            int type = deviceChild.getType();
+            String onlineTopicName = "";
+            String offlineTopicName = "";
+            switch (type) {
                 case 2:
                     onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                    offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
                     break;
             }
             list.add(onlineTopicName);
             list.add(offlineTopicName);
         }
+        list.add(friendTopic);
 //        list.add("warmer/p99"+macAddress+"/set");
         return list;
     }
+
     /**
      * 重新连接MQTT
      */
@@ -502,6 +563,9 @@ public class MQService extends Service {
             try {
                 MqttMessage message = new MqttMessage(payload.getBytes("utf-8"));
                 qos = 1;
+                if (topicName.contains("friend")) {
+                    message.setRetained(true);
+                }
                 message.setQos(qos);
                 client.publish(topicName, message);
                 flag = true;
@@ -526,8 +590,9 @@ public class MQService extends Service {
         }
         return flag;
     }
-    public void updateDevice(DeviceChild deviceChild){
+
+    public void updateDevice(DeviceChild deviceChild) {
         deviceChildDao.update(deviceChild);
-        Log.i("deviceChild2","-->"+deviceChild.getDeviceId());
+        Log.i("deviceChild2", "-->" + deviceChild.getDeviceId());
     }
 }

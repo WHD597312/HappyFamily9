@@ -2,6 +2,7 @@ package com.xr.happyFamily.le.fragment;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
@@ -38,6 +39,8 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+import static android.content.Context.MODE_PRIVATE;
+
 /**
  * Created by TYQ on 2017/9/7.
  */
@@ -66,7 +69,8 @@ public class QingLvFragment extends BaseFragment  {
     private ClockQinglvAdapter qinglvAdapter;
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
-
+    SharedPreferences preferences;
+    String userId;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -79,7 +83,8 @@ public class QingLvFragment extends BaseFragment  {
 
         clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
         userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
-
+        preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
 
 
         return view;
@@ -147,7 +152,7 @@ public class QingLvFragment extends BaseFragment  {
     public void onStart() {
         super.onStart();
         upClock();
-        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList,userInfoList);
+        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList,userInfoList,userId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(qinglvAdapter);

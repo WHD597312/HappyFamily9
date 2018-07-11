@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -43,7 +42,6 @@ import com.xr.happyFamily.together.util.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -52,7 +50,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class QinglvAddActivity extends AppCompatActivity {
+public class QinglvEditActivity extends AppCompatActivity {
 
 
     @BindView(R.id.tv_lrsd_qx)
@@ -73,6 +71,8 @@ public class QinglvAddActivity extends AppCompatActivity {
     TextView tvTag;
     @BindView(R.id.rl_bjtime_bq)
     RelativeLayout rlBjtimeBq;
+    @BindView(R.id.tv_music)
+    TextView tvMusic;
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
@@ -85,9 +85,12 @@ public class QinglvAddActivity extends AppCompatActivity {
     ClockAddQinglvAdapter qinglvAdapter;
     String uesrId;
     MyDialog dialog;
-    Context mContext = QinglvAddActivity.this;
+    Context mContext = QinglvEditActivity.this;
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
+
+    private List<UserInfo> myUserInfoList = new ArrayList<>();
+    private ClockBean clockBean;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,13 +108,12 @@ public class QinglvAddActivity extends AppCompatActivity {
 
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
+        clockBean = (ClockBean) getIntent().getSerializableExtra("clock");
+        myUserInfoList = (ArrayList<UserInfo>) getIntent().getSerializableExtra("uesr");
 
-        times = timeDao.findByAllTime();
-        Calendar calendar = Calendar.getInstance();
-        //小时
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+        int hour = clockBean.getClockHour();
 //分钟
-        int minute = calendar.get(Calendar.MINUTE);
+        int minute = clockBean.getClockMinute();
         timeLe1.setMaxValue(23);
         timeLe1.setMinValue(00);
         timeLe1.setValue(hour);
@@ -122,6 +124,9 @@ public class QinglvAddActivity extends AppCompatActivity {
         timeLe2.setValue(minute);
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timeLe2.setNumberPickerDividerColor(timeLe2);
+
+        tvTag.setText(clockBean.getFlag());
+        tvMusic.setText(clockBean.getMusic());
         am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         //获取通知管理器
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
@@ -139,7 +144,7 @@ public class QinglvAddActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_add:
-                startActivity(new Intent(QinglvAddActivity.this, FriendFindActivity.class));
+                startActivity(new Intent(QinglvEditActivity.this, FriendFindActivity.class));
                 break;
             case R.id.tv_lrsd_qx:
                 finish();
@@ -167,15 +172,15 @@ public class QinglvAddActivity extends AppCompatActivity {
 //                setResult(600);
 
                 Map map = new HashMap();
+                map.put("clockId", clockBean.getClockId());
                 map.put("clockHour", hour);
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
-                if("请填写标签".equals(tvTag.getText().toString()))
-                {
+                if ("请填写标签".equals(tvTag.getText().toString())) {
                     Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
                     break;
-                }else
-                map.put("flag", tvTag.getText().toString());
+                } else
+                    map.put("flag", tvTag.getText().toString());
                 map.put("music", "狼爱上羊");
                 map.put("switchs", 1);
                 String member = qinglvAdapter.getMember();
@@ -189,7 +194,7 @@ public class QinglvAddActivity extends AppCompatActivity {
                 map.put("clockCreater", userId);
                 map.put("clockType", 3);
                 dialog.show();
-                new addClock().execute(map);
+                new changeClockInfo().execute(map);
                 break;
         }
     }
@@ -410,7 +415,7 @@ public class QinglvAddActivity extends AppCompatActivity {
 
             String url = "/happy/clock/getClockFriends";
             url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(QinglvAddActivity.this, url);
+            String result = HttpUtils.doGet(QinglvEditActivity.this, url);
             Log.e("qqqqqqqqRRR", userId + "?" + result);
             String code = "";
             try {
@@ -448,12 +453,12 @@ public class QinglvAddActivity extends AppCompatActivity {
     }
 
 
-    class addClock extends AsyncTask<Map<String, Object>, Void, String> {
+    class changeClockInfo extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
 
             Map<String, Object> params = maps[0];
-            String url = "/happy/clock/addClock";
+            String url = "/happy/clock/changeClockInfo";
             String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
             Log.e("qqqqqqqRRR", result);
             String code = "";

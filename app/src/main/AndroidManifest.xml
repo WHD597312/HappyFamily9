@@ -385,8 +385,11 @@
         <activity android:name=".le.clock.QinglvAddActivity" />
         <activity android:name=".le.clock.QunzuAddActivity" />
         <activity android:name=".le.clock.FriendFindActivity" />
-        <activity android:name=".le.clock.MsgActivity" />
+        <activity android:name=".le.clock.MsgActivity"
+            android:launchMode="singleTask"/>
         <activity android:name=".le.clock.FriendAddActivity" />
+        <activity android:name=".le.clock.QunzuEditActivity" />
+        <activity android:name=".le.clock.QinglvEditActivity" />
     </application>
 
 </manifest>

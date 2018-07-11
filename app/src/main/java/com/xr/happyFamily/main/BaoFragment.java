@@ -171,7 +171,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.activity_shop_mypage, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getContext();
-        dialog = MyDialog.showDialog(mContext);
+
         isStop = false;
         init();
         homePage = new ArrayList<>();
@@ -482,6 +482,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
 
     private void getShopData(int id, int page) {
+        dialog = MyDialog.showDialog(mContext);
         dialog.show();
         Map<String, Object> params = new HashMap<>();
         if (id == 0) {

@@ -98,7 +98,7 @@ public class btClockjsDialog4 extends Dialog {
                     mediaPlayer.stop();
                     dismiss();
                     SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("first",2);
+                    editor.putInt("first",1);
                     editor.apply();
                     Calendar c=Calendar.getInstance();//c：当前系统时间
                     AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);

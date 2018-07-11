@@ -145,7 +145,7 @@ public class addTimeActivity extends AppCompatActivity {
                     am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
                 }
                 Utils.showToast(addTimeActivity.this, "添加闹铃成功");
-//                setResult(600);
+                setResult(600);
                 finish();
 
                 break;
@@ -157,6 +157,10 @@ public class addTimeActivity extends AppCompatActivity {
             case R.id.rl_bjtime_gb:
                 //选择关闭方式
                 clolkDialog1();
+                break;
+            case R.id.rl_bjcoloc:
+                Intent intent3 = new Intent(this,clockRingActivity.class);
+                startActivityForResult(intent3,111);
                 break;
         }
     }

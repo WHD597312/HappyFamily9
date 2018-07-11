@@ -192,7 +192,7 @@ public class btClockjsDialog2 extends Dialog {
                    dismiss();
                    mediaPlayer.stop();
                 SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt("first",2);
+                editor.putInt("first",1);
                 editor.apply();
                 Calendar c=Calendar.getInstance();//c：当前系统时间
                 AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
@@ -203,7 +203,7 @@ public class btClockjsDialog2 extends Dialog {
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
                     am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
                 } else {
-                    am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                    am.set(AlarmManager.RTC_WAKEUP,  c.getTimeInMillis(), sender);
                 }
 
 

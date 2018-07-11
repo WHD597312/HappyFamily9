@@ -105,10 +105,13 @@ public class RingReceiver extends BroadcastReceiver {
                             Time time = times.get(0);
                             if (time.getOpen()) {
                                 if (time.getFlag() == 1) {
+
                                     clolkDialog1();
                                 } else if (time.getFlag() == 2) {
+
                                     clolkDialog2();
                                 } else if (time.getFlag() == 3) {
+
                                     clolkDialog3();
                                 }
 

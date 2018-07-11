@@ -111,7 +111,7 @@ public class btClockjsDialog extends Dialog {
             mediaPlayer.start();//一进来就播放
             mediaPlayer.setLooping(true);
         }
-
+       //将音量调至最大
         audioMa = (AudioManager)mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
@@ -133,6 +133,7 @@ public class btClockjsDialog extends Dialog {
 //            default:
 //                return false;
 //        }}
+    //关闭音量减少
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
 // TODO Auto-generated method stub

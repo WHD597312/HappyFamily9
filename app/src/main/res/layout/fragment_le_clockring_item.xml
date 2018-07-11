@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:id="@+id/rl_le_clockring"
+    android:background="@color/white"
+    android:layout_height="@dimen/dp_jy_50">
+    <TextView
+        android:id="@+id/tv_clockring_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="love me"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+       android:layout_centerVertical="true"
+        android:textSize="20sp"
+        />
+
+
+    <ImageView
+        android:id="@+id/iv_clockring_kg"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_centerVertical="true"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        />
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/horizontal_line_style"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        />
+</RelativeLayout>

@@ -127,6 +127,7 @@ public class FamilyFragmentManager extends Fragment {
                 ((ViewGroup) view.getParent()).removeView(view);
             }
         }
+        running=false;
     }
 
     @Override

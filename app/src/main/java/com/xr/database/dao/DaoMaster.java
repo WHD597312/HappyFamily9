@@ -29,6 +29,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ClockBeanDao.createTable(db, ifNotExists);
         UserInfoDao.createTable(db, ifNotExists);
         FriendDataDao.createTable(db, ifNotExists);
+        UserBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -41,6 +42,7 @@ public class DaoMaster extends AbstractDaoMaster {
         ClockBeanDao.dropTable(db, ifExists);
         UserInfoDao.dropTable(db, ifExists);
         FriendDataDao.dropTable(db, ifExists);
+        UserBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -67,6 +69,7 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(ClockBeanDao.class);
         registerDaoClass(UserInfoDao.class);
         registerDaoClass(FriendDataDao.class);
+        registerDaoClass(UserBeanDao.class);
     }
 
     public DaoSession newSession() {

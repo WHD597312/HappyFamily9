@@ -44,6 +44,7 @@ import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -65,7 +66,7 @@ public class RoomFragment extends Fragment{
     private List<DeviceChild> deviceChildren;
     @BindView(R.id.gv_balcony_home)
     MyGridview mGridView;
-    private List<DeviceChild> mGridData;
+    private List<DeviceChild> mGridData=new ArrayList<>();
     GridViewAdapter mGridViewAdapter;
     @BindView(R.id.tv_home_manager)
     TextView tv_home_manager;/**房间管理*/
@@ -128,6 +129,7 @@ public class RoomFragment extends Fragment{
                     Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
                     intent.putExtra("deviceName", deviceName);
                     intent.putExtra("deviceId", deviceId);
+                    intent.putExtra("houseId",houseId);
                     startActivityForResult(intent,6000);
                 }
             });

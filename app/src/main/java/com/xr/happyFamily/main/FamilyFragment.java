@@ -44,6 +44,7 @@ import com.xr.happyFamily.together.http.HttpUtils;
 
 import org.json.JSONObject;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.BindView;
@@ -67,8 +68,8 @@ public class FamilyFragment  extends Fragment{
 
     private DeviceChildDaoImpl deviceChildDao;
 
-    private List<DeviceChild> commonDevices;
-    private List<DeviceChild> shareDevices;
+    private List<DeviceChild> commonDevices=new ArrayList<>();
+    private List<DeviceChild> shareDevices=new ArrayList<>();
 
     private SharedPreferences preferences;
     private int userId;

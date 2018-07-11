@@ -93,6 +93,7 @@ public class UserInfo implements Serializable{
     public UserInfo() {
     }
 
+  
 
 
 }

@@ -766,6 +766,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 String returnCode=jsonObject.getString("returnCode");
                 if ("100".equals(returnCode)){
                     code=100;
+                    deviceChild.setName(deviceName);
+                    deviceChildDao.update(deviceChild);
                 }
                 Log.i("result","-->"+result);
             }catch (Exception e){

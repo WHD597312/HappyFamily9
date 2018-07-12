@@ -86,9 +86,8 @@ public class GridViewAdapter extends ArrayAdapter {
                             holder.tv_device_switch.setText("电压正常");
                         }else if (sensorState==2){
                             holder.tv_device_switch.setText("电压低");
-
-                            
                         }
+                        
                         holder.tv_device_switch.setTextColor(Color.parseColor("#57Cf76"));
                     }else {
                         holder.tv_device_switch.setText("离线");

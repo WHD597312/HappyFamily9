@@ -155,6 +155,7 @@ public class FriendAddActivity extends AppCompatActivity {
             MyDialog.closeDialog(dialog);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                Toast.makeText(mContext,"发送好友申请成功",Toast.LENGTH_SHORT).show();
+               finish();
             }else { Toast.makeText(mContext,returnMsg,Toast.LENGTH_SHORT).show();
 
             }

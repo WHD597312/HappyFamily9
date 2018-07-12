@@ -13,6 +13,8 @@ public class Time {
     String day;
     String lable;
     String Style;
+    String ringName;
+    int sumMin;
     int flag;
     boolean open;
     public boolean getOpen() {
@@ -26,6 +28,18 @@ public class Time {
     }
     public void setFlag(int flag) {
         this.flag = flag;
+    }
+    public int getSumMin() {
+        return this.sumMin;
+    }
+    public void setSumMin(int sumMin) {
+        this.sumMin = sumMin;
+    }
+    public String getRingName() {
+        return this.ringName;
+    }
+    public void setRingName(String ringName) {
+        this.ringName = ringName;
     }
     public String getStyle() {
         return this.Style;
@@ -63,22 +77,23 @@ public class Time {
     public void setId(Long Id) {
         this.Id = Id;
     }
-    @Generated(hash = 1101508372)
+    @Generated(hash = 1884399495)
     public Time(Long Id, int hour, int minutes, String day, String lable,
-            String Style, int flag, boolean open) {
+            String Style, String ringName, int sumMin, int flag, boolean open) {
         this.Id = Id;
         this.hour = hour;
         this.minutes = minutes;
         this.day = day;
         this.lable = lable;
         this.Style = Style;
+        this.ringName = ringName;
+        this.sumMin = sumMin;
         this.flag = flag;
         this.open = open;
     }
     @Generated(hash = 37380482)
     public Time() {
     }
-   
-   
+  
     
 }

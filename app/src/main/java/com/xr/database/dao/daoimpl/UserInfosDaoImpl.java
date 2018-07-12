@@ -2,11 +2,18 @@ package com.xr.database.dao.daoimpl;
 
 import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
+
+import com.xr.database.dao.ClockBeanDao;
 import com.xr.database.dao.DBManager;
 import com.xr.database.dao.DaoMaster;
 import com.xr.database.dao.DaoSession;
+import com.xr.database.dao.DeviceChildDao;
 import com.xr.database.dao.UserInfoDao;
+import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
+
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.List;
 
 
@@ -56,5 +63,8 @@ public class UserInfosDaoImpl {
     }
     public void  deleteAll(){
         userInfoDao.deleteAll();
+    }
+    public List<UserInfo> findUserInfoByClockId(int clockId){
+        return userInfoDao.queryBuilder().where(UserInfoDao.Properties.ClockId.eq(clockId)).orderAsc(UserInfoDao.Properties.ClockId).list();
     }
 }

@@ -168,6 +168,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             receiveId = data.getStringExtra("receiveId");
             Log.e("qqqqqqqqRRR", receiveId + "???");
             // 把得到的数据显示到输入框内
+            if ((tvAddress!=null))
             tvAddress.setText(address);
 
 
@@ -401,9 +402,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 if (tvType != null)
                     tvType.setText(type);
 
-                Picasso.with(mContext)
-                        .load(img)
-                        .into(imgPic);//此种策略并不会压缩图片
+                if(imgPic!=null) {
+                    Picasso.with(mContext)
+                            .load(img)
+                            .into(imgPic);//此种策略并不会压缩图片
+                }
             }
 
             isWeight = true;

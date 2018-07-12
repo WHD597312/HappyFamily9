@@ -10,6 +10,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -29,8 +30,11 @@ import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.le.adapter.ChooseTimeAdapter;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.main.MainActivity;
+import com.xr.happyFamily.together.util.Utils;
 
 import android.support.v7.app.NotificationCompat;
+
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import butterknife.BindView;
@@ -73,12 +77,8 @@ public class CommonClockFragment extends BaseFragment {
 //        Log.i("userid", "onCreateView: "+userId);
 //        time.setUserId(Long.parseLong(userId));
         times = timeDao.findByAllTime();
-        Log.i("userid", "onCreateView: "+times.size());
-//        Log.i("userid", "onCreateView: "+times.get(0).getDay()+"...."+times.get(0).getHour()+"...."+times.get(0).getMinutes());
         adapter = new ChooseTimeAdapter(getActivity(),times);
-//        recyclerView.addItemDecoration(new SpaceItemDecoration(30));
         recyclerView.setAdapter(adapter);
-
         return view;
     }
 
@@ -95,24 +95,36 @@ public class CommonClockFragment extends BaseFragment {
     @Override
     public void onStart() {
         super.onStart();
+        if (times.size()>0){
+            timeDao= new TimeDaoImpl(getActivity());
+            times = timeDao.findByAllTime();
+            Log.e("qqqqqqqqqNNN",times.get(0).getHour()+"");
+            adapter = new ChooseTimeAdapter(getActivity(),times);
+            recyclerView.setAdapter(adapter);
+        }
 
     }
 
 
-    @OnClick({R.id.iv_le_clock_add})
+    @OnClick({R.id.iv_le_clock_add,R.id.iv_comm_fh})
     public void  onClick(View view){
         switch (view.getId()){
             case R.id.iv_le_clock_add:
                 Intent intent = new Intent(getActivity(),addTimeActivity.class);
                 startActivityForResult(intent,600);
                 break;
+            case R.id.iv_comm_fh:
+                getActivity().finish();
+                break;
         }
     }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode==600){
+
+        Log.e("qqqqqQQ","??????????");
+        if (resultCode==600){
+            Log.e("qqqqqqqqMMM",data.getIntExtra("hour",0)+"");
             times = timeDao.findByAllTime();
             adapter = new ChooseTimeAdapter(getActivity(),times);
             recyclerView.setAdapter(adapter);

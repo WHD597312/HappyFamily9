@@ -20,8 +20,10 @@ import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.together.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -93,6 +95,19 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
         holder.tv_name.setText(data.get(position).getUsername());
 //        holder.tv_context.setText(data.get(position).get("context").toString());
         final int[] sign = {0};
+
+        if(myUserInfoList.size()>0){
+
+                for(int j=0;j<myUserInfoList.size();j++)
+                if (data.get(position).getUserId()==myUserInfoList.get(j).getUserId()) {
+                    sign[0]=1;
+                    holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_true);
+                    data.get(position).setMemSign(1);
+                }
+
+
+
+        }
 
         holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -166,6 +181,13 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
         }
         return str.substring(0,str.length()-1);
 
+    }
+
+
+    private List<UserInfo> myUserInfoList = new ArrayList<>();
+    public void setUserInfoList(List<UserInfo> myUserInfoList ){
+        this.myUserInfoList=myUserInfoList;
+        notifyDataSetChanged();
     }
 
 }

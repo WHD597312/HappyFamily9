@@ -6,74 +6,68 @@ import android.database.sqlite.SQLiteDatabase;
 import com.xr.database.dao.DBManager;
 import com.xr.database.dao.DaoMaster;
 import com.xr.database.dao.DaoSession;
-import com.xr.database.dao.DeviceChildDao;
 import com.xr.database.dao.TimeDao;
+import com.xr.database.dao.UserBeanDao;
 import com.xr.happyFamily.le.pojo.Time;
-
+import com.xr.happyFamily.le.pojo.UserBean;
 
 import org.greenrobot.greendao.query.WhereCondition;
 
 import java.util.List;
 
 
-public class TimeDaoImpl {
+public class UserBeanDaoImpl {
     private Context context;
     private SQLiteDatabase db;
     private DaoMaster master;
-    private TimeDao timeDao;
+    private UserBeanDao userBeanDao;
     private DaoSession session;
-    public TimeDaoImpl(Context context) {
+    public UserBeanDaoImpl(Context context) {
         this.context = context;
         db= DBManager.getInstance(context).getWritableDasebase();
         master=new DaoMaster(db);
         session=master.newSession();
-        timeDao = session.getTimeDao();
+        userBeanDao = session.getUserBeanDao();
 
     }
 
     /**
      * 添加设备
-     * @param time
+     * @param userBean
      */
-    public void insert(Time time){
-        timeDao.insert(time);
+    public void insert(UserBean userBean){
+        userBeanDao.insert(userBean);
     }
 
     /**
      * 删除设备
-     * @param time
+     * @param userBean
      */
-    public void delete(Time time){
-        timeDao.delete(time);
+    public void delete(UserBean userBean){
+        userBeanDao.delete(userBean);
     }
 
     /**
      * 更新设备
-     * @param time
+     * @param
      */
-    public void update(Time time){
-        timeDao.update(time);
+    public void update(UserBean userBean){
+        userBeanDao.update(userBean);
     }
 
-    public Time findById(long userId){
-        return timeDao.load(userId);
+    public UserBean findById(long userId){
+        return userBeanDao.load(userId);
     }
 //    public List<Time> findAllTimes(long userId){
 //        List<Time> times=timeDao.queryBuilder().where(TimeDao.Properties.UserId.eq(userId)).orderAsc(TimeDao.Properties.UserId).list();
 //        return times;
 //    }
-    public List<Time> findByAllTime(){
-        return timeDao.loadAll();
-    }
-    public List<Time> findTimesByHourAndMin(int hour,int min){
-        WhereCondition whereCondition=timeDao.queryBuilder().and(TimeDao.Properties.Hour.eq(hour),TimeDao.Properties.Minutes.eq(min));
-        return timeDao.queryBuilder().where(whereCondition).list();
-    }
-    public List<Time> findTimeByMin(){
-        return timeDao.queryBuilder().orderAsc(TimeDao.Properties.SumMin).list();
+    public List<UserBean> findByAllUser(){
+        return userBeanDao.loadAll();
     }
 
+
     public void  deleteAll(){
-        timeDao.deleteAll();
+        userBeanDao.deleteAll();
     }
 }

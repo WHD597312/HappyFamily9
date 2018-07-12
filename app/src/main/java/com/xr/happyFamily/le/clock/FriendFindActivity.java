@@ -107,6 +107,7 @@ public class FriendFindActivity extends AppCompatActivity {
                     JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
                     JsonArray list = content.getAsJsonArray("returnData");
                     Gson gson = new Gson();
+                    list_friend.clear();
                     for (JsonElement user : list) {
                         //通过反射 得到UserBean.class
                         ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);

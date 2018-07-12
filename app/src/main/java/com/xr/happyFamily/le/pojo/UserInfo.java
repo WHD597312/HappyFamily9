@@ -6,6 +6,7 @@ package com.xr.happyFamily.le.pojo;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 
+import java.io.Serializable;
 import java.util.List;
 import org.greenrobot.greendao.annotation.Generated;
 
@@ -16,7 +17,7 @@ import org.greenrobot.greendao.annotation.Generated;
  * @website http://www.bejson.com/java2pojo/
  */
 @Entity
-public class UserInfo {
+public class UserInfo implements Serializable{
 
 
     @Id(autoincrement = true)
@@ -92,6 +93,7 @@ public class UserInfo {
     public UserInfo() {
     }
 
+  
 
 
 }

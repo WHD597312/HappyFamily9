@@ -74,7 +74,7 @@ public class PaySuccessActivity extends AppCompatActivity {
     private String[] from = {"title"};
     private int[] to = {R.id.tv_search};
     String[] titles = new String[]{"从低到高", "从高到低"};
-    String[] titles2 = new String[]{"松下", "小米", "海尔", "格力", "松下"};
+//    String[] titles2 = new String[]{"松下", "小米", "海尔", "格力", "松下"};
     SimpleAdapter jiageAdapter;
     SimpleAdapter pinpaiAdapter;
     private boolean isMore = false;
@@ -123,8 +123,8 @@ public class PaySuccessActivity extends AppCompatActivity {
 
         jiageAdapter = new SimpleAdapter(this, getList(),
                 R.layout.item_search_result, from, to);
-        pinpaiAdapter = new SimpleAdapter(this, getList2(),
-                R.layout.item_search_result, from, to);
+//        pinpaiAdapter = new SimpleAdapter(this, getList2(),
+//                R.layout.item_search_result, from, to);
         gvMore.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
@@ -175,19 +175,19 @@ public class PaySuccessActivity extends AppCompatActivity {
         return list;
     }
 
-    public List<Map<String, Object>> getList2() {
-        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
-        Map<String, Object> map = null;
-
-
-        for (int i = 0; i < 5; i++) {
-            map = new HashMap<String, Object>();
-            map.put("title", titles2[i]);
-            list.add(map);
-        }
-        return list;
-    }
-
+//    public List<Map<String, Object>> getList2() {
+//        List<Map<String, Object>> list = new ArrayList<Map<String, Object>>();
+//        Map<String, Object> map = null;
+//
+//
+//        for (int i = 0; i < 5; i++) {
+//            map = new HashMap<String, Object>();
+//            map.put("title", titles2[i]);
+//            list.add(map);
+//        }
+//        return list;
+//    }
+//
 
 
 

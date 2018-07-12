@@ -23,12 +23,14 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.UserBeanDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.UserBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -89,12 +91,12 @@ public class LeFragment extends Fragment {
     View view;
     Unbinder unbinder;
     private MyDialog dialog;
-
-
+    UserBean userBean;
     SharedPreferences preferences;
     String userId;
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
+    UserBeanDaoImpl userBeanDao;
 
     @Nullable
     @Override
@@ -112,6 +114,9 @@ public class LeFragment extends Fragment {
 
         clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
         userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
+        userBeanDao= new UserBeanDaoImpl(getActivity().getApplicationContext());
+        userBeanDao.deleteAll();
+        userBean= new UserBean();
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         userId= preferences.getString("userId","");
         new getClocksByUserId().execute();
@@ -291,12 +296,23 @@ public class LeFragment extends Fragment {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
+
+                  //开始
+                    JSONObject returnData1 = jsonObject.getJSONObject("returnData");
+                    String birthday=  returnData1.getString("birthday");
+
+                    userBean.setBirthday(birthday);
+                    userBeanDao.insert(userBean);
+                    //结束
+
+
                     String retrunData=jsonObject.getString("returnData");
                     JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
                     JsonArray groupList = content.getAsJsonArray("clockGroup");
                     Gson gson = new Gson();
                     clockBeanDao.deleteAll();
                     userInfosDao.deleteAll();
+
                     for (JsonElement user : groupList) {
                         ClockBean userList = gson.fromJson(user, ClockBean.class);
                         clockBeanDao.insert(userList);
@@ -306,7 +322,6 @@ public class LeFragment extends Fragment {
                             UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
                             userInfo1.setClockId(userList.getClockId());
                             userInfosDao.insert(userInfo1);
-
                         }
                     }
                     JsonArray loveList = content.getAsJsonArray("clockLovers");

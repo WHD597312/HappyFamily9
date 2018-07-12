@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Message;
+import android.os.Parcelable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -25,6 +26,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.clock.QunzuAddActivity;
+import com.xr.happyFamily.le.clock.QunzuEditActivity;
 import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
@@ -34,6 +36,7 @@ import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -120,12 +123,12 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
         holder.tv_time.setText(hourStr+":"+minStr);
         holder.tv_context.setText(clockBeanList.get(position).getFlag());
 
-        List<UserInfo> myUserInfoList=new ArrayList<>();
+        final List<UserInfo> myUserInfoList=userInfosDao.findUserInfoByClockId(clockBeanList.get(position).getClockId());
 
-            for(int j=0;j<userInfoList.size();j++){
-                if (userInfoList.get(j).getClockId()==clockBeanList.get(position).getClockId())
-                    myUserInfoList.add(userInfoList.get(j));
-            }
+//            for(int j=0;j<userInfoList.size();j++){
+//                if (userInfoList.get(j).getClockId()==clockBeanList.get(position).getClockId())
+//                    myUserInfoList.add(userInfoList.get(j));
+//            }
 
             int size=0;
         if(myUserInfoList.size()<5) {
@@ -140,7 +143,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
 
             if (!Utils.isEmpty(myUserInfoList.get(i).getHeadImgUrl()))
                 Picasso.with(context)
-                        .load(myUserInfoList.get(position).getHeadImgUrl())
+                        .load(myUserInfoList.get(i).getHeadImgUrl())
                         .error(R.mipmap.ic_touxiang_moren)
                         .into(holder.imgs[i]);
         }
@@ -173,7 +176,10 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
         holder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(context,"查看详情"+position,Toast.LENGTH_SHORT).show();
+                Intent intent=new Intent(context, QunzuEditActivity.class);
+                intent.putExtra("clock",  clockBeanList.get(position));
+                intent.putExtra("uesr", (Serializable) myUserInfoList);
+                context.startActivity(intent);
             }
         });
         holder.rl_item.setOnLongClickListener(new View.OnLongClickListener() {
@@ -332,5 +338,6 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
             }
         }
     }
+
 
 }

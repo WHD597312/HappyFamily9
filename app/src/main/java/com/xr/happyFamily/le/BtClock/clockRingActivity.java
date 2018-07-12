@@ -1,199 +1,148 @@
-package com.xr.happyFamily.le.clock;
+package com.xr.happyFamily.le.BtClock;
 
+import android.app.Activity;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.os.AsyncTask;
+import android.media.Ringtone;
+import android.media.RingtoneManager;
+import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.preference.Preference;
+import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
-import android.widget.ImageView;
-import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.TextView;
-import android.widget.Toast;
-
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
-import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
-import com.xr.happyFamily.le.adapter.ClockAddQinglvAdapter;
-import com.xr.happyFamily.le.bean.ClickFriendBean;
-import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.adapter.ChooseRingAdapter;
+import com.xr.happyFamily.le.adapter.ChooseTimeAdapter;
 import com.xr.happyFamily.le.pojo.Time;
-import com.xr.happyFamily.le.pojo.UserInfo;
-import com.xr.happyFamily.le.view.QinglvTimepicker;
-import com.xr.happyFamily.together.MyDialog;
-import com.xr.happyFamily.together.http.HttpUtils;
-import com.xr.happyFamily.together.util.Utils;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.HashMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
+
+import android.preference.PreferenceActivity;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
-public class QinglvAddActivity extends AppCompatActivity {
+public class clockRingActivity extends Activity {
 
-
-    @BindView(R.id.tv_lrsd_qx)
-    TextView tvLrsdQx;
-    @BindView(R.id.tv_lrsd_qd)
-    TextView tvLrsdQd;
-    @BindView(R.id.time_le1)
-    QinglvTimepicker timeLe1;
-    @BindView(R.id.time_le2)
-    QinglvTimepicker timeLe2;
-    @BindView(R.id.recyclerView)
+    @BindView(R.id.colockring_recyc)
     RecyclerView recyclerView;
-    @BindView(R.id.img_add)
-    ImageView imgAdd;
-    @BindView(R.id.sdclock_layout_mian)
-    LinearLayout sdclockLayoutMian;
-    @BindView(R.id.tv_tag)
-    TextView tvTag;
-    @BindView(R.id.rl_bjtime_bq)
-    RelativeLayout rlBjtimeBq;
     private TimeDaoImpl timeDao;
-    List<Time> times;
+    private List<String> mData = new ArrayList<String>(Arrays.asList("睡猫觉", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"));
+    ChooseRingAdapter adapter;
     Time time;
     int hour, minutes;
-    SharedPreferences preferences;
     String userId;
-    private AlarmManager am;
-    private PendingIntent pendingIntent;
-    private NotificationManager notificationManager;
-    ClockAddQinglvAdapter qinglvAdapter;
-    String uesrId;
-    MyDialog dialog;
-    Context mContext = QinglvAddActivity.this;
-    private ClockDaoImpl clockBeanDao;
-    private UserInfosDaoImpl userInfosDao;
+    public static final String ALARM_RINGTONE    = "pref_alarm_ringtone";
 
+    private Preference mAlarmSoundsPref;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_clock_add_qinglv);
+        setContentView(R.layout.fragment_le_clockring);
         ButterKnife.bind(this);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        timeDao = new TimeDaoImpl(getApplicationContext());
-        clockBeanDao = new ClockDaoImpl(getApplicationContext());
-        userInfosDao = new UserInfosDaoImpl(getApplicationContext());
-
-        times = new ArrayList<>();
-
-        preferences = this.getSharedPreferences("my", MODE_PRIVATE);
-        userId = preferences.getString("userId", "");
-
-        times = timeDao.findByAllTime();
-        Calendar calendar = Calendar.getInstance();
-        //小时
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-//分钟
-        int minute = calendar.get(Calendar.MINUTE);
-        timeLe1.setMaxValue(23);
-        timeLe1.setMinValue(00);
-        timeLe1.setValue(hour);
-//        timepicker1.setBackgroundColor(Color.WHITE);
-        timeLe1.setNumberPickerDividerColor(timeLe1);
-        timeLe2.setMaxValue(59);
-        timeLe2.setMinValue(00);
-        timeLe2.setValue(minute);
-//        timepicker2.setBackgroundColor(Color.WHITE);
-        timeLe2.setNumberPickerDividerColor(timeLe2);
-        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        //获取通知管理器
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-
-        dialog = MyDialog.showDialog(this);
-        dialog.show();
-        new getClockFriends().execute();
-        qinglvAdapter = new ClockAddQinglvAdapter(this, list_friend);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(clockRingActivity.this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(qinglvAdapter);
+
+        adapter = new ChooseRingAdapter(clockRingActivity.this,mData);
+        recyclerView.setAdapter(adapter);
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq})
+
+
+
+
+
+
+    @OnClick({R.id.iv_ring_fh, R.id.rl_clock_xt})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_add:
-                startActivity(new Intent(QinglvAddActivity.this, FriendFindActivity.class));
-                break;
-            case R.id.tv_lrsd_qx:
+
+            case R.id.iv_ring_fh:
+                int pos = adapter.getLastPos();
+                Intent intent = new Intent();
+                intent.putExtra("pos",pos);
+                setResult(111,intent);
                 finish();
                 break;
-            case R.id.rl_bjtime_bq:
-                Intent intent2 = new Intent(this, bqOfColckActivity.class);
-                startActivityForResult(intent2, 666);
+            case R.id.rl_clock_xt:
+                doPickAlarmRingtone();
                 break;
-            case R.id.tv_lrsd_qd:
-                hour = timeLe1.getValue();
-                minutes = timeLe2.getValue();
-//                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
-//                if (time == null) {
-//                    time = new Time();
-//                }
-//                time.setHour(hour);
-//                time.setMinutes(minutes);
-//                timeDao.insert(time);
-//                Calendar c = Calendar.getInstance();//c：当前系统时间
-//                c.set(Calendar.HOUR_OF_DAY, hour);//把小时设为你选择的小时
-//                c.set(Calendar.MINUTE, minutes);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0x101, new Intent("com.zking.android29_alarm_notification.RING"), 0);//上下文 请求码  启动哪一个广播 标志位
-//                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-//                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
-//                setResult(600);
 
-                Map map = new HashMap();
-                map.put("clockHour", hour);
-                map.put("clockMinute", minutes);
-                map.put("clockDay", "0");
-                if("请填写标签".equals(tvTag.getText().toString()))
-                {
-                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
-                    break;
-                }else
-                map.put("flag", tvTag.getText().toString());
-                map.put("music", "狼爱上羊");
-                map.put("switchs", 1);
-                String member = qinglvAdapter.getMember();
-                if ("0".equals(member)) {
-                    Toast.makeText(mContext, "请选择添加成员", Toast.LENGTH_SHORT).show();
-                    break;
-                } else
-
-                    map.put("clockMember", userId + "," + member);
-                Log.e("qqqqqqqMMMM", member);
-                map.put("clockCreater", userId);
-                map.put("clockType", 3);
-                dialog.show();
-                new addClock().execute(map);
-                break;
         }
     }
+    private String alarmStr;
+    private static final int ALARM_RINGTONE_PICKED = 3;
+    private void doPickAlarmRingtone(){
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        alarmStr = sharedPreferences.getString(ALARM_RINGTONE, null);
 
+        Intent intent = new Intent(RingtoneManager.ACTION_RINGTONE_PICKER);
+        // Allow user to pick 'Default'
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_DEFAULT, true);
+        // Show only ringtones
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_TYPE, RingtoneManager.TYPE_ALARM);
+        //set the default Notification value
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_DEFAULT_URI, RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM));
+        // Don't show 'Silent'
+        intent.putExtra(RingtoneManager.EXTRA_RINGTONE_SHOW_SILENT, true);
+
+        Uri alarmUri;
+        if (alarmStr != null) {
+            alarmUri = Uri.parse(alarmStr);
+            // Put checkmark next to the current ringtone for this contact
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, alarmUri);
+        } else {
+            // Otherwise pick default ringtone Uri so that something is selected.
+            alarmUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_ALARM);
+            // Put checkmark next to the current ringtone for this contact
+            intent.putExtra(RingtoneManager.EXTRA_RINGTONE_EXISTING_URI, alarmUri);
+        }
+
+        startActivityForResult(intent, ALARM_RINGTONE_PICKED);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        SharedPreferences sharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        if (resultCode != RESULT_OK) {
+            return;
+        }
+
+        switch (requestCode) {
+
+            case ALARM_RINGTONE_PICKED:{
+                Uri pickedUri = data.getParcelableExtra(RingtoneManager.EXTRA_RINGTONE_PICKED_URI);
+                if(null == pickedUri){
+
+                    editor.putString(ALARM_RINGTONE, null);
+                    editor.commit();
+                }else{
+                    Ringtone ringtone =  RingtoneManager.getRingtone(clockRingActivity.this, pickedUri);
+                    String strRingtone = ringtone.getTitle(clockRingActivity.this);
+                    editor.putString(ALARM_RINGTONE, pickedUri.toString());
+                    editor.commit();
+
+                }
+                break;
+            }
+
+
+            default:break;
+        }
+    }
 
 //
 //    private boolean mIsShowing = false;
@@ -401,142 +350,4 @@ public class QinglvAddActivity extends AppCompatActivity {
 //    }
 
 
-    List<ClickFriendBean> list_friend = new ArrayList<>();
-
-    class getClockFriends extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-
-            String url = "/happy/clock/getClockFriends";
-            url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(QinglvAddActivity.this, url);
-            Log.e("qqqqqqqqRRR", userId + "?" + result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-
-                    JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("returnData");
-                    Gson gson = new Gson();
-                    for (JsonElement user : list) {
-                        //通过反射 得到UserBean.class
-                        ClickFriendBean userList = gson.fromJson(user, ClickFriendBean.class);
-                        userList.setMemSign(0);
-                        list_friend.add(userList);
-                    }
-
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
-                qinglvAdapter.notifyDataSetChanged();
-
-            }
-        }
-    }
-
-
-    class addClock extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-            Map<String, Object> params = maps[0];
-            String url = "/happy/clock/addClock";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
-            Log.e("qqqqqqqRRR", result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                new getClocksByUserId().execute();
-            }
-        }
-    }
-
-
-    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-
-            String url = "/happy/clock/getClocksByUserId";
-            url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(mContext, url);
-            Log.e("qqqqqqqqRRR", userId + "?" + result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    String retrunData = jsonObject.getString("returnData");
-                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("clockLovers");
-                    Gson gson = new Gson();
-                    clockBeanDao.deleteAll();
-                    userInfosDao.deleteAll();
-                    for (JsonElement user : list) {
-                        ClockBean userList = gson.fromJson(user, ClockBean.class);
-                        clockBeanDao.insert(userList);
-                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
-                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
-                        for (JsonElement myUserInfo : userInfoList) {
-                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
-                            userInfo1.setClockId(userList.getClockId());
-                            userInfosDao.insert(userInfo1);
-
-                        }
-                    }
-
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode == 666) {
-            String text = data.getStringExtra("text");
-            tvTag.setText(text);
-        }
-    }
 }

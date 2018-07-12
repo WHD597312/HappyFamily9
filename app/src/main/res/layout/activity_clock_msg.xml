@@ -20,16 +20,24 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_45"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_msg"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:text="系统提示"
+                android:gravity="center"
                 android:textColor="#3393ED"
                 android:drawablePadding="@dimen/dp_jy_5"
                 android:drawableLeft="@mipmap/ic_clock_msg_clock1"
                 />
+            <View
+                android:id="@+id/view_msg"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_1"
+                android:background="#3393ED"/>
         </LinearLayout>
         <View
             android:layout_width="@dimen/dp_jy_1"
@@ -42,16 +50,25 @@
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_45"
             android:layout_weight="1"
-            android:gravity="center">
+            android:gravity="center"
+            android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_friend"
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_height="0dp"
+                android:layout_weight="1"
                 android:text="好友申请"
                 android:textColor="#9e9e9e"
+                android:gravity="center"
                 android:drawablePadding="@dimen/dp_jy_5"
                 android:drawableLeft="@mipmap/ic_clock_msg_friend"
                 />
+            <View
+                android:visibility="gone"
+                android:id="@+id/view_friend"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_1"
+                android:background="#3393ED"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -7,6 +7,7 @@ import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Generated;
 import org.greenrobot.greendao.annotation.Id;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
@@ -16,7 +17,7 @@ import java.util.List;
  * @website http://www.bejson.com/java2pojo/
  */
 @Entity
-public class ClockBean {
+public class ClockBean implements Serializable{
 
     @Id(autoincrement = true)
     private Long id;

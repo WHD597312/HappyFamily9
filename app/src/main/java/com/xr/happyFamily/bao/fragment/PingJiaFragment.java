@@ -260,10 +260,14 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
                         }
                     }
                     adapter_pinglun.notifyDataSetChanged();
-                    if(total.equals("0"))
-                        tvHaoping.setText("满意度:100%");
-                    else
-                    tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
+                    if (tvHaoping!=null) {
+                        if (total.equals("0"))
+
+                            tvHaoping.setText("满意度:100%");
+
+                        else
+                            tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
+                    }
 //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                 }
             }

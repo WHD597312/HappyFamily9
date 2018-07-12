@@ -150,6 +150,7 @@ public class FamilyFragment extends Fragment {
                             intent.putExtra("houseId",houseId);
                             startActivityForResult(intent,6000);
                         }else if (type==3){
+                            
                             Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();

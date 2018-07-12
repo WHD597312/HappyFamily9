@@ -65,8 +65,6 @@ public class GridViewAdapter extends ArrayAdapter {
                         }else if (deviceState==0){
                             holder.tv_device_switch.setText("电源关");
                         }
-
-
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                     }else if (online==false){
                         holder.tv_device_switch.setText("离线");

@@ -143,7 +143,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         Log.i("deviceChildren","-->"+deviceChildren.size());
 
         Intent service = new Intent(this, MQService.class);
-        startService(service);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
 
         IntentFilter intentFilter = new IntentFilter("DeviceDetailActivity");
@@ -334,8 +333,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
        tv_timer_hour= (Timepicker3) view.findViewById(R.id.tv_hour);
 
 
-
-
         initTimer();
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -495,7 +492,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }
                 }
             }
-
         }
     }
     private void setMode(DeviceChild deviceChild){

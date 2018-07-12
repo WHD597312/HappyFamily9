@@ -2,6 +2,8 @@ package com.xr.happyFamily.jia.adapter;
 
 import android.app.Activity;
 import android.content.Context;
+import android.graphics.Color;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -12,7 +14,6 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Equipment;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -21,7 +22,6 @@ public class GridViewAdapter extends ArrayAdapter {
     private Context mContext;
     private int layoutResourceId;
     private List<DeviceChild> mGridData;
-
 
     int img[]={R.mipmap.t};
     public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
@@ -66,14 +66,33 @@ public class GridViewAdapter extends ArrayAdapter {
                             holder.tv_device_switch.setText("电源关");
                         }
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
-                    }else {
+                    }else if (online==false){
                         holder.tv_device_switch.setText("离线");
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
+                }else if (type==3){
+                    item.setImg(img[0]);
+                    holder.tv_device_name.setText(item.getName());
+                    Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
+                    boolean online=item.getOnline();
+                    Log.i("online","-->"+online);
+                    int sensorState=item.getSensorState();
+                    Log.i("online","-->"+sensorState);
+                    if (online){
+                        if (sensorState==128){
+                            holder.tv_device_switch.setText("USB供电");
+                        }else if (sensorState==1){
+                            holder.tv_device_switch.setText("电压正常");
+                        }else if (sensorState==2){
+                            holder.tv_device_switch.setText("电压低");
+                        }
+                        holder.tv_device_switch.setTextColor(Color.parseColor("#57Cf76"));
+                    }else {
+                        holder.tv_device_switch.setText("离线");
+                        holder.tv_device_switch.setTextColor(Color.parseColor("#999999"));
+                    }
                 }
-                item.setImg(img[0]);
-                holder.tv_device_name.setText(item.getName());
-                Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
+
             }
 
             return convertView;

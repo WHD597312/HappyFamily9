@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -57,12 +58,18 @@ public class AddhourseActivity extends AppCompatActivity {
     private HourseDaoImpl hourseDao;
 
     int houseId;
+    private MyApplication  application;
+
 
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
 
         setContentView(R.layout.activity_home_addhourse);
         unbinder = ButterKnife.bind(this);
+        if (application==null){
+            application= (MyApplication) getApplication();
+            application.addActivity(this);
+        }
         titleView.setTitleText("新建家庭");
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId=preferences.getString("userId","");
@@ -102,6 +109,14 @@ public class AddhourseActivity extends AppCompatActivity {
                 new AddHouseAsync().execute(params);
                 break;
         }
+    }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeActivity(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
     private void showPickerView() {
 

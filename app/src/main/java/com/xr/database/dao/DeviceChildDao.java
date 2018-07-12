@@ -55,7 +55,15 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property UserId = new Property(28, int.class, "userId", false, "USER_ID");
         public final static Property Img = new Property(29, int.class, "img", false, "IMG");
         public final static Property DeviceId = new Property(30, int.class, "deviceId", false, "DEVICE_ID");
-        public final static Property ShareId = new Property(31, long.class, "shareId", false, "SHARE_ID");
+        public final static Property Linked = new Property(31, int.class, "linked", false, "LINKED");
+        public final static Property ShareId = new Property(32, long.class, "shareId", false, "SHARE_ID");
+        public final static Property SensorState = new Property(33, int.class, "sensorState", false, "SENSOR_STATE");
+        public final static Property SensorSimpleTemp = new Property(34, int.class, "sensorSimpleTemp", false, "SENSOR_SIMPLE_TEMP");
+        public final static Property SensorSimpleHum = new Property(35, int.class, "sensorSimpleHum", false, "SENSOR_SIMPLE_HUM");
+        public final static Property SorsorPm = new Property(36, int.class, "sorsorPm", false, "SORSOR_PM");
+        public final static Property SensorOx = new Property(37, int.class, "sensorOx", false, "SENSOR_OX");
+        public final static Property SensorHcho = new Property(38, int.class, "sensorHcho", false, "SENSOR_HCHO");
+        public final static Property Share = new Property(39, String.class, "share", false, "SHARE");
     }
 
 
@@ -102,7 +110,15 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"USER_ID\" INTEGER NOT NULL ," + // 28: userId
                 "\"IMG\" INTEGER NOT NULL ," + // 29: img
                 "\"DEVICE_ID\" INTEGER NOT NULL ," + // 30: deviceId
-                "\"SHARE_ID\" INTEGER NOT NULL );"); // 31: shareId
+                "\"LINKED\" INTEGER NOT NULL ," + // 31: linked
+                "\"SHARE_ID\" INTEGER NOT NULL ," + // 32: shareId
+                "\"SENSOR_STATE\" INTEGER NOT NULL ," + // 33: sensorState
+                "\"SENSOR_SIMPLE_TEMP\" INTEGER NOT NULL ," + // 34: sensorSimpleTemp
+                "\"SENSOR_SIMPLE_HUM\" INTEGER NOT NULL ," + // 35: sensorSimpleHum
+                "\"SORSOR_PM\" INTEGER NOT NULL ," + // 36: sorsorPm
+                "\"SENSOR_OX\" INTEGER NOT NULL ," + // 37: sensorOx
+                "\"SENSOR_HCHO\" INTEGER NOT NULL ," + // 38: sensorHcho
+                "\"SHARE\" TEXT);"); // 39: share
     }
 
     /** Drops the underlying database table. */
@@ -169,7 +185,19 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(29, entity.getUserId());
         stmt.bindLong(30, entity.getImg());
         stmt.bindLong(31, entity.getDeviceId());
-        stmt.bindLong(32, entity.getShareId());
+        stmt.bindLong(32, entity.getLinked());
+        stmt.bindLong(33, entity.getShareId());
+        stmt.bindLong(34, entity.getSensorState());
+        stmt.bindLong(35, entity.getSensorSimpleTemp());
+        stmt.bindLong(36, entity.getSensorSimpleHum());
+        stmt.bindLong(37, entity.getSorsorPm());
+        stmt.bindLong(38, entity.getSensorOx());
+        stmt.bindLong(39, entity.getSensorHcho());
+ 
+        String share = entity.getShare();
+        if (share != null) {
+            stmt.bindString(40, share);
+        }
     }
 
     @Override
@@ -230,7 +258,19 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(29, entity.getUserId());
         stmt.bindLong(30, entity.getImg());
         stmt.bindLong(31, entity.getDeviceId());
-        stmt.bindLong(32, entity.getShareId());
+        stmt.bindLong(32, entity.getLinked());
+        stmt.bindLong(33, entity.getShareId());
+        stmt.bindLong(34, entity.getSensorState());
+        stmt.bindLong(35, entity.getSensorSimpleTemp());
+        stmt.bindLong(36, entity.getSensorSimpleHum());
+        stmt.bindLong(37, entity.getSorsorPm());
+        stmt.bindLong(38, entity.getSensorOx());
+        stmt.bindLong(39, entity.getSensorHcho());
+ 
+        String share = entity.getShare();
+        if (share != null) {
+            stmt.bindString(40, share);
+        }
     }
 
     @Override
@@ -272,7 +312,15 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.getInt(offset + 28), // userId
             cursor.getInt(offset + 29), // img
             cursor.getInt(offset + 30), // deviceId
-            cursor.getLong(offset + 31) // shareId
+            cursor.getInt(offset + 31), // linked
+            cursor.getLong(offset + 32), // shareId
+            cursor.getInt(offset + 33), // sensorState
+            cursor.getInt(offset + 34), // sensorSimpleTemp
+            cursor.getInt(offset + 35), // sensorSimpleHum
+            cursor.getInt(offset + 36), // sorsorPm
+            cursor.getInt(offset + 37), // sensorOx
+            cursor.getInt(offset + 38), // sensorHcho
+            cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39) // share
         );
         return entity;
     }
@@ -310,7 +358,15 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setUserId(cursor.getInt(offset + 28));
         entity.setImg(cursor.getInt(offset + 29));
         entity.setDeviceId(cursor.getInt(offset + 30));
-        entity.setShareId(cursor.getLong(offset + 31));
+        entity.setLinked(cursor.getInt(offset + 31));
+        entity.setShareId(cursor.getLong(offset + 32));
+        entity.setSensorState(cursor.getInt(offset + 33));
+        entity.setSensorSimpleTemp(cursor.getInt(offset + 34));
+        entity.setSensorSimpleHum(cursor.getInt(offset + 35));
+        entity.setSorsorPm(cursor.getInt(offset + 36));
+        entity.setSensorOx(cursor.getInt(offset + 37));
+        entity.setSensorHcho(cursor.getInt(offset + 38));
+        entity.setShare(cursor.isNull(offset + 39) ? null : cursor.getString(offset + 39));
      }
     
     @Override

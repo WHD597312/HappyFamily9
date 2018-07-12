@@ -272,7 +272,9 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                             deviceChild.setUserId(Integer.parseInt(userId));
                             deviceChild.setType(Integer.parseInt(typeType));
                             deviceChild.setName(deviceName);
+                            deviceChild.setRoomId(Long.parseLong(room));
                             deviceChild.setShareId(Long.MAX_VALUE);
+                            deviceChild.setShare("share");
 
                             List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                             for (DeviceChild deviceChild2 : deviceChildren) {
@@ -318,6 +320,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                     Utils.showToast(QRScannerActivity.this, "分享设备添加成功");
                     Intent intent2 = new Intent(QRScannerActivity.this, MainActivity.class);
                     intent2.putExtra("houseId",houseId);
+                    intent2.putExtra("share","share");
                     startActivity(intent2);
                     break;
                 default:

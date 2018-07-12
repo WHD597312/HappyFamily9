@@ -8,6 +8,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -47,6 +48,7 @@ public class ManageHourseActivity extends AppCompatActivity {
     Context context;
     ChooseHouseAdapter adapter;
     public static  final int MREQUEST_CODE=1;
+    private MyApplication application;
 
 
 
@@ -55,6 +57,10 @@ public class ManageHourseActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_house_choose1);
         unbinder = ButterKnife.bind(this);
+        if (application==null){
+            application= (MyApplication) getApplication();
+            application.addActivity(this);
+        }
         imageView1= (ImageView) findViewById(R.id.iv_hourse_c);
         hourseDao=new HourseDaoImpl(getApplicationContext());
 
@@ -67,6 +73,14 @@ public class ManageHourseActivity extends AppCompatActivity {
         adapter.setSign(1);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeActivity(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
 
     @Override

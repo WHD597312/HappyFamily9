@@ -40,7 +40,14 @@ public class DeviceChild implements Serializable{
     int userId=0;/**用户Id*/
     int img;/**设备标志图片*/
     int deviceId;/**设备Id*/
+    int linked;/**是否联动*/
     long shareId;/**分享设备*/
+    int sensorState;/**传感器状态*/
+    int sensorSimpleTemp;/**传感器采样温度*/
+    int sensorSimpleHum;/**传感器采样湿度*/
+    int sorsorPm;/**PM2.5粉尘传感器数据*/
+    int sensorOx;/**氧浓度传感器数据*/
+    int sensorHcho;/**甲醛数据*/
     public int getEndCode() {
         return this.endCode;
     }
@@ -233,10 +240,61 @@ public class DeviceChild implements Serializable{
     public void setOnline(boolean online) {
         this.online = online;
     }
+    public int getSensorHcho() {
+        return this.sensorHcho;
+    }
+    public void setSensorHcho(int sensorHcho) {
+        this.sensorHcho = sensorHcho;
+    }
+    public int getSensorOx() {
+        return this.sensorOx;
+    }
+    public void setSensorOx(int sensorOx) {
+        this.sensorOx = sensorOx;
+    }
+    public int getSorsorPm() {
+        return this.sorsorPm;
+    }
+    public void setSorsorPm(int sorsorPm) {
+        this.sorsorPm = sorsorPm;
+    }
+    public int getSensorSimpleHum() {
+        return this.sensorSimpleHum;
+    }
+    public String share;
+    public void setSensorSimpleHum(int sensorSimpleHum) {
+        this.sensorSimpleHum = sensorSimpleHum;
+    }
+    public int getSensorSimpleTemp() {
+        return this.sensorSimpleTemp;
+    }
+    public void setSensorSimpleTemp(int sensorSimpleTemp) {
+        this.sensorSimpleTemp = sensorSimpleTemp;
+    }
+    public int getSensorState() {
+        return this.sensorState;
+    }
+    public void setSensorState(int sensorState) {
+        this.sensorState = sensorState;
+    }
+    public int getLinked() {
+        return this.linked;
+    }
+    public void setLinked(int linked) {
+        this.linked = linked;
+    }
+    public String getShare() {
+        return this.share;
+    }
+    public void setShare(String share) {
+        this.share = share;
+    }
    
     @Generated(hash = 1973447423)
     public DeviceChild() {
     }
+
+
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.id = id;
         this.houseId = houseId;
@@ -247,12 +305,22 @@ public class DeviceChild implements Serializable{
         this.name = name;
         this.userId = userId;
     }
-    @Generated(hash = 42437245)
-    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, int type, int busModel, String macAddress,
-            String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
-            int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState, int deviceState, String rateState, int lockState,
-            int screenState, int curRunState2, int curRunState3, int timerHour, int timerMin, int checkCode, int endCode, int userId, int img,
-            int deviceId, long shareId) {
+
+    public DeviceChild(int type, String macAddress, int deviceId, int linked,String name) {
+        this.type = type;
+        this.macAddress = macAddress;
+        this.deviceId = deviceId;
+        this.linked = linked;
+        this.name=name;
+    }
+
+    @Generated(hash = 1421010307)
+    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, int type, int busModel,
+            String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp,
+            int warmerCurTemp, int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
+            int deviceState, String rateState, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour,
+            int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, long shareId, int sensorState,
+            int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, String share) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -284,6 +352,15 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
         this.img = img;
         this.deviceId = deviceId;
+        this.linked = linked;
         this.shareId = shareId;
+        this.sensorState = sensorState;
+        this.sensorSimpleTemp = sensorSimpleTemp;
+        this.sensorSimpleHum = sensorSimpleHum;
+        this.sorsorPm = sorsorPm;
+        this.sensorOx = sensorOx;
+        this.sensorHcho = sensorHcho;
+        this.share = share;
     }
+    
 }

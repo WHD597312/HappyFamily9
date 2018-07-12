@@ -38,7 +38,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentRight="true"
                 android:layout_centerVertical="true"
-                app:srcCompat="@mipmap/image_more"
+                android:src="@mipmap/image_more"
+                android:padding="@dimen/dp_jy_12"
                 android:layout_marginRight="@dimen/dp_jy_20"
                 />
         </RelativeLayout>

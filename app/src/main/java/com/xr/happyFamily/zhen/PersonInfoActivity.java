@@ -55,6 +55,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -262,6 +263,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                     String birthday=preferences.getString("birthday","");
                     Date date =new Date(Long.parseLong(birthday));
                     SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+
                     //设置转化格式
                     String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
                     viewHolder4.tv_birthday.setText(time);

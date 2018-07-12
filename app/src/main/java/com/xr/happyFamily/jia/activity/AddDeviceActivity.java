@@ -44,6 +44,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 
@@ -62,7 +63,7 @@ import butterknife.Unbinder;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
 
-public class AddDeviceActivity extends AppCompatActivity {
+public class AddDeviceActivity extends CheckPermissionsActivity {
 
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
@@ -367,6 +368,12 @@ public class AddDeviceActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (unbinder != null) {
@@ -428,6 +435,9 @@ public class AddDeviceActivity extends AppCompatActivity {
                         if (2 == deviceType) {
                             onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
                             offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                        }else if (3==deviceType){
+                            onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
+                            offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
                         }
                         if (!TextUtils.isEmpty(onlineTopicName)){
                             boolean success = mqService.subscribe(onlineTopicName, 1);
@@ -438,12 +448,12 @@ public class AddDeviceActivity extends AppCompatActivity {
                             if (!success2){
                                 mqService.subscribe(offlineTopicName, 1);
                             }
-
                             if (deviceType==3){
+                                String topicName="p99/sensor1/"+macAddress+"/set";
+                                city=city.substring(0,city.length()-1);
                                 String info="url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city="+ URLEncoder.encode(city,"utf-8")+"&province="+URLEncoder.encode(province,"utf-8");
-                                mqService.publish(onlineTopicName,1,info);
+                                mqService.publish(topicName,1,info);
                             }
-
                         }
                     }
                 } catch (Exception e) {

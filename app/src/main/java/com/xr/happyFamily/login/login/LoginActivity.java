@@ -326,9 +326,10 @@ public class LoginActivity extends AppCompatActivity {
                         hourseDao.deleteAll();
                         roomDao.deleteAll();
                         deviceChildDao.deleteAll();
-                        JSONArray returnData = jsonObject.getJSONArray("returnData");
-                        for (int i = 0; i < returnData.length(); i++) {
-                            JSONObject houseObject = returnData.getJSONObject(i);
+                        JSONObject returnData=jsonObject.getJSONObject("returnData");
+                        JSONArray houseDevices = returnData.getJSONArray("houseDevices");
+                        for (int i = 0; i < houseDevices.length(); i++) {
+                            JSONObject houseObject = houseDevices.getJSONObject(i);
                             int id = houseObject.getInt("id");
                             Log.i("rrrr", "doInBackground:--> " + id);
                             String houseName = houseObject.getString("houseName");
@@ -385,7 +386,7 @@ public class LoginActivity extends AppCompatActivity {
                                 int deviceType=jsonObject3.getInt("deviceType");
                                 int roomId=jsonObject3.getInt("roomId");
                                 String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
-                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
+                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=null;
                                 for (DeviceChild deviceChild:deviceChildren){
                                     int deviceId2=deviceChild.getDeviceId();
@@ -400,7 +401,6 @@ public class LoginActivity extends AppCompatActivity {
                                     if (deviceChild2==null){
                                         deviceChild2=new DeviceChild();
                                         deviceChild2.setUserId(userId);
-                                        deviceChild2.setShareId(Long.MAX_VALUE);
                                         deviceChild2.setName(deviceName);
                                         deviceChild2.setDeviceId(deviceId);
                                         deviceChild2.setMacAddress(deviceMacAddress);
@@ -418,7 +418,7 @@ public class LoginActivity extends AppCompatActivity {
                                 int deviceType=jsonObject2.getInt("deviceType");
                                 int roomId=jsonObject2.getInt("roomId");
                                 String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
-                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
+                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=null;
                                 for (DeviceChild deviceChild:deviceChildren){
                                     int deviceId2=deviceChild.getDeviceId();
@@ -439,37 +439,19 @@ public class LoginActivity extends AppCompatActivity {
                                        deviceChild2.setMacAddress(deviceMacAddress);
                                        deviceChild2.setType(deviceType);
                                        deviceChild2.setRoomId(roomId);
+                                       deviceChild2.setShare("share");
                                        deviceChildDao.insert(deviceChild2);
                                    }
                                }
 
                             }
                         }
-//                        JSONArray deviceShareds=jsonObject.getJSONArray("deviceCommons");
-
-//                        JSONArray roomDevices=returnData.getJSONArray("roomDevices");
-
-
-//                        id = returnData.getInt("id");
-//                        String houseAddress = returnData.getString("houseAddress");
-//                        String houseName = returnData.getString("houseName");
-////                        Integer userId = returnData.getInt("userId");
-////                        Integer roomId = roomDevices.getInt("roomId");
-////                        SharedPreferences.Editor editor = preferences.edit();
-////                        editor.putInt("id",
-//////                        editor.putString("houseAddress", houseAddress);
-//////                        editor.putInt("roomId", roomId);
-//////                        editor.putString("houseName", houseName);
-//////                        editor.commit();
-
-
                     }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
             }
             return code;
-
         }
 
         protected void onPostExecute(Integer code) {

@@ -106,8 +106,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (application == null) {
             application = (MyApplication) getApplication();
             application.addActivity(this);
-            Intent service=new Intent(this, MQService.class);
-            startService(service);
         }
 
         roomDao=new RoomDaoImpl(getApplicationContext());
@@ -126,30 +124,17 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         Intent intent = getIntent();
         load=intent.getStringExtra("load");
         String login=intent.getStringExtra("login");
-
-//        if (!TextUtils.isEmpty(load) && TextUtils.isEmpty(login)){
-//            Intent service = new Intent(this, MQService.class);
-//            startService(service);
-//            isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-//        }
-
+        String share=intent.getStringExtra("share");
+        if (TextUtils.isEmpty(share)){
+            Intent service=new Intent(this, MQService.class);
+            startService(service);
+        }
         long houseId = intent.getLongExtra("houseId", 0);
-        if (houseId == 0) {
+        if (houseId == 0 && hourses.size()>0) {
             Hourse hourse = hourses.get(0);
             houseId = hourse.getHouseId();
         }
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        familyFragmentManager = new FamilyFragmentManager();
-        leFragment = new LeFragment();
-        baoFragment = new BaoFragment();
-        zhenFragment=new ZhenFragment();
 
-
-        Bundle bundle = new Bundle();
-        bundle.putLong("houseId", houseId);
-        familyFragmentManager.setArguments(bundle);
-        fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-        fragmentTransaction.commit();
         mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
         sign = intent.getStringExtra("sign");
         //从支付成功跳回主界面时，打开商城fragment
@@ -162,10 +147,25 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             if (mPositionPreferences.contains("position")) {
                 mPositionPreferences.edit().clear().commit();
             }
+        }else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            familyFragmentManager = new FamilyFragmentManager();
+            leFragment = new LeFragment();
+            baoFragment = new BaoFragment();
+            zhenFragment=new ZhenFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("load","load");
+            bundle.putLong("houseId", houseId);
+            familyFragmentManager.setArguments(bundle);
+            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+            fragmentTransaction.commit();
         }
-        if (preferences.contains("headImgUrl")){
-            new LoadUserImageAsync().execute();
+        if (!preferences.contains("image")){
+            if (preferences.contains("headImgUrl")){
+                new LoadUserImageAsync().execute();
+            }
         }
+
 //        if (TextUtils.isEmpty(sign) && TextUtils.isEmpty(login)){
 //            new hourseAsyncTask().execute();
 //        }
@@ -221,6 +221,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 long houseId = hourse.getHouseId();
                 Bundle bundle = new Bundle();
                 bundle.putLong("houseId", houseId);
+                bundle.putString("load","");
                 familyFragmentManager = new FamilyFragmentManager();
                 familyFragmentManager.setArguments(bundle);
                 FragmentTransaction familyTransaction = fragmentManager.beginTransaction();
@@ -285,15 +286,12 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (unbinder != null) {
             unbinder.unbind();
         }
-        if (mPositionPreferences.contains("position")) {
-            mPositionPreferences.edit().clear().commit();
-        }
+
+        mPositionPreferences.edit().clear().commit();
+
         if (myReceiver!=null){
             unregisterReceiver(myReceiver);
         }
-//        if (isBound){
-//            unbindService(connection);
-//        }
     }
 
     @Override
@@ -341,6 +339,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (bitmap!=null){
                     File file= BitmapCompressUtils.compressImage(bitmap);
                     preferences.edit().putString("image",file.getPath()).commit();
+                    BitmapCompressUtils.recycleBitmap(bitmap);
+
                 }
             }catch (Exception e) {
                 e.printStackTrace();

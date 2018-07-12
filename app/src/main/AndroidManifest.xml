@@ -97,7 +97,6 @@
     <!-- 用于提高GPS定位速度 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
@@ -134,13 +133,11 @@
             <intent-filter>
                 <action android:name="mqttmessage2" />
             </intent-filter>
-
         </receiver>
 
         <activity android:name=".login.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -150,12 +147,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".le.BtClock.addTimeActivity"
+            android:name=".jia.RenameHourseActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".jia.ManageHourseActivity"
+            android:name=".le.BtClock.addTimeActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -173,8 +170,7 @@
             android:name=".jia.ManageHourseActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.ChooseHourseActivity"
             android:label=""
@@ -196,15 +192,12 @@
         <activity android:name=".jia.ChangeEquipmentActivity" />
         <activity android:name=".jia.activity.AddDeviceActivity" />
 
-
-        <receiver android:name=".le.BtClock.RingReceiver"
+        <receiver
+            android:name=".le.BtClock.RingReceiver"
             android:enabled="true"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
-                <action android:name="com.zking.android29_alarm_notification.RING">
-
-                </action>
+                <action android:name="com.zking.android29_alarm_notification.RING"></action>
             </intent-filter>
         </receiver>
 
@@ -311,7 +304,6 @@
             android:launchMode="singleTop"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".bao.FuWuActivity"
             android:label=""
@@ -409,7 +401,9 @@
         <activity android:name=".le.HistoryActivity" />
         <activity android:name=".le.ClockActivity" />
         <activity android:name=".zhen.SettingActivity" />
-        <activity android:name=".zhen.PersonInfoActivity"/>
+        <activity android:name=".zhen.PersonInfoActivity" />
+        <activity android:name=".jia.activity.SmartTerminalActivity" />
+        <activity android:name=".jia.activity.SmartLinkedActivity"/>
     </application>
 
 </manifest>

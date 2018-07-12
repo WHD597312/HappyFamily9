@@ -453,6 +453,8 @@ public class HttpUtils {
             }
 
 
+            String s=jsonObject.toJSONString();
+            Log.i("ss",s);
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toJSONString());
             SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
             String token = my.getString("token", "token");
@@ -472,7 +474,7 @@ public class HttpUtils {
             }
 
         }catch (Exception e){
-
+            e.printStackTrace();
         }
         return result;
     }

@@ -33,6 +33,7 @@ import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
+import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Room;
@@ -124,13 +125,29 @@ public class RoomFragment extends Fragment{
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     DeviceChild deviceChild = mGridData.get(position);
-                    String deviceName = deviceChild.getName();
-                    long deviceId = deviceChild.getId();
-                    Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
-                    intent.putExtra("deviceName", deviceName);
-                    intent.putExtra("deviceId", deviceId);
-                    intent.putExtra("houseId",houseId);
-                    startActivityForResult(intent,6000);
+                    int type=deviceChild.getType();
+                    boolean online=deviceChild.getOnline();
+                    if (online){
+                        if (type==2){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId",houseId);
+                            startActivityForResult(intent,6000);
+                        }else if (type==3){
+                            Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId",houseId);
+                            startActivityForResult(intent,6000);
+                        }
+                    }else {
+                        Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
+                    }
                 }
             });
             mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -400,9 +417,8 @@ public class RoomFragment extends Fragment{
                     String returnCode=jsonObject.getString("returnCode");
                     if ("100".equals(returnCode)){
                         code=100;
-                        DeviceChild deviceChild= deviceChildDao.findById(deviceId);
-                        if (deviceChild!=null){
-                            deviceChildDao.delete(deviceChild);
+                        if (mdeledeviceChild!=null){
+                            deviceChildDao.delete(mdeledeviceChild);
                         }
                     }
                 }

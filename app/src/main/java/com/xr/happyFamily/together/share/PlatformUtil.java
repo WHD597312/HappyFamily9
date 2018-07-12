@@ -16,7 +16,7 @@ import java.io.File;
 import java.util.List;
 
 public class PlatformUtil {
-    public static final String AUTHORITY = "com.ume.browser.fileprovider";
+    public static final String AUTHORITY = "com.hm.camerademo.fileprovider2";
     // 是否存在微信客户端
     public static boolean isWeChatAvailable(Context context) {
         final PackageManager packageManager = context.getPackageManager();
@@ -71,7 +71,7 @@ public class PlatformUtil {
      *
      * @param bitmap
      */
-    public void shareImageToQQ(Context mContext,Bitmap bitmap) {
+    public static void shareImageToQQ(Context mContext,Bitmap bitmap) {
         if (PlatformUtil.isQQClientAvailable(mContext)) {
             try {
                 Uri uriToImage = Uri.parse(MediaStore.Images.Media.insertImage(
@@ -95,30 +95,22 @@ public class PlatformUtil {
     /**
      * 直接分享图片到微信好友
      * @param context
-     * @param picFile
+     * @param bitmap
      */
-    public static void shareWechatFriend(Context context,String content ,File picFile){
+    public static void
+    shareWechatFriend(Context context,Bitmap bitmap){
         if (PlatformUtil.isWeChatAvailable(context)){
-            Intent intent = new Intent();
-            ComponentName cop = new ComponentName("com.tencent.mm","com.tencent.mm.ui.tools.ShareImgUI");
-            intent.setComponent(cop);
-            intent.setAction(Intent.ACTION_SEND);
-            intent.setType("image/*");
-            if (picFile != null) {
-                if (picFile.isFile() && picFile.exists()) {
-                    Uri uri;
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.N) {
-                        uri = FileProvider.getUriForFile(context, AUTHORITY, picFile);
-                    } else {
-                        uri = Uri.fromFile(picFile);
-                    }
-                    intent.putExtra(Intent.EXTRA_STREAM, uri);
-//                    intent.putParcelableArrayListExtra(Intent.EXTRA_STREAM, Uri);
-                }
-            }
-//            intent.putExtra("Kdescription", !TextUtils.isEmpty(content) ? content : "");
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-            context.startActivity(intent);
+            Uri uriToImage = Uri.parse(MediaStore.Images.Media.insertImage(
+                    context.getContentResolver(), bitmap, null, null));
+            Intent shareIntent = new Intent();
+            shareIntent.setAction(Intent.ACTION_SEND);
+            shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
+            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            shareIntent.setType("image/*");
+            // 遍历所有支持发送图片的应用。找到需要的应用
+            ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");
+            shareIntent.setComponent(componentName);
+            context.startActivity(shareIntent);
         }else{
             Toast.makeText(context, "您需要安装微信客户端", Toast.LENGTH_LONG).show();
         }

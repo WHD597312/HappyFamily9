@@ -66,7 +66,7 @@ public class GridViewAdapter extends ArrayAdapter {
                             holder.tv_device_switch.setText("电源关");
                         }
 
-                        
+
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                     }else if (online==false){
                         holder.tv_device_switch.setText("离线");
@@ -81,7 +81,6 @@ public class GridViewAdapter extends ArrayAdapter {
                     int sensorState=item.getSensorState();
                     Log.i("online","-->"+sensorState);
                     if (online){
-
                         if (sensorState==128){
                             holder.tv_device_switch.setText("USB供电");
                         }else if (sensorState==1){
@@ -89,7 +88,6 @@ public class GridViewAdapter extends ArrayAdapter {
                         }else if (sensorState==2){
                             holder.tv_device_switch.setText("电压低");
                         }
-
                         holder.tv_device_switch.setTextColor(Color.parseColor("#57Cf76"));
                     }else {
                         holder.tv_device_switch.setText("离线");

@@ -14,6 +14,7 @@ import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
+import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.main.FamilyFragmentManager;
 import com.xr.happyFamily.together.util.TenTwoUtil;
@@ -172,15 +173,15 @@ public class MQService extends Service {
         protected Void doInBackground(Void... voids) {
             try {
                 client.connect(options);
-                List<String> topicNames = getTopicNames();
-                if (!topicNames.isEmpty()) {
-                    for (String topicName : topicNames) {
-                        if(!TextUtils.isEmpty(topicName)){
-                            client.subscribe(topicName, 1);
-                            Log.i("client","-->"+topicName);
-                        }
-                    }
-                }
+//                List<String> topicNames = getTopicNames();
+//                if (!topicNames.isEmpty()) {
+//                    for (String topicName : topicNames) {
+//                        if(!TextUtils.isEmpty(topicName)){
+//                            client.subscribe(topicName, 1);
+//                            Log.i("client","-->"+topicName);
+//                        }
+//                    }
+//                }
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -201,6 +202,8 @@ public class MQService extends Service {
             String macAddress = null;
             if (topicName.startsWith("p99/warmer")) {
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
+            }else if (topicName.startsWith("p99/sensor1")){
+                macAddress=topicName.substring(12,topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99")) {
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
@@ -245,23 +248,22 @@ public class MQService extends Service {
                     }
                 }
             }
-
             try {
                 if ("reSet".equals(message)) {
                     if (deviceChild != null) {
-                        long sharedId2=deviceChild.getShareId();
-                        if (sharedId2==Long.MAX_VALUE){
-                            sharedId=sharedId2;
+                        String share=deviceChild.getShare();
+                        if ("share".equals(share)){
+                            sharedId=Long.MAX_VALUE;
                         }
                         deviceChildDao.delete(deviceChild);
                         deviceChild=null;
                     }
-                }else if ("offline".equals(message)){
+                }else if ("offline".equals(message) || TextUtils.isEmpty(message)){
                     if (deviceChild!=null){
                         deviceChild.setOnline(false);
                     }
                 }else {
-                    if (isGoodJson(message)) {
+                    if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                         messageJsonObject = new JSONObject(message);
                     }
                     if (messageJsonObject != null && messageJsonObject.has("productType")) {
@@ -269,18 +271,20 @@ public class MQService extends Service {
                     }
                     if (messageJsonObject != null && messageJsonObject.has("Warmer")) {
                         messageJsonArray = messageJsonObject.getJSONArray("Warmer");
+                    }else if (messageJsonObject!=null && messageJsonObject.has("TempHumPM2_5")){
+                        messageJsonArray=messageJsonObject.getJSONArray("TempHumPM2_5");
                     }
-
                     if (!TextUtils.isEmpty(productType)) {
                         type = Integer.parseInt(productType);
                     } else {
-                        int index = messageJsonArray.getInt(1);
-                        int index2 = messageJsonArray.getInt(2);
-                        String x = "" + index + index2;
-                        type = Integer.parseInt(x);
+                        if (messageJsonArray!=null){
+                            int index = messageJsonArray.getInt(1);
+                            int index2 = messageJsonArray.getInt(2);
+                            String x = "" + index + index2;
+                            type = Integer.parseInt(x);
+                        }
                     }
                 }
-
                 switch (type) {
                     case 1:
                         break;
@@ -289,7 +293,6 @@ public class MQService extends Service {
 
                         } else {
                             if (messageJsonArray != null) {
-
                                 busModel = messageJsonArray.getInt(3);
                                 int mMcuVersion = messageJsonArray.getInt(4);
                                 mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
@@ -389,8 +392,8 @@ public class MQService extends Service {
                             int deviceUsedCount=deviceChild.getDeviceUsedCount();
                             deviceChild.setDeviceUsedCount(deviceUsedCount+1);
                             deviceChild.setOnline(true);
-                            long shareId2=deviceChild.getShareId();
-                            if (shareId2==Long.MAX_VALUE){
+                            String share=deviceChild.getShare();
+                            if ("share".equals(share)){
                                 sharedId=Long.MAX_VALUE;
                             }
                             deviceChildDao.update(deviceChild);
@@ -398,6 +401,45 @@ public class MQService extends Service {
                         }
                         break;
                     case 3:
+                        if (!TextUtils.isEmpty(productType)) {
+
+                        }else {
+                            if (messageJsonArray!=null){
+                                int sensorSimpleTemp;/**传感器采样温度*/
+                                int sensorSimpleHum;/**传感器采样湿度*/
+                                int sorsorPm;/**PM2.5粉尘传感器数据*/
+                                int sensorOx;/**氧浓度传感器数据*/
+                                int sensorHcho;/**甲醛数据*/
+
+                                busModel=messageJsonArray.getInt(3);
+                                int mMcuVersion = messageJsonArray.getInt(4);
+                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                                int mWifiVersion = messageJsonArray.getInt(5);
+                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                                int sensorState=messageJsonArray.getInt(7);
+                                sensorSimpleTemp=messageJsonArray.getInt(8)-128;
+                                sensorSimpleHum=messageJsonArray.getInt(9)-128;
+                                sorsorPm=messageJsonArray.getInt(10)-128;
+                                sensorOx=messageJsonArray.getInt(11)-128;
+                                sensorHcho=messageJsonArray.getInt(12)-128;
+
+                                deviceChild.setSensorState(sensorState);
+                                deviceChild.setBusModel(busModel);
+                                deviceChild.setMcuVersion(mcuVersion);
+                                deviceChild.setWifiVersion(wifiVersion);
+                                deviceChild.setSensorSimpleTemp(sensorSimpleTemp);
+                                deviceChild.setSensorSimpleHum(sensorSimpleHum);
+                                deviceChild.setSorsorPm(sorsorPm);
+                                deviceChild.setSensorOx(sensorOx);
+                                deviceChild.setSensorHcho(sensorHcho);
+                                if (screenState==4){
+                                    deviceChild.setOnline(false);
+                                }else {
+                                    deviceChild.setOnline(true);
+                                }
+                                deviceChildDao.update(deviceChild);
+                            }
+                        }
                         break;
                     case 4:
                         break;
@@ -429,6 +471,11 @@ public class MQService extends Service {
                     mqttIntent.putExtra("macAddress", macAddress);
                     mqttIntent.putExtra("sharedId", sharedId);
                     sendBroadcast(mqttIntent);
+                }else if (SmartTerminalActivity.running){
+                    Intent mqttIntent = new Intent("SmartTerminalActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
                 }
 
                 //标记  运行控件
@@ -454,10 +501,16 @@ public class MQService extends Service {
                 case 2:
                     onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
                     offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                    break;
+                case 3:
+                    onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
+                    offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
                     break;
             }
-            list.add(onlineTopicName);
-            list.add(offlineTopicName);
         }
 //        list.add("warmer/p99"+macAddress+"/set");
         return list;
@@ -494,10 +547,11 @@ public class MQService extends Service {
     public boolean publish(String topicName, int qos, String payload) {
         boolean flag = false;
         if (client != null && client.isConnected()) {
-
             try {
                 MqttMessage message = new MqttMessage(payload.getBytes("utf-8"));
-                qos = 1;
+                if (topicName.contains("sensor")){
+                    message.setRetained(true);
+                }
                 message.setQos(qos);
                 client.publish(topicName, message);
                 flag = true;
@@ -507,6 +561,7 @@ public class MQService extends Service {
         }
         return flag;
     }
+
 
     /**
      * 订阅MQTT主题

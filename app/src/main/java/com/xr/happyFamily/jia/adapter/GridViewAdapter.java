@@ -80,6 +80,7 @@ public class GridViewAdapter extends ArrayAdapter {
                     int sensorState=item.getSensorState();
                     Log.i("online","-->"+sensorState);
                     if (online){
+                        
                         if (sensorState==128){
                             holder.tv_device_switch.setText("USB供电");
                         }else if (sensorState==1){

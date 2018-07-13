@@ -47,7 +47,11 @@ public class SmartLinkedActivity extends AppCompatActivity {
     private String chooseDevicesIp=HttpUtils.ipAddress+"/family/device/sensors/chooseDevices";
     private List<DeviceChild> list=new ArrayList<>();/**可联动的设备*/
     private LinkdAdapter adapter;
-    private long sensorId;/**传感器Id*/
+    private int sensorId;/**传感器Id*/
+    long houseId;
+    long roomId;
+    int linkedSensorId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +67,12 @@ public class SmartLinkedActivity extends AppCompatActivity {
         deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
 //        list=deviceChildDao.findLinkDevice(3);
         Intent intent=getIntent();
-        sensorId=intent.getLongExtra("sensorId",0);
+        sensorId=intent.getIntExtra("sensorId",0);
+        long id= intent.getLongExtra("Id",0);
+        DeviceChild sensorChild=deviceChildDao.findById(id);
+        linkedSensorId=sensorChild.getDeviceId();
+        houseId=sensorChild.getHouseId();
+        roomId=sensorChild.getRoomId();
         list= (List<DeviceChild>) intent.getSerializableExtra("deviceList");
         for (DeviceChild deviceChild:list){
             int deviceId=deviceChild.getDeviceId();
@@ -72,8 +81,6 @@ public class SmartLinkedActivity extends AppCompatActivity {
         adapter=new LinkdAdapter(this,list);
         list_linked.setAdapter(adapter);
     }
-
-
     @Override
     public void onBackPressed() {
         Intent intent=new Intent();
@@ -118,8 +125,6 @@ public class SmartLinkedActivity extends AppCompatActivity {
         }
     }
 
-
-
     @Override
     protected void onDestroy() {
         super.onDestroy();
@@ -127,8 +132,6 @@ public class SmartLinkedActivity extends AppCompatActivity {
             unbinder.unbind();
         }
     }
-
-
 
     class LinkdAdapter extends BaseAdapter{
         private Context context;
@@ -166,7 +169,7 @@ public class SmartLinkedActivity extends AppCompatActivity {
                 int type=deviceChild.getType();
                 if (type==2){/**取暖器*/
                     viewHolder.image_linked.setImageResource(R.mipmap.warmer);
-                    viewHolder.tv_linked.setText("取暖器");
+                    viewHolder.tv_linked.setText(deviceChild.getName());
                     int linked=deviceChild.getLinked();
                     if (linked==1){
                         check.setChecked(true);
@@ -183,14 +186,12 @@ public class SmartLinkedActivity extends AppCompatActivity {
                         int deviceId=deviceChild.getDeviceId();
                         linkedMap.put(deviceId,deviceChild);
                     }else {
-
                         deviceChild.setLinked(0);
                         int deviceId=deviceChild.getDeviceId();
                         linkedMap.put(deviceId,deviceChild);
                     }
                 }
             });
-
             return convertView;
         }
         class ViewHolder{
@@ -214,6 +215,11 @@ public class SmartLinkedActivity extends AppCompatActivity {
                     String returnCode=jsonObject.getString("returnCode");
                     if ("100".equals(returnCode)){
                         code=100;
+                        for (Map.Entry<Integer, DeviceChild> entry : linkedMap.entrySet()) {
+                            DeviceChild deviceChild=entry.getValue();
+                            deviceChild.setLinkedSensorId(sensorId);
+                            deviceChildDao.update(deviceChild);
+                        }
                     }
                 }catch (Exception e){
                     e.printStackTrace();

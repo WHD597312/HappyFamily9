@@ -303,6 +303,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             FamilyFragmentManager familyFragmentManager = new FamilyFragmentManager();
             Bundle bundle = new Bundle();
             bundle.putLong("houseId", houseId);
+            bundle.putString("load","");
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
@@ -516,7 +517,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     bundle.putLong("houseId", houseId);
                     familyFragmentManager.setArguments(bundle);
                     fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-                   fragmentTransaction.commit();
+                    fragmentTransaction.commit();
 //                    Intent service = new Intent(MainActivity.this, MQService.class);
 //                    startService(service);
 //                    isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);

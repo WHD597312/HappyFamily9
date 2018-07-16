@@ -74,6 +74,7 @@ public class XQActivity extends AppCompatActivity {
             case R.id.back:
                finish();
                 break;
+                
         }
     }
 

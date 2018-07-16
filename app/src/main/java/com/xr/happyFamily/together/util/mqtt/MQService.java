@@ -213,7 +213,6 @@ public class MQService extends Service {
                 if (client.isConnected() && !topicNames.isEmpty()) {
                     for (String topicName : topicNames) {
                         if (!TextUtils.isEmpty(topicName)) {
-                            Thread.sleep(200);
                             client.subscribe(topicName, 1);
                             Log.i("client", "-->" + topicName);
                         }

@@ -54,6 +54,7 @@ public class FamilyFragmentManager extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+        Log.i("FamilyFragmentManager","-->onCreateView");
         if (view==null){
             view = inflater.inflate(R.layout.fragment_family_manager, container, false);
             viewPager = (ViewPager) view.findViewById(R.id.viewPager);
@@ -172,6 +173,7 @@ public class FamilyFragmentManager extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        Log.i("FamilyFragmentManager","-->onStart");
         running=true;
     }
     @Override
@@ -196,6 +198,7 @@ public class FamilyFragmentManager extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
+        Log.i("FamilyFragmentManager","-->onStop");
         running=false;
     }
 

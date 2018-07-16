@@ -138,6 +138,7 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
         }
 
         mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
+
         //从支付成功跳回主界面时，打开商城fragment
         if ("PaySuccess".equals(sign)) {
             id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -201,7 +202,6 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
 
         @Override
         protected Void doInBackground(Void... voids) {
-
             return null;
         }
     }
@@ -210,12 +210,6 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
     protected void onStart() {
         super.onStart();
 
-        Intent intent = getIntent();
-        load=intent.getStringExtra("load");
-        String login=intent.getStringExtra("login");
-        share=intent.getStringExtra("share");
-        sign = intent.getStringExtra("sign");
-        houseId = intent.getLongExtra("houseId", 0);
 
         if (!preferences.contains("image")){
             if (preferences.contains("headImgUrl")){

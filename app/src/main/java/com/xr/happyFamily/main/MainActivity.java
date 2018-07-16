@@ -183,6 +183,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
         }
     }
+    
     SharedPreferences preferencesclock;
     Intent clockintent;
     ClockService clcokservice;

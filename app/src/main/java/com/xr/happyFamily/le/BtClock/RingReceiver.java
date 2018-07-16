@@ -15,8 +15,10 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.xr.database.dao.ClockBeanDao;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.utils.WakeAndLock;
 import com.xr.happyFamily.le.view.btClockjsDialog;
@@ -36,22 +38,26 @@ public class RingReceiver extends BroadcastReceiver {
     btClockjsDialog4 dialog4;
     List<Time> times;
     Time time;
+    ClockBeanDao clockBeanDao;
+    ClockBean clockBean;
     private TimeDaoImpl timeDao;
-    int firstHour=-1;
-    int firstMinutes=-1;
+    int firstHour = -1;
+    int firstMinutes = -1;
     int first;
     private String op = "on";
     SharedPreferences preferences;
+
     public void onReceive(Context context, Intent intent) {
         //广播的名字:包名+随便取一个名字
+        String sss = intent.getAction();
+        Log.i("sssssss", "sss");
         if ("com.zking.android29_alarm_notification.RING".equals(intent.getAction())) {
             Log.i("test", "闹钟响了！！！");
             mContext = context;
             timeDao = new TimeDaoImpl(mContext);
             times = timeDao.findTimeByMin();
-            preferences = mContext.getSharedPreferences("this", Context.MODE_PRIVATE);
 
-            first = preferences.getInt("first", 0);
+
             Calendar calendar = Calendar.getInstance();
 //            int minutes=(int) calendar.getTimeInMillis()/(1000*60);
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
@@ -65,63 +71,66 @@ public class RingReceiver extends BroadcastReceiver {
                     firstMinutes = time.getMinutes();
                     break;
                 }
-
             }
             if (firstMinutes != -1 && firstHour != -1) {
-                if (first == 1) {
 
-                    Calendar c = Calendar.getInstance();//c：当前系统时间
-                    c.set(Calendar.HOUR_OF_DAY, firstHour);//把小时设为你选择的小时
-                    c.set(Calendar.MINUTE, firstMinutes);
-                    AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
-                    Intent intent1 = new Intent("com.zking.android29_alarm_notification.RING");
-                    PendingIntent sender = PendingIntent.getBroadcast(mContext, 0x101, intent1,
-                            PendingIntent.FLAG_CANCEL_CURRENT);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-                    } else {
-                        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
-                    }
 
-                    if (hour == firstHour && minutes == firstMinutes) {
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("first",2);
-                        editor.apply();
-                        PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
+//                    Calendar c = Calendar.getInstance();//c：当前系统时间
+//                    c.set(Calendar.HOUR_OF_DAY, firstHour);//把小时设为你选择的小时
+//                    c.set(Calendar.MINUTE, firstMinutes);
+//                    AlarmManager am = (AlarmManager) mContext.getSystemService(Context.ALARM_SERVICE);
+//                    Intent intent1 = new Intent("com.zking.android29_alarm_notification.RING");
+//                    intent1.setFlags( Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);//3.1以后的版本需要设置Intent.FLAG_INCLUDE_STOPPED_PACKAGES
+//                    PendingIntent sender = PendingIntent.getBroadcast(mContext, 0x101, intent1,
+//                            PendingIntent.FLAG_CANCEL_CURRENT);
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+////                        am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
+//                        am.setExact(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),sender);
+//                    } else {
+//                        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+//                    }
+                Log.i("hhhhh", "有闹铃 广播发送成功");
+                if (hour == firstHour && minutes == firstMinutes) {
+
+
+                    PowerManager pm = (PowerManager) mContext.getSystemService(Context.POWER_SERVICE);
 /*        PARTIAL_WAKE_LOCK:保持CPU 运转，屏幕和键盘灯有可能是关闭的。
         SCREEN_DIM_WAKE_LOCK：保持CPU 运转，允许保持屏幕显示但有可能是灰的，允许关闭键盘灯
         SCREEN_BRIGHT_WAKE_LOCK：保持CPU 运转，允许保持屏幕高亮显示，允许关闭键盘灯
         FULL_WAKE_LOCK：保持CPU 运转，保持屏幕高亮显示，键盘灯也保持亮度
         ACQUIRE_CAUSES_WAKEUP：强制使屏幕亮起，这种锁主要针对一些必须通知用户的操作.
                 ON_AFTER_RELEASE：当锁被释放时，保持屏幕亮起一段时间*/
-                        PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wjc");
-                        wakeLock.acquire();
+                    PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wjc");
+                    wakeLock.acquire();
 //wakeLock.acquire(1000);
-                        wakeLock.release();
+                    wakeLock.release();
 
 
-                        List<Time> times = timeDao.findTimesByHourAndMin(hour, minutes);
-                        if (!times.isEmpty()) {
-                            Time time = times.get(0);
-                            if (time.getOpen()) {
-                                if (time.getFlag() == 1) {
-
-                                    clolkDialog1();
-                                } else if (time.getFlag() == 2) {
-
-                                    clolkDialog2();
-                                } else if (time.getFlag() == 3) {
-
-                                    clolkDialog3();
-                                }
-
+                    List<Time> times = timeDao.findTimesByHourAndMin(hour, minutes);
+                    if (!times.isEmpty()) {
+                        Time time = times.get(0);
+                        if (time.getOpen()) {
+                            if (time.getFlag() == 1) {
+//                time.setOpen(false);
+//                timeDao.update(time);
+                                clolkDialog1();
+                            } else if (time.getFlag() == 2) {
+//                time.setOpen(false);
+//                timeDao.update(time);
+                                clolkDialog2();
+                            } else if (time.getFlag() == 3) {
+//                time.setOpen(false);
+//                timeDao.update(time);
+                                clolkDialog3();
                             }
+
                         }
                     }
                 }
             }
-
         }
+
+
     }
 
     private void clolkDialog1() {//听歌识曲

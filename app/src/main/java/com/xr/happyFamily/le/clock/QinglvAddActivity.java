@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -76,6 +77,7 @@ public class QinglvAddActivity extends AppCompatActivity {
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
+    ClockBean clockBean;
     int hour, minutes;
     SharedPreferences preferences;
     String userId;
@@ -151,45 +153,52 @@ public class QinglvAddActivity extends AppCompatActivity {
             case R.id.tv_lrsd_qd:
                 hour = timeLe1.getValue();
                 minutes = timeLe2.getValue();
-//                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
-//                if (time == null) {
-//                    time = new Time();
-//                }
-//                time.setHour(hour);
-//                time.setMinutes(minutes);
-//                timeDao.insert(time);
-//                Calendar c = Calendar.getInstance();//c：当前系统时间
-//                c.set(Calendar.HOUR_OF_DAY, hour);//把小时设为你选择的小时
-//                c.set(Calendar.MINUTE, minutes);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0x101, new Intent("com.zking.android29_alarm_notification.RING"), 0);//上下文 请求码  启动哪一个广播 标志位
-//                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-//                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
-//                setResult(600);
+                preferences = this.getSharedPreferences("firstring", MODE_MULTI_PROCESS);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putInt("first",1);
+                editor.commit();
+                if (clockBean == null) {
+                    clockBean = new ClockBean();
+                }
+                clockBean.setClockHour(hour);
+                clockBean.setClockMinute(minutes);
+                clockBeanDao.insert(clockBean);
+                Calendar c=Calendar.getInstance();//c：当前系统时间
+                AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
+                Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
+                Log.e("time", "onClick: "+hour+"...."+minutes );
+                PendingIntent sender = PendingIntent.getBroadcast(this, 0x101, intent1,
+                        PendingIntent.FLAG_CANCEL_CURRENT);
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                    am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
+                } else {
+                    am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                }
 
-                Map map = new HashMap();
-                map.put("clockHour", hour);
-                map.put("clockMinute", minutes);
-                map.put("clockDay", "0");
-                if("请填写标签".equals(tvTag.getText().toString()))
-                {
-                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
-                    break;
-                }else
-                map.put("flag", tvTag.getText().toString());
-                map.put("music", "狼爱上羊");
-                map.put("switchs", 1);
-                String member = qinglvAdapter.getMember();
-                if ("0".equals(member)) {
-                    Toast.makeText(mContext, "请选择添加成员", Toast.LENGTH_SHORT).show();
-                    break;
-                } else
-
-                    map.put("clockMember", userId + "," + member);
-                Log.e("qqqqqqqMMMM", member);
-                map.put("clockCreater", userId);
-                map.put("clockType", 3);
-                dialog.show();
-                new addClock().execute(map);
+//                Map map = new HashMap();
+//                map.put("clockHour", hour);
+//                map.put("clockMinute", minutes);
+//                map.put("clockDay", "0");
+//                if("请填写标签".equals(tvTag.getText().toString()))
+//                {
+//                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
+//                    break;
+//                }else
+//                map.put("flag", tvTag.getText().toString());
+//                map.put("music", "狼爱上羊");
+//                map.put("switchs", 1);
+//                String member = qinglvAdapter.getMember();
+//                if ("0".equals(member)) {
+//                    Toast.makeText(mContext, "请选择添加成员", Toast.LENGTH_SHORT).show();
+//                    break;
+//                } else
+//
+//                    map.put("clockMember", userId + "," + member);
+//                Log.e("qqqqqqqMMMM", member);
+//                map.put("clockCreater", userId);
+//                map.put("clockType", 3);
+//                dialog.show();
+//                new addClock().execute(map);
                 break;
         }
     }

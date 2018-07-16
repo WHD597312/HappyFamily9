@@ -124,7 +124,6 @@ public class CommonClockFragment extends BaseFragment {
 
         Log.e("qqqqqQQ","??????????");
         if (resultCode==600){
-            Log.e("qqqqqqqqMMM",data.getIntExtra("hour",0)+"");
             times = timeDao.findByAllTime();
             adapter = new ChooseTimeAdapter(getActivity(),times);
             recyclerView.setAdapter(adapter);

@@ -9,14 +9,14 @@ repositories {
 }
 
 greendao {
-    schemaVersion 17
+    schemaVersion 18
     daoPackage 'com.xr.database.dao'
     targetGenDir 'src/main/java'
 }
 android {
     signingConfigs {
         release {
-            storeFile file('F:/android/p99.jks')
+            storeFile file('D:/android/copy/HappyFamily/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'

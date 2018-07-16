@@ -3,8 +3,10 @@ package com.xr.happyFamily.le.view;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -12,16 +14,21 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
+
 import org.json.JSONObject;
 import java.io.IOException;
 import java.util.Calendar;
@@ -48,6 +55,8 @@ public class btClockjsDialog4 extends Dialog {
     Context mcontext;
     private MediaPlayer mediaPlayer;
     SharedPreferences preferences;
+    Intent service;
+    boolean isBound;
     public btClockjsDialog4(@NonNull Context context) {
         super(context, R.style.MyDialog);
         mcontext=context;
@@ -62,16 +71,45 @@ public class btClockjsDialog4 extends Dialog {
         audioMa = (AudioManager)mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
-        preferences = mcontext.getSharedPreferences("this", mcontext.MODE_PRIVATE);
+        service = new Intent(mcontext, ClockService.class);
+
+        isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
+//        Window win =getWindow();
+//        WindowManager.LayoutParams winParams = win.getAttributes();
+//        winParams.flags |= (WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
+//                | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED
+//                | WindowManager.LayoutParams.FLAG_ALLOW_LOCK_WHILE_SCREEN_ON | WindowManager.LayoutParams.FLAG_TURN_SCREEN_ON);
+
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound){
+            mcontext.unbindService(connection);
+        }
+    }
 
     @Override
     protected void onStart() {
         super.onStart();
 
     }
+    ClockService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
    public String getText(){
         return text;
@@ -97,20 +135,20 @@ public class btClockjsDialog4 extends Dialog {
                 if (name.equals(songName)){
                     mediaPlayer.stop();
                     dismiss();
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putInt("first",1);
-                    editor.apply();
-                    Calendar c=Calendar.getInstance();//c：当前系统时间
-                    AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
-                    Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
-
-                    PendingIntent sender = PendingIntent.getBroadcast(mcontext, 0x101, intent1,
-                            PendingIntent.FLAG_CANCEL_CURRENT);
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-                    } else {
-                        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                    if (mqService != null) {
+                        mqService.startClock();
                     }
+//                    Calendar c=Calendar.getInstance();//c：当前系统时间
+//                    AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
+//                    Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
+//
+//                    PendingIntent sender = PendingIntent.getBroadcast(mcontext, 0x101, intent1,
+//                            PendingIntent.FLAG_CANCEL_CURRENT);
+//                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+//                        am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
+//                    } else {
+//                        am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+//                    }
                 }else {
                     Toast.makeText(mcontext, "输入错误请从新输入", Toast.LENGTH_SHORT).show();
 

@@ -3,8 +3,10 @@ package com.xr.happyFamily.le.view;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
@@ -12,6 +14,7 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.text.TextUtils;
@@ -28,6 +31,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 
 import org.json.JSONObject;
 
@@ -77,7 +81,8 @@ public class btClockjsDialog2 extends Dialog {
     private MediaPlayer mediaPlayer;
     private AudioManager audioMa;
     SharedPreferences preferences;
-
+    Intent service;
+    boolean isBound;
     public btClockjsDialog2(@NonNull Context context) {
         super(context, R.style.MyDialog);
         mcontext=context;
@@ -136,7 +141,10 @@ public class btClockjsDialog2 extends Dialog {
         audioMa = (AudioManager)mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
-        preferences = mcontext.getSharedPreferences("this", mcontext.MODE_PRIVATE);
+        service = new Intent(mcontext, ClockService.class);
+
+        isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
+
     }
 
 
@@ -153,13 +161,33 @@ public class btClockjsDialog2 extends Dialog {
         return false;
     }
 
-
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound){
+            mcontext.unbindService(connection);
+        }
+    }
     @Override
     protected void onStart() {
         super.onStart();
 
     }
+    ClockService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
    public String getText(){
         return text;
@@ -191,21 +219,9 @@ public class btClockjsDialog2 extends Dialog {
 
                    dismiss();
                    mediaPlayer.stop();
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putInt("first",1);
-                editor.apply();
-                Calendar c=Calendar.getInstance();//c：当前系统时间
-                AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
-                Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
-
-                PendingIntent sender = PendingIntent.getBroadcast(mcontext, 0x101, intent1,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-                } else {
-                    am.set(AlarmManager.RTC_WAKEUP,  c.getTimeInMillis(), sender);
+                if (mqService != null) {
+                    mqService.startClock();
                 }
-
 
                 break;
 

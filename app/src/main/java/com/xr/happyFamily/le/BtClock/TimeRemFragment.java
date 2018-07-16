@@ -59,12 +59,9 @@ SharedPreferences preferences;
         int minutes = calendar.get(Calendar.MINUTE);
         tv_sgjs_hour.setText(hour+"");
         tv_sgjs_minutes.setText(minutes+"");
-        userBean=new UserBean();
-        userBeanDao = new UserBeanDaoImpl(getContext().getApplicationContext());
-        userBean = userBeanDao.findByAllUser().get(0);
         preferences = getActivity().getSharedPreferences("this", Context.MODE_PRIVATE);
-
-        String birthday = userBean.getBirthday();
+        SharedPreferences preferences=getActivity().getSharedPreferences("my", Context.MODE_PRIVATE);
+        String birthday =preferences.getString("birthday","");
         try {
             String format = "yyyy-MM-dd";
             DateFormat sdf = new SimpleDateFormat(format);

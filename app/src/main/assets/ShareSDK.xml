@@ -18,16 +18,14 @@
 		<!--AppKey="257a640199764"/> &lt;!&ndash; 修改成你在sharesdk后台注册的应用的appkey"&ndash;&gt;-->
 
 	<Wechat
-        Id="4"
-        SortId="4"
-        AppId="wx44acbeed9571e8cf"
-        AppSecret="bfd87437ffa1d563059a37514eddd51f"
-		UserName="gh_afb25ac019c9"
-		Path="pages/index/index.html?id=1"
-        BypassApproval="false"
+		Id="4"
+		SortId="4"
+		AppId="wx44acbeed9571e8cf"
+		AppSecret="bfd87437ffa1d563059a37514eddd51f"
+		BypassApproval="false"
 		WithShareTicket = "true"
 		MiniprogramType = "0"
-        Enable="true" />
+		Enable="true"/>
 
     <WechatMoments
         Id="5"

@@ -1,5 +1,6 @@
 package com.xr.happyFamily.main;
 
+import android.app.AlarmManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -10,6 +11,7 @@ import android.graphics.Bitmap;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.IBinder;
+import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
@@ -36,6 +38,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.receiver.MQTTMessageReveiver;
 
@@ -88,10 +91,9 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     SharedPreferences preferences;
     private DeviceChildDaoImpl deviceChildDao;
 
-
     //其他activity跳转回主界面时的标记
     private String sign = "0";
-
+    AlarmManager alarmManager;
     private MQTTMessageReveiver myReceiver;
     private  boolean isBound;
     String load;
@@ -112,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-
+        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         myReceiver = new MQTTMessageReveiver();
@@ -169,7 +171,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 //        if (TextUtils.isEmpty(sign) && TextUtils.isEmpty(login)){
 //            new hourseAsyncTask().execute();
 //        }
+        //启动闹铃服务
+
+
+
+
     }
+
+
+
 
 //    MQService mqService;
 //    private boolean bound=false;
@@ -286,7 +296,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (unbinder != null) {
             unbinder.unbind();
         }
-
+        Log.e("close", "onDestroy: ---->" );
         mPositionPreferences.edit().clear().commit();
 
         if (myReceiver!=null){

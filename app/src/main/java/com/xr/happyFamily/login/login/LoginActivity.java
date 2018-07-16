@@ -1,10 +1,20 @@
 package com.xr.happyFamily.login.login;
 
+import android.annotation.TargetApi;
+import android.app.Activity;
+import android.app.AppOpsManager;
+import android.app.ProgressDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Binder;
+import android.os.Build;
 import android.os.Bundle;
+import android.os.Message;
+import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -15,12 +25,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-
+import android.os.Handler.Callback;
+import com.mob.tools.utils.UIHandler;
 import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.UserBeanDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
@@ -28,6 +40,7 @@ import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.le.pojo.UserBean;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 
@@ -40,18 +53,36 @@ import com.xr.happyFamily.together.util.mqtt.MQService;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TimeZone;
+
+import android.view.View.OnClickListener;
+import android.widget.Toast;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import cn.sharesdk.framework.Platform;
+import cn.sharesdk.framework.PlatformActionListener;
+import cn.sharesdk.framework.ShareSDK;
+import cn.sharesdk.wechat.friends.Wechat;
 import pl.droidsonroids.gif.GifDrawable;
 
-public class LoginActivity extends AppCompatActivity {
+import static android.R.attr.action;
 
+public class LoginActivity extends Activity implements Callback,
+       PlatformActionListener {
+    private static final int MSG_USERID_FOUND = 1;
+    private static final int MSG_LOGIN = 2;
+    private static final int MSG_AUTH_CANCEL = 3;
+    private static final int MSG_AUTH_ERROR= 4;
+    private static final int MSG_AUTH_COMPLETE = 5;
     Unbinder unbinder;
     MyApplication application;
     @BindView(R.id.et_name)
@@ -69,6 +100,8 @@ public class LoginActivity extends AppCompatActivity {
     boolean isHideFirst = true;
     private HourseDaoImpl hourseDao;
     private RoomDaoImpl roomDao;
+    UserBeanDaoImpl userBeanDao;
+    UserBean userBean;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
     int firstClick=1;
@@ -80,11 +113,9 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
         unbinder = ButterKnife.bind(this);
         imageView.setImageResource(R.mipmap.yanjing13x);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        preferences = getSharedPreferences("my", MODE_PRIVATE);
 
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        ShareSDK.initSDK(this);
         if (application == null) {
             application = (MyApplication) getApplication();
         }
@@ -96,7 +127,12 @@ public class LoginActivity extends AppCompatActivity {
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
+        userBeanDao = new UserBeanDaoImpl(getApplicationContext());
     }
+
+
+
+
 
     SharedPreferences preferences;
 
@@ -195,10 +231,113 @@ public class LoginActivity extends AppCompatActivity {
                 et_pswd.setSelection(index);
                 break;
             case R.id.image_wx:
-
+                Platform wechat = ShareSDK.getPlatform(Wechat.NAME);
+                wechat.setPlatformActionListener(this);
+                wechat.SSOSetting(false);
+                authorize(wechat, 1);
                 break;
         }
     }
+    private static final int MSG_ACTION_CCALLBACK = 0;
+    private ProgressDialog progressDialog;
+    /******三方登录逻辑*******/
+    private void authorize(Platform plat, int type) {
+        switch (type) {
+            case 1:
+                showProgressDialog("正在打开微信，请稍后...");
+                break;
+            case 2:
+                showProgressDialog("正在打开QQ，请稍后...");
+                break;
+
+        }
+        if (plat.isValid()) { //如果授权就删除授权资料
+            plat.removeAccount();
+        }
+        plat.showUser(null);//授权并获取用户信息
+    }
+
+    //登陆授权成功的回调
+    @Override
+    public void onComplete(Platform platform, int i, HashMap<String, Object> res) {
+        Message msg = new Message();
+        msg.what = MSG_ACTION_CCALLBACK;
+        msg.arg1 = 1;
+        msg.arg2 = action;
+        msg.obj = platform;
+        UIHandler.sendMessage(msg, this);   //发送消息
+
+    }
+
+    //登陆授权错误的回调
+    @Override
+    public void onError(Platform platform, int i, Throwable t) {
+        Message msg = new Message();
+        msg.what = MSG_ACTION_CCALLBACK;
+        msg.arg1 = 2;
+        msg.arg2 = action;
+        msg.obj = t;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    //登陆授权取消的回调
+    @Override
+    public void onCancel(Platform platform, int i) {
+        Message msg = new Message();
+        msg.what = MSG_ACTION_CCALLBACK;
+        msg.arg1 = 3;
+        msg.arg2 = action;
+        msg.obj = platform;
+        UIHandler.sendMessage(msg, this);
+    }
+
+    //登陆发送的handle消息在这里处理
+    @Override
+    public boolean handleMessage(Message message) {
+        hideProgressDialog();
+        switch (message.arg1) {
+            case 1: { // 成功
+                Toast.makeText(LoginActivity.this, "授权登陆成功", Toast.LENGTH_SHORT).show();
+
+                //获取用户资料
+                Platform platform = (Platform) message.obj;
+                String userId = platform.getDb().getUserId();//获取用户账号
+                String userName = platform.getDb().getUserName();//获取用户名字
+                String userIcon = platform.getDb().getUserIcon();//获取用户头像
+                String userGender = platform.getDb().getUserGender(); //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
+                Toast.makeText(LoginActivity.this, "用户信息为--用户名：" + userName + "  性别：" + userGender, Toast.LENGTH_SHORT).show();
+
+                //下面就可以利用获取的用户信息登录自己的服务器或者做自己想做的事啦!
+                //。。。
+
+            }
+            break;
+            case 2: { // 失败
+                Toast.makeText(LoginActivity.this, "授权登陆失败", Toast.LENGTH_SHORT).show();
+            }
+            break;
+            case 3: { // 取消
+                Toast.makeText(LoginActivity.this, "授权登陆取消", Toast.LENGTH_SHORT).show();
+            }
+            break;
+        }
+        return false;
+    }
+
+    //显示dialog
+    public void showProgressDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(true);
+        progressDialog.show();
+    }
+
+    //隐藏dialog
+    public void hideProgressDialog() {
+        if (progressDialog != null)
+            progressDialog.dismiss();
+    }
+
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -271,6 +410,12 @@ public class LoginActivity extends AppCompatActivity {
             }
         }
     }
+    public static String getDateToString(long milSecond) {
+        Date date = new Date(milSecond);
+        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+        return format.format(date);
+    }
+
 
     class LoadUserAsync extends AsyncTask<Map<String,Object>,Void,Void>{
 
@@ -289,7 +434,7 @@ public class LoginActivity extends AppCompatActivity {
                         String headImgUrl=jsonObject.getString("headImgUrl");
                         editor.putString("headImgUrl",headImgUrl);
                     }
-                    String birthday=jsonObject.getString("birthday");
+                    String birthday= getDateToString(Long.parseLong(jsonObject.getString("birthday")) );
                     editor.putBoolean("sex",sex);
                     editor.putString("birthday",birthday);
                     boolean success=editor.commit();
@@ -428,6 +573,7 @@ public class LoginActivity extends AppCompatActivity {
                                         break;
                                     }
                                 }
+
                                if (deviceChild2!=null){
                                    deviceChildDao.update(deviceChild2);
                                }else if (deviceChild2==null){
@@ -482,5 +628,7 @@ public class LoginActivity extends AppCompatActivity {
         if (unbinder != null) {
             unbinder.unbind();
         }
+        ShareSDK.stopSDK(this);
+
     }
 }

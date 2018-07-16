@@ -39,6 +39,9 @@ public class TimeDaoImpl {
         timeDao.insert(time);
     }
 
+    public Time findById(long id){
+        return timeDao.load(id);
+    }
     /**
      * 删除设备
      * @param time
@@ -55,9 +58,10 @@ public class TimeDaoImpl {
         timeDao.update(time);
     }
 
-    public Time findById(long userId){
-        return timeDao.load(userId);
-    }
+
+//    public Time findById(long userId){
+//        return timeDao.load(userId);
+//    }
 //    public List<Time> findAllTimes(long userId){
 //        List<Time> times=timeDao.queryBuilder().where(TimeDao.Properties.UserId.eq(userId)).orderAsc(TimeDao.Properties.UserId).list();
 //        return times;

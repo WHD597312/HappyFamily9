@@ -1,6 +1,9 @@
 package com.xr.happyFamily.le;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
+import android.app.AppOpsManager;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -11,10 +14,13 @@ import android.graphics.Rect;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
+import android.net.Uri;
 import android.os.AsyncTask;
+import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
 import android.print.PrinterId;
+import android.provider.Settings;
 import android.support.annotation.RequiresApi;
 import android.support.design.widget.TabLayout;
 import android.support.v4.content.ContextCompat;
@@ -63,6 +69,7 @@ import com.xr.happyFamily.le.fragment.ZhiLaiFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.NoSrcollViewPage;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -72,6 +79,7 @@ import org.json.JSONObject;
 
 import java.io.Serializable;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -120,6 +128,7 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
         Intent intent = getIntent();
         int fragid = intent.getIntExtra("fragid", 0);
     }
+
 
     private void initView() {
         circle.add("时光简记");

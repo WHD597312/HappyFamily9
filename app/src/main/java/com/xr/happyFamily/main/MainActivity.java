@@ -223,6 +223,7 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
+                
                 List<Hourse> hourses = hourseDao.findAllHouse();
                 Hourse hourse = hourses.get(0);
                 long houseId = hourse.getHouseId();

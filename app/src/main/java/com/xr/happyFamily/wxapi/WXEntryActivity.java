@@ -1,4 +1,4 @@
-package com.xr.happyFamily.login.login.wxapi;
+package com.xr.happyFamily.wxapi;
 
 import android.content.Intent;
 import android.widget.Toast;

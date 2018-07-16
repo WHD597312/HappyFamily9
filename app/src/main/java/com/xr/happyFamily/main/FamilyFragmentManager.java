@@ -111,7 +111,6 @@ public class FamilyFragmentManager extends Fragment {
                 listener.onPageSelected(0);
             }
         }
-
         Intent service = new Intent(getActivity(), MQService.class);
         isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
         return view;
@@ -124,10 +123,10 @@ public class FamilyFragmentManager extends Fragment {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             mqService = binder.getService();
             bound = true;
-            if (!TextUtils.isEmpty(load)){
-                List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
-                new LoadDevicesAsync().execute(deviceChildren);
-            }
+//            if (!TextUtils.isEmpty(load)){
+//                List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
+//                new LoadDevicesAsync().execute(deviceChildren);
+//            }
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {

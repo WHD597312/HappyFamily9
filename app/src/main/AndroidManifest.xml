@@ -88,6 +88,7 @@
 
     <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
@@ -97,6 +98,7 @@
     <!-- 用于提高GPS定位速度 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
@@ -121,17 +123,21 @@
             android:value="57bea7cd7ce34ab79dc987f0ff6a222b" />
 
         <service android:name="com.amap.api.location.APSService" />
+
         <service
             android:name=".together.util.mqtt.MQService"
             android:enabled="true"
-            android:exported="true" />
-
+            android:exported="true"
+            >
+        </service>
         <receiver
             android:name=".together.util.receiver.MQTTMessageReveiver"
             android:enabled="true"
-            android:exported="true">
+            android:exported="true"
+            >
             <intent-filter>
                 <action android:name="mqttmessage2" />
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
             </intent-filter>
         </receiver>
 
@@ -209,6 +215,12 @@
             android:name=".jia.activity.ShareDeviceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
             android:name=".jia.activity.DeviceDetailActivity"
             android:screenOrientation="portrait"

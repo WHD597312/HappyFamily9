@@ -36,6 +36,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.receiver.MQTTMessageReveiver;
 
@@ -52,7 +53,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
-public class MainActivity extends AppCompatActivity implements FamilyFragmentManager.CallValueValue {
+public class MainActivity extends CheckPermissionsActivity implements FamilyFragmentManager.CallValueValue {
 
     Unbinder unbinder;
     FragmentManager fragmentManager;
@@ -91,6 +92,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
     //其他activity跳转回主界面时的标记
     private String sign = "0";
+    private long houseId;
 
     private MQTTMessageReveiver myReceiver;
     private  boolean isBound;
@@ -113,53 +115,20 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
 
-
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction("mqttmessage2");
         myReceiver = new MQTTMessageReveiver();
         this.registerReceiver(myReceiver, filter);
 
         fragmentManager = getSupportFragmentManager();
         hourseDao = new HourseDaoImpl(getApplicationContext());
-        List<Hourse> hourses = hourseDao.findAllHouse();
         Intent intent = getIntent();
         load=intent.getStringExtra("load");
         String login=intent.getStringExtra("login");
         String share=intent.getStringExtra("share");
-        if (TextUtils.isEmpty(share)){
-            Intent service=new Intent(this, MQService.class);
-            startService(service);
-        }
-        long houseId = intent.getLongExtra("houseId", 0);
-        if (houseId == 0 && hourses.size()>0) {
-            Hourse hourse = hourses.get(0);
-            houseId = hourse.getHouseId();
-        }
-
-        mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
         sign = intent.getStringExtra("sign");
-        //从支付成功跳回主界面时，打开商城fragment
-        if ("PaySuccess".equals(sign)) {
-            id_bto_jia_img.setImageResource(R.mipmap.jia);
-            id_bto_bao_img.setImageResource(R.mipmap.bao1);
-            FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
-            baoTransaction.replace(R.id.layout_body, baoFragment);
-            baoTransaction.commit();
-            if (mPositionPreferences.contains("position")) {
-                mPositionPreferences.edit().clear().commit();
-            }
-        }else {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            familyFragmentManager = new FamilyFragmentManager();
-            leFragment = new LeFragment();
-            baoFragment = new BaoFragment();
-            zhenFragment=new ZhenFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("load","load");
-            bundle.putLong("houseId", houseId);
-            familyFragmentManager.setArguments(bundle);
-            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-            fragmentTransaction.commit();
-        }
+        houseId = intent.getLongExtra("houseId", 0);
+
         if (!preferences.contains("image")){
             if (preferences.contains("headImgUrl")){
                 new LoadUserImageAsync().execute();
@@ -209,6 +178,44 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             return null;
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        List<Hourse> hourses = hourseDao.findAllHouse();
+
+
+        if (houseId == 0 && hourses.size()>0) {
+            Hourse hourse = hourses.get(0);
+            houseId = hourse.getHouseId();
+        }
+
+        mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
+        //从支付成功跳回主界面时，打开商城fragment
+        if ("PaySuccess".equals(sign)) {
+            id_bto_jia_img.setImageResource(R.mipmap.jia);
+            id_bto_bao_img.setImageResource(R.mipmap.bao1);
+            FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
+            baoTransaction.replace(R.id.layout_body, baoFragment);
+            baoTransaction.commit();
+            if (mPositionPreferences.contains("position")) {
+                mPositionPreferences.edit().clear().commit();
+            }
+        }else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            familyFragmentManager = new FamilyFragmentManager();
+            leFragment = new LeFragment();
+            baoFragment = new BaoFragment();
+            zhenFragment=new ZhenFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("load","load");
+            bundle.putLong("houseId", houseId);
+            familyFragmentManager.setArguments(bundle);
+            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+            fragmentTransaction.commit();
+        }
+    }
+
     @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
     public void onClick(View view) {
         switch (view.getId()) {

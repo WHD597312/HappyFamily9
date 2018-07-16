@@ -6,6 +6,10 @@ import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
+
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;

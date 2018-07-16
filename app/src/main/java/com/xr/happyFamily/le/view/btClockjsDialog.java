@@ -3,15 +3,18 @@ package com.xr.happyFamily.le.view;
 import android.app.AlarmManager;
 import android.app.Dialog;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
 import android.util.Log;
@@ -25,6 +28,7 @@ import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 
 import java.util.Calendar;
 import java.util.List;
@@ -39,7 +43,6 @@ import butterknife.OnClick;
  * 制懒闹钟计算关闭
  */
 public class btClockjsDialog extends Dialog {
-
 
     @BindView(R.id.tv_zl_js)
     TextView tv_zl_js;
@@ -56,6 +59,8 @@ public class btClockjsDialog extends Dialog {
     TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
+    Intent service;
+    boolean isBound;
 //        public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;//定义屏蔽参数
     public btClockjsDialog(@NonNull Context context) {
         super(context, R.style.MyDialog);
@@ -71,6 +76,7 @@ public class btClockjsDialog extends Dialog {
         x = (int) (random.nextInt(900)) + 100;
         y = (int) (random.nextInt(900)) + 100;
         tv_zl_js.setText(x + "×" + y + "=");
+        Log.e("test", "onCreate: -->"+(x*y) );
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minute=calendar.get(Calendar.MINUTE);
@@ -116,7 +122,9 @@ public class btClockjsDialog extends Dialog {
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC,audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC),AudioManager.FLAG_SHOW_UI);
 //        this.getWindow().setFlags(FLAG_HOMEKEY_DISPATCHED, FLAG_HOMEKEY_DISPATCHED); //onCreate中实现
-        preferences = mcontext.getSharedPreferences("this", mcontext.MODE_PRIVATE);
+        service = new Intent(mcontext, ClockService.class);
+
+        isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
 
     }
 //    @Override
@@ -154,6 +162,14 @@ public class btClockjsDialog extends Dialog {
 
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (isBound){
+            mcontext.unbindService(connection);
+        }
+    }
+
     public int getX() {
         return x;
     }
@@ -173,6 +189,22 @@ public class btClockjsDialog extends Dialog {
     public void setName(String name) {
         this.name = name;
     }
+
+    ClockService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     @OnClick({R.id.ib_zl_sc, R.id.ib_zl_qd, R.id.bt_zl_sz1, R.id.bt_zl_sz2, R.id.bt_zl_sz3, R.id.bt_zl_sz4,
             R.id.bt_zl_sz5, R.id.bt_zl_sz6, R.id.bt_zl_sz7, R.id.bt_zl_sz8, R.id.bt_zl_sz9, R.id.bt_zl_sz0})
@@ -198,20 +230,10 @@ public class btClockjsDialog extends Dialog {
                     if (z == a) {
                         dismiss();
                         mediaPlayer.stop();
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("first",1);
-                        editor.apply();
-                        Calendar c=Calendar.getInstance();//c：当前系统时间
-                        AlarmManager am = (AlarmManager) mcontext.getSystemService(Context.ALARM_SERVICE);
-                        Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
-
-                        PendingIntent sender = PendingIntent.getBroadcast(mcontext, 0x101, intent1,
-                                PendingIntent.FLAG_CANCEL_CURRENT);
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                            am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-                        } else {
-                            am.set(AlarmManager.RTC_WAKEUP,  c.getTimeInMillis(), sender);
+                        if (mqService != null) {
+                            mqService.startClock();
                         }
+
                     } else {
                         Toast.makeText(mcontext, "输入错误请从新输入", Toast.LENGTH_SHORT).show();
                     }

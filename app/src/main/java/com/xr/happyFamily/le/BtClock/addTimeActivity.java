@@ -3,8 +3,10 @@ package com.xr.happyFamily.le.BtClock;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.Color;
@@ -13,6 +15,7 @@ import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Gravity;
@@ -32,8 +35,11 @@ import com.xr.happyFamily.jia.xnty.Timepicker;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.view.btClockjsDialog3;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONObject;
 
@@ -53,21 +59,24 @@ public class addTimeActivity extends AppCompatActivity {
     Timepicker timepicker1;
     @BindView(R.id.time_lebj2)
     Timepicker timepicker2;
-    @BindView(R.id.tv_bjtime_bq) TextView tv_bjtime_bq;
-    @BindView(R.id.tv_bjtime_gb) TextView tv_bjtime_gb;
-    @BindView(R.id.tv_bt_title) TextView tv_bt_title;
-    @BindView(R.id.tv_bjclock_ring) TextView tv_bjclock_ring;
+    @BindView(R.id.tv_bjtime_bq)
+    TextView tv_bjtime_bq;
+    @BindView(R.id.tv_bjtime_gb)
+    TextView tv_bjtime_gb;
+    @BindView(R.id.tv_bt_title)
+    TextView tv_bt_title;
+    @BindView(R.id.tv_bjclock_ring)
+    TextView tv_bjclock_ring;
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
     int hour, minutes;
     SharedPreferences preferences;
     String userId;
-    String lable ,style;
+    String lable, style;
     String ip = "http://47.98.131.11:8084";
-    private AlarmManager am;
-    private PendingIntent pendingIntent;
-    private NotificationManager notificationManager;
+    Intent service;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -80,13 +89,13 @@ public class addTimeActivity extends AppCompatActivity {
         timeDao = new TimeDaoImpl(getApplicationContext());
         times = new ArrayList<>();
 
-        preferences = this.getSharedPreferences("this", MODE_PRIVATE);
+        preferences = this.getSharedPreferences("firstring", MODE_MULTI_PROCESS);
         SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("first",1);
-        editor.apply();
+        editor.putInt("first", 1);
+        editor.commit();
 //        userId= preferences.getString("userId","");
         times = timeDao.findByAllTime();
-        time=new Time();
+        time = new Time();
         timepicker1.setMaxValue(23);
         timepicker1.setMinValue(00);
         timepicker1.setValue(49);
@@ -97,12 +106,17 @@ public class addTimeActivity extends AppCompatActivity {
         timepicker2.setValue(49);
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timepicker2.setNumberPickerDividerColor(timepicker2);
-        am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-        //获取通知管理器
-        notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+
+
+        service = new Intent(this, ClockService.class);
+        startService(service);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
     }
 
-    @OnClick({R.id.tv_lrbj_qx, R.id.tv_lrbj_qd ,R.id.rl_bjtime_bq,R.id.rl_bjtime_gb})
+    boolean isBound;
+
+
+    @OnClick({R.id.tv_lrbj_qx, R.id.tv_lrbj_qd, R.id.rl_bjtime_bq, R.id.rl_bjtime_gb, R.id.rl_bjcoloc})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -116,34 +130,23 @@ public class addTimeActivity extends AppCompatActivity {
                 Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
                 time.setHour(hour);
                 time.setMinutes(minutes);
-                if (Utils.isEmpty(time.getLable())){
+                if (Utils.isEmpty(time.getLable())) {
                     time.setLable("别忘了明天的会议");
                 }
-                if (Utils.isEmpty(time.getStyle())){
+                if (Utils.isEmpty(time.getStyle())) {
                     time.setStyle("听歌识曲");
                     time.setFlag(1);
                 }
-                int sumMin=hour*60 +minutes;
+                int sumMin = hour * 60 + minutes;
                 time.setSumMin(sumMin);
                 time.setOpen(true);
                 timeDao.insert(time);
-                Calendar c=Calendar.getInstance();//c：当前系统时间
-//                    c.set(Calendar.HOUR_OF_DAY,hour);//把小时设为你选择的小时
-//                    c.set(Calendar.MINUTE,minutes);
-//                PendingIntent pendingIntent= PendingIntent.getBroadcast(this,0x101,new Intent("com.zking.android29_alarm_notification.RING"),0);//上下文 请求码  启动哪一个广播 标志位
-//                am.set(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-//                am.setRepeating(AlarmManager.RTC_WAKEUP,c.getTimeInMillis(),60*60*24*1000, pendingIntent);
-                //发送广播。。。响铃
-                AlarmManager am = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-                Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
-
-                PendingIntent sender = PendingIntent.getBroadcast(addTimeActivity.this, 0x101, intent1,
-                        PendingIntent.FLAG_CANCEL_CURRENT);
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    am.setWindow(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 0, sender);
-                } else {
-                    am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
+                stopService(service);
+                startService(service);
+                if (mqService != null) {
+                    mqService.startClock();
                 }
+
                 Utils.showToast(addTimeActivity.this, "添加闹铃成功");
                 setResult(600);
                 finish();
@@ -151,39 +154,65 @@ public class addTimeActivity extends AppCompatActivity {
                 break;
             case R.id.rl_bjtime_bq:
                 //跳转到标签
-                Intent intent2 = new Intent(this,bqOfColckActivity.class);
-                startActivityForResult(intent2,666);
+                Intent intent2 = new Intent(this, bqOfColckActivity.class);
+                startActivityForResult(intent2, 666);
                 break;
             case R.id.rl_bjtime_gb:
                 //选择关闭方式
                 clolkDialog1();
                 break;
             case R.id.rl_bjcoloc:
-                Intent intent3 = new Intent(this,clockRingActivity.class);
-                startActivityForResult(intent3,111);
+                Intent intent3 = new Intent(this, clockRingActivity.class);
+                startActivityForResult(intent3, 111);
                 break;
         }
     }
+
     String text1;
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (resultCode==666){
-            Intent intent=getIntent();
-            text1=intent.getStringExtra("text");
+        if (resultCode == 666) {
+            Intent intent = getIntent();
+            text1 = intent.getStringExtra("text");
             tv_bjtime_bq.setText(text1);
         }
-        if (resultCode==111){
-            List<String> mData = new ArrayList<String>(Arrays.asList("睡猫觉", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"));
-            Intent intent = getIntent();
-            int pos=intent.getIntExtra("pos",0);
-            String text=mData.get(pos);
-            tv_bjclock_ring.setText(text);
-            time.setRingName(text);
+        if (resultCode == 111) {
+
+            int pos = data.getIntExtra("pos", 0);
+            List<String> mData = new ArrayList<String>(Arrays.asList("睡猫觉", "芙蓉雨", "浪人琵琶", "阿里郎", "that girl", "expression"));
+            if (pos != -1) {
+                String text = mData.get(pos);
+                tv_bjclock_ring.setText(text);
+                time.setRingName(text);
+            } else {
+                tv_bjclock_ring.setText("系统自带");
+                time.setRingName("系统自带");
+            }
         }
     }
-    int flag1=1;
+
+    ClockService mqService;
+    boolean bound;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            mqService.acquireWakeLock(addTimeActivity.this);
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+    int flag1 = 1;
     btClockjsDialog3 dialog;
+
     private void clolkDialog1() {
         dialog = new btClockjsDialog3(this);
 //        Window dialogWindow = dialog.getWindow();
@@ -204,9 +233,9 @@ public class addTimeActivity extends AppCompatActivity {
         dialog.setOnPositiveClickListener(new btClockjsDialog3.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-                String text=dialog.getText();
-                Log.e("text", "onPositiveClick: "+text );
-               flag1 = dialog.getFlag();
+                String text = dialog.getText();
+                Log.e("text", "onPositiveClick: " + text);
+                flag1 = dialog.getFlag();
                 tv_bjtime_gb.setText(text);
                 time.setStyle(text);
                 time.setFlag(flag1);
@@ -224,6 +253,13 @@ public class addTimeActivity extends AppCompatActivity {
 //        dialog.onWindowAttributesChanged(lp);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isBound) {
+            unbindService(connection);
+        }
+    }
 
 //
 //    private boolean mIsShowing = false;

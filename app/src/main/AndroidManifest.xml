@@ -160,6 +160,11 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".le.BtClock.bqOfColckActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
             android:name=".jia.RenameHourseActivity"
             android:label=""
             android:screenOrientation="portrait"

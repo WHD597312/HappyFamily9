@@ -7,6 +7,7 @@
     android:background="@mipmap/bj1"
     android:orientation="vertical">
 
+
     <com.xr.happyFamily.jia.Myscrollview
         android:layout_width="0dp"
         android:layout_height="0dp"
@@ -16,7 +17,6 @@
         app:layout_widthPercent="100%">
 
         <RelativeLayout
-
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:focusable="true"

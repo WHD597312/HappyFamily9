@@ -71,9 +71,17 @@ public class clockRingActivity extends Activity {
 
             case R.id.iv_ring_fh:
                 int pos = adapter.getLastPos();
-                Intent intent = new Intent();
-                intent.putExtra("pos",pos);
-                setResult(111,intent);
+                Log.e("pos", "onClick: "+pos );
+                if (pos==-1){
+                    Intent intent = new Intent();
+                    intent.putExtra("pos",0);
+                    setResult(111,intent);
+                }else {
+                    Intent intent = new Intent();
+                    intent.putExtra("pos",pos);
+                    setResult(111,intent);
+                }
+
                 finish();
                 break;
             case R.id.rl_clock_xt:

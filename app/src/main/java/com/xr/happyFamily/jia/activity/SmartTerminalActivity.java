@@ -456,18 +456,25 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             }
         }
     }
+
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        if (unbinder!=null){
-            unbinder.unbind();
-        }
+    protected void onStop() {
+        super.onStop();
         if (isBound){
             unbindService(connection);
         }
         if (receiver!=null){
             unregisterReceiver(receiver);
         }
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (unbinder!=null){
+            unbinder.unbind();
+        }
+
         running=false;
     }
 

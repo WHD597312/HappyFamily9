@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
+import android.util.Log;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.jia.MyApplication;
@@ -25,6 +26,7 @@ public class MQTTMessageReveiver extends BroadcastReceiver {
         NetworkInfo mobNetInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE);
         NetworkInfo  wifiNetInfo=connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI);
 
+        Log.i("MQTTMessageReveiver","MQTTMessageReveiver");
         if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
             Utils.showToast(context, "网络不可用");
             //改变背景或者 处理网络的全局变量

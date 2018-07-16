@@ -502,6 +502,7 @@ public class QunzuEditActivity extends AppCompatActivity {
                     userInfosDao.deleteAll();
                     for (JsonElement user : list) {
                         ClockBean userList = gson.fromJson(user, ClockBean.class);
+                        userList.setSumMinute(userList.getClockHour()*60+userList.getClockMinute());
                         clockBeanDao.insert(userList);
                         JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
                         JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");

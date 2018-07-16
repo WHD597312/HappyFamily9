@@ -21,8 +21,10 @@ import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
+import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.together.util.Utils;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -32,10 +34,11 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     private Context context;
     private List<ClickFriendBean> data;
     private ButtonInterface buttonInterface;
-    private int selPosition=-1;
+    private int selPosition = -1;
     private int defItem = -1;
     private OnItemListener onItemListener;
     private int type = 0;
+    boolean isFirst = true;
 
     public ClockAddQinglvAdapter(Context context, List<ClickFriendBean> list) {
         this.context = context;
@@ -79,7 +82,7 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     }
 
 
-    public void setSelection(int position){
+    public void setSelection(int position) {
         this.selPosition = position;
         notifyDataSetChanged();
     }
@@ -87,25 +90,41 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        if(!Utils.isEmpty(data.get(position).getHeadImgUrl()))
-        Picasso.with(context)
-                .load(data.get(position).getHeadImgUrl())
-                .error(R.mipmap.ic_touxiang_moren)
-                .into(holder.img_touxiang);
+        if (!Utils.isEmpty(data.get(position).getHeadImgUrl()))
+            Picasso.with(context)
+                    .load(data.get(position).getHeadImgUrl())
+                    .error(R.mipmap.ic_touxiang_moren)
+                    .into(holder.img_touxiang);
         holder.tv_name.setText(data.get(position).getUsername().toString());
+
+
 //        holder.tv_context.setText(data.get(position).get("context").toString());
         final int[] sign = {0};
+
+
         final Drawable drawable_false = context.getResources().getDrawable(R.mipmap.ic_clock_qinglv_false);
         final Drawable drawable_true = context.getResources().getDrawable(R.mipmap.ic_clock_qinglv_true);
         drawable_true.setBounds(0, 0, drawable_true.getMinimumWidth(), drawable_true.getMinimumHeight());
         drawable_false.setBounds(0, 0, drawable_false.getMinimumWidth(), drawable_false.getMinimumHeight());
-        if (selPosition==position)
-        {
+        if (selPosition == position) {
             holder.tv_name.setCompoundDrawables(null, null, drawable_true, null);
-        }else
-        {
+            data.get(position).setMemSign(1);
+        } else {
             holder.tv_name.setCompoundDrawables(null, null, drawable_false, null);
+            data.get(position).setMemSign(0);
         }
+
+        if (isFirst) {
+            Log.e("qqqqqqqqqIIIII222",loveId+"????");
+            if (data.get(position).getUserId() ==loveId) {
+                isFirst = false;
+                sign[0] = 1;
+                this.selPosition = position;
+                holder.tv_name.setCompoundDrawables(null, null, drawable_true, null);
+                data.get(position).setMemSign(1);
+            }
+        }
+
 
         holder.tv_name.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -162,13 +181,25 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     }
 
 
-
-    public String getMember(){
-        String member="0";
+    public String getMember() {
+        String member = "0";
         if (selPosition != -1) {
-        member=data.get(selPosition).getUserId()+"";
+            member = data.get(selPosition).getUserId() + "";
         }
         return member;
     }
+
+
+    public int getItem() {
+        return selPosition;
+    }
+
+    private int loveId=-1;
+
+    public void setUserId(int loveId) {
+        this.loveId = loveId;
+        notifyDataSetChanged();
+    }
+
 
 }

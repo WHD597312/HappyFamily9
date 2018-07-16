@@ -156,7 +156,6 @@ public class MsgActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
 
-
             case R.id.back:
                 finish();
                 break;
@@ -194,7 +193,7 @@ public class MsgActivity extends AppCompatActivity {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             mqService = binder.getService();
-            String str = "+/" + userId + "_" + userName;
+            String str = "+/acceptorId_" + userId;
             new FriendAsync().execute(str);
         }
 

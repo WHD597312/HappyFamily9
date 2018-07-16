@@ -27,9 +27,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
@@ -94,7 +96,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
     //其他activity跳转回主界面时的标记
     private String sign = "0";
-    AlarmManager alarmManager;
+    private long houseId;
+    String share;
     private MQTTMessageReveiver myReceiver;
     private  boolean isBound;
     private  boolean clockisBound;
@@ -119,11 +122,19 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
+        filter.addAction("mqttmessage2");
         myReceiver = new MQTTMessageReveiver();
         this.registerReceiver(myReceiver, filter);
 
         fragmentManager = getSupportFragmentManager();
         hourseDao = new HourseDaoImpl(getApplicationContext());
+
+
+        UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
+        ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
+        clockBeanDao.deleteAll();
+        userInfosDao.deleteAll();
+
         List<Hourse> hourses = hourseDao.findAllHouse();
         Intent intent = getIntent();
         load=intent.getStringExtra("load");
@@ -183,7 +194,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
         }
     }
-    
     SharedPreferences preferencesclock;
     Intent clockintent;
     ClockService clcokservice;
@@ -243,6 +253,23 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             return null;
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+
+
+        if (!preferences.contains("image")){
+            if (preferences.contains("headImgUrl")){
+                new LoadUserImageAsync().execute();
+            }
+        }
+        if (TextUtils.isEmpty(share)){
+            Intent service=new Intent(this,MQService.class);
+            startService(service);
+        }
+    }
+
     @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
     public void onClick(View view) {
         switch (view.getId()) {

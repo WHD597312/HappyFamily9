@@ -19,6 +19,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 
+import java.io.File;
 import java.util.List;
 
 import butterknife.BindView;
@@ -59,6 +60,14 @@ public class SettingActivity extends AppCompatActivity {
             case R.id.btn_exit:
                 if(preferences.contains("password")){
                     preferences.edit().remove("password").commit();
+                }
+                if (preferences.contains("image")){
+                    String image=preferences.getString("image","");
+                    preferences.edit().remove("image").commit();
+                    File file=new File(image);
+                    if (file.exists()){
+                        file.delete();
+                    }
                 }
                 SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
                 mPositionPreferences.edit().clear().commit();

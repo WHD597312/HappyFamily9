@@ -13,6 +13,8 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.List;
 
 
@@ -60,7 +62,15 @@ public class ClockDaoImpl {
     public List<ClockBean> findAll(){
         return clockBeanDao.loadAll();
     }
+    public List<ClockBean> findTimeByMin(){
+        return clockBeanDao.queryBuilder().orderAsc(ClockBeanDao.Properties.SumMinute).list();
+    }
     public void  deleteAll(){
         clockBeanDao.deleteAll();
+    }
+
+    public List<ClockBean> findClockByClockId(int clockId){
+        WhereCondition whereCondition=clockBeanDao.queryBuilder().and(ClockBeanDao.Properties.ClockId.eq(clockId),ClockBeanDao.Properties.ClockId.eq(clockId));
+        return clockBeanDao.queryBuilder().where(whereCondition).list();
     }
 }

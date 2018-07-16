@@ -1,20 +1,12 @@
 package com.xr.happyFamily.login.login;
 
-import android.annotation.TargetApi;
-import android.app.Activity;
-import android.app.AppOpsManager;
 import android.app.ProgressDialog;
-import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -25,14 +17,14 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
-import android.os.Handler.Callback;
+import android.widget.Toast;
+
 import com.mob.tools.utils.UIHandler;
 import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
-import com.xr.database.dao.daoimpl.UserBeanDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
@@ -40,44 +32,39 @@ import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.le.pojo.UserBean;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
-
+import android.os.Handler.Callback;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.TimeZone;
 
-import android.view.View.OnClickListener;
-import android.widget.Toast;
+
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 import cn.sharesdk.framework.Platform;
-import cn.sharesdk.framework.PlatformActionListener;
-import cn.sharesdk.framework.ShareSDK;
 import cn.sharesdk.wechat.friends.Wechat;
-import pl.droidsonroids.gif.GifDrawable;
-
+import cn.sharesdk.framework.ShareSDK;
 import static android.R.attr.action;
-
-public class LoginActivity extends Activity implements Callback,
-       PlatformActionListener {
+import pl.droidsonroids.gif.GifDrawable;
+import cn.sharesdk.framework.PlatformActionListener;
+public class LoginActivity extends CheckPermissionsActivity implements Callback,
+        PlatformActionListener {
     private static final int MSG_USERID_FOUND = 1;
     private static final int MSG_LOGIN = 2;
     private static final int MSG_AUTH_CANCEL = 3;
@@ -100,8 +87,6 @@ public class LoginActivity extends Activity implements Callback,
     boolean isHideFirst = true;
     private HourseDaoImpl hourseDao;
     private RoomDaoImpl roomDao;
-    UserBeanDaoImpl userBeanDao;
-    UserBean userBean;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
     int firstClick=1;
@@ -113,9 +98,11 @@ public class LoginActivity extends Activity implements Callback,
         setContentView(R.layout.activity_login);
         unbinder = ButterKnife.bind(this);
         imageView.setImageResource(R.mipmap.yanjing13x);
-
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        ShareSDK.initSDK(this);
+
         if (application == null) {
             application = (MyApplication) getApplication();
         }
@@ -127,12 +114,7 @@ public class LoginActivity extends Activity implements Callback,
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
-        userBeanDao = new UserBeanDaoImpl(getApplicationContext());
     }
-
-
-
-
 
     SharedPreferences preferences;
 
@@ -199,7 +181,6 @@ public class LoginActivity extends Activity implements Callback,
                     break;
                 }
                if (firstClick==1){
-
                    Map<String, Object> params = new HashMap<>();
                    params.put("phone", phone);
                    params.put("password", password);
@@ -210,7 +191,6 @@ public class LoginActivity extends Activity implements Callback,
             case R.id.tv_forget_pswd:
                 startActivity(new Intent(this, ForgetPswdActivity.class));
                 break;
-
             case R.id.image_seepwd:
                 if (isHideFirst == true) {
                     imageView.setImageResource(R.mipmap.yanjing);
@@ -238,8 +218,10 @@ public class LoginActivity extends Activity implements Callback,
                 break;
         }
     }
+
     private static final int MSG_ACTION_CCALLBACK = 0;
     private ProgressDialog progressDialog;
+
     /******三方登录逻辑*******/
     private void authorize(Platform plat, int type) {
         switch (type) {
@@ -266,6 +248,8 @@ public class LoginActivity extends Activity implements Callback,
         msg.arg2 = action;
         msg.obj = platform;
         UIHandler.sendMessage(msg, this);   //发送消息
+        Log.e("test", "授权成功" );
+        Log.e("msg", "onComplete:--> "+msg.toString() );
 
     }
 
@@ -292,6 +276,8 @@ public class LoginActivity extends Activity implements Callback,
     }
 
     //登陆发送的handle消息在这里处理
+    String oAuthId;
+    String accessToken;
     @Override
     public boolean handleMessage(Message message) {
         hideProgressDialog();
@@ -301,15 +287,14 @@ public class LoginActivity extends Activity implements Callback,
 
                 //获取用户资料
                 Platform platform = (Platform) message.obj;
-                String userId = platform.getDb().getUserId();//获取用户账号
-                String userName = platform.getDb().getUserName();//获取用户名字
-                String userIcon = platform.getDb().getUserIcon();//获取用户头像
-                String userGender = platform.getDb().getUserGender(); //获取用户性别，m = 男, f = 女，如果微信没有设置性别,默认返回null
-                Toast.makeText(LoginActivity.this, "用户信息为--用户名：" + userName + "  性别：" + userGender, Toast.LENGTH_SHORT).show();
-
-                //下面就可以利用获取的用户信息登录自己的服务器或者做自己想做的事啦!
-                //。。。
-
+                Log.e("platform", "handleMessage: -->"+platform );
+                oAuthId = platform.getDb().getUserId();//获取用户账号
+                accessToken = platform.getDb().getToken();
+                Map<String,Object> params=new HashMap<>();
+                params.put("oAuthId",oAuthId);
+                params.put("oAuthType","weixin");
+                params.put("accessToken",accessToken);
+                new  WxLoginAsyncTask().execute(params);
             }
             break;
             case 2: { // 失败
@@ -322,6 +307,35 @@ public class LoginActivity extends Activity implements Callback,
             break;
         }
         return false;
+    }
+
+    class WxLoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+            Map<String,Object> params=maps[0];
+            String url = ip+"/login/auth/third";
+            String result = HttpUtils.postOkHpptRequest(url,params);
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+
+                case 100:
+
+                    break;
+            }
+        }
     }
 
     //显示dialog
@@ -337,6 +351,7 @@ public class LoginActivity extends Activity implements Callback,
         if (progressDialog != null)
             progressDialog.dismiss();
     }
+
 
 
     @Override
@@ -379,9 +394,7 @@ public class LoginActivity extends Activity implements Callback,
                         boolean success=editor.commit();
 
                         if (success){
-                            Map<String,Object> params2=new HashMap<>();
-                            params2.put("userId",userId);
-                            new LoadUserAsync().execute(params2);
+                            new hourseAsyncTask().execute();
                         }
 
                     }
@@ -410,45 +423,6 @@ public class LoginActivity extends Activity implements Callback,
             }
         }
     }
-    public static String getDateToString(long milSecond) {
-        Date date = new Date(milSecond);
-        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-        return format.format(date);
-    }
-
-
-    class LoadUserAsync extends AsyncTask<Map<String,Object>,Void,Void>{
-
-        @Override
-        protected Void doInBackground(Map<String, Object>... maps) {
-            Map<String,Object> params=maps[0];
-            String url=HttpUtils.ipAddress+"/login/getInfo";
-            String result=HttpUtils.postOkHpptRequest(url,params);
-            try {
-                Log.i("result","-->"+result);
-                if (!TextUtils.isEmpty(result)){
-                    JSONObject jsonObject=new JSONObject(result);
-                    SharedPreferences.Editor editor=preferences.edit();
-                    boolean sex=jsonObject.getBoolean("sex");
-                    if (jsonObject.has("headImgUrl")){
-                        String headImgUrl=jsonObject.getString("headImgUrl");
-                        editor.putString("headImgUrl",headImgUrl);
-                    }
-                    String birthday= getDateToString(Long.parseLong(jsonObject.getString("birthday")) );
-                    editor.putBoolean("sex",sex);
-                    editor.putString("birthday",birthday);
-                    boolean success=editor.commit();
-                    if (success){
-                        new hourseAsyncTask().execute();
-                    }
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return null;
-        }
-    }
-
     long Id = -1;
     int img[] = {R.mipmap.t};
 
@@ -466,13 +440,25 @@ public class LoginActivity extends Activity implements Callback,
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     Log.i("fffffffft", "--->: " + code);
-//                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
-
                     if (code == 100) {
                         hourseDao.deleteAll();
                         roomDao.deleteAll();
                         deviceChildDao.deleteAll();
                         JSONObject returnData=jsonObject.getJSONObject("returnData");
+                        SharedPreferences.Editor editor=preferences.edit();
+                        boolean sex=returnData.getBoolean("sex");
+                        if (returnData.has("headImgUrl")){
+                            String headImgUrl=returnData.getString("headImgUrl");
+                            editor.putString("headImgUrl",headImgUrl);
+                        }
+                        String birthday=returnData.getString("birthday");
+                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                        Date date=format.parse(birthday);
+                        long ts = date.getTime();
+                        String res = String.valueOf(ts);
+                        editor.putBoolean("sex",sex);
+                        editor.putString("birthday",res);
+                        editor.commit();
                         JSONArray houseDevices = returnData.getJSONArray("houseDevices");
                         for (int i = 0; i < houseDevices.length(); i++) {
                             JSONObject houseObject = houseDevices.getJSONObject(i);
@@ -573,7 +559,6 @@ public class LoginActivity extends Activity implements Callback,
                                         break;
                                     }
                                 }
-
                                if (deviceChild2!=null){
                                    deviceChildDao.update(deviceChild2);
                                }else if (deviceChild2==null){
@@ -628,7 +613,5 @@ public class LoginActivity extends Activity implements Callback,
         if (unbinder != null) {
             unbinder.unbind();
         }
-        ShareSDK.stopSDK(this);
-
     }
 }

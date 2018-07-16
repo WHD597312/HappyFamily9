@@ -191,6 +191,7 @@ public class QunzuAddActivity extends AppCompatActivity {
                 Log.e("qqqqqqqMMMM", member);
                 map.put("clockCreater", userId);
                 map.put("clockType", 2);
+                dialog = MyDialog.showDialog(this);
                 dialog.show();
                 new addClock().execute(map);
                 break;
@@ -474,58 +475,59 @@ public class QunzuAddActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                new getClocksByUserId().execute();
+//                new getClocksByUserId().execute();
             }
         }
     }
 
-
-    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-            String url = "/happy/clock/getClocksByUserId";
-            url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(mContext, url);
-            Log.e("qqqqqqqqRRR", userId + "?" + result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    String retrunData = jsonObject.getString("returnData");
-                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("clockGroup");
-                    Gson gson = new Gson();
-                    clockBeanDao.deleteAll();
-                    userInfosDao.deleteAll();
-                    for (JsonElement user : list) {
-                        ClockBean userList = gson.fromJson(user, ClockBean.class);
-                        clockBeanDao.insert(userList);
-                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
-                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
-                        for (JsonElement myUserInfo : userInfoList) {
-                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
-                            userInfo1.setClockId(userList.getClockId());
-                            userInfosDao.insert(userInfo1);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
+//
+//    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
+//        @Override
+//        protected String doInBackground(Map<String, Object>... maps) {
+//            String url = "/happy/clock/getClocksByUserId";
+//            url = url + "?userId=" + userId;
+//            String result = HttpUtils.doGet(mContext, url);
+//            Log.e("qqqqqqqqRRR", userId + "?" + result);
+//            String code = "";
+//            try {
+//                if (!Utils.isEmpty(result)) {
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    code = jsonObject.getString("returnCode");
+//                    String retrunData = jsonObject.getString("returnData");
+//                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
+//                    JsonArray list = content.getAsJsonArray("clockGroup");
+//                    Gson gson = new Gson();
+//                    clockBeanDao.deleteAll();
+//                    userInfosDao.deleteAll();
+//                    for (JsonElement user : list) {
+//                        ClockBean userList = gson.fromJson(user, ClockBean.class);
+//                        userList.setSumMinute(userList.getClockHour()*60+userList.getClockMinute());
+//                        clockBeanDao.insert(userList);
+//                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
+//                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
+//                        for (JsonElement myUserInfo : userInfoList) {
+//                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
+//                            userInfo1.setClockId(userList.getClockId());
+//                            userInfosDao.insert(userInfo1);
+//                        }
+//                    }
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return code;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            if (!Utils.isEmpty(s) && "100".equals(s)) {
+//                MyDialog.closeDialog(dialog);
+//                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
+//                finish();
+//            }
+//        }
+//    }
 
 
     @Override

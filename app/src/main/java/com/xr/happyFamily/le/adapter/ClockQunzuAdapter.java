@@ -31,6 +31,7 @@ import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.RoundTransform;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -144,6 +145,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
             if (!Utils.isEmpty(myUserInfoList.get(i).getHeadImgUrl()))
                 Picasso.with(context)
                         .load(myUserInfoList.get(i).getHeadImgUrl())
+                        .transform(new RoundTransform(20))
                         .error(R.mipmap.ic_touxiang_moren)
                         .into(holder.imgs[i]);
         }

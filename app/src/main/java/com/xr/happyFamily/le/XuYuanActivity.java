@@ -189,7 +189,7 @@ public class XuYuanActivity extends AppCompatActivity implements View.OnClickLis
         mPopWindow.setOutsideTouchable(true);
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
-        mPopWindow.setOnDismissListener(new XuYuanActivity.poponDismissListener());
+        mPopWindow.setOnDismissListener(new poponDismissListener());
         mPopWindow.showAsDropDown(findViewById(R.id.img_add));
     }
 

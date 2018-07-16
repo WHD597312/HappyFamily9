@@ -119,101 +119,11 @@ public class FamilyFragment extends Fragment {
 
         deviceChildDao = new DeviceChildDaoImpl(getActivity());
         hourseDao = new HourseDaoImpl(getActivity());
-        Hourse hourse = hourseDao.findById(houseId);
-        if (hourse != null) {
-            String name = hourse.getHouseName();
-            tv_my_hourse.setText(name);
-            commonDevices = deviceChildDao.findHouseCommonDevices(houseId);
-            shareDevices = deviceChildDao.findShareDevice(userId);
 
-            Log.i("commonDevices", "-->" + commonDevices.size());
-            shareViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, shareDevices);
-            mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, commonDevices);
-
-            gv_home_my.setAdapter(mGridViewAdapter);
-            gv_share_view.setAdapter(shareViewAdapter);
-            gv_home_my.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    DeviceChild deviceChild = commonDevices.get(position);
-                    int type=deviceChild.getType();
-                    boolean online=deviceChild.getOnline();
-                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
-                    mPositionPreferences.edit().clear().commit();
-                    if (online){
-                        if (type==2){
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
-                        }else if (type==3){
-
-                            Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
-                        }
-                    }else {
-                        Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
-                    }
-                }
-            });
-            gv_share_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
-                @Override
-                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
-                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
-                    mPositionPreferences.edit().clear().commit();
-                    mPosition = position;
-                    mdeledeviceChild = shareDevices.get(position);
-                    Log.i("mdeledeviceChild", "-->" + mdeledeviceChild.getDeviceId());
-                    deleteDeviceDialog();
-                    return true;
-                }
-            });
-
-            gv_share_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-                @Override
-                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                    DeviceChild deviceChild = shareDevices.get(position);
-                    int type=deviceChild.getType();
-                    boolean online=deviceChild.getOnline();
-                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
-                    mPositionPreferences.edit().clear().commit();
-                    if (online){
-                        if (type==2){
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
-                        }else if (type==3){
-                            Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
-                        }
-                    }else {
-                        Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
-                    }
-
-                }
-            });
-
-        }
 
         return view;
     }
+
 
     private void deleteDeviceDialog() {
         final DeleteDeviceDialog dialog = new DeleteDeviceDialog(getActivity());
@@ -316,6 +226,98 @@ public class FamilyFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter("RoomFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
+        Hourse hourse = hourseDao.findById(houseId);
+        if (hourse != null) {
+            String name = hourse.getHouseName();
+            tv_my_hourse.setText(name);
+            commonDevices = deviceChildDao.findHouseCommonDevices(houseId);
+            shareDevices = deviceChildDao.findShareDevice(userId);
+
+            Log.i("commonDevices", "-->" + commonDevices.size());
+            shareViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, shareDevices);
+            mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, commonDevices);
+
+            gv_home_my.setAdapter(mGridViewAdapter);
+            gv_share_view.setAdapter(shareViewAdapter);
+            gv_home_my.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    DeviceChild deviceChild = commonDevices.get(position);
+                    int type=deviceChild.getType();
+                    boolean online=deviceChild.getOnline();
+                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
+                    mPositionPreferences.edit().clear().commit();
+
+                    if (type==2){
+                        if (online){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId",houseId);
+                            startActivityForResult(intent,6000);
+                        }else {
+                            Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (type==3){
+                        Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
+                        String deviceName = deviceChild.getName();
+                        long deviceId = deviceChild.getId();
+                        intent.putExtra("deviceName", deviceName);
+                        intent.putExtra("deviceId", deviceId);
+                        intent.putExtra("houseId",houseId);
+                        startActivityForResult(intent,6000);
+                    }
+                }
+            });
+            gv_share_view.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
+                @Override
+                public boolean onItemLongClick(AdapterView<?> parent, View view, int position, long id) {
+                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
+                    mPositionPreferences.edit().clear().commit();
+                    mPosition = position;
+                    mdeledeviceChild = shareDevices.get(position);
+                    Log.i("mdeledeviceChild", "-->" + mdeledeviceChild.getDeviceId());
+                    deleteDeviceDialog();
+                    return true;
+                }
+            });
+
+            gv_share_view.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+                @Override
+                public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                    DeviceChild deviceChild = shareDevices.get(position);
+                    int type=deviceChild.getType();
+                    boolean online=deviceChild.getOnline();
+                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
+                    mPositionPreferences.edit().clear().commit();
+                    if (online){
+                        if (type==2){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId",houseId);
+                            startActivityForResult(intent,6000);
+                        }else if (type==3){
+                            Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId",houseId);
+                            startActivityForResult(intent,6000);
+                        }
+                    }else {
+                        Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
+                    }
+
+                }
+            });
+
+        }
     }
 
     @Override

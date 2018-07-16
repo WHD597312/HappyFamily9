@@ -88,6 +88,7 @@
 
     <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
+    <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
 
     <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
@@ -97,6 +98,7 @@
     <!-- 用于提高GPS定位速度 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
@@ -105,9 +107,7 @@
         android:label="@string/app_name"
         android:roundIcon="@mipmap/app"
         android:supportsRtl="true"
-
-    android:theme="@style/AppTheme">
-
+        android:theme="@style/AppTheme">
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.hm.camerademo.fileprovider2"
@@ -130,13 +130,6 @@
             android:exported="true"
             >
         </service>
-        <service
-            android:name=".together.util.mqtt.ClockService"
-            android:enabled="true"
-            android:exported="true"
-            android:persistent="true"
-            >
-        </service>
         <receiver
             android:name=".together.util.receiver.MQTTMessageReveiver"
             android:enabled="true"
@@ -156,11 +149,6 @@
         </activity>
         <activity
             android:name=".jia.xnty.CsjActivity"
-            android:label=""
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".le.BtClock.bqOfColckActivity"
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -228,6 +216,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:name=".wxapi.WXEntryActivity"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:exported="true"
+            android:screenOrientation="portrait"
+            android:theme="@android:style/Theme.Translucent.NoTitleBar" />
+        <activity
             android:name=".jia.activity.DeviceDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -273,11 +267,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.AddRoomActivity"
-            android:label="@null"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".le.BtClock.clockRingActivity"
             android:label="@null"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -423,10 +412,18 @@
         <activity android:name=".le.MsgActivity" />
         <activity android:name=".le.HistoryActivity" />
         <activity android:name=".le.ClockActivity" />
+        <activity android:name=".le.clock.QinglvEditActivity"/>
+        <activity android:name=".le.clock.QunzuEditActivity"/>
+        <activity android:name=".le.clock.QinglvAddActivity"/>
+        <activity android:name=".le.clock.QunzuAddActivity"/>
+        <activity android:name=".le.clock.MsgActivity"/>
         <activity android:name=".zhen.SettingActivity" />
         <activity android:name=".zhen.PersonInfoActivity" />
+        <activity android:name=".le.BtClock.bqOfColckActivity"/>
         <activity android:name=".jia.activity.SmartTerminalActivity" />
         <activity android:name=".jia.activity.SmartLinkedActivity"/>
+        <activity android:name=".le.clock.FriendFindActivity"/>
+        <activity android:name=".le.clock.FriendAddActivity"/>
     </application>
 
 </manifest>

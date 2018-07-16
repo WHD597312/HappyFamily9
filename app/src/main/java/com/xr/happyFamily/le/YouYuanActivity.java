@@ -162,7 +162,7 @@ public class YouYuanActivity extends AppCompatActivity {
         mPopWindow.setOutsideTouchable(true);
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
-        mPopWindow.setOnDismissListener(new YouYuanActivity.poponDismissListener());
+        mPopWindow.setOnDismissListener(new poponDismissListener());
         mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 

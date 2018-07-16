@@ -115,7 +115,7 @@ public class BarrageView extends RelativeLayout {
         for (int i = 0; i < childCount; i++) {
             final View view = getChildAt(i);
             if (view != null) {
-                RelativeLayout.LayoutParams lp = (LayoutParams) view.getLayoutParams();
+                LayoutParams lp = (LayoutParams) view.getLayoutParams();
                 if (lp.leftMargin <= 0) {
                     if (mDirection == FROM_RIGNG_TO_LEFT) {
                         view.layout(mScreenWidth, lp.topMargin, mScreenWidth + view.getMeasuredWidth(),
@@ -165,8 +165,8 @@ public class BarrageView extends RelativeLayout {
         final XuYuanTextView textView = new XuYuanTextView(context);
 
         textView.setText(text);
-        int w = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
-        int h = View.MeasureSpec.makeMeasureSpec(0, View.MeasureSpec.UNSPECIFIED);
+        int w = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
+        int h = MeasureSpec.makeMeasureSpec(0, MeasureSpec.UNSPECIFIED);
         textView.measure(w, h);
         textView.setOnClickListener(new OnClickListener() {
             @Override
@@ -185,7 +185,7 @@ public class BarrageView extends RelativeLayout {
         int a=new Random().nextInt(mChildHeight/4);
 
         mRowPosList.add(row);
-        RelativeLayout.LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
+        LayoutParams lp = new LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT);
         lp.topMargin = row * mChildHeight+a;
 //        lastRow = row;
         textView.setLayoutParams(lp);

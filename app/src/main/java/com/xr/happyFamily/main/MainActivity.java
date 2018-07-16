@@ -124,23 +124,43 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
 
         fragmentManager = getSupportFragmentManager();
         hourseDao = new HourseDaoImpl(getApplicationContext());
-        Intent intent = getIntent();
-        load=intent.getStringExtra("load");
-        String login=intent.getStringExtra("login");
-        share=intent.getStringExtra("share");
-        sign = intent.getStringExtra("sign");
-        houseId = intent.getLongExtra("houseId", 0);
 
-        if (!preferences.contains("image")){
-            if (preferences.contains("headImgUrl")){
-                new LoadUserImageAsync().execute();
-            }
-        }
 
         UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
         ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
         clockBeanDao.deleteAll();
         userInfosDao.deleteAll();
+
+        List<Hourse> hourses = hourseDao.findAllHouse();
+        if (houseId == 0 && hourses.size()>0) {
+            Hourse hourse = hourses.get(0);
+            houseId = hourse.getHouseId();
+        }
+
+        mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
+        //从支付成功跳回主界面时，打开商城fragment
+        if ("PaySuccess".equals(sign)) {
+            id_bto_jia_img.setImageResource(R.mipmap.jia);
+            id_bto_bao_img.setImageResource(R.mipmap.bao1);
+            FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
+            baoTransaction.replace(R.id.layout_body, baoFragment);
+            baoTransaction.commit();
+            if (mPositionPreferences.contains("position")) {
+                mPositionPreferences.edit().clear().commit();
+            }
+        }else {
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            familyFragmentManager = new FamilyFragmentManager();
+            leFragment = new LeFragment();
+            baoFragment = new BaoFragment();
+            zhenFragment=new ZhenFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("load","load");
+            bundle.putLong("houseId", houseId);
+            familyFragmentManager.setArguments(bundle);
+            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+            fragmentTransaction.commit();
+        }
 
 //        if (TextUtils.isEmpty(sign) && TextUtils.isEmpty(login)){
 //            new hourseAsyncTask().execute();
@@ -190,41 +210,21 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
     protected void onStart() {
         super.onStart();
 
+        Intent intent = getIntent();
+        load=intent.getStringExtra("load");
+        String login=intent.getStringExtra("login");
+        share=intent.getStringExtra("share");
+        sign = intent.getStringExtra("sign");
+        houseId = intent.getLongExtra("houseId", 0);
+
+        if (!preferences.contains("image")){
+            if (preferences.contains("headImgUrl")){
+                new LoadUserImageAsync().execute();
+            }
+        }
         if (TextUtils.isEmpty(share)){
             Intent service=new Intent(this,MQService.class);
             startService(service);
-        }
-        List<Hourse> hourses = hourseDao.findAllHouse();
-
-
-        if (houseId == 0 && hourses.size()>0) {
-            Hourse hourse = hourses.get(0);
-            houseId = hourse.getHouseId();
-        }
-
-        mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
-        //从支付成功跳回主界面时，打开商城fragment
-        if ("PaySuccess".equals(sign)) {
-            id_bto_jia_img.setImageResource(R.mipmap.jia);
-            id_bto_bao_img.setImageResource(R.mipmap.bao1);
-            FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
-            baoTransaction.replace(R.id.layout_body, baoFragment);
-            baoTransaction.commit();
-            if (mPositionPreferences.contains("position")) {
-                mPositionPreferences.edit().clear().commit();
-            }
-        }else {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            familyFragmentManager = new FamilyFragmentManager();
-            leFragment = new LeFragment();
-            baoFragment = new BaoFragment();
-            zhenFragment=new ZhenFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("load","load");
-            bundle.putLong("houseId", houseId);
-            familyFragmentManager.setArguments(bundle);
-            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-            fragmentTransaction.commit();
         }
     }
 

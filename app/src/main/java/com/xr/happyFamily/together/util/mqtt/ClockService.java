@@ -6,22 +6,16 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.PixelFormat;
+import android.content.SharedPreferences;
 import android.os.Binder;
-import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
-import android.view.Gravity;
-import android.view.LayoutInflater;
-import android.view.SurfaceHolder;
-import android.view.Window;
 import android.view.WindowManager;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.le.BtClock.TimeClockActivity;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.view.btClockjsDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog2;
@@ -34,7 +28,7 @@ public class ClockService extends Service {
 
     private TimeDaoImpl timeDao;
     private LocalBinder binder = new LocalBinder();
-
+    SharedPreferences preferences;
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
      */
@@ -42,6 +36,7 @@ public class ClockService extends Service {
     public void onCreate() {
         super.onCreate();
         timeDao = new TimeDaoImpl(this);
+        preferences = this.getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
 
     }
 
@@ -117,7 +112,7 @@ public class ClockService extends Service {
                 countTimer.cancel();
                 countTimer=null;
             }
-        Log.e("close", "onDestroy: ---->" );
+
 
     }
 
@@ -162,6 +157,9 @@ public class ClockService extends Service {
 //wakeLock.acquire(1000);
                     wakeLock.release();
                     ring();
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("trueCount",false);
+                    editor.commit();
                     break;
                 }
             }
@@ -308,6 +306,9 @@ public class ClockService extends Service {
                 counttime = sumMin - nowminutes;
                 countTimer = new CountTimer(counttime * 1000, 1000);
                 countTimer.start();
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("trueCount",true);
+                editor.commit();
                 break;
             }
         }

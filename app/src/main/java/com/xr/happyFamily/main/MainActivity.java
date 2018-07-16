@@ -35,6 +35,7 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.le.BtClock.bjTimeActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -96,6 +97,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     AlarmManager alarmManager;
     private MQTTMessageReveiver myReceiver;
     private  boolean isBound;
+    private  boolean clockisBound;
     String load;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -171,14 +173,35 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 //        if (TextUtils.isEmpty(sign) && TextUtils.isEmpty(login)){
 //            new hourseAsyncTask().execute();
 //        }
-        //启动闹铃服务
-
-
-
-
+        //启动闹铃服务根据是否在倒计时判断是否开启服务
+        preferencesclock = getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
+        Boolean trueCount =preferencesclock.getBoolean("trueCount",false);
+        Log.i("Boolean","-->"+trueCount);
+        if(false==trueCount){
+            clockintent = new Intent(MainActivity.this, ClockService.class);
+            startService(clockintent);
+            clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
+        }
     }
+    SharedPreferences preferencesclock;
+    Intent clockintent;
+    ClockService clcokservice;
+    boolean boundclock;
+    ServiceConnection clockconnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            clcokservice = binder.getService();
+            clcokservice.acquireWakeLock(MainActivity.this);
+            boundclock = true;
+            clcokservice.startClock();
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
 
+        }
+    };
 
 
 //    MQService mqService;
@@ -298,9 +321,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         }
         Log.e("close", "onDestroy: ---->" );
         mPositionPreferences.edit().clear().commit();
-
+        //闹铃 退出将倒计时状态改为f
+        SharedPreferences.Editor editor = preferencesclock.edit();
+        editor.putBoolean("trueCount",false);
+        editor.commit();
         if (myReceiver!=null){
             unregisterReceiver(myReceiver);
+        }
+        if (clockisBound){
+            unbindService(clockconnection);
         }
     }
 

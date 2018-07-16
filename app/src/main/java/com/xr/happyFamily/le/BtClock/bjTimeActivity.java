@@ -68,11 +68,7 @@ public class bjTimeActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         timeDao = new TimeDaoImpl(getApplicationContext());
         times = new ArrayList<>();
-        preferences = this.getSharedPreferences("firstring", MODE_MULTI_PROCESS);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putInt("first",1);
-//        editor.apply();
-        editor.commit();
+
 //        userId= preferences.getString("userId","");
         times=timeDao.findByAllTime();
        Intent intent = getIntent();

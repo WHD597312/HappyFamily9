@@ -58,7 +58,6 @@ public class GridViewAdapter extends ArrayAdapter {
                     holder.tv_device_type.setText("取暖器");
                     boolean online=item.getOnline();
                     int deviceState=item.getDeviceState();
-
                     if (online){
                         if (deviceState==1){
                             holder.tv_device_switch.setText("电源开");
@@ -71,9 +70,6 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
                 }else if (type==3){
-                    item.setImg(img[0]);
-                    holder.tv_device_name.setText(item.getName());
-                    Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
                     boolean online=item.getOnline();
                     Log.i("online","-->"+online);
                     int sensorState=item.getSensorState();
@@ -92,8 +88,11 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setTextColor(Color.parseColor("#999999"));
                     }
                 }
-
+                item.setImg(img[0]);
+                holder.tv_device_name.setText(item.getName());
+                Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             }
+
 
             return convertView;
         }

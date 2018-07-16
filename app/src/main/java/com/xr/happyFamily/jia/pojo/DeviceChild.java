@@ -41,6 +41,7 @@ public class DeviceChild implements Serializable{
     int img;/**设备标志图片*/
     int deviceId;/**设备Id*/
     int linked;/**是否联动*/
+    int linkedSensorId;/**与智能终端联动的设备*/
     long shareId;/**分享设备*/
     int sensorState;/**传感器状态*/
     int sensorSimpleTemp;/**传感器采样温度*/
@@ -289,6 +290,12 @@ public class DeviceChild implements Serializable{
     public void setShare(String share) {
         this.share = share;
     }
+    public int getLinkedSensorId() {
+        return this.linkedSensorId;
+    }
+    public void setLinkedSensorId(int linkedSensorId) {
+        this.linkedSensorId = linkedSensorId;
+    }
    
     @Generated(hash = 1973447423)
     public DeviceChild() {
@@ -314,13 +321,14 @@ public class DeviceChild implements Serializable{
         this.name=name;
     }
 
-    @Generated(hash = 1421010307)
+    @Generated(hash = 93242163)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp,
             int warmerCurTemp, int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
             int deviceState, String rateState, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour,
-            int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, long shareId, int sensorState,
-            int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, String share) {
+            int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId,
+            long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho,
+            String share) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -353,6 +361,7 @@ public class DeviceChild implements Serializable{
         this.img = img;
         this.deviceId = deviceId;
         this.linked = linked;
+        this.linkedSensorId = linkedSensorId;
         this.shareId = shareId;
         this.sensorState = sensorState;
         this.sensorSimpleTemp = sensorSimpleTemp;

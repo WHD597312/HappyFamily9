@@ -82,7 +82,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     MessageReceiver receiver;
     public static boolean running=false;
     private List<DeviceChild> linkList=new ArrayList<>();
-    long deviceId;
+    int sensorId;
     long houseId;
     long roomId;
     List<DeviceChild> warmers=new ArrayList<>();
@@ -105,9 +105,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         houseId=intent.getLongExtra("houseId",0);
 
         deviceChild=deviceChildDao.findById(id);
-        deviceId=deviceChild.getDeviceId();
+        sensorId=deviceChild.getDeviceId();
         roomId=deviceChild.getRoomId();
-        warmers=deviceChildDao.findDeviceByType(houseId,roomId,2,true);
+//        warmers=deviceChildDao.findDeviceByType(houseId,roomId,2,true);
 //        linkList=deviceChildDao.findLinkDevice(houseId,roomId,3);
         boolean isConn=NetWorkUtil.isConn(this);
         if (isConn){
@@ -273,7 +273,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 }else if (temp>=42){
                     temp=42;
                 }
-                tv_smart_temp.setText(temp+"℃");
                 Message tempDecrease=handler.obtainMessage();
                 tempDecrease.arg1=0;/**减温度标记*/
                 handler.sendMessage(tempDecrease);
@@ -289,7 +288,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 if (temp>=42){
                     temp=42;
                 }
-                tv_smart_temp.setText(temp+"℃");
                 Message tempAdd=handler.obtainMessage();
                 tempAdd.arg1=1;/**加温度标记*/
                 handler.sendMessage(tempAdd);
@@ -319,14 +317,16 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     Toast.makeText(this,"没有可联动的设备",Toast.LENGTH_SHORT).show();
                 }else {
                     Intent intent2=new Intent(this,SmartLinkedActivity.class);
-                    intent2.putExtra("sensorId",deviceId);
+                    intent2.putExtra("sensorId",sensorId);
+                    intent2.putExtra("Id",deviceChild.getId());
                     intent2.putExtra("deviceList",(Serializable) linkList);
                     startActivityForResult(intent2,100);
                 }
                 break;
             case R.id.image_switch:
                 String tag= (String) image_switch.getTag();
-                List<DeviceChild> deviceChildren=deviceChildDao.findDeviceByType(houseId,roomId,2,true);
+
+                List<DeviceChild> deviceChildren=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1,true);
                 if ("close".equals(tag)){
                     for(DeviceChild deviceChild:deviceChildren){
                         deviceChild.setDeviceState(1);
@@ -402,11 +402,11 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                         for (int i = 0; i < returnData.length(); i++) {
                             JSONObject device=returnData.getJSONObject(i);
                             int deviceId=device.getInt("deviceId");
-                            String deviceName=device.getString("deviceName");
-                            int deviceType=device.getInt("deviceType");
-                            String deviceMacAddress=device.getString("deviceMacAddress");
                             int isLinked=device.getInt("isLinked");
-                            DeviceChild deviceChild=new DeviceChild(deviceType, deviceMacAddress, deviceId, isLinked,deviceName);
+                            DeviceChild deviceChild=deviceChildDao.findDeviceByDeviceId(houseId,roomId,deviceId);
+                            deviceChild.setLinked(isLinked);
+                            deviceChild.setLinkedSensorId(sensorId);
+                            deviceChildDao.update(deviceChild);
                             if (linkList!=null){
                                 linkList.add(deviceChild);
                             }
@@ -500,12 +500,13 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     }.start();
                 }else if (event.getAction()==MotionEvent.ACTION_UP){
                     onClick=false;
+                    temp=(int)tempCurProgress+15;
                     if (temp<=5){
                         temp=5;
                     }else if (temp>=42){
                         temp=42;
                     }
-                    temp=(int)tempCurProgress+15;
+                    warmers=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1,true);
                     for (DeviceChild deviceChild:warmers){
                         deviceChild.setWaramerSetTemp(temp);
                         send(deviceChild);
@@ -539,10 +540,12 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     }.start();
                 }else if (event.getAction()==MotionEvent.ACTION_UP){
                     temp=(int)tempCurProgress+15;
-                    if (temp>=42){
-
+                    if (temp<=5){
+                        temp=5;
+                    } else if (temp>=42){
                         temp=42;
                     }
+                    warmers=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1,true);
                     for (DeviceChild deviceChild:warmers){
                         deviceChild.setWaramerSetTemp(temp);
                         send(deviceChild);

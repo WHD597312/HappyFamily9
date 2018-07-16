@@ -158,9 +158,9 @@ public class FamilyFragmentManager extends Fragment {
                 try {
                     if (bound){
                         Log.i("topic","-->"+onlineTopicName);
-                        mqService.subscribe(onlineTopicName,1);
-                        mqService.subscribe(offlineTopicName,1);
-                        Thread.sleep(100);
+                        boolean step1=mqService.subscribe(onlineTopicName,1);
+                        boolean step2=mqService.subscribe(offlineTopicName,1);
+                        Log.i("step","-->"+step1+","+step2);
                     }
                 }catch (Exception e){
                     e.printStackTrace();

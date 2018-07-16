@@ -25,9 +25,11 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.github.mikephil.charting.formatter.IFillFormatter;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
@@ -93,7 +95,7 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
     //其他activity跳转回主界面时的标记
     private String sign = "0";
     private long houseId;
-
+    String share;
     private MQTTMessageReveiver myReceiver;
     private  boolean isBound;
     String load;
@@ -125,7 +127,7 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
         Intent intent = getIntent();
         load=intent.getStringExtra("load");
         String login=intent.getStringExtra("login");
-        String share=intent.getStringExtra("share");
+        share=intent.getStringExtra("share");
         sign = intent.getStringExtra("sign");
         houseId = intent.getLongExtra("houseId", 0);
 
@@ -134,6 +136,11 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
                 new LoadUserImageAsync().execute();
             }
         }
+
+        UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
+        ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
+        clockBeanDao.deleteAll();
+        userInfosDao.deleteAll();
 
 //        if (TextUtils.isEmpty(sign) && TextUtils.isEmpty(login)){
 //            new hourseAsyncTask().execute();
@@ -182,6 +189,11 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
     @Override
     protected void onStart() {
         super.onStart();
+
+        if (TextUtils.isEmpty(share)){
+            Intent service=new Intent(this,MQService.class);
+            startService(service);
+        }
         List<Hourse> hourses = hourseDao.findAllHouse();
 
 
@@ -223,7 +235,6 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
-                
                 List<Hourse> hourses = hourseDao.findAllHouse();
                 Hourse hourse = hourses.get(0);
                 long houseId = hourse.getHouseId();

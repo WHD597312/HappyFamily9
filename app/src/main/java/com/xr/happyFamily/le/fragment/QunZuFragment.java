@@ -61,7 +61,7 @@ public class QunZuFragment extends BaseFragment  {
     RecyclerView recyclerView;
     @BindView(R.id.img_add)
     ImageView imgAdd;
-
+    public static boolean running = false;
 
     private TimeBar timeBar;
     private ClockQunzuAdapter qunzuAdapter;
@@ -146,11 +146,18 @@ public class QunZuFragment extends BaseFragment  {
     @Override
     public void onStart() {
         super.onStart();
+        running=true;
         upClock();
         qunzuAdapter = new ClockQunzuAdapter((ClockActivity) getActivity(), clockBeanList,userInfoList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(qunzuAdapter);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        running=false;
     }
 
     public void upData(){

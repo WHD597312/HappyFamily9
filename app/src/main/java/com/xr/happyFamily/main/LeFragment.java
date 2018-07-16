@@ -306,38 +306,6 @@ public class LeFragment extends Fragment {
                     //结束
 
 
-                    String retrunData=jsonObject.getString("returnData");
-                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
-                    JsonArray groupList = content.getAsJsonArray("clockGroup");
-                    Gson gson = new Gson();
-                    clockBeanDao.deleteAll();
-                    userInfosDao.deleteAll();
-
-                    for (JsonElement user : groupList) {
-                        ClockBean userList = gson.fromJson(user, ClockBean.class);
-                        clockBeanDao.insert(userList);
-                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
-                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
-                        for (JsonElement myUserInfo : userInfoList) {
-                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
-                            userInfo1.setClockId(userList.getClockId());
-                            userInfosDao.insert(userInfo1);
-                        }
-                    }
-                    JsonArray loveList = content.getAsJsonArray("clockLovers");
-
-                    for (JsonElement user : loveList) {
-                        ClockBean userList = gson.fromJson(user, ClockBean.class);
-                        clockBeanDao.insert(userList);
-                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
-                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
-                        for (JsonElement myUserInfo : userInfoList) {
-                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
-                            userInfo1.setClockId(userList.getClockId());
-                            userInfosDao.insert(userInfo1);
-
-                        }
-                    }
 
                 }
             } catch (Exception e) {

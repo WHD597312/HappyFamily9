@@ -1,12 +1,19 @@
 package com.xr.happyFamily.le.fragment;
 
+import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +21,13 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextClock;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.adapter.ClockQinglvAdapter;
 
@@ -28,8 +37,14 @@ import com.xr.happyFamily.le.clock.QinglvAddActivity;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.TimeBar;
+import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.MQService;
+
+import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -45,7 +60,7 @@ import static android.content.Context.MODE_PRIVATE;
  * Created by TYQ on 2017/9/7.
  */
 
-public class QingLvFragment extends BaseFragment  {
+public class QingLvFragment extends BaseFragment {
 
     Unbinder unbinder;
     Context mContext;
@@ -64,13 +79,19 @@ public class QingLvFragment extends BaseFragment  {
     @BindView(R.id.img_add)
     ImageView imgAdd;
 
+    private boolean isBound = false;
+    MessageReceiver receiver;
+    public static boolean running = false;
 
     private TimeBar timeBar;
     private ClockQinglvAdapter qinglvAdapter;
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
     SharedPreferences preferences;
-    String userId;
+    String userId, clockData;
+    String[] clocks;
+    Intent service;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -81,26 +102,51 @@ public class QingLvFragment extends BaseFragment  {
         tcTime.setFormat12Hour(null);
         tcTime.setFormat24Hour("HH:mm");
 
-        clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
-        userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
+
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
+
+
+        service = new Intent(getActivity(), MQService.class);
+
+        IntentFilter intentFilter = new IntentFilter("QingLvFragment");
+        receiver = new MessageReceiver();
+        getActivity().registerReceiver(receiver, intentFilter);
+
+
+//        for(int i=1081;i<1085;i++){
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("id", i);
+//            new deleteClock().execute(params);}
+
+        getData();
 
 
         return view;
 
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        running = false;
+    }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        if (isBound) {
+            getActivity().unbindService(connection);
+        }
+        if (receiver != null) {
+            getActivity().unregisterReceiver(receiver);
+        }
     }
 
-    boolean isDel=false;
+    boolean isDel = false;
 
-    @OnClick({R.id.back, R.id.img_right,R.id.img_add})
+    @OnClick({R.id.back, R.id.img_right, R.id.img_add})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -110,8 +156,8 @@ public class QingLvFragment extends BaseFragment  {
                 getActivity().startActivity(new Intent(getActivity(), MsgActivity.class));
                 break;
             case R.id.img_add:
-                Intent intent=new Intent(getActivity(), QinglvAddActivity.class);
-                intent.putExtra("type","qinglv");
+                Intent intent = new Intent(getActivity(), QinglvAddActivity.class);
+                intent.putExtra("type", "qinglv");
                 getActivity().startActivity(intent);
 
                 break;
@@ -124,41 +170,134 @@ public class QingLvFragment extends BaseFragment  {
 
     List<ClockBean> allClockList;
     List<UserInfo> allUserInfoList;
-    private void upClock(){
-        clockBeanList=new ArrayList<>();
-        userInfoList=new ArrayList<>();
-        allClockList=clockBeanDao.findAll();
-        allUserInfoList=userInfosDao.findAll();
-        Log.e("qqqqqqqqqxxxxx",allClockList.size()+"???");
-        for(int i=0;i<allClockList.size();i++){
-            if (allClockList.get(i).getClockType()==3) {
+
+    public void upClock() {
+        getData();
+        clockBeanDao = new ClockDaoImpl(getActivity().getApplicationContext());
+        userInfosDao = new UserInfosDaoImpl(getActivity().getApplicationContext());
+        clockBeanList = new ArrayList<>();
+        userInfoList = new ArrayList<>();
+        allClockList = clockBeanDao.findAll();
+        allUserInfoList = userInfosDao.findAll();
+
+
+        for (int i = 0; i < allClockList.size(); i++) {
+            if (allClockList.get(i).getClockType() == 3) {
                 clockBeanList.add(allClockList.get(i));
-                for(int j=0;j<allUserInfoList.size();j++){
-                    if (allUserInfoList.get(j).getClockId()==allClockList.get(i).getClockId())
-                        userInfoList.add(allUserInfoList.get(j));
-                }
             }
         }
 
-        Log.e("qqqqqqqqqxxxxx",clockBeanList.size()+"?");
-        int[][] time=new int[clockBeanList.size()][2];
-        for(int i=0;i<clockBeanList.size();i++){
-            time[i][0]=clockBeanList.get(i).getClockHour();
-            time[i][1]=clockBeanList.get(i).getClockMinute();
+
+        int[][] time = new int[clockBeanList.size()][2];
+        for (int i = 0; i < clockBeanList.size(); i++) {
+            time[i][0] = clockBeanList.get(i).getClockHour();
+            time[i][1] = clockBeanList.get(i).getClockMinute();
+            Log.e("qqqqqqqqLLLL", clockBeanDao.findClockByClockId(clockBeanList.get(i).getClockId()).get(0).getFlag() + "???"+clockBeanList.get(i).getClockId());
+            Log.e("qqqqqqqqqxxxxx", clockBeanList.get(i).getFlag() +"?222222");
         }
-        timeBar.setTime(time,1);
-    }
-    @Override
-    public void onStart() {
-        super.onStart();
-        upClock();
-        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList,userInfoList,userId);
+        timeBar.setTime(time, 1);
+        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList, userId,mqService);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(qinglvAdapter);
+
+        qinglvAdapter.notifyDataSetChanged();
     }
 
-    public void upData(){
+    @Override
+    public void onStart() {
+        super.onStart();
+        running = true;
+        isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
         upClock();
+
+    }
+
+
+
+
+    public  MQService mqService;
+    private boolean bound = false;
+    private String deviceName;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            if(mqService!=null){
+               qinglvAdapter.setMqService(mqService);
+            }
+            bound = true;
+            getData();
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+        }
+    };
+
+
+    private class getClockAsync extends AsyncTask<String, Void, Void> {
+        @Override
+        protected Void doInBackground(String... macs) {
+            String macAddress = macs[0];
+            if (mqService != null) {
+                String topicName = "p99/" + macAddress + "/clockuniversal";
+                boolean success = mqService.subscribe(topicName, 1);
+
+            }
+            return null;
+        }
+    }
+
+
+    class MessageReceiver extends BroadcastReceiver {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String msg = intent.getStringExtra("msg");
+            upClock();
+        }
+    }
+
+
+    public void getData() {
+        clockData = preferences.getString("clockData", "");
+        clocks = clockData.split(",");
+        for (int i = 0; i < clocks.length; i++) {
+            new getClockAsync().execute(clocks[i]);
+        }
+    }
+
+
+
+    class deleteClock extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            Map<String, Object> params = maps[0];
+            String url = "/happy/clock/deleteClock";
+            url = url + "?clockCreater=1031&clockId=" + params.get("id");
+            String result = HttpUtils.doGet(context, url);
+//            Log.e("qqqqqqqRRR", result);
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getString("returnCode");
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                Toast.makeText(context, "删除闹钟成功", Toast.LENGTH_SHORT).show();
+            }
+        }
     }
 }

@@ -412,10 +412,18 @@
         <activity android:name=".le.MsgActivity" />
         <activity android:name=".le.HistoryActivity" />
         <activity android:name=".le.ClockActivity" />
+        <activity android:name=".le.clock.QinglvEditActivity"/>
+        <activity android:name=".le.clock.QunzuEditActivity"/>
+        <activity android:name=".le.clock.QinglvAddActivity"/>
+        <activity android:name=".le.clock.QunzuAddActivity"/>
+        <activity android:name=".le.clock.MsgActivity"/>
         <activity android:name=".zhen.SettingActivity" />
         <activity android:name=".zhen.PersonInfoActivity" />
+        <activity android:name=".le.BtClock.bqOfColckActivity"/>
         <activity android:name=".jia.activity.SmartTerminalActivity" />
         <activity android:name=".jia.activity.SmartLinkedActivity"/>
+        <activity android:name=".le.clock.FriendFindActivity"/>
+        <activity android:name=".le.clock.FriendAddActivity"/>
     </application>
 
 </manifest>

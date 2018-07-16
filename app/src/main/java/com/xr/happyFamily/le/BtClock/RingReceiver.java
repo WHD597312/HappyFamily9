@@ -15,14 +15,18 @@ import android.view.KeyEvent;
 import android.view.Window;
 import android.view.WindowManager;
 
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.utils.WakeAndLock;
+import com.xr.happyFamily.le.view.QinglvClockDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog2;
 import com.xr.happyFamily.le.view.btClockjsDialog3;
 import com.xr.happyFamily.le.view.btClockjsDialog4;
+import com.xr.happyFamily.together.MyDialog;
 
 import java.util.Calendar;
 import java.util.List;
@@ -31,24 +35,35 @@ import java.util.List;
 public class RingReceiver extends BroadcastReceiver {
     Context mContext;
     private MediaPlayer mediaPlayer;
+    QinglvClockDialog qldialog;
     btClockjsDialog dialog;
     btClockjsDialog2 dialog2;
     btClockjsDialog4 dialog4;
+    //治懒闹钟
     List<Time> times;
+    //情侣、群组闹钟数据
+    List<ClockBean>  clockBeanList;
     Time time;
+    ClockBean clockBean;
     private TimeDaoImpl timeDao;
+    private ClockDaoImpl clockDao;
     int firstHour=-1;
     int firstMinutes=-1;
     int first;
     private String op = "on";
     SharedPreferences preferences;
+
+    //判断是治懒闹钟:1 还是情侣（群组）:2
+    int sign=0;
     public void onReceive(Context context, Intent intent) {
         //广播的名字:包名+随便取一个名字
         if ("com.zking.android29_alarm_notification.RING".equals(intent.getAction())) {
             Log.i("test", "闹钟响了！！！");
             mContext = context;
             timeDao = new TimeDaoImpl(mContext);
+            clockDao=new ClockDaoImpl(mContext);
             times = timeDao.findTimeByMin();
+            clockBeanList=clockDao.findTimeByMin();
             preferences = mContext.getSharedPreferences("this", Context.MODE_PRIVATE);
 
             first = preferences.getInt("first", 0);
@@ -57,19 +72,32 @@ public class RingReceiver extends BroadcastReceiver {
             int hour = calendar.get(Calendar.HOUR_OF_DAY);
             int minutes = calendar.get(Calendar.MINUTE);
             int nowminutes = hour * 60 + minutes;
+            int sumMin = 0;
             for (int i = 0; i < times.size(); i++) {
                 time = times.get(i);
-                int sumMin = time.getSumMin();
+                sumMin = time.getSumMin();
                 if (sumMin >= nowminutes) {
                     firstHour = time.getHour();
                     firstMinutes = time.getMinutes();
+                    sign=1;
                     break;
                 }
 
             }
+
+            for (int i = 0; i < clockBeanList.size(); i++) {
+                clockBean = clockBeanList.get(i);
+                int sumMin2 = clockBean.getSumMinute();
+                if (sumMin2 >= nowminutes && sumMin2<sumMin) {
+                    firstHour = time.getHour();
+                    firstMinutes = time.getMinutes();
+                    sign=2;
+                    break;
+                }
+            }
+
             if (firstMinutes != -1 && firstHour != -1) {
                 if (first == 1) {
-
                     Calendar c = Calendar.getInstance();//c：当前系统时间
                     c.set(Calendar.HOUR_OF_DAY, firstHour);//把小时设为你选择的小时
                     c.set(Calendar.MINUTE, firstMinutes);
@@ -82,7 +110,6 @@ public class RingReceiver extends BroadcastReceiver {
                     } else {
                         am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), sender);
                     }
-
                     if (hour == firstHour && minutes == firstMinutes) {
                         SharedPreferences.Editor editor = preferences.edit();
                         editor.putInt("first",2);
@@ -100,23 +127,26 @@ public class RingReceiver extends BroadcastReceiver {
                         wakeLock.release();
 
 
-                        List<Time> times = timeDao.findTimesByHourAndMin(hour, minutes);
-                        if (!times.isEmpty()) {
-                            Time time = times.get(0);
-                            if (time.getOpen()) {
-                                if (time.getFlag() == 1) {
+                        if(sign==1) {
+                            List<Time> times = timeDao.findTimesByHourAndMin(hour, minutes);
+                            if (!times.isEmpty()) {
+                                Time time = times.get(0);
+                                if (time.getOpen()) {
+                                    if (time.getFlag() == 1) {
 
-                                    clolkDialog1();
-                                } else if (time.getFlag() == 2) {
+                                        clolkDialog1();
+                                    } else if (time.getFlag() == 2) {
 
-                                    clolkDialog2();
-                                } else if (time.getFlag() == 3) {
+                                        clolkDialog2();
+                                    } else if (time.getFlag() == 3) {
 
-                                    clolkDialog3();
+                                        clolkDialog3();
+                                    }
+
                                 }
-
                             }
-                        }
+                        }else
+                            clolkDialog4();
                     }
                 }
             }
@@ -195,6 +225,14 @@ public class RingReceiver extends BroadcastReceiver {
         dialog.setCancelable(false);
         dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog.show();
+    }
+
+    private void clolkDialog4() {//情侣、群组闹钟
+        qldialog = new QinglvClockDialog(mContext);
+
+
+
+        qldialog.show();
     }
 
 }

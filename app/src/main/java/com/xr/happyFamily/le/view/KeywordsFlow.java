@@ -155,7 +155,7 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
                 removeView(txv);
                 continue;
             }
-            FrameLayout.LayoutParams layParams = (LayoutParams) txv
+            LayoutParams layParams = (LayoutParams) txv
                     .getLayoutParams();
             int[] xy = new int[] { layParams.leftMargin, layParams.topMargin,
                     txv.getWidth() };
@@ -277,9 +277,9 @@ public class KeywordsFlow extends FrameLayout implements OnGlobalLayoutListener 
 //                // 已经调整过前i个需要再次排序
 //                sortXYList(listTxt, i + 1);
 //            }
-            FrameLayout.LayoutParams layParams = new FrameLayout.LayoutParams(
-                    FrameLayout.LayoutParams.WRAP_CONTENT,
-                    FrameLayout.LayoutParams.WRAP_CONTENT);
+            LayoutParams layParams = new LayoutParams(
+                    LayoutParams.WRAP_CONTENT,
+                    LayoutParams.WRAP_CONTENT);
             layParams.gravity = Gravity.LEFT | Gravity.TOP;
             layParams.leftMargin = iXY[IDX_X];
             layParams.topMargin = iXY[IDX_Y];

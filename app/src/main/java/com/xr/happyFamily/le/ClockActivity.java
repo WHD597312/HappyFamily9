@@ -209,9 +209,6 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
     public void upData(){
         qunZuFragment.upData();
     }
-    public void upQinglvData(){
-        qingLvFragment.upData();
-    }
 
 
     @Override

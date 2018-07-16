@@ -28,12 +28,13 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         public final static Property ClockId = new Property(1, int.class, "clockId", false, "CLOCK_ID");
         public final static Property ClockHour = new Property(2, int.class, "clockHour", false, "CLOCK_HOUR");
         public final static Property ClockMinute = new Property(3, int.class, "clockMinute", false, "CLOCK_MINUTE");
-        public final static Property ClockDay = new Property(4, String.class, "clockDay", false, "CLOCK_DAY");
-        public final static Property Flag = new Property(5, String.class, "flag", false, "FLAG");
-        public final static Property Music = new Property(6, String.class, "music", false, "MUSIC");
-        public final static Property Switchs = new Property(7, int.class, "switchs", false, "SWITCHS");
-        public final static Property ClockCreater = new Property(8, int.class, "clockCreater", false, "CLOCK_CREATER");
-        public final static Property ClockType = new Property(9, int.class, "clockType", false, "CLOCK_TYPE");
+        public final static Property SumMinute = new Property(4, int.class, "sumMinute", false, "SUM_MINUTE");
+        public final static Property ClockDay = new Property(5, String.class, "clockDay", false, "CLOCK_DAY");
+        public final static Property Flag = new Property(6, String.class, "flag", false, "FLAG");
+        public final static Property Music = new Property(7, String.class, "music", false, "MUSIC");
+        public final static Property Switchs = new Property(8, int.class, "switchs", false, "SWITCHS");
+        public final static Property ClockCreater = new Property(9, int.class, "clockCreater", false, "CLOCK_CREATER");
+        public final static Property ClockType = new Property(10, int.class, "clockType", false, "CLOCK_TYPE");
     }
 
 
@@ -53,12 +54,13 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
                 "\"CLOCK_ID\" INTEGER NOT NULL ," + // 1: clockId
                 "\"CLOCK_HOUR\" INTEGER NOT NULL ," + // 2: clockHour
                 "\"CLOCK_MINUTE\" INTEGER NOT NULL ," + // 3: clockMinute
-                "\"CLOCK_DAY\" TEXT," + // 4: clockDay
-                "\"FLAG\" TEXT," + // 5: flag
-                "\"MUSIC\" TEXT," + // 6: music
-                "\"SWITCHS\" INTEGER NOT NULL ," + // 7: switchs
-                "\"CLOCK_CREATER\" INTEGER NOT NULL ," + // 8: clockCreater
-                "\"CLOCK_TYPE\" INTEGER NOT NULL );"); // 9: clockType
+                "\"SUM_MINUTE\" INTEGER NOT NULL ," + // 4: sumMinute
+                "\"CLOCK_DAY\" TEXT," + // 5: clockDay
+                "\"FLAG\" TEXT," + // 6: flag
+                "\"MUSIC\" TEXT," + // 7: music
+                "\"SWITCHS\" INTEGER NOT NULL ," + // 8: switchs
+                "\"CLOCK_CREATER\" INTEGER NOT NULL ," + // 9: clockCreater
+                "\"CLOCK_TYPE\" INTEGER NOT NULL );"); // 10: clockType
     }
 
     /** Drops the underlying database table. */
@@ -78,24 +80,25 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         stmt.bindLong(2, entity.getClockId());
         stmt.bindLong(3, entity.getClockHour());
         stmt.bindLong(4, entity.getClockMinute());
+        stmt.bindLong(5, entity.getSumMinute());
  
         String clockDay = entity.getClockDay();
         if (clockDay != null) {
-            stmt.bindString(5, clockDay);
+            stmt.bindString(6, clockDay);
         }
  
         String flag = entity.getFlag();
         if (flag != null) {
-            stmt.bindString(6, flag);
+            stmt.bindString(7, flag);
         }
  
         String music = entity.getMusic();
         if (music != null) {
-            stmt.bindString(7, music);
+            stmt.bindString(8, music);
         }
-        stmt.bindLong(8, entity.getSwitchs());
-        stmt.bindLong(9, entity.getClockCreater());
-        stmt.bindLong(10, entity.getClockType());
+        stmt.bindLong(9, entity.getSwitchs());
+        stmt.bindLong(10, entity.getClockCreater());
+        stmt.bindLong(11, entity.getClockType());
     }
 
     @Override
@@ -109,24 +112,25 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         stmt.bindLong(2, entity.getClockId());
         stmt.bindLong(3, entity.getClockHour());
         stmt.bindLong(4, entity.getClockMinute());
+        stmt.bindLong(5, entity.getSumMinute());
  
         String clockDay = entity.getClockDay();
         if (clockDay != null) {
-            stmt.bindString(5, clockDay);
+            stmt.bindString(6, clockDay);
         }
  
         String flag = entity.getFlag();
         if (flag != null) {
-            stmt.bindString(6, flag);
+            stmt.bindString(7, flag);
         }
  
         String music = entity.getMusic();
         if (music != null) {
-            stmt.bindString(7, music);
+            stmt.bindString(8, music);
         }
-        stmt.bindLong(8, entity.getSwitchs());
-        stmt.bindLong(9, entity.getClockCreater());
-        stmt.bindLong(10, entity.getClockType());
+        stmt.bindLong(9, entity.getSwitchs());
+        stmt.bindLong(10, entity.getClockCreater());
+        stmt.bindLong(11, entity.getClockType());
     }
 
     @Override
@@ -141,12 +145,13 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
             cursor.getInt(offset + 1), // clockId
             cursor.getInt(offset + 2), // clockHour
             cursor.getInt(offset + 3), // clockMinute
-            cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // clockDay
-            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // flag
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // music
-            cursor.getInt(offset + 7), // switchs
-            cursor.getInt(offset + 8), // clockCreater
-            cursor.getInt(offset + 9) // clockType
+            cursor.getInt(offset + 4), // sumMinute
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // clockDay
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // flag
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // music
+            cursor.getInt(offset + 8), // switchs
+            cursor.getInt(offset + 9), // clockCreater
+            cursor.getInt(offset + 10) // clockType
         );
         return entity;
     }
@@ -157,12 +162,13 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         entity.setClockId(cursor.getInt(offset + 1));
         entity.setClockHour(cursor.getInt(offset + 2));
         entity.setClockMinute(cursor.getInt(offset + 3));
-        entity.setClockDay(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setFlag(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
-        entity.setMusic(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
-        entity.setSwitchs(cursor.getInt(offset + 7));
-        entity.setClockCreater(cursor.getInt(offset + 8));
-        entity.setClockType(cursor.getInt(offset + 9));
+        entity.setSumMinute(cursor.getInt(offset + 4));
+        entity.setClockDay(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setFlag(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setMusic(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
+        entity.setSwitchs(cursor.getInt(offset + 8));
+        entity.setClockCreater(cursor.getInt(offset + 9));
+        entity.setClockType(cursor.getInt(offset + 10));
      }
     
     @Override

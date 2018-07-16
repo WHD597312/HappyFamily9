@@ -106,7 +106,7 @@ public class MsgFriendAdapter extends RecyclerView.Adapter<MsgFriendAdapter.MyVi
                 dialog=MyDialog.showDialog(context);
                 dialog.show();
                 Map<String, Object> params = new HashMap<>();
-                params.put("clockFriendId", data.get(position).getSenderId()+"");
+                params.put("frdId", data.get(position).getFrdId()+"");
                 params.put("replay", 0+"");
                 new replayClockFriendApplication().execute(params);
             }
@@ -118,7 +118,7 @@ public class MsgFriendAdapter extends RecyclerView.Adapter<MsgFriendAdapter.MyVi
                 dialog=MyDialog.showDialog(context);
                 dialog.show();
                 Map<String, Object> params = new HashMap<>();
-                params.put("clockFriendId", data.get(position).getSenderId()+"");
+                params.put("frdId", data.get(position).getFrdId()+"");
                 params.put("replay", 1+"");
                 new replayClockFriendApplication().execute(params);
             }
@@ -174,7 +174,7 @@ public class MsgFriendAdapter extends RecyclerView.Adapter<MsgFriendAdapter.MyVi
         protected String doInBackground(Map<String, Object>... maps) {
             String url = "/happy/clock/replayClockFriendApplication";
             Map<String, Object> params = maps[0];
-            String clockFriendId=params.get("clockFriendId").toString();
+            String clockFriendId=params.get("frdId").toString();
             String replay=params.get("replay").toString();
 
             url=url+"?clockFriendId="+clockFriendId+"&replay="+replay;

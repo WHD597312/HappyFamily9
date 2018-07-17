@@ -172,7 +172,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
-                android:src="@mipmap/image_switch"
+                android:src="@mipmap/image_close"
                 />
 
             <View

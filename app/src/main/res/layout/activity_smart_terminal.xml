@@ -492,8 +492,8 @@
         />
     <ImageView
         android:id="@+id/image_switch"
-        android:layout_width="@dimen/dp_jy_45"
-        android:layout_height="@dimen/dp_jy_45"
+        android:layout_width="@dimen/dp_jy_40"
+        android:layout_height="@dimen/dp_jy_40"
         android:scaleType="centerInside"
         android:src="@mipmap/image_unswitch"
         android:layout_toLeftOf="@+id/image_linkage"

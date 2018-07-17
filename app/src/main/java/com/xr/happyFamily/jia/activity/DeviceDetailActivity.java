@@ -508,7 +508,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         /**开关机状态*/
         if (deviceState==0){
-            image_switch.setImageResource(R.mipmap.image_switch);
+            image_switch.setImageResource(R.mipmap.image_close);
             image_rate.setImageResource(R.mipmap.rate_power);
             Message msg=handler.obtainMessage();
             msg.arg1=0;

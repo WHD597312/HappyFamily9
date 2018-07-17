@@ -218,6 +218,8 @@ public class SmartLinkedActivity extends AppCompatActivity {
                         for (Map.Entry<Integer, DeviceChild> entry : linkedMap.entrySet()) {
                             DeviceChild deviceChild=entry.getValue();
                             deviceChild.setLinkedSensorId(sensorId);
+                            int linked=deviceChild.getLinked();
+                            deviceChild.setLinked(linked);
                             deviceChildDao.update(deviceChild);
                         }
                     }

@@ -580,7 +580,7 @@ public class MQService extends Service {
                         map.put(newClocks[i], 1);
                     }
                     for (int j = 0; j < clocks.length; j++) {
-                        Log.e("qqqqqqqqqqWWW0000", "id" + clocks[j] + "," + Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
+//                        Log.e("qqqqqqqqqqWWW0000", "id" + clocks[j] + "," + Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
                         if (map.get(clocks[j]) == null) {
                             String str = "p99/" + clocks[j] + "/clockuniversa";
                             unsubscribe(str);

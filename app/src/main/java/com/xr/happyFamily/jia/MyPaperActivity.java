@@ -112,7 +112,6 @@ public class MyPaperActivity extends AppCompatActivity {
                 KitchenFragment kitchenFragment=new KitchenFragment();
                 kitchenFragment.setArguments(bundle);
                 views.add(kitchenFragment);
-
             }
            else if ("卧室".equals(str2.get(i))){
                 Bundle bundle=new Bundle();

@@ -153,7 +153,7 @@ public class DeviceChildDaoImpl {
     }
 
     /**
-     *  查询智能终端已经联动的设备
+     *  查询智能终端已经联动且在线的设备
      * @param houseId
      * @param roomId
      * @param type
@@ -164,6 +164,20 @@ public class DeviceChildDaoImpl {
      */
     public List<DeviceChild> findLinkedDevices(long houseId,long roomId,int type,int linkedSensorId,int linked,boolean online) {
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.Type.eq(type),DeviceChildDao.Properties.LinkedSensorId.eq(linkedSensorId),DeviceChildDao.Properties.Linked.eq(linked),DeviceChildDao.Properties.Online.eq(online));
+        return deviceChildDao.queryBuilder().where(whereCondition).orderAsc(DeviceChildDao.Properties.Id).list();
+    }
+
+    /**
+     * 查询智能终端联动的设备
+     * @param houseId
+     * @param roomId
+     * @param type
+     * @param linkedSensorId
+     * @param linked
+     * @return
+     */
+    public List<DeviceChild> findLinkedDevices(long houseId,long roomId,int type,int linkedSensorId,int linked){
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.Type.eq(type),DeviceChildDao.Properties.LinkedSensorId.eq(linkedSensorId),DeviceChildDao.Properties.Linked.eq(linked));
         return deviceChildDao.queryBuilder().where(whereCondition).orderAsc(DeviceChildDao.Properties.Id).list();
     }
     public DeviceChild findDeviceByDeviceId(long houseId,long roomId,int deviceId){

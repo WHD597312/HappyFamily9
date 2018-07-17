@@ -284,10 +284,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         switch (message.arg1) {
             case 1: { // 成功
                 Toast.makeText(LoginActivity.this, "授权登陆成功", Toast.LENGTH_SHORT).show();
-
                 //获取用户资料
                 Platform platform = (Platform) message.obj;
-                Log.e("platform", "handleMessage: -->"+platform );
+                Log.e("platform", "handleMessage: -->"+platform);
                 oAuthId = platform.getDb().getUserId();//获取用户账号
                 accessToken = platform.getDb().getToken();
                 Map<String,Object> params=new HashMap<>();
@@ -392,11 +391,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         editor.putString("token", token);
                         editor.putString("username",username);
                         boolean success=editor.commit();
-
                         if (success){
                             new hourseAsyncTask().execute();
                         }
-
                     }
                 }
             } catch (Exception e) {

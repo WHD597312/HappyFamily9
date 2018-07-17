@@ -103,7 +103,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         Intent intent=getIntent();
         long  id=intent.getLongExtra("deviceId",0);
         houseId=intent.getLongExtra("houseId",0);
-
         deviceChild=deviceChildDao.findById(id);
         sensorId=deviceChild.getDeviceId();
         roomId=deviceChild.getRoomId();
@@ -116,7 +115,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             Toast.makeText(this,"请检查网络",Toast.LENGTH_SHORT).show();
         }
         getBitWheelInfos();
-        smartTerminalCircle.setBitInfos(list);
+//        smartTerminalCircle.setBitInfos(list);
         image_switch.setTag("close");
     }
 
@@ -325,7 +324,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 break;
             case R.id.image_switch:
                 String tag= (String) image_switch.getTag();
-
                 List<DeviceChild> deviceChildren=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1,true);
                 if ("close".equals(tag)){
                     for(DeviceChild deviceChild:deviceChildren){
@@ -342,7 +340,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     image_switch.setTag("close");
                     image_switch.setImageResource(R.mipmap.image_unswitch);
                 }
-
                 break;
         }
     }
@@ -351,10 +348,14 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode==100){
-            List<DeviceChild> list= (List<DeviceChild>) data.getSerializableExtra("list");
-            if (!list.isEmpty()){
-                linkList=list;
+            linkList= (List<DeviceChild>) data.getSerializableExtra("list");
+            List<DeviceChild> list3=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1);
+            List<SmartTerminalInfo> infoList=new ArrayList<>();
+            for (int i = 0; i <list3.size() ; i++) {
+                SmartTerminalInfo terminalInfo=list.get(i);
+                infoList.add(terminalInfo);
             }
+            smartTerminalCircle.setBitInfos(infoList);
         }
     }
 
@@ -388,6 +389,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
 
         @Override
         protected Integer doInBackground(Void... voids) {
+            int code=0;
             int Id=deviceChild.getDeviceId();
             int type=deviceChild.getType();
             long roomId=deviceChild.getRoomId();
@@ -397,6 +399,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 if (!TextUtils.isEmpty(result)){
                     JSONObject jsonObject=new JSONObject(result);
                     String returnCode=jsonObject.getString("returnCode");
+                    code=Integer.parseInt(returnCode);
                     if ("100".equals(returnCode)){
                         JSONArray returnData=jsonObject.getJSONArray("returnData");
                         for (int i = 0; i < returnData.length(); i++) {
@@ -416,7 +419,23 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             }catch (Exception e){
                 e.printStackTrace();
             }
-            return null;
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code){
+                case 100:
+                    List<DeviceChild> list2=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1);
+                    List<SmartTerminalInfo> infoList=new ArrayList<>();
+                    for (int i = 0; i <list2.size() ; i++) {
+                        SmartTerminalInfo terminalInfo=list.get(i);
+                        infoList.add(terminalInfo);
+                    }
+                    smartTerminalCircle.setBitInfos(infoList);
+                    break;
+            }
         }
     }
 

@@ -29,6 +29,8 @@ public class ClockService extends Service {
     private TimeDaoImpl timeDao;
     private LocalBinder binder = new LocalBinder();
     SharedPreferences preferences;
+    Boolean Ring = false;
+    Time ti;
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
      */
@@ -136,14 +138,18 @@ public class ClockService extends Service {
         /**
          * 倒计时完成后调用
          */
+
         @Override
         public void onFinish() {
             Log.e("Tag", "倒计时完成");
             //设置倒计时结束之后的按钮样式
+                List<Time > times = timeDao.findTimeByMin();
             for (int i = 0; i < times.size(); i++) {
-                time = times.get(i);
-                boolean open = time.getOpen();
-                sumMin = time.getSumMin()*60;
+                Log.e("open", "onFinish:... "+ times.size() );
+                  ti = times.get(i);
+                boolean open = ti.getOpen();
+                sumMin = ti.getSumMin()*60;
+                Log.e("open", "onFinish:--> "+open );
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minutes = calendar.get(Calendar.MINUTE);
@@ -156,10 +162,14 @@ public class ClockService extends Service {
                     wakeLock.acquire();
 //wakeLock.acquire(1000);
                     wakeLock.release();
-                    ring();
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putBoolean("trueCount",false);
-                    editor.commit();
+                    if (Ring==false){
+                        ring();
+                        Ring=true;
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putBoolean("trueCount",false);
+                        editor.commit();
+                    }
+
                     break;
                 }
             }
@@ -185,21 +195,21 @@ public class ClockService extends Service {
 //    }
 
     public void ring() {
-        if (time.getOpen()) {
-            if (time.getFlag() == 1) {
+
+        if (ti.getOpen()) {
+            if (ti.getFlag() == 1) {
 //                time.setOpen(false);
 //                timeDao.update(time);
                 clolkDialog1();
-            } else if (time.getFlag() == 2) {
+            } else if (ti.getFlag() == 2) {
 //                time.setOpen(false);
 //                timeDao.update(time);
                 clolkDialog2();
-            } else if (time.getFlag() == 3) {
+            } else if (ti.getFlag() == 3) {
 //                time.setOpen(false);
 //                timeDao.update(time);
                 clolkDialog3();
             }
-
         }
     }
 
@@ -220,7 +230,7 @@ public class ClockService extends Service {
         dialog4.setOnPositiveClickListener(new btClockjsDialog4.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-
+              Ring = false;
             }
         });
 
@@ -246,15 +256,13 @@ public class ClockService extends Service {
         dialog2.setOnPositiveClickListener(new btClockjsDialog2.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-
+                Ring = false;
             }
         });
         dialog2.setCanceledOnTouchOutside(false);
         dialog2.setCancelable(false);
         dialog2.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
         dialog2.show();
-
-
     }
 
     private void clolkDialog3() {//算一算
@@ -273,7 +281,7 @@ public class ClockService extends Service {
         dialog.setOnPositiveClickListener(new btClockjsDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-
+                Ring = false;
             }
         });
         dialog.setCanceledOnTouchOutside(false);
@@ -336,8 +344,7 @@ public class ClockService extends Service {
     }
 
     public void update(Time time){
-
         timeDao.update(time);
-
     }
+
 }

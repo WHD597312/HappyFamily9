@@ -36,7 +36,7 @@
 
 
       <EditText
-          android:id="@+id/et_phone"
+          android:id="@+id/et_third_phone"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_toRightOf="@+id/image_phone"
@@ -54,7 +54,7 @@
           android:layout_height="@dimen/dp_jy_30"
           android:layout_below="@+id/tv_third_bd"
           android:layout_marginLeft="@dimen/dp_jy_24"
-          android:layout_marginTop="@dimen/dp_jy_56"
+          android:layout_marginTop="@dimen/dp_jy_40"
           android:scaleType="centerInside"
           android:src="@mipmap/wo" />
 
@@ -62,17 +62,17 @@
           android:id="@+id/view1"
           android:layout_width="match_parent"
           android:layout_height="1dp"
-          android:layout_below="@+id/et_phone"
+          android:layout_below="@+id/et_third_phone"
           android:layout_marginLeft="@dimen/dp_jy_29"
           android:layout_marginRight="@dimen/dp_jy_29"
           android:layout_marginTop="@dimen/dp_jy_1"
           android:background="@color/color_gray2" />
 
       <EditText
-          android:id="@+id/et_code"
+          android:id="@+id/et_third_code"
           android:layout_width="@dimen/dp_jy_190"
           android:layout_height="wrap_content"
-          android:layout_alignLeft="@+id/et_phone"
+          android:layout_alignLeft="@+id/et_third_phone"
           android:layout_below="@+id/view1"
           android:layout_marginTop="@dimen/dp_jy_28"
           android:background="@null"
@@ -96,18 +96,18 @@
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp_jy_1"
           android:layout_alignRight="@id/et_code"
-          android:layout_below="@+id/et_code"
+          android:layout_below="@+id/et_third_code"
           android:layout_marginLeft="@dimen/dp_jy_29"
           android:layout_marginRight="@dimen/dp_jy_10"
           android:layout_marginTop="@dimen/dp_jy_5"
           android:background="@color/color_gray2" />
 
       <Button
-          android:id="@+id/btn_get_code"
+          android:id="@+id/btn_third_code"
           android:layout_width="wrap_content"
           android:layout_height="@dimen/dp_jy_30"
           android:layout_alignParentRight="true"
-          android:layout_alignBottom="@+id/et_code"
+          android:layout_alignBottom="@+id/et_third_code"
           android:layout_marginRight="@dimen/dp_jy_29"
           android:background="@mipmap/anniu3"
           android:text="获取验证码"
@@ -117,7 +117,7 @@
 
 
       <EditText
-          android:id="@+id/et_password"
+          android:id="@+id/et_third_password"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_below="@id/view2"
@@ -144,21 +144,21 @@
           android:id="@+id/view3"
           android:layout_width="match_parent"
           android:layout_height="@dimen/dp_jy_1"
-          android:layout_below="@+id/et_password"
+          android:layout_below="@+id/et_third_password"
           android:layout_marginLeft="@dimen/dp_jy_29"
           android:layout_marginRight="@dimen/dp_jy_29"
           android:layout_marginTop="@dimen/dp_jy_5"
           android:background="@color/color_gray2" />
 
       <Button
-          android:id="@+id/btn_finish"
+          android:id="@+id/btn_third_finish"
           android:layout_width="match_parent"
           android:layout_height="wrap_content"
           android:layout_marginLeft="@dimen/dp_jy_35"
           android:layout_marginRight="@dimen/dp_jy_35"
           android:layout_alignParentBottom="true"
           android:background="@mipmap/anniu1"
-          android:text="下一步"
+          android:text="完成"
           android:textColor="@color/green2" />
    </RelativeLayout>
 </RelativeLayout>

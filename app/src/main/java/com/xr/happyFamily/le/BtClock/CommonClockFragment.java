@@ -6,12 +6,15 @@ import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
@@ -31,6 +34,7 @@ import com.xr.happyFamily.le.adapter.ChooseTimeAdapter;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 
 import android.support.v7.app.NotificationCompat;
 
@@ -58,14 +62,31 @@ public class CommonClockFragment extends BaseFragment {
    SharedPreferences preferences;
    ChooseTimeAdapter adapter;
    String userId;
-
+    Intent service;
+    Boolean isBound;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         context=getActivity();
     }
+    //绑定服务
+    ClockService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+            adapter.setClockService(mqService);
+        }
 
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_le_comonclock, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -77,18 +98,17 @@ public class CommonClockFragment extends BaseFragment {
 //        Log.i("userid", "onCreateView: "+userId);
 //        time.setUserId(Long.parseLong(userId));
         times = timeDao.findByAllTime();
+        for (int i=0;i<times.size();i++){
+            time= times.get(i);
+            Log.e("time", "onCreateView:--> "+time.getOpen() );
+        }
         adapter = new ChooseTimeAdapter(getActivity(),times);
         recyclerView.setAdapter(adapter);
+
+        service = new Intent(context, ClockService.class);
+        isBound = context.bindService(service, connection, Context.BIND_AUTO_CREATE);
         return view;
     }
-
-
-
-
-
-
-
-
 
 
 
@@ -105,6 +125,24 @@ public class CommonClockFragment extends BaseFragment {
 
     }
 
+
+    @Override
+    public void onStop() {
+        super.onStop();
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        if (isBound){
+            getActivity().unbindService(connection);
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        super.onDestroy();
+    }
 
     @OnClick({R.id.iv_le_clock_add,R.id.iv_comm_fh})
     public void  onClick(View view){

@@ -28,7 +28,6 @@ public class TimeDaoImpl {
         master=new DaoMaster(db);
         session=master.newSession();
         timeDao = session.getTimeDao();
-
     }
 
     /**

@@ -1,9 +1,12 @@
 package com.xr.happyFamily.le.adapter;
 
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.graphics.drawable.ColorDrawable;
+import android.os.IBinder;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -24,6 +27,7 @@ import com.xr.happyFamily.le.BtClock.bjTimeActivity;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.main.RoomFragment;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -44,13 +48,34 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
     private String shopId;
     private int clicked;
     private TimeDaoImpl timeDao;
-
+    private ClockService clockService;
+    Intent service;
+    Boolean isBound;
     public ChooseTimeAdapter(Context context, List<Time> list) {
         this.context = context;
         this.data = list;
         timeDao=new TimeDaoImpl(context);
-    }
+        service = new Intent(context, ClockService.class);
+        isBound = context.bindService(service, connection, Context.BIND_AUTO_CREATE);
 
+    }
+    //绑定服务
+    ClockService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     public void setOnItemListener(OnItemListener onItemListener) {
         this.onItemListener = onItemListener;
     }
@@ -66,6 +91,7 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
         this.defItem = position;
         notifyDataSetChanged();
     }
+
 
     /**
      * 按钮点击事件需要的方法
@@ -90,11 +116,13 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
                 false));
         return holder;
     }
-
+    Time ti;
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 //        holder.tv_shop_type.setText(data.get(position).getGoods().getSimpleDescribe());
         final Time time=data.get(position);
+//        List<Time> times = timeDao.findByAllTime();
+//        final Time ti =  times.get(position);
         holder.tv_time.setText(data.get(position).getHour()+":"+data.get(position).getMinutes());
         holder.tv_day1.setText(data.get(position).getDay());
         Log.i("day", "onBindViewHolder:--> "+data.get(position).getDay());
@@ -136,12 +164,32 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
                     holder.img_kg.setImageResource(R.mipmap.bt_kgg);
                     open[0] =false;
                     time.setOpen(false);
-                    timeDao.update(time);
+                    Time time2=timeDao.findById(time.getId());
+                    Log.e("id", "onClick: -->"+time.getId() );
+                    time2.setOpen(false);
+//
+// clockService.update(time2);
+                    if (mqService != null) {
+                        mqService.update(time);
+                    }
+//                     timeDao.update(time2);
+                     Time t = timeDao.findById(time2.getId());
+
+                    Log.e("id", "onClick: -->"+  t.getOpen());
                 }else {
                     open[0] =true;
                     holder.img_kg.setImageResource(R.mipmap.bt_kg);
                     time.setOpen(true);
-                    timeDao.update(time);
+                    Time time2=timeDao.findById( time.getId());
+                    time2.setOpen(true);
+//                    clockService.update(time2);
+                    if (mqService != null) {
+                        mqService.update(time2);
+
+                    }
+                    Time t = timeDao.findById(time2.getId());
+
+                    Log.e("id", "onClick: -->"+  t.getOpen());
                 }
 //                if ("open".equals(img_kg.getTag())) {
 //                    img_kg.setImageResource(R.mipmap.bt_kgg);
@@ -209,11 +257,15 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
         });
     }
 
+    public ClockService getClockService() {
+        return clockService;
+    }
 
+    public void setClockService(ClockService clockService) {
+        this.clockService = clockService;
+    }
 
-
-
-//    @OnClick({R.id.iv_clock_kg})
+    //    @OnClick({R.id.iv_clock_kg})
 //    public void onClick(View v) {
 //        switch (v.getId()){
 //            case R.id.iv_clock_kg:
@@ -276,6 +328,4 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
 //            });
         }
     }
-
-
 }

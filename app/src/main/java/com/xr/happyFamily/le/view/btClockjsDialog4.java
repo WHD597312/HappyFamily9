@@ -203,10 +203,8 @@ public class btClockjsDialog4 extends Dialog {
 
 //设置类型
                         mediaPlayer=new MediaPlayer();
-                            mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
-
+                        mediaPlayer.setAudioStreamType(AudioManager.STREAM_MUSIC);
 //设置音源
-
                         try {
 
 //播放网络音乐

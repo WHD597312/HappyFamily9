@@ -27,6 +27,7 @@ import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.zhen.AccountActivity;
 import com.xr.happyFamily.zhen.PersonInfoActivity;
 import com.xr.happyFamily.zhen.SettingActivity;
 
@@ -101,6 +102,8 @@ public class ZhenFragment extends Fragment {
                     case 0:
                         break;
                     case 3:
+                        Intent account=new Intent(getActivity(), AccountActivity.class);
+                        startActivity(account);
                         break;
                     case 5:
                         break;

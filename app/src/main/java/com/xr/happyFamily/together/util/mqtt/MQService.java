@@ -300,7 +300,12 @@ public class MQService extends Service {
                     }
                 } else if ("offline".equals(message)) {
                     if (deviceChild != null) {
+                        long sharedId2 = deviceChild.getShareId();
+                        if (sharedId2 == Long.MAX_VALUE) {
+                            sharedId = sharedId2;
+                        }
                         deviceChild.setOnline(false);
+                        deviceChildDao.update(deviceChild);
                     }
                 } else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
 

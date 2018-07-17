@@ -98,7 +98,8 @@
     <!-- 用于提高GPS定位速度 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.WAKE_LOCK"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
+
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
@@ -123,37 +124,30 @@
             android:value="57bea7cd7ce34ab79dc987f0ff6a222b" />
 
         <service android:name="com.amap.api.location.APSService" />
-
         <service
             android:name=".together.util.mqtt.MQService"
             android:enabled="true"
-            android:exported="true"
-            >
-        </service>
-
-
-        <service android:name=".together.util.mqtt.ClockService"
+            android:exported="true"></service>
+        <service
+            android:name=".together.util.mqtt.ClockService"
             android:enabled="true"
             android:exported="true"
             android:persistent="true" />
 
-
-
-
         <receiver
             android:name=".together.util.receiver.MQTTMessageReveiver"
             android:enabled="true"
-            android:exported="true"
-            >
+            android:exported="true">
             <intent-filter>
                 <action android:name="mqttmessage2" />
-                <action android:name="android.net.conn.CONNECTIVITY_CHANGE"/>
+                <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
 
         <activity android:name=".login.login.LoginActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -192,7 +186,6 @@
             android:label=""
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-
         <activity
             android:name=".jia.ManageHourseActivity"
             android:label=""
@@ -224,7 +217,7 @@
             android:enabled="true"
             android:exported="true">
             <intent-filter>
-                <action android:name="com.zking.android29_alarm_notification.RING"></action>
+                <action android:name="com.zking.android29_alarm_notification.RING" />
             </intent-filter>
         </receiver>
 
@@ -433,17 +426,19 @@
         <activity android:name=".le.MsgActivity" />
         <activity android:name=".le.HistoryActivity" />
         <activity android:name=".le.ClockActivity" />
-        <activity android:name=".le.clock.QinglvEditActivity"/>
-        <activity android:name=".le.clock.QunzuEditActivity"/>
-        <activity android:name=".le.clock.QinglvAddActivity"/>
-        <activity android:name=".le.clock.QunzuAddActivity"/>
-        <activity android:name=".le.clock.MsgActivity"/>
+        <activity android:name=".le.clock.QinglvEditActivity" />
+        <activity android:name=".le.clock.QunzuEditActivity" />
+        <activity android:name=".le.clock.QinglvAddActivity" />
+        <activity android:name=".le.clock.QunzuAddActivity" />
+        <activity android:name=".le.clock.MsgActivity" />
         <activity android:name=".zhen.SettingActivity" />
         <activity android:name=".zhen.PersonInfoActivity" />
         <activity android:name=".jia.activity.SmartTerminalActivity" />
-        <activity android:name=".jia.activity.SmartLinkedActivity"/>
-        <activity android:name=".le.clock.FriendFindActivity"/>
-        <activity android:name=".le.clock.FriendAddActivity"/>
+        <activity android:name=".jia.activity.SmartLinkedActivity" />
+        <activity android:name=".le.clock.FriendFindActivity" />
+        <activity android:name=".le.clock.FriendAddActivity" />
+        <activity android:name=".zhen.AccountActivity" />
+        <activity android:name=".zhen.ReSetpswdActivity"></activity>
     </application>
 
 </manifest>

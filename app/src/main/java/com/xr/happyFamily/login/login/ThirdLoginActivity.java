@@ -15,15 +15,26 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.RegistFinishActivity;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import butterknife.BindView;
@@ -49,11 +60,16 @@ public class ThirdLoginActivity extends AppCompatActivity {
     Button btn_get_code;
     private String url="http://47.98.131.11:8084/user/thirdBindPhone";
     SharedPreferences preferences;
-    @BindView(R.id.iv_register_tb)
+    @BindView(R.id.iv_third_tb)
     ImageView imageView6;
     GifDrawable gifDrawable;
     Context mContext;
     int firstClick = 1;
+    String ip = "http://47.98.131.11:8084";
+    private DeviceChildDaoImpl deviceChildDao;
+    private HourseDaoImpl hourseDao;
+    private RoomDaoImpl roomDao;
+    SharedPreferences mPositionPreferences;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,8 +82,10 @@ public class ThirdLoginActivity extends AppCompatActivity {
             application= (MyApplication) getApplication();
         }
         application.addActivity(this);
-
-
+        mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
+        deviceChildDao= new DeviceChildDaoImpl(getApplicationContext());
+        hourseDao = new HourseDaoImpl(getApplicationContext());
+        roomDao = new RoomDaoImpl(getApplicationContext());
         //图标动画
         try {
             gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao);
@@ -78,8 +96,10 @@ public class ThirdLoginActivity extends AppCompatActivity {
             gifDrawable.start();
             imageView6.setImageDrawable(gifDrawable);
         }
+        Intent intent= getIntent();
+         userId =  intent.getIntExtra("userId",0);
     }
-
+    int userId;
 
     @Override
     protected void onStart() {
@@ -137,7 +157,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                     params.put("phone",phone2);
                     params.put("code",code);
                     params.put("password",password);
-
+                    params.put("userId",userId);
                     new RegistAsyncTask().execute(params);
 //                new getShopAsync().execute(params);
                     firstClick=0;
@@ -169,7 +189,9 @@ public class ThirdLoginActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-
+                   if (code=="100"){
+                       new hourseAsyncTask().execute();
+                   }
 
 
                 } catch (Exception e) {
@@ -186,6 +208,9 @@ public class ThirdLoginActivity extends AppCompatActivity {
                 case "10003":
                     Utils.showToast(ThirdLoginActivity.this, "手机验证码错误，请重试");
                     break;
+                case "10001":
+                    Utils.showToast(ThirdLoginActivity.this, "账户已存在");
+                    break;
                 case "100":
                     Utils.showToast(ThirdLoginActivity.this, "创建成功");
                     SharedPreferences.Editor editor = preferences.edit();
@@ -194,7 +219,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                     editor.putString("phone", phone);
                     editor.putString("password", password);
                     if (editor.commit()) {
-                        Intent intent = new Intent(ThirdLoginActivity.this, RegistFinishActivity.class);
+                        Intent intent = new Intent(ThirdLoginActivity.this, MainActivity.class);
                         intent.putExtra("phone",phone);
                         intent.putExtra("password",password);
                         startActivity(intent);
@@ -203,6 +228,196 @@ public class ThirdLoginActivity extends AppCompatActivity {
             }
         }
     }
+
+
+
+    long Id = -1;
+    int img[] = {R.mipmap.t};
+
+    class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+//            Map<String, Object> params = maps[0];
+            String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("ffffffff", "--->: " + result);
+            try {
+                if (!Utils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    Log.i("fffffffft", "--->: " + code);
+                    if (code == 100) {
+                        hourseDao.deleteAll();
+                        roomDao.deleteAll();
+                        deviceChildDao.deleteAll();
+                        JSONObject returnData=jsonObject.getJSONObject("returnData");
+                        SharedPreferences.Editor editor=preferences.edit();
+                        boolean sex=returnData.getBoolean("sex");
+                        if (returnData.has("headImgUrl")){
+                            String headImgUrl=returnData.getString("headImgUrl");
+                            editor.putString("headImgUrl",headImgUrl);
+                        }
+                        String birthday=returnData.getString("birthday");
+                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                        Date date=format.parse(birthday);
+                        long ts = date.getTime();
+                        String res = String.valueOf(ts);
+                        editor.putBoolean("sex",sex);
+                        editor.putString("birthday",res);
+                        editor.commit();
+                        JSONArray houseDevices = returnData.getJSONArray("houseDevices");
+                        for (int i = 0; i < houseDevices.length(); i++) {
+                            JSONObject houseObject = houseDevices.getJSONObject(i);
+                            int id = houseObject.getInt("id");
+                            Log.i("rrrr", "doInBackground:--> " + id);
+                            String houseName = houseObject.getString("houseName");
+                            String houseAddress = houseObject.getString("houseAddress");
+                            int userId = houseObject.getInt("userId");
+                            Hourse hourse = hourseDao.findById((long) id);
+                            if (hourse != null) {
+                                hourse.setHouseName(houseName);
+                                hourse.setHouseAddress(houseAddress);
+                                hourse.setUserId(userId);
+                                hourseDao.update(hourse);
+                            } else {
+                                hourse = new Hourse((long) id, houseName, houseAddress, userId);
+                                hourseDao.insert(hourse);
+                                Log.i("dddddd1", "doInBackground:---> " + hourse);
+                            }
+                            JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
+
+                            Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
+                            for (int j = 0; j < roomDevices.length(); j++) {
+                                JSONObject roomObject = roomDevices.getJSONObject(j);
+                                int roomId = roomObject.getInt("roomId");
+                                Id = roomId;
+                                String roomName = roomObject.getString("roomName");
+                                int houseId = roomObject.getInt("houseId");
+                                String roomType = roomObject.getString("roomType");
+
+                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0);
+                                Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
+                                roomDao.insert(room);
+
+                                JSONArray deviceList = roomObject.getJSONArray("deviceList");
+                                for (int k = 0; k < deviceList.length(); k++) {
+                                    JSONObject device = deviceList.getJSONObject(k);
+                                    int deviceId = device.getInt("deviceId");
+                                    String deviceName = device.getString("deviceName");
+                                    int deviceType = device.getInt("deviceType");
+                                    String deviceMacAddress = device.getString("deviceMacAddress");
+                                    int houseId2 = device.getInt("houseId");
+                                    int userId2 = device.getInt("userId");
+                                    int roomId2 = device.getInt("roomId");
+                                    int deviceUsedCount = device.getInt("deviceUsedCount");
+                                    DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
+                                    deviceChild.setDeviceId(deviceId);
+                                    deviceChild.setImg(img[0]);
+                                    deviceChildDao.insert(deviceChild);
+                                }
+                            }
+                            JSONArray deviceCommons=houseObject.getJSONArray("deviceCommons");
+                            for (int j = 0; j < deviceCommons.length(); j++) {
+                                JSONObject jsonObject3=deviceCommons.getJSONObject(j);
+                                int deviceId=jsonObject3.getInt("deviceId");
+                                String deviceName=jsonObject3.getString("deviceName");
+                                int deviceType=jsonObject3.getInt("deviceType");
+                                int roomId=jsonObject3.getInt("roomId");
+                                String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                                DeviceChild deviceChild2=null;
+                                for (DeviceChild deviceChild:deviceChildren){
+                                    int deviceId2=deviceChild.getDeviceId();
+                                    if (deviceId2==deviceId){
+                                        deviceChild2=deviceChild;
+                                        break;
+                                    }
+                                }
+                                if (deviceChild2!=null){
+                                    deviceChildDao.update(deviceChild2);
+                                }else if (deviceChild2==null){
+                                    if (deviceChild2==null){
+                                        deviceChild2=new DeviceChild();
+                                        deviceChild2.setUserId(userId);
+                                        deviceChild2.setName(deviceName);
+                                        deviceChild2.setDeviceId(deviceId);
+                                        deviceChild2.setMacAddress(deviceMacAddress);
+                                        deviceChild2.setType(deviceType);
+                                        deviceChild2.setRoomId(roomId);
+                                        deviceChildDao.insert(deviceChild2);
+                                    }
+                                }
+                            }
+                            JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
+                            for (int x = 0; x < deviceShareds.length(); x++) {
+                                JSONObject jsonObject2=deviceShareds.getJSONObject(x);
+                                int deviceId=jsonObject2.getInt("deviceId");
+                                String deviceName=jsonObject2.getString("deviceName");
+                                int deviceType=jsonObject2.getInt("deviceType");
+                                int roomId=jsonObject2.getInt("roomId");
+                                String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                                DeviceChild deviceChild2=null;
+                                for (DeviceChild deviceChild:deviceChildren){
+                                    int deviceId2=deviceChild.getDeviceId();
+                                    if (deviceId2==deviceId){
+                                        deviceChild2=deviceChild;
+                                        break;
+                                    }
+                                }
+                                if (deviceChild2!=null){
+                                    deviceChildDao.update(deviceChild2);
+                                }else if (deviceChild2==null){
+                                    if (deviceChild2==null){
+                                        deviceChild2=new DeviceChild();
+                                        deviceChild2.setUserId(userId);
+                                        deviceChild2.setShareId(Long.MAX_VALUE);
+                                        deviceChild2.setName(deviceName);
+                                        deviceChild2.setDeviceId(deviceId);
+                                        deviceChild2.setMacAddress(deviceMacAddress);
+                                        deviceChild2.setType(deviceType);
+                                        deviceChild2.setRoomId(roomId);
+                                        deviceChild2.setShare("share");
+                                        deviceChildDao.insert(deviceChild2);
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 1005:
+                    Utils.showToast(ThirdLoginActivity.this, "查询失败");
+                    break;
+                case 100:
+                    if (mPositionPreferences.contains("position")){
+                        mPositionPreferences.edit().clear().commit();
+                    }
+                    Utils.showToast(ThirdLoginActivity.this, "登录成功");
+                    Intent intent = new Intent(ThirdLoginActivity.this, MainActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("load","load");
+                    intent.putExtra("login","login");
+                    startActivity(intent);
+                    break;
+            }
+        }
+    }
+
+
+
+
 //        class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
 //            @Override
 //            protected String doInBackground(Map<String, Object>... maps) {

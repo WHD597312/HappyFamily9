@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:id="@+id/iv_zhenhelp_fh"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+            android:paddingRight="@dimen/dp_jy_60"
+            android:layout_gravity="center"
+            android:src="@mipmap/fanhui"
+            android:layout_weight="1"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:text="关于我们"
+            android:textSize="20sp"
+            android:textColor="@color/color_black3"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:gravity="center"
+            />
+        <TextView
+            android:id="@+id/tv_zhenhelp_fk"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_20"
+
+            android:layout_gravity="center"
+            android:textSize="@dimen/sp_15"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/zhen_about"
+        android:layout_gravity="center"
+        android:layout_marginTop="@dimen/dp_jy_20"
+        />
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="P99 1.0 版本"
+    android:textSize="@dimen/sp_15"
+    android:textColor="#999999"
+    android:layout_gravity="center"
+    android:layout_marginTop="@dimen/dp_jy_10"
+    android:layout_marginBottom="@dimen/dp_jy_25"
+    />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="版本说明"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_black3"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_16"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/hourse_xz"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        style="@style/horizontal_line_style"
+        />
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_45"
+        android:background="@color/white"
+        >
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="去评分"
+            android:layout_centerVertical="true"
+            android:textColor="@color/color_black3"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_16"
+            />
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/hourse_xz"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+
+    </RelativeLayout>
+
+</LinearLayout>

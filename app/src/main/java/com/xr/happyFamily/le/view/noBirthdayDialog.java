@@ -1,12 +1,11 @@
-package com.xr.happyFamily.jia.view_custom;
+package com.xr.happyFamily.le.view;
 
 import android.app.Dialog;
 import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ImageView;
 
 import com.xr.happyFamily.R;
 
@@ -16,26 +15,31 @@ import butterknife.OnClick;
 
 
 /**
- * 删除房间
+ * 没有生日跳转到朕的生日修改界面
  */
-public class DeleteHomeDialog extends Dialog {
+public class noBirthdayDialog extends Dialog {
 
-    @BindView(R.id.tv_cancel)
-    Button tv_cancel;
-    @BindView(R.id.tv_ensure)
-    Button tv_ensure;
+
+
     private String name;
-    Context context;
-    public DeleteHomeDialog(@NonNull Context context) {
-        super(context, R.style.MyDialog);
 
+
+    Context mcontext;
+
+    public noBirthdayDialog(@NonNull Context context) {
+        super(context, R.style.MyDialog);
+        mcontext=context;
     }
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popview_delete_home);
+        setContentView(R.layout.popview_nobirthday);
         ButterKnife.bind(this);
+
     }
+
+
+
 
     @Override
     protected void onStart() {
@@ -43,33 +47,38 @@ public class DeleteHomeDialog extends Dialog {
 
     }
 
-    public String getName() {
-        return name;
-    }
 
-    public void setName(String name) {
-        this.name = name;
-    }
 
-    @OnClick({R.id.tv_cancel, R.id.tv_ensure})
+    @OnClick({R.id.bt_birthday_cancel,R.id.bt_birthday_ensure})
     public void onClick(View view){
         switch(view.getId()){
-            case R.id.tv_cancel:
+            case R.id.bt_birthday_cancel:
                 if (onNegativeClickListener!=null){
                     onNegativeClickListener.onNegativeClick();
                 }
+
                 break;
-            case R.id.tv_ensure:
+            case R.id.bt_birthday_ensure:
                 if (onPositiveClickListener!=null){
 
                     onPositiveClickListener.onPositiveClick();
                 }
 
+
                 break;
+
+
+
+
+
         }
     }
+    private   OnKeyListener onKeyListener;
     private OnPositiveClickListener onPositiveClickListener;
 
+    public void setOnKeyListener(OnKeyListener onKeyListener){
+        this.onKeyListener=onKeyListener;
+    }
     public void setOnPositiveClickListener(OnPositiveClickListener onPositiveClickListener) {
 
 
@@ -89,5 +98,8 @@ public class DeleteHomeDialog extends Dialog {
 
     public interface OnNegativeClickListener {
         void onNegativeClick();
+    }
+    public interface OnKeyListener{
+        void  OnKeyListener();
     }
 }

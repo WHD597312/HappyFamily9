@@ -42,12 +42,12 @@ public class FamilyFragmentManager extends Fragment {
     private long houseId;
     private long roomId;
     ViewPager viewPager;
-    List<Room> rooms;
+    List<Room> rooms=new ArrayList<>();
     private SharedPreferences mPositionPreferences;
     SharedPreferences roomPreferences;
     public static boolean running=false;
     private DeviceChildDaoImpl deviceChildDao;
-    private List<DeviceChild> shareChildren;
+    private List<DeviceChild> shareChildren=new ArrayList<>();
     SharedPreferences preferences;
     boolean isBound;
     String load;
@@ -65,7 +65,6 @@ public class FamilyFragmentManager extends Fragment {
             load=bundle.getString("load");
             roomDao = new RoomDaoImpl(getActivity());
             deviceChildDao=new DeviceChildDaoImpl(getActivity());
-            rooms = new ArrayList<>();
             List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
             preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
             String userIdStr=preferences.getString("userId","");

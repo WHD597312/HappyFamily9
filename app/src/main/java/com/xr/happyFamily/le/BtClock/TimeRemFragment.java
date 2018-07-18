@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -62,10 +63,11 @@ SharedPreferences preferences;
         preferences = getActivity().getSharedPreferences("this", Context.MODE_PRIVATE);
         SharedPreferences preferences=getActivity().getSharedPreferences("my", Context.MODE_PRIVATE);
         String birthday =preferences.getString("birthday","");
+        Log.e("birthday", "onCreateView: "+birthday );
         try {
+            Date d1 =new Date(Long.parseLong(birthday));
             String format = "yyyy-MM-dd";
             DateFormat sdf = new SimpleDateFormat(format);
-            Date d1 = sdf.parse(birthday);
             Date d2 = new Date(System.currentTimeMillis());//你也可以获取当前时间   long diff = d1.getTime() - d2.getTime();//这样得到的差值是微秒级别
             long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
             long days = diff / (1000 * 60 * 60 * 24);

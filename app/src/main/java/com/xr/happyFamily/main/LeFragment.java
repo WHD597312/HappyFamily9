@@ -50,12 +50,13 @@ import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.le.view.btClockjsDialog3;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.PublicData;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
-
+import com.xr.happyFamily.le.view.noBirthdayDialog;
 import org.json.JSONObject;
 
 import java.lang.reflect.Method;
@@ -133,17 +134,19 @@ public class LeFragment extends Fragment {
 
         new getAdByPageAsync().execute();
 
-        clockBeanDao=new ClockDaoImpl(getActivity().getApplicationContext());
-        userInfosDao=new UserInfosDaoImpl(getActivity().getApplicationContext());
-        userBeanDao= new UserBeanDaoImpl(getActivity().getApplicationContext());
+        clockBeanDao = new ClockDaoImpl(getActivity().getApplicationContext());
+        userInfosDao = new UserInfosDaoImpl(getActivity().getApplicationContext());
+        userBeanDao = new UserBeanDaoImpl(getActivity().getApplicationContext());
         userBeanDao.deleteAll();
-        userBean= new UserBean();
+        userBean = new UserBean();
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
-        userId= preferences.getString("userId","");
+        birthday = preferences.getString("birthday", "");
+        userId = preferences.getString("userId", "");
         new getClocksByUserId().execute();
         return view;
     }
 
+    String birthday;
 
     public void initData() {
         //初始化和图片
@@ -232,31 +235,60 @@ public class LeFragment extends Fragment {
             thread.start();
         }
     }
+    noBirthdayDialog birthdaydialog;
+    private void clolkDialog1() {
+        birthdaydialog = new noBirthdayDialog(getActivity());
 
+        birthdaydialog.setOnNegativeClickListener(new noBirthdayDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                birthdaydialog.dismiss();
+            }
+        });
+        birthdaydialog.setOnPositiveClickListener(new noBirthdayDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                     
+                birthdaydialog.dismiss();
+            }
+        });
+
+        birthdaydialog.setCanceledOnTouchOutside(false);
+
+        birthdaydialog.show();
+
+    }
 
     @OnClick({R.id.ll_xuyuan, R.id.ll_clock})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_clock:
+                if (birthday == null) {
 
-                if ("Xiaomi".equals(Build.MANUFACTURER)) {//小米手机
 
-                    requestPermission();
-                } else if ("Meizu".equals(Build.MANUFACTURER)) {//魅族手机
 
-                    requestPermission();
-                } else {//其他手机
+                } else {
 
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        if (!Settings.canDrawOverlays(getActivity())) {
-                            Toast.makeText(getActivity(), "请允许app在最上层显示否则某些功能无法使用", Toast.LENGTH_SHORT).show();
-                            Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-                            startActivityForResult(intent, 12);
+
+                    if ("Xiaomi".equals(Build.MANUFACTURER)) {//小米手机
+
+                        requestPermission();
+                    } else if ("Meizu".equals(Build.MANUFACTURER)) {//魅族手机
+
+                        requestPermission();
+                    } else {//其他手机
+
+                        if (Build.VERSION.SDK_INT >= 23) {
+                            if (!Settings.canDrawOverlays(getActivity())) {
+                                Toast.makeText(getActivity(), "请允许app在最上层显示否则某些功能无法使用", Toast.LENGTH_SHORT).show();
+                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
+                                startActivityForResult(intent, 12);
+                            } else {
+                                switchActivity();
+                            }
                         } else {
                             switchActivity();
                         }
-                    } else {
-                        switchActivity();
                     }
                 }
 
@@ -264,9 +296,6 @@ public class LeFragment extends Fragment {
                 break;
         }
     }
-
-
-
 
 
     @Override
@@ -370,26 +399,19 @@ public class LeFragment extends Fragment {
                     "miui.intent.action.APP_PERM_EDITOR");
             localIntent.setClassName("com.miui.securitycenter",
                     "com.miui.permcenter.permissions.AppPermissionsEditorActivity");
-            localIntent.putExtra("extra_pkgname",getActivity().getPackageName());
+            localIntent.putExtra("extra_pkgname", getActivity().getPackageName());
             startActivityForResult(localIntent, 11);
             Toast.makeText(getActivity(), "启动小米悬浮窗设置界面", Toast.LENGTH_SHORT).show();
 
         } catch (ActivityNotFoundException localActivityNotFoundException) {
             Intent intent1 = new Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
-            Uri uri = Uri.fromParts("package",getActivity(). getPackageName(), null);
+            Uri uri = Uri.fromParts("package", getActivity().getPackageName(), null);
             intent1.setData(uri);
             startActivityForResult(intent1, 11);
             Toast.makeText(getActivity(), "启动悬浮窗界面", Toast.LENGTH_SHORT).show();
         }
 
     }
-
-
-
-
-
-
-
 
 
     List<ShopBannerBean> shopBannerBeans;
@@ -450,8 +472,6 @@ public class LeFragment extends Fragment {
     }
 
 
-
-
     class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -460,14 +480,12 @@ public class LeFragment extends Fragment {
             String url = "/happy/clock/getClocksByUserId";
             url = url + "?userId=" + userId;
             String result = HttpUtils.doGet(getActivity(), url);
-            Log.e("qqqqqqqqRRR",userId+"?"+result);
+            Log.e("qqqqqqqqRRR", userId + "?" + result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-
-
 
 
                 }

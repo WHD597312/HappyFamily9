@@ -7,10 +7,12 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">@color/colorAccent</item>
     </style>
+
     <style name="menu_labels_style">
         <item name="android:background">@mipmap/button</item>
         <item name="android:textColor">@color/white</item>
     </style>
+
     <style name="MyTabLayoutTextAppearance" parent="TextAppearance.AppCompat.Widget.ActionBar.Title">
         <item name="android:textSize">@dimen/dp_jy_15</item>
         <!--<item name="android:textColor">@android:color/white</item>-->
@@ -21,19 +23,19 @@
         <item name="windowNoTitle">true</item>
         <item name="colorPrimary">#3d3c38</item>
     </style>
-　　　
+    　　　
     <declare-styleable name="BeautySeekBarView">
-    <attr name="valueCountent" format="integer"/>
-    <attr name="padding" format="dimension"/>
-    <attr name="pointColor" format="color"/>
-    <attr name="lineColor" format="color"/>
-    <attr name="smallPic" format="reference"/>
-    <attr name="bigPic" format="reference"/>
-    <attr name="minValue" format="integer"/>
-    <attr name="maxValue" format="integer"/>
-    <attr name="curValue" format="integer"/>
-    <attr name="curProgress" format="integer"/>
-</declare-styleable>
+        <attr name="valueCountent" format="integer" />
+        <attr name="padding" format="dimension" />
+        <attr name="pointColor" format="color" />
+        <attr name="lineColor" format="color" />
+        <attr name="smallPic" format="reference" />
+        <attr name="bigPic" format="reference" />
+        <attr name="minValue" format="integer" />
+        <attr name="maxValue" format="integer" />
+        <attr name="curValue" format="integer" />
+        <attr name="curProgress" format="integer" />
+    </declare-styleable>
 
     <style name="edit_AlertDialog_style" parent="@android:style/Theme.Dialog">
         <item name="android:windowIsFloating">true</item>
@@ -77,23 +79,25 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">0.4dp</item>
     </style>
+
     <declare-styleable name="DiffuseView">
-        <attr name="diffuse_color"/>
-        <attr name="diffuse_coreColor"/>
-        <attr name="diffuse_coreImage"/>
-        <attr name="diffuse_coreRadius"/>
-        <attr name="diffuse_width"/>
-        <attr name="diffuse_maxWidth"/>
-        <attr name="diffuse_speed"/>
+        <attr name="diffuse_color" />
+        <attr name="diffuse_coreColor" />
+        <attr name="diffuse_coreImage" />
+        <attr name="diffuse_coreRadius" />
+        <attr name="diffuse_width" />
+        <attr name="diffuse_maxWidth" />
+        <attr name="diffuse_speed" />
     </declare-styleable>
     <!--<declare-styleable name="Timepicker">-->
-        <!--<attr name="timepicker_color"/>-->
+    <!--<attr name="timepicker_color"/>-->
 
     <!--</declare-styleable>-->
     <style name="Popupwindow">
         <item name="android:windowEnterAnimation">@anim/window_out</item>
         <item name="android:windowExitAnimation">@anim/window_back</item>
     </style>
+
     <style name="MyDialog" parent="android:style/Theme.Dialog">
         <!-- 设置背景和透明度 -->
         <item name="android:windowBackground">@android:color/transparent</item>
@@ -107,4 +111,8 @@
         <item name="android:backgroundDimEnabled">true</item>
 
     </style>
+
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
+
+    <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
 </resources>

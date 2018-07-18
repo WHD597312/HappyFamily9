@@ -39,7 +39,6 @@ public class ClockService extends Service {
         super.onCreate();
         timeDao = new TimeDaoImpl(this);
         preferences = this.getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
-
     }
 
     @Nullable
@@ -114,10 +113,7 @@ public class ClockService extends Service {
                 countTimer.cancel();
                 countTimer=null;
             }
-
-
     }
-
 
     class CountTimer extends CountDownTimer {
         public CountTimer(long millisInFuture, long countDownInterval) {
@@ -173,7 +169,6 @@ public class ClockService extends Service {
                     break;
                 }
             }
-
         }
     }
 //    Handler handler=new Handler(){

@@ -289,6 +289,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 Log.e("platform", "handleMessage: -->"+platform);
                 oAuthId = platform.getDb().getUserId();//获取用户账号
                 accessToken = platform.getDb().getToken();
+                Log.e("token", "handleMessage: -->"+oAuthId+"...."+accessToken );
                 Map<String,Object> params=new HashMap<>();
                 params.put("oAuthId",oAuthId);
                 params.put("oAuthType","weixin");
@@ -308,6 +309,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         return false;
     }
 
+
+    int isFirst=-1;
+    int ThirduserId;
     class WxLoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -318,8 +322,18 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             String result = HttpUtils.postOkHpptRequest(url,params);
             try {
                 if (!Utils.isEmpty(result)) {
+                    Log.e("result", "doInBackground: -->"+result );
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
+                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                     isFirst = returnData.getInt("isFirst");
+                     ThirduserId = returnData.getInt("userId");
+                    String token = returnData.getString("token");
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("token", token);
+                    editor.putInt("ThirduserId", ThirduserId);
+                    editor.commit();
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -331,7 +345,14 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             switch (code) {
 
                 case 100:
-
+                   if (isFirst==1){
+                       Intent intent = new Intent(LoginActivity.this,ThirdLoginActivity.class);
+                       intent.putExtra("userId",ThirduserId);
+                       startActivity(intent);
+                   }else {
+                       userId= String.valueOf(ThirduserId);
+                       new hourseAsyncTask().execute();
+                   }
                     break;
             }
         }

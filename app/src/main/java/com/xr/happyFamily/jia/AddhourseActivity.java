@@ -7,6 +7,7 @@ import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -144,6 +145,7 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
                 break;
             case R.id.btn_ensure:
                 houseName=et_house_name.getText().toString();
+                houseLocation= String.valueOf( tv_shi.getText());
                 if (TextUtils.isEmpty(houseName)){
                     Toast.makeText(this,"请输入家庭名称",Toast.LENGTH_SHORT).show();
                     break;
@@ -158,6 +160,7 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
                 params.put("houseName",houseName);
                 new AddHouseAsync().execute(params);
                 break;
+
         }
     }
     @Override
@@ -168,8 +171,11 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
         }
         return super.onKeyDown(keyCode, event);
     }
-//  _
-private RecyclerView recyclerview;
+
+
+
+
+
     private ImageView img_close;
     private View view_dis;
     private ListView listCity;
@@ -198,11 +204,16 @@ private RecyclerView recyclerview;
         img_shi = (ImageView) contentViewSign.findViewById(R.id.img_shi);
         img_qu = (ImageView) contentViewSign.findViewById(R.id.img_qu);
         img_city = new ImageView[]{img_sheng, img_shi, img_qu};
-        img_close.setOnClickListener(this);
+//        img_close.setOnClickListener(this);
+        img_close.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mPopWindow.dismiss();
+            }
+        });
         rl_sheng.setOnClickListener(this);
         rl_shi.setOnClickListener(this);
         rl_qu.setOnClickListener(this);
-
 
         cityAdapter = new CityAdapter(data, this);
         listCity.setAdapter(cityAdapter);
@@ -226,6 +237,8 @@ private RecyclerView recyclerview;
                     case 2:
                         receiveCounty = data.get(position);
                         tv_qu.setText(receiveCounty);
+                        tv_house_position.setText(tv_shi.getText());
+
                         mPopWindow.dismiss();
 
                         break;
@@ -251,7 +264,7 @@ private RecyclerView recyclerview;
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
         mPopWindow.setOnDismissListener(new AddhourseActivity.poponDismissListener());
-
+        mPopWindow.showAsDropDown(findViewById(R.id.title_addhourse));
     }
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -302,6 +315,14 @@ private RecyclerView recyclerview;
 
         cityAdapter.notifyDataSetChanged();
     }
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 3) {
+                showPopup();
+            }
+        }
+    };
 
 
     public List<Province> parser() {
@@ -440,8 +461,8 @@ private RecyclerView recyclerview;
                     finish();
                     break;
                     default:
-                        Toast.makeText(AddhourseActivity.this,"添加失败",Toast.LENGTH_SHORT).show();
-                        break;
+                     Toast.makeText(AddhourseActivity.this,"添加失败",Toast.LENGTH_SHORT).show();
+                     break;
             }
         }
     }

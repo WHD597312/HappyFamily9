@@ -3,15 +3,24 @@ package com.xr.happyFamily.jia;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,6 +29,10 @@ import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.adapter.CityAdapter;
+import com.xr.happyFamily.bao.bean.City;
+import com.xr.happyFamily.bao.bean.District;
+import com.xr.happyFamily.bao.bean.Province;
 import com.xr.happyFamily.jia.Fragment.RoomFragment;
 import com.xr.happyFamily.jia.adapter.ChooseHouseAdapter;
 import com.xr.happyFamily.jia.pojo.Hourse;
@@ -32,7 +45,9 @@ import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.xmlpull.v1.XmlPullParserException;
 
+import java.io.IOException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +60,7 @@ import butterknife.Unbinder;
 
 import static com.xr.happyFamily.jia.ChooseHourseActivity.MREQUEST_CODE;
 
-public class RenameHourseActivity extends AppCompatActivity {
+public class RenameHourseActivity extends AppCompatActivity implements View.OnClickListener {
     Unbinder unbinder;
     String ip = "http://47.98.131.11:8084";
     String houseName;
@@ -69,13 +84,31 @@ public class RenameHourseActivity extends AppCompatActivity {
     @BindView(R.id.iv_rename_back)
     ImageView imageViewb;
 
+    private MyApplication  application;
+    private View contentViewSign;
+    private PopupWindow mPopWindow;
+    private Context mContext;
+    private Boolean isMoren = true;
+
+
+    List<Province> list = null;
+    Province province = null;
+
+    List<City> cities = null;
+    City city = null;
+
+    List<District> districts = null;
+    District district = null;
+
+    int sign_sheng = 0, sign_city = 0, isDefault = 1, receiveId = 0;
+    String receiveProvince, receiveCity, receiveCounty, receiveAddress;
 
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
 
         setContentView(R.layout.activity_hourse_rename);
         unbinder = ButterKnife.bind(this);
-
+        mContext=RenameHourseActivity.this;
         hourseDao= new HourseDaoImpl(getApplicationContext());
 
         Intent intent = getIntent();
@@ -93,7 +126,6 @@ public class RenameHourseActivity extends AppCompatActivity {
     @Override
     public void onStart() {
         super.onStart();
-        initJsonData();
     }
 
     @Override
@@ -109,7 +141,7 @@ public class RenameHourseActivity extends AppCompatActivity {
                 buildUpdateHomeDialog();
                 break;
             case R.id.rl_rename_it2:
-                showPickerView();
+                 showPopup();
                 break;
             case R.id.iv_rename_back:
                 Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
@@ -118,98 +150,243 @@ public class RenameHourseActivity extends AppCompatActivity {
                 break;
         }
     }
-    private void showPickerView() {
+    private ImageView img_close;
+    private View view_dis;
+    private ListView listCity;
+    private List<String> data = new ArrayList<>();
+    private CityAdapter cityAdapter;
+    private TextView tv_sheng, tv_shi, tv_qu;
+    private RelativeLayout rl_sheng, rl_shi, rl_qu;
+    private ImageView img_sheng, img_shi, img_qu;
+    private ImageView[] img_city;
+    private int sing_city = 0;
 
-        OptionsPickerView pvOptions = new OptionsPickerView.Builder(RenameHourseActivity.this, new OptionsPickerView.OnOptionsSelectListener() {
+
+    private void showPopup() {
+        parser();
+        Log.e("qqqqqqqqqQQQ","????");
+        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_city, null);
+        img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
+        listCity = (ListView) contentViewSign.findViewById(R.id.list_city);
+        tv_sheng = (TextView) contentViewSign.findViewById(R.id.tv_sheng);
+        tv_shi = (TextView) contentViewSign.findViewById(R.id.tv_shi);
+        tv_qu = (TextView) contentViewSign.findViewById(R.id.tv_qu);
+        rl_sheng = (RelativeLayout) contentViewSign.findViewById(R.id.rl_sheng);
+        rl_shi = (RelativeLayout) contentViewSign.findViewById(R.id.rl_shi);
+        rl_qu = (RelativeLayout) contentViewSign.findViewById(R.id.rl_qu);
+        img_sheng = (ImageView) contentViewSign.findViewById(R.id.img_sheng);
+        img_shi = (ImageView) contentViewSign.findViewById(R.id.img_shi);
+        img_qu = (ImageView) contentViewSign.findViewById(R.id.img_qu);
+        img_city = new ImageView[]{img_sheng, img_shi, img_qu};
+//        img_close.setOnClickListener(this);
+        img_close.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onOptionsSelect(int options1, int options2, int options3, View v) {
-                //返回的分别是三个级别的选中位置
-                String text = options2Items.get(options1).get(options2);
-                if (!TextUtils.isEmpty(text)){
-
-                    houseAddress=text;
-                    new RenameHourseActivity.ChangeAddressAsync().execute();
-                }
-                Log.i("location","-->"+text);
+            public void onClick(View v) {
+                mPopWindow.dismiss();
             }
-        }).setTitleText("")
-                .setDividerColor(Color.GRAY)
-                .setTextColorCenter(Color.GRAY)
-                .setContentTextSize(16)
-                .setOutSideCancelable(false)
-                .build();
-          /*pvOptions.setPicker(options1Items);//一级选择器
-        pvOptions.setPicker(options1Items, options2Items);//二级选择器*/
-        pvOptions.setPicker(options1Items, options2Items, options3Items);//三级选择器
-        pvOptions.show();
+        });
+        rl_sheng.setOnClickListener(this);
+        rl_shi.setOnClickListener(this);
+        rl_qu.setOnClickListener(this);
+
+        cityAdapter = new CityAdapter(data, this);
+        listCity.setAdapter(cityAdapter);
+        listCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (sing_city) {
+                    case 0:
+                        receiveProvince = data.get(position);
+                        tv_sheng.setText(receiveProvince);
+                        sign_sheng = position;
+                        upData(1);
+
+                        break;
+                    case 1:
+                        receiveCity = data.get(position);
+                        tv_shi.setText(receiveCity);
+                        sign_city = position;
+                        upData(2);
+                        break;
+                    case 2:
+                        receiveCounty = data.get(position);
+                        tv_qu.setText(receiveCounty);
+                        houseAddress=String.valueOf(tv_sheng.getText()) ;
+                        new ChangeAddressAsync().execute();
+                        mPopWindow.dismiss();
+
+                        break;
+
+
+                }
+
+            }
+
+        });
+        upData(0);
+        mPopWindow = new PopupWindow(contentViewSign);
+        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //点击空白处时，隐藏掉pop窗口
+        mPopWindow.setFocusable(true);
+//        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopWindow.setOutsideTouchable(true);
+        mPopWindow.setClippingEnabled(false);
+        backgroundAlpha(0.5f);
+        //添加pop窗口关闭事件
+        mPopWindow.setOnDismissListener(new RenameHourseActivity.poponDismissListener());
+        mPopWindow.showAsDropDown(findViewById(R.id.iv_rename_back));
+    }
+    public void backgroundAlpha(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp); //添加pop窗口关闭事件
     }
 
-    private void initJsonData() {   //解析数据
+    class poponDismissListener implements PopupWindow.OnDismissListener {
 
-        /**
-         * 注意：assets 目录下的Json文件仅供参考，实际使用可自行替换文件
-         * 关键逻辑在于循环体
-         *
-         * */
-        //  获取json数据
-        String JsonData = JsonFileReader.getJson(this, "province_data.json");
-        ArrayList<JsonBean> jsonBean = parseData(JsonData);//用Gson 转成实体
-
-        /**
-         * 添加省份数据
-         *
-         * 注意：如果是添加的JavaBean实体，则实体类需要实现 IPickerViewData 接口，
-         * PickerView会通过getPickerViewText方法获取字符串显示出来。
-         */
-        options1Items = jsonBean;
-
-        for (int i = 0; i < jsonBean.size(); i++) {//遍历省份
-            ArrayList<String> CityList = new ArrayList<>();//该省的城市列表（第二级）
-            ArrayList<ArrayList<String>> Province_AreaList = new ArrayList<>();//该省的所有地区列表（第三极）
-
-            for (int c = 0; c < jsonBean.get(i).getCityList().size(); c++) {//遍历该省份的所有城市
-                String CityName = jsonBean.get(i).getCityList().get(c).getName();
-                CityList.add(CityName);//添加城市
-
-                ArrayList<String> City_AreaList = new ArrayList<>();//该城市的所有地区列表
-
-                //如果无地区数据，建议添加空字符串，防止数据为null 导致三个选项长度不匹配造成崩溃
-                if (jsonBean.get(i).getCityList().get(c).getArea() == null
-                        || jsonBean.get(i).getCityList().get(c).getArea().size() == 0) {
-                    City_AreaList.add("");
-                } else {
-                    for (int d = 0; d < jsonBean.get(i).getCityList().get(c).getArea().size(); d++) {//该城市对应地区所有数据
-                        String AreaName = jsonBean.get(i).getCityList().get(c).getArea().get(d);
-                        City_AreaList.add(AreaName);//添加该城市所有地区数据
-                    }
-                }
-                Province_AreaList.add(City_AreaList);//添加该省所有地区数据
-            }
-            /**
-             * 添加城市数据
-             */
-            options2Items.add(CityList);
-
-            /**
-             * 添加地区数据
-             */
-            options3Items.add(Province_AreaList);
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            backgroundAlpha(1f);
         }
+
     }
-    public ArrayList<JsonBean> parseData(String result) {//Gson 解析
-        ArrayList<JsonBean> detail = new ArrayList<>();
+    private void upData(int i) {
+
+        img_city[sing_city].setVisibility(View.INVISIBLE);
+        sing_city = i;
+        img_city[sing_city].setVisibility(View.VISIBLE);
+        data.clear();
+        if (i == 0) {
+            for (int a = 0; a < list.size(); a++) {
+                data.add(list.get(a).getName());
+            }
+        } else if (i == 1) {
+//            listCity
+            if (list.size() > 0) {
+                cities = list.get(sign_sheng).getCitys();
+                for (int a = 0; a < cities.size(); a++) {
+                    data.add(cities.get(a).getName());
+                }
+            } else {
+                Toast.makeText(RenameHourseActivity.this, "请选择省份", Toast.LENGTH_SHORT).show();
+            }
+        } else if (i == 2) {
+            if (cities.size() > 0) {
+                districts = cities.get(sign_city).getDistricts();
+                for (int a = 0; a < districts.size(); a++) {
+                    if (!districts.get(a).getName().equals(cities.get(sign_city).getName()))
+                        data.add(districts.get(a).getName());
+                }
+            } else {
+                Toast.makeText(RenameHourseActivity.this, "请选择城市", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        cityAdapter.notifyDataSetChanged();
+    }
+    Handler handler = new Handler() {
+        @Override
+        public void handleMessage(Message msg) {
+            if (msg.what == 3) {
+                showPopup();
+            }
+        }
+    };
+
+
+    public List<Province> parser() {
+        // 创建解析器，并制定解析的xml文件
+        XmlResourceParser parser = getResources().getXml(R.xml.cities);
         try {
-            JSONArray data = new JSONArray(result);
-            Gson gson = new Gson();
-            for (int i = 0; i < data.length(); i++) {
-                JsonBean entity = gson.fromJson(data.optJSONObject(i).toString(), JsonBean.class);
-                detail.add(entity);
+            int type = parser.getEventType();
+            while (type != 1) {
+                String tag = parser.getName();//获得标签名
+                switch (type) {
+                    case XmlResourceParser.START_DOCUMENT:
+                        list = new ArrayList<Province>();
+                        break;
+                    case XmlResourceParser.START_TAG:
+                        if ("p".equals(tag)) {
+                            province = new Province();
+                            cities = new ArrayList<City>();
+                            int n = parser.getAttributeCount();
+                            for (int i = 0; i < n; i++) {
+                                //获得属性的名和值
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if ("p_id".equals(name)) {
+                                    province.setId(value);
+                                }
+                            }
+                        }
+                        if ("pn".equals(tag)) {//省名字
+                            province.setName(parser.nextText());
+                        }
+                        if ("c".equals(tag)) {//城市
+                            city = new City();
+                            districts = new ArrayList<District>();
+                            int n = parser.getAttributeCount();
+                            for (int i = 0; i < n; i++) {
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if ("c_id".equals(name)) {
+                                    city.setId(value);
+                                }
+                            }
+                        }
+                        if ("cn".equals(tag)) {
+                            city.setName(parser.nextText());
+                        }
+                        if ("d".equals(tag)) {
+                            district = new District();
+                            int n = parser.getAttributeCount();
+                            for (int i = 0; i < n; i++) {
+                                String name = parser.getAttributeName(i);
+                                String value = parser.getAttributeValue(i);
+                                if ("d_id".equals(name)) {
+                                    district.setId(value);
+                                }
+                            }
+                            district.setName(parser.nextText());
+                            districts.add(district);
+                        }
+                        break;
+                    case XmlResourceParser.END_TAG:
+                        if ("c".equals(tag)) {
+                            city.setDistricts(districts);
+                            cities.add(city);
+                        }
+                        if ("p".equals(tag)) {
+                            province.setCitys(cities);
+                            list.add(province);
+                        }
+                        break;
+                    default:
+                        break;
+                }
+                type = parser.next();
             }
-        } catch (Exception e) {
+        } catch (XmlPullParserException e) {
+            // TODO Auto-generated catch block
             e.printStackTrace();
-            // mHandler.sendEmptyMessage(MSG_LOAD_FAILED);
         }
-        return detail;
+        /*catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } */ catch (NumberFormatException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+
+        } catch (IOException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+        return list;
     }
     private void buildUpdateHomeDialog() {
         final HomeDialog dialog = new HomeDialog(this);
@@ -317,7 +494,7 @@ public class RenameHourseActivity extends AppCompatActivity {
             switch (code){
                 case 100:
                     Toast.makeText(RenameHourseActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
-                    textViewa.setText(houseAddress);
+                    textViewa.setText(tv_shi.getText());
 //                    startActivity(new Intent(RenameHourseActivity.this,ChooseHourseActivity.class));
                     break;
                 default:

@@ -19,7 +19,6 @@
     <LinearLayout
         android:layout_below="@+id/tv_homed_del"
         android:layout_marginTop="@dimen/dp_jy_21"
-        android:background="@color/color_gray"
         android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginRight="@dimen/dp_jy_12"
         android:orientation="horizontal"

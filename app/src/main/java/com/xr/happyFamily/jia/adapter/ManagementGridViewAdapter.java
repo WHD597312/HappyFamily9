@@ -54,7 +54,7 @@ public class ManagementGridViewAdapter extends ArrayAdapter {
         holder.textView_management.setText(item.getName());
         Picasso.with(mContext).load(item.getImgeId()).into(holder.imageView_management);
         if (selectedPosition == position) {
-            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color_gray2));
+            holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.color_grayx));
         } else {
             holder.linearLayout.setBackgroundColor(mContext.getResources().getColor(R.color.white));
         }

@@ -44,6 +44,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_jy_12"
                     android:layout_marginTop="@dimen/dp_jy_12"
+                    android:textSize="@dimen/sp_16"
                     android:text="Cofen的家"
                     android:textColor="@color/white" />
 
@@ -85,6 +86,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_jy_13"
                         android:layout_marginTop="@dimen/dp_jy_13"
+                        android:textColor="@color/color_black"
                         android:text="虚拟体验" />
 
                     <TextView

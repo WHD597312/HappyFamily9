@@ -229,7 +229,8 @@ public class FamilyFragment extends Fragment {
         Hourse hourse = hourseDao.findById(houseId);
         if (hourse != null) {
             String name = hourse.getHouseName();
-            tv_my_hourse.setText(name);
+            String address = hourse.getHouseAddress();
+            tv_my_hourse.setText(name+"·"+address);
             commonDevices = deviceChildDao.findHouseCommonDevices(houseId);
             shareDevices = deviceChildDao.findShareDevice(userId);
 

@@ -72,7 +72,7 @@
     <GridView
         android:id="@+id/gv_management_my"
         android:layout_width="match_parent"
-        android:layout_height="320dp"
+        android:layout_height="@dimen/dp_jy_380"
         android:layout_below="@+id/tv_managment_room"
         android:layout_centerHorizontal="true"
         android:layout_marginLeft="@dimen/dp_jy_12"

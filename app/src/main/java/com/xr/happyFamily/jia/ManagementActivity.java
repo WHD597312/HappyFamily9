@@ -104,49 +104,10 @@ public class ManagementActivity extends AppCompatActivity {
                 String name=localCartoonText[position];
                 roomName=name;
                 roomType=roomName;
-//                view.setBackgroundResource(R.color.color_gray2);
-//              //   gridView中点击 item为选中状态(背景颜色)
-//                for(int n=0;n<mGridData.size();n++){
-//                    View item = mGridView.getChildAt(n).findViewById(R.id.li_item_addroom);
-//                    if (position == n) {//当前选中的Item改变背景颜色
-//                        item.setBackgroundResource(R.color.color_gray2);
-//                    } else {
-//                        item.setBackgroundResource(R.color.white);
-//                    }
-//                }
                 mPoistion=position;
                 mGridViewAdapter.setSelectedPosition(mPoistion);
                 mGridViewAdapter.notifyDataSetInvalidated();
-//                switch (position) {
-//                    case 0:
-//                        roomType="厨房";
-//                        roomName="厨房";
-//                        Toast.makeText(ManagementActivity.this,"1",Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 1:
-//                        roomType="卧室";
-//                        roomName="卧室";
-//                        Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 2:
-//                        roomType="客厅";
-//                        roomName="客厅";
-//                        Toast.makeText(ManagementActivity.this,"2",Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 3:
-//                        roomType="阳台";
-//                        roomName="阳台";
-//                        Toast.makeText(ManagementActivity.this,"3",Toast.LENGTH_SHORT).show();
-//                        break;
-//                    case 4:
-//                        roomType="卫生间";
-//                        roomName="卫生间";
-//                        Toast.makeText(ManagementActivity.this,"4",Toast.LENGTH_SHORT).show();
-//                        break;
-//
-//                    default:
-//                        break;
-//                }
+
             }
         });
     }

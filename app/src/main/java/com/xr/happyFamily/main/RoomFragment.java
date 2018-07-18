@@ -101,7 +101,7 @@ public class RoomFragment extends Fragment{
         super.onDestroy();
         Log.i("RoomFragment","onDestroy");
         Log.i("RoomFragment","-->"+room.getRoomType());
-        
+
     }
 
     @Nullable

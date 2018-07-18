@@ -29,11 +29,11 @@
                 android:layout_height="match_parent">
                 <ImageButton
                     android:id="@+id/image_change"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="@dimen/dp_jy_23"
+                    android:layout_height="@dimen/dp_jy_23"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/dp_jy_12"
-                    android:layout_marginTop="@dimen/dp_jy_12"
+                    android:layout_marginRight="@dimen/dp_jy_14"
+                    android:layout_marginTop="@dimen/dp_jy_13"
                     android:background="@null"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/weishengjian1" />

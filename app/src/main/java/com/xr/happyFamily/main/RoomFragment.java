@@ -6,6 +6,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -14,6 +15,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -21,7 +23,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,12 +45,14 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.DeleteDeviceDialog;
 import com.xr.happyFamily.jia.view_custom.DeleteHomeDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
+import com.xr.happyFamily.jia.view_custom.Timepicker3;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.Map;
 
@@ -205,7 +212,7 @@ public class RoomFragment extends Fragment{
                 startActivity(intent2);
                 break;
             case R.id.tv_home_manager:
-                showPopupMenu(tv_home_manager);
+                popupTimerWindow();
                 break;
             case R.id.btn_add_device:
                 Intent intent=new Intent(getActivity(), AddDeviceActivity.class);
@@ -265,33 +272,97 @@ public class RoomFragment extends Fragment{
     }
     String title;
     Dialog dia ;
-    private void showPopupMenu(View view) {
-        // View当前PopupMenu显示的相对View的位置
-        PopupMenu popupMenu = new PopupMenu(getContext(), view);
-        // menu布局
-        popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
-        // menu的item点击事件
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                title = String.valueOf(item.getTitle());
-                return false;
-            }
-        });
-        // PopupMenu关闭事件
-        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
-                if ("更改房间名".equals(title)){
-                    buildUpdateHomeDialog();
+//    private void showPopupMenu(View view) {
+//        // View当前PopupMenu显示的相对View的位置
+//        PopupMenu popupMenu = new PopupMenu(getContext(), view);
+//        // menu布局
+//        popupMenu.getMenuInflater().inflate(R.menu.main, popupMenu.getMenu());
+//        // menu的item点击事件
+//        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+//            @Override
+//            public boolean onMenuItemClick(MenuItem item) {
+//                title = String.valueOf(item.getTitle());
+//                return false;
+//            }
+//        });
+//        // PopupMenu关闭事件
+//        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
+//            @Override
+//            public void onDismiss(PopupMenu menu) {
+//                if ("更改房间名".equals(title)){
+//                    buildUpdateHomeDialog();
+//                }
+//                if ("删除房间".equals(title)){
+//                    deleteHomeDialog();
+//                }
+//            }
+//        });
+//        popupMenu.show();
+//    }
+
+
+
+
+
+
+
+
+
+
+    private PopupWindow popupWindow;
+    public void popupTimerWindow() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(getActivity(), R.layout.popview_room_homemanerge, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        RelativeLayout rl_room_rename= (RelativeLayout) view.findViewById(R.id.rl_room_rename);
+        RelativeLayout tv_timer= (RelativeLayout) view.findViewById(R.id.rl_room_del);
+
+
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow.setAnimationStyle(R.style.Popupwindow);
+
+//        ColorDrawable dw = new ColorDrawable(0x30000000);
+//        popupWindow.setBackgroundDrawable(dw);
+        popupWindow.showAsDropDown(tv_home_manager,0,20);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.rl_room_rename:
+                        buildUpdateHomeDialog();
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.rl_room_del:
+                        deleteHomeDialog();
+                        popupWindow.dismiss();
+                        break;
                 }
-                if ("删除房间".equals(title)){
-                    deleteHomeDialog();
-                }
             }
-        });
-        popupMenu.show();
+        };
+
+        rl_room_rename.setOnClickListener(listener);
+        tv_timer.setOnClickListener(listener);
     }
+
+
+
+
+
+
+
+
+
+
     private String houseName;
     private void deleteHomeDialog() {
         final DeleteHomeDialog dialog = new DeleteHomeDialog(getActivity());

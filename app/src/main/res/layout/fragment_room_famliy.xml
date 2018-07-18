@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bj1"
+    android:background="@mipmap/bj_home"
     android:orientation="vertical">
 
 
@@ -47,7 +47,12 @@
                     android:textSize="@dimen/sp_16"
                     android:text="Cofen的家"
                     android:textColor="@color/white" />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_my_hourse"
+                    android:layout_alignTop="@id/tv_my_hourse"
+                    />
                 <TextView
                     android:id="@+id/tv_wd_my"
                     android:layout_width="wrap_content"

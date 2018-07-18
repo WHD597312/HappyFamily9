@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+   <RelativeLayout
+       android:layout_width="@dimen/dp_jy_115"
+       android:layout_height="@dimen/dp_jy_80"
+       android:background="@mipmap/home_pop_bj"
+       android:layout_alignParentRight="true"
+       android:layout_marginRight="@dimen/dp_jy_12"
+       >
+    <RelativeLayout
+        android:id="@+id/rl_room_rename"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_30"
+        android:layout_marginTop="@dimen/dp_jy_13"
+        >
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/white"
+        android:layout_centerInParent="true"
+        android:id="@+id/tv_rname_r1"
+        android:text="更改房间名"
+        />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_room_del"
+        android:layout_below="@+id/rl_room_rename"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_30"
+        android:layout_marginTop="@dimen/dp_jy_3"
+        >
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/white"
+            android:layout_centerInParent="true"
+            android:text="删除房间"
+            android:paddingRight="@dimen/dp_jy_13"
+            />
+    </RelativeLayout>
+   </RelativeLayout>
+</RelativeLayout>

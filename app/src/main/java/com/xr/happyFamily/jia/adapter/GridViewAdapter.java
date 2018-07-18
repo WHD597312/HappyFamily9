@@ -23,7 +23,7 @@ public class GridViewAdapter extends ArrayAdapter {
     private int layoutResourceId;
     private List<DeviceChild> mGridData;
 
-    int img[]={R.mipmap.t};
+    int img[]={R.mipmap.sb_dnq};
     public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
         super(context, resource, objects);
         this.mContext = context;
@@ -51,6 +51,7 @@ public class GridViewAdapter extends ArrayAdapter {
             holder.imageView = (ImageView) convertView.findViewById(R.id.iv_home);
             holder.tv_device_switch= (TextView) convertView.findViewById(R.id.tv_device_switch);
             holder.tv_device_type= (TextView) convertView.findViewById(R.id.tv_device_type);
+             holder.view= (View) convertView.findViewById(R.id.view_homeitem);
             DeviceChild item = mGridData.get(position);
             if (item!=null){
                 int type=item.getType();
@@ -61,13 +62,16 @@ public class GridViewAdapter extends ArrayAdapter {
                     if (online){
                         if (deviceState==1){
                             holder.tv_device_switch.setText("电源开");
+                            holder.view.setVisibility(View.VISIBLE);
                         }else if (deviceState==0){
                             holder.tv_device_switch.setText("电源关");
+                            holder.view.setVisibility(View.GONE);
                         }
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                     }else if (online==false){
                         holder.tv_device_switch.setText("离线");
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                        holder.view.setVisibility(View.GONE);
                     }
                 }else if (type==3){
                     boolean online=item.getOnline();
@@ -101,5 +105,6 @@ public class GridViewAdapter extends ArrayAdapter {
         TextView tv_device_type;/**设备类型*/
         TextView tv_device_name;/**设备名称*/
         ImageView imageView;
+        View view;//开关的小绿点
     }
 }

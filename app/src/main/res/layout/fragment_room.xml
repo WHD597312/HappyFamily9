@@ -6,7 +6,7 @@
     android:id="@+id/pr_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bg_balcony"
+    android:background="@mipmap/bj_home"
 
     android:orientation="vertical">
 
@@ -58,9 +58,10 @@
                         android:layout_height="wrap_content"
                         android:text=""
                         android:textColor="@color/white"
-                        android:textSize="16sp" />
+                        android:textSize="@dimen/sp_18" />
 
                     <ImageView
+                        android:layout_marginLeft="@dimen/dp_jy_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:paddingTop="@dimen/dp_jy_7"

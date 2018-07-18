@@ -188,7 +188,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         @Override
         public void onFinish() {
             Log.e("Tag", "倒计时完成");
-            Utils.showToast(LoginActivity.this, "登录失败请重试");
+            hideProgressDialog();
         }
     }
     @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})

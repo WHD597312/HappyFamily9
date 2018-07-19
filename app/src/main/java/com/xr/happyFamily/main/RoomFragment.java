@@ -338,6 +338,7 @@ public class RoomFragment extends Fragment{
             return;
         }
 
+        
         View view = View.inflate(getActivity(), R.layout.popview_room_homemanerge, null);
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;

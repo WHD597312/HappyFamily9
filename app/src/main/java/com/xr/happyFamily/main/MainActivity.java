@@ -186,14 +186,14 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 //            new hourseAsyncTask().execute();
 //        }
         //启动闹铃服务根据是否在倒计时判断是否开启服务
-        preferencesclock = getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
-        Boolean trueCount =preferencesclock.getBoolean("trueCount",false);
-        Log.i("Boolean","-->"+trueCount);
-        if(false==trueCount){
+//        preferencesclock = getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
+//            Boolean trueCount =preferencesclock.getBoolean("trueCount",false);
+//            Log.i("Boolean","-->"+trueCount);
+//            if(false==trueCount){
             clockintent = new Intent(MainActivity.this, ClockService.class);
             startService(clockintent);
             clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
-        }
+//        }
     }
     
     SharedPreferences preferencesclock;
@@ -350,11 +350,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             unbinder.unbind();
         }
         Log.e("close", "onDestroy: ---->" );
-        mPositionPreferences.edit().clear().commit();
-        //闹铃 退出将倒计时状态改为f
-        SharedPreferences.Editor editor = preferencesclock.edit();
-        editor.putBoolean("trueCount",false);
-        editor.commit();
+//        mPositionPreferences.edit().clear().commit();
+//        //闹铃 退出将倒计时状态改为f
+//        SharedPreferences.Editor editor = preferencesclock.edit();
+//        editor.putBoolean("trueCount",false);
+//        editor.commit();
         if (myReceiver!=null){
             unregisterReceiver(myReceiver);
         }

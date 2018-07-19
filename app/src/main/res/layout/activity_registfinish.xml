@@ -8,10 +8,6 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_centerVertical="true"
-        android:layout_marginRight="@dimen/dp_jy_12"
-        android:layout_marginLeft="@dimen/dp_jy_12"
-        android:layout_marginTop="@dimen/dp_jy_100"
         android:layout_centerInParent="true"
         android:background="@mipmap/beijing">
 
@@ -20,9 +16,8 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="-30dp"
             android:scaleType="centerCrop"
-            android:src="@mipmap/dtubiao" />
+            android:src="@mipmap/p99_tb" />
 
         <ImageView
             android:id="@+id/iv_fyuan"
@@ -36,9 +31,9 @@
             android:id="@+id/iv_registerf_dh"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/iv_registerf_tb"
+            android:layout_alignTop="@+id/iv_fyuan"
             android:layout_centerHorizontal="true"
-            android:layout_marginTop="@dimen/dp_jy_5"
+            android:layout_marginTop="@dimen/dp_jy_8"
             android:src="@mipmap/daohang"
 
 
@@ -62,7 +57,7 @@
             android:layout_marginTop="@dimen/dp_jy_9"
             android:text="注册"
             android:textColor="@color/color_gray2"
-            android:textSize="7sp" />
+            android:textSize="9sp" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -72,28 +67,26 @@
             android:layout_marginTop="@dimen/dp_jy_9"
             android:text="完成"
             android:textColor="@color/green2"
-            android:textSize="7sp" />
+            android:textSize="9sp" />
 
         <EditText
             android:id="@+id/et_fphone"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/image_fphone"
+            android:layout_marginLeft="@dimen/dp_jy_21"
             android:layout_toRightOf="@+id/image_fphone"
-            android:layout_alignTop="@+id/image_fphone"
-            android:layout_marginLeft="@dimen/dp_jy_14"
             android:background="@null"
-            android:layout_marginBottom="@dimen/dp_jy_5"
             android:hint="昵称"
             android:textSize="@dimen/sp_18" />
 
         <ImageView
             android:id="@+id/image_fphone"
-            android:layout_width="@dimen/dp_jy_30"
-            android:layout_height="@dimen/dp_jy_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_below="@+id/tv_registerf_zc"
-            android:layout_marginLeft="@dimen/dp_jy_24"
-            android:layout_marginTop="@dimen/dp_jy_56"
-            android:scaleType="centerInside"
+            android:layout_marginLeft="@dimen/dp_jy_27"
+            android:layout_marginTop="@dimen/dp_jy_50"
             android:src="@mipmap/wo" />
 
         <View
@@ -103,26 +96,25 @@
             android:layout_below="@+id/et_fphone"
             android:layout_marginLeft="@dimen/dp_jy_29"
             android:layout_marginRight="@dimen/dp_jy_29"
-            android:layout_marginTop="@dimen/dp_jy_1"
+            android:layout_marginTop="@dimen/dp_jy_5"
             android:background="@color/color_gray2" />
+
         <ImageView
             android:id="@+id/image_sex"
-            android:layout_width="@dimen/dp_jy_30"
-            android:layout_height="@dimen/dp_jy_30"
-            android:layout_above="@+id/view2"
-            android:layout_marginBottom="-7dp"
-            android:layout_marginLeft="@dimen/dp_jy_24"
-            android:scaleType="centerInside"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/rgMale"
+            android:layout_alignLeft="@+id/image_fphone"
             android:src="@mipmap/xingbie" />
 
         <RadioGroup
             android:id="@+id/rgMale"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:gravity="center"
-            android:layout_marginTop="@dimen/dp_jy_5"
             android:layout_below="@+id/view1"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_jy_5"
+            android:gravity="center"
             android:orientation="horizontal">
 
             <RadioButton
@@ -155,27 +147,24 @@
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/image_fpwd"
             android:layout_centerHorizontal="true"
-            android:text="        年            月            日       "
-            />
+            android:text="        年            月            日       " />
 
         <DatePicker
             android:id="@+id/register_date"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:visibility="gone"
+            android:layout_below="@+id/image_fphone"
             android:calendarViewShown="false"
             android:datePickerMode="spinner"
-            android:layout_below="@+id/image_fphone"
-            />
+            android:visibility="gone" />
 
         <ImageView
             android:id="@+id/image_fpwd"
-            android:layout_width="@dimen/dp_jy_30"
-            android:layout_height="@dimen/dp_jy_30"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignLeft="@+id/image_fphone"
             android:layout_below="@+id/view2"
-            android:layout_marginLeft="@dimen/dp_jy_24"
-            android:layout_marginTop="@dimen/dp_jy_12"
-            android:scaleType="centerInside"
+            android:layout_marginTop="@dimen/dp_jy_18"
             android:src="@mipmap/rili" />
 
         <View
@@ -185,15 +174,16 @@
             android:layout_below="@+id/image_fpwd"
             android:layout_marginLeft="@dimen/dp_jy_29"
             android:layout_marginRight="@dimen/dp_jy_29"
+            android:layout_marginTop="@dimen/dp_jy_5"
             android:background="@color/color_gray2" />
 
         <Button
             android:id="@+id/btn_ffinish"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/dp_jy_35"
             android:layout_marginRight="@dimen/dp_jy_35"
-            android:layout_alignParentBottom="true"
             android:background="@mipmap/anniu1"
             android:text="注册"
             android:textColor="@color/green2" />

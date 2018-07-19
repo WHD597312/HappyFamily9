@@ -144,13 +144,13 @@ public class ClockService extends Service {
                 Log.e("open", "onFinish:... "+ times.size() );
                   ti = times.get(i);
                 boolean open = ti.getOpen();
-                sumMin = ti.getSumMin()*60;
+                sumMin = ti.getSumMin();
                 Log.e("open", "onFinish:--> "+open );
                 Calendar calendar = Calendar.getInstance();
                 int hour = calendar.get(Calendar.HOUR_OF_DAY);
                 int minutes = calendar.get(Calendar.MINUTE);
-                int second = calendar.get(Calendar.SECOND);
-                int nowminutes = hour * 60 *60 + minutes*60+second;
+
+                int nowminutes = hour * 60 + minutes;
 
                 if (sumMin == nowminutes&&true==open) {
                     PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);

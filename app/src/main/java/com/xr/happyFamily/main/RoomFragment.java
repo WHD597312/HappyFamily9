@@ -205,6 +205,7 @@ public class RoomFragment extends Fragment{
                 Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
                 intent3.putExtra("houseId",houseId);
                 startActivityForResult(intent3,6000);
+                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
                 break;
             case R.id.iv_home_fh:
                 Intent intent2=new Intent(getActivity(),MainActivity.class);

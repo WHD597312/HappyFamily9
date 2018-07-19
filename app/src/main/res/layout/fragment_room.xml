@@ -132,6 +132,7 @@
                     android:layout_marginBottom="5dp"
                     android:layout_toRightOf="@+id/tv_balcony_23"
                     android:text="℃"
+                    android:textSize="@dimen/sp_12"
                     android:textColor="@color/color_white"
 
                     />
@@ -166,6 +167,7 @@
                     android:layout_alignTop="@id/tv_balcony_c"
                     android:layout_toRightOf="@id/tv_balcony_sd"
                     android:text="％"
+                    android:textSize="@dimen/sp_12"
                     android:textColor="@color/color_white"
 
                     />

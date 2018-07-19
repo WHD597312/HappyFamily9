@@ -3,46 +3,36 @@
 
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
     android:background="@mipmap/img"
-    >
+    android:orientation="vertical">
 
 
     <RelativeLayout
         android:id="@+id/rl_login"
-        android:layout_centerVertical="true"
-        android:background="@mipmap/beijing"
-        android:layout_centerInParent="true"
-        android:layout_marginRight="@dimen/dp_jy_12"
-        android:layout_marginLeft="@dimen/dp_jy_12"
-        android:layout_marginTop="@dimen/dp_jy_100"
         android:layout_width="match_parent"
-        android:layout_height="490dp">
+        android:layout_height="match_parent"
+        android:layout_centerInParent="true"
+        android:layout_centerVertical="true"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_110"
+        android:background="@mipmap/beijing">
 
-
-        <ImageView
-            android:id="@+id/imageView6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="-30dp"
-            android:scaleType="centerCrop"
-            android:layout_centerHorizontal="true"
-            android:src="@mipmap/dtubiao" />
 
         <EditText
             android:id="@+id/et_name"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignBottom="@+id/image_user"
-            android:layout_toRightOf="@+id/image_user"
-            android:layout_marginLeft="@dimen/dp_jy_77"
             android:layout_marginBottom="@dimen/dp_jy_5"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_toRightOf="@+id/image_user"
+            android:background="@null"
             android:digits="1234567890"
             android:hint="请输入帐户"
             android:inputType="phone|number"
             android:maxLength="11"
             android:singleLine="true"
-            android:background="@null"
             android:textSize="@dimen/sp_18" />
 
 
@@ -51,8 +41,7 @@
             android:layout_width="@dimen/dp_jy_30"
             android:layout_height="@dimen/dp_jy_30"
             android:layout_marginLeft="@dimen/dp_jy_28"
-            android:layout_marginTop="@dimen/dp_jy_60"
-            android:layout_below="@+id/imageView6"
+            android:layout_marginTop="@dimen/dp_jy_180"
             android:scaleType="centerInside"
             android:src="@mipmap/wo" />
 
@@ -60,64 +49,62 @@
             android:id="@+id/view5"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_jy_1"
-            android:background="@color/color_gray2"
             android:layout_below="@+id/et_name"
             android:layout_marginLeft="@dimen/dp_jy_30"
             android:layout_marginRight="@dimen/dp_jy_30"
-             />
+            android:background="@color/color_gray2" />
 
         <EditText
             android:id="@+id/et_pswd"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_below="@+id/view5"
-            android:layout_marginTop="@dimen/dp_jy_28"
             android:layout_marginBottom="@dimen/dp_jy_5"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_marginTop="@dimen/dp_jy_28"
             android:layout_toRightOf="@+id/image_pswd"
-            android:layout_marginLeft="@dimen/dp_jy_77"
+            android:background="@null"
             android:hint="请输入密码"
             android:inputType="textPassword"
-            android:background="@null"
             android:textColor="@color/black" />
 
         <ImageView
             android:id="@+id/image_seepwd"
-            android:src="@mipmap/yanjing13x"
             android:layout_width="@dimen/dp_jy_30"
             android:layout_height="@dimen/dp_jy_30"
-            android:scaleType="centerInside"
+            android:layout_alignBottom="@+id/view3"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_25"
-            android:layout_alignBottom="@+id/view3"
-            />
+            android:scaleType="centerInside"
+            android:src="@mipmap/yanjing13x" />
 
         <ImageView
             android:id="@+id/image_pswd"
             android:layout_width="@dimen/dp_jy_30"
             android:layout_height="@dimen/dp_jy_30"
             android:layout_below="@id/image_user"
-            android:scaleType="centerInside"
             android:layout_marginLeft="@dimen/dp_jy_28"
             android:layout_marginTop="@dimen/dp_jy_28"
+            android:scaleType="centerInside"
             android:src="@mipmap/suo" />
 
         <View
             android:id="@+id/view3"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_jy_1"
-            android:background="@color/color_gray2"
             android:layout_below="@+id/et_pswd"
             android:layout_marginLeft="@dimen/dp_jy_30"
             android:layout_marginRight="@dimen/dp_jy_30"
-            />
+            android:background="@color/color_gray2" />
 
         <TextView
             android:id="@+id/tv_register"
+            android:layout_alignLeft="@+id/image_user"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_below="@+id/image_pswd"
-            android:layout_marginLeft="@dimen/dp_jy_24"
             android:layout_marginTop="@dimen/dp_jy_14"
+            android:layout_marginLeft="@dimen/dp_jy_2"
             android:gravity="center"
             android:text="注册" />
 
@@ -126,29 +113,30 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_marginRight="@dimen/dp_jy_24"
             android:layout_alignTop="@id/tv_register"
+            android:layout_marginRight="@dimen/dp_jy_28"
             android:gravity="center"
             android:text="忘记密码" />
 
-        <ImageView
-            android:id="@+id/image_qq"
-            android:layout_width="@dimen/dp_jy_40"
-            android:layout_height="@dimen/dp_jy_40"
-            android:layout_below="@+id/tv_forget_pswd"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/dp_jy_31"
-            android:layout_marginRight="@dimen/dp_jy_99"
-            android:src="@mipmap/qq" />
+        <!--<ImageView-->
+            <!--android:id="@+id/image_qq"-->
+            <!--android:layout_width="@dimen/dp_jy_40"-->
+            <!--android:layout_height="@dimen/dp_jy_40"-->
+            <!--android:layout_alignParentRight="true"-->
+            <!--android:layout_below="@+id/tv_forget_pswd"-->
+            <!--android:layout_marginRight="@dimen/dp_jy_99"-->
+            <!--android:layout_marginTop="@dimen/dp_jy_31"-->
+            <!--android:src="@mipmap/qq" />-->
 
         <ImageView
             android:id="@+id/image_wx"
             android:layout_width="@dimen/dp_jy_40"
             android:layout_height="@dimen/dp_jy_40"
-            android:layout_alignBottom="@+id/image_qq"
-            android:layout_toLeftOf="@+id/image_qq"
-            android:layout_marginRight="@dimen/dp_jy_64"
+            android:layout_marginTop="@dimen/dp_jy_31"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@id/tv_forget_pswd"
             android:src="@mipmap/weixin1" />
+
         <Button
             android:id="@+id/btn_login"
             android:layout_width="match_parent"
@@ -157,10 +145,10 @@
             android:layout_marginLeft="@dimen/dp_jy_35"
             android:layout_marginRight="@dimen/dp_jy_35"
             android:background="@mipmap/anniu1"
-            android:text="登录"
             android:gravity="center"
+            android:paddingBottom="@dimen/dp_jy_7"
+            android:text="登录"
             android:textColor="@color/green2"
-            android:layout_centerHorizontal="true"
             android:textSize="@dimen/sp_18"
 
 
@@ -169,8 +157,14 @@
     </RelativeLayout>
 
 
-
-
+    <ImageView
+        android:id="@+id/imageView6"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_jy_30"
+        android:scaleType="centerInside"
+        android:src="@mipmap/p99_tb" />
 
 
 </RelativeLayout>

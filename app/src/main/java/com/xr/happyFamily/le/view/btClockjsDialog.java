@@ -112,7 +112,24 @@ public class btClockjsDialog extends Dialog {
             mediaPlayer = MediaPlayer.create(mcontext, R.raw.ex);
             mediaPlayer.start();//一进来就播放
             mediaPlayer.setLooping(true);
-        }else if ("系统自带".equals(name)){
+        }else if ("梦醒时分".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.mxsf);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("甜甜女生".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.ttns);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("38列车搞笑".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.lc);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }else if ("小娘子".equals(name)){
+            mediaPlayer = MediaPlayer.create(mcontext, R.raw.xnz);
+            mediaPlayer.start();//一进来就播放
+            mediaPlayer.setLooping(true);
+        }
+        else if ("系统自带".equals(name)){
             mediaPlayer = MediaPlayer.create(mcontext, Uri.parse(url));
             mediaPlayer.start();//一进来就播放
             mediaPlayer.setLooping(true);

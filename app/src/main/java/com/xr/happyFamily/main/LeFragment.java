@@ -306,13 +306,13 @@ public class LeFragment extends Fragment {
                 switchActivity();
             } else {
 
-                Toast.makeText(getActivity(), "开启悬浮窗失败", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(getActivity(), "开启悬浮窗失败", Toast.LENGTH_SHORT).show();
             }
         } else if (requestCode == 12) {
             if (Build.VERSION.SDK_INT >= 23) {
                 if (!Settings.canDrawOverlays(getActivity())) {
 
-                    Toast.makeText(getActivity(), "权限授予失败,无法开启悬浮窗", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(getActivity(), "权限授予失败,无法开启悬浮窗", Toast.LENGTH_SHORT).show();
                 } else {
                     switchActivity();
                 }

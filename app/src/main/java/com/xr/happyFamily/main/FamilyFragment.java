@@ -210,6 +210,7 @@ public class FamilyFragment extends Fragment {
                 Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
                 intent3.putExtra("houseId", houseId);
                 startActivityForResult(intent3, MREQUEST_CODE);
+                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
                 break;
         }
     }

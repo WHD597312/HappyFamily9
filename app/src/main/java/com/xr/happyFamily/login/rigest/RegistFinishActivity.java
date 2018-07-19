@@ -14,6 +14,9 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
@@ -71,20 +74,18 @@ public class RegistFinishActivity extends AppCompatActivity {
     String phone;
     String password;
     String birthday;
+    Animation rotate;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registfinish);
         unbinder = ButterKnife.bind(this);
-        try {
-            gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (gifDrawable != null) {
-            gifDrawable.start();
-            imageView6.setImageDrawable(gifDrawable);
-        }
+        rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
+        /*imagefs.setAnimation(rotate);
+        imagefs.startAnimation(rotate);*/
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        rotate.setInterpolator(lin);
+        imageView6.startAnimation(rotate);
         initbirthday();
         initsex();
         calendar = Calendar.getInstance();

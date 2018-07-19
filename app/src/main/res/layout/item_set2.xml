@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_jy_80"
+    android:layout_height="@dimen/dp_jy_60"
     android:background="@color/white"
     >
 
 
     <TextView
         android:id="@+id/tv_head"
-        android:layout_marginTop="@dimen/dp_jy_15"
+        android:layout_marginTop="@dimen/dp_jy_10"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="插件自动更新"
-        android:textColor="@color/black"
-        android:paddingLeft="@dimen/dp_jy_15"
-        android:textSize="@dimen/sp_18"
+        android:textColor="#494949"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:textSize="@dimen/sp_14"
         />
     <TextView
         android:id="@+id/tv_head2"
@@ -22,9 +22,10 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/tv_head"
         android:text="WLAN下自动更新"
-        android:paddingLeft="@dimen/dp_jy_15"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginTop="@dimen/dp_jy_5"
-        android:textSize="@dimen/sp_18"
+        android:textColor="#bababa"
+        android:textSize="@dimen/sp_12"
         />
     <ImageView
         android:id="@+id/image_arrow"
@@ -35,4 +36,5 @@
         android:src="@mipmap/image_arrow"
         android:layout_marginRight="@dimen/dp_jy_10"
         />
+
 </RelativeLayout>

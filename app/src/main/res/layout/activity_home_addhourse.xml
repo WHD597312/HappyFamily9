@@ -65,6 +65,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_50"
+        android:background="@color/white"
         android:layout_below="@id/view4"
         android:id="@+id/view5"
 

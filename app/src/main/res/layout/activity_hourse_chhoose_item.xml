@@ -47,9 +47,8 @@
         android:id="@+id/house_view"
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:layout_below="@+id/et_phone"
         android:layout_marginTop="@dimen/dp_jy_1"
-        android:background="@color/color_gray2" />
+        android:background="#e7e7e7" />
 
 
 

@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -51,6 +54,7 @@ public class ForgetPswdActivity extends AppCompatActivity
     EditText et_password;
     @BindView(R.id.btn_fg_code)
     Button btn_get_code;
+    Animation rotate;
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forgtpassword);
@@ -63,15 +67,12 @@ public class ForgetPswdActivity extends AppCompatActivity
             application= (MyApplication) getApplication();
         }
         application.addActivity(this);*/
-        try {
-            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if (gifDrawable!=null){
-            gifDrawable.start();
-            imageView6.setImageDrawable(gifDrawable);
-        }
+        rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
+        /*imagefs.setAnimation(rotate);
+        imagefs.startAnimation(rotate);*/
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        rotate.setInterpolator(lin);
+        imageView6.startAnimation(rotate);
     }
     @Override
     protected void onStart() {

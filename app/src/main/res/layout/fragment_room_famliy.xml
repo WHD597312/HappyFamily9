@@ -58,7 +58,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_jy_28"
-                    android:layout_marginTop="@dimen/dp_jy_63"
+                    android:layout_marginBottom="@dimen/dp_jy_8"
+                    android:layout_alignBottom="@+id/tv_23_my"
                     android:text="室温"
                     android:textColor="@color/color_white"
 
@@ -70,7 +71,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignLeft="@id/tv_wd_my"
                     android:layout_marginLeft="@dimen/dp_jy_37"
-                    android:layout_marginTop="@dimen/dp_jy_43"
+                    android:layout_marginTop="@dimen/dp_jy_47"
                     android:text="23℃"
                     android:textColor="@color/color_white"
                     android:textSize="35sp"
@@ -79,10 +80,11 @@
 
                 <RelativeLayout
                     android:id="@+id/rl_home_xnty"
-                    android:layout_width="@dimen/dp_jy_226"
-                    android:layout_height="@dimen/dp_jy_110"
+                    android:layout_width="@dimen/dp_jy_200"
+                    android:layout_height="@dimen/dp_jy_100"
                     android:layout_marginLeft="@dimen/dp_jy_12"
-                    android:layout_marginTop="@dimen/dp_jy_91"
+                    android:layout_below="@+id/tv_23_my"
+                    android:layout_marginTop="@dimen/dp_jy_10"
                     android:background="@mipmap/bj_m3x">
 
                     <TextView

@@ -17,6 +17,9 @@ import android.text.method.TransformationMethod;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
@@ -95,7 +98,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
-
+    Animation rotate;
     SharedPreferences mPositionPreferences;
 
     @Override
@@ -133,15 +136,21 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             intent.putExtra("load","load");
             startActivity(intent);
         }
-        try {
-            gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        if (gifDrawable != null) {
-            gifDrawable.start();
-            imageView6.setImageDrawable(gifDrawable);
-        }
+//        try {
+//            gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        if (gifDrawable != null) {
+//            gifDrawable.start();
+//            imageView6.setImageDrawable(gifDrawable);
+//        }
+        rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
+        /*imagefs.setAnimation(rotate);
+        imagefs.startAnimation(rotate);*/
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        rotate.setInterpolator(lin);
+        imageView6.startAnimation(rotate);
         if (preferences.contains("phone")) {
             String phone = preferences.getString("phone", "");
             et_name.setText(phone);
@@ -239,7 +248,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     et_pswd.setTransformationMethod(method1);
                     isHideFirst = false;
                 } else {
-                    imageView.setImageResource(R.mipmap.yanjing1);
+                    imageView.setImageResource(R.mipmap.yanjing13x);
                     //密文
                     TransformationMethod method = PasswordTransformationMethod.getInstance();
                     et_pswd.setTransformationMethod(method);

@@ -5,6 +5,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,6 +27,7 @@ import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.login.rigest.RegistFinishActivity;
+import com.xr.happyFamily.main.MainActivity;
 
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
@@ -83,10 +86,14 @@ public class ChangeRoomActivity extends AppCompatActivity {
                 editor.putInt("position",position+1);
                 editor.commit();
                 setResult(6000,intent);
-                finish();
+                 finish();
+
             }
         });
     }
+
+
+
 
     Integer imgs[] = {R.mipmap.chifang, R.mipmap.keting, R.mipmap.weishengjian, R.mipmap.woshi, R.mipmap.yangtai};
 
@@ -122,6 +129,7 @@ public class ChangeRoomActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.li_change:
                 finish();
+                overridePendingTransition(R.anim.topin,R.anim.topin);
                 break;
 
         }

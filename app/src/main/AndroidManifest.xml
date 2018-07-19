@@ -127,7 +127,7 @@
         <service
             android:name=".together.util.mqtt.MQService"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
         <service
             android:name=".together.util.mqtt.ClockService"
             android:enabled="true"
@@ -151,12 +151,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".zhen.AboutActivity"
+        <activity
+            android:name=".zhen.AboutActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.xnty.CsjActivity"
             android:label=""
@@ -449,7 +448,11 @@
         <activity android:name=".le.clock.FriendFindActivity" />
         <activity android:name=".le.clock.FriendAddActivity" />
         <activity android:name=".zhen.AccountActivity" />
-        <activity android:name=".zhen.ReSetpswdActivity"></activity>
+        <activity android:name=".zhen.ReSetpswdActivity" />
+        <activity android:name=".zhen.HelpActivity" />
+        <activity
+            android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
+            android:theme="@style/ImagePickerThemeFullScreen"/>
     </application>
 
 </manifest>

@@ -103,6 +103,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private  boolean clockisBound;
     String load;
     AlarmManager alarmManager;
+    private String family;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -140,12 +141,9 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         Intent intent = getIntent();
         load=intent.getStringExtra("load");
         String login=intent.getStringExtra("login");
-        String share=intent.getStringExtra("share");
-        if (TextUtils.isEmpty(share)){
-            Intent service=new Intent(this, MQService.class);
-            startService(service);
-        }
-        long houseId = intent.getLongExtra("houseId", 0);
+        share=intent.getStringExtra("share");
+
+        houseId = intent.getLongExtra("houseId", 0);
         if (houseId == 0 && hourses.size()>0) {
             Hourse hourse = hourses.get(0);
             houseId = hourse.getHouseId();
@@ -163,6 +161,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             if (mPositionPreferences.contains("position")) {
                 mPositionPreferences.edit().clear().commit();
             }
+            family="";
         }else {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             familyFragmentManager = new FamilyFragmentManager();
@@ -259,12 +258,20 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     @Override
     protected void onStart() {
         super.onStart();
-
-
-        if (!preferences.contains("image")){
-            if (preferences.contains("headImgUrl")){
-                new LoadUserImageAsync().execute();
-            }
+        Log.i("family","-->"+family);
+        if (!TextUtils.isEmpty(family)){
+            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+            familyFragmentManager = new FamilyFragmentManager();
+            leFragment = new LeFragment();
+            baoFragment = new BaoFragment();
+            zhenFragment=new ZhenFragment();
+            Bundle bundle = new Bundle();
+            bundle.putString("load","load");
+            bundle.putLong("houseId", houseId);
+            familyFragmentManager.setArguments(bundle);
+            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+            fragmentTransaction.commit();
+            family="family";
         }
         if (TextUtils.isEmpty(share)){
             Intent service=new Intent(this,MQService.class);
@@ -294,6 +301,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
                 idBtoLeImg.setImageResource(R.mipmap.le);
+                family="family";
                 break;
             case R.id.id_bto_bao:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -306,6 +314,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
+                family="";
                 break;
             case R.id.id_bto_le:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -318,6 +327,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
+                family="";
                 break;
             case R.id.id_bto_zhen:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -330,6 +340,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
+                family="";
                 break;
         }
     }
@@ -338,6 +349,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             application.removeAllActivity();
+            family="";
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -376,6 +388,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
+            family="family";
         }
     }
 
@@ -582,7 +595,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     Bundle bundle = new Bundle();
                     List<Hourse> hourses = hourseDao.findAllHouse();
                     Hourse hourse = hourses.get(0);
-                    long houseId = hourse.getHouseId();
+                    houseId = hourse.getHouseId();
                     bundle.putLong("houseId", houseId);
                     familyFragmentManager.setArguments(bundle);
                     fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);

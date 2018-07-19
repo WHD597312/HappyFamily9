@@ -32,10 +32,12 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.Button;
+import android.widget.DatePicker;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.TimePicker;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
@@ -111,13 +113,13 @@ public class PersonInfoActivity extends AppCompatActivity {
                     case 4:
                         updatePersonDialog();
                         break;
+                    case 8:
+                        popupWindow2();
+                        break;
                 }
             }
         });
     }
-
-
-
 
     private void updatePersonDialog() {
         final PersonDialog dialog = new PersonDialog(this);
@@ -137,6 +139,10 @@ public class PersonInfoActivity extends AppCompatActivity {
                     Map<String,Object> params=new HashMap<>();
                     String userId=preferences.getString("userId","");
                     boolean sex=preferences.getBoolean("sex",false);
+                    String birthday=preferences.getString("birthday","");
+                    Date date =new Date(Long.parseLong(birthday));
+                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                    String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
                     int flag=0;
                     if (sex){
                         flag=1;
@@ -146,7 +152,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                     params.put("userId",userId);
                     params.put("sex",flag);
                     params.put("username",username);
-                    params.put("birthday","2018-5-12");
+                    params.put("birthday",time);
                     new UpdatePersonAsync().execute(params);
                     dialog.dismiss();
                 }
@@ -179,6 +185,88 @@ public class PersonInfoActivity extends AppCompatActivity {
             unbinder.unbind();
         }
     }
+    int year=0;
+    int month;
+    int day=0;
+    int hour=0;
+    String birthday;
+    //底部popupWindow
+    public void popupWindow2() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return;
+        }
+        View view = View.inflate(this, R.layout.popup_birthday, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        DatePicker datePicker= (DatePicker) view.findViewById(R.id.datePicker);
+        Button btn_cancle= (Button) view.findViewById(R.id.btn_cancle);
+        Button btn_ensure= (Button) view.findViewById(R.id.btn_ensure);
+
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow.setFocusable(true);
+        popupWindow.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow.setAnimationStyle(R.style.Popupwindow);
+
+        ColorDrawable dw = new ColorDrawable(0x30000000);
+        popupWindow.setBackgroundDrawable(dw);
+        popupWindow.showAtLocation(list_set, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.btn_cancle:
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.btn_ensure:
+                        Map<String,Object> params=new HashMap<>();
+                        String userId=preferences.getString("userId","");
+                        boolean sex=preferences.getBoolean("sex",false);
+                        birthday=year+"-"+month+"-"+day;
+
+                        int flag=0;
+                        if (sex){
+                            flag=1;
+                        }else {
+                            flag=0;
+                        }
+                        params.put("userId",userId);
+                        params.put("sex",flag);
+                        params.put("username",username);
+                        params.put("birthday",birthday);
+                        new UpdatePersonAsync().execute(params);
+                        popupWindow.dismiss();
+                        break;
+
+                }
+
+            }
+        };
+
+        Calendar calendar= Calendar.getInstance();
+        year=calendar.get(Calendar.YEAR);
+        month=calendar.get(Calendar.MONTH);
+        day=calendar.get(Calendar.DAY_OF_MONTH);
+        hour=calendar.get(Calendar.HOUR_OF_DAY);
+
+
+
+        datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
+            @Override
+            public void onDateChanged(DatePicker view, int mYear, int monthOfYear, int dayOfMonth) {
+                year=mYear;
+                month=monthOfYear+1;
+                day=dayOfMonth;
+            }
+        });
+        month=month+1;
+
+
+        btn_cancle.setOnClickListener(listener);
+        btn_ensure.setOnClickListener(listener);
+    }
     class PersonAdapter extends BaseAdapter{
 
         String strs[]={"头像","手机号","昵称","性别","生日","修改密码"};
@@ -188,7 +276,7 @@ public class PersonInfoActivity extends AppCompatActivity {
         }
         @Override
         public int getCount() {
-            return 11;
+            return 9;
         }
 
         @Override
@@ -267,13 +355,6 @@ public class PersonInfoActivity extends AppCompatActivity {
                     //设置转化格式
                     String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
                     viewHolder4.tv_birthday.setText(time);
-                    break;
-                case 9:
-                    convertView=View.inflate(context,R.layout.view4,null);
-                    convertView.setMinimumHeight(40);
-                    break;
-                case 10:
-                    convertView=View.inflate(context,R.layout.person_update_pswd,null);
                     break;
             }
             return convertView;
@@ -583,6 +664,11 @@ public class PersonInfoActivity extends AppCompatActivity {
                         code=100;
                         SharedPreferences.Editor editor=preferences.edit();
                         editor.putString("username",username);
+                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                        Date date=format.parse(birthday);
+                        long ts = date.getTime();
+                        String res = String.valueOf(ts);
+                        editor.putString("birthday",res);
                         editor.commit();
                     }
                 }

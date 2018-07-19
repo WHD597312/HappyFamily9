@@ -21,28 +21,28 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
-        DeviceChildDao.createTable(db, ifNotExists);
-        HourseDao.createTable(db, ifNotExists);
-        RoomDao.createTable(db, ifNotExists);
         TimeTaskDao.createTable(db, ifNotExists);
-        TimeDao.createTable(db, ifNotExists);
+        DeviceChildDao.createTable(db, ifNotExists);
+        RoomDao.createTable(db, ifNotExists);
+        HourseDao.createTable(db, ifNotExists);
         ClockBeanDao.createTable(db, ifNotExists);
+        TimeDao.createTable(db, ifNotExists);
         UserInfoDao.createTable(db, ifNotExists);
-        UserBeanDao.createTable(db, ifNotExists);
         FriendDataDao.createTable(db, ifNotExists);
+        UserBeanDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
-        DeviceChildDao.dropTable(db, ifExists);
-        HourseDao.dropTable(db, ifExists);
-        RoomDao.dropTable(db, ifExists);
         TimeTaskDao.dropTable(db, ifExists);
-        TimeDao.dropTable(db, ifExists);
+        DeviceChildDao.dropTable(db, ifExists);
+        RoomDao.dropTable(db, ifExists);
+        HourseDao.dropTable(db, ifExists);
         ClockBeanDao.dropTable(db, ifExists);
+        TimeDao.dropTable(db, ifExists);
         UserInfoDao.dropTable(db, ifExists);
-        UserBeanDao.dropTable(db, ifExists);
         FriendDataDao.dropTable(db, ifExists);
+        UserBeanDao.dropTable(db, ifExists);
     }
 
     /**
@@ -61,15 +61,15 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
-        registerDaoClass(DeviceChildDao.class);
-        registerDaoClass(HourseDao.class);
-        registerDaoClass(RoomDao.class);
         registerDaoClass(TimeTaskDao.class);
-        registerDaoClass(TimeDao.class);
+        registerDaoClass(DeviceChildDao.class);
+        registerDaoClass(RoomDao.class);
+        registerDaoClass(HourseDao.class);
         registerDaoClass(ClockBeanDao.class);
+        registerDaoClass(TimeDao.class);
         registerDaoClass(UserInfoDao.class);
-        registerDaoClass(UserBeanDao.class);
         registerDaoClass(FriendDataDao.class);
+        registerDaoClass(UserBeanDao.class);
     }
 
     public DaoSession newSession() {

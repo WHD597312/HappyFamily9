@@ -55,7 +55,7 @@ public class AccountActivity extends AppCompatActivity {
         list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                if (position==2){
+                if (position==1){
                     Intent intent=new Intent(AccountActivity.this,ReSetpswdActivity.class);
                     startActivity(intent);
                 }
@@ -90,14 +90,14 @@ public class AccountActivity extends AppCompatActivity {
     }
     class AccountAdapter extends BaseAdapter{
         private Context context;
-        String strs[]={"账号","修改手机号码","更改登录密码"};
+        String strs[]={"账号","更改登录密码"};
         public AccountAdapter(Context context) {
             this.context = context;
         }
 
         @Override
         public int getCount() {
-            return 3;
+            return 2;
         }
 
         @Override
@@ -130,12 +130,8 @@ public class AccountActivity extends AppCompatActivity {
                 viewHolder.tv_account.setText(username);
                 viewHolder.tv_account.setVisibility(View.VISIBLE);
             }else if (position==1){
-                viewHolder.tv_account.setText(phone);
-                viewHolder.tv_head.setText(strs[1]);
-                viewHolder.tv_account.setVisibility(View.VISIBLE);
-            }else if (position==2){
                 viewHolder.tv_account.setVisibility(View.GONE);
-                viewHolder.tv_head.setText(strs[2]);
+                viewHolder.tv_head.setText(strs[1]);
             }
             return convertView;
         }

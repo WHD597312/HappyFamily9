@@ -185,7 +185,6 @@ public class MQService extends Service {
     }
 
     public void connect() {
-
         try {
             if (client.isConnected()) {
                 client.disconnect();
@@ -194,8 +193,6 @@ public class MQService extends Service {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
-
     }
 
     /**

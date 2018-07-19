@@ -88,8 +88,6 @@ public class MyApplication extends Application {
             public void onActivityDestroyed(Activity activity) {
             }
         });
-
-
     }
 
     public void addActivity(Activity activity){

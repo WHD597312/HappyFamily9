@@ -101,7 +101,7 @@ public class SettingActivity extends AppCompatActivity {
         }
         @Override
         public int getCount() {
-            return 9;
+            return 3;
         }
 
         @Override
@@ -121,47 +121,46 @@ public class SettingActivity extends AppCompatActivity {
             ViewHolder viewHolder=null;
             ViewHolder2 viewHolder2=null;
             switch (position){
+//                case 0:
+//                    convertView=View.inflate(context,R.layout.item_set,null);
+//                    viewHolder=new ViewHolder(convertView);
+//                    viewHolder.tv_head.setText(str[0]);
+//                    break;
+//                case 1:
+//                    convertView=View.inflate(context,R.layout.item_set2,null);
+//                    break;
+//                case 2:
+//                    convertView=View.inflate(context,R.layout.view3,null);
+//                    convertView.setMinimumHeight(3);
+//                    break;
                 case 0:
-                    convertView=View.inflate(context,R.layout.item_set,null);
-                    viewHolder=new ViewHolder(convertView);
-                    viewHolder.tv_head.setText(str[0]);
-                    break;
-                case 1:
-                    convertView=View.inflate(context,R.layout.item_set2,null);
-                    break;
-                case 2:
-                    convertView=View.inflate(context,R.layout.view3,null);
-                    convertView.setMinimumHeight(3);
-                    break;
-                case 3:
                     convertView=View.inflate(context,R.layout.item_set3,null);
                     viewHolder2=new ViewHolder2(convertView);
                     viewHolder2.tv_head.setText(str[1]);
                     break;
-                case 4:
+                case 1:
                     convertView=View.inflate(context,R.layout.view3,null);
                     convertView.setMinimumHeight(3);
                     break;
-                case 5:
-                    convertView=View.inflate(context,R.layout.item_set,null);
-                    viewHolder=new ViewHolder(convertView);
-                    viewHolder.tv_head.setText(str[2]);
-                    viewHolder.tv_head.setBackgroundColor(Color.parseColor("#faf9f9"));
-                    break;
-                case 6:
-                    convertView=View.inflate(context,R.layout.item_set3,null);
-                    viewHolder2=new ViewHolder2(convertView);
-                    viewHolder2.tv_head.setText(str[3]);
-                    break;
-                case 7:
-                    convertView=View.inflate(context,R.layout.view3,null);
-                    convertView.setMinimumHeight(3);
-                    break;
-                case 8:
+                case 2:
                     convertView=View.inflate(context,R.layout.item_set3,null);
                     viewHolder2=new ViewHolder2(convertView);
                     viewHolder2.tv_head.setText(str[4]);
                     break;
+//                case 6:
+//                    convertView=View.inflate(context,R.layout.item_set3,null);
+//                    viewHolder2=new ViewHolder2(convertView);
+//                    viewHolder2.tv_head.setText(str[3]);
+//                    break;
+//                case 7:
+//                    convertView=View.inflate(context,R.layout.view3,null);
+//                    convertView.setMinimumHeight(3);
+//                    break;
+//                case 8:
+//                    convertView=View.inflate(context,R.layout.item_set3,null);
+//                    viewHolder2=new ViewHolder2(convertView);
+//                    viewHolder2.tv_head.setText(str[4]);
+//                    break;
             }
             return convertView;
         }

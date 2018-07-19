@@ -16,7 +16,7 @@ greendao {
 android {
     signingConfigs {
         release {
-            storeFile file('D:/android/copy/HappyFamily/p99.jks')
+            storeFile file('F:/android/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
@@ -31,7 +31,7 @@ android {
     compileSdkVersion 25
     defaultConfig {
         applicationId "com.xr.happyFamily"
-        minSdkVersion 21
+        minSdkVersion 19
         targetSdkVersion 25
         versionCode 1
         versionName "1.0"

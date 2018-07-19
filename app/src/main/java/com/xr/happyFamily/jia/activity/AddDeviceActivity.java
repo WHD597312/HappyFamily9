@@ -13,6 +13,7 @@ import android.os.AsyncTask;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
@@ -152,6 +153,12 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         } else {
             nice_spinner.setText("");
         }
+        SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
+        if (wifi.contains(apSsid)) {
+            String pswd = wifi.getString(apSsid, "");
+            et_wifi.setText(pswd);
+            et_wifi.setInputType(InputType.TYPE_TEXT_VARIATION_PASSWORD);
+        }
         String userId = my.getString("userId", "");
         Log.i("userId", "-->" + userId);
     }
@@ -220,7 +227,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             mqService = binder.getService();
             bound = true;
             if (bound == true && !TextUtils.isEmpty(mac)) {
-                String wifiName = nice_spinner.getText().toString();
+                String wifiName = mWifiAdmin.getWifiConnectedSsid();
                 macAddress = wifiName + mac;
                 deviceName=mac;
                 if (!TextUtils.isEmpty(macAddress)) {
@@ -408,6 +415,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     JSONObject jsonObject = new JSONObject(result);
                     String returnCode = jsonObject.getString("returnCode");
                     if ("100".equals(returnCode)) {
+                        SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
+                        wifi.edit().putString(mWifiAdmin.getWifiConnectedSsid(), et_wifi.getText().toString()).commit();
                         JSONObject returnData = jsonObject.getJSONObject("returnData");
                         int deviceType = returnData.getInt("deviceType");
                         String deviceMacAddress = returnData.getString("deviceMacAddress");

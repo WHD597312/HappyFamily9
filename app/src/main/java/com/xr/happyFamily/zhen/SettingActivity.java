@@ -9,9 +9,11 @@ import android.os.Bundle;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.donkingliang.groupedadapter.adapter.GroupedRecyclerViewAdapter;
 import com.donkingliang.groupedadapter.holder.BaseViewHolder;
@@ -49,6 +51,19 @@ public class SettingActivity extends AppCompatActivity {
         unbinder=ButterKnife.bind(this);
         adatper=new SettingAdatper(this);
         list_set.setAdapter(adatper);
+        list_set.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                switch (position){
+                    case 0:
+                        Toast.makeText(SettingActivity.this,"已是最新版本",Toast.LENGTH_SHORT).show();
+                        break;
+                    case 2:
+                        Toast.makeText(SettingActivity.this,"缓存已清理",Toast.LENGTH_SHORT).show();
+                        break;
+                }
+            }
+        });
     }
 
     @OnClick({R.id.back,R.id.btn_exit})

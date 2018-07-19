@@ -6,32 +6,33 @@
     android:background="#faf9f9">
 
     <RelativeLayout
+        android:id="@+id/head"
         android:layout_width="match_parent"
-        android:layout_height="160dp"
+        android:layout_height="180dp"
         android:background="@mipmap/my_back">
 
-        <ImageView
-            android:id="@+id/image_header2"
+        <TextView
+            android:id="@+id/tv_head"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="@dimen/dp_jy_10"
-            android:src="@mipmap/myjiangshan" />
-
-        <ImageView
-            android:id="@+id/image_header"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image_header2"
-            android:src="@mipmap/my" />
+            android:text="朕的江山"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_18"
+            android:gravity="center_horizontal"
+            android:layout_marginTop="@dimen/dp_jy_5"
+            />
         <ImageView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:src="@mipmap/line"
-            android:layout_below="@+id/image_header"
+            android:scaleType="centerInside"
+            android:layout_below="@+id/tv_head"
+            android:layout_marginLeft="@dimen/dp_jy_10"
+            android:layout_marginRight="@dimen/dp_jy_10"
             />
-
         <RelativeLayout
             android:id="@+id/layout"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerVertical="true">
@@ -87,7 +88,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_jy_15"
         android:layout_marginRight="@dimen/dp_jy_15"
-        android:layout_marginTop="@dimen/dp_jy_130"
+        android:layout_marginTop="@dimen/dp_jy_150"
         android:background="@color/white"
         android:divider="@null" />
 </RelativeLayout>

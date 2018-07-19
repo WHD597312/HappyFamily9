@@ -128,14 +128,14 @@ public class DeviceChildDaoImpl {
     }
 
     /***
-     * 查询可联动的设备
+     * 查询设备类型
      * @param houseId
      * @param roomId
      * @param type
      * @return
      */
-    public List<DeviceChild> findLinkDevice(long houseId,long roomId,int type){
-        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId),DeviceChildDao.Properties.Type.notEq(type),DeviceChildDao.Properties.Linked.eq(0),DeviceChildDao.Properties.ShareId.notEq(Long.MAX_VALUE));
+    public List<DeviceChild> findDeviceType(long houseId,long roomId,int type){
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId),DeviceChildDao.Properties.Type.eq(type),DeviceChildDao.Properties.ShareId.notEq(Long.MAX_VALUE));
         return deviceChildDao.queryBuilder().where(whereCondition).orderAsc(DeviceChildDao.Properties.Id).list();
     }
 

@@ -26,17 +26,19 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_jy_40"
             android:text="设置"
-            android:textSize="@dimen/sp_20"
-            android:textColor="@color/black"
+            android:textSize="@dimen/sp_18"
             android:gravity="center"
             android:layout_centerVertical="true"
             />
     </RelativeLayout>
     <RelativeLayout
+        android:layout_marginTop="@dimen/dp_jy_10"
         android:id="@+id/layout"
         android:layout_below="@+id/head_title"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
         <ListView
             android:id="@+id/list_set"
             android:layout_width="match_parent"
@@ -57,8 +59,9 @@
         android:layout_height="@dimen/dp_jy_45"
         android:text="退出账号"
         android:gravity="center"
-        android:textSize="@dimen/sp_14"
-        android:background="@drawable/shape_exit"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_16"
+        android:background="@mipmap/button"
         />
 
 

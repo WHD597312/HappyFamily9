@@ -27,7 +27,9 @@ import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.zhen.AboutActivity;
 import com.xr.happyFamily.zhen.AccountActivity;
+import com.xr.happyFamily.zhen.HelpActivity;
 import com.xr.happyFamily.zhen.PersonInfoActivity;
 import com.xr.happyFamily.zhen.SettingActivity;
 
@@ -82,10 +84,10 @@ public class ZhenFragment extends Fragment {
         list_info.setAdapter(myAdapter);
         return view;
     }
-    @OnClick({R.id.image_editor})
+    @OnClick({R.id.layout})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.image_editor:
+            case R.id.layout:
                 Intent intent=new Intent(getActivity(), PersonInfoActivity.class);
                 startActivityForResult(intent,7000);
                 break;
@@ -100,20 +102,21 @@ public class ZhenFragment extends Fragment {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        break;
-                    case 3:
                         Intent account=new Intent(getActivity(), AccountActivity.class);
                         startActivity(account);
                         break;
-                    case 5:
+                    case 2:
+                        Intent help=new Intent(getActivity(), HelpActivity.class);
+                        startActivity(help);
                         break;
-                    case 7:
+                    case 4:
+                        Intent about=new Intent(getActivity(), AboutActivity.class);
+                        startActivity(about);
                         break;
-                    case 9:
+                    case 6:
                         Intent setIntent=new Intent(getActivity(), SettingActivity.class);
                         startActivityForResult(setIntent,7000);
                         break;
-
                 }
             }
         });
@@ -167,7 +170,7 @@ public class ZhenFragment extends Fragment {
 
         @Override
         public int getCount() {
-            return 10;
+            return 7;
         }
 
         @Override
@@ -186,51 +189,51 @@ public class ZhenFragment extends Fragment {
             int imgs[]={R.mipmap.optimal,R.mipmap.secure,R.mipmap.feedback,R.mipmap.aboutus, R.mipmap.setting};
             String strs[]={"优点子","账号与安全","帮助与反馈","关于我们","设置"};
             switch (position){
+//                case 0:
+//                    convertView=View.inflate(context,R.layout.item_my,null);
+//                    viewHolder=new ViewHolder(convertView);
+//                    viewHolder.image_icon.setImageResource(imgs[0]);
+//                    viewHolder.tv_item.setText(strs[0]);
+//                    break;
+//                case 1:
+//                    convertView=View.inflate(context,R.layout.view3,null);
+//                    convertView.setMinimumHeight(3);
+//                    break;
+//                case 2:
+//                    convertView=View.inflate(context,R.layout.view2,null);
+//                    convertView.setMinimumHeight(50);
+//                    break;
                 case 0:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
-                    viewHolder.image_icon.setImageResource(imgs[0]);
-                    viewHolder.tv_item.setText(strs[0]);
+                    viewHolder.image_icon.setImageResource(imgs[1]);
+                    viewHolder.tv_item.setText(strs[1]);
                     break;
                 case 1:
                     convertView=View.inflate(context,R.layout.view3,null);
                     convertView.setMinimumHeight(3);
                     break;
                 case 2:
-                    convertView=View.inflate(context,R.layout.view2,null);
-                    convertView.setMinimumHeight(50);
-                    break;
-                case 3:
-                    convertView=View.inflate(context,R.layout.item_my,null);
-                    viewHolder=new ViewHolder(convertView);
-                    viewHolder.image_icon.setImageResource(imgs[1]);
-                    viewHolder.tv_item.setText(strs[1]);
-                    break;
-                case 4:
-                    convertView=View.inflate(context,R.layout.view3,null);
-                    convertView.setMinimumHeight(3);
-                    break;
-                case 5:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
                     viewHolder.image_icon.setImageResource(imgs[2]);
                     viewHolder.tv_item.setText(strs[2]);
                     break;
-                case 6:
+                case 3:
                     convertView=View.inflate(context,R.layout.view3,null);
                     convertView.setMinimumHeight(3);
                     break;
-                case 7:
+                case 4:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
                     viewHolder.image_icon.setImageResource(imgs[3]);
                     viewHolder.tv_item.setText(strs[3]);
                     break;
-                case 8:
+                case 5:
                     convertView=View.inflate(context,R.layout.view2,null);
-                    convertView.setMinimumHeight(50);
+                    convertView.setMinimumHeight(30);
                     break;
-                case 9:
+                case 6:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
                     viewHolder.image_icon.setImageResource(imgs[4]);

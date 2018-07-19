@@ -2,32 +2,13 @@ package com.xr.happyFamily.together.http;
 
 
 import android.content.Context;
-import android.content.Intent;
 import android.content.SharedPreferences;
 import android.util.Log;
 import android.widget.Toast;
 
-
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.util.Log;
-import android.widget.Toast;
 
 import com.alibaba.fastjson.JSONObject;
 import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.login.login.LoginActivity;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.builder.GetBuilder;
-
-
-import org.json.JSONArray;
-import org.json.JSONException;
-
-import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.IOException;
-import java.io.InputStream;
-import com.xr.happyFamily.jia.MyApplication;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.GetBuilder;
 
@@ -38,16 +19,16 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+
+
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
-import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
-import okhttp3.Cache;
-import okhttp3.Interceptor;
 import okhttp3.MediaType;
+import okhttp3.MultipartBody;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
@@ -672,6 +653,53 @@ public class HttpUtils {
         return result;
     }
 
+    public static String upFileAndDesc(String url, Map<String, Object> paramsMap, Map<String, Object> fileMap){
+        String result=null;
+        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
+        String token =my.getString("token","");
+       MediaType MEDIA_TYPE_FILE = MediaType.parse("image/jpg");
+        try {
+            //入参-字符串
+
+            MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            for (Map.Entry entry : paramsMap.entrySet()) {
+                requestBody.addFormDataPart(entry.getKey().toString(), entry.getValue().toString());
+            }
+            //入参-文件
+            for (Map.Entry entry : fileMap.entrySet()) {
+                File file = (File) entry.getValue();
+                RequestBody fileBody = RequestBody.create(MEDIA_TYPE_FILE, file);
+                String fileName = file.getName();
+                requestBody.addFormDataPart("files", fileName, fileBody);
+            }
+            Request request = new Request.Builder()
+                    .addHeader("authorization",token)
+                    .url(url)
+                    .post(requestBody.build())
+                    .build();
+
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(5, TimeUnit.SECONDS)//设置连接超时
+                    .readTimeout(5, TimeUnit.SECONDS)//读取超时
+                    .writeTimeout(5, TimeUnit.SECONDS)//写入超时
+                    .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
+                    .build();
+            Response response=okHttpClient.newCall(request).execute();
+
+            if(response.isSuccessful()) {
+                Log.e("qqqqqqqqXXXX", "111111");
+                result = response.body().string();
+            }
+            for (Map.Entry entry : fileMap.entrySet()) {
+                File file = (File) entry.getValue();
+                file.delete();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
     public static String upLoadFile(String url, String fileNmae, File file) {
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
 //            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);

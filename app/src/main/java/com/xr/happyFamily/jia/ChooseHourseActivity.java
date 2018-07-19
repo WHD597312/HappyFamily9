@@ -99,10 +99,8 @@ public class ChooseHourseActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_hourse_gl:
-
                 Intent intent = new Intent(this, ManageHourseActivity.class);
                 startActivity(intent);
-
                 break;
             case R.id.iv_choose_back:
                 startActivity(new Intent(this, MainActivity.class));
@@ -122,6 +120,5 @@ public class ChooseHourseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
     }
 }

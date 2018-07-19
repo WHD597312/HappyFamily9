@@ -84,10 +84,10 @@ public class ZhenFragment extends Fragment {
         list_info.setAdapter(myAdapter);
         return view;
     }
-    @OnClick({R.id.image_editor})
+    @OnClick({R.id.layout})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.image_editor:
+            case R.id.layout:
                 Intent intent=new Intent(getActivity(), PersonInfoActivity.class);
                 startActivityForResult(intent,7000);
                 break;
@@ -231,7 +231,7 @@ public class ZhenFragment extends Fragment {
                     break;
                 case 5:
                     convertView=View.inflate(context,R.layout.view2,null);
-                    convertView.setMinimumHeight(50);
+                    convertView.setMinimumHeight(30);
                     break;
                 case 6:
                     convertView=View.inflate(context,R.layout.item_my,null);

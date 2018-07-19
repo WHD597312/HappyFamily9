@@ -42,6 +42,7 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.SmartWheelInfo;
 import com.xr.happyFamily.jia.view_custom.DeviceChildDialog;
+import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.SemicircleBar;
 import com.xr.happyFamily.jia.view_custom.SmartWheelBar;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
@@ -232,12 +233,76 @@ public class DeviceDetailActivity extends AppCompatActivity {
             }
         });
     }
+
+
+
+
+
+
+    private PopupWindow popupWindow1;
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.popview_room_homemanerge, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        RelativeLayout rl_room_rename = (RelativeLayout) view.findViewById(R.id.rl_room_rename);
+        RelativeLayout tv_timer = (RelativeLayout) view.findViewById(R.id.rl_room_del);
+        TextView tv_rname_r1 = (TextView) view.findViewById(R.id.tv_rname_r1);
+        TextView tv_del_r1 = (TextView) view.findViewById(R.id.tv_del_r1);
+        ImageView iv_del_r1 = (ImageView) view.findViewById(R.id.iv_del_r1);
+        tv_rname_r1.setText("修改名称");
+        tv_del_r1.setText("分享设备");
+        iv_del_r1.setImageResource(R.mipmap.pop_share);
+        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.Popupwindow);
+
+//        ColorDrawable dw = new ColorDrawable(0x30000000);
+//        popupWindow.setBackgroundDrawable(dw);
+        popupWindow1.showAsDropDown(image_more, 0, 20);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.rl_room_rename:
+                        buildUpdateDeviceDialog();
+                        popupWindow1.dismiss();
+                        break;
+                    case R.id.rl_room_del:
+                        Intent intent=new Intent(DeviceDetailActivity.this,ShareDeviceActivity.class);
+                        long id=deviceChild.getId();
+                        intent.putExtra("deviceId",id);
+                        startActivity(intent);
+                        popupWindow1.dismiss();
+                        break;
+                }
+            }
+        };
+
+        rl_room_rename.setOnClickListener(listener);
+        tv_timer.setOnClickListener(listener);
+    }
+
+
+
+
+
+
+
     int deviceState;
     @OnClick({R.id.image_more,R.id.image_back,R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.image_more:
-                showPopupMenu(image_more);
+                popupmenuWindow();
                 break;
             case R.id.image_back:
                 Intent intent=new Intent();
@@ -694,47 +759,17 @@ public class DeviceDetailActivity extends AppCompatActivity {
         }
     };
 
-    String title;
-    private void showPopupMenu(View view) {
-        // View当前PopupMenu显示的相对View的位置
-        PopupMenu popupMenu = new PopupMenu(this, view);
-        // menu布局
-        popupMenu.getMenuInflater().inflate(R.menu.device_menu, popupMenu.getMenu());
-        // menu的item点击事件
-        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                title = String.valueOf(item.getTitle());
-                return false;
-            }
-        });
-        // PopupMenu关闭事件
-        popupMenu.setOnDismissListener(new PopupMenu.OnDismissListener() {
-            @Override
-            public void onDismiss(PopupMenu menu) {
-                if ("修改名称".equals(title)){
-                    buildUpdateDeviceDialog();
-                }
-                if ("分享设备".equals(title)){
-                    Intent intent=new Intent(DeviceDetailActivity.this,ShareDeviceActivity.class);
-                    long id=deviceChild.getId();
-                    intent.putExtra("deviceId",id);
-                    startActivity(intent);
-                }
-            }
-        });
-        popupMenu.show();
-    }
+
     String deviceName;
     private void buildUpdateDeviceDialog() {
-        final UpdateDeviceDialog dialog = new UpdateDeviceDialog(this);
-        dialog.setOnNegativeClickListener(new UpdateDeviceDialog.OnNegativeClickListener() {
+        final HomeDialog dialog = new HomeDialog(this);
+        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
             @Override
             public void onNegativeClick() {
                 dialog.dismiss();
             }
         });
-        dialog.setOnPositiveClickListener(new UpdateDeviceDialog.OnPositiveClickListener() {
+        dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
                 deviceName = dialog.getName();

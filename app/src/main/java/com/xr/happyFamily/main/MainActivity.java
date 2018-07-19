@@ -361,7 +361,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (unbinder != null) {
             unbinder.unbind();
         }
-        
+
         Log.e("close", "onDestroy: ---->" );
 //        mPositionPreferences.edit().clear().commit();
 //        //闹铃 退出将倒计时状态改为f

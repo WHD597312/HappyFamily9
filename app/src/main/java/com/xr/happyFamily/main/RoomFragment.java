@@ -2,14 +2,17 @@ package com.xr.happyFamily.main;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.graphics.drawable.ColorDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -48,6 +51,7 @@ import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONObject;
 
@@ -78,6 +82,8 @@ public class RoomFragment extends Fragment{
     GridViewAdapter mGridViewAdapter;
     @BindView(R.id.tv_home_manager)
     TextView tv_home_manager;/**房间管理*/
+    @BindView(R.id.tv_balcony_23) TextView tv_balcony_23;/**房间温度*/
+    @BindView(R.id.tv_balcony_sd) TextView tv_balcony_sd;/**房间湿度*/
     SharedPreferences roomPreferences;
     public static int index;
     private SharedPreferences mPositionPreferences;
@@ -101,7 +107,6 @@ public class RoomFragment extends Fragment{
         super.onDestroy();
         Log.i("RoomFragment","onDestroy");
         Log.i("RoomFragment","-->"+room.getRoomType());
-
     }
 
     @Nullable
@@ -125,6 +130,16 @@ public class RoomFragment extends Fragment{
             deviceChildren=deviceChildDao.findHouseInRoomDevices(houseId,roomId);
             Log.i("deviceSize","-->"+deviceChildren.size());
             mGridData=deviceChildDao.findHouseInRoomDevices(houseId,roomId);
+            List<DeviceChild> deviceChildren=deviceChildDao.findDeviceType(houseId,roomId,3);
+            if (deviceChildren==null || deviceChildren.isEmpty()){
+
+            }else {
+                DeviceChild deviceChild=deviceChildren.get(0);
+                int sensorSimpleTemp=deviceChild.getSensorSimpleTemp();
+                int sensorSimpleHum=deviceChild.getSensorSimpleHum();
+                tv_balcony_23.setText(sensorSimpleTemp+"");
+                tv_balcony_sd.setText(sensorSimpleHum+"");
+            }
             int size=mGridData.size();
             Log.i("size","size:"+size);
             mGridViewAdapter = new GridViewAdapter(getActivity(), R.layout.activity_home_item, mGridData);
@@ -189,6 +204,7 @@ public class RoomFragment extends Fragment{
         dialog.show();
     }
     MessageReceiver receiver;
+    private boolean isBound;
     @Override
     public void onStart() {
         super.onStart();
@@ -197,6 +213,9 @@ public class RoomFragment extends Fragment{
         IntentFilter intentFilter = new IntentFilter("RoomFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
+
+        Intent service = new Intent(getActivity(), MQService.class);
+        isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
     }
     @OnClick({R.id.balcony_li,R.id.iv_home_fh,R.id.btn_add_device,R.id.tv_home_manager})
     public void onClick(View view){
@@ -262,6 +281,9 @@ public class RoomFragment extends Fragment{
             Log.i("RoomFragment","onStop");
             getActivity().unregisterReceiver(receiver);
         }
+        if (isBound){
+            getActivity().unbindService(connection);
+        }
     }
 
     @Override
@@ -301,7 +323,6 @@ public class RoomFragment extends Fragment{
 //        });
 //        popupMenu.show();
 //    }
-
 
 
 
@@ -445,7 +466,28 @@ public class RoomFragment extends Fragment{
                                     editor.commit();
                                 }
                             }
-
+                        }
+                        List<DeviceChild> deviceChildren=deviceChildDao.findHouseInRoomDevices(houseId,roomId);
+                        for (DeviceChild deviceChild:deviceChildren){
+                            String macAddress = deviceChild.getMacAddress();
+                            int type = deviceChild.getType();
+                            String onlineTopicName = "";
+                            String offlineTopicName = "";
+                            switch (type) {
+                                case 2:
+                                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                    break;
+                                case 3:
+                                    onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(onlineTopicName);
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(offlineTopicName);
+                            }
                         }
                         deviceChildDao.deleteDeviceInHouseRoom(houseId,roomId);
                     }
@@ -490,7 +532,27 @@ public class RoomFragment extends Fragment{
                     String returnCode=jsonObject.getString("returnCode");
                     if ("100".equals(returnCode)){
                         code=100;
+
                         if (mdeledeviceChild!=null){
+                            String macAddress = mdeledeviceChild.getMacAddress();
+                            int type = mdeledeviceChild.getType();
+                            String onlineTopicName = "";
+                            String offlineTopicName = "";
+                            switch (type) {
+                                case 2:
+                                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                    break;
+                                case 3:
+                                    onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(onlineTopicName);
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(offlineTopicName);
+                            }
                             deviceChildDao.delete(mdeledeviceChild);
                         }
                     }
@@ -555,6 +617,20 @@ public class RoomFragment extends Fragment{
             }
         }
     }
+    MQService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
     class MessageReceiver extends BroadcastReceiver{
         @Override
         public void onReceive(Context context, Intent intent) {

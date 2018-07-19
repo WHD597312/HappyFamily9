@@ -92,14 +92,6 @@
             android:layout_below="@+id/et_wifi"
             android:visibility="gone"
             />
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_below="@id/et_wifi"
-            android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/dp_jy_10"
-            android:text="隐藏密码"
-            android:textColor="@color/green2" />
     </RelativeLayout>
 
 

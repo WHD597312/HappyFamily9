@@ -4,6 +4,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,11 +30,13 @@ public class NoRoomFragment extends Fragment {
     Unbinder unbinder;
     public static final int MREQUEST_CODE=2;
     private HourseDaoImpl hourseDao;
+    @BindView(R.id.tv_23_my1) TextView tv_23_my1;/**家庭温度*/
     Hourse hourse;
     private long houseId;
     @BindView(R.id.rl_page) RelativeLayout rl_page;
     @BindView(R.id.tv_noroom_hoursename)
     TextView textViewhousename;
+    private String temperature;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -42,8 +45,17 @@ public class NoRoomFragment extends Fragment {
         hourseDao=new HourseDaoImpl(getActivity());
         hourse=hourseDao.findById(houseId);
         String hourseName = hourse.getHouseName();
-        textViewhousename.setText(hourseName);
+        String address=hourse.getHouseAddress();
+        textViewhousename.setText(hourseName+"."+address);
         return view;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        if (!TextUtils.isEmpty(temperature)){
+            tv_23_my1.setText(temperature);
+        }
     }
 
     @OnClick({R.id.rl_page,R.id.btn_add_room,R.id.tv_noroom_hoursename})
@@ -63,6 +75,14 @@ public class NoRoomFragment extends Fragment {
                 startActivity(intent2);
                 break;
         }
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
     public void setHouseId(long houseId) {

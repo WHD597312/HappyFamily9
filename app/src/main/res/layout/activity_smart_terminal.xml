@@ -83,6 +83,7 @@
             android:textColor="@color/white"
             android:layout_marginLeft="80px"
             android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_jy_5"
             />
         <View
             android:id="@+id/view1"
@@ -91,8 +92,9 @@
             android:layout_alignTop="@+id/tv_temp"
             android:layout_alignBottom="@+id/tv_temp"
             android:layout_toRightOf="@+id/tv_temp"
+            android:paddingTop="@dimen/dp_jy_5"
             android:background="@color/white"
-            android:layout_marginTop="@dimen/dp_jy_2"
+            android:layout_marginTop="@dimen/dp_jy_4"
             android:layout_marginBottom="@dimen/dp_jy_2"
             android:layout_marginLeft="@dimen/dp_jy_5"
             android:layout_marginRight="@dimen/dp_jy_5"
@@ -106,6 +108,7 @@
             android:text="较低"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_12"
+            android:paddingTop="@dimen/dp_jy_5"
             />
 
         <TextView
@@ -116,6 +119,7 @@
             android:layout_toRightOf="@+id/tv_temp_state"
             android:text="相对湿度"
             android:textColor="@color/white"
+            android:paddingTop="@dimen/dp_jy_5"
             android:textSize="@dimen/sp_12" />
         <View
             android:id="@+id/view2"
@@ -125,10 +129,11 @@
             android:layout_alignBottom="@+id/tv_temp"
             android:layout_toRightOf="@+id/tv_hum"
             android:background="@color/white"
-            android:layout_marginTop="@dimen/dp_jy_2"
+            android:layout_marginTop="@dimen/dp_jy_4"
             android:layout_marginBottom="@dimen/dp_jy_2"
             android:layout_marginLeft="@dimen/dp_jy_5"
             android:layout_marginRight="@dimen/dp_jy_5"
+            android:paddingTop="@dimen/dp_jy_5"
             />
         <TextView
             android:id="@+id/tv_hum_state"
@@ -140,6 +145,7 @@
             android:textColor="@color/white"
             android:text="非常干燥"
             android:layout_marginRight="@dimen/dp_jy_10"
+            android:paddingTop="@dimen/dp_jy_5"
             />
         <ImageView
             android:id="@+id/smart_hum_white"
@@ -234,16 +240,18 @@
             android:textSize="@dimen/sp_12"
             android:textColor="@color/white"
             android:gravity="center_vertical"
+            android:paddingTop="@dimen/dp_jy_5"
             />
         <View
             android:id="@+id/view3"
             android:layout_width="@dimen/dp_jy_1"
+            android:paddingTop="@dimen/dp_jy_5"
             android:layout_height="wrap_content"
             android:layout_alignTop="@+id/tv_air"
             android:layout_alignBottom="@+id/tv_air"
             android:layout_toRightOf="@+id/tv_air"
             android:background="@color/white"
-            android:layout_marginTop="@dimen/dp_jy_2"
+            android:layout_marginTop="@dimen/dp_jy_4"
             android:layout_marginBottom="@dimen/dp_jy_2"
             android:layout_marginLeft="@dimen/dp_jy_5"
             android:layout_marginRight="@dimen/dp_jy_5"
@@ -259,6 +267,7 @@
             android:textSize="@dimen/sp_12"
             android:textColor="@color/white"
             android:gravity="center_vertical"
+            android:paddingTop="@dimen/dp_jy_5"
             />
 
         <TextView
@@ -289,12 +298,10 @@
             android:id="@+id/image_air"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerHorizontal="true"
-            android:layout_centerInParent="true"
             android:src="@mipmap/smart_air_back"
             android:scaleType="centerInside"
             android:layout_alignParentRight="true"
-            android:layout_marginTop="@dimen/dp_jy_5"
+            android:layout_marginTop="@dimen/dp_jy_16"
 
             />
 
@@ -305,7 +312,6 @@
             android:layout_alignLeft="@id/image_air"
             android:layout_alignParentRight="true"
             android:layout_alignRight="@+id/image_air"
-            android:layout_centerVertical="true"
             android:gravity="center"
             android:text="10"
             android:textColor="@color/white"

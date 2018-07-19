@@ -2,12 +2,15 @@ package com.xr.happyFamily.main;
 
 import android.app.Dialog;
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
@@ -42,6 +45,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.view_custom.DeleteDeviceDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONObject;
 
@@ -64,6 +68,8 @@ public class FamilyFragment extends Fragment {
     private long houseId;
     @BindView(R.id.rl_home_xnty)
     RelativeLayout rl_home_xnty;
+    private String temperature;
+    @BindView(R.id.tv_23_my) TextView tv_23_my;/**家庭温度*/
     /**
      * 虚拟体验
      */
@@ -119,8 +125,6 @@ public class FamilyFragment extends Fragment {
 
         deviceChildDao = new DeviceChildDaoImpl(getActivity());
         hourseDao = new HourseDaoImpl(getActivity());
-
-
         return view;
     }
 
@@ -164,6 +168,22 @@ public class FamilyFragment extends Fragment {
                     if ("100".equals(returnCode)) {
                         code = 100;
                         if (mdeledeviceChild != null) {
+                            String macAddress = mdeledeviceChild.getMacAddress();
+                            int type = mdeledeviceChild.getType();
+                            String onlineTopicName = "";
+                            String offlineTopicName = "";
+                            switch (type) {
+                                case 2:
+                                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                    break;
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(onlineTopicName);
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(offlineTopicName);
+                            }
                             deviceChildDao.delete(mdeledeviceChild);
                         }
                     }
@@ -220,15 +240,22 @@ public class FamilyFragment extends Fragment {
     }
 
     MessageReceiver receiver;
-
+    private boolean isBound;
     @Override
     public void onStart() {
         super.onStart();
         IntentFilter intentFilter = new IntentFilter("RoomFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
+
+        Intent service = new Intent(getActivity(), MQService.class);
+        isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
         Hourse hourse = hourseDao.findById(houseId);
+
         if (hourse != null) {
+            if (!TextUtils.isEmpty(temperature)){
+                tv_23_my.setText(temperature);
+            }
             String name = hourse.getHouseName();
             String address = hourse.getHouseAddress();
             tv_my_hourse.setText(name+"·"+address);
@@ -315,11 +342,17 @@ public class FamilyFragment extends Fragment {
                     }else {
                         Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
                     }
-
                 }
             });
-
         }
+    }
+
+    public String getTemperature() {
+        return temperature;
+    }
+
+    public void setTemperature(String temperature) {
+        this.temperature = temperature;
     }
 
     @Override
@@ -337,7 +370,24 @@ public class FamilyFragment extends Fragment {
         if (unbinder != null) {
             unbinder.unbind();
         }
+        if (isBound){
+            getActivity().unbindService(connection);
+        }
     }
+    MQService mqService;
+    boolean bound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
     class MessageReceiver extends BroadcastReceiver {
         @Override

@@ -39,6 +39,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.le.BtClock.bjTimeActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
@@ -49,6 +50,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -104,6 +106,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     String load;
     AlarmManager alarmManager;
     private String family;
+    private String city;
+    private String temperature;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -148,6 +152,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             Hourse hourse = hourses.get(0);
             houseId = hourse.getHouseId();
         }
+        familyFragmentManager = new FamilyFragmentManager();
+        leFragment = new LeFragment();
+        baoFragment = new BaoFragment();
+        zhenFragment=new ZhenFragment();
 
         mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
         sign = intent.getStringExtra("sign");
@@ -163,17 +171,25 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             }
             family="";
         }else {
-            FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-            familyFragmentManager = new FamilyFragmentManager();
-            leFragment = new LeFragment();
-            baoFragment = new BaoFragment();
-            zhenFragment=new ZhenFragment();
-            Bundle bundle = new Bundle();
-            bundle.putString("load","load");
-            bundle.putLong("houseId", houseId);
-            familyFragmentManager.setArguments(bundle);
-            fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-            fragmentTransaction.commit();
+            if (NetWorkUtil.isConn(this)){
+                Hourse hourse=hourseDao.findById(houseId);
+                if (hourse!=null){
+                    city=hourse.getHouseAddress();
+                    if (!TextUtils.isEmpty(city)){
+                        city=city.substring(0,city.length()-1);
+                        new WeatherAsync().execute();
+                    }
+                }
+            }else {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("load","load");
+                bundle.putLong("houseId", houseId);
+                bundle.putString("temperature","");
+                familyFragmentManager.setArguments(bundle);
+                fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+                fragmentTransaction.commit();
+            }
         }
         if (!preferences.contains("image")){
             if (preferences.contains("headImgUrl")){
@@ -214,6 +230,52 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         }
     };
+
+    class WeatherAsync extends AsyncTask<Void,Void,String>{
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String temperature=null;
+            try {
+                String url="http://apicloud.mob.com/v1/weather/query?key=257a640199764&city="+ URLEncoder.encode(city,"UTF-8");
+                String result=HttpUtils.getOkHpptRequest(url);
+                Log.i("result","-->"+result);
+                if (!TextUtils.isEmpty(result)){
+                    JSONObject jsonObject=new JSONObject(result);
+                    String msg=jsonObject.getString("msg");
+                    if ("success".equals(msg)){
+                        JSONArray jsonArray=jsonObject.getJSONArray("result");
+                        int len=jsonArray.length();
+                        JSONObject jsonObject2=jsonArray.getJSONObject(0);
+                        temperature=jsonObject2.getString("temperature");
+                        Log.i("temperature","-->"+temperature);
+                    }
+                }
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return temperature;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            try {
+                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                Bundle bundle = new Bundle();
+                bundle.putString("load","load");
+                bundle.putLong("houseId", houseId);
+                temperature=s;
+                bundle.putString("temperature",s);
+                familyFragmentManager.setArguments(bundle);
+                fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+                fragmentTransaction.commit();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+
+        }
+    }
 
 
 //    MQService mqService;
@@ -268,6 +330,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             Bundle bundle = new Bundle();
             bundle.putString("load","load");
             bundle.putLong("houseId", houseId);
+            bundle.putString("temperature",temperature);
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
@@ -292,6 +355,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 Bundle bundle = new Bundle();
                 bundle.putLong("houseId", houseId);
                 bundle.putString("load","");
+                bundle.putString("temperature",temperature);
                 familyFragmentManager = new FamilyFragmentManager();
                 familyFragmentManager.setArguments(bundle);
                 FragmentTransaction familyTransaction = fragmentManager.beginTransaction();

@@ -23,7 +23,7 @@ public class GridViewAdapter extends ArrayAdapter {
     private int layoutResourceId;
     private List<DeviceChild> mGridData;
 
-    int img[]={R.mipmap.sb_dnq};
+    int img[]={R.mipmap.sb_dnq,R.mipmap.sb_znzd};
     public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
         super(context, resource, objects);
         this.mContext = context;
@@ -59,6 +59,7 @@ public class GridViewAdapter extends ArrayAdapter {
                     holder.tv_device_type.setText("取暖器");
                     boolean online=item.getOnline();
                     int deviceState=item.getDeviceState();
+                    item.setImg(img[0]);
                     if (online){
                         if (deviceState==1){
                             holder.tv_device_switch.setText("电源开");
@@ -78,26 +79,28 @@ public class GridViewAdapter extends ArrayAdapter {
                     Log.i("online","-->"+online);
                     int sensorState=item.getSensorState();
                     Log.i("online","-->"+sensorState);
+                    item.setImg(img[1]);
                     if (online){
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                        holder.view.setVisibility(View.VISIBLE);
                         if (sensorState==128){
                             holder.tv_device_switch.setText("USB供电");
                         }else if (sensorState==1){
                             holder.tv_device_switch.setText("电压正常");
                         }else if (sensorState==2){
                             holder.tv_device_switch.setText("电压低");
+                        }else {
+                            holder.tv_device_switch.setText("在线");
                         }
-                        holder.tv_device_switch.setTextColor(Color.parseColor("#57Cf76"));
                     }else {
+                        holder.view.setVisibility(View.GONE);
                         holder.tv_device_switch.setText("离线");
-                        holder.tv_device_switch.setTextColor(Color.parseColor("#999999"));
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
                 }
-                item.setImg(img[0]);
                 holder.tv_device_name.setText(item.getName());
                 Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             }
-
-
             return convertView;
         }
     private class ViewHolder {

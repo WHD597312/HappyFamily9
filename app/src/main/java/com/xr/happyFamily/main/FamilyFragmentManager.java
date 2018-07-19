@@ -22,13 +22,20 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.adapter.FamilyAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -49,6 +56,7 @@ public class FamilyFragmentManager extends Fragment {
     private DeviceChildDaoImpl deviceChildDao;
     private List<DeviceChild> shareChildren=new ArrayList<>();
     SharedPreferences preferences;
+    private String city;
     boolean isBound;
     String load;
     @Nullable
@@ -63,9 +71,12 @@ public class FamilyFragmentManager extends Fragment {
             Bundle bundle = getArguments();
             houseId = bundle.getLong("houseId");
             load=bundle.getString("load");
+            String temperature=bundle.getString("temperature");
             roomDao = new RoomDaoImpl(getActivity());
             deviceChildDao=new DeviceChildDaoImpl(getActivity());
+
             List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
+
             preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
             String userIdStr=preferences.getString("userId","");
             if (!TextUtils.isEmpty(userIdStr)){
@@ -80,10 +91,13 @@ public class FamilyFragmentManager extends Fragment {
             if (rooms.isEmpty() && shareChildren.isEmpty()) {
                 NoRoomFragment noRoomFragment = new NoRoomFragment();
                 noRoomFragment.setHouseId(houseId);
+                noRoomFragment.setTemperature(temperature);
                 fragmentList.add(noRoomFragment);
             } else {
                 FamilyFragment familyFragment = new FamilyFragment();
+                familyFragment.setTemperature(temperature);
                 familyFragment.setHouseId(houseId);
+
                 fragmentList.add(familyFragment);
             }
             Log.i("roomtList", "-->" + rooms.size());
@@ -115,6 +129,7 @@ public class FamilyFragmentManager extends Fragment {
         isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
         return view;
     }
+
     MQService mqService;
     boolean bound;
     ServiceConnection connection=new ServiceConnection() {

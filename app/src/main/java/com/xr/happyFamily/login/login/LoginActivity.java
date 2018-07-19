@@ -6,7 +6,9 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -32,20 +34,24 @@ import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.login.rigest.ForgetPswdActivity;
 import com.xr.happyFamily.login.rigest.RegistActivity;
 import android.os.Handler.Callback;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -89,7 +95,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
-    int firstClick=1;
+
     SharedPreferences mPositionPreferences;
 
     @Override
@@ -159,7 +165,32 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             }
         }
     }
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
 
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+
+        @Override
+        public void onFinish() {
+            Log.e("Tag", "倒计时完成");
+            hideProgressDialog();
+        }
+    }
     @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -167,6 +198,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 startActivity(new Intent(this, RegistActivity.class));
                 break;
             case R.id.btn_login:
+
                 String phone = et_name.getText().toString().trim();
                 String password = et_pswd.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
@@ -180,13 +212,21 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     Utils.showToast(this, "请输入密码");
                     break;
                 }
-               if (firstClick==1){
-                   Map<String, Object> params = new HashMap<>();
-                   params.put("phone", phone);
-                   params.put("password", password);
-                   new LoginAsyncTask().execute(params);
-                   firstClick=0;
-               }
+                boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
+                if (isConn){
+                    showProgressDialog("正在登录，请稍后...");
+                    CountTimer countTimer = new CountTimer(6000, 1000);
+                    countTimer.start();
+                    Map<String, Object> params = new HashMap<>();
+                    params.put("phone", phone);
+                    params.put("password", password);
+                    new LoginAsyncTask().execute(params);
+                }else {
+                    Utils.showToast(this, "无网络可用，请检查网络");
+                }
+
+
+
                 break;
             case R.id.tv_forget_pswd:
                 startActivity(new Intent(this, ForgetPswdActivity.class));
@@ -362,7 +402,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     public void showProgressDialog(String message) {
         progressDialog = new ProgressDialog(this);
         progressDialog.setMessage(message);
-        progressDialog.setCancelable(true);
+        progressDialog.setCancelable(false);
         progressDialog.show();
     }
 
@@ -386,9 +426,10 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     String userId;
 
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
-
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
+
+
             int code = 0;
             Map<String, Object> params = maps[0];
             String result = HttpUtils.postOkHpptRequest(url, params);
@@ -429,14 +470,14 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             switch (code) {
                 case 10002:
                     Utils.showToast(LoginActivity.this, "手机号码未注册");
-                    firstClick=1;
+
                     break;
                 case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
-                    firstClick=1;
                     et_pswd.setText("");
                     break;
                 case 100:
+                    hideProgressDialog();
                     break;
             }
         }

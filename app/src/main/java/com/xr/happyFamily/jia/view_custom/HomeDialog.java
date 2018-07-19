@@ -5,6 +5,7 @@ import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
 import com.xr.happyFamily.R;
@@ -23,9 +24,9 @@ public class HomeDialog extends Dialog {
     @BindView(R.id.et_homed_name)
     EditText et_name;
     @BindView(R.id.tv_dialog_qx)
-    TextView button_cancel;
+    Button button_cancel;
     @BindView(R.id.tv_dialog_qd)
-    TextView button_ensure;
+    Button button_ensure;
     private String name;
     public HomeDialog(@NonNull Context context) {
         super(context, R.style.MyDialog);

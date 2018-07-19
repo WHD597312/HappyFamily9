@@ -4,7 +4,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@mipmap/bj1"
+    android:background="@mipmap/bj_home"
     android:orientation="vertical">
 
 
@@ -29,11 +29,11 @@
                 android:layout_height="match_parent">
                 <ImageButton
                     android:id="@+id/image_change"
-                    android:layout_width="26dp"
-                    android:layout_height="26dp"
+                    android:layout_width="@dimen/dp_jy_23"
+                    android:layout_height="@dimen/dp_jy_23"
                     android:layout_alignParentRight="true"
-                    android:layout_marginRight="@dimen/dp_jy_12"
-                    android:layout_marginTop="@dimen/dp_jy_12"
+                    android:layout_marginRight="@dimen/dp_jy_14"
+                    android:layout_marginTop="@dimen/dp_jy_13"
                     android:background="@null"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/weishengjian1" />
@@ -44,9 +44,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_jy_12"
                     android:layout_marginTop="@dimen/dp_jy_12"
+                    android:textSize="@dimen/sp_16"
                     android:text="Cofen的家"
                     android:textColor="@color/white" />
-
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_toRightOf="@+id/tv_my_hourse"
+                    android:layout_alignTop="@id/tv_my_hourse"
+                    />
                 <TextView
                     android:id="@+id/tv_wd_my"
                     android:layout_width="wrap_content"
@@ -85,6 +91,7 @@
                         android:layout_height="wrap_content"
                         android:layout_marginLeft="@dimen/dp_jy_13"
                         android:layout_marginTop="@dimen/dp_jy_13"
+                        android:textColor="@color/color_black"
                         android:text="虚拟体验" />
 
                     <TextView
@@ -194,6 +201,7 @@
     </com.xr.happyFamily.jia.Myscrollview>
 
     <Button
+
         android:id="@+id/btn_add_room"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

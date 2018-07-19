@@ -28,7 +28,7 @@ public class MQTTMessageReveiver extends BroadcastReceiver {
 
         Log.i("MQTTMessageReveiver","MQTTMessageReveiver");
         if (!mobNetInfo.isConnected() && !wifiNetInfo.isConnected()) {
-            Utils.showToast(context, "网络不可用");
+            Utils.showToast(context, "无网络可用");
             //改变背景或者 处理网络的全局变量
         }else if (mobNetInfo.isConnected() || wifiNetInfo.isConnected()){
 //            Utils.showToast(context,"网络已连接");

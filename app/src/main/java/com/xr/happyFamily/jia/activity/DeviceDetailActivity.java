@@ -234,11 +234,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         });
     }
 
-
-
-
-
-
     private PopupWindow popupWindow1;
     public void popupmenuWindow() {
         if (popupWindow1 != null && popupWindow1.isShowing()) {
@@ -265,7 +260,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
 //        ColorDrawable dw = new ColorDrawable(0x30000000);
 //        popupWindow.setBackgroundDrawable(dw);
-        popupWindow1.showAsDropDown(image_more, 0, 20);
+        popupWindow1.showAsDropDown(image_more, 0, -20);
 //        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
         //添加按键事件监听
 

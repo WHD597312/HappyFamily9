@@ -3,6 +3,7 @@ package com.xr.happyFamily.jia.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.graphics.Color;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,11 +56,21 @@ public class GridViewAdapter extends ArrayAdapter {
             DeviceChild item = mGridData.get(position);
             if (item!=null){
                 int type=item.getType();
+                String common=item.getCommon();
                 if (type==2){
-                    holder.tv_device_type.setText("取暖器");
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("取暖器");
+                    }else {
+                        String roomName=item.getRoomName();
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
+
                     boolean online=item.getOnline();
                     int deviceState=item.getDeviceState();
                     item.setImg(img[0]);
+
                     if (online){
                         if (deviceState==1){
                             holder.tv_device_switch.setText("电源开");
@@ -75,6 +86,14 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.view.setVisibility(View.GONE);
                     }
                 }else if (type==3){
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("智能终端");
+                    }else {
+                        String roomName=item.getRoomName();
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
                     boolean online=item.getOnline();
                     Log.i("online","-->"+online);
                     int sensorState=item.getSensorState();
@@ -98,7 +117,6 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
                 }
-                holder.tv_device_name.setText(item.getName());
                 Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             }
             return convertView;

@@ -706,8 +706,6 @@ public class MQService extends Service {
                         mqttIntent.putExtra("msg", message);
                         sendBroadcast(mqttIntent);
                     }
-
-
                 }
 
 
@@ -726,36 +724,15 @@ public class MQService extends Service {
 
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
-        List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
         SharedPreferences preferences;
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
         String friendTopic = "p99/+/acceptorId_" + userId + "/friend";
         String clockTopic = "p99/clockuniversal/userId_" + userId;
-
         Log.e("qqqqqCCC", friendTopic);
-        for (DeviceChild deviceChild : deviceChildren) {
-            String macAddress = deviceChild.getMacAddress();
-            int type = deviceChild.getType();
-            String onlineTopicName = "";
-            String offlineTopicName = "";
-            switch (type) {
-                case 2:
-                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
-                    break;
-                case 3:
-                    onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
-                    offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
-                    break;
-            }
-            list.add(onlineTopicName);
-            list.add(offlineTopicName);
-        }
         list.add(friendTopic);
         list.add(clockTopic);
-//        list.add("warmer/p99"+macAddress+"/set");
         return list;
     }
 

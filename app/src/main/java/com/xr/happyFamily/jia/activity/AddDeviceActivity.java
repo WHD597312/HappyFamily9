@@ -29,6 +29,7 @@ import com.amap.api.location.AMapLocationListener;
 import com.amap.api.location.AMapLocationQualityReport;
 import com.amap.api.maps.model.Text;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.esptouch.EspWifiAdminSimple;
@@ -41,6 +42,7 @@ import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -135,14 +137,19 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     long roomId;
     long houseId;
     int mPosition;
-
+    String roomName;
+    String houseAddress;
     @Override
     protected void onStart() {
         super.onStart();
         Intent intent = getIntent();
         roomId = intent.getLongExtra("roomId", 0);
         Room room = roomDao.findById(roomId);
+        roomName=room.getRoomName();
         houseId = room.getHouseId();
+        HourseDaoImpl hourseDao=new HourseDaoImpl(getApplicationContext());
+        Hourse hourse = hourseDao.findById(houseId);
+        houseAddress=hourse.getHouseAddress();
         List<DeviceChild> deviceChildren = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
         Log.i("roomId", "-->" + roomId);
         int size = deviceChildren.size();
@@ -167,8 +174,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     protected void onResume() {
         super.onResume();
         running = true;
-
-
     }
 
     @OnClick({R.id.back, R.id.image_scan,R.id.bt_add_finish})
@@ -430,6 +435,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                             }
                         }
                         if (deviceChild!=null){
+                            deviceChild.setRoomName(roomName);
                             deviceChild.setName(deviceName);
                             deviceChild.setType(deviceType);
                             deviceChild.setDeviceId(deviceId);
@@ -459,9 +465,21 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                             }
                             if (deviceType==3){
                                 String topicName="p99/sensor1/"+macAddress+"/set";
-                                city=city.substring(0,city.length()-1);
-                                String info="url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city="+ URLEncoder.encode(city,"utf-8")+"&province="+URLEncoder.encode(province,"utf-8");
-                                mqService.publish(topicName,1,info);
+                                if (TextUtils.isEmpty(city)){
+                                    city=houseAddress;
+                                    if (city.contains("市")){
+                                        city=city.substring(0,city.length()-1);
+                                    }
+                                    String info="url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city="+ URLEncoder.encode(city,"utf-8");
+                                    mqService.publish(topicName,1,info);
+                                }else {
+                                    if (city.contains("市")){
+                                        city=city.substring(0,city.length()-1);
+                                    }
+                                    String info="url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city="+ URLEncoder.encode(city,"utf-8")+"&province="+URLEncoder.encode(province,"utf-8");
+                                    mqService.publish(topicName,1,info);
+                                }
+
                             }
                         }
                     }

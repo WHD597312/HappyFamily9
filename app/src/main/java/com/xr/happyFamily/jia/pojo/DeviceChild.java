@@ -14,6 +14,8 @@ public class DeviceChild implements Serializable{
     long houseId;/**设备的房子Id*/
     long roomId;/**设备的房间Id*/
     int deviceUsedCount;/**设备被用户使用的次数*/
+    String roomName;/**房间名称*/
+    String common;/**常用设备*/
     int type;/**设备类型*/
     int busModel;/**商业模式*/
     String macAddress;/**mac地址*/
@@ -296,6 +298,18 @@ public class DeviceChild implements Serializable{
     public void setLinkedSensorId(int linkedSensorId) {
         this.linkedSensorId = linkedSensorId;
     }
+    public String getRoomName() {
+        return this.roomName;
+    }
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+    public String getCommon() {
+        return this.common;
+    }
+    public void setCommon(String common) {
+        this.common = common;
+    }
    
     @Generated(hash = 1973447423)
     public DeviceChild() {
@@ -321,19 +335,21 @@ public class DeviceChild implements Serializable{
         this.name=name;
     }
 
-    @Generated(hash = 93242163)
-    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, int type, int busModel,
-            String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp,
-            int warmerCurTemp, int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
-            int deviceState, String rateState, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour,
-            int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId,
-            long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho,
-            String share) {
+    @Generated(hash = 1374294374)
+    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common,
+            int type, int busModel, String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion,
+            int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower,
+            int warmerRunState, int deviceState, String rateState, int lockState, int screenState, int curRunState2,
+            int curRunState3, int timerHour, int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked,
+            int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx,
+            int sensorHcho, String share) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
         this.roomId = roomId;
         this.deviceUsedCount = deviceUsedCount;
+        this.roomName = roomName;
+        this.common = common;
         this.type = type;
         this.busModel = busModel;
         this.macAddress = macAddress;

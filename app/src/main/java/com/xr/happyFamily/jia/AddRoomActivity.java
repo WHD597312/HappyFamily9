@@ -1,6 +1,9 @@
 package com.xr.happyFamily.jia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.graphics.Bitmap;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -11,6 +14,9 @@ import android.widget.AdapterView;
 import android.widget.GridView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.model.GlideUrl;
+import com.bumptech.glide.load.model.LazyHeaders;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.activity.QRScannerActivity;
@@ -19,12 +25,15 @@ import com.xr.happyFamily.jia.pojo.Equipment;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.titleview.TitleView;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -148,7 +157,6 @@ public class AddRoomActivity extends AppCompatActivity {
     }
 
     class AddroomAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
-
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
             int code = 0;
@@ -164,20 +172,54 @@ public class AddRoomActivity extends AppCompatActivity {
                     if (code == 100) {
 
                         Room room = roomDao.findById((long) roomId);
+
                         if (room!=null){
+
                             room.setRoomId((long)roomId);
                             room.setHouseId((int)houseId);
                             room.setRoomType(roomType);
+                            String imgAddress=room.getImgAddress();
+                            String roomType=room.getRoomType();
+                            List<Room> roomList=roomDao.findRoomByType(roomType);
+                            if (roomList.isEmpty()){
+                                File file=new File(imgAddress);
+                                if (!file.exists()){
+                                    new LoadRoomsImage().execute(room);
+                                }
+                            }else {
+                                Room room1=roomList.get(0);
+                                room.setImgAddress(room1.getImgAddress());
+                            }
                             roomDao.update(room);
                             Log.i("dddddd11qqq1", "doInBackground:---> "+room);
                         }else {
-                            room = new Room((long)roomId,  roomName,  (int)houseId, roomType,0,"");
+                            room = new Room((long)roomId,  roomName,  (int)houseId, roomType,0);
+                            String imgAddress=room.getImgAddress();
+                            String roomType=room.getRoomType();
+//                            List<Room> roomList=roomDao.findRoomByType(roomType);
+//                            if (roomList.isEmpty()){
+//                                File file=new File(imgAddress);
+//                                if (!file.exists()){
+//                                    new LoadRoomsImage().execute(room);
+//                                }
+//                            }
+
+                            List<Room> roomList=roomDao.findRoomByType(roomType);
+                            if (roomList.isEmpty()){
+                                File file=new File(imgAddress);
+                                if (!file.exists()){
+                                    new LoadRoomsImage().execute(room);
+                                }
+                            }else {
+                                Room room1=roomList.get(0);
+                                room.setImgAddress(room1.getImgAddress());
+                            }
+
                             roomDao.insert(room);
                             Log.i("dddddd1111", "doInBackground:---> "+room);
                         }
 
                     }
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -192,13 +234,93 @@ public class AddRoomActivity extends AppCompatActivity {
                 case 3001:
                     Utils.showToast(AddRoomActivity.this, "添加房间失败，请重试");
                     break;
-
                 case 100:
-
                     startActivity(new Intent(AddRoomActivity.this, MyPaperActivity.class));
-
                     break;
             }
+        }
+    }
+    private String imageUrl="http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
+    private Map<String,Room> roomMap=new LinkedHashMap<>();
+    class LoadRoomsImage extends AsyncTask<Room,Void,Void>{
+
+        @Override
+        protected Void doInBackground(Room... rooms) {
+            try {
+                Room room2=rooms[0];
+                String roomType2=room2.getRoomType();
+                List<Room> rooms2=roomDao.findRoomByType(roomType2);
+                for (Room room:rooms2){
+                    String roomType=room.getRoomType();
+                    roomMap.put(roomType,room);
+                }
+                for (Map.Entry<String,Room> entry:roomMap.entrySet()){
+                    String roomType=entry.getKey();
+                    Room room=entry.getValue();
+                    String image="";
+                    if ("客厅".equals(roomType)){
+                        image="living_room.png";
+                    }else if ("卧室".equals(roomType)){
+                        image="bedroom.png";
+                    }else if ("餐厅".equals(roomType)){
+                        image="canteen.png";
+                    }else if ("卫生间".equals(roomType)){
+                        image="toilet.png";
+                    }else if ("卧室".equals(roomType)){
+                        image="bedroom.png";
+                    }else if ("餐厅".equals(roomType)){
+                        image="canteen.png";
+                    }else if ("卫生间".equals(roomType)){
+                        image="toilet.png";
+                    }else if ("浴室".equals(roomType)){
+                        image="bedroom.png";
+                    }else if ("厨房".equals(roomType)){
+                        image="kitchen.png";
+                    }else if ("儿童房".equals(roomType)){
+                        image="childrens_room.png";
+                    }else if ("婴儿房".equals(roomType)){
+                        image="baby_room.png";
+                    }else if ("活动室".equals(roomType)){
+                        image="activity_room.png";
+                    }else if ("媒体房".equals(roomType)){
+                        image="media_room.png";
+                    }else if ("办公室".equals(roomType)){
+                        image="office.png";
+                    }else if ("休闲室".equals(roomType)){
+                        image="lounge.png";
+                    }else if ("书房".equals(roomType)){
+                        image="study.png";
+                    }else if ("工作室".equals(roomType)){
+                        image="studio.png";
+                    }else if ("衣帽间".equals(roomType)){
+                        image="cloakroom.png";
+                    }else if ("后院".equals(roomType)){
+                        image="backyard.png";
+                    }
+                    String url=imageUrl+image;
+                    SharedPreferences my=getSharedPreferences("my", Context.MODE_PRIVATE);
+                    String token = my.getString("token", "token");
+                    GlideUrl glideUrl = new GlideUrl(url, new LazyHeaders.Builder().addHeader("authorization", token).build());
+                    Bitmap bitmap = Glide.with(AddRoomActivity.this)
+                            .load(glideUrl)
+                            .asBitmap()
+                            .centerCrop()
+                            .into(1440, 442)
+                            .get();
+                    if (bitmap != null) {
+                        File file = BitmapCompressUtils.compressImage(bitmap);
+                        String path=file.getPath();
+                        room.setImgAddress(path);
+                        List<Room> roomList=roomDao.findRoomByType(roomType);
+                        roomDao.updateRooms(roomList);
+                    }
+                    Thread.sleep(2000);
+                }
+
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 

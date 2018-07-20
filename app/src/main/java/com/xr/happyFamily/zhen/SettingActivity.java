@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,8 +18,10 @@ import android.widget.Toast;
 
 import com.donkingliang.groupedadapter.adapter.GroupedRecyclerViewAdapter;
 import com.donkingliang.groupedadapter.holder.BaseViewHolder;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.login.LoginActivity;
 
 import java.io.File;
@@ -36,6 +39,7 @@ public class SettingActivity extends AppCompatActivity {
     Unbinder unbinder;
     private MyApplication application;
     SharedPreferences preferences;
+    private RoomDaoImpl roomDao;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -50,6 +54,7 @@ public class SettingActivity extends AppCompatActivity {
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         unbinder=ButterKnife.bind(this);
         adatper=new SettingAdatper(this);
+        roomDao=new RoomDaoImpl(this);
         list_set.setAdapter(adatper);
         list_set.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override

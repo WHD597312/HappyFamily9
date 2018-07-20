@@ -29,42 +29,44 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property HouseId = new Property(2, long.class, "houseId", false, "HOUSE_ID");
         public final static Property RoomId = new Property(3, long.class, "roomId", false, "ROOM_ID");
         public final static Property DeviceUsedCount = new Property(4, int.class, "deviceUsedCount", false, "DEVICE_USED_COUNT");
-        public final static Property Type = new Property(5, int.class, "type", false, "TYPE");
-        public final static Property BusModel = new Property(6, int.class, "busModel", false, "BUS_MODEL");
-        public final static Property MacAddress = new Property(7, String.class, "macAddress", false, "MAC_ADDRESS");
-        public final static Property Name = new Property(8, String.class, "name", false, "NAME");
-        public final static Property TimerMoudle = new Property(9, int.class, "timerMoudle", false, "TIMER_MOUDLE");
-        public final static Property McuVersion = new Property(10, String.class, "mcuVersion", false, "MCU_VERSION");
-        public final static Property WifiVersion = new Property(11, String.class, "wifiVersion", false, "WIFI_VERSION");
-        public final static Property WaramerSetTemp = new Property(12, int.class, "waramerSetTemp", false, "WARAMER_SET_TEMP");
-        public final static Property WarmerCurTemp = new Property(13, int.class, "warmerCurTemp", false, "WARMER_CUR_TEMP");
-        public final static Property WarmerSampleData = new Property(14, int.class, "warmerSampleData", false, "WARMER_SAMPLE_DATA");
-        public final static Property WarmerRatePower = new Property(15, int.class, "warmerRatePower", false, "WARMER_RATE_POWER");
-        public final static Property WarmerCurRunRoatePower = new Property(16, int.class, "warmerCurRunRoatePower", false, "WARMER_CUR_RUN_ROATE_POWER");
-        public final static Property WarmerRunState = new Property(17, int.class, "warmerRunState", false, "WARMER_RUN_STATE");
-        public final static Property DeviceState = new Property(18, int.class, "deviceState", false, "DEVICE_STATE");
-        public final static Property RateState = new Property(19, String.class, "rateState", false, "RATE_STATE");
-        public final static Property LockState = new Property(20, int.class, "lockState", false, "LOCK_STATE");
-        public final static Property ScreenState = new Property(21, int.class, "screenState", false, "SCREEN_STATE");
-        public final static Property CurRunState2 = new Property(22, int.class, "curRunState2", false, "CUR_RUN_STATE2");
-        public final static Property CurRunState3 = new Property(23, int.class, "curRunState3", false, "CUR_RUN_STATE3");
-        public final static Property TimerHour = new Property(24, int.class, "timerHour", false, "TIMER_HOUR");
-        public final static Property TimerMin = new Property(25, int.class, "timerMin", false, "TIMER_MIN");
-        public final static Property CheckCode = new Property(26, int.class, "checkCode", false, "CHECK_CODE");
-        public final static Property EndCode = new Property(27, int.class, "endCode", false, "END_CODE");
-        public final static Property UserId = new Property(28, int.class, "userId", false, "USER_ID");
-        public final static Property Img = new Property(29, int.class, "img", false, "IMG");
-        public final static Property DeviceId = new Property(30, int.class, "deviceId", false, "DEVICE_ID");
-        public final static Property Linked = new Property(31, int.class, "linked", false, "LINKED");
-        public final static Property LinkedSensorId = new Property(32, int.class, "linkedSensorId", false, "LINKED_SENSOR_ID");
-        public final static Property ShareId = new Property(33, long.class, "shareId", false, "SHARE_ID");
-        public final static Property SensorState = new Property(34, int.class, "sensorState", false, "SENSOR_STATE");
-        public final static Property SensorSimpleTemp = new Property(35, int.class, "sensorSimpleTemp", false, "SENSOR_SIMPLE_TEMP");
-        public final static Property SensorSimpleHum = new Property(36, int.class, "sensorSimpleHum", false, "SENSOR_SIMPLE_HUM");
-        public final static Property SorsorPm = new Property(37, int.class, "sorsorPm", false, "SORSOR_PM");
-        public final static Property SensorOx = new Property(38, int.class, "sensorOx", false, "SENSOR_OX");
-        public final static Property SensorHcho = new Property(39, int.class, "sensorHcho", false, "SENSOR_HCHO");
-        public final static Property Share = new Property(40, String.class, "share", false, "SHARE");
+        public final static Property RoomName = new Property(5, String.class, "roomName", false, "ROOM_NAME");
+        public final static Property Common = new Property(6, String.class, "common", false, "COMMON");
+        public final static Property Type = new Property(7, int.class, "type", false, "TYPE");
+        public final static Property BusModel = new Property(8, int.class, "busModel", false, "BUS_MODEL");
+        public final static Property MacAddress = new Property(9, String.class, "macAddress", false, "MAC_ADDRESS");
+        public final static Property Name = new Property(10, String.class, "name", false, "NAME");
+        public final static Property TimerMoudle = new Property(11, int.class, "timerMoudle", false, "TIMER_MOUDLE");
+        public final static Property McuVersion = new Property(12, String.class, "mcuVersion", false, "MCU_VERSION");
+        public final static Property WifiVersion = new Property(13, String.class, "wifiVersion", false, "WIFI_VERSION");
+        public final static Property WaramerSetTemp = new Property(14, int.class, "waramerSetTemp", false, "WARAMER_SET_TEMP");
+        public final static Property WarmerCurTemp = new Property(15, int.class, "warmerCurTemp", false, "WARMER_CUR_TEMP");
+        public final static Property WarmerSampleData = new Property(16, int.class, "warmerSampleData", false, "WARMER_SAMPLE_DATA");
+        public final static Property WarmerRatePower = new Property(17, int.class, "warmerRatePower", false, "WARMER_RATE_POWER");
+        public final static Property WarmerCurRunRoatePower = new Property(18, int.class, "warmerCurRunRoatePower", false, "WARMER_CUR_RUN_ROATE_POWER");
+        public final static Property WarmerRunState = new Property(19, int.class, "warmerRunState", false, "WARMER_RUN_STATE");
+        public final static Property DeviceState = new Property(20, int.class, "deviceState", false, "DEVICE_STATE");
+        public final static Property RateState = new Property(21, String.class, "rateState", false, "RATE_STATE");
+        public final static Property LockState = new Property(22, int.class, "lockState", false, "LOCK_STATE");
+        public final static Property ScreenState = new Property(23, int.class, "screenState", false, "SCREEN_STATE");
+        public final static Property CurRunState2 = new Property(24, int.class, "curRunState2", false, "CUR_RUN_STATE2");
+        public final static Property CurRunState3 = new Property(25, int.class, "curRunState3", false, "CUR_RUN_STATE3");
+        public final static Property TimerHour = new Property(26, int.class, "timerHour", false, "TIMER_HOUR");
+        public final static Property TimerMin = new Property(27, int.class, "timerMin", false, "TIMER_MIN");
+        public final static Property CheckCode = new Property(28, int.class, "checkCode", false, "CHECK_CODE");
+        public final static Property EndCode = new Property(29, int.class, "endCode", false, "END_CODE");
+        public final static Property UserId = new Property(30, int.class, "userId", false, "USER_ID");
+        public final static Property Img = new Property(31, int.class, "img", false, "IMG");
+        public final static Property DeviceId = new Property(32, int.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Linked = new Property(33, int.class, "linked", false, "LINKED");
+        public final static Property LinkedSensorId = new Property(34, int.class, "linkedSensorId", false, "LINKED_SENSOR_ID");
+        public final static Property ShareId = new Property(35, long.class, "shareId", false, "SHARE_ID");
+        public final static Property SensorState = new Property(36, int.class, "sensorState", false, "SENSOR_STATE");
+        public final static Property SensorSimpleTemp = new Property(37, int.class, "sensorSimpleTemp", false, "SENSOR_SIMPLE_TEMP");
+        public final static Property SensorSimpleHum = new Property(38, int.class, "sensorSimpleHum", false, "SENSOR_SIMPLE_HUM");
+        public final static Property SorsorPm = new Property(39, int.class, "sorsorPm", false, "SORSOR_PM");
+        public final static Property SensorOx = new Property(40, int.class, "sensorOx", false, "SENSOR_OX");
+        public final static Property SensorHcho = new Property(41, int.class, "sensorHcho", false, "SENSOR_HCHO");
+        public final static Property Share = new Property(42, String.class, "share", false, "SHARE");
     }
 
 
@@ -85,42 +87,44 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"HOUSE_ID\" INTEGER NOT NULL ," + // 2: houseId
                 "\"ROOM_ID\" INTEGER NOT NULL ," + // 3: roomId
                 "\"DEVICE_USED_COUNT\" INTEGER NOT NULL ," + // 4: deviceUsedCount
-                "\"TYPE\" INTEGER NOT NULL ," + // 5: type
-                "\"BUS_MODEL\" INTEGER NOT NULL ," + // 6: busModel
-                "\"MAC_ADDRESS\" TEXT," + // 7: macAddress
-                "\"NAME\" TEXT," + // 8: name
-                "\"TIMER_MOUDLE\" INTEGER NOT NULL ," + // 9: timerMoudle
-                "\"MCU_VERSION\" TEXT," + // 10: mcuVersion
-                "\"WIFI_VERSION\" TEXT," + // 11: wifiVersion
-                "\"WARAMER_SET_TEMP\" INTEGER NOT NULL ," + // 12: waramerSetTemp
-                "\"WARMER_CUR_TEMP\" INTEGER NOT NULL ," + // 13: warmerCurTemp
-                "\"WARMER_SAMPLE_DATA\" INTEGER NOT NULL ," + // 14: warmerSampleData
-                "\"WARMER_RATE_POWER\" INTEGER NOT NULL ," + // 15: warmerRatePower
-                "\"WARMER_CUR_RUN_ROATE_POWER\" INTEGER NOT NULL ," + // 16: warmerCurRunRoatePower
-                "\"WARMER_RUN_STATE\" INTEGER NOT NULL ," + // 17: warmerRunState
-                "\"DEVICE_STATE\" INTEGER NOT NULL ," + // 18: deviceState
-                "\"RATE_STATE\" TEXT," + // 19: rateState
-                "\"LOCK_STATE\" INTEGER NOT NULL ," + // 20: lockState
-                "\"SCREEN_STATE\" INTEGER NOT NULL ," + // 21: screenState
-                "\"CUR_RUN_STATE2\" INTEGER NOT NULL ," + // 22: curRunState2
-                "\"CUR_RUN_STATE3\" INTEGER NOT NULL ," + // 23: curRunState3
-                "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 24: timerHour
-                "\"TIMER_MIN\" INTEGER NOT NULL ," + // 25: timerMin
-                "\"CHECK_CODE\" INTEGER NOT NULL ," + // 26: checkCode
-                "\"END_CODE\" INTEGER NOT NULL ," + // 27: endCode
-                "\"USER_ID\" INTEGER NOT NULL ," + // 28: userId
-                "\"IMG\" INTEGER NOT NULL ," + // 29: img
-                "\"DEVICE_ID\" INTEGER NOT NULL ," + // 30: deviceId
-                "\"LINKED\" INTEGER NOT NULL ," + // 31: linked
-                "\"LINKED_SENSOR_ID\" INTEGER NOT NULL ," + // 32: linkedSensorId
-                "\"SHARE_ID\" INTEGER NOT NULL ," + // 33: shareId
-                "\"SENSOR_STATE\" INTEGER NOT NULL ," + // 34: sensorState
-                "\"SENSOR_SIMPLE_TEMP\" INTEGER NOT NULL ," + // 35: sensorSimpleTemp
-                "\"SENSOR_SIMPLE_HUM\" INTEGER NOT NULL ," + // 36: sensorSimpleHum
-                "\"SORSOR_PM\" INTEGER NOT NULL ," + // 37: sorsorPm
-                "\"SENSOR_OX\" INTEGER NOT NULL ," + // 38: sensorOx
-                "\"SENSOR_HCHO\" INTEGER NOT NULL ," + // 39: sensorHcho
-                "\"SHARE\" TEXT);"); // 40: share
+                "\"ROOM_NAME\" TEXT," + // 5: roomName
+                "\"COMMON\" TEXT," + // 6: common
+                "\"TYPE\" INTEGER NOT NULL ," + // 7: type
+                "\"BUS_MODEL\" INTEGER NOT NULL ," + // 8: busModel
+                "\"MAC_ADDRESS\" TEXT," + // 9: macAddress
+                "\"NAME\" TEXT," + // 10: name
+                "\"TIMER_MOUDLE\" INTEGER NOT NULL ," + // 11: timerMoudle
+                "\"MCU_VERSION\" TEXT," + // 12: mcuVersion
+                "\"WIFI_VERSION\" TEXT," + // 13: wifiVersion
+                "\"WARAMER_SET_TEMP\" INTEGER NOT NULL ," + // 14: waramerSetTemp
+                "\"WARMER_CUR_TEMP\" INTEGER NOT NULL ," + // 15: warmerCurTemp
+                "\"WARMER_SAMPLE_DATA\" INTEGER NOT NULL ," + // 16: warmerSampleData
+                "\"WARMER_RATE_POWER\" INTEGER NOT NULL ," + // 17: warmerRatePower
+                "\"WARMER_CUR_RUN_ROATE_POWER\" INTEGER NOT NULL ," + // 18: warmerCurRunRoatePower
+                "\"WARMER_RUN_STATE\" INTEGER NOT NULL ," + // 19: warmerRunState
+                "\"DEVICE_STATE\" INTEGER NOT NULL ," + // 20: deviceState
+                "\"RATE_STATE\" TEXT," + // 21: rateState
+                "\"LOCK_STATE\" INTEGER NOT NULL ," + // 22: lockState
+                "\"SCREEN_STATE\" INTEGER NOT NULL ," + // 23: screenState
+                "\"CUR_RUN_STATE2\" INTEGER NOT NULL ," + // 24: curRunState2
+                "\"CUR_RUN_STATE3\" INTEGER NOT NULL ," + // 25: curRunState3
+                "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 26: timerHour
+                "\"TIMER_MIN\" INTEGER NOT NULL ," + // 27: timerMin
+                "\"CHECK_CODE\" INTEGER NOT NULL ," + // 28: checkCode
+                "\"END_CODE\" INTEGER NOT NULL ," + // 29: endCode
+                "\"USER_ID\" INTEGER NOT NULL ," + // 30: userId
+                "\"IMG\" INTEGER NOT NULL ," + // 31: img
+                "\"DEVICE_ID\" INTEGER NOT NULL ," + // 32: deviceId
+                "\"LINKED\" INTEGER NOT NULL ," + // 33: linked
+                "\"LINKED_SENSOR_ID\" INTEGER NOT NULL ," + // 34: linkedSensorId
+                "\"SHARE_ID\" INTEGER NOT NULL ," + // 35: shareId
+                "\"SENSOR_STATE\" INTEGER NOT NULL ," + // 36: sensorState
+                "\"SENSOR_SIMPLE_TEMP\" INTEGER NOT NULL ," + // 37: sensorSimpleTemp
+                "\"SENSOR_SIMPLE_HUM\" INTEGER NOT NULL ," + // 38: sensorSimpleHum
+                "\"SORSOR_PM\" INTEGER NOT NULL ," + // 39: sorsorPm
+                "\"SENSOR_OX\" INTEGER NOT NULL ," + // 40: sensorOx
+                "\"SENSOR_HCHO\" INTEGER NOT NULL ," + // 41: sensorHcho
+                "\"SHARE\" TEXT);"); // 42: share
     }
 
     /** Drops the underlying database table. */
@@ -141,65 +145,75 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(3, entity.getHouseId());
         stmt.bindLong(4, entity.getRoomId());
         stmt.bindLong(5, entity.getDeviceUsedCount());
-        stmt.bindLong(6, entity.getType());
-        stmt.bindLong(7, entity.getBusModel());
+ 
+        String roomName = entity.getRoomName();
+        if (roomName != null) {
+            stmt.bindString(6, roomName);
+        }
+ 
+        String common = entity.getCommon();
+        if (common != null) {
+            stmt.bindString(7, common);
+        }
+        stmt.bindLong(8, entity.getType());
+        stmt.bindLong(9, entity.getBusModel());
  
         String macAddress = entity.getMacAddress();
         if (macAddress != null) {
-            stmt.bindString(8, macAddress);
+            stmt.bindString(10, macAddress);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(9, name);
+            stmt.bindString(11, name);
         }
-        stmt.bindLong(10, entity.getTimerMoudle());
+        stmt.bindLong(12, entity.getTimerMoudle());
  
         String mcuVersion = entity.getMcuVersion();
         if (mcuVersion != null) {
-            stmt.bindString(11, mcuVersion);
+            stmt.bindString(13, mcuVersion);
         }
  
         String wifiVersion = entity.getWifiVersion();
         if (wifiVersion != null) {
-            stmt.bindString(12, wifiVersion);
+            stmt.bindString(14, wifiVersion);
         }
-        stmt.bindLong(13, entity.getWaramerSetTemp());
-        stmt.bindLong(14, entity.getWarmerCurTemp());
-        stmt.bindLong(15, entity.getWarmerSampleData());
-        stmt.bindLong(16, entity.getWarmerRatePower());
-        stmt.bindLong(17, entity.getWarmerCurRunRoatePower());
-        stmt.bindLong(18, entity.getWarmerRunState());
-        stmt.bindLong(19, entity.getDeviceState());
+        stmt.bindLong(15, entity.getWaramerSetTemp());
+        stmt.bindLong(16, entity.getWarmerCurTemp());
+        stmt.bindLong(17, entity.getWarmerSampleData());
+        stmt.bindLong(18, entity.getWarmerRatePower());
+        stmt.bindLong(19, entity.getWarmerCurRunRoatePower());
+        stmt.bindLong(20, entity.getWarmerRunState());
+        stmt.bindLong(21, entity.getDeviceState());
  
         String rateState = entity.getRateState();
         if (rateState != null) {
-            stmt.bindString(20, rateState);
+            stmt.bindString(22, rateState);
         }
-        stmt.bindLong(21, entity.getLockState());
-        stmt.bindLong(22, entity.getScreenState());
-        stmt.bindLong(23, entity.getCurRunState2());
-        stmt.bindLong(24, entity.getCurRunState3());
-        stmt.bindLong(25, entity.getTimerHour());
-        stmt.bindLong(26, entity.getTimerMin());
-        stmt.bindLong(27, entity.getCheckCode());
-        stmt.bindLong(28, entity.getEndCode());
-        stmt.bindLong(29, entity.getUserId());
-        stmt.bindLong(30, entity.getImg());
-        stmt.bindLong(31, entity.getDeviceId());
-        stmt.bindLong(32, entity.getLinked());
-        stmt.bindLong(33, entity.getLinkedSensorId());
-        stmt.bindLong(34, entity.getShareId());
-        stmt.bindLong(35, entity.getSensorState());
-        stmt.bindLong(36, entity.getSensorSimpleTemp());
-        stmt.bindLong(37, entity.getSensorSimpleHum());
-        stmt.bindLong(38, entity.getSorsorPm());
-        stmt.bindLong(39, entity.getSensorOx());
-        stmt.bindLong(40, entity.getSensorHcho());
+        stmt.bindLong(23, entity.getLockState());
+        stmt.bindLong(24, entity.getScreenState());
+        stmt.bindLong(25, entity.getCurRunState2());
+        stmt.bindLong(26, entity.getCurRunState3());
+        stmt.bindLong(27, entity.getTimerHour());
+        stmt.bindLong(28, entity.getTimerMin());
+        stmt.bindLong(29, entity.getCheckCode());
+        stmt.bindLong(30, entity.getEndCode());
+        stmt.bindLong(31, entity.getUserId());
+        stmt.bindLong(32, entity.getImg());
+        stmt.bindLong(33, entity.getDeviceId());
+        stmt.bindLong(34, entity.getLinked());
+        stmt.bindLong(35, entity.getLinkedSensorId());
+        stmt.bindLong(36, entity.getShareId());
+        stmt.bindLong(37, entity.getSensorState());
+        stmt.bindLong(38, entity.getSensorSimpleTemp());
+        stmt.bindLong(39, entity.getSensorSimpleHum());
+        stmt.bindLong(40, entity.getSorsorPm());
+        stmt.bindLong(41, entity.getSensorOx());
+        stmt.bindLong(42, entity.getSensorHcho());
  
         String share = entity.getShare();
         if (share != null) {
-            stmt.bindString(41, share);
+            stmt.bindString(43, share);
         }
     }
 
@@ -215,65 +229,75 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(3, entity.getHouseId());
         stmt.bindLong(4, entity.getRoomId());
         stmt.bindLong(5, entity.getDeviceUsedCount());
-        stmt.bindLong(6, entity.getType());
-        stmt.bindLong(7, entity.getBusModel());
+ 
+        String roomName = entity.getRoomName();
+        if (roomName != null) {
+            stmt.bindString(6, roomName);
+        }
+ 
+        String common = entity.getCommon();
+        if (common != null) {
+            stmt.bindString(7, common);
+        }
+        stmt.bindLong(8, entity.getType());
+        stmt.bindLong(9, entity.getBusModel());
  
         String macAddress = entity.getMacAddress();
         if (macAddress != null) {
-            stmt.bindString(8, macAddress);
+            stmt.bindString(10, macAddress);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(9, name);
+            stmt.bindString(11, name);
         }
-        stmt.bindLong(10, entity.getTimerMoudle());
+        stmt.bindLong(12, entity.getTimerMoudle());
  
         String mcuVersion = entity.getMcuVersion();
         if (mcuVersion != null) {
-            stmt.bindString(11, mcuVersion);
+            stmt.bindString(13, mcuVersion);
         }
  
         String wifiVersion = entity.getWifiVersion();
         if (wifiVersion != null) {
-            stmt.bindString(12, wifiVersion);
+            stmt.bindString(14, wifiVersion);
         }
-        stmt.bindLong(13, entity.getWaramerSetTemp());
-        stmt.bindLong(14, entity.getWarmerCurTemp());
-        stmt.bindLong(15, entity.getWarmerSampleData());
-        stmt.bindLong(16, entity.getWarmerRatePower());
-        stmt.bindLong(17, entity.getWarmerCurRunRoatePower());
-        stmt.bindLong(18, entity.getWarmerRunState());
-        stmt.bindLong(19, entity.getDeviceState());
+        stmt.bindLong(15, entity.getWaramerSetTemp());
+        stmt.bindLong(16, entity.getWarmerCurTemp());
+        stmt.bindLong(17, entity.getWarmerSampleData());
+        stmt.bindLong(18, entity.getWarmerRatePower());
+        stmt.bindLong(19, entity.getWarmerCurRunRoatePower());
+        stmt.bindLong(20, entity.getWarmerRunState());
+        stmt.bindLong(21, entity.getDeviceState());
  
         String rateState = entity.getRateState();
         if (rateState != null) {
-            stmt.bindString(20, rateState);
+            stmt.bindString(22, rateState);
         }
-        stmt.bindLong(21, entity.getLockState());
-        stmt.bindLong(22, entity.getScreenState());
-        stmt.bindLong(23, entity.getCurRunState2());
-        stmt.bindLong(24, entity.getCurRunState3());
-        stmt.bindLong(25, entity.getTimerHour());
-        stmt.bindLong(26, entity.getTimerMin());
-        stmt.bindLong(27, entity.getCheckCode());
-        stmt.bindLong(28, entity.getEndCode());
-        stmt.bindLong(29, entity.getUserId());
-        stmt.bindLong(30, entity.getImg());
-        stmt.bindLong(31, entity.getDeviceId());
-        stmt.bindLong(32, entity.getLinked());
-        stmt.bindLong(33, entity.getLinkedSensorId());
-        stmt.bindLong(34, entity.getShareId());
-        stmt.bindLong(35, entity.getSensorState());
-        stmt.bindLong(36, entity.getSensorSimpleTemp());
-        stmt.bindLong(37, entity.getSensorSimpleHum());
-        stmt.bindLong(38, entity.getSorsorPm());
-        stmt.bindLong(39, entity.getSensorOx());
-        stmt.bindLong(40, entity.getSensorHcho());
+        stmt.bindLong(23, entity.getLockState());
+        stmt.bindLong(24, entity.getScreenState());
+        stmt.bindLong(25, entity.getCurRunState2());
+        stmt.bindLong(26, entity.getCurRunState3());
+        stmt.bindLong(27, entity.getTimerHour());
+        stmt.bindLong(28, entity.getTimerMin());
+        stmt.bindLong(29, entity.getCheckCode());
+        stmt.bindLong(30, entity.getEndCode());
+        stmt.bindLong(31, entity.getUserId());
+        stmt.bindLong(32, entity.getImg());
+        stmt.bindLong(33, entity.getDeviceId());
+        stmt.bindLong(34, entity.getLinked());
+        stmt.bindLong(35, entity.getLinkedSensorId());
+        stmt.bindLong(36, entity.getShareId());
+        stmt.bindLong(37, entity.getSensorState());
+        stmt.bindLong(38, entity.getSensorSimpleTemp());
+        stmt.bindLong(39, entity.getSensorSimpleHum());
+        stmt.bindLong(40, entity.getSorsorPm());
+        stmt.bindLong(41, entity.getSensorOx());
+        stmt.bindLong(42, entity.getSensorHcho());
  
         String share = entity.getShare();
         if (share != null) {
-            stmt.bindString(41, share);
+            stmt.bindString(43, share);
         }
     }
 
@@ -290,42 +314,44 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.getLong(offset + 2), // houseId
             cursor.getLong(offset + 3), // roomId
             cursor.getInt(offset + 4), // deviceUsedCount
-            cursor.getInt(offset + 5), // type
-            cursor.getInt(offset + 6), // busModel
-            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // macAddress
-            cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8), // name
-            cursor.getInt(offset + 9), // timerMoudle
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // mcuVersion
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // wifiVersion
-            cursor.getInt(offset + 12), // waramerSetTemp
-            cursor.getInt(offset + 13), // warmerCurTemp
-            cursor.getInt(offset + 14), // warmerSampleData
-            cursor.getInt(offset + 15), // warmerRatePower
-            cursor.getInt(offset + 16), // warmerCurRunRoatePower
-            cursor.getInt(offset + 17), // warmerRunState
-            cursor.getInt(offset + 18), // deviceState
-            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // rateState
-            cursor.getInt(offset + 20), // lockState
-            cursor.getInt(offset + 21), // screenState
-            cursor.getInt(offset + 22), // curRunState2
-            cursor.getInt(offset + 23), // curRunState3
-            cursor.getInt(offset + 24), // timerHour
-            cursor.getInt(offset + 25), // timerMin
-            cursor.getInt(offset + 26), // checkCode
-            cursor.getInt(offset + 27), // endCode
-            cursor.getInt(offset + 28), // userId
-            cursor.getInt(offset + 29), // img
-            cursor.getInt(offset + 30), // deviceId
-            cursor.getInt(offset + 31), // linked
-            cursor.getInt(offset + 32), // linkedSensorId
-            cursor.getLong(offset + 33), // shareId
-            cursor.getInt(offset + 34), // sensorState
-            cursor.getInt(offset + 35), // sensorSimpleTemp
-            cursor.getInt(offset + 36), // sensorSimpleHum
-            cursor.getInt(offset + 37), // sorsorPm
-            cursor.getInt(offset + 38), // sensorOx
-            cursor.getInt(offset + 39), // sensorHcho
-            cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40) // share
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // roomName
+            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6), // common
+            cursor.getInt(offset + 7), // type
+            cursor.getInt(offset + 8), // busModel
+            cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9), // macAddress
+            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // name
+            cursor.getInt(offset + 11), // timerMoudle
+            cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12), // mcuVersion
+            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // wifiVersion
+            cursor.getInt(offset + 14), // waramerSetTemp
+            cursor.getInt(offset + 15), // warmerCurTemp
+            cursor.getInt(offset + 16), // warmerSampleData
+            cursor.getInt(offset + 17), // warmerRatePower
+            cursor.getInt(offset + 18), // warmerCurRunRoatePower
+            cursor.getInt(offset + 19), // warmerRunState
+            cursor.getInt(offset + 20), // deviceState
+            cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21), // rateState
+            cursor.getInt(offset + 22), // lockState
+            cursor.getInt(offset + 23), // screenState
+            cursor.getInt(offset + 24), // curRunState2
+            cursor.getInt(offset + 25), // curRunState3
+            cursor.getInt(offset + 26), // timerHour
+            cursor.getInt(offset + 27), // timerMin
+            cursor.getInt(offset + 28), // checkCode
+            cursor.getInt(offset + 29), // endCode
+            cursor.getInt(offset + 30), // userId
+            cursor.getInt(offset + 31), // img
+            cursor.getInt(offset + 32), // deviceId
+            cursor.getInt(offset + 33), // linked
+            cursor.getInt(offset + 34), // linkedSensorId
+            cursor.getLong(offset + 35), // shareId
+            cursor.getInt(offset + 36), // sensorState
+            cursor.getInt(offset + 37), // sensorSimpleTemp
+            cursor.getInt(offset + 38), // sensorSimpleHum
+            cursor.getInt(offset + 39), // sorsorPm
+            cursor.getInt(offset + 40), // sensorOx
+            cursor.getInt(offset + 41), // sensorHcho
+            cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42) // share
         );
         return entity;
     }
@@ -337,42 +363,44 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setHouseId(cursor.getLong(offset + 2));
         entity.setRoomId(cursor.getLong(offset + 3));
         entity.setDeviceUsedCount(cursor.getInt(offset + 4));
-        entity.setType(cursor.getInt(offset + 5));
-        entity.setBusModel(cursor.getInt(offset + 6));
-        entity.setMacAddress(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
-        entity.setName(cursor.isNull(offset + 8) ? null : cursor.getString(offset + 8));
-        entity.setTimerMoudle(cursor.getInt(offset + 9));
-        entity.setMcuVersion(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setWifiVersion(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setWaramerSetTemp(cursor.getInt(offset + 12));
-        entity.setWarmerCurTemp(cursor.getInt(offset + 13));
-        entity.setWarmerSampleData(cursor.getInt(offset + 14));
-        entity.setWarmerRatePower(cursor.getInt(offset + 15));
-        entity.setWarmerCurRunRoatePower(cursor.getInt(offset + 16));
-        entity.setWarmerRunState(cursor.getInt(offset + 17));
-        entity.setDeviceState(cursor.getInt(offset + 18));
-        entity.setRateState(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
-        entity.setLockState(cursor.getInt(offset + 20));
-        entity.setScreenState(cursor.getInt(offset + 21));
-        entity.setCurRunState2(cursor.getInt(offset + 22));
-        entity.setCurRunState3(cursor.getInt(offset + 23));
-        entity.setTimerHour(cursor.getInt(offset + 24));
-        entity.setTimerMin(cursor.getInt(offset + 25));
-        entity.setCheckCode(cursor.getInt(offset + 26));
-        entity.setEndCode(cursor.getInt(offset + 27));
-        entity.setUserId(cursor.getInt(offset + 28));
-        entity.setImg(cursor.getInt(offset + 29));
-        entity.setDeviceId(cursor.getInt(offset + 30));
-        entity.setLinked(cursor.getInt(offset + 31));
-        entity.setLinkedSensorId(cursor.getInt(offset + 32));
-        entity.setShareId(cursor.getLong(offset + 33));
-        entity.setSensorState(cursor.getInt(offset + 34));
-        entity.setSensorSimpleTemp(cursor.getInt(offset + 35));
-        entity.setSensorSimpleHum(cursor.getInt(offset + 36));
-        entity.setSorsorPm(cursor.getInt(offset + 37));
-        entity.setSensorOx(cursor.getInt(offset + 38));
-        entity.setSensorHcho(cursor.getInt(offset + 39));
-        entity.setShare(cursor.isNull(offset + 40) ? null : cursor.getString(offset + 40));
+        entity.setRoomName(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setCommon(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setType(cursor.getInt(offset + 7));
+        entity.setBusModel(cursor.getInt(offset + 8));
+        entity.setMacAddress(cursor.isNull(offset + 9) ? null : cursor.getString(offset + 9));
+        entity.setName(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
+        entity.setTimerMoudle(cursor.getInt(offset + 11));
+        entity.setMcuVersion(cursor.isNull(offset + 12) ? null : cursor.getString(offset + 12));
+        entity.setWifiVersion(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
+        entity.setWaramerSetTemp(cursor.getInt(offset + 14));
+        entity.setWarmerCurTemp(cursor.getInt(offset + 15));
+        entity.setWarmerSampleData(cursor.getInt(offset + 16));
+        entity.setWarmerRatePower(cursor.getInt(offset + 17));
+        entity.setWarmerCurRunRoatePower(cursor.getInt(offset + 18));
+        entity.setWarmerRunState(cursor.getInt(offset + 19));
+        entity.setDeviceState(cursor.getInt(offset + 20));
+        entity.setRateState(cursor.isNull(offset + 21) ? null : cursor.getString(offset + 21));
+        entity.setLockState(cursor.getInt(offset + 22));
+        entity.setScreenState(cursor.getInt(offset + 23));
+        entity.setCurRunState2(cursor.getInt(offset + 24));
+        entity.setCurRunState3(cursor.getInt(offset + 25));
+        entity.setTimerHour(cursor.getInt(offset + 26));
+        entity.setTimerMin(cursor.getInt(offset + 27));
+        entity.setCheckCode(cursor.getInt(offset + 28));
+        entity.setEndCode(cursor.getInt(offset + 29));
+        entity.setUserId(cursor.getInt(offset + 30));
+        entity.setImg(cursor.getInt(offset + 31));
+        entity.setDeviceId(cursor.getInt(offset + 32));
+        entity.setLinked(cursor.getInt(offset + 33));
+        entity.setLinkedSensorId(cursor.getInt(offset + 34));
+        entity.setShareId(cursor.getLong(offset + 35));
+        entity.setSensorState(cursor.getInt(offset + 36));
+        entity.setSensorSimpleTemp(cursor.getInt(offset + 37));
+        entity.setSensorSimpleHum(cursor.getInt(offset + 38));
+        entity.setSorsorPm(cursor.getInt(offset + 39));
+        entity.setSensorOx(cursor.getInt(offset + 40));
+        entity.setSensorHcho(cursor.getInt(offset + 41));
+        entity.setShare(cursor.isNull(offset + 42) ? null : cursor.getString(offset + 42));
      }
     
     @Override

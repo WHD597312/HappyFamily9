@@ -62,6 +62,12 @@ public class RoomDaoImpl {
     public List<Room> findByAllRoom(){
         return roomDao.loadAll();
     }
+    public List<Room> findRoomByType(String roomType){
+        return roomDao.queryBuilder().where(RoomDao.Properties.RoomType.eq(roomType)).orderDesc(RoomDao.Properties.RoomId).limit(4).list();
+    }
+    public void updateRooms(List<Room> rooms){
+        roomDao.updateInTx(rooms);
+    }
     public void  deleteAll(){
         roomDao.deleteAll();
     }

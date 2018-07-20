@@ -1,99 +1,119 @@
 package com.xr.happyFamily.jia.adapter;
 
 import android.content.Context;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
-import android.support.v7.widget.RecyclerView;
+import android.support.annotation.Nullable;
+import android.text.TextUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.bumptech.glide.load.model.GlideUrl;
-import com.bumptech.glide.load.model.LazyHeaders;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.main.MainActivity;
-import com.xr.happyFamily.together.util.BitmapCompressUtils;
-import com.xr.happyFamily.together.util.GlideCircleTransform;
 
 import java.io.File;
-import java.net.URL;
 import java.util.List;
+
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 public class RoomAdapter extends ArrayAdapter {
     private final int resourceId;
-    Context mcontext;
-    String url = "http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
-    String path;
+    private List<Room> rooms;
+    private Context mContext;
     public RoomAdapter(Context context, int textViewResourceId, List<Room> objects) {
-        super(context, textViewResourceId, objects);
-        mcontext = context;
+       super(context, textViewResourceId, objects);
         resourceId = textViewResourceId;
+        this.rooms=objects;
+        this.mContext=context;
+    }
+
+    @Nullable
+    @Override
+    public Object getItem(int position) {
+        return super.getItem(position);
     }
 
     @Override
-    public View getView(int position, View convertView, ViewGroup parent) {
-        Room room = (Room) getItem(position); // 获取当前项的Room实例
-        String roomType= room.getRoomType();
-        View view = LayoutInflater.from(getContext()).inflate(resourceId, null);//实例化一个对象
-        ImageView roomImage = (ImageView) view.findViewById(R.id.iv_change);//获取该布局内的图片视图
-        TextView roomName = (TextView) view.findViewById(R.id.tv_change_1);//获取该布局内的文本视图
-//        roomImage.setImageResource(room.getImgId());//为图片视图设置图片资源
-        roomName.setText(room.getRoomName());//为文本视图设置文本内容
-        String image=room.getImgAddress();
-        File file=new File(image);
-        Glide.with(mcontext).load(file).into(roomImage);
-        return view;
-
+    public long getItemId(int position) {
+        return super.getItemId(position);
     }
 
-//    class roomImageAsync extends AsyncTask<Void,Void,Void> {
-//
-//        @Override
-//        protected Void doInBackground(Void... voids) {
-//            Bitmap bitmap=null;
-//
-//            try {
-//                GlideUrl glideUrl = new GlideUrl(path);
-//                bitmap = Glide.with(mcontext)
-//                        .load(glideUrl)
-//                        .asBitmap()
-//                        .centerCrop()
-//                        .into(1440,442)
-//                        .get();
-//                if (bitmap != null) {
-//                    File file = BitmapCompressUtils.compressImage(bitmap);
-//                }
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//            return null;
-//        }
-//    }
+    @Override
+    public int getCount() {
+        return rooms.size();
+    }
 
+    @Override
+    public int getPosition(@Nullable Object item) {
+        return super.getPosition(item);
+    }
 
-    class MyViewHolder extends RecyclerView.ViewHolder {
+    private String imageUrl="http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
 
-        ImageView img_change;
-        TextView tv_address, tv_name;
-        RelativeLayout rl_d1;
-        RelativeLayout rl_d2;
+        convertView=View.inflate(mContext,resourceId,null);
+        ViewHolder viewHolder=new ViewHolder(convertView);
 
-        public MyViewHolder(View view) {
-            super(view);
-
-
-            tv_name = (TextView) view.findViewById(R.id.tv_hourse_h);
-            tv_address = (TextView) view.findViewById(R.id.tv_hourse_ad);
-            rl_d1 = (RelativeLayout) view.findViewById(R.id.rl_house_it1);
-            rl_d1 = (RelativeLayout) view.findViewById(R.id.rl_house_it2);
-
+        Room room = rooms.get(position); // 获取当前项的Room实例
+        if (room!=null){
+            String roomType=room.getRoomType();
+            String image="";
+            if ("客厅".equals(roomType)){
+                image="living_room.png";
+            }else if ("卧室".equals(roomType)){
+                image="bedroom.png";
+            }else if ("餐厅".equals(roomType)){
+                image="canteen.png";
+            }else if ("卫生间".equals(roomType)){
+                image="toilet.png";
+            }else if ("卧室".equals(roomType)){
+                image="bedroom.png";
+            }else if ("餐厅".equals(roomType)){
+                image="canteen.png";
+            }else if ("卫生间".equals(roomType)){
+                image="toilet.png";
+            }else if ("浴室".equals(roomType)){
+                image="bedroom.png";
+            }else if ("厨房".equals(roomType)){
+                image="kitchen.png";
+            }else if ("儿童房".equals(roomType)){
+                image="childrens_room.png";
+            }else if ("婴儿房".equals(roomType)){
+                image="baby_room.png";
+            }else if ("活动室".equals(roomType)){
+                image="activity_room.png";
+            }else if ("媒体房".equals(roomType)){
+                image="media_room.png";
+            }else if ("办公室".equals(roomType)){
+                image="office.png";
+            }else if ("休闲室".equals(roomType)){
+                image="lounge.png";
+            }else if ("书房".equals(roomType)){
+                image="study.png";
+            }else if ("工作室".equals(roomType)){
+                image="studio.png";
+            }else if ("衣帽间".equals(roomType)){
+                image="cloakroom.png";
+            }else if ("后院".equals(roomType)){
+                image="backyard.png";
+            }
+            String url=imageUrl+image;
+            Glide.with(mContext).load(url).into(viewHolder.iv_change);
+            viewHolder.tv_change_1.setText(room.getRoomName());//为文本视图设置文本内容
         }
 
+        return convertView;
+    }
+    class ViewHolder{
+        @BindView(R.id.iv_change) ImageView iv_change;
+        @BindView(R.id.tv_change_1) TextView tv_change_1;
+        public ViewHolder(View view){
+            ButterKnife.bind(this,view);
+        }
     }
 }

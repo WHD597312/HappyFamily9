@@ -17,7 +17,10 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupWindow;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -26,12 +29,14 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.SmartTerminalInfo;
+import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.SmartTerminalBar;
 import com.xr.happyFamily.jia.view_custom.SmartTerminalCircle;
 import com.xr.happyFamily.jia.view_custom.SmartTerminalHumBar;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.TenTwoUtil;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.receiver.MQTTMessageReveiver;
 
@@ -39,6 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.Serializable;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,6 +78,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     @BindView(R.id.smart_hum_add) ImageView smart_hum_add;/**加湿度*/
     @BindView(R.id.tv_smart_temp) TextView tv_smart_temp;/**设定温度*/
     @BindView(R.id.image_switch) ImageView image_switch;/**一键开关*/
+    @BindView(R.id.image_more) ImageView image_more;/**修改设备名称*/
     private List<SmartTerminalInfo> list=new ArrayList<>();
     private String[] mStrs = new String[]{"", "","", "","","","",""};
     @BindView(R.id.smartTerminalCircle)
@@ -79,6 +86,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     private DeviceChild deviceChild;
     private DeviceChildDaoImpl deviceChildDao;
     private String linkedUrl= HttpUtils.ipAddress+"/family/device/sensors/getDevicesInRoom";
+    private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
     MessageReceiver receiver;
     public static boolean running=false;
     private List<DeviceChild> linkList=new ArrayList<>();
@@ -251,9 +259,12 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         }
     }
     int temp;
-    @OnClick({R.id.image_back,R.id.smart_temp_decrease,R.id.smart_temp_add,R.id.smart_hum_decrease,R.id.smart_hum_add,R.id.image_linkage,R.id.image_switch})
+    @OnClick({R.id.image_more,R.id.image_back,R.id.smart_temp_decrease,R.id.smart_temp_add,R.id.smart_hum_decrease,R.id.smart_hum_add,R.id.image_linkage,R.id.image_switch})
     public void onClick(View view){
         switch (view.getId()){
+            case R.id.image_more:
+                popupmenuWindow();
+                break;
             case R.id.image_back:
                 Intent intent=new Intent();
                 intent.putExtra("houseId",houseId);
@@ -342,6 +353,106 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 }
                 break;
         }
+    }
+
+    String deviceName;
+    private void buildUpdateDeviceDialog() {
+        final HomeDialog dialog = new HomeDialog(this);
+        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                deviceName = dialog.getName();
+                if (TextUtils.isEmpty(deviceName)) {
+                    Utils.showToast(SmartTerminalActivity.this, "设备名称不能为空");
+                } else {
+                    new UpdateDeviceAsync().execute();
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+    class UpdateDeviceAsync extends AsyncTask<Void,Void,Integer>{
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code=0;
+            try {
+                int deviceId=deviceChild.getDeviceId();
+                String url=updateDeviceNameUrl+"?deviceName="+ URLEncoder.encode(deviceName,"utf-8")+"&deviceId="+deviceId;
+                String result=HttpUtils.getOkHpptRequest(url);
+                JSONObject jsonObject=new JSONObject(result);
+                String returnCode=jsonObject.getString("returnCode");
+                if ("100".equals(returnCode)){
+                    code=100;
+                    deviceChild.setName(deviceName);
+                    deviceChildDao.update(deviceChild);
+                }
+                Log.i("result","-->"+result);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code){
+                case 100:
+                    Utils.showToast(SmartTerminalActivity.this, "修改成功");
+                    tv_title.setText(deviceName);
+                    break;
+                default:
+                    Utils.showToast(SmartTerminalActivity.this, "修改失败");
+                    break;
+            }
+        }
+    }
+    private PopupWindow popupWindow1;
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.popview_update_device, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        RelativeLayout rl_room_rename = (RelativeLayout) view.findViewById(R.id.rl_room_rename);
+        TextView tv_rname_r1 = (TextView) view.findViewById(R.id.tv_rname_r1);
+        tv_rname_r1.setText("修改名称");
+
+        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.Popupwindow);
+
+//        ColorDrawable dw = new ColorDrawable(0x30000000);
+//        popupWindow.setBackgroundDrawable(dw);
+        popupWindow1.showAsDropDown(image_more, 0, -20);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.rl_room_rename:
+                        buildUpdateDeviceDialog();
+                        popupWindow1.dismiss();
+                        break;
+                }
+            }
+        };
+
+        rl_room_rename.setOnClickListener(listener);
     }
 
     @Override
@@ -433,7 +544,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                         SmartTerminalInfo terminalInfo=list.get(i);
                         infoList.add(terminalInfo);
                     }
-                    smartTerminalCircle.setBitInfos(infoList);
+                    if (smartTerminalCircle!=null){
+                        smartTerminalCircle.setBitInfos(infoList);
+                    }
                     break;
             }
         }

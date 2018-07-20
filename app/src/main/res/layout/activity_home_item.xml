@@ -9,12 +9,12 @@
         android:id="@+id/tv_device_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_jy_14"
         android:layout_alignParentTop="true"
+        android:layout_marginLeft="@dimen/dp_jy_14"
         android:layout_marginTop="@dimen/dp_jy_12"
-        android:textSize="@dimen/sp_10"
         android:text="卧室"
-        android:textColor="#3c3c3c" />
+        android:textColor="#3c3c3c"
+        android:textSize="@dimen/sp_10" />
 
     <TextView
         android:id="@+id/tv_device_type"

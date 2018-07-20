@@ -62,7 +62,6 @@
             android:layout_toRightOf="@+id/iv_del_r1"
             android:layout_alignTop="@+id/iv_del_r1"
             android:text="删除房间"
-
             />
     </RelativeLayout>
    </RelativeLayout>

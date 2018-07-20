@@ -70,23 +70,7 @@ public class CommonClockFragment extends BaseFragment {
         super.onCreate(savedInstanceState);
         context=getActivity();
     }
-    //绑定服务
-    ClockService mqService;
-    boolean bound;
-    ServiceConnection connection=new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
-            mqService = binder.getService();
-            bound = true;
-            adapter.setClockService(mqService);
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-
-        }
-    };
+    ServiceConnection connection;
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         view = inflater.inflate(R.layout.fragment_le_comonclock, container, false);
         unbinder = ButterKnife.bind(this, view);
@@ -104,9 +88,7 @@ public class CommonClockFragment extends BaseFragment {
         }
         adapter = new ChooseTimeAdapter(getActivity(),times);
         recyclerView.setAdapter(adapter);
-
-        service = new Intent(context, ClockService.class);
-        isBound = context.bindService(service, connection, Context.BIND_AUTO_CREATE);
+        connection=adapter.getConnection();
         return view;
     }
 
@@ -134,9 +116,9 @@ public class CommonClockFragment extends BaseFragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (isBound){
-            getActivity().unbindService(connection);
-        }
+       if (connection!=null){
+           getActivity().unbindService(connection);
+       }
     }
 
     @Override
@@ -165,6 +147,7 @@ public class CommonClockFragment extends BaseFragment {
             times = timeDao.findByAllTime();
             adapter = new ChooseTimeAdapter(getActivity(),times);
             recyclerView.setAdapter(adapter);
+            connection=adapter.getConnection();
         }
     }
 

@@ -29,6 +29,7 @@ public class RoomDao extends AbstractDao<Room, Long> {
         public final static Property HouseId = new Property(2, int.class, "houseId", false, "HOUSE_ID");
         public final static Property RoomType = new Property(3, String.class, "roomType", false, "ROOM_TYPE");
         public final static Property ImgId = new Property(4, int.class, "imgId", false, "IMG_ID");
+        public final static Property ImgAddress = new Property(5, String.class, "imgAddress", false, "IMG_ADDRESS");
     }
 
 
@@ -48,7 +49,8 @@ public class RoomDao extends AbstractDao<Room, Long> {
                 "\"ROOM_NAME\" TEXT," + // 1: roomName
                 "\"HOUSE_ID\" INTEGER NOT NULL ," + // 2: houseId
                 "\"ROOM_TYPE\" TEXT," + // 3: roomType
-                "\"IMG_ID\" INTEGER NOT NULL );"); // 4: imgId
+                "\"IMG_ID\" INTEGER NOT NULL ," + // 4: imgId
+                "\"IMG_ADDRESS\" TEXT);"); // 5: imgAddress
     }
 
     /** Drops the underlying database table. */
@@ -77,6 +79,11 @@ public class RoomDao extends AbstractDao<Room, Long> {
             stmt.bindString(4, roomType);
         }
         stmt.bindLong(5, entity.getImgId());
+ 
+        String imgAddress = entity.getImgAddress();
+        if (imgAddress != null) {
+            stmt.bindString(6, imgAddress);
+        }
     }
 
     @Override
@@ -99,6 +106,11 @@ public class RoomDao extends AbstractDao<Room, Long> {
             stmt.bindString(4, roomType);
         }
         stmt.bindLong(5, entity.getImgId());
+ 
+        String imgAddress = entity.getImgAddress();
+        if (imgAddress != null) {
+            stmt.bindString(6, imgAddress);
+        }
     }
 
     @Override
@@ -113,7 +125,8 @@ public class RoomDao extends AbstractDao<Room, Long> {
             cursor.isNull(offset + 1) ? null : cursor.getString(offset + 1), // roomName
             cursor.getInt(offset + 2), // houseId
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // roomType
-            cursor.getInt(offset + 4) // imgId
+            cursor.getInt(offset + 4), // imgId
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5) // imgAddress
         );
         return entity;
     }
@@ -125,6 +138,7 @@ public class RoomDao extends AbstractDao<Room, Long> {
         entity.setHouseId(cursor.getInt(offset + 2));
         entity.setRoomType(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setImgId(cursor.getInt(offset + 4));
+        entity.setImgAddress(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
      }
     
     @Override

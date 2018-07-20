@@ -71,6 +71,8 @@ public class bjTimeActivity extends AppCompatActivity {
 
 //        userId= preferences.getString("userId","");
         times=timeDao.findByAllTime();
+        Calendar calendar = Calendar.getInstance();
+
        Intent intent = getIntent();
        int hour= intent.getIntExtra("hour",0);
        int minutes=intent.getIntExtra("minutes",0);
@@ -84,12 +86,12 @@ public class bjTimeActivity extends AppCompatActivity {
        //闹钟数字
         timepicker1.setMaxValue(23);
         timepicker1.setMinValue(00);
-        timepicker1.setValue(hour);
+        timepicker1.setValue(calendar.get(Calendar.HOUR_OF_DAY));
 //        timepicker1.setBackgroundColor(Color.WHITE);
         timepicker1.setNumberPickerDividerColor(timepicker1);
         timepicker2.setMaxValue(59);
         timepicker2.setMinValue(00);
-        timepicker2.setValue(minutes);
+        timepicker2.setValue(calendar.get(Calendar.MINUTE));
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timepicker2.setNumberPickerDividerColor(timepicker2);
         timrClock=getSharedPreferences("clock",Context.MODE_PRIVATE);

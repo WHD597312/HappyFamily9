@@ -171,7 +171,7 @@ public class AddRoomActivity extends AppCompatActivity {
                             roomDao.update(room);
                             Log.i("dddddd11qqq1", "doInBackground:---> "+room);
                         }else {
-                            room = new Room((long)roomId,  roomName,  (int)houseId, roomType,0);
+                            room = new Room((long)roomId,  roomName,  (int)houseId, roomType,0,"");
                             roomDao.insert(room);
                             Log.i("dddddd1111", "doInBackground:---> "+room);
                         }

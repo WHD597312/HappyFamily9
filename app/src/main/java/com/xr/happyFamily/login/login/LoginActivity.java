@@ -534,7 +534,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                 int houseId = roomObject.getInt("houseId");
                                 String roomType = roomObject.getString("roomType");
 
-                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0);
+                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0,"");
                                 Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
                                 roomDao.insert(room);
 

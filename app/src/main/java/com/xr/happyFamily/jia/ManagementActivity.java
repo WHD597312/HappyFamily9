@@ -129,7 +129,7 @@ public class ManagementActivity extends AppCompatActivity {
                         String roomName=returnData.getString("roomName");
                         String roomType=returnData.getString("roomType");
                         int houseId=returnData.getInt("houseId");
-                        Room room = new Room((long)roomId,  roomName,  houseId, roomType,0);
+                        Room room = new Room((long)roomId,  roomName,  houseId, roomType,0,"");
                         room.setRoomId((long)roomId);
                         room.setHouseId(houseId);
                         room.setRoomType(roomType);

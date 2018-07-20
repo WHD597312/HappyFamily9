@@ -96,14 +96,15 @@ public class addTimeActivity extends AppCompatActivity {
 //        userId= preferences.getString("userId","");
         times = timeDao.findByAllTime();
         time = new Time();
+        Calendar calendar = Calendar.getInstance();
         timepicker1.setMaxValue(23);
         timepicker1.setMinValue(00);
-        timepicker1.setValue(49);
+        timepicker1.setValue(calendar.get(Calendar.HOUR_OF_DAY));
 //        timepicker1.setBackgroundColor(Color.WHITE);
         timepicker1.setNumberPickerDividerColor(timepicker1);
         timepicker2.setMaxValue(59);
         timepicker2.setMinValue(00);
-        timepicker2.setValue(49);
+        timepicker2.setValue(calendar.get(Calendar.MINUTE));
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timepicker2.setNumberPickerDividerColor(timepicker2);
 

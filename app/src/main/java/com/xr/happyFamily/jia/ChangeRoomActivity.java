@@ -4,6 +4,9 @@ package com.xr.happyFamily.jia;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -32,6 +35,11 @@ import com.xr.happyFamily.main.MainActivity;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -57,7 +65,7 @@ public class ChangeRoomActivity extends AppCompatActivity {
     ArrayList str3;
     TextView textView;
     long houseId;
-
+    Bitmap bitmap;
     private SharedPreferences mPositionPreferences;
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
@@ -71,6 +79,7 @@ public class ChangeRoomActivity extends AppCompatActivity {
         houseId = intent.getLongExtra("houseId", 0);
         roomDao = new RoomDaoImpl(getApplicationContext());
         rooms = roomDao.findAllRoomInHouse(houseId);
+
         initRoom(); // 初始化
         RoomAdapter adapter = new RoomAdapter(ChangeRoomActivity.this, R.layout.activity_home_change_item, roomList);
         textView = (TextView) findViewById(R.id.tv_change_1);
@@ -93,34 +102,55 @@ public class ChangeRoomActivity extends AppCompatActivity {
     }
 
 
+//    public Bitmap getPicture(String path){
+//        Bitmap bm=null;
+//        URL url;
+//        try {
+//            url = new URL(path);//创建URL对象
+//            URLConnection conn=url.openConnection();//获取URL对象对应的连接
+//            conn.connect();//打开连接
+//            InputStream is=conn.getInputStream();//获取输入流对象
+//            bm=BitmapFactory.decodeStream(is);//根据输入流对象创建Bitmap对象
+//        } catch (MalformedURLException e1) {
+//            e1.printStackTrace();//输出异常信息
+//        }catch (IOException e) {
+//            e.printStackTrace();//输出异常信息
+//        }
+//
+//
+//        return bm;
+//    }
 
 
+//    Integer imgs[] = {R.mipmap.chifang, R.mipmap.keting, R.mipmap.weishengjian, R.mipmap.woshi, R.mipmap.yangtai};
     Integer imgs[] = {R.mipmap.chifang, R.mipmap.keting, R.mipmap.weishengjian, R.mipmap.woshi, R.mipmap.yangtai};
 
     private void initRoom() {
+
         for (int i = 0; i < rooms.size(); i++) {
             Room room = rooms.get(i);
             String roomType = room.getRoomType();
-            if ("厨房".equals(roomType)) {
-                room.setImgId(imgs[0]);
-                roomList.add(room);
-            } else if ("客厅".equals(roomType)) {
-                room.setImgId(imgs[1]);
-                roomList.add(room);
-
-            } else if ("卫生间".equals(roomType)) {
-                room.setImgId(imgs[2]);
-                roomList.add(room);
-            } else if ("卧室".equals(roomType)) {
-                room.setImgId(imgs[3]);
-                roomList.add(room);
-            } else if ("阳台".equals(roomType)) {
-                room.setImgId(imgs[4]);
-                roomList.add(room);
-            } else {
-                room.setImgId(imgs[4]);
-                roomList.add(room);
-            }
+//            if ("厨房".equals(roomType)) {
+//
+//                roomList.add(room);
+//            } else if ("客厅".equals(roomType)) {
+//
+//                roomList.add(room);
+//
+//            } else if ("卫生间".equals(roomType)) {
+//
+//                roomList.add(room);
+//            } else if ("卧室".equals(roomType)) {
+//
+//                roomList.add(room);
+//            } else if ("阳台".equals(roomType)) {
+//
+//                roomList.add(room);
+//            } else {
+//
+//                roomList.add(room);
+//            }
+            roomList.add(room);
         }
     }
 

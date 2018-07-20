@@ -209,6 +209,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             startService(clockintent);
             clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
 //        }
+        new roomImageAsync().execute();
     }
     
     SharedPreferences preferencesclock;
@@ -496,7 +497,45 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             return null;
         }
     }
+    String path;
+    class roomImageAsync extends AsyncTask<Void,Void,Void>{
 
+        @Override
+        protected Void doInBackground(Void... voids) {
+            Bitmap bitmap=null;
+            String url = "http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
+            List<Room> rooms = roomDao.findByAllRoom();
+            for (int i = 0 ; i<rooms.size();i++){
+                Room room = rooms.get(i);
+                String roomType = room.getRoomType();
+                if ("厨房".equals(roomType)){
+                    path = url+"office.png";
+                }else {
+                    path = url+"office.png";
+                }
+
+                try {
+                    GlideUrl glideUrl = new GlideUrl(path);
+                    bitmap = Glide.with(MainActivity.this)
+                            .load(glideUrl)
+                            .asBitmap()
+                            .centerCrop()
+                            .into(1440,442)
+                            .get();
+                    if (bitmap != null) {
+                        File file = BitmapCompressUtils.compressImage(bitmap);
+                        String imgAddress=file.getPath();
+                        room.setImgAddress(imgAddress);
+                        roomDao.update(room);
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+            }
+            return null;
+        }
+    }
     int img[] = {R.mipmap.t};
     class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
@@ -548,7 +587,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                                 int houseId = roomObject.getInt("houseId");
                                 String roomType = roomObject.getString("roomType");
 
-                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0);
+                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0,"");
                                 Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
                                 roomDao.insert(room);
 

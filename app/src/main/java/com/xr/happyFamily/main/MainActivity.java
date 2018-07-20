@@ -531,7 +531,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
-
             }
             return null;
         }

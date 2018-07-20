@@ -238,7 +238,7 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
                         receiveCounty = data.get(position);
                         tv_qu.setText(receiveCounty);
                         tv_house_position.setText(tv_shi.getText());
-
+                        Log.e("name", "onItemClick: -->"+tv_shi );
                         mPopWindow.dismiss();
 
                         break;

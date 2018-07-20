@@ -211,7 +211,8 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                     case 2:
                         receiveCounty = data.get(position);
                         tv_qu.setText(receiveCounty);
-                        houseAddress=String.valueOf(tv_sheng.getText()) ;
+                        houseAddress=String.valueOf(tv_shi.getText()) ;
+                        textViewa.setText(tv_shi.getText());
                         new ChangeAddressAsync().execute();
                         mPopWindow.dismiss();
 

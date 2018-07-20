@@ -305,6 +305,9 @@ public class ClockService extends Service {
             time = times.get(i);
             boolean open = time.getOpen();
             sumMin = time.getSumMin()*60;
+            if (sumMin<nowminutes){
+                sumMin= sumMin+24*60*60;
+            }
             if (sumMin >= nowminutes&&true==open) {
                 counttime = sumMin - nowminutes;
                 countTimer = new CountTimer(counttime * 1000, 1000);

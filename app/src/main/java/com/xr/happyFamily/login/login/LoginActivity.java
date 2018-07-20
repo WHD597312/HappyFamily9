@@ -174,32 +174,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             }
         }
     }
-    class CountTimer extends CountDownTimer {
-        public CountTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
 
-        /**
-         * 倒计时过程中调用
-         *
-         * @param millisUntilFinished
-         */
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
-        }
-
-        /**
-         * 倒计时完成后调用
-         */
-
-        @Override
-        public void onFinish() {
-            Log.e("Tag", "倒计时完成");
-            hideProgressDialog();
-        }
-    }
     @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -224,8 +199,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
                 if (isConn){
                     showProgressDialog("正在登录，请稍后...");
-                    CountTimer countTimer = new CountTimer(6000, 1000);
-                    countTimer.start();
                     Map<String, Object> params = new HashMap<>();
                     params.put("phone", phone);
                     params.put("password", password);
@@ -479,15 +452,19 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             switch (code) {
                 case 10002:
                     Utils.showToast(LoginActivity.this, "手机号码未注册");
-
+                    hideProgressDialog();
                     break;
                 case 10004:
                     Utils.showToast(LoginActivity.this, "用户名或密码错误");
                     et_pswd.setText("");
+                    hideProgressDialog();
                     break;
                 case 100:
                     hideProgressDialog();
                     break;
+                    default:
+                        hideProgressDialog();
+                        break;
             }
         }
     }

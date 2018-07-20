@@ -150,6 +150,7 @@ public class ChangeRoomActivity extends AppCompatActivity {
 //
 //                roomList.add(room);
 //            }
+            
             roomList.add(room);
         }
     }

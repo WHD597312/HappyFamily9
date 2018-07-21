@@ -72,7 +72,9 @@ import com.xr.happyFamily.le.view.NoSrcollViewPage;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.permission.FloatWindowManager;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -124,7 +126,7 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
 
         initView();
         initData();
-
+        FloatWindowManager.getInstance().applyOrShowFloatWindow(ClockActivity.this);
         Intent intent = getIntent();
         int fragid = intent.getIntExtra("fragid", 0);
     }

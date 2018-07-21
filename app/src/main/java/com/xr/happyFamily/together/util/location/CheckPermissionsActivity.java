@@ -56,7 +56,7 @@ public class CheckPermissionsActivity extends AppCompatActivity {
 				&& getApplicationInfo().targetSdkVersion >= 23) {
 			if (isNeedCheck) {
 				checkPermissions(needPermissions);
-				
+
 			}
 		}
 	}

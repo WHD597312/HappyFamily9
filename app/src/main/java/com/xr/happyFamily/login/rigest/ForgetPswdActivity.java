@@ -104,7 +104,7 @@ public class ForgetPswdActivity extends AppCompatActivity
             }
         }
     };
-    @OnClick({R.id.btn_fg_finish,R.id.btn_fg_code,})
+    @OnClick({R.id.btn_fg_finish,R.id.btn_fg_code,R.id.iv_for_fh})
     public void onClick(View view){
         switch (view.getId()){
 
@@ -142,6 +142,9 @@ public class ForgetPswdActivity extends AppCompatActivity
                     CountTimer countTimer=new CountTimer(60000,1000);
                     countTimer.start();
                 }
+                break;
+            case R.id.iv_for_fh:
+                finish();
                 break;
         }
     }

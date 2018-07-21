@@ -23,7 +23,6 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.Fragment.homeFragment;
 import com.xr.happyFamily.jia.activity.QRScannerActivity;
 import com.xr.happyFamily.jia.adapter.ManagementGridViewAdapter;
 import com.xr.happyFamily.jia.pojo.Equipment;
@@ -141,14 +140,14 @@ public class ManagementActivity extends AppCompatActivity {
                         room.setRoomId((long)roomId);
                         room.setHouseId(houseId);
                         room.setRoomType(roomType);
-                        String imgAddress=room.getImgAddress();
-                        List<Room> roomList=roomDao.findRoomByType(roomType);
-                        if (roomList.isEmpty()){
-                            new LoadRoomsImage().execute(room);
-                        }else {
-                            Room room1=roomList.get(0);
-                            room.setImgAddress(room1.getImgAddress());
-                        }
+//                        String imgAddress=room.getImgAddress();
+//                        List<Room> roomList=roomDao.findRoomByType(roomType);
+//                        if (roomList.isEmpty()){
+//                            new LoadRoomsImage().execute(room);
+//                        }else {
+//                            Room room1=roomList.get(0);
+//                            room.setImgAddress(room1.getImgAddress());
+//                        }
                         roomDao.insert(room);
                         List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
                         SharedPreferences.Editor editor=mPositionPreferences.edit();

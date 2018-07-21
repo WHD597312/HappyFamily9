@@ -21,11 +21,7 @@ import com.bumptech.glide.Glide;
 import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.Fragment.BalconyFragment;
-import com.xr.happyFamily.jia.Fragment.BathroomFragment;
-import com.xr.happyFamily.jia.Fragment.KitchenFragment;
-import com.xr.happyFamily.jia.Fragment.LivingFragment;
-import com.xr.happyFamily.jia.Fragment.RoomFragment;
+
 import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.rigest.RegistActivity;

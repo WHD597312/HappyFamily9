@@ -33,7 +33,6 @@ import com.xr.happyFamily.bao.adapter.CityAdapter;
 import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
-import com.xr.happyFamily.jia.Fragment.RoomFragment;
 import com.xr.happyFamily.jia.adapter.ChooseHouseAdapter;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.JsonBean;

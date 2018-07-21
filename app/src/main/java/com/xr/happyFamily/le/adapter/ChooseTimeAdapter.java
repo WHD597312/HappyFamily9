@@ -59,6 +59,11 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
         isBound = context.bindService(service, connection, Context.BIND_AUTO_CREATE);
 
     }
+
+    public ServiceConnection getConnection() {
+        return connection;
+    }
+
     //绑定服务
     ClockService mqService;
     boolean bound;
@@ -68,7 +73,6 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
             ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
             mqService = binder.getService();
             bound = true;
-
         }
 
         @Override
@@ -76,6 +80,7 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
 
         }
     };
+
     public void setOnItemListener(OnItemListener onItemListener) {
         this.onItemListener = onItemListener;
     }

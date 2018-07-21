@@ -259,7 +259,15 @@ public class FamilyFragment extends Fragment {
             String name = hourse.getHouseName();
             String address = hourse.getHouseAddress();
             tv_my_hourse.setText(name+"·"+address);
-            commonDevices = deviceChildDao.findHouseCommonDevices(houseId);
+            List<DeviceChild> deviceChildren= deviceChildDao.findHouseCommonDevices(houseId);
+            commonDevices.clear();
+            if (deviceChildren!=null && !deviceChildren.isEmpty()){
+                for (int i = 0; i <deviceChildren.size(); i++) {
+                    DeviceChild deviceChild=deviceChildren.get(i);
+                    deviceChild.setCommon("common");
+                    commonDevices.add(deviceChild);
+                }
+            }
             shareDevices = deviceChildDao.findShareDevice(userId);
 
             Log.i("commonDevices", "-->" + commonDevices.size());
@@ -449,6 +457,7 @@ public class FamilyFragment extends Fragment {
                             DeviceChild deviceChild = commonDevices.get(i);
                             String mac = deviceChild.getMacAddress();
                             if (mac.equals(macAddress) && deviceChild2 != null) {
+                                deviceChild2.setCommon("common");
                                 commonDevices.set(i, deviceChild2);
                                 mGridViewAdapter.notifyDataSetChanged();
                                 break;

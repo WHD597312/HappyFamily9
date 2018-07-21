@@ -123,18 +123,33 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
+
+        if (preferences.contains("phone") && preferences.contains("password")) {
+            login="login";
+            String phone1=preferences.getString("phone","");
+            String password1=preferences.getString("password","");
+            Map<String, Object> params = new HashMap<>();
+            phone=phone1;
+            password=password1;
+            params.put("phone", phone);
+            params.put("password", password);
+            et_name.setText(phone);
+            et_pswd.setText(password);
+            new LoginAsyncTask().execute(params);
+        }
+
     }
 
     SharedPreferences preferences;
-
+    private String login;
     @Override
     protected void onStart() {
         super.onStart();
-        if (preferences.contains("phone") && preferences.contains("password")){
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            Intent intent=new Intent(this,MainActivity.class);
-            intent.putExtra("load","load");
-            startActivity(intent);
+
+        if (preferences.contains("phone") && !preferences.contains("password")) {
+            String phone = preferences.getString("phone", "");
+            et_name.setText(phone);
+            et_pswd.setText("");
         }
 //        try {
 //            gifDrawable = new GifDrawable(getResources(), R.mipmap.dtubiao);
@@ -151,30 +166,43 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
         rotate.setInterpolator(lin);
         imageView6.startAnimation(rotate);
-        if (preferences.contains("phone")) {
-            String phone = preferences.getString("phone", "");
-            et_name.setText(phone);
-            et_pswd.setText("");
-        }
-        if (preferences.contains("phone") && preferences.contains("password")) {
-            String phone = preferences.getString("phone", "");
-            String password = preferences.getString("password", "");
-            et_name.setText(phone);
-            et_pswd.setText(password);
-        }
+
+
+
     }
 
     @Override
     protected void onResume() {
         super.onResume();
-        if (preferences.contains("phone") && preferences.contains("password")) {
-//            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            if (preferences.contains("my")) {
-                startActivity(new Intent(this, HomepageActivity.class));
-            }
+    }
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+
+        @Override
+        public void onFinish() {
+            Log.e("Tag", "倒计时完成");
+            hideProgressDialog();
         }
     }
-
+    String phone;
+    String password;
     @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -182,9 +210,8 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 startActivity(new Intent(this, RegistActivity.class));
                 break;
             case R.id.btn_login:
-
-                String phone = et_name.getText().toString().trim();
-                String password = et_pswd.getText().toString().trim();
+                phone = et_name.getText().toString().trim();
+                password = et_pswd.getText().toString().trim();
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this, "账号码不能为空");
                     break;
@@ -199,6 +226,8 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
                 if (isConn){
                     showProgressDialog("正在登录，请稍后...");
+                    CountTimer countTimer = new CountTimer(6000, 1000);
+                    countTimer.start();
                     Map<String, Object> params = new HashMap<>();
                     params.put("phone", phone);
                     params.put("password", password);
@@ -425,8 +454,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         userId = returnData.getString("userId");
                         String token = returnData.getString("token");
                         SharedPreferences.Editor editor = preferences.edit();
-                        String phone = et_name.getText().toString().trim();
-                        String password = et_pswd.getText().toString().trim();
                         Log.i("phone", "---->: " + phone + ",,,," + password);
                         editor.putString("phone", phone);
                         editor.putString("username", returnData.getString("username"));
@@ -562,6 +589,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                 String deviceName=jsonObject3.getString("deviceName");
                                 int deviceType=jsonObject3.getInt("deviceType");
                                 int roomId=jsonObject3.getInt("roomId");
+                                String roomName=jsonObject3.getString("roomName");
                                 String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
                                 List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=null;
@@ -573,6 +601,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                     }
                                 }
                                 if (deviceChild2!=null){
+                                    deviceChild2.setRoomName(roomName);
                                     deviceChildDao.update(deviceChild2);
                                 }else if (deviceChild2==null){
                                     if (deviceChild2==null){
@@ -583,6 +612,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                         deviceChild2.setMacAddress(deviceMacAddress);
                                         deviceChild2.setType(deviceType);
                                         deviceChild2.setRoomId(roomId);
+                                        deviceChild2.setRoomName(roomName);
                                         deviceChildDao.insert(deviceChild2);
                                     }
                                 }
@@ -638,12 +668,15 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     Utils.showToast(LoginActivity.this, "查询失败");
                     break;
                 case 100:
+                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     if (mPositionPreferences.contains("position")){
                         mPositionPreferences.edit().clear().commit();
                     }
-                    Utils.showToast(LoginActivity.this, "登录成功");
-                    Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    if (TextUtils.isEmpty(login)){
+                        Utils.showToast(LoginActivity.this, "登录成功");
+                        intent.putExtra("login0","login0");
+                    }
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("load","load");
                     intent.putExtra("login","login");
                     startActivity(intent);

@@ -30,6 +30,15 @@
             android:text="智能终端"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_20" />
+        <ImageView
+            android:id="@+id/image_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_jy_10"
+            android:padding="@dimen/dp_jy_12"
+            android:src="@mipmap/image_more1" />
     </RelativeLayout>
     <RelativeLayout
         android:layout_below="@+id/head"

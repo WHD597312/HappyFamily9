@@ -76,6 +76,7 @@ public class FamilyFragmentManager extends Fragment {
             deviceChildDao=new DeviceChildDaoImpl(getActivity());
 
             List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
+            List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
 
             preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
             String userIdStr=preferences.getString("userId","");
@@ -88,7 +89,7 @@ public class FamilyFragmentManager extends Fragment {
                 rooms.add(room);
             }
             fragmentList = new ArrayList<>();
-            if (rooms.isEmpty() && shareChildren.isEmpty()) {
+            if (deviceChildren==null || deviceChildren.isEmpty()) {
                 NoRoomFragment noRoomFragment = new NoRoomFragment();
                 noRoomFragment.setHouseId(houseId);
                 noRoomFragment.setTemperature(temperature);
@@ -97,7 +98,6 @@ public class FamilyFragmentManager extends Fragment {
                 FamilyFragment familyFragment = new FamilyFragment();
                 familyFragment.setTemperature(temperature);
                 familyFragment.setHouseId(houseId);
-
                 fragmentList.add(familyFragment);
             }
             Log.i("roomtList", "-->" + rooms.size());
@@ -138,10 +138,10 @@ public class FamilyFragmentManager extends Fragment {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             mqService = binder.getService();
             bound = true;
-//            if (!TextUtils.isEmpty(load)){
-//                List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
-//                new LoadDevicesAsync().execute(deviceChildren);
-//            }
+            if (!TextUtils.isEmpty(load)){
+                List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
+                new LoadDevicesAsync().execute(deviceChildren);
+            }
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {

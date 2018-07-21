@@ -104,6 +104,7 @@ public class ChooseHourseActivity extends AppCompatActivity {
                 break;
             case R.id.iv_choose_back:
                 startActivity(new Intent(this, MainActivity.class));
+//                finish();
                 break;
         }
     }

@@ -51,7 +51,10 @@ import org.json.JSONObject;
 
 import java.io.File;
 import java.net.URLEncoder;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -86,11 +89,20 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     @BindView(R.id.id_bto_bao_img)
     ImageButton id_bto_bao_img;
     @BindView(R.id.id_bto_zhen_img)
-    ImageButton id_bto_zhen_img;/**朕*/
+    ImageButton id_bto_zhen_img;
+    /**
+     * 朕
+     */
 
     private FamilyFragmentManager familyFragmentManager;
-    private BaoFragment baoFragment;/**宝的页面*/
-    private ZhenFragment zhenFragment;/**朕的页面*/
+    private BaoFragment baoFragment;
+    /**
+     * 宝的页面
+     */
+    private ZhenFragment zhenFragment;
+    /**
+     * 朕的页面
+     */
     private LeFragment leFragment;
     private MyApplication application;
     SharedPreferences preferences;
@@ -101,13 +113,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private long houseId;
     String share;
     private MQTTMessageReveiver myReceiver;
-    private  boolean isBound;
-    private  boolean clockisBound;
+    private boolean isBound;
+    private boolean clockisBound;
     String load;
     AlarmManager alarmManager;
     private String family;
     private String city;
     private String temperature;
+    String login0;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -120,9 +134,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             application = (MyApplication) getApplication();
             application.addActivity(this);
         }
-
-        roomDao=new RoomDaoImpl(getApplicationContext());
-        deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
+        roomDao = new RoomDaoImpl(getApplicationContext());
+        deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
@@ -143,23 +156,27 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         List<Hourse> hourses = hourseDao.findAllHouse();
         Intent intent = getIntent();
-        load=intent.getStringExtra("load");
-        String login=intent.getStringExtra("login");
-        share=intent.getStringExtra("share");
+        load = intent.getStringExtra("load");
+        login0=intent.getStringExtra("login0");
+        String login = intent.getStringExtra("login");
+        share = intent.getStringExtra("share");
 
         houseId = intent.getLongExtra("houseId", 0);
-        if (houseId == 0 && hourses.size()>0) {
+        if (houseId == 0 && hourses.size() > 0) {
             Hourse hourse = hourses.get(0);
             houseId = hourse.getHouseId();
         }
         familyFragmentManager = new FamilyFragmentManager();
         leFragment = new LeFragment();
         baoFragment = new BaoFragment();
-        zhenFragment=new ZhenFragment();
+        zhenFragment = new ZhenFragment();
 
         mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
         sign = intent.getStringExtra("sign");
+
+
         //从支付成功跳回主界面时，打开商城fragment
+
         if ("PaySuccess".equals(sign)) {
             id_bto_jia_img.setImageResource(R.mipmap.jia);
             id_bto_bao_img.setImageResource(R.mipmap.bao1);
@@ -169,30 +186,39 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             if (mPositionPreferences.contains("position")) {
                 mPositionPreferences.edit().clear().commit();
             }
-            family="";
-        }else {
-            if (NetWorkUtil.isConn(this)){
-                Hourse hourse=hourseDao.findById(houseId);
-                if (hourse!=null){
-                    city=hourse.getHouseAddress();
-                    if (!TextUtils.isEmpty(city)){
-                        city=city.substring(0,city.length()-1);
+            family = "";
+        } else {
+            if (NetWorkUtil.isConn(this)) {
+                Hourse hourse = hourseDao.findById(houseId);
+                if (hourse != null) {
+                    city = hourse.getHouseAddress();
+                    if (!TextUtils.isEmpty(city)) {
+                        if (city.contains("市")){
+                            city = city.substring(0, city.length() - 1);
+                        }
                         new WeatherAsync().execute();
                     }
                 }
-            }else {
+            } else {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle bundle = new Bundle();
-                bundle.putString("load","load");
+                bundle.putString("load", "load");
                 bundle.putLong("houseId", houseId);
-                bundle.putString("temperature","");
+                bundle.putString("temperature", "");
                 familyFragmentManager.setArguments(bundle);
                 fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
                 fragmentTransaction.commit();
+                id_bto_jia_img.setImageResource(R.mipmap.jia1);
+                id_bto_bao_img.setImageResource(R.mipmap.bao);
+                id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+                idBtoLeImg.setImageResource(R.mipmap.le);
+
             }
         }
-        if (!preferences.contains("image")){
-            if (preferences.contains("headImgUrl")){
+
+
+        if (!preferences.contains("image")) {
+            if (preferences.contains("headImgUrl")) {
                 new LoadUserImageAsync().execute();
             }
         }
@@ -205,18 +231,17 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 //            Boolean trueCount =preferencesclock.getBoolean("trueCount",false);
 //            Log.i("Boolean","-->"+trueCount);
 //            if(false==trueCount){
-            clockintent = new Intent(MainActivity.this, ClockService.class);
-            startService(clockintent);
-            clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
+        clockintent = new Intent(MainActivity.this, ClockService.class);
+        startService(clockintent);
+        clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
 //        }
-        new roomImageAsync().execute();
     }
-    
+
     SharedPreferences preferencesclock;
     Intent clockintent;
     ClockService clcokservice;
     boolean boundclock;
-    ServiceConnection clockconnection=new ServiceConnection() {
+    ServiceConnection clockconnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
@@ -225,34 +250,34 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             boundclock = true;
             clcokservice.startClock();
         }
-
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
         }
     };
 
-    class WeatherAsync extends AsyncTask<Void,Void,String>{
+    class WeatherAsync extends AsyncTask<Void, Void, String> {
 
         @Override
         protected String doInBackground(Void... voids) {
-            String temperature=null;
+            String temperature = null;
             try {
-                String url="http://apicloud.mob.com/v1/weather/query?key=257a640199764&city="+ URLEncoder.encode(city,"UTF-8");
-                String result=HttpUtils.getOkHpptRequest(url);
-                Log.i("result","-->"+result);
-                if (!TextUtils.isEmpty(result)){
-                    JSONObject jsonObject=new JSONObject(result);
-                    String msg=jsonObject.getString("msg");
-                    if ("success".equals(msg)){
-                        JSONArray jsonArray=jsonObject.getJSONArray("result");
-                        int len=jsonArray.length();
-                        JSONObject jsonObject2=jsonArray.getJSONObject(0);
-                        temperature=jsonObject2.getString("temperature");
-                        Log.i("temperature","-->"+temperature);
+                String url = "http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "UTF-8");
+                String result = HttpUtils.getOkHpptRequest(url);
+                Log.i("result", "-->" + result);
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String msg = jsonObject.getString("msg");
+                    if ("success".equals(msg)) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        int len = jsonArray.length();
+                        JSONObject jsonObject2 = jsonArray.getJSONObject(0);
+                        temperature = jsonObject2.getString("temperature");
+                        Log.i("temperature", "-->" + temperature);
                     }
+
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return temperature;
@@ -264,22 +289,26 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             try {
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
                 Bundle bundle = new Bundle();
-                bundle.putString("load","load");
+                bundle.putString("load", "load");
                 bundle.putLong("houseId", houseId);
-                temperature=s;
-                bundle.putString("temperature",s);
+                temperature = s;
+                bundle.putString("temperature", s);
                 familyFragmentManager.setArguments(bundle);
                 fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
                 fragmentTransaction.commit();
-            }catch (Exception e){
+                id_bto_jia_img.setImageResource(R.mipmap.jia1);
+                id_bto_bao_img.setImageResource(R.mipmap.bao);
+                id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+                idBtoLeImg.setImageResource(R.mipmap.le);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-
         }
     }
 
 
-//    MQService mqService;
+
+    //    MQService mqService;
 //    private boolean bound=false;
 //    ServiceConnection connection = new ServiceConnection() {
 //        @Override
@@ -309,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 //            bound = false;
 //        }
 //    };
-    class LoadAync extends AsyncTask<Void,Void,Void>{
+    class LoadAync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
@@ -321,29 +350,29 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     @Override
     protected void onStart() {
         super.onStart();
-        Log.i("family","-->"+family);
-        if (!TextUtils.isEmpty(family)){
+        Log.i("family", "-->" + family);
+        if (!TextUtils.isEmpty(family)) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             familyFragmentManager = new FamilyFragmentManager();
             leFragment = new LeFragment();
             baoFragment = new BaoFragment();
-            zhenFragment=new ZhenFragment();
+            zhenFragment = new ZhenFragment();
             Bundle bundle = new Bundle();
-            bundle.putString("load","load");
+            bundle.putString("load", "load");
             bundle.putLong("houseId", houseId);
-            bundle.putString("temperature",temperature);
+            bundle.putString("temperature", temperature);
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
-            family="family";
+            family = "family";
         }
-        if (TextUtils.isEmpty(share)){
-            Intent service=new Intent(this,MQService.class);
+        if (TextUtils.isEmpty(share)) {
+            Intent service = new Intent(this, MQService.class);
             startService(service);
         }
     }
 
-    @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
+    @OnClick({R.id.id_bto_jia, R.id.id_bto_bao, R.id.id_bto_le, R.id.id_bto_zhen})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_bto_jia:
@@ -355,8 +384,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 long houseId = hourse.getHouseId();
                 Bundle bundle = new Bundle();
                 bundle.putLong("houseId", houseId);
-                bundle.putString("load","");
-                bundle.putString("temperature",temperature);
+                bundle.putString("load", "");
+                bundle.putString("temperature", temperature);
                 familyFragmentManager = new FamilyFragmentManager();
                 familyFragmentManager.setArguments(bundle);
                 FragmentTransaction familyTransaction = fragmentManager.beginTransaction();
@@ -366,7 +395,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
                 idBtoLeImg.setImageResource(R.mipmap.le);
-                family="family";
+                family = "family";
                 break;
             case R.id.id_bto_bao:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -379,7 +408,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
-                family="";
+                family = "";
                 break;
             case R.id.id_bto_le:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -392,7 +421,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
-                family="";
+                family = "";
                 break;
             case R.id.id_bto_zhen:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -405,7 +434,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
-                family="";
+                family = "";
                 break;
         }
     }
@@ -414,7 +443,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             application.removeAllActivity();
-            family="";
+            family = "";
+            mPositionPreferences.edit().clear().commit();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -427,16 +457,16 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             unbinder.unbind();
         }
 
-        Log.e("close", "onDestroy: ---->" );
+        Log.e("close", "onDestroy: ---->");
 //        mPositionPreferences.edit().clear().commit();
 //        //闹铃 退出将倒计时状态改为f
 //        SharedPreferences.Editor editor = preferencesclock.edit();
 //        editor.putBoolean("trueCount",false);
 //        editor.commit();
-        if (myReceiver!=null){
+        if (myReceiver != null) {
             unregisterReceiver(myReceiver);
         }
-        if (clockisBound){
+        if (clockisBound) {
             unbindService(clockconnection);
         }
     }
@@ -450,11 +480,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             FamilyFragmentManager familyFragmentManager = new FamilyFragmentManager();
             Bundle bundle = new Bundle();
             bundle.putLong("houseId", houseId);
-            bundle.putString("load","");
+            bundle.putString("load", "");
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
-            family="family";
+            family = "family";
         }
     }
 
@@ -470,80 +500,44 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             layout_bottom.setVisibility(View.VISIBLE);
         }
     }
-    class LoadUserImageAsync extends AsyncTask<Void,Void,Void>{
+
+    class LoadUserImageAsync extends AsyncTask<Void, Void, Void> {
 
         @Override
         protected Void doInBackground(Void... voids) {
-            Bitmap bitmap=null;
+            Bitmap bitmap = null;
             try {
                 String token = preferences.getString("token", "token");
-                String url=preferences.getString("headImgUrl","");
-                GlideUrl glideUrl=new GlideUrl(url,new LazyHeaders.Builder().addHeader("authorization",token).build());
-                bitmap= Glide.with(MainActivity.this)
+                String url = preferences.getString("headImgUrl", "");
+                GlideUrl glideUrl = new GlideUrl(url, new LazyHeaders.Builder().addHeader("authorization", token).build());
+                bitmap = Glide.with(MainActivity.this)
                         .load(glideUrl)
                         .asBitmap()
                         .centerCrop()
-                        .into(180,180)
+                        .into(180, 180)
                         .get();
-                if (bitmap!=null){
-                    File file= BitmapCompressUtils.compressImage(bitmap);
-                    preferences.edit().putString("image",file.getPath()).commit();
+                if (bitmap != null) {
+                    File file = BitmapCompressUtils.compressImage(bitmap);
+                    preferences.edit().putString("image", file.getPath()).commit();
                     BitmapCompressUtils.recycleBitmap(bitmap);
-
                 }
-            }catch (Exception e) {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return null;
         }
     }
-    String path;
-    class roomImageAsync extends AsyncTask<Void,Void,Void>{
 
-        @Override
-        protected Void doInBackground(Void... voids) {
-            Bitmap bitmap=null;
-            String url = "http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
-            List<Room> rooms = roomDao.findByAllRoom();
-            for (int i = 0 ; i<rooms.size();i++){
-                Room room = rooms.get(i);
-                String roomType = room.getRoomType();
-                if ("厨房".equals(roomType)){
-                    path = url+"office.png";
-                }else {
-                    path = url+"office.png";
-                }
-
-                try {
-                    GlideUrl glideUrl = new GlideUrl(path);
-                    bitmap = Glide.with(MainActivity.this)
-                            .load(glideUrl)
-                            .asBitmap()
-                            .centerCrop()
-                            .into(1440,442)
-                            .get();
-                    if (bitmap != null) {
-                        File file = BitmapCompressUtils.compressImage(bitmap);
-                        String imgAddress=file.getPath();
-                        room.setImgAddress(imgAddress);
-                        roomDao.update(room);
-                    }
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-            return null;
-        }
-    }
     int img[] = {R.mipmap.t};
+
     class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
             int code = 0;
 //            Map<String, Object> params = maps[0];
-            String userId3=preferences.getString("userId","");
-            String url =HttpUtils.ipAddress + "/family/house/getHouseDeviceByUser?userId=" + userId3;
+            String userId3 = preferences.getString("userId", "");
+            String url = HttpUtils.ipAddress + "/family/house/getHouseDeviceByUser?userId=" + userId3;
             String result = HttpUtils.getOkHpptRequest(url);
             Log.i("ffffffff", "--->: " + result);
             try {
@@ -551,20 +545,32 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     Log.i("fffffffft", "--->: " + code);
-//                    JSONObject roomDevices = jsonObject.getJSONObject("roomDevices");
-
                     if (code == 100) {
-                        hourseDao.deleteAll();
-                        roomDao.deleteAll();
                         deviceChildDao.deleteAll();
-                        JSONArray returnData = jsonObject.getJSONArray("returnData");
-                        for (int i = 0; i < returnData.length(); i++) {
-                            JSONObject houseObject = returnData.getJSONObject(i);
+                        JSONObject returnData = jsonObject.getJSONObject("returnData");
+                        SharedPreferences.Editor editor = preferences.edit();
+                        boolean sex = returnData.getBoolean("sex");
+                        if (returnData.has("headImgUrl")) {
+                            String headImgUrl = returnData.getString("headImgUrl");
+                            editor.putString("headImgUrl", headImgUrl);
+                        }
+                        String birthday = returnData.getString("birthday");
+                        SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                        Date date = format.parse(birthday);
+                        long ts = date.getTime();
+                        String res = String.valueOf(ts);
+                        editor.putBoolean("sex", sex);
+                        editor.putString("birthday", res);
+                        editor.commit();
+                        JSONArray houseDevices = returnData.getJSONArray("houseDevices");
+                        for (int i = 0; i < houseDevices.length(); i++) {
+                            JSONObject houseObject = houseDevices.getJSONObject(i);
                             int id = houseObject.getInt("id");
                             Log.i("rrrr", "doInBackground:--> " + id);
                             String houseName = houseObject.getString("houseName");
                             String houseAddress = houseObject.getString("houseAddress");
                             int userId = houseObject.getInt("userId");
+
                             Hourse hourse = hourseDao.findById((long) id);
                             if (hourse != null) {
                                 hourse.setHouseName(houseName);
@@ -576,6 +582,13 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                                 hourseDao.insert(hourse);
                                 Log.i("dddddd1", "doInBackground:---> " + hourse);
                             }
+                            if (hourse != null && i == 0) {
+                                city = hourse.getHouseAddress();
+                                if (!TextUtils.isEmpty(city)) {
+                                    city = city.substring(0, city.length() - 1);
+                                    new WeatherAsync().execute();
+                                }
+                            }
                             JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
 
                             Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
@@ -585,8 +598,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                                 String roomName = roomObject.getString("roomName");
                                 int houseId = roomObject.getInt("houseId");
                                 String roomType = roomObject.getString("roomType");
-
-                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0,"");
+                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0);
                                 Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
                                 roomDao.insert(room);
 
@@ -607,30 +619,29 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                                     deviceChildDao.insert(deviceChild);
                                 }
                             }
-                            JSONArray deviceCommons=houseObject.getJSONArray("deviceCommons");
+                            JSONArray deviceCommons = houseObject.getJSONArray("deviceCommons");
                             for (int j = 0; j < deviceCommons.length(); j++) {
-                                JSONObject jsonObject3=deviceCommons.getJSONObject(j);
-                                int deviceId=jsonObject3.getInt("deviceId");
-                                String deviceName=jsonObject3.getString("deviceName");
-                                int deviceType=jsonObject3.getInt("deviceType");
-                                int roomId=jsonObject3.getInt("roomId");
-                                String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
-                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
-                                DeviceChild deviceChild2=null;
-                                for (DeviceChild deviceChild:deviceChildren){
-                                    int deviceId2=deviceChild.getDeviceId();
-                                    if (deviceId2==deviceId){
-                                        deviceChild2=deviceChild;
+                                JSONObject jsonObject3 = deviceCommons.getJSONObject(j);
+                                int deviceId = jsonObject3.getInt("deviceId");
+                                String deviceName = jsonObject3.getString("deviceName");
+                                int deviceType = jsonObject3.getInt("deviceType");
+                                int roomId = jsonObject3.getInt("roomId");
+                                String deviceMacAddress = jsonObject3.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+                                DeviceChild deviceChild2 = null;
+                                for (DeviceChild deviceChild : deviceChildren) {
+                                    int deviceId2 = deviceChild.getDeviceId();
+                                    if (deviceId2 == deviceId) {
+                                        deviceChild2 = deviceChild;
                                         break;
                                     }
                                 }
-                                if (deviceChild2!=null){
+                                if (deviceChild2 != null) {
                                     deviceChildDao.update(deviceChild2);
-                                }else if (deviceChild2==null){
-                                    if (deviceChild2==null){
-                                        deviceChild2=new DeviceChild();
+                                } else if (deviceChild2 == null) {
+                                    if (deviceChild2 == null) {
+                                        deviceChild2 = new DeviceChild();
                                         deviceChild2.setUserId(userId);
-                                        deviceChild2.setShareId(Long.MAX_VALUE);
                                         deviceChild2.setName(deviceName);
                                         deviceChild2.setDeviceId(deviceId);
                                         deviceChild2.setMacAddress(deviceMacAddress);
@@ -640,28 +651,28 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                                     }
                                 }
                             }
-                            JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
+                            JSONArray deviceShareds = houseObject.getJSONArray("deviceShareds");
                             for (int x = 0; x < deviceShareds.length(); x++) {
-                                JSONObject jsonObject2=deviceShareds.getJSONObject(x);
-                                int deviceId=jsonObject2.getInt("deviceId");
-                                String deviceName=jsonObject2.getString("deviceName");
-                                int deviceType=jsonObject2.getInt("deviceType");
-                                int roomId=jsonObject2.getInt("roomId");
-                                String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
-                                List<DeviceChild> deviceChildren=deviceChildDao.findShareDevice(userId);
-                                DeviceChild deviceChild2=null;
-                                for (DeviceChild deviceChild:deviceChildren){
-                                    int deviceId2=deviceChild.getDeviceId();
-                                    if (deviceId2==deviceId){
-                                        deviceChild2=deviceChild;
+                                JSONObject jsonObject2 = deviceShareds.getJSONObject(x);
+                                int deviceId = jsonObject2.getInt("deviceId");
+                                String deviceName = jsonObject2.getString("deviceName");
+                                int deviceType = jsonObject2.getInt("deviceType");
+                                int roomId = jsonObject2.getInt("roomId");
+                                String deviceMacAddress = jsonObject2.getString("deviceMacAddress");
+                                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+                                DeviceChild deviceChild2 = null;
+                                for (DeviceChild deviceChild : deviceChildren) {
+                                    int deviceId2 = deviceChild.getDeviceId();
+                                    if (deviceId2 == deviceId) {
+                                        deviceChild2 = deviceChild;
                                         break;
                                     }
                                 }
-                                if (deviceChild2!=null){
+                                if (deviceChild2 != null) {
                                     deviceChildDao.update(deviceChild2);
-                                }else if (deviceChild2==null){
-                                    if (deviceChild2==null){
-                                        deviceChild2=new DeviceChild();
+                                } else if (deviceChild2 == null) {
+                                    if (deviceChild2 == null) {
+                                        deviceChild2 = new DeviceChild();
                                         deviceChild2.setUserId(userId);
                                         deviceChild2.setShareId(Long.MAX_VALUE);
                                         deviceChild2.setName(deviceName);
@@ -669,6 +680,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                                         deviceChild2.setMacAddress(deviceMacAddress);
                                         deviceChild2.setType(deviceType);
                                         deviceChild2.setRoomId(roomId);
+                                        deviceChild2.setShare("share");
                                         deviceChildDao.insert(deviceChild2);
                                     }
                                 }
@@ -680,7 +692,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 e.printStackTrace();
             }
             return code;
-
         }
 
         protected void onPostExecute(Integer code) {
@@ -688,24 +699,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             switch (code) {
                 case 1005:
                     Utils.showToast(MainActivity.this, "加载失败");
-                    break;
-                case 100:
-                    if (mPositionPreferences.contains("position")){
-                        mPositionPreferences.edit().clear().commit();
-                    }
-                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                    familyFragmentManager = new FamilyFragmentManager();
-                    Bundle bundle = new Bundle();
-                    List<Hourse> hourses = hourseDao.findAllHouse();
-                    Hourse hourse = hourses.get(0);
-                    houseId = hourse.getHouseId();
-                    bundle.putLong("houseId", houseId);
-                    familyFragmentManager.setArguments(bundle);
-                    fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-                    fragmentTransaction.commit();
-//                    Intent service = new Intent(MainActivity.this, MQService.class);
-//                    startService(service);
-//                    isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
                     break;
             }
         }

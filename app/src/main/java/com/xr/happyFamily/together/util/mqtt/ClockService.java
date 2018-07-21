@@ -95,8 +95,6 @@ public class ClockService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        return super.onStartCommand(intent, flags, startId);
         Notification notification=new Notification.Builder(getApplicationContext())
-                .setContentText("前台服务")
-                .setSmallIcon(R.mipmap.app)
                 .setWhen(System.currentTimeMillis())
                 .build();
         startForeground(110,notification);

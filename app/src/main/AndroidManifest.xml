@@ -209,13 +209,6 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".jia.xnty.ZnWdActivity" />
         <activity
-            android:name=".jia.MenuActivity"
-            android:label="@string/app_name" />
-        <activity
-            android:name=".jia.AddEquipmentActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".jia.AddhourseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -254,9 +247,7 @@
             android:name=".login.rigest.ForgetPswdActivity"
             android:hardwareAccelerated="true"
             android:label="@string/app_name" />
-        <activity
-            android:name=".jia.MyPaperActivity"
-            android:label="@string/app_name" />
+
         <activity
             android:name=".jia.xnty.AircleanerActivity"
             android:label="@string/app_name"
@@ -291,20 +282,12 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".jia.AddRoomActivity"
-            android:label="@null"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".login.rigest.RegistFinishActivity"
             android:label="@null"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.ChangeRoomActivity"
-            android:label="@null" />
-        <activity
-            android:name=".jia.HomepageActivity"
             android:label="@null" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"

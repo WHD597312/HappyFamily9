@@ -22,6 +22,7 @@ import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.Toast;
 
 import com.mob.tools.utils.UIHandler;
@@ -31,9 +32,7 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.HomepageActivity;
 import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
@@ -98,6 +97,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
     GifDrawable gifDrawable;
+    @BindView(R.id.rl_login) RelativeLayout rl_login;
     Animation rotate;
     SharedPreferences mPositionPreferences;
 
@@ -135,7 +135,14 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             params.put("password", password);
             et_name.setText(phone);
             et_pswd.setText(password);
-            new LoginAsyncTask().execute(params);
+            if (NetWorkUtil.isConn(this)){
+                new LoginAsyncTask().execute(params);
+            }else {
+                Intent intent=new Intent(this,MainActivity.class);
+                intent.putExtra("load","load");
+                intent.putExtra("login","login");
+                startActivity(intent);
+            }
         }
 
     }

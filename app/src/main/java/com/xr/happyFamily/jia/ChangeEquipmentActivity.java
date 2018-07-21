@@ -11,11 +11,7 @@ import android.widget.ListView;
 
 import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.jia.Fragment.BalconyFragment;
-import com.xr.happyFamily.jia.Fragment.BathroomFragment;
-import com.xr.happyFamily.jia.Fragment.KitchenFragment;
-import com.xr.happyFamily.jia.Fragment.LivingFragment;
-import com.xr.happyFamily.jia.Fragment.RoomFragment;
+
 import com.xr.happyFamily.jia.adapter.MyAdapter;
 import com.xr.happyFamily.jia.xnty.AirConditionerActivity;
 import com.xr.happyFamily.jia.xnty.AircleanerActivity;

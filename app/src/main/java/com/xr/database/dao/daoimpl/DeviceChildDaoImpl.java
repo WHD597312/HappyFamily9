@@ -93,7 +93,8 @@ public class DeviceChildDaoImpl {
      */
     public List<DeviceChild> findHouseInRoomDevices(long houseId,long roomId){
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId));
-        return deviceChildDao.queryBuilder().where(whereCondition).orderDesc(DeviceChildDao.Properties.DeviceId).list();
+        return deviceChildDao.queryBuilder().where(whereCondition).orderDesc
+                (DeviceChildDao.Properties.DeviceId).list();
     }
 
     /***

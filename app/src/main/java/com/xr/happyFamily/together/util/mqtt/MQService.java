@@ -731,6 +731,27 @@ public class MQService extends Service {
         String friendTopic = "p99/+/acceptorId_" + userId + "/friend";
         String clockTopic = "p99/clockuniversal/userId_" + userId;
         Log.e("qqqqqCCC", friendTopic);
+        List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+        for (DeviceChild deviceChild : deviceChildren) {
+            String macAddress = deviceChild.getMacAddress();
+            int type = deviceChild.getType();
+            String onlineTopicName = "";
+            String offlineTopicName = "";
+            switch (type) {
+                case 2:
+                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                    break;
+                case 3:
+                    onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                    break;
+            }
+        }
         list.add(friendTopic);
         list.add(clockTopic);
         return list;

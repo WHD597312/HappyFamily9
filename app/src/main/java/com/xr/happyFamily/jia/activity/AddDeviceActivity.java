@@ -40,7 +40,6 @@ import com.xr.happyFamily.esptouch.IEsptouchTask;
 import com.xr.happyFamily.esptouch.task.__IEsptouchTask;
 
 import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;

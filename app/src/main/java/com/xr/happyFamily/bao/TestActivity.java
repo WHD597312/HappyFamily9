@@ -20,6 +20,7 @@ import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.alipay.PayResult;
 import com.xr.happyFamily.bean.OrderListBean;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.xnty.ArcProgressBar;
 import com.xr.happyFamily.le.view.CompletedView;
 import com.xr.happyFamily.le.view.MyHorizontalScrollView;
@@ -60,7 +61,8 @@ public class TestActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         timeBar = (TimeBar) findViewById(R.id.arcprogressBar);
 
 

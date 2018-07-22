@@ -11,12 +11,15 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopDingdanXQActivity;
 import com.xr.happyFamily.bean.ShopPinglunBean;
+import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.zhen.PersonInfoActivity;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -75,28 +78,26 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        int sign=list.size()-position-1;
+        int sign = list.size() - position - 1;
         if (list.get(sign).getAnonymous())
             holder.tv_name.setText("匿名");
         else
             holder.tv_name.setText(list.get(sign).getUsername());
 
 
-        if((list.get(sign).getComment())!=null)
-        holder.tv_pinglun.setText(list.get(sign).getComment().toString());
-        if (list.get(sign).getImage() == null) {
+        if ((list.get(sign).getComment()) != null)
+            holder.tv_pinglun.setText(list.get(sign).getComment().toString());
+        if (list.get(sign).getHeadImgUrl() == null) {
             holder.img_touxiang.setImageResource(R.mipmap.ic_touxiang_moren);
         } else
-            Picasso.with(context).load(list.get(sign).getImage().toString())
-                    .error(R.mipmap.ic_touxiang_moren)
-                    .into(holder.img_touxiang);
+            Glide.with(context).load(list.get(sign).getHeadImgUrl().toString()).transform(new GlideCircleTransform(context.getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(holder.img_touxiang);
         int buyerRate = list.get(sign).getBuyerRate();
         for (int i = 0; i < buyerRate; i++) {
             holder.imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);
         }
 
 
-        holder.tv_time.setText(TimeUtils.getTime(list.get(sign).getCreateTime()+""));
+        holder.tv_time.setText(TimeUtils.getTime(list.get(sign).getCreateTime() + ""));
 //        holder.img_pingjia.setImageResource( Integer.parseInt(list.get(position).get("pic").toString()));
     }
 

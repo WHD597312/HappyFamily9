@@ -31,6 +31,8 @@ import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.bean.ShopCartBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -114,6 +116,8 @@ public class ShopConfActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
 
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_conf);
         ButterKnife.bind(this);
 
@@ -278,7 +282,9 @@ public class ShopConfActivity extends AppCompatActivity {
 
             try {
                 if (!Utils.isEmpty(result)) {
-
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     returnData = jsonObject.getString("returnData");
@@ -337,6 +343,9 @@ public class ShopConfActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     returnData = jsonObject.getString("returnData");
@@ -371,6 +380,15 @@ public class ShopConfActivity extends AppCompatActivity {
 //                tvMoney=
                 if(isPrice&&isShopData)
                     MyDialog.closeDialog(dialog);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -387,6 +405,9 @@ public class ShopConfActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     if (!Utils.isEmpty(code) && "100".equals(code)) {
@@ -419,6 +440,15 @@ public class ShopConfActivity extends AppCompatActivity {
                     finish();
                 }
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -435,6 +465,9 @@ public class ShopConfActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -464,6 +497,15 @@ public class ShopConfActivity extends AppCompatActivity {
 
                 if(isShopData&&isAddress)
                 MyDialog.closeDialog(dialog);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

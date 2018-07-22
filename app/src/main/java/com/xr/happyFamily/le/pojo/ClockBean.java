@@ -31,11 +31,12 @@ public class ClockBean implements Serializable{
     private int switchs;
     private int clockCreater;
     private int clockType;
+    private String createrName;
 
-    @Generated(hash = 1188591895)
+    @Generated(hash = 653913546)
     public ClockBean(Long id, int clockId, int clockHour, int clockMinute,
             int sumMinute, String clockDay, String flag, String music, int switchs,
-            int clockCreater, int clockType) {
+            int clockCreater, int clockType, String createrName) {
         this.id = id;
         this.clockId = clockId;
         this.clockHour = clockHour;
@@ -47,6 +48,7 @@ public class ClockBean implements Serializable{
         this.switchs = switchs;
         this.clockCreater = clockCreater;
         this.clockType = clockType;
+        this.createrName = createrName;
     }
 
     @Generated(hash = 513947775)
@@ -141,6 +143,14 @@ public class ClockBean implements Serializable{
 
     public void setId(Long id) {
         this.id = id;
+    }
+
+    public String getCreaterName() {
+        return this.createrName;
+    }
+
+    public void setCreaterName(String createrName) {
+        this.createrName = createrName;
     }
 
 

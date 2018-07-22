@@ -5,8 +5,14 @@
     android:orientation="vertical">
 
 
+    <com.xr.happyFamily.bao.view.MyScrollview
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
 
-
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
 
             <include layout="@layout/happy_banner" />
@@ -15,188 +21,249 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@mipmap/bg_happy_quwei"
-                android:layout_marginTop="@dimen/dp_jy_25"/>
+                android:layout_marginTop="@dimen/dp_jy_25"
+                android:src="@mipmap/bg_happy_quwei" />
 
 
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingTop="@dimen/dp_jy_12"
-        android:paddingBottom="@dimen/dp_jy_8"
-        android:paddingLeft="@dimen/dp_jy_8"
-        android:paddingRight="@dimen/dp_jy_8">
-        <LinearLayout
-            android:id="@+id/ll_xuyuan"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:background="@mipmap/bg_xuyuanxq"
-            android:paddingLeft="@dimen/dp_jy_14"
-            android:paddingTop="@dimen/dp_jy_12"
-            android:paddingBottom="@dimen/dp_jy_18">
-            <ImageView
-                android:layout_width="@dimen/dp_jy_60"
-                android:layout_height="@dimen/dp_jy_60"
-                android:background="@color/color_dark_gray"/>
             <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingBottom="@dimen/dp_jy_8"
+                android:paddingLeft="@dimen/dp_jy_8"
+                android:paddingRight="@dimen/dp_jy_8"
+                android:paddingTop="@dimen/dp_jy_12">
+
+                <LinearLayout
+                    android:id="@+id/ll_xuyuan"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@mipmap/bg_xuyuanxq"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp_jy_18"
+                    android:paddingLeft="@dimen/dp_jy_14"
+                    android:paddingTop="@dimen/dp_jy_12"
+                    android:visibility="gone">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_jy_60"
+                        android:layout_height="@dimen/dp_jy_60"
+                        android:background="@color/color_dark_gray" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/dp_jy_10"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="许愿墙"
+                            android:textColor="@color/happy_green"
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:text="2.325条愿望"
+                            android:textColor="@color/happy_gray"
+                            android:textSize="@dimen/sp_12" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_clock"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_jy_8"
+                    android:layout_weight="1"
+                    android:background="@mipmap/bg_xuyuanxq"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp_jy_18"
+                    android:paddingLeft="@dimen/dp_jy_14"
+                    android:paddingTop="@dimen/dp_jy_12">
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:src="@mipmap/ic_le_clock" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/dp_jy_10"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="智能闹钟"
+                            android:textColor="@color/happy_green"
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:text="有1.2万人在玩"
+                            android:textColor="@color/happy_gray"
+                            android:textSize="@dimen/sp_12" />
+                    </LinearLayout>
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@mipmap/bg_xuyuanxq"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp_jy_18"
+                    android:paddingLeft="@dimen/dp_jy_14"
+                    android:paddingTop="@dimen/dp_jy_12"
+                    android:visibility="invisible">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_jy_60"
+                        android:layout_height="@dimen/dp_jy_60"
+                        android:background="@color/color_dark_gray" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/dp_jy_10"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="许愿墙"
+                            android:textColor="@color/happy_green"
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:text="2.325条愿望"
+                            android:textColor="@color/happy_gray"
+                            android:textSize="@dimen/sp_12" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:paddingLeft="@dimen/dp_jy_8"
+                android:paddingRight="@dimen/dp_jy_8"
+                android:visibility="gone">
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="@mipmap/bg_xuyuanxq"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp_jy_18"
+                    android:paddingLeft="@dimen/dp_jy_14"
+                    android:paddingTop="@dimen/dp_jy_12">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_jy_60"
+                        android:layout_height="@dimen/dp_jy_60"
+                        android:background="@color/color_dark_gray" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/dp_jy_10"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="许愿墙"
+                            android:textColor="@color/happy_green"
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:text="2.325条愿望"
+                            android:textColor="@color/happy_gray"
+                            android:textSize="@dimen/sp_12" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_jy_8"
+                    android:layout_weight="1"
+                    android:background="@mipmap/bg_xuyuanxq"
+                    android:orientation="horizontal"
+                    android:paddingBottom="@dimen/dp_jy_18"
+                    android:paddingLeft="@dimen/dp_jy_14"
+                    android:paddingTop="@dimen/dp_jy_12">
+
+                    <ImageView
+                        android:layout_width="@dimen/dp_jy_60"
+                        android:layout_height="@dimen/dp_jy_60"
+                        android:background="@color/color_dark_gray" />
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center"
+                        android:layout_marginLeft="@dimen/dp_jy_10"
+                        android:orientation="vertical">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="许愿墙"
+                            android:textColor="@color/happy_green"
+                            android:textSize="@dimen/sp_14" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:text="2.325条愿望"
+                            android:textColor="@color/happy_gray"
+                            android:textSize="@dimen/sp_12" />
+                    </LinearLayout>
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
                 android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_jy_10">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="许愿墙"
-                    android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2.325条愿望"
-                    android:textSize="@dimen/sp_12"
-                    android:layout_marginTop="@dimen/dp_jy_5"
-                    android:textColor="@color/happy_gray"/>
-            </LinearLayout>
+                android:layout_marginTop="@dimen/dp_jy_25"
+                android:src="@mipmap/bg_happy_jiankang" />
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerView"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+            </android.support.v7.widget.RecyclerView>
+
         </LinearLayout>
-
-
-        <LinearLayout
-            android:id="@+id/ll_clock"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:background="@mipmap/bg_xuyuanxq"
-            android:paddingLeft="@dimen/dp_jy_14"
-            android:paddingTop="@dimen/dp_jy_12"
-            android:layout_marginLeft="@dimen/dp_jy_8"
-            android:paddingBottom="@dimen/dp_jy_18">
-            <ImageView
-                android:layout_width="@dimen/dp_jy_60"
-                android:layout_height="@dimen/dp_jy_60"
-                android:background="@color/color_dark_gray"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_jy_10">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="智能闹钟"
-                    android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2.325条愿望"
-                    android:textSize="@dimen/sp_12"
-                    android:layout_marginTop="@dimen/dp_jy_5"
-                    android:textColor="@color/happy_gray"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:paddingLeft="@dimen/dp_jy_8"
-        android:paddingRight="@dimen/dp_jy_8">
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:background="@mipmap/bg_xuyuanxq"
-            android:paddingLeft="@dimen/dp_jy_14"
-            android:paddingTop="@dimen/dp_jy_12"
-            android:paddingBottom="@dimen/dp_jy_18">
-            <ImageView
-                android:layout_width="@dimen/dp_jy_60"
-                android:layout_height="@dimen/dp_jy_60"
-                android:background="@color/color_dark_gray"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_jy_10">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="许愿墙"
-                    android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:textSize="@dimen/sp_12"
-                    android:text="2.325条愿望"
-                    android:layout_marginTop="@dimen/dp_jy_5"
-                    android:textColor="@color/happy_gray"/>
-            </LinearLayout>
-        </LinearLayout>
-
-
-        <LinearLayout
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_weight="1"
-            android:background="@mipmap/bg_xuyuanxq"
-            android:paddingLeft="@dimen/dp_jy_14"
-            android:paddingTop="@dimen/dp_jy_12"
-            android:layout_marginLeft="@dimen/dp_jy_8"
-            android:paddingBottom="@dimen/dp_jy_18">
-            <ImageView
-                android:layout_width="@dimen/dp_jy_60"
-                android:layout_height="@dimen/dp_jy_60"
-                android:background="@color/color_dark_gray"/>
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center"
-                android:layout_marginLeft="@dimen/dp_jy_10">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="许愿墙"
-                    android:textSize="@dimen/sp_14"
-                    android:textColor="@color/happy_green"/>
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="2.325条愿望"
-                    android:textSize="@dimen/sp_12"
-                    android:layout_marginTop="@dimen/dp_jy_5"
-                    android:textColor="@color/happy_gray"/>
-            </LinearLayout>
-        </LinearLayout>
-    </LinearLayout>
-
-    <ImageView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/bg_happy_jiankang"
-        android:layout_gravity="center"
-        android:layout_marginTop="@dimen/dp_jy_25"/>
-
-    <ImageView
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_108"
-        android:padding="@dimen/dp_jy_12"
-        android:src="@color/color_dark_gray"
-        android:layout_gravity="bottom"/>
+    </com.xr.happyFamily.bao.view.MyScrollview>
 </LinearLayout>
 
 

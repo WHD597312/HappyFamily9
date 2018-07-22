@@ -2,6 +2,7 @@ package com.xr.happyFamily.bao;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -34,6 +35,7 @@ import com.xr.happyFamily.bao.adapter.ShopCartAdapter;
 import com.xr.happyFamily.bao.bean.ShoppingCart;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopCartBean;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -89,6 +91,8 @@ public class ShopCartActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
        getData();
         titleText.setText("购物车");
         tvShopCartSelect = (TextView) findViewById(R.id.tv_shopcart_addselect);
@@ -277,6 +281,9 @@ public class ShopCartActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 //                    if("null".equals(returnData.getJSONObject("shoppingCartItem").toString())) {
@@ -323,6 +330,15 @@ public class ShopCartActivity extends AppCompatActivity {
                 }
             } else if (!Utils.isEmpty(s) && "10005".equals(s)) {
                 startActivity(new Intent(ShopCartActivity.this, LoginActivity.class));
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -338,6 +354,9 @@ public class ShopCartActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -358,6 +377,15 @@ public class ShopCartActivity extends AppCompatActivity {
 
             } else if (!Utils.isEmpty(s) && "10005".equals(s)) {
                 startActivity(new Intent(ShopCartActivity.this, LoginActivity.class));
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

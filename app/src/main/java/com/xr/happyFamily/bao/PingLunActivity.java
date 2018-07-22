@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -17,6 +18,9 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.EvaluatePlAdapter;
 import com.xr.happyFamily.bao.adapter.PinglunFabiaoAdapter;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -69,6 +73,8 @@ public class PingLunActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_pinglun_fabiao);
         ButterKnife.bind(this);
         titleRightText.setText("发布");
@@ -187,6 +193,9 @@ public class PingLunActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -205,6 +214,15 @@ public class PingLunActivity extends AppCompatActivity {
                 Intent intent=new Intent(PingLunActivity.this,PingLunSuccessActivity.class);
                 startActivity(intent);
             finish();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(PingLunActivity.this.getApplicationContext(), LoginActivity.class));
             }
         }
     }

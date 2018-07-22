@@ -2,6 +2,8 @@ package com.xr.happyFamily.bao.fragment;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -28,6 +30,7 @@ import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bean.ShopPinglunBean;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -43,6 +46,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by TYQ on 2017/9/7.
@@ -109,8 +114,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
                 adapter_pinglun.notifyDataSetChanged();
 
                 getPingLun(tag[position]);
-
-
             }
         });
 
@@ -217,29 +220,33 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
 
             try {
                 if (!Utils.isEmpty(result)) {
-                    code="100";
-                    JSONObject jsonObject = new JSONObject(result);
-                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+                    if (result.length() < 6) {
+                        code=result;
+                    }else {
+                        code = "100";
+                        JSONObject jsonObject = new JSONObject(result);
+                        JSONObject returnData = jsonObject.getJSONObject("returnData");
 
-                    average = returnData.getString("average");
-                    Log.i("average2","-->"+average);
-                    total = returnData.getString("total");
-                    beautiful = returnData.getString("beautiful");
-                    cost = returnData.getString("cost");
-                    fine = returnData.getString("fine");
-                    comfortable = returnData.getString("comfortable");
-                    //满意度
-                    satisfaction = returnData.getString("satisfaction");
-                    packing = returnData.getString("packing");
+                        average = returnData.getString("average");
+                        Log.i("average2", "-->" + average);
+                        total = returnData.getString("total");
+                        beautiful = returnData.getString("beautiful");
+                        cost = returnData.getString("cost");
+                        fine = returnData.getString("fine");
+                        comfortable = returnData.getString("comfortable");
+                        //满意度
+                        satisfaction = returnData.getString("satisfaction");
+                        packing = returnData.getString("packing");
 
 //        list.add("质量好（100）");
-                    list.clear();
-                    list.add("全部（" + total + "）");
-                    list.add("美观（" + beautiful + "）");
-                    list.add("性价比高（" + cost + "）");
-                    list.add("包装好（" + packing + "）");
-                    list.add("做工精细（" + fine + "）");
-                    list.add("使用舒服（" + comfortable + "）");
+                        list.clear();
+                        list.add("全部（" + total + "）");
+                        list.add("美观（" + beautiful + "）");
+                        list.add("性价比高（" + cost + "）");
+                        list.add("包装好（" + packing + "）");
+                        list.add("做工精细（" + fine + "）");
+                        list.add("使用舒服（" + comfortable + "）");
+                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -269,6 +276,15 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
                             tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
                     }
 //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                    Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                    SharedPreferences preferences;
+                    preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+                    MyDialog.setStart(false);
+                    if (preferences.contains("password")) {
+                        preferences.edit().remove("password").commit();
+                    }
+                    startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
                 }
             }
         }
@@ -288,9 +304,11 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
 
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-
                     returnData = jsonObject.getString("returnData");
                     if (!Utils.isEmpty(returnData)) {
                         JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
@@ -324,6 +342,15 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
                     Toast.makeText(context,"此商品暂无评论",Toast.LENGTH_SHORT).show();
                 }
 //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
 

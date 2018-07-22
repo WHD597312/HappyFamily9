@@ -7,6 +7,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -38,6 +39,8 @@ public class TuiKuanSuccessActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_tuikuan);
         ButterKnife.bind(this);
         titleText.setText("退款成功");

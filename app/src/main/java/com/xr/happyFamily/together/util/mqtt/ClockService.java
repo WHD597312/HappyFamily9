@@ -14,9 +14,15 @@ import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
 import android.view.WindowManager;
+
+import com.xr.database.dao.ClockBeanDao;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
+import com.xr.happyFamily.le.view.QinglvClockDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog2;
 import com.xr.happyFamily.le.view.btClockjsDialog4;
@@ -28,9 +34,16 @@ public class ClockService extends Service {
 
     private TimeDaoImpl timeDao;
     private LocalBinder binder = new LocalBinder();
+    private ClockDaoImpl clockDao;
+    private UserInfosDaoImpl userInfosDao;
     SharedPreferences preferences;
     Boolean Ring = false;
     Time ti;
+    ClockBean cl;
+    ClockBeanDao clockBeanDao;
+    ClockBean clockBean;
+    List<ClockBean> clockBeanList;
+    String userId;
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
      */
@@ -137,6 +150,9 @@ public class ClockService extends Service {
         public void onFinish() {
             Log.e("Tag", "倒计时完成");
             //设置倒计时结束之后的按钮样式
+            clockDao = new ClockDaoImpl(ClockService.this);
+            boolean isBt = false;
+            boolean isJy = false;
                 List<Time > times = timeDao.findTimeByMin();
             for (int i = 0; i < times.size(); i++) {
                 Log.e("open", "onFinish:... "+ times.size() );
@@ -149,24 +165,71 @@ public class ClockService extends Service {
                 int minutes = calendar.get(Calendar.MINUTE);
 
                 int nowminutes = hour * 60 + minutes;
-
-                if (sumMin == nowminutes&&true==open) {
-                    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
-                    PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wjc");
-                    wakeLock.acquire();
-//wakeLock.acquire(1000);
-                    wakeLock.release();
-                    if (Ring==false){
-                        ring();
-                        Ring=true;
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putBoolean("trueCount",false);
-                        editor.commit();
-                    }
+                Log.e("qqqqqLLLLLL", sumMin + ",,,," + nowminutes);
+                if (sumMin == nowminutes && true == open) {
+                    isBt = true;
+                    Log.e("qqqqqLLLLLL", isBt + "2222222");
+//                    PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+//                    PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wjc");
+//                    wakeLock.acquire();
+////wakeLock.acquire(1000);
+//                    wakeLock.release();
+//                    if (Ring == false) {
+//                        ring();
+//                        Ring = true;
+//                        SharedPreferences.Editor editor = preferences.edit();
+//                        editor.putBoolean("trueCount", false);
+//                        editor.commit();
+//                    }
 
                     break;
                 }
             }
+
+            if (!isBt) {
+                for (int i = 0; i < clockBeanList.size(); i++) {
+                    cl = clockBeanList.get(i);
+                    int switchs = cl.getSwitchs();
+                    boolean open;
+                    if (switchs == 1) {
+                        open = true;
+                    } else {
+                        open = false;
+                    }
+                    sumMin = cl.getSumMinute() * 60;
+                    Log.e("open", "onFinish:--> " + open);
+                    Calendar calendar = Calendar.getInstance();
+                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                    int minutes = calendar.get(Calendar.MINUTE);
+                    int second = calendar.get(Calendar.SECOND);
+                    int nowminutes = hour * 60 * 60 + minutes * 60 + second;
+                    if (sumMin == nowminutes && true == open) {
+                        isJy = true;
+                        isBt = false;
+                        break;
+                    }
+                }
+            }
+
+            if (isBt || isJy) {
+                PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
+                PowerManager.WakeLock wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP | PowerManager.ON_AFTER_RELEASE, "wjc");
+                wakeLock.acquire();
+//wakeLock.acquire(1000);
+                wakeLock.release();
+                if (Ring == false) {
+                    if (isBt)
+                        ring();
+                    else if (isJy)
+                        qinglvDialog();
+                    Ring = true;
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putBoolean("trueCount", false);
+                    editor.commit();
+                }
+            }
+
+
         }
     }
 //    Handler handler=new Handler(){
@@ -206,9 +269,32 @@ public class ClockService extends Service {
         }
     }
 
+
+    private void qinglvDialog() {
+        qinglvClockDialog = new QinglvClockDialog(this);
+
+        qinglvClockDialog.setOnNegativeClickListener(new QinglvClockDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+//                dialog.dismiss();
+            }
+        });
+        qinglvClockDialog.setOnPositiveClickListener(new QinglvClockDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                Ring = false;
+            }
+        });
+        qinglvClockDialog.setCanceledOnTouchOutside(false);
+        qinglvClockDialog.setCancelable(false);
+        qinglvClockDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        qinglvClockDialog.show();
+    }
+
     btClockjsDialog dialog;
     btClockjsDialog2 dialog2;
     btClockjsDialog4 dialog4;
+    QinglvClockDialog qinglvClockDialog;
 
     private void clolkDialog1() {//听歌识曲
         dialog4 = new btClockjsDialog4(this);
@@ -298,7 +384,11 @@ public class ClockService extends Service {
         int second = calendar.get(Calendar.SECOND);
         int nowminutes = hour * 60 *60 + minutes*60+second;
 
-       times = timeDao.findTimeByMin();
+        clockDao=new ClockDaoImpl(this);
+
+
+        int finishTime = 0;
+        times = timeDao.findTimeByMin();
         for (int i = 0; i < times.size(); i++) {
             time = times.get(i);
             boolean open = time.getOpen();
@@ -306,17 +396,48 @@ public class ClockService extends Service {
             if (sumMin<nowminutes){
                 sumMin= sumMin+24*60*60;
             }
-            if (sumMin >= nowminutes&&true==open) {
-                counttime = sumMin - nowminutes;
-                countTimer = new CountTimer(counttime * 1000, 1000);
-                countTimer.start();
-                SharedPreferences.Editor editor = preferences.edit();
-                editor.putBoolean("trueCount",true);
-                editor.commit();
+            if (sumMin >= nowminutes && true == open) {
+                finishTime = sumMin;
                 break;
             }
         }
-          int time = counttime*1000;
+
+        clockBeanList = clockDao.findTimeByMin();
+        for (int i = 0; i < clockBeanList.size(); i++) {
+            clockBean = clockBeanList.get(i);
+            if (!(clockBean.getClockCreater() + "").equals(userId)) {
+                Log.e("qqqqqqqqqqqLLLLpppp", clockBean.getClockHour() + "????" + clockBean.getClockMinute());
+                int switchs = clockBean.getSwitchs();
+                boolean open;
+                if (switchs == 1) {
+                    open = true;
+                } else {
+                    open = false;
+                }
+                sumMin = clockBean.getSumMinute() * 60;
+                if (sumMin<nowminutes){
+                    sumMin= sumMin+24*60*60;
+                }
+                if (sumMin >= nowminutes && true == open) {
+                    if (finishTime == 0)
+                        finishTime = sumMin;
+                    else if (sumMin < finishTime)
+                        finishTime = sumMin;
+                    Log.e("qqqqqqqqqqqLLLL", "Time-----" + finishTime + "????" + nowminutes);
+                    Log.e("qqqqqqqqqqqLLLL1111", "Time-----" + finishTime + "????" + nowminutes);
+                    break;
+                }
+            }
+        }
+        Log.e("qqqqqqqqqqqLLLL2222", "Time-----" + finishTime + "????" + nowminutes);
+        counttime = finishTime - nowminutes;
+        countTimer = new ClockService.CountTimer(counttime * 1000, 1000);
+        countTimer.start();
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putBoolean("trueCount", true);
+        editor.commit();
+
+        int time = counttime * 1000;
 //        AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);
 //        Intent intent1=new Intent("com.zking.android29_alarm_notification.RING");
 //        intent1.setFlags( Intent.FLAG_EXCLUDE_STOPPED_PACKAGES);//3.1以后的版本需要设置Intent.FLAG_INCLUDE_STOPPED_PACKAGES

@@ -10,6 +10,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.squareup.picasso.Picasso;
@@ -47,6 +48,8 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
     public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
 
         MyViewHolder holder2 = (MyViewHolder) holder;
+
+
         ShopBean.ReturnData.MyList myList = mData.get(position);
         Log.e("qqqqqqqqqqq333",myList.getImage());
         String url = myList.getImage();
@@ -55,9 +58,10 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
                 .load(url)
                 .into(holder2.userAvatar);//此种策略并不会压缩图片
 
+
 //        Picasso.with(mContext).load(myList.getImage()).into(holder2.userAvatar);
 //        holder2.userAvatar.getLayoutParams().height = personCard.imgHeight; //从数据源中获取图片高度，动态设置到控件上
-        holder2.tv_name.setText(myList.getNickname());
+        holder2.tv_name.setText(myList.getGoodsName());
         holder2.tv_context.setText(myList.getSimpleDescribe());
         holder2.tv_price.setText("¥"+myList.getGoodsPrice().get(0).getPrice());
     }

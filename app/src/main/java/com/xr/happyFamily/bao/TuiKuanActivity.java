@@ -1,7 +1,9 @@
 package com.xr.happyFamily.bao;
 
 import android.app.Dialog;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -35,6 +37,8 @@ import com.xr.happyFamily.bao.adapter.WuLiuListAdapter;
 import com.xr.happyFamily.bao.util.WuLiuData;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.WuLiuListBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -86,6 +90,7 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
 
     boolean isXG=true;
     List<WuLiuListBean> wuLiuListBeanList=new ArrayList<>();
+    Context mContext=TuiKuanActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -93,6 +98,8 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_tuikuan_shenqing);
         ButterKnife.bind(this);
         titleRightText.setVisibility(View.GONE);
@@ -418,6 +425,9 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -438,6 +448,15 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
                 intent.putExtra("orderId", orderNumber);
                 startActivity(intent);
                 finish();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -453,6 +472,9 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -471,6 +493,15 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
                 Intent intent = new Intent(TuiKuanActivity.this, TuiKuanXQActivity.class);
                 intent.putExtra("orderId", orderNumber);
                 startActivity(intent);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -490,6 +521,9 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -521,6 +555,15 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
                 confListAdapter.notifyDataSetChanged();
                 tvMoney.setText(money);
                 MyDialog.closeDialog(dialog);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

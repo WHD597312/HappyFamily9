@@ -11,7 +11,6 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
 import android.widget.ImageView;
@@ -29,13 +28,13 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQunzuAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
-import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
-import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.QunzuTimepicker;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -74,6 +73,10 @@ public class QunzuAddActivity extends AppCompatActivity {
     TextView tvTag;
     @BindView(R.id.rl_bjtime_bq)
     RelativeLayout rlBjtimeBq;
+    @BindView(R.id.tv_music)
+    TextView tvMusic;
+    @BindView(R.id.rl_music)
+    RelativeLayout rlMusic;
     private TimeDaoImpl timeDao;
     List<Time> times;
     Time time;
@@ -100,6 +103,8 @@ public class QunzuAddActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         timeDao = new TimeDaoImpl(getApplicationContext());
         clockBeanDao = new ClockDaoImpl(getApplicationContext());
         userInfosDao = new UserInfosDaoImpl(getApplicationContext());
@@ -174,13 +179,12 @@ public class QunzuAddActivity extends AppCompatActivity {
                 map.put("clockHour", hour);
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
-                if("请填写标签".equals(tvTag.getText().toString()))
-                {
+                if ("请填写标签".equals(tvTag.getText().toString())) {
                     Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
                     break;
-                }else
+                } else
                     map.put("flag", tvTag.getText().toString());
-                map.put("music", "狼爱上羊");
+                map.put("music", tvMusic.getText().toString());
                 map.put("switchs", 1);
                 String member = qunzuAdapter.getMember();
                 if ("0".equals(member)) {
@@ -418,6 +422,9 @@ public class QunzuAddActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -446,6 +453,15 @@ public class QunzuAddActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 qunzuAdapter.notifyDataSetChanged();
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -461,6 +477,9 @@ public class QunzuAddActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -476,6 +495,15 @@ public class QunzuAddActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //                new getClocksByUserId().execute();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -534,9 +562,9 @@ public class QunzuAddActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (resultCode == 666&&requestCode == 101 ) {
+        if (resultCode == 666 && requestCode == 101) {
             String text = data.getStringExtra("text");
-            Log.i("text", "onCreate: -->22222"+text);
+            Log.i("text", "onCreate: -->22222" + text);
             tvTag.setText(text);
         }
     }

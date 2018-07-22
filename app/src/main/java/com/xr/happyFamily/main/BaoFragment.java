@@ -12,8 +12,6 @@ import android.support.annotation.Nullable;
 import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
-import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -37,6 +35,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
+import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
@@ -52,7 +52,6 @@ import com.xr.happyFamily.bao.view.MyScrollview;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopPageBean;
-import com.xr.happyFamily.jia.MyPaperActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -114,7 +113,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.myScroll)
     MyScrollview myScroll;
     @BindView(R.id.swipe_content)
-    SwipeRefreshLayout swipeContent;
+    PullToRefreshLayout swipeContent;
     @BindView(R.id.rv_title)
     RecyclerView rvTitle;
     @BindView(R.id.img_more)
@@ -130,6 +129,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.ll_nodata)
     LinearLayout llNodata;
 
+    public static final int MAIN_CODE = 1000;
     private RecyclerView.LayoutManager shopLayoutManager;
     private LinearLayoutManager titleLayoutManager;
     private WaterFallAdapter shopAdapter;
@@ -160,6 +160,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     List<Map<String, Object>> list_more;
 
     int lastBanner=0;
+
+    boolean isLoading=false,isRefresh=false;
 
     //判断三个后台数据是否获取完成
     boolean isBanner=false,isShopData=false,isPage=false;
@@ -218,40 +220,26 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(mContext, ShopXQActivity.class);
                 intent.putExtra("goodsId", list_shop.get(position).getGoodsId() + "");
-                startActivity(intent);
+                startActivityForResult(intent,MAIN_CODE);
             }
         });
-        myScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
+        swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int height = v.getHeight();
-                int scrollViewMeasuredHeight = myScroll.getChildAt(0).getMeasuredHeight();
-                if (scrollY == 0) {
-//                    System.out.println("滑动到了顶端 view.getScrollY()=" + scrollY);
-                }
-                if ((scrollY + height) == scrollViewMeasuredHeight) {
-//                    System.out.println("滑动到了底部 scrollY=" + scrollY);
-                    page++;
-
-                    getShopData(lastVisibleItem, page);
-                }
-            }
-        });
-
-        swipeContent.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        // 设置下拉进度的主题颜色
-        swipeContent.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
-
-        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
-        swipeContent.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
+            public void refresh() {
+                page=1;
+                isRefresh=true;
                 list_shop.clear();
-                getShopData(lastVisibleItem, 1);
-                CountTimer countTimer=new CountTimer(5000,1000);
-                countTimer.start();
+                getShopData(lastVisibleItem, page);
+            }
+
+            @Override
+            public void loadMore() {
+                page++;
+                isLoading=true;
+                    getShopData(lastVisibleItem, page);
             }
         });
+
 
         mainTitleAdapter.setOnItemClickListener(new MainTitleAdapter.MyItemClickListener() {
             @Override
@@ -383,7 +371,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                                     });
                                     SystemClock.sleep(PAGER_TIOME);
                                 }
-
                             }
                         }
                     });
@@ -397,7 +384,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
-                startActivity(new Intent(mContext, ShopSearchActivity.class));
+                startActivityForResult(new Intent(mContext, ShopSearchActivity.class),MAIN_CODE);
                 break;
             case R.id.image_more:
                 showPopup();
@@ -455,15 +442,15 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_shopcart:
-                startActivity(new Intent(mContext, ShopCartActivity.class));
+                startActivityForResult(new Intent(mContext, ShopCartActivity.class),MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_dingdan:
-                startActivity(new Intent(mContext, ShopDingdanActivity.class));
+                startActivityForResult(new Intent(mContext, ShopDingdanActivity.class),MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_shangcheng:
-                startActivity(new Intent(mContext, ShopShangchengActivity.class));
+                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class),MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
         }
@@ -537,7 +524,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 isShopData=true;
                 shopAdapter.notifyDataSetChanged();
-                swipeContent.setRefreshing(false);
+                if(isLoading)
+                swipeContent.finishLoadMore();
+                if (isRefresh)
+                swipeContent.finishRefresh();
+
                 if (!isData) {
                     Toast.makeText(mContext, "无更多数据", Toast.LENGTH_SHORT).show();
                 }
@@ -559,6 +550,9 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
@@ -623,6 +617,9 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -684,7 +681,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
          */
         @Override
         public void onFinish() {
-            swipeContent.setRefreshing(false);
             MyDialog.closeDialog(dialog);
             Toast.makeText(mContext,"加载超时请重试",Toast.LENGTH_SHORT).show();
         }

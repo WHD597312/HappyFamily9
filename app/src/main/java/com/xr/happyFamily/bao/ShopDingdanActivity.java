@@ -6,7 +6,6 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,12 +21,14 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
+import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
-import com.xr.happyFamily.bao.bean.Order;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.OrderListBean;
-import com.xr.happyFamily.together.ClickFilter;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -35,12 +36,7 @@ import com.xr.happyFamily.together.util.Utils;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.ParsePosition;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -48,9 +44,6 @@ import java.util.Map;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
-import okhttp3.Response;
-
-import static com.xr.happyFamily.R.color.black;
 
 /**
  * Created by win7 on 2018/5/22.
@@ -95,9 +88,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
     List<OrderBean.OrderDetailsList> orderDetailsLists;
 
     List<OrderListBean.myList> orderBeans = new ArrayList<>();
+    @BindView(R.id.swipe_content)
+    PullToRefreshLayout swipeContent;
     private MyDialog dialog;
-    int page=1,lastSign=0;
-
+    int page = 1, lastSign = 0;
+    boolean isLoading=false,isRefresh=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -105,6 +100,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_dingdan);
         ButterKnife.bind(this);
         mContext = ShopDingdanActivity.this;
@@ -119,14 +116,22 @@ public class ShopDingdanActivity extends AppCompatActivity {
         orderDetailsLists = new ArrayList<>();
         dingdanAdapter = new DingdanAdapter(ShopDingdanActivity.this, orderDetailsLists);
         recyclerview.setAdapter(dingdanAdapter);
-        recyclerview.addOnScrollListener(new RecyclerView.OnScrollListener() {
+
+
+        swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
-            public void onScrollStateChanged(RecyclerView recyclerView, int newState) {
-                super.onScrollStateChanged(recyclerView, newState);
-                if(newState==0&&!recyclerView.canScrollVertically(1)){
-                    page++;
-                    getDingDan(lastSign,page);
-                }
+            public void refresh() {
+                page=1;
+                isRefresh=true;
+                orderDetailsLists.clear();
+                getDingDan(lastSign, page);
+            }
+
+            @Override
+            public void loadMore() {
+                page++;
+                isLoading=true;
+                getDingDan(lastSign, page);
             }
         });
         //      调用按钮返回事件回调的方法
@@ -136,14 +141,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 dingdanAdapter.setDefSelect(position);
             }
         });
-//        honmeAdapter.setOnItemListener(new AddressAdapter.OnItemListener() {
-//            @Override
-//            public void onClick(View v, int pos, String projectc) {
-//                honmeAdapter.setDefSelect(pos);
-//
-//            }
-//        });
-        getDingDan(0,page);
+
+        getDingDan(0, page);
 
     }
 
@@ -157,33 +156,33 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 break;
             case R.id.tv1:
 //                if(isFastClick())
-                lastSign=0;
-                page=1;
+                lastSign = 0;
+                page = 1;
                 upData(lastSign, "全部");
                 break;
             case R.id.tv2:
-                lastSign=1;
-                page=1;
+                lastSign = 1;
+                page = 1;
 //                if(isFastClick())
                 upData(lastSign, "待付款");
                 break;
             case R.id.tv3:
-                lastSign=2;
-                page=1;
+                lastSign = 2;
+                page = 1;
 //                if(isFastClick())
                 upData(lastSign, "待收货");
                 break;
             case R.id.tv4:
-                lastSign=3;
-                page=1;
+                lastSign = 3;
+                page = 1;
 //                if(isFastClick())
                 upData(lastSign, "已收货");
                 break;
 
             case R.id.tv5:
 //                if(isFastClick())
-                lastSign=4;
-                page=1;
+                lastSign = 4;
+                page = 1;
                 upData(lastSign, "退款/售后");
                 break;
 
@@ -203,10 +202,12 @@ public class ShopDingdanActivity extends AppCompatActivity {
 //        datas.clear();
 //        datas.addAll(initData(title));
 //        dingdanAdapter.notifyDataSetChanged();
-        getDingDan(sing_title,page);
+        getDingDan(sing_title, page);
     }
+
     dingDanAsync dingDanAsync;
-    public void getDingDan(int state,int page) {
+
+    public void getDingDan(int state, int page) {
         dialog = MyDialog.showDialog(mContext);
 
         dialog.show();
@@ -224,10 +225,10 @@ public class ShopDingdanActivity extends AppCompatActivity {
         else if (state == 4)
             params.put("state", 5);
         params.put("pageRow", "10");
-        if(dingDanAsync !=null && dingDanAsync.getStatus() == AsyncTask.Status.RUNNING){
+        if (dingDanAsync != null && dingDanAsync.getStatus() == AsyncTask.Status.RUNNING) {
             dingDanAsync.cancel(true);
-        }else {
-            dingDanAsync=new dingDanAsync();
+        } else {
+            dingDanAsync = new dingDanAsync();
             dingDanAsync.execute(params);
         }
 
@@ -245,11 +246,14 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 url = url + entry.getKey() + "=" + entry.getValue() + "&";
             }
             url = url.substring(0, url.length() - 1);
-            Log.e("qqqqqqEEE",url);
+            Log.e("qqqqqqEEE", url);
             String result = HttpUtils.doGet(mContext, url);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -261,11 +265,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
                         Gson gson = new Gson();
                         orderBeans.clear();
 
-                        Log.e("qqqqqqqEEE",list.size()+"?");
+                        Log.e("qqqqqqqEEE", list.size() + "?");
                         for (int i = 0; i < list.size(); i++) {
 //                        //通过反射 得到UserBean.class
                             JsonElement user = list.get(i);
-                            Log.e("qqqqqqqEEE",i+":"+user.toString());
+                            Log.e("qqqqqqqEEE", i + ":" + user.toString());
                             OrderListBean.myList userList = gson.fromJson(user, OrderListBean.myList.class);
                             orderBeans.add(userList);
                             orderId = orderBeans.get(i).getOrderNumber();
@@ -275,13 +279,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
                             map.put("time", orderBeans.get(i).getCreateTime());
 
 
-
 //                            map.put("refundTime", userList.getRefundTime());
                             new getOrderAsync().execute(map);
                             SystemClock.sleep(50);
                         }
-                    }
-                    else {
+                    } else {
 
                     }
                 }
@@ -298,15 +300,30 @@ public class ShopDingdanActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-
                 if (orderBeans.size() == 0) {
                     MyDialog.closeDialog(dialog);
                     dingdanAdapter.notifyDataSetChanged();
-
-                    if(page>1)
+                    if (page > 1)
                         page--;
                     Toast.makeText(ShopDingdanActivity.this, "无更多数据", Toast.LENGTH_SHORT).show();
+                    if(isLoading) {
+                        isLoading=false;
+                        swipeContent.finishLoadMore();
+                    }
+                    if (isRefresh) {
+                        isRefresh=false;
+                        swipeContent.finishRefresh();
+                    }
                 }
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -327,11 +344,15 @@ public class ShopDingdanActivity extends AppCompatActivity {
 
 
             String code = "";
+
             try {
                 if (orderBeans.get(orderBeans.size() - 1).getOrderNumber().equals(params.get("orderId").toString())) {
                     isFinish = true;
                 }
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
 
                     code = jsonObject.getString("returnCode");
@@ -356,7 +377,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
                         userList.setOrderId(Integer.parseInt(returnData.get("orderId").toString()));
                         userList.setState(state);
                         userList.setTime(time);
-                        Log.e("qqqqqqqqqII",returnData.getInt("isRate")+"??");
+                        Log.e("qqqqqqqqqII", returnData.getInt("isRate") + "??");
                         userList.setIsRate(returnData.getInt("isRate"));
                         if (state.equals("5")) {
                             JSONObject orderRefund = returnData.getJSONObject("orderRefund");
@@ -384,7 +405,24 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 if (isFinish) {
                     MyDialog.closeDialog(dialog);
                     dingdanAdapter.notifyDataSetChanged();
+                    if(isLoading) {
+                        isLoading=false;
+                        swipeContent.finishLoadMore();
+                    }
+                    if (isRefresh) {
+                        isRefresh=false;
+                        swipeContent.finishRefresh();
+                    }
                 }
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -408,6 +446,6 @@ public class ShopDingdanActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
 
-        upData(lastSign,"返回刷新");
+        upData(lastSign, "返回刷新");
     }
 }

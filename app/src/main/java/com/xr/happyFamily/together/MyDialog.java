@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 
 import pl.droidsonroids.gif.GifDrawable;
 
@@ -58,6 +59,7 @@ public class MyDialog extends Dialog {
     public static void closeDialog(Dialog mDialogUtils) {
         if (mDialogUtils != null && mDialogUtils.isShowing()) {
             countTimer.cancel();
+            isStart=false;
             mDialogUtils.dismiss();
 
         }
@@ -86,6 +88,7 @@ public class MyDialog extends Dialog {
             super(millisInFuture, countDownInterval);
         }
 
+
         /**
          * 倒计时过程中调用
          *
@@ -102,9 +105,24 @@ public class MyDialog extends Dialog {
         @Override
         public void onFinish() {
             Log.e("Tag", "倒计时完成"+context.toString());
-            dialog.dismiss();
-            Toast.makeText(context,"加载超时请重试",Toast.LENGTH_SHORT).show();
+            boolean isConn= NetWorkUtil.isConn(context);
+            if( isStart) {
+                if (isConn) {
+                    Toast.makeText(context, "加载超时请重试", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(context, "请检查网络", Toast.LENGTH_SHORT).show();
+                }
+                if(dialog!=null)
+                dialog.dismiss();
+            }
+
+
         }
+    }
+
+    private static boolean isStart=true;
+    public static void setStart(boolean isStart2){
+        isStart=isStart2;
     }
 
 }

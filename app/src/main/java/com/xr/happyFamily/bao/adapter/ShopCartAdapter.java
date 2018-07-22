@@ -350,7 +350,6 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
                 mPopWindow.dismiss();
                 data.get(pos).setQuantity(Integer.parseInt(ed_num.getText().toString()));
                 Map<String, Object> params = new HashMap<>();
-                params.put("cartId", data.get(pos).getCartId());
                 params.put("priceId", data.get(pos).getGoodsPrice().getPriceId());
                 params.put("quantity", ed_num.getText().toString());
                 new editAsync().execute(params);
@@ -403,6 +402,9 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject content = jsonObject.getJSONObject("returnData");
@@ -427,6 +429,9 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -447,6 +452,9 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }

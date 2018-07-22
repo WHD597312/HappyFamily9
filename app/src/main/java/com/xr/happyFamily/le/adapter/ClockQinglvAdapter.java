@@ -38,6 +38,8 @@ import com.xr.happyFamily.le.clock.QinglvEditActivity;
 import com.xr.happyFamily.le.fragment.QingLvFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
@@ -118,6 +120,8 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         userInfosDao = new UserInfosDaoImpl(context.getApplicationContext());
         userInfoList=userInfosDao.findUserInfoByClockId(clockBeanList.get(position).getClockId());
 
+        Log.e("qqqqqqqqWWWW",userInfosDao.findAll().size()+"ppppppppp");
+
         String hourStr = "";
         int hour = clockBeanList.get(position).getClockHour();
         if (hour < 10) {
@@ -138,7 +142,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         final int[] sign = {Integer.parseInt(clockBeanList.get(position).getSwitchs() + "")};
 
 
-        Log.e("qqqqqqqqWWWW", clockBeanList.get(position).getSwitchs() + "???");
+        Log.e("qqqqqqqqWWWW", clockBeanList.get(position).getClockId()+"???"+userInfoList.size());
 
         if (!(clockBeanList.get(position).getClockCreater() + "").equals(userId)) {
             holder.tv_name.setText(userInfoList.get(0).getUsername());
@@ -175,7 +179,6 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                     context.startActivity(intent);
                 }
             });
-
         }
 
 
@@ -229,7 +232,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         map.put("clockMinute", clockBean.getClockMinute());
         map.put("clockDay", "0");
         map.put("flag", clockBean.getFlag());
-        map.put("music", "狼爱上羊");
+        map.put("music", clockBean.getMusic());
         map.put("switchs", state);
         if (Utils.isEmpty(image)) {
             myInfo.setHeadImgUrl("null");
@@ -254,6 +257,12 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         map.put("userInfos", userInfos);
         map.put("clockCreater", userId);
         map.put("clockType", 3);
+
+        long timeStampSec = System.currentTimeMillis()/1000;
+        String timestamp = String.format("%010d", timeStampSec);
+        map.put("createrName", username);
+        long createTime=Long.parseLong(timestamp);
+        map.put("createTime", createTime);
         String macAddress = JSON.toJSONString(map, true);
         new addMqttAsync().execute(macAddress);
     }
@@ -390,6 +399,9 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -410,6 +422,15 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 //                context.upQinglvData();
                 mPopWindow.dismiss();
 //                notifyDataSetChanged();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(context.getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = context.getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                context.startActivity(new Intent(context.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -445,7 +466,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 String topicName = "p99/3_" + clockId + "/clockuniversal";
                 step2 = mqService.publish(topicName, 1, macAddress);
 
-                Log.e("qqqqqqSSSS1111", step2 + "?");
+                Log.e("qqqqqqSSSS1111", step2 + "?"+topicName+","+macAddress);
             }
             return step2;
         }

@@ -73,4 +73,9 @@ public class ClockDaoImpl {
         WhereCondition whereCondition=clockBeanDao.queryBuilder().and(ClockBeanDao.Properties.ClockId.eq(clockId),ClockBeanDao.Properties.ClockId.eq(clockId));
         return clockBeanDao.queryBuilder().where(whereCondition).list();
     }
+
+    public List<ClockBean> findTimesByHourAndMin(int hour,int min){
+        WhereCondition whereCondition=clockBeanDao.queryBuilder().and(ClockBeanDao.Properties.ClockHour.eq(hour),ClockBeanDao.Properties.ClockMinute.eq(min));
+        return clockBeanDao.queryBuilder().where(whereCondition).list();
+    }
 }

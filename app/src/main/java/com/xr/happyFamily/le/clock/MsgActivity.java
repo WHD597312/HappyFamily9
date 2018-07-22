@@ -22,14 +22,22 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
+import com.google.gson.JsonParser;
 import com.xr.database.dao.FriendDataDao;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
+import com.xr.database.dao.daoimpl.MsgDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.adapter.MsgClockAdapter;
 import com.xr.happyFamily.le.adapter.MsgFriendAdapter;
 import com.xr.happyFamily.le.bean.MsgFriendBean;
 import com.xr.happyFamily.le.pojo.FriendData;
+import com.xr.happyFamily.le.pojo.MsgData;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+
+import org.json.JSONException;
+import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +80,9 @@ public class MsgActivity extends AppCompatActivity {
     SharedPreferences preferences;
     String userId, userName;
     List<FriendData> msgFriendList;
+    List<MsgData> msgDataList;
     FriendDataDaoImpl friendDataDao;
+    MsgDaoImpl msgDao;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -81,24 +91,27 @@ public class MsgActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
         userName = preferences.getString("username", "");
         userName = "大王";
 
+        SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        long timeStampSec = System.currentTimeMillis()/1000;
+        String timestamp = String.format("%010d", timeStampSec);
+        long createTime=Long.parseLong(timestamp);
+        editor.putLong("msgTime", createTime);
+        editor.commit();
+
         titleText.setText("消息");
         friendDataDao=new FriendDataDaoImpl(getApplicationContext());
         msgFriendList = friendDataDao.findAll();
-        List<String> qunzuList = new ArrayList<>();
-        qunzuList.add("10.30");
-        qunzuList.add("8.50");
-        qunzuList.add("8.00");
-        qunzuList.add("昨天");
-        qunzuList.add("昨天");
-        qunzuList.add("两天前");
-        qunzuList.add("两天前");
-
-        msgClockAdapter = new MsgClockAdapter(this, qunzuList);
+        msgDao=new MsgDaoImpl(getApplicationContext());
+        msgDataList=msgDao.findMsgByTime();
+        msgClockAdapter = new MsgClockAdapter(this, msgDataList);
         msgFriendAdapter = new MsgFriendAdapter(this, msgFriendList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         rvFriend.setLayoutManager(linearLayoutManager);
@@ -119,7 +132,7 @@ public class MsgActivity extends AppCompatActivity {
 
 
         Intent service = new Intent(MsgActivity.this, MQService.class);
-        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+//        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
 
         IntentFilter intentFilter = new IntentFilter("Friend");
         receiver = new MessageReceiver();
@@ -143,9 +156,9 @@ public class MsgActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isBound) {
-            unbindService(connection);
-        }
+//        if (isBound) {
+//            unbindService(connection);
+//        }
 
         if (receiver != null) {
             unregisterReceiver(receiver);
@@ -188,33 +201,33 @@ public class MsgActivity extends AppCompatActivity {
 
 
     MQService mqService;
-    ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MQService.LocalBinder binder = (MQService.LocalBinder) service;
-            mqService = binder.getService();
-            String str = "+/acceptorId_" + userId;
-            new FriendAsync().execute(str);
-        }
+//    ServiceConnection connection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+//            mqService = binder.getService();
+//            String str = "+/acceptorId_" + userId;
+//            new FriendAsync().execute(str);
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//        }
+//    };
 
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
-
-    private class FriendAsync extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... macs) {
-            String macAddress = macs[0];
-            Log.i("deviceChild3", "-->" + "yes");
-            String topicName2 = "p99/" + macAddress + "/friend";
-
-            if (mqService != null) {
-                boolean success = mqService.subscribe(topicName2, 1);
-            }
-            return null;
-        }
-    }
+//    private class FriendAsync extends AsyncTask<String, Void, Void> {
+//        @Override
+//        protected Void doInBackground(String... macs) {
+//            String macAddress = macs[0];
+//            Log.i("deviceChild3", "-->" + "yes");
+//            String topicName2 = "p99/" + macAddress + "/friend";
+//
+//            if (mqService != null) {
+////                boolean success = mqService.subscribe(topicName2, 1);
+//            }
+//            return null;
+//        }
+//    }
 
 
     class MessageReceiver extends BroadcastReceiver {
@@ -227,10 +240,43 @@ public class MsgActivity extends AppCompatActivity {
             if (msg.contains("senderRemark") && msg.contains("senderAge") && msg.contains("senderSex")) {
                 user = gson.fromJson(msg, FriendData.class);
                 msgFriendList.add(user);
+                msgFriendAdapter.notifyDataSetChanged();
+            }else if(msg.contains("createrName") && msg.contains("music") && msg.contains("userInfos")){
+                try {
+                    JSONObject jsonObject = null;
+                    jsonObject = new JSONObject(msg);
+                    JsonObject content = new JsonParser().parse(msg).getAsJsonObject();
+                    //添加闹钟
+                    MsgData msgData=new MsgData();
+                    msgData.setCreateTime(jsonObject.getLong("createTime"));
+                    msgData.setUserName(jsonObject.getString("createrName"));
+                    msgData.setState(jsonObject.getInt("state"));
+                    msgDataList.add(0,msgData);
+                    msgClockAdapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }else if(msg.contains("您的好友请求")){
+                String str[]=msg.split(",");
+                MsgData msgData=new MsgData();
+                int state;
+                if(str[1].contains("同意"))
+                    state=5;
+                else
+                    state=6;
+                msgData.setUserName(str[0]);
+                msgData.setState(state);
+                msgData.setCreateTime(Long.parseLong(str[2]));
+                msgDataList.add(0,msgData);
             }
 
-            msgFriendAdapter.notifyDataSetChanged();
+
 
         }
+    }
+
+
+    public void setMsgData(){
+
     }
 }

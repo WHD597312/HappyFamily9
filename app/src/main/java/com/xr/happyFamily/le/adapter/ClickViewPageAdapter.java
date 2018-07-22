@@ -48,16 +48,17 @@ public class ClickViewPageAdapter extends FragmentPagerAdapter {
                 tv.setText("时光简记");
                 break;
             case 1:
-                iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon3));
-                tv.setText("群组模式");
+                iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon5));
+                tv.setText("制懒模式");
                 break;
             case 2:
                 iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon4));
                 tv.setText("情侣模式");
                 break;
             case 3:
-                iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon5));
-                tv.setText("制赖模式");
+
+                iv.setImageDrawable(context.getResources().getDrawable(R.drawable.rb_clock_icon3));
+                tv.setText("群组模式");
                 break;
         }
         return view;

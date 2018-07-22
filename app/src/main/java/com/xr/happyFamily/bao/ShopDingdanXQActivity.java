@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -39,9 +40,12 @@ import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.bean.WuLiuBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.PublicData;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -136,6 +140,8 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         mContext = ShopDingdanXQActivity.this;
         setContentView(R.layout.activity_shop_dingdan_xq);
         ButterKnife.bind(this);
@@ -351,6 +357,9 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -451,13 +460,22 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 tvName.setText(name);
                 tvTel.setText(tel);
                 tvAddress.setText(address);
-                tvChangjian.setText("创建时间:" + createTime);
+                tvChangjian.setText("创建时间:" + TimeUtils.getTime(createTime));
                 tvFukuan.setText("付款时间:" + paymentTime);
                 tvFahuo.setText("发货时间:" + sendTime);
                 tvZhifubao.setText("交易号:" + paymentSeq);
                 tvDingdan.setText("订单编号:" + orderNumber);
                 tvYunfei.setText("¥" + postFee);
                 tvPrice.setText("¥" + paidAmount);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -473,6 +491,9 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -492,6 +513,15 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 finish();
                 Toast.makeText(mContext, "取消订单成功", Toast.LENGTH_SHORT).show();
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -509,6 +539,9 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -535,6 +568,15 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 tvWuliu.setText(wuliu);
                 tvWuliuTime.setText(wuliu_time);
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

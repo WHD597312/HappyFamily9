@@ -3,6 +3,7 @@ package com.xr.happyFamily.le.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Message;
 import android.os.Parcelable;
@@ -31,6 +32,7 @@ import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.RoundTransform;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -41,6 +43,8 @@ import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //快递列表适配器
 
@@ -317,6 +321,9 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -337,6 +344,15 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
                 context.upData();
                 mPopWindow.dismiss();
                 notifyDataSetChanged();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(context.getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = context.getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                context.startActivity(new Intent(context.getApplicationContext(), LoginActivity.class));
             }
         }
     }

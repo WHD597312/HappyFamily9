@@ -213,6 +213,7 @@ public class HttpUtils {
                 result = response.body().string();
                 Log.e(context.toString()+"       --get---"+url, result);
             }else {
+                result=response.code()+"";
                 NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
                 Log.e("qqqqqqqqqqqXXXXX","???????");
             }
@@ -260,6 +261,7 @@ public class HttpUtils {
             if(response.isSuccessful()){
                 result= response.body().string();
             }else {
+                result=response.code()+"";
                 NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
             }
         }catch (Exception e){

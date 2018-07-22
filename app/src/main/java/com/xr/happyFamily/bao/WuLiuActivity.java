@@ -3,6 +3,7 @@ package com.xr.happyFamily.bao;
 import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -19,7 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.ListView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -30,19 +31,18 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.adapter.DingdanAdapter;
 import com.xr.happyFamily.bao.adapter.TimeLineAdapter;
-import com.xr.happyFamily.bao.adapter.WuLiuListAdapter;
 import com.xr.happyFamily.bao.adapter.WuLiuXQAdapter;
 import com.xr.happyFamily.bao.util.WuLiuData;
 import com.xr.happyFamily.bao.view.MyListView;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.WuLiuBean;
 import com.xr.happyFamily.bean.WuLiuListBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.PublicData;
 import com.xr.happyFamily.together.http.HttpUtils;
-import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -83,6 +83,8 @@ public class WuLiuActivity extends AppCompatActivity {
     RecyclerView recyclerView;
     @BindView(R.id.lv_list)
     MyListView lvList;
+    @BindView(R.id.ll_call)
+    LinearLayout llCall;
     private TimeLineAdapter adapter;
     private WuLiuXQAdapter wuLiuListAdapter;
     String logisticCode, shipperCode, describe;
@@ -98,6 +100,8 @@ public class WuLiuActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         mContext = WuLiuActivity.this;
         setContentView(R.layout.activity_shop_wuliu);
         ButterKnife.bind(this);
@@ -121,7 +125,7 @@ public class WuLiuActivity extends AppCompatActivity {
         shipperCode = bundle.get("shipperCode").toString();
         orderNumber = bundle.get("orderNumber").toString();
 
-        Log.e("qqqqqqqqqNNNN",orderNumber);
+        Log.e("qqqqqqqqqNNNN", orderNumber);
         for (int i = 0; i < wuLiuListBeanList.size(); i++) {
             if (shipperCode.equals(wuLiuListBeanList.get(i).getCode()))
                 tvTel.setText(wuLiuListBeanList.get(i).getName() + " " + logisticCode);
@@ -167,6 +171,9 @@ public class WuLiuActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -212,12 +219,41 @@ public class WuLiuActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
-                tvState.setText(describe);
+                if (describe.equals("无信息")) {
+                    describe = "卖家已发货";
+
+                    if (isTime && !isWuliu)
+                        setFirst();
+                    isWuliu = true;
+
+                }
+                if (tvState != null)
+                    tvState.setText(describe);
                 adapter.notifyDataSetChanged();
-                tvCall.setText(tel);
+                if (tel.equals("0")) {
+                    if (llCall != null)
+                        llCall.setVisibility(View.GONE);
+                }else {
+                    String newTel="";
+                    for(String sss:tel.replaceAll("[^0-9]", ",").split(",")){
+                        if (sss.length()>0)
+                            newTel=newTel+sss;
+                    }
+                    if (tvCall != null)
+                        tvCall.setText(newTel);
+                }
 //                tvWuliu.setText(wuliu);
 //                tvWuliuTime.setText(wuliu_time);
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -255,7 +291,7 @@ public class WuLiuActivity extends AppCompatActivity {
                 }
             }
         });
-        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("拨打电话");
+        ((TextView) contentViewSign.findViewById(R.id.tv_title)).setText("拨打电话");
         tv_context.setText("是否拨打快递员电话？");
         mPopWindow = new PopupWindow(contentViewSign);
         mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -307,6 +343,9 @@ public class WuLiuActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -332,10 +371,37 @@ public class WuLiuActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+
+                if (isWuliu && !isTime)
+                    setFirst();
+                isTime = true;
                 wuLiuListAdapter.notifyDataSetChanged();
-                if(!"null".equals(time))
-                tvTime.setText(TimeUtils.getTime(time));
+                if (!"null".equals(time))
+                    tvTime.setText(time);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
+    }
+
+
+    boolean isTime = false, isWuliu = false;
+
+    private void setFirst() {
+        Map<String, Object> map = new HashMap<String, Object>();
+        map.put("title", describe);
+        map.put("time", time);
+
+        map.put("state", "3");
+
+        wuliuList.add(map);
+        adapter.notifyDataSetChanged();
     }
 }

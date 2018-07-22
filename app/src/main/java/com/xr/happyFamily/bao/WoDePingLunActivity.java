@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.PingLunListAdapter;
+import com.xr.happyFamily.jia.MyApplication;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -44,6 +45,8 @@ public class WoDePingLunActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_wode_pinglun);
         ButterKnife.bind(this);
         titleText.setText("我的评论");

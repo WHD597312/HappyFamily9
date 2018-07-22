@@ -17,11 +17,13 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.Utils;
 
 import java.util.ArrayList;
@@ -91,10 +93,8 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         if (!Utils.isEmpty(data.get(position).getHeadImgUrl()))
-            Picasso.with(context)
-                    .load(data.get(position).getHeadImgUrl())
-                    .error(R.mipmap.ic_touxiang_moren)
-                    .into(holder.img_touxiang);
+            Glide.with(context).load(data.get(position).getHeadImgUrl()).transform(new GlideCircleTransform(context.getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(holder.img_touxiang);
+
         holder.tv_name.setText(data.get(position).getUsername().toString());
 
 

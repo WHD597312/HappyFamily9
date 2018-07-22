@@ -17,6 +17,7 @@ import android.widget.TextView;
 
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.view.JyTimepicker;
 
@@ -61,6 +62,8 @@ public class ClockAddActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         timeDao = new TimeDaoImpl(getApplicationContext());
         times = new ArrayList<>();
 

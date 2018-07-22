@@ -27,6 +27,7 @@ import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQunzuAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
@@ -34,6 +35,7 @@ import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.QunzuTimepicker;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -101,7 +103,8 @@ public class QunzuEditActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         clockBeanDao = new ClockDaoImpl(getApplicationContext());
         userInfosDao = new UserInfosDaoImpl(getApplicationContext());
         times = new ArrayList<>();
@@ -183,7 +186,7 @@ public class QunzuEditActivity extends AppCompatActivity {
                     break;
                 } else
                     map.put("flag", tvTag.getText().toString());
-                map.put("music", "狼爱上羊");
+                map.put("music", tvMusic.getText().toString());
                 map.put("switchs", 1);
                 String member = qunzuAdapter.getMember();
                 if ("0".equals(member)) {
@@ -419,6 +422,9 @@ public class QunzuEditActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -447,6 +453,15 @@ public class QunzuEditActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 qunzuAdapter.notifyDataSetChanged();
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -462,9 +477,11 @@ public class QunzuEditActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -477,6 +494,15 @@ public class QunzuEditActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 new getClocksByUserId().execute();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -492,6 +518,9 @@ public class QunzuEditActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     String retrunData = jsonObject.getString("returnData");
@@ -526,6 +555,15 @@ public class QunzuEditActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
                 finish();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

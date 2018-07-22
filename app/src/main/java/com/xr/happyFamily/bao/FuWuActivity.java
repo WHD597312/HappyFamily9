@@ -9,6 +9,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -57,6 +58,8 @@ public class FuWuActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_fuwu);
         ButterKnife.bind(this);
         titleRightText.setVisibility(View.GONE);

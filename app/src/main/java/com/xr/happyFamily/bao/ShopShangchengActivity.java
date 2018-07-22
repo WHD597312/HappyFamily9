@@ -23,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.PublicData;
 
@@ -56,9 +57,10 @@ public class ShopShangchengActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_shangcheng);
         ButterKnife.bind(this);
-
         titleText.setText("我的商城");
         titleRightText.setVisibility(View.GONE);
 
@@ -92,7 +94,7 @@ public class ShopShangchengActivity extends AppCompatActivity {
 
     private View contentViewSign;
     private PopupWindow mPopWindow;
-    private Context mContext;
+    private Context mContext=ShopShangchengActivity.this;
     private TextView tv_quxiao, tv_queding, tv_context;
     private void showPopup() {
 

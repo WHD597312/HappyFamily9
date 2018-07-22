@@ -2,6 +2,7 @@ package com.xr.happyFamily.bao.alipay;
 
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -15,6 +16,8 @@ import com.alipay.sdk.app.PayTask;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PayFailActivity;
 import com.xr.happyFamily.bao.PaySuccessActivity;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -85,6 +88,9 @@ public class PayActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -106,6 +112,15 @@ public class PayActivity extends AppCompatActivity {
 
                 Thread payThread = new Thread(payRunnable);
                 payThread.start();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(PayActivity.this.getApplicationContext(), LoginActivity.class));
             }
         }
     }

@@ -12,6 +12,7 @@ public class FriendData {
     private int senderId;
     private String senderName;
     private String senderSex;
+    private String senderHeadImgUrl;
     private int senderAge;
     private String senderRemark;
     public Long getId() {
@@ -61,14 +62,22 @@ public class FriendData {
     public String getSenderRemark() {
         return senderRemark;
     }
-    @Generated(hash = 291223402)
+    public String getSenderHeadImgUrl() {
+        return this.senderHeadImgUrl;
+    }
+    public void setSenderHeadImgUrl(String senderHeadImgUrl) {
+        this.senderHeadImgUrl = senderHeadImgUrl;
+    }
+    @Generated(hash = 1575625505)
     public FriendData(Long id, int frdId, int senderId, String senderName,
-            String senderSex, int senderAge, String senderRemark) {
+            String senderSex, String senderHeadImgUrl, int senderAge,
+            String senderRemark) {
         this.id = id;
         this.frdId = frdId;
         this.senderId = senderId;
         this.senderName = senderName;
         this.senderSex = senderSex;
+        this.senderHeadImgUrl = senderHeadImgUrl;
         this.senderAge = senderAge;
         this.senderRemark = senderRemark;
     }

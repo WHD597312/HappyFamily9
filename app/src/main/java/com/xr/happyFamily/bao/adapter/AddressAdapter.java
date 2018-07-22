@@ -1,6 +1,8 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -14,6 +16,7 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.AddressBean;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -24,6 +27,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //快递列表适配器
 
@@ -184,6 +189,9 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -199,6 +207,15 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(context, "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = context.getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                context.startActivity(new Intent(context.getApplicationContext(), LoginActivity.class));
             }
         }
     }

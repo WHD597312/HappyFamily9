@@ -32,6 +32,7 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQinglvAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
@@ -39,6 +40,7 @@ import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.QinglvTimepicker;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -47,6 +49,7 @@ import com.xr.happyFamily.together.util.mqtt.MQService;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
@@ -110,6 +113,8 @@ public class QinglvEditActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         timeDao = new TimeDaoImpl(getApplicationContext());
 //        clockBeanDao = new ClockDaoImpl(getApplicationContext());
 //        userInfosDao = new UserInfosDaoImpl(getApplicationContext());
@@ -143,9 +148,7 @@ public class QinglvEditActivity extends AppCompatActivity {
         //获取通知管理器
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
-        dialog = MyDialog.showDialog(this);
-        dialog.show();
-        new getClockFriends().execute();
+
         qinglvAdapter = new ClockAddQinglvAdapter(this, list_friend);
         qinglvAdapter.setUserId(loveId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -154,6 +157,16 @@ public class QinglvEditActivity extends AppCompatActivity {
         Intent service = new Intent(mContext, MQService.class);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
 
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        list_friend.clear();
+        dialog = MyDialog.showDialog(this);
+        dialog.show();
+        new getClockFriends().execute();
+        qinglvAdapter.notifyDataSetChanged();
     }
 
     @Override
@@ -166,7 +179,7 @@ public class QinglvEditActivity extends AppCompatActivity {
 
     String macAddress;
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq,R.id.rl_music})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_add:
@@ -174,6 +187,10 @@ public class QinglvEditActivity extends AppCompatActivity {
                 break;
             case R.id.tv_lrsd_qx:
                 finish();
+                break;
+            case R.id.rl_music:
+                Intent intent3 = new Intent(this,MusicActivity.class);
+                startActivityForResult(intent3,111);
                 break;
             case R.id.rl_bjtime_bq:
                 Intent intent2 = new Intent(this, bqOfColckActivity.class);
@@ -214,7 +231,7 @@ public class QinglvEditActivity extends AppCompatActivity {
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
                 map.put("flag", tvTag.getText().toString());
-                map.put("music", "狼爱上羊");
+                map.put("music",tvMusic.getText().toString());
                 map.put("switchs", clockBean.getSwitchs());
 
                 if (Utils.isEmpty(image)) {
@@ -231,7 +248,13 @@ public class QinglvEditActivity extends AppCompatActivity {
 
                 map.put("userInfos", userInfos);
                 map.put("clockCreater", userId);
+                map.put("createrName", username);
                 map.put("clockType", 3);
+
+                long timeStampSec = System.currentTimeMillis()/1000;
+                String timestamp = String.format("%010d", timeStampSec);
+                long createTime=Long.parseLong(timestamp);
+                map.put("createTime", createTime);
                 macAddress = JSON.toJSONString(map, true);
                 new addMqttAsync().execute(macAddress);
 
@@ -260,6 +283,9 @@ public class QinglvEditActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -288,6 +314,15 @@ public class QinglvEditActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 qinglvAdapter.notifyDataSetChanged();
 
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -303,6 +338,9 @@ public class QinglvEditActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -318,6 +356,15 @@ public class QinglvEditActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //                new getClocksByUserId().execute();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -329,6 +376,15 @@ public class QinglvEditActivity extends AppCompatActivity {
         if (resultCode == 666) {
             String text = data.getStringExtra("text");
             tvTag.setText(text);
+        }
+
+        if (resultCode==111){
+            String[] str={"学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"};
+            int pos=0;
+            pos=data.getIntExtra("pos",0);
+            String text=str[pos];
+            tvMusic.setText(text);
+//            time.setRingName(text);
         }
     }
 
@@ -361,6 +417,7 @@ public class QinglvEditActivity extends AppCompatActivity {
                 String topicName = "p99/3_" + clockId + "/clockuniversal";
                 step2 = mqService.publish(topicName, 1, macAddress);
 
+                Log.e("qqqqqqSSSSS",macAddress);
             }
             return step2;
         }
@@ -371,6 +428,7 @@ public class QinglvEditActivity extends AppCompatActivity {
             if (s) {
                 MyDialog.closeDialog(dialog);
                 Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
+                finish();
             } else
                 Toast.makeText(mContext, "请检查网络", Toast.LENGTH_SHORT).show();
         }

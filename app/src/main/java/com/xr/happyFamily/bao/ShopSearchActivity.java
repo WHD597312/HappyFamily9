@@ -30,6 +30,8 @@ import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bean.HotWordBean;
 import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -81,6 +83,8 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_search);
         ButterKnife.bind(this);
 
@@ -152,8 +156,8 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
         tv_quxiao = (TextView) contentViewSign.findViewById(R.id.tv_quxiao);
         tv_queding = (TextView) contentViewSign.findViewById(R.id.tv_queren);
         tv_context = (TextView) contentViewSign.findViewById(R.id.tv_context);
-        tv_context.setText("确定删除收货地址？");
-        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("收货地址");
+        tv_context.setText("确定删除历史记录？");
+        ((TextView)contentViewSign.findViewById(R.id.tv_title)).setText("历史记录");
         tv_quxiao.setOnClickListener(this);
         tv_queding.setOnClickListener(this);
         mPopWindow = new PopupWindow(contentViewSign);
@@ -186,6 +190,9 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_queren:
+                SharedPreferences.Editor editor = getSharedPreferences("SearchHistoryList", MODE_PRIVATE).edit();
+                editor.clear();
+                editor.commit();
                 llHis.setVisibility(View.GONE);
                 lgHis.setVisibility(View.GONE);
                 mPopWindow.dismiss();
@@ -215,6 +222,10 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
             loadList.add(environItem);
         }
         adapter_his.setItems(loadList);
+        if(loadList.size()==0){
+            llHis.setVisibility(View.GONE);
+            lgHis.setVisibility(View.GONE);
+        }
     }
 
     //将搜索记录保存到历史记录
@@ -258,6 +269,9 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
 
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     Log.e("qqqqSize",jsonObject.toString());
                     code = jsonObject.getString("returnCode");
@@ -290,6 +304,15 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
                     list.add(list_hot.get(i).getName());
                 }
                 adapter_hot.setItems(list);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

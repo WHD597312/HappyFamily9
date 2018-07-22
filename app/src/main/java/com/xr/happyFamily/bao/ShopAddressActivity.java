@@ -28,6 +28,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.AddressAdapter;
 import com.xr.happyFamily.bean.AddressBean;
 import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -72,6 +74,8 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_address);
         ButterKnife.bind(this);
         mContext=ShopAddressActivity.this;
@@ -184,7 +188,9 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
 
             try {
                 if (!Utils.isEmpty(result)) {
-
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
@@ -212,6 +218,15 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
                 addressAdapter.notifyDataSetChanged();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -227,6 +242,9 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -243,6 +261,15 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
                 Toast.makeText(mContext, "删除地址成功", Toast.LENGTH_SHORT).show();
                 mDatas.clear();
                 getShopData();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

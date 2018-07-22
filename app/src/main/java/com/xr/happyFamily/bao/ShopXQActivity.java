@@ -38,6 +38,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.qzs.android.fuzzybackgroundlibrary.Fuzzy_Background;
+import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
 import com.xr.happyFamily.bao.adapter.EvaluateXhAdapter;
@@ -48,7 +49,10 @@ import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
 import com.xr.happyFamily.bao.fragment.XiangQingFragment;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.bao.view.ViewPagerSlide;
 import com.xr.happyFamily.bean.ShopCartBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -78,7 +82,7 @@ public class ShopXQActivity extends AppCompatActivity {
     @BindView(R.id.tl_flower)
     TabLayout tl_flower;
     @BindView(R.id.vp_flower)
-    ViewPager vp_flower;
+    ViewPagerSlide vp_flower;
     Unbinder unbinder;
     List<String> circle = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();
@@ -96,6 +100,7 @@ public class ShopXQActivity extends AppCompatActivity {
     String goodsId;
     ShopFragment shopFragment;
     PingJiaFragment pingJiaFragment;
+    XiangQingFragment xiangQingFragment;
     int priceId = -1;
     int pos = 0;
     ArrayList<ShopCartBean> mGoPayList = new ArrayList<>();
@@ -109,6 +114,8 @@ public class ShopXQActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         mContext = ShopXQActivity.this;
         setContentView(R.layout.activity_shopxq);
         ButterKnife.bind(this);
@@ -139,6 +146,7 @@ public class ShopXQActivity extends AppCompatActivity {
 
         shopFragment = new ShopFragment();
         pingJiaFragment = new PingJiaFragment();
+        xiangQingFragment=new XiangQingFragment();
         Bundle bundle = new Bundle();
         // 步骤5:往bundle中添加数据
         bundle.putString("goodsId", goodsId);
@@ -148,7 +156,7 @@ public class ShopXQActivity extends AppCompatActivity {
         pingJiaFragment.setArguments(bundle);
         fragmentList.add(shopFragment);
         fragmentList.add(pingJiaFragment);
-        fragmentList.add(new XiangQingFragment());
+        fragmentList.add(xiangQingFragment);
 
         for (int i = 0; i < circle.size(); i++) {
             tl_flower.addTab(tl_flower.newTab());
@@ -440,6 +448,9 @@ public class ShopXQActivity extends AppCompatActivity {
 
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -457,6 +468,15 @@ public class ShopXQActivity extends AppCompatActivity {
                 if (mPopWindow != null) {
                     mPopWindow.dismiss();
                 }
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -675,7 +695,7 @@ public class ShopXQActivity extends AppCompatActivity {
     }
 
     JSONObject jsonObject;
-    String name, type, img, price;
+    String name, type, img, price,detailDescribe;
     double weight;
 
     class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
@@ -687,11 +707,15 @@ public class ShopXQActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
                     JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
                     JsonArray list = content.getAsJsonArray("goodsPrice");
+                    detailDescribe=returnData.getString("detailDescribe");
                     if ("100".equals(code)) {
                         Gson gson = new Gson();
                         for (JsonElement user : list) {
@@ -716,7 +740,17 @@ public class ShopXQActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                xiangQingFragment.setData(goodsId);
                 MyDialog.closeDialog(dialog);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -725,6 +759,8 @@ public class ShopXQActivity extends AppCompatActivity {
     protected void onRestart() {
         super.onRestart();
     }
+
+
 
 
 

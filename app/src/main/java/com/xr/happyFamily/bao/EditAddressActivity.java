@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
 import android.os.AsyncTask;
@@ -29,6 +30,9 @@ import com.xr.happyFamily.bao.adapter.CityAdapter;
 import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
@@ -92,12 +96,17 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     int sign_sheng = 0, sign_city = 0, isDefault = 1, receiveId = 0;
     String receiveProvince, receiveCity, receiveCounty, receiveAddress;
 
+    MyDialog dialog;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         mContext = EditAddressActivity.this;
         setContentView(R.layout.activity_shop_add_address);
         ButterKnife.bind(this);
@@ -156,33 +165,31 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                 if (Utils.isEmpty(edName.getText().toString())) {
                     Toast.makeText(this, "请输入收货人", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else
+                } else
                     params.put("contact", edName.getText().toString());
                 if (Utils.isEmpty(edTel.getText().toString())) {
                     Toast.makeText(this, "请输入联系电话", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else if(Mobile.isMobile(edTel.getText().toString()))
+                } else if (Mobile.isMobile(edTel.getText().toString()))
                     params.put("tel", edTel.getText().toString());
                 else
                     Toast.makeText(this, "请输入正确联系电话", Toast.LENGTH_SHORT).show();
                 if (Utils.isEmpty(tvAddress.getText().toString())) {
                     Toast.makeText(this, "请输入所在地址", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else {
+                } else {
                     params.put("receiveProvince", receiveProvince);
                     params.put("receiveCity", receiveCity);
                     params.put("receiveCounty", receiveCounty);
                 }
-                if (Utils.isEmpty(edAddress.getText().toString())){
+                if (Utils.isEmpty(edAddress.getText().toString())) {
                     Toast.makeText(this, "请输入详细地址", Toast.LENGTH_SHORT).show();
                     break;
-                }
-                else
+                } else
                     params.put("receiveAddress", edAddress.getText().toString());
                 params.put("isDefault", isDefault + "");
+                dialog = MyDialog.showDialog(mContext);
+                dialog.show();
                 new AddReceiveAsync().execute(params);
 
                 break;
@@ -457,8 +464,12 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -470,8 +481,18 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 Toast.makeText(mContext, "编辑地址成功", Toast.LENGTH_SHORT).show();
                 finish();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

@@ -23,7 +23,7 @@
         <TextView
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_35"
-            android:text="制赖闹钟"
+            android:text="制懒闹钟"
             android:textSize="20sp"
             android:textColor="@color/black"
             android:layout_gravity="center"

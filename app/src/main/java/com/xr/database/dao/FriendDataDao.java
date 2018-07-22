@@ -29,8 +29,9 @@ public class FriendDataDao extends AbstractDao<FriendData, Long> {
         public final static Property SenderId = new Property(2, int.class, "senderId", false, "SENDER_ID");
         public final static Property SenderName = new Property(3, String.class, "senderName", false, "SENDER_NAME");
         public final static Property SenderSex = new Property(4, String.class, "senderSex", false, "SENDER_SEX");
-        public final static Property SenderAge = new Property(5, int.class, "senderAge", false, "SENDER_AGE");
-        public final static Property SenderRemark = new Property(6, String.class, "senderRemark", false, "SENDER_REMARK");
+        public final static Property SenderHeadImgUrl = new Property(5, String.class, "senderHeadImgUrl", false, "SENDER_HEAD_IMG_URL");
+        public final static Property SenderAge = new Property(6, int.class, "senderAge", false, "SENDER_AGE");
+        public final static Property SenderRemark = new Property(7, String.class, "senderRemark", false, "SENDER_REMARK");
     }
 
 
@@ -51,8 +52,9 @@ public class FriendDataDao extends AbstractDao<FriendData, Long> {
                 "\"SENDER_ID\" INTEGER NOT NULL ," + // 2: senderId
                 "\"SENDER_NAME\" TEXT," + // 3: senderName
                 "\"SENDER_SEX\" TEXT," + // 4: senderSex
-                "\"SENDER_AGE\" INTEGER NOT NULL ," + // 5: senderAge
-                "\"SENDER_REMARK\" TEXT);"); // 6: senderRemark
+                "\"SENDER_HEAD_IMG_URL\" TEXT," + // 5: senderHeadImgUrl
+                "\"SENDER_AGE\" INTEGER NOT NULL ," + // 6: senderAge
+                "\"SENDER_REMARK\" TEXT);"); // 7: senderRemark
     }
 
     /** Drops the underlying database table. */
@@ -81,11 +83,16 @@ public class FriendDataDao extends AbstractDao<FriendData, Long> {
         if (senderSex != null) {
             stmt.bindString(5, senderSex);
         }
-        stmt.bindLong(6, entity.getSenderAge());
+ 
+        String senderHeadImgUrl = entity.getSenderHeadImgUrl();
+        if (senderHeadImgUrl != null) {
+            stmt.bindString(6, senderHeadImgUrl);
+        }
+        stmt.bindLong(7, entity.getSenderAge());
  
         String senderRemark = entity.getSenderRemark();
         if (senderRemark != null) {
-            stmt.bindString(7, senderRemark);
+            stmt.bindString(8, senderRemark);
         }
     }
 
@@ -109,11 +116,16 @@ public class FriendDataDao extends AbstractDao<FriendData, Long> {
         if (senderSex != null) {
             stmt.bindString(5, senderSex);
         }
-        stmt.bindLong(6, entity.getSenderAge());
+ 
+        String senderHeadImgUrl = entity.getSenderHeadImgUrl();
+        if (senderHeadImgUrl != null) {
+            stmt.bindString(6, senderHeadImgUrl);
+        }
+        stmt.bindLong(7, entity.getSenderAge());
  
         String senderRemark = entity.getSenderRemark();
         if (senderRemark != null) {
-            stmt.bindString(7, senderRemark);
+            stmt.bindString(8, senderRemark);
         }
     }
 
@@ -130,8 +142,9 @@ public class FriendDataDao extends AbstractDao<FriendData, Long> {
             cursor.getInt(offset + 2), // senderId
             cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3), // senderName
             cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4), // senderSex
-            cursor.getInt(offset + 5), // senderAge
-            cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6) // senderRemark
+            cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5), // senderHeadImgUrl
+            cursor.getInt(offset + 6), // senderAge
+            cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7) // senderRemark
         );
         return entity;
     }
@@ -143,8 +156,9 @@ public class FriendDataDao extends AbstractDao<FriendData, Long> {
         entity.setSenderId(cursor.getInt(offset + 2));
         entity.setSenderName(cursor.isNull(offset + 3) ? null : cursor.getString(offset + 3));
         entity.setSenderSex(cursor.isNull(offset + 4) ? null : cursor.getString(offset + 4));
-        entity.setSenderAge(cursor.getInt(offset + 5));
-        entity.setSenderRemark(cursor.isNull(offset + 6) ? null : cursor.getString(offset + 6));
+        entity.setSenderHeadImgUrl(cursor.isNull(offset + 5) ? null : cursor.getString(offset + 5));
+        entity.setSenderAge(cursor.getInt(offset + 6));
+        entity.setSenderRemark(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
      }
     
     @Override

@@ -1,11 +1,11 @@
 package com.xr.happyFamily.bao;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.support.v4.widget.NestedScrollView;
-import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -25,11 +25,15 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
+import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
 import com.xr.happyFamily.bao.view.MyScrollview;
 import com.xr.happyFamily.bean.PersonCard;
 import com.xr.happyFamily.bean.ShopBean;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -82,7 +86,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     @BindView(R.id.myScroll)
     MyScrollview myScroll;
     @BindView(R.id.swipe_content)
-    SwipeRefreshLayout swipeContent;
+    PullToRefreshLayout swipeContent;
     private RecyclerView.LayoutManager mLayoutManager;
     private WaterFallAdapter shopAdapter;
 
@@ -98,48 +102,39 @@ public class ShopSearchResultActivity extends AppCompatActivity {
     String goodsName;
     private MyDialog dialog;
     int page = 1, lastState = -1;
-    boolean isXiala = false;
 
+
+    boolean isLoading=false,isRefresh=false;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         setContentView(R.layout.activity_shop_search_result);
         ButterKnife.bind(this);
         goodsName = getIntent().getExtras().getString("goodsName");
 
-        swipeContent.setProgressBackgroundColorSchemeResource(android.R.color.white);
-        // 设置下拉进度的主题颜色
-        swipeContent.setColorSchemeResources(R.color.colorAccent, R.color.colorPrimary, R.color.colorPrimaryDark);
 
-        // 下拉时触发SwipeRefreshLayout的下拉动画，动画完毕之后就会回调这个方法
-        swipeContent.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+        swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
-            public void onRefresh() {
+            public void refresh() {
+                page=1;
+                isRefresh=true;
                 list_shop.clear();
-                isXiala = true;
                 getShopData(1, lastState);
-                CountTimer countTimer=new CountTimer(5000,1000);
-                countTimer.start();
-
             }
-        });
 
-        myScroll.setOnScrollChangeListener(new NestedScrollView.OnScrollChangeListener() {
             @Override
-            public void onScrollChange(NestedScrollView v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                int height = v.getHeight();
-                int scrollViewMeasuredHeight = myScroll.getChildAt(0).getMeasuredHeight();
-                if (scrollY == 0) {
-                }
-                if ((scrollY + height) == scrollViewMeasuredHeight) {
-                    page++;
-                    getShopData(page, lastState);
-                }
+            public void loadMore() {
+                isLoading=true;
+                page++;
+                getShopData(page, lastState);
             }
         });
+
 
         init();
 
@@ -257,10 +252,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
 
     private void getShopData(int page, int state) {
         list_shop.clear();
-        if (!isXiala) {
-            dialog = MyDialog.showDialog(ShopSearchResultActivity.this);
-            dialog.show();
-        }
+
         Map<String, Object> params = new HashMap<>();
         params.put("goodsName", goodsName);
         params.put("pageNum", page + "");
@@ -292,6 +284,9 @@ public class ShopSearchResultActivity extends AppCompatActivity {
 
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -323,7 +318,11 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 shopAdapter.notifyDataSetChanged();
-                swipeContent.setRefreshing(false);
+                if(isLoading)
+                    swipeContent.finishLoadMore();
+                if (isRefresh)
+                    swipeContent.finishRefresh();
+
                 if (!isData) {
                     if (page == 0) {
                         llNodata.setVisibility(View.VISIBLE);
@@ -335,33 +334,18 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                     recyclerview.setVisibility(View.VISIBLE);
                 }
                 MyDialog.closeDialog(dialog);
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(ShopSearchResultActivity.this.getApplicationContext(), LoginActivity.class));
             }
         }
     }
 
 
-    class CountTimer extends CountDownTimer {
-        public CountTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        /**
-         * 倒计时过程中调用
-         *
-         * @param millisUntilFinished
-         */
-        @Override
-        public void onTick(long millisUntilFinished) {
-            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
-        }
-
-        /**
-         * 倒计时完成后调用
-         */
-        @Override
-        public void onFinish() {
-            swipeContent.setRefreshing(false);
-            Toast.makeText(ShopSearchResultActivity.this,"加载超时请重试",Toast.LENGTH_SHORT).show();
-        }
-    }
 }

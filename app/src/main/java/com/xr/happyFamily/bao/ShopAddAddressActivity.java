@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
 import android.os.AsyncTask;
@@ -30,6 +31,9 @@ import com.xr.happyFamily.bao.adapter.CityAdapter;
 import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
+import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
@@ -91,7 +95,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
     District district = null;
 
     int sign_sheng = 0, sign_city = 0, isDefault = 1;
-
+    MyDialog dialog;
 
 
 
@@ -101,6 +105,8 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         mContext = ShopAddAddressActivity.this;
         setContentView(R.layout.activity_shop_add_address);
         ButterKnife.bind(this);
@@ -184,6 +190,8 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                 params.put("isDefault", isDefault + "");
 
                 Log.e("qqqqqqqDDDD","1111111111111");
+                dialog = MyDialog.showDialog(mContext);
+                dialog.show();
                 new AddReceiveAsync().execute(params);
 
                 break;
@@ -456,6 +464,9 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
 
@@ -470,8 +481,18 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 Toast.makeText(mContext, "添加地址成功", Toast.LENGTH_SHORT).show();
                 finish();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }

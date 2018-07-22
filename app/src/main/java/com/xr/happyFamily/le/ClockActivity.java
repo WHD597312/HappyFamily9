@@ -4,8 +4,10 @@ import android.annotation.TargetApi;
 import android.app.Activity;
 import android.app.AppOpsManager;
 import android.content.ActivityNotFoundException;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.Resources;
 import android.graphics.Bitmap;
@@ -19,6 +21,7 @@ import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.print.PrinterId;
 import android.provider.Settings;
 import android.support.annotation.RequiresApi;
@@ -58,8 +61,10 @@ import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
 import com.xr.happyFamily.bao.fragment.XiangQingFragment;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.CommonClockFragment;
 import com.xr.happyFamily.le.BtClock.LeFragmentManager;
+import com.xr.happyFamily.le.BtClock.addTimeActivity;
 import com.xr.happyFamily.le.adapter.ClickViewPageAdapter;
 import com.xr.happyFamily.le.fragment.PuTongFragment;
 import com.xr.happyFamily.le.fragment.QingLvFragment;
@@ -105,6 +110,7 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
     @BindView(R.id.tl_flower)
     TabLayout tl_flower;
 
+    public static boolean running = false;
 
     private Context mContext=ClockActivity.this;
     SharedPreferences preferences;
@@ -113,6 +119,7 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
     QunZuFragment qunZuFragment=new QunZuFragment();
     QingLvFragment qingLvFragment=new QingLvFragment();
 
+    String type;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -120,28 +127,40 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         mContext = ClockActivity.this;
         setContentView(R.layout.activity_clock);
         ButterKnife.bind(this);
-
+        type=getIntent().getStringExtra("type");
+        Log.e("qqqqqTTT",type);
+        if(type.equals("MQServer")){
+            Toast.makeText(this,"有新的闹钟请确认",Toast.LENGTH_SHORT).show();
+        }
         initView();
         initData();
         FloatWindowManager.getInstance().applyOrShowFloatWindow(ClockActivity.this);
         Intent intent = getIntent();
         int fragid = intent.getIntExtra("fragid", 0);
+        service = new Intent(this, ClockService.class);
+        startService(service);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+        FloatWindowManager.getInstance().applyOrShowFloatWindow(ClockActivity.this);
     }
 
 
     private void initView() {
         circle.add("时光简记");
-        circle.add("群组模式");
+        circle.add("制懒模式");
         circle.add("情侣模式");
-        circle.add("制赖模式");
+        circle.add("群组模式");
+
+
         Bundle extras = getIntent().getExtras();
         fragmentList.add(new LeFragmentManager());
-        fragmentList.add(qunZuFragment);
-        fragmentList.add(qingLvFragment);
         fragmentList.add(new CommonClockFragment());
+        fragmentList.add(qingLvFragment);
+        fragmentList.add(qunZuFragment);
         ClickViewPageAdapter tabAdapter = new ClickViewPageAdapter(getSupportFragmentManager(), fragmentList,this);
         vp_flower.setAdapter(tabAdapter);
         tl_flower.setupWithViewPager(vp_flower);
@@ -166,12 +185,11 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
                 switch (tab.getPosition()){
                     case 0: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
                         break;
-                    case 1: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#3682ff"));
+                    case 1: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
                         break;
                     case 2: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#ff7a73"));
                         break;
-                    case 3: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#33c62b"));
-                        break;
+                    case 3: ((TextView) tab.getCustomView().findViewById(R.id.tab_tv)).setTextColor(Color.parseColor("#3682ff"));
                 }
 
 
@@ -230,4 +248,66 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
             tl_flower.setVisibility(View.VISIBLE);
         }
     }
+
+    @Override
+    protected void onStart() {
+        running = true;
+        super.onStart();
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running = false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isBound) {
+            unbindService(connection);
+        }
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        String type=intent.getStringExtra("type");
+        if("MQServer".equals(type)){
+            if(mqService!=null){
+                mqService.startClock();
+            }else {
+                Log.e("qqqqqqqqqqqqIIII","??????");
+            }
+        }
+    }
+
+    //响铃
+    ClockService mqService;
+    boolean bound;
+    boolean isBound;
+    Intent service;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            mqService = binder.getService();
+            mqService.acquireWakeLock(ClockActivity.this);
+            if(type.equals("MQServer")){
+                mqService.startClock();
+            }
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
+
+
+
+
+
 }

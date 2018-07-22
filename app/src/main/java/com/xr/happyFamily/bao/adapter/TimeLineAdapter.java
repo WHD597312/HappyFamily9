@@ -79,7 +79,12 @@ public class TimeLineAdapter extends BaseAdapter {
             viewHolder.view1.setVisibility(View.VISIBLE);
             viewHolder.image.setImageResource(R.mipmap.weixuanzhong_wuliu3x);
             viewHolder.view2.setVisibility(View.INVISIBLE);
-        }else {
+        }else if(state.equals("3")){
+            viewHolder.view1.setVisibility(View.VISIBLE);
+            viewHolder.image.setImageResource(R.mipmap.xuanzhong_wuliu3x);
+            viewHolder.view2.setVisibility(View.VISIBLE);
+        }
+        else {
             viewHolder.view1.setVisibility(View.VISIBLE);
             viewHolder.image.setImageResource(R.mipmap.weixuanzhong_wuliu3x);
             viewHolder.view2.setVisibility(View.VISIBLE);

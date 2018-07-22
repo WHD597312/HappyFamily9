@@ -2,6 +2,7 @@ package com.xr.happyFamily.le.clock;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -20,8 +21,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.adapter.FriendFindAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -76,11 +79,13 @@ public class FriendAddActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        MyApplication application = (MyApplication) getApplication();
+        application.addActivity(this);
         titleText.setText("添加好友");
         titleRightText.setText("发送");
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
-        userName = "xxx";
+        userName = preferences.getString("username", "");
         clickFriendBean = (ClickFriendBean) getIntent().getSerializableExtra("friendData");
         info = "我是" + userName;
         etInfo.setHint(info);
@@ -99,7 +104,6 @@ public class FriendAddActivity extends AppCompatActivity {
 
             case R.id.title_rightText:
                 dialog = MyDialog.showDialog(this);
-                dialog.show();
                 new getClockUsers().execute();
                 break;
             case R.id.back:
@@ -128,6 +132,9 @@ public class FriendAddActivity extends AppCompatActivity {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     returnMsg = jsonObject.getString("returnMsg");
@@ -156,6 +163,15 @@ public class FriendAddActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                Toast.makeText(mContext,"发送好友申请成功",Toast.LENGTH_SHORT).show();
                finish();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }else { Toast.makeText(mContext,returnMsg,Toast.LENGTH_SHORT).show();
 
             }

@@ -3,6 +3,7 @@ package com.xr.happyFamily.bao.fragment;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
@@ -35,6 +36,8 @@ import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bean.PostFreeBean;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -54,6 +57,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+
+import static android.content.Context.MODE_PRIVATE;
 
 /**
  * Created by TYQ on 2017/9/7.
@@ -348,8 +353,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
     int pos = 0;
-
-
     JSONObject jsonObject;
     String name, type, img, price = "0";
     Double weight;
@@ -364,6 +367,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
@@ -407,6 +413,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                             .load(img)
                             .into(imgPic);//此种策略并不会压缩图片
                 }
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
 
             isWeight = true;
@@ -430,7 +445,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
             try {
                 if (!Utils.isEmpty(result)) {
-
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     returnData = jsonObject.getString("returnData");
@@ -454,7 +471,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     if (tvAddress != null)
                         tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                     isAddress = true;
-
+                    Log.e("qqqqqqqRRRR",tvAddress.getText().toString());
                     receiveId = receive.getReceiveId() + "";
                     if (isWeight)
                         getTime();
@@ -478,7 +495,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
             try {
                 if (!Utils.isEmpty(result)) {
-
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -494,6 +513,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Toast.makeText(mContext, "已加入购物车", Toast.LENGTH_SHORT).show();
                 mPopWindow.dismiss();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -554,6 +582,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     returnData = jsonObject.getString("returnData");
@@ -591,6 +622,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 String time = format.format(date);
                 if (tvTime!=null)
                     tvTime.setText("23.00前下单，预计（" + time.substring(5, time.length()) + "）送达");
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
         }
     }
@@ -604,4 +644,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         map.put("weight", weight);
         new getPostFeeAsync().execute(map);
     }
+
+
+
 }

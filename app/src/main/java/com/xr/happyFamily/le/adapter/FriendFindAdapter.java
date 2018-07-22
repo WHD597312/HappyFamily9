@@ -14,12 +14,14 @@ import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
 import com.xr.happyFamily.le.clock.FriendAddActivity;
+import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.Utils;
 
 import java.io.Serializable;
@@ -83,10 +85,10 @@ public class FriendFindAdapter extends RecyclerView.Adapter<FriendFindAdapter.My
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
         if (!Utils.isEmpty(data.get(position).getHeadImgUrl()))
-            Picasso.with(context)
-                    .load(data.get(position).getHeadImgUrl())
-                    .error(R.mipmap.ic_touxiang_moren)
-                    .into(holder.img_touxiang);
+            Glide.with(context).load(data.get(position).getHeadImgUrl()).transform(new GlideCircleTransform(context.getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(holder.img_touxiang);
+        else{
+            holder.img_touxiang.setImageResource(R.mipmap.ic_touxiang_moren);
+        }
         holder.tv_name.setText(data.get(position).getUsername());
         holder.tv_tel.setText(data.get(position).getPhone());
         if (data.get(position).getSex())

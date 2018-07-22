@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    >
+
+    <LinearLayout
+        android:layout_width="340dp"
+        android:layout_height="@dimen/dp_jy_242"
+        android:orientation="vertical"
+        android:background="@drawable/bg_shape_search"
+        android:gravity="center_horizontal"
+        >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ic_pop_qlclock"
+            android:layout_marginTop="@dimen/dp_jy_35"/>
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_16"
+            android:layout_marginTop="@dimen/dp_jy_17"
+            android:layout_centerHorizontal="true"
+            android:drawableRight="@mipmap/ic_pop_qlmsg"
+            android:drawablePadding="@dimen/dp_jy_5"
+            android:textColor="#363636"/>
+
+
+        <TextView
+            android:id="@+id/tv_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#8D8D8D"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="@dimen/dp_jy_15"
+            android:textSize="@dimen/sp_15" />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:orientation="horizontal"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp_jy_15"
+            android:gravity="center_horizontal"
+          >
+
+            <TextView
+                android:id="@+id/tv_queren"
+                android:background="@drawable/bg_pop_clock_ql25"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:padding="@dimen/dp_jy_12"
+                android:textColor="@color/white"
+                android:gravity="center"
+                android:textSize="@dimen/sp_16"
+                android:layout_marginBottom="@dimen/dp_jy_10"
+                android:layout_marginRight="@dimen/dp_jy_30"
+                android:layout_marginLeft="@dimen/dp_jy_30"
+
+                android:layout_alignParentBottom="true"
+           android:text="知道了"/>
+
+
+        </RelativeLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+</LinearLayout>
+
+

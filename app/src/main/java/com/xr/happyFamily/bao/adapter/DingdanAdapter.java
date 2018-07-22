@@ -3,6 +3,7 @@ package com.xr.happyFamily.bao.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
@@ -34,6 +35,8 @@ import com.xr.happyFamily.bao.WuLiuActivity;
 import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bean.OrderBean;
+import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -46,6 +49,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import static android.content.Context.MODE_PRIVATE;
 
 //订单适配器
 
@@ -468,6 +473,9 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code=result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                 }
@@ -487,6 +495,15 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                     list.get(i).setState("6");
                 }
                 notifyDataSetChanged();
+            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(context, "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                SharedPreferences preferences;
+                preferences = context.getSharedPreferences("my", MODE_PRIVATE);
+                MyDialog.setStart(false);
+                if (preferences.contains("password")) {
+                    preferences.edit().remove("password").commit();
+                }
+                context.startActivity(new Intent(context.getApplicationContext(), LoginActivity.class));
             }
         }
     }

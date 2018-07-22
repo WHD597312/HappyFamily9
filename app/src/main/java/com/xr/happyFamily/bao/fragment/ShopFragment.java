@@ -424,6 +424,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
 
+            
             isWeight = true;
             if (isAddress)
                 getTime();

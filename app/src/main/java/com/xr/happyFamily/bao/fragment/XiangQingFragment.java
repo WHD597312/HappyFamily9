@@ -1,39 +1,23 @@
 package com.xr.happyFamily.bao.fragment;
 
 import android.content.Context;
-import android.content.Intent;
-import android.content.SharedPreferences;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ListView;
+import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
-import com.squareup.picasso.Picasso;
+import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
+import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.adapter.ShopXqAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
-import com.xr.happyFamily.bao.bean.GoodsPrice;
-import com.xr.happyFamily.bean.ShopBean;
-import com.xr.happyFamily.le.adapter.HappyFootAdapter;
-import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
-import com.xr.happyFamily.together.http.HttpUtils;
-import com.xr.happyFamily.together.util.Utils;
-
-import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,8 +29,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static android.content.Context.MODE_PRIVATE;
-
 /**
  * Created by TYQ on 2017/9/7.
  */
@@ -56,37 +38,73 @@ public class XiangQingFragment extends BaseFragment implements View.OnClickListe
     Unbinder unbinder;
     private static ShopXQActivity father;
     Context mContext;
-    @BindView(R.id.recyclerView)
-    ListView recyclerView;
+
     ShopXqAdapter shopXqAdapter;
-    List<String> myList;
-    MyDialog dialog;
+    List<String> imgList;
+
+    String goodsId;
+    Bundle bundle;
+
+//    @BindView(R.id.ll_xiangqing)
+//    LinearLayout llXiangqing;
+
+    @BindView(R.id.recyclerView)
+    RecyclerView recyclerView;
+    @BindView(R.id.swipe_content)
+    PullToRefreshLayout swipeContent;
+    private MyDialog dialog;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         mContext = getActivity();
         View view = inflater.inflate(R.layout.fragment_shop_xiangqing, container, false);
         unbinder = ButterKnife.bind(this, view);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
-        myList=new ArrayList<>();
-
-
-        dialog=MyDialog.showDialog(getActivity());
-        dialog.show();
+        bundle = this.getArguments();
+        goodsId = bundle.getString("goodsId");
         Map<String, Object> params = new HashMap<>();
         params.put("goodsId", goodsId);
-        dialog = MyDialog.showDialog(mContext);
-        dialog.show();
-        new getShopAsync().execute();
+//        dialog = MyDialog.showDialog(mContext);
+//        dialog.show();
+//        new getShopAsync().execute(params);
+        imgList = new ArrayList<>();
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(father);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        String[] str = imgData.split(",");
+        imgList = Arrays.asList(str);
+        shopXqAdapter = new ShopXqAdapter(getActivity(), imgList);
+        recyclerView.setAdapter(shopXqAdapter);
+        swipeContent.setRefreshListener(new BaseRefreshListener() {
+            @Override
+            public void refresh() {
+                swipeContent.finishRefresh();
+                final ShopXQActivity shopXQActivity = (ShopXQActivity) getActivity();
+                shopXQActivity.gotoShop();
+            }
+
+            @Override
+            public void loadMore() {
+                swipeContent.finishLoadMore();
+                Toast.makeText(getActivity(), "已滑动到底部了", Toast.LENGTH_SHORT).show();
+            }
+        });
+
         return view;
     }
 
-    List<String>  imgList=new ArrayList<>();
+
+    public static boolean running = false;
     @Override
     public void onStart() {
         super.onStart();
+        running=true;
     }
 
+    @Override
+    public void onStop() {
+        super.onStop();
+        running=false;
+    }
     @Override
     public void onDestroyView() {
         super.onDestroyView();
@@ -107,67 +125,96 @@ public class XiangQingFragment extends BaseFragment implements View.OnClickListe
     }
 
 
+    String imgData;
 
-
-
-
-    JSONObject jsonObject;
-    String name, type, img, price,detailDescribe;
-    double weight;
-
-    class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-            Map<String, Object> params = maps[0];
-            String url = "goods/getGoodsById";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    if (result.length() < 6) {
-                        code=result;
-                    }
-                    jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("goodsPrice");
-                    detailDescribe=returnData.getString("detailDescribe");
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                String[] img=detailDescribe.split(",");
-                imgList.clear();
-                imgList = Arrays.asList(img);
-                MyDialog.closeDialog(dialog);
-                shopXqAdapter = new ShopXqAdapter( imgList,getActivity());
-                recyclerView.setAdapter(shopXqAdapter);
-                shopXqAdapter.notifyDataSetChanged();
-
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(getActivity().getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
-                SharedPreferences preferences;
-                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
-                MyDialog.setStart(false);
-                if (preferences.contains("password")) {
-                    preferences.edit().remove("password").commit();
-                }
-                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
-            }
-        }
+    public void setData(String s) {
+        imgData = s;
     }
 
-    String goodsId;
-    public void setData(String s){
-        goodsId=s;
-    }
+    String detailDescribe;
+
+//    class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
+//        @Override
+//        protected String doInBackground(Map<String, Object>... maps) {
+//            Map<String, Object> params = maps[0];
+//            String url = "goods/getGoodsById";
+//            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+//            String code = "";
+//            try {
+//                if (!Utils.isEmpty(result)) {
+//                    if (result.length() < 6) {
+//                        code = result;
+//                    }
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    code = jsonObject.getString("returnCode");
+//                    JSONObject returnData = jsonObject.getJSONObject("returnData");
+//                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+//                    detailDescribe = returnData.getString("detailDescribe");
+//
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return code;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            if (!Utils.isEmpty(s) && "100".equals(s)) {
+//                MyDialog.closeDialog(dialog);
+//                String[] str = detailDescribe.split(",");
+//                imgList = Arrays.asList(str);
+//                shopXqAdapter = new ShopXqAdapter(getActivity(), imgList);
+//                recyclerView.setAdapter(shopXqAdapter);
+//                addGroupImage();
+//
+//            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
+//
+//                Toast.makeText(getActivity().getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+//                SharedPreferences preferences;
+//                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+//                MyDialog.setStart(false);
+//                if (preferences.contains("password")) {
+//                    preferences.edit().remove("password").commit();
+//                }
+//                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
+//            }
+//        }
+//    }
+
+
+    ImageView imgs[];
+//    private void addGroupImage() {
+//        imgs=new ImageView[imgList.size()];
+//        for (int i = 0; i < imgList.size(); i++) {
+//            ImageView imageView = new ImageView(getActivity());
+//            imageView.setLayoutParams(new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT));  //设置图片宽高
+//            imgs[i]=imageView;
+//            llXiangqing.addView(imageView); //动态添加图片
+//        }
+//
+//        for (int i = 0; i < imgList.size(); i++) {
+//            Picasso.with(father).load(imgList.get(i))
+//                    .placeholder(R.mipmap.app)
+//                    .error(R.mipmap.bg_develop).into(imgs[i]);
+//        }
+
+
+//        Picasso.with(father).load("http://p9zaf8j1m.bkt.clouddn.com/detailDescribe/%E5%8F%96%E6%9A%96%E5%99%A8_02.png")
+//                .placeholder(R.mipmap.app)
+//                .error(R.mipmap.bg_develop).into(imgs[1]);
+//
+//        Picasso.with(father).load("http://p9zaf8j1m.bkt.clouddn.com/detailDescribe/%E5%8F%96%E6%9A%96%E5%99%A8_03.png")
+//                .placeholder(R.mipmap.app)
+//                .error(R.mipmap.bg_develop).into(imgs[2]);
+//
+//        Picasso.with(father).load("http://p9zaf8j1m.bkt.clouddn.com/detailDescribe/灭蚊器_02.png")
+//                .placeholder(R.mipmap.app)
+//                .error(R.mipmap.bg_develop).into(imgs[3]);
+//
+//        Picasso.with(father).load("http://p9zaf8j1m.bkt.clouddn.com/detailDescribe/灭蚊器_01.png")
+//                .placeholder(R.mipmap.app)
+//                .error(R.mipmap.bg_develop).into(imgs[4]);
+//    }
 }

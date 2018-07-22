@@ -215,6 +215,7 @@ public class btClockjsDialog4 extends Dialog {
 //                                mediaPlayer.prepareAsync();
                             mediaPlayer.prepare();
                             mediaPlayer.start();
+                            mediaPlayer.setLooping(true);
 
                         } catch (IOException e) {
 

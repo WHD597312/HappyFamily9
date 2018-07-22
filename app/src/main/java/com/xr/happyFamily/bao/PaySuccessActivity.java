@@ -304,7 +304,7 @@ public class PaySuccessActivity extends AppCompatActivity {
                 if (shopAdapter!=null)
                 shopAdapter.notifyDataSetChanged();
                 if(!isData){
-                    Toast.makeText(PaySuccessActivity.this,"无更多数据",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(PaySuccessActivity.this,"无更多商品",Toast.LENGTH_SHORT).show();
                 }
                 if (dialog!=null)
                 MyDialog.closeDialog(dialog);

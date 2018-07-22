@@ -80,6 +80,7 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
     @BindView(R.id.img5)
     ImageView img5;
 
+
     private boolean isMore = false;
     private EvaluateAdapter adapter_pinglun;
     private ArrayList<Map<String, Object>> datas;
@@ -112,8 +113,8 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             public void itemClick(int position) {
                 adapter_pinglun.setSelection(position);
                 adapter_pinglun.notifyDataSetChanged();
-
                 getPingLun(tag[position]);
+
             }
         });
 
@@ -129,6 +130,19 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
 
         getData();
         return view;
+    }
+
+    public static boolean running = false;
+    @Override
+    public void onStart() {
+        super.onStart();
+        running=true;
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        running=false;
     }
 
     @Override
@@ -338,9 +352,9 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
             if (!Utils.isEmpty(s) && "100".equals(s)) {
 //                Log.e("qqqqqqqqqqqRece",receive.getContact()+"!");
                 pinglunAdapter.notifyDataSetChanged();
-                if(shopPinglunBeanList.size()==0){
-                    Toast.makeText(context,"此商品暂无评论",Toast.LENGTH_SHORT).show();
-                }
+//                if(shopPinglunBeanList.size()==0){
+//                    Toast.makeText(context,"此商品暂无评论",Toast.LENGTH_SHORT).show();
+//                }
 //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();

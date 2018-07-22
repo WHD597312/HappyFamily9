@@ -4,8 +4,10 @@
     android:layout_height="wrap_content"
     android:orientation="vertical">
    <ImageView
-          android:id="@+id/img_footBanner"
+       android:id="@+id/img_xiangqing"
        android:layout_width="match_parent"
        android:layout_height="wrap_content"
-       android:scaleType="centerCrop" />
+       android:adjustViewBounds="true"
+       android:scaleType="fitXY"/>
+
 </LinearLayout>

@@ -54,6 +54,7 @@ import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopPageBean;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -154,7 +155,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     List<ShopBean.ReturnData.MyList> list_shop;
     boolean isData = true;
     private MyDialog dialog;
-
+    private static CountTimer countTimer;
     private boolean isFirst = true;
     SimpleAdapter moreAdapter;
     List<Map<String, Object>> list_more;
@@ -229,6 +230,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 page=1;
                 isRefresh=true;
                 list_shop.clear();
+                countTimer=new CountTimer(5000,1000);
+                countTimer.start();
                 getShopData(lastVisibleItem, page);
             }
 
@@ -469,8 +472,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
 
     private void getShopData(int id, int page) {
-        dialog = MyDialog.showDialog(mContext);
-        dialog.show();
+        if(!isRefresh) {
+            dialog = MyDialog.showDialog(mContext);
+            dialog.show();
+        }
         Map<String, Object> params = new HashMap<>();
         if (id == 0) {
             llTuijian.setVisibility(View.VISIBLE);
@@ -529,8 +534,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 if (isRefresh)
                 swipeContent.finishRefresh();
 
+                isRefresh=false;
+                isLoading=false;
                 if (!isData) {
-                    Toast.makeText(mContext, "无更多数据", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext, "无更多商品", Toast.LENGTH_SHORT).show();
                 }
                 if(isShopData&&isBanner&&isPage)
                 MyDialog.closeDialog(dialog);
@@ -681,8 +688,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
          */
         @Override
         public void onFinish() {
-            MyDialog.closeDialog(dialog);
-            Toast.makeText(mContext,"加载超时请重试",Toast.LENGTH_SHORT).show();
+            if(isRefresh) {
+                swipeContent.finishRefresh();
+                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+            }
         }
     }
 
@@ -702,5 +711,9 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         }
 
     }
+
+
+
+
 
 }

@@ -420,7 +420,8 @@
         <activity android:name=".le.YouYuanActivity" />
         <activity android:name=".le.MsgActivity" />
         <activity android:name=".le.HistoryActivity" />
-        <activity android:name=".le.ClockActivity" />
+        <activity android:name=".le.ClockActivity"
+            android:launchMode="singleTop"/>
         <activity android:name=".le.clock.QinglvEditActivity" />
         <activity android:name=".le.clock.QunzuEditActivity" />
         <activity android:name=".le.clock.QinglvAddActivity" />

@@ -5,7 +5,7 @@
     android:layout_marginLeft="@dimen/dp_jy_12"
     android:layout_marginRight="@dimen/dp_jy_12"
     android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="@dimen/dp_jy_380">
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -31,14 +31,22 @@
             android:layout_centerHorizontal="true"
             android:src="@mipmap/bt_tg"
             />
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+            >
+
+
         <EditText
             android:id="@+id/et_tg_name"
-            android:layout_below="@+id/iv_tg_tg"
+
             android:layout_width="@dimen/dp_jy_165"
             android:layout_height="@dimen/dp_jy_35"
             android:hint="请输入歌名"
             android:gravity="center"
-            android:layout_centerHorizontal="true"
+
             android:layout_marginTop="@dimen/dp_jy_20"
             android:background="@drawable/bg_le_tgettext"
             />
@@ -55,7 +63,7 @@
             android:layout_marginBottom="@dimen/dp_jy_16"
             />
     </RelativeLayout>
-
+    </RelativeLayout>
 
 
 </LinearLayout>

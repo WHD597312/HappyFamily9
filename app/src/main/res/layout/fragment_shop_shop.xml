@@ -4,186 +4,193 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
-    <com.xr.happyFamily.bao.view.MyScrollview
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
 
-        <LinearLayout
+    <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
+        android:id="@+id/swipe_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/rv_title">
+
+        <ScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-
-
-
-            <ImageView
-                android:id="@+id/img_pic"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:src="@mipmap/chanpin4" />
-
-
-            <TextView
-                android:id="@+id/tv_name"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_jy_12"
-                android:background="@color/white"
-                android:padding="@dimen/dp_jy_12"
-                android:textColor="@color/black"
-                android:textSize="@dimen/sp_12" />
-
-            <TextView
-                android:id="@+id/tv_type"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:paddingLeft="@dimen/dp_jy_12"
-                android:textColor="@color/shop_title"
-                android:textSize="@dimen/sp_12" />
-
-            <TextView
-                android:id="@+id/tv_price"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="@dimen/dp_jy_12"
-                android:textColor="#ff0000"
-                android:textSize="@dimen/sp_12" />
-
-            <com.xr.happyFamily.bao.view.LinearGradientView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_jy_3" />
+            android:layout_height="match_parent">
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_jy_45"
-                android:layout_marginTop="@dimen/dp_jy_12"
-                android:background="@color/white"
-                android:gravity="center"
-                android:orientation="horizontal"
-                android:padding="@dimen/dp_jy_12">
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="已选:"
-                    android:textColor="@color/shop_title"
-                    android:textSize="@dimen/dp_jy_12" />
-
-                <TextView
-                    android:id="@+id/tv_xinghao"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:drawableRight="@mipmap/gengduo_dizhi3x"
-                    android:paddingLeft="@dimen/dp_jy_8"
-                    android:text="请选择型号"
-                    android:textColor="@color/shop_title"
-                    android:textSize="@dimen/dp_jy_12" />
-            </LinearLayout>
-
-            <com.xr.happyFamily.bao.view.LinearGradientView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_jy_3" />
-
-
-            <TextView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_jy_45"
-                android:layout_marginTop="@dimen/dp_jy_12"
-                android:background="@color/white"
-                android:drawableLeft="@mipmap/ic_shop_gou"
-                android:drawablePadding="@dimen/dp_jy_14"
-                android:gravity="center|left"
-                android:paddingLeft="@dimen/dp_jy_12"
-                android:text="慈溪市鑫睿电子科技有限公司发货并提供售后"
-                android:textColor="@color/shop_title"
-                android:textSize="@dimen/sp_12" />
-
-
-            <com.xr.happyFamily.bao.view.LinearGradientView
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/dp_jy_3" />
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="@color/white"
-                android:padding="@dimen/dp_jy_12">
-
-                <TextView
-                    android:id="@+id/tv1"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="送至"
-                    android:textColor="@color/black"
-                    android:textSize="@dimen/sp_12" />
-
-                <TextView
-                    android:id="@+id/tv_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_jy_12"
-                    android:layout_toRightOf="@id/tv1"
-                    android:drawableLeft="@mipmap/ic_shop_address_green"
-                    android:drawablePadding="@dimen/dp_jy_8"
-                    android:text="广东 深圳市 宝安区"
-                    android:textColor="@color/green3" />
 
                 <ImageView
-                    android:id="@+id/img_address"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/img_pic"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:paddingBottom="@dimen/dp_jy_10"
-                    android:paddingLeft="@dimen/dp_jy_20"
-                    android:paddingTop="@dimen/dp_jy_10"
-                    android:src="@mipmap/gengduo2x" />
+                    android:adjustViewBounds="true"
+                    android:scaleType="fitXY"/>
+
 
                 <TextView
-                    android:id="@+id/tv2"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_name"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/tv_address"
-                    android:layout_below="@id/tv_address"
-                    android:layout_marginTop="@dimen/dp_jy_3"
-                    android:text="现货"
-                    android:textColor="@color/green2"
-                    android:textSize="@dimen/sp_12" />
-
-                <TextView
-                    android:id="@+id/tv_time"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignTop="@id/tv2"
-                    android:layout_marginLeft="@dimen/dp_jy_8"
-                    android:layout_toRightOf="@id/tv2"
-                    android:text="预计到达时间：请先填写地址信息"
-                    android:textColor="@color/shop_title"
-                    android:textSize="@dimen/sp_12" />
-
-                <TextView
-
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_time"
-                    android:layout_marginTop="@dimen/dp_jy_3"
-                    android:text="重量"
+                    android:layout_marginTop="@dimen/dp_jy_12"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_jy_12"
                     android:textColor="@color/black"
                     android:textSize="@dimen/sp_12" />
 
                 <TextView
-                    android:id="@+id/tv_weight"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/tv_type"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_alignLeft="@id/tv2"
-                    android:layout_below="@id/tv2"
-                    android:layout_marginTop="@dimen/dp_jy_3"
-                    android:text="5.2kg"
+                    android:background="@color/white"
+                    android:paddingLeft="@dimen/dp_jy_12"
+                    android:paddingRight="@dimen/dp_jy_12"
                     android:textColor="@color/shop_title"
                     android:textSize="@dimen/sp_12" />
-            </RelativeLayout>
 
-        </LinearLayout>
-    </com.xr.happyFamily.bao.view.MyScrollview>
+                <TextView
+                    android:id="@+id/tv_price"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_jy_12"
+                    android:textColor="#ff0000"
+                    android:textSize="@dimen/sp_12" />
+
+                <com.xr.happyFamily.bao.view.LinearGradientView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3" />
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_45"
+                    android:layout_marginTop="@dimen/dp_jy_12"
+                    android:background="@color/white"
+                    android:gravity="center"
+                    android:orientation="horizontal"
+                    android:padding="@dimen/dp_jy_12">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="已选:"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/dp_jy_12" />
+
+                    <TextView
+                        android:id="@+id/tv_xinghao"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:drawableRight="@mipmap/gengduo_dizhi3x"
+                        android:paddingLeft="@dimen/dp_jy_8"
+                        android:text="请选择型号"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/dp_jy_12" />
+                </LinearLayout>
+
+                <com.xr.happyFamily.bao.view.LinearGradientView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3" />
+
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_45"
+                    android:layout_marginTop="@dimen/dp_jy_12"
+                    android:background="@color/white"
+                    android:drawableLeft="@mipmap/ic_shop_gou"
+                    android:drawablePadding="@dimen/dp_jy_14"
+                    android:gravity="center|left"
+                    android:paddingLeft="@dimen/dp_jy_12"
+                    android:text="宁波培厚电子科技有限公司发货并提供售后"
+                    android:textColor="@color/shop_title"
+                    android:textSize="@dimen/sp_12" />
+
+
+                <com.xr.happyFamily.bao.view.LinearGradientView
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/dp_jy_3" />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@color/white"
+                    android:padding="@dimen/dp_jy_12">
+
+                    <TextView
+                        android:id="@+id/tv1"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="送至"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_jy_12"
+                        android:layout_toRightOf="@id/tv1"
+                        android:drawableLeft="@mipmap/ic_shop_address_green"
+                        android:drawablePadding="@dimen/dp_jy_8"
+                        android:text="广东 深圳市 宝安区"
+                        android:textColor="@color/green3" />
+
+                    <ImageView
+                        android:id="@+id/img_address"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentRight="true"
+                        android:paddingBottom="@dimen/dp_jy_10"
+                        android:paddingLeft="@dimen/dp_jy_20"
+                        android:paddingTop="@dimen/dp_jy_10"
+                        android:src="@mipmap/gengduo2x" />
+
+                    <TextView
+                        android:id="@+id/tv2"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@id/tv_address"
+                        android:layout_below="@id/tv_address"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:text="现货"
+                        android:textColor="@color/green2"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_time"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignTop="@id/tv2"
+                        android:layout_marginLeft="@dimen/dp_jy_8"
+                        android:layout_toRightOf="@id/tv2"
+                        android:text="预计到达时间：请先填写地址信息"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_time"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:text="重量"
+                        android:textColor="@color/black"
+                        android:textSize="@dimen/sp_12" />
+
+                    <TextView
+                        android:id="@+id/tv_weight"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@id/tv2"
+                        android:layout_below="@id/tv2"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:text="5.2kg"
+                        android:textColor="@color/shop_title"
+                        android:textSize="@dimen/sp_12" />
+                </RelativeLayout>
+            </LinearLayout>
+        </ScrollView>
+    </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
 </LinearLayout>

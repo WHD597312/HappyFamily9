@@ -328,7 +328,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                         llNodata.setVisibility(View.VISIBLE);
                         recyclerview.setVisibility(View.GONE);
                     } else
-                        Toast.makeText(ShopSearchResultActivity.this, "无更多数据", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(ShopSearchResultActivity.this, "无更多商品", Toast.LENGTH_SHORT).show();
                 } else {
                     llNodata.setVisibility(View.GONE);
                     recyclerview.setVisibility(View.VISIBLE);

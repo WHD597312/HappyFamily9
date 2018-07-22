@@ -97,6 +97,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     String receiveProvince, receiveCity, receiveCounty, receiveAddress;
 
     MyDialog dialog;
+    boolean isPop=false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,7 +147,10 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
 
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        showPopup();
+                        if(!isPop) {
+                            isPop=true;
+                            showPopup();
+                        }
                     }
                 }, 300);
 
@@ -201,6 +205,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         switch (v.getId()) {
             case R.id.view_dis:
             case R.id.img_close:
+                isPop=false;
                 mPopWindow.dismiss();
                 break;
             case R.id.rl_sheng:
@@ -229,6 +234,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     private int sing_city = 0;
 
     private void showPopup() {
+        isPop=true;
         parser();
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_city, null);
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
@@ -273,6 +279,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     case 2:
                         receiveCounty = data.get(position);
                         tv_qu.setText(receiveCounty);
+                        isPop=false;
                         mPopWindow.dismiss();
                         tvAddress.setText(tv_sheng.getText() + " " + tv_shi.getText() + " " + tv_qu.getText());
                         break;

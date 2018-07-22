@@ -96,6 +96,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
 
     int sign_sheng = 0, sign_city = 0, isDefault = 1;
     MyDialog dialog;
+    boolean isPop=false;
 
 
 
@@ -144,7 +145,11 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
 
                 new Handler().postDelayed(new Runnable() {
                     public void run() {
-                        showPopup();
+                        if(!isPop){
+                            isPop=true;
+                            showPopup();
+                        }
+
                     }
                 }, 300);
 
@@ -203,6 +208,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
         switch (v.getId()) {
             case R.id.view_dis:
             case R.id.img_close:
+                isPop=false;
                 mPopWindow.dismiss();
                 break;
             case R.id.rl_sheng:
@@ -274,6 +280,8 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                         break;
                     case 2:
                         tv_qu.setText(data.get(position));
+                        isPop=false;
+
                         mPopWindow.dismiss();
                         tvAddress.setText(tv_sheng.getText() + " " + tv_shi.getText() + " " + tv_qu.getText());
                         break;

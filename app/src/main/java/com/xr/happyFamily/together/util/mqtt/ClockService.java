@@ -13,7 +13,9 @@ import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
 import android.util.Log;
+import android.view.Window;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 
 import com.xr.database.dao.ClockBeanDao;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;

@@ -120,12 +120,17 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             application.addActivity(this);
         }
 
+
+
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
 
+        SharedPreferences.Editor editor2 = preferences.edit();
+        editor2.putString("clockNew", "old");
+        editor2.commit();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
         filter.addAction("mqttmessage2");
         myReceiver = new MQTTMessageReveiver();
@@ -429,7 +434,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     File file = BitmapCompressUtils.compressImage(bitmap);
                     preferences.edit().putString("image", file.getPath()).commit();
                     BitmapCompressUtils.recycleBitmap(bitmap);
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();

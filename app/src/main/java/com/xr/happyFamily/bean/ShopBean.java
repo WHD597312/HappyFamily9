@@ -209,7 +209,7 @@ public class ShopBean {
 
                 private int priceId;
                 private int goodsId;
-                private int power;
+                private String power;
                 private int price;
                 private int state;
                 private long createTime;
@@ -229,10 +229,10 @@ public class ShopBean {
                     return goodsId;
                 }
 
-                public void setPower(int power) {
+                public void setPower(String power) {
                     this.power = power;
                 }
-                public int getPower() {
+                public String getPower() {
                     return power;
                 }
 

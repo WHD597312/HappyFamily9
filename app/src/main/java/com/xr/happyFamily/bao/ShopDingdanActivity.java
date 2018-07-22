@@ -92,7 +92,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     PullToRefreshLayout swipeContent;
     private MyDialog dialog;
     int page = 1, lastSign = 0;
-    boolean isLoading=false,isRefresh=false;
+    boolean isLoading = false, isRefresh = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -121,8 +121,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
-                page=1;
-                isRefresh=true;
+                page = 1;
+                isRefresh = true;
                 orderDetailsLists.clear();
                 getDingDan(lastSign, page);
             }
@@ -130,7 +130,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
             @Override
             public void loadMore() {
                 page++;
-                isLoading=true;
+                isLoading = true;
                 getDingDan(lastSign, page);
             }
         });
@@ -208,9 +208,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
     dingDanAsync dingDanAsync;
 
     public void getDingDan(int state, int page) {
-        dialog = MyDialog.showDialog(mContext);
+        if (!isRefresh) {
+            dialog = MyDialog.showDialog(mContext);
 
-        dialog.show();
+            dialog.show();
+        }
         Map<String, Object> params = new HashMap<>();
         SharedPreferences userSettings = mContext.getSharedPreferences("my", 0);
         String userId = userSettings.getString("userId", "userId");
@@ -305,13 +307,13 @@ public class ShopDingdanActivity extends AppCompatActivity {
                     dingdanAdapter.notifyDataSetChanged();
                     if (page > 1)
                         page--;
-                    Toast.makeText(ShopDingdanActivity.this, "无更多数据", Toast.LENGTH_SHORT).show();
-                    if(isLoading) {
-                        isLoading=false;
+                    Toast.makeText(ShopDingdanActivity.this, "无更多订单", Toast.LENGTH_SHORT).show();
+                    if (isLoading) {
+                        isLoading = false;
                         swipeContent.finishLoadMore();
                     }
                     if (isRefresh) {
-                        isRefresh=false;
+                        isRefresh = false;
                         swipeContent.finishRefresh();
                     }
                 }
@@ -405,12 +407,12 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 if (isFinish) {
                     MyDialog.closeDialog(dialog);
                     dingdanAdapter.notifyDataSetChanged();
-                    if(isLoading) {
-                        isLoading=false;
+                    if (isLoading) {
+                        isLoading = false;
                         swipeContent.finishLoadMore();
                     }
                     if (isRefresh) {
-                        isRefresh=false;
+                        isRefresh = false;
                         swipeContent.finishRefresh();
                     }
                 }

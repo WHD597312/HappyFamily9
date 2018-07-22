@@ -49,7 +49,6 @@ import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
 import com.xr.happyFamily.bao.fragment.XiangQingFragment;
 import com.xr.happyFamily.bao.view.FlowTagView;
-import com.xr.happyFamily.bao.view.ViewPagerSlide;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
@@ -82,7 +81,7 @@ public class ShopXQActivity extends AppCompatActivity {
     @BindView(R.id.tl_flower)
     TabLayout tl_flower;
     @BindView(R.id.vp_flower)
-    ViewPagerSlide vp_flower;
+    ViewPager vp_flower;
     Unbinder unbinder;
     List<String> circle = new ArrayList<>();
     List<BaseFragment> fragmentList = new ArrayList<>();
@@ -119,6 +118,11 @@ public class ShopXQActivity extends AppCompatActivity {
         mContext = ShopXQActivity.this;
         setContentView(R.layout.activity_shopxq);
         ButterKnife.bind(this);
+        SharedPreferences preferences = this.getSharedPreferences("my", Context.MODE_PRIVATE);
+        SharedPreferences.Editor editor = preferences.edit();
+        editor.putString("jyShopPrice", "");
+        editor.putString("jyShopPower", "");
+        editor.commit(); 
         initView();
         setmTitle();
     }
@@ -151,9 +155,13 @@ public class ShopXQActivity extends AppCompatActivity {
         // 步骤5:往bundle中添加数据
         bundle.putString("goodsId", goodsId);
         bundle.putString("userId", userId);
+        bundle.putString("sign_1", sign_1);
+        bundle.putString("sign_2", sing_2);
+        bundle.putString("sign_3", sing_3);
         // 步骤6:把数据设置到Fragment中
         shopFragment.setArguments(bundle);
         pingJiaFragment.setArguments(bundle);
+        xiangQingFragment.setArguments(bundle);
         fragmentList.add(shopFragment);
         fragmentList.add(pingJiaFragment);
         fragmentList.add(xiangQingFragment);
@@ -165,6 +173,12 @@ public class ShopXQActivity extends AppCompatActivity {
         tl_flower.setTabMode(TabLayout.MODE_SCROLLABLE);
         vp_flower.setAdapter(new MyViewPageAdapter(getSupportFragmentManager(), fragmentList));
         initTab();
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+
     }
 
     private void initTab() {
@@ -218,8 +232,6 @@ public class ShopXQActivity extends AppCompatActivity {
             }
         });
     }
-
-
     /**
      * dp转px
      */
@@ -239,8 +251,8 @@ public class ShopXQActivity extends AppCompatActivity {
 //                showPopup();
                 Intent fenxiang = new Intent(Intent.ACTION_SEND);
                 fenxiang.setType("text/plain");
-                fenxiang.putExtra(Intent.EXTRA_TEXT, "测试内容");
-                startActivity(Intent.createChooser(fenxiang, "测试标题"));
+                fenxiang.putExtra(Intent.EXTRA_TEXT, headerImg);
+                startActivity(Intent.createChooser(fenxiang, "P99"));
                 break;
             case R.id.tv_shopcart:
                 if (priceId == -1) {
@@ -256,13 +268,10 @@ public class ShopXQActivity extends AppCompatActivity {
                                 new addShopAsync().execute(params);
                             }
                         }
-
                         @Override
-                        public void getPrice(String price, int priceId, int num, String goodId, int sign) {
+                        public void getPrice(String price, int priceId, int num, String goodId, int sign,String power) {
 
                         }
-
-
                     });
                 } else {
                     Map<String, Object> params = new HashMap<>();
@@ -284,7 +293,7 @@ public class ShopXQActivity extends AppCompatActivity {
                         }
 
                         @Override
-                        public void getPrice(String price, int priceId, int num, String myGoodId, int sign) {
+                        public void getPrice(String price, int priceId, int num, String myGoodId, int sign,String power) {
                             if (sign != -1) {
                                 choosePrice = price;
                                 Intent intent = new Intent(ShopXQActivity.this, ShopConfActivity.class);
@@ -333,8 +342,6 @@ public class ShopXQActivity extends AppCompatActivity {
         activity.getWindow().getDecorView().setDrawingCacheEnabled(true);
 
         Bitmap bmp = activity.getWindow().getDecorView().getDrawingCache();
-
-
         View view = activity.getWindow().getDecorView();
         view.setDrawingCacheEnabled(true);
         view.buildDrawingCache();
@@ -364,59 +371,58 @@ public class ShopXQActivity extends AppCompatActivity {
     private RelativeLayout rl_dis;
 
     @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN)
-    private void showPopup() {
-
-        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_fenxiang, null);
-        rl_bg = (LinearLayout) contentViewSign.findViewById(R.id.rl_bg);
-        img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
-        tv_dis = (TextView) contentViewSign.findViewById(R.id.tv_dis);
-
-        rl_dis = (RelativeLayout) contentViewSign.findViewById(R.id.rl_dis);
-//        tv_dingdan = (TextView) contentViewSign.findViewById(R.id.tv_dingdan);
-//        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
-//        tv_shopcart.setOnClickListener(this);
-//        tv_dingdan.setOnClickListener(this);
-//        tv_shangcheng.setOnClickListener(this);
-        img_close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopWindow.dismiss();
-            }
-        });
-        tv_dis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopWindow.dismiss();
-            }
-        });
-        rl_dis.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                mPopWindow.dismiss();
-            }
-        });
-        Resources res = getResources();
-        Bitmap finalBitmap = Fuzzy_Background.with(this)
-                .bitmap(captureScreen(this)) //要模糊的图片
-                .radius(20)//模糊半径
-                .blur();
-        Drawable drawable2 = new BitmapDrawable(finalBitmap);
-        rl_bg.setBackground(drawable2);
-        mPopWindow = new PopupWindow(contentViewSign);
-        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
-        mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
-        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
-        mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
-        mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
-        //点击空白处时，隐藏掉pop窗口
-        mPopWindow.setFocusable(true);
-//        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
-        mPopWindow.setOutsideTouchable(true);
-        backgroundAlpha(0.5f);
-        //添加pop窗口关闭事件
-        mPopWindow.setOnDismissListener(new ShopXQActivity.poponDismissListener());
-        mPopWindow.showAsDropDown(findViewById(R.id.view_pop));
-    }
+//    private void showPopup() {
+//        contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_fenxiang, null);
+//        rl_bg = (LinearLayout) contentViewSign.findViewById(R.id.rl_bg);
+//        img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
+//        tv_dis = (TextView) contentViewSign.findViewById(R.id.tv_dis);
+//
+//        rl_dis = (RelativeLayout) contentViewSign.findViewById(R.id.rl_dis);
+////        tv_dingdan = (TextView) contentViewSign.findViewById(R.id.tv_dingdan);
+////        tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
+////        tv_shopcart.setOnClickListener(this);
+////        tv_dingdan.setOnClickListener(this);
+////        tv_shangcheng.setOnClickListener(this);
+//        img_close.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPopWindow.dismiss();
+//            }
+//        });
+//        tv_dis.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPopWindow.dismiss();
+//            }
+//        });
+//        rl_dis.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                mPopWindow.dismiss();
+//            }
+//        });
+//        Resources res = getResources();
+//        Bitmap finalBitmap = Fuzzy_Background.with(this)
+//                .bitmap(captureScreen(this)) //要模糊的图片
+//                .radius(20)//模糊半径
+//                .blur();
+//        Drawable drawable2 = new BitmapDrawable(finalBitmap);
+//        rl_bg.setBackground(drawable2);
+//        mPopWindow = new PopupWindow(contentViewSign);
+//        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+//        mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
+//        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+//        mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+//        mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+//        //点击空白处时，隐藏掉pop窗口
+//        mPopWindow.setFocusable(true);
+////        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+//        mPopWindow.setOutsideTouchable(true);
+//        backgroundAlpha(0.5f);
+//        //添加pop窗口关闭事件
+//        mPopWindow.setOnDismissListener(new ShopXQActivity.poponDismissListener());
+//        mPopWindow.showAsDropDown(findViewById(R.id.view_pop));
+//    }
 
 
     public void backgroundAlpha(float bgAlpha) {
@@ -486,6 +492,7 @@ public class ShopXQActivity extends AppCompatActivity {
     private EvaluateAdapter adapter_xinghao;
     private FlowTagView labelsView;
     private TextView tv_price, tv_name, tv_type_cart, tv_type_bug, tv_jia, tv_jian, tv_num, tv_cart, tv_buy;
+    private ImageView img_shop_pic;
     int num = 1;
     private EvaluateXhAdapter adapter_xh;
     int sign = -1;
@@ -495,6 +502,11 @@ public class ShopXQActivity extends AppCompatActivity {
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
         view_dis = contentViewSign.findViewById(R.id.view_dis);
         labelsView = (FlowTagView) contentViewSign.findViewById(R.id.labels);
+        tv_name= (TextView) contentViewSign.findViewById(R.id.tv_name);
+        tv_name.setText(goodsName);
+        img_shop_pic= (ImageView) contentViewSign.findViewById(R.id.img_shop_pic);
+        if(!Utils.isEmpty(headerImg))
+        Picasso.with(this).load(headerImg).into(img_shop_pic);
         adapter_xh = new EvaluateXhAdapter(this, R.layout.item_xinghao);
         list = new ArrayList<>();
         for (int i = 0; i < list_price.size(); i++) {
@@ -507,17 +519,25 @@ public class ShopXQActivity extends AppCompatActivity {
         labelsView.setItemClickListener(new FlowTagView.TagItemClickListener() {
             @Override
             public void itemClick(int position) {
-                Log.e("qqqqqqNNNN","??????????");
                 sign = position;
                 adapter_xh.setSelection(position);
                 adapter_xh.notifyDataSetChanged();
                 String e = adapter_xh.getItem(position).toString();
                 tv_price.setText("¥" + list_price.get(position).getPrice());
-
                 price = list_price.get(position).getPrice() + "";
+                sign_1=price;
                 priceId = list_price.get(position).getPriceId();
-                Log.e("qqqqqqNNNN",priceId+"!!!!!!");
                 goodsId = list_price.get(position).getGoodsId() + "";
+                returnPrice=list_price.get(position).getPower();
+                sing_2=returnPrice;
+                sing_3=sign+"";
+
+                SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("jyShopPrice", price);
+                editor.putString("jyShopPower", returnPrice);
+                editor.commit();
+                if(shopFragment.running)
                 shopFragment.setData(price, list_price.get(position).getPower() + "", sign);
 //                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();
 //                datas.clear();
@@ -597,6 +617,7 @@ public class ShopXQActivity extends AppCompatActivity {
         });
 
         try {
+            if(!Utils.isEmpty(jsonObject.getString("goodsName")))
             tv_name.setText(jsonObject.getString("goodsName"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -695,8 +716,10 @@ public class ShopXQActivity extends AppCompatActivity {
     }
 
     JSONObject jsonObject;
-    String name, type, img, price,detailDescribe;
+    String name, type, img, price="0",detailDescribe,goodsName;
+    String returnPrice="0";
     double weight;
+    String headerImg;
 
     class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -716,6 +739,8 @@ public class ShopXQActivity extends AppCompatActivity {
                     JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
                     JsonArray list = content.getAsJsonArray("goodsPrice");
                     detailDescribe=returnData.getString("detailDescribe");
+                    headerImg=returnData.getString("headerImg");
+                    goodsName=returnData.getString("goodsName");
                     if ("100".equals(code)) {
                         Gson gson = new Gson();
                         for (JsonElement user : list) {
@@ -740,9 +765,10 @@ public class ShopXQActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                xiangQingFragment.setData(goodsId);
+                xiangQingFragment.setData(detailDescribe);
                 MyDialog.closeDialog(dialog);
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -762,6 +788,45 @@ public class ShopXQActivity extends AppCompatActivity {
 
 
 
+    public void gotoShop(){
+        vp_flower.setCurrentItem(0);
+        if(returnPrice.equals("0"))
+        shopFragment.setData(price, returnPrice + "", sign);
+
+        if (priceId == -1) {
+            shopFragment.sendMessage(new ShopFragment.ICallBack() {
+                @Override
+                public void get_message_from_Fragment(String string,int num) {
+
+                }
+                @Override
+                public void getPrice(String price, int priceId, int num, String goodId, int sign,String power) {
+                    if (sign != -1) {
+                        shopFragment.setData(price,  power, sign);
+                    }
+                }
+            });
+        } else {
+            Map<String, Object> params = new HashMap<>();
+            params.put("priceId", priceId);
+            params.put("quantity", num);
+            new addShopAsync().execute(params);
+        }
+    }
+    public void gotoXiangQing(){
+        vp_flower.setCurrentItem(2);
+    }
+
+   static String sign_1,sing_2,sing_3;
 
 
+    public static  String[] getData(){
+        Log.e("qqqqqqqqqGGGGG","11111111");
+        String[] str=new String[3];
+        str[0]=sign_1;
+        str[1]=sing_2;
+        str[2]=sing_3;
+        Log.e("qqqqqqqqqGGGGG222",sign_1+","+sing_2+","+sing_3);
+        return str;
+    }
 }

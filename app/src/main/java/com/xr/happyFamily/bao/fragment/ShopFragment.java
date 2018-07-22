@@ -18,12 +18,13 @@ import android.widget.PopupWindow;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.donkingliang.labels.LabelsView;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
+import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopAddressActivity;
@@ -37,6 +38,8 @@ import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.main.FamilyFragmentManager;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -67,7 +70,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     Unbinder unbinder;
-    private static ShopXQActivity father;
+    private static ShopXQActivity father=new ShopXQActivity();
     Context mContext;
     @BindView(R.id.tv_name)
     TextView tvName;
@@ -95,6 +98,12 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     List<GoodsPrice> list_price;
 
     int num = 1;
+    @BindView(R.id.tv1)
+    TextView tv1;
+    @BindView(R.id.tv2)
+    TextView tv2;
+    @BindView(R.id.swipe_content)
+    PullToRefreshLayout swipeContent;
 
 
     @Nullable
@@ -104,9 +113,21 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         View view = inflater.inflate(R.layout.fragment_shop_shop, container, false);
         unbinder = ButterKnife.bind(this, view);
         getData();
-
-
         Calendar c = Calendar.getInstance();//
+
+        swipeContent.setRefreshListener(new BaseRefreshListener() {
+            @Override
+            public void refresh() {
+                swipeContent.finishRefresh();
+            }
+
+            @Override
+            public void loadMore() {
+                swipeContent.finishLoadMore();
+                final ShopXQActivity shopXQActivity = (ShopXQActivity) getActivity();
+                shopXQActivity.gotoXiangQing();
+            }
+        });
 
 //        int mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
 //
@@ -117,11 +138,14 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 //
 //
 //        tvTime.setText("23.00前下单，预计明天（"+date .toString() +"送达");
-
 //        tvXinghao.setText(power);
 //        tvPrice.setText(price);
+
+
+
         return view;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -152,6 +176,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 startActivityForResult(new Intent(getActivity(), ShopAddressActivity.class), 101);
                 break;
             case R.id.tv_xinghao:
+
                 showPopup();
                 break;
         }
@@ -173,12 +198,38 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             receiveId = data.getStringExtra("receiveId");
             Log.e("qqqqqqqqRRR", receiveId + "???");
             // 把得到的数据显示到输入框内
-            if ((tvAddress!=null))
-            tvAddress.setText(address);
+            if ((tvAddress != null))
+                tvAddress.setText(address);
 
 
         }
     }
+
+    public static boolean running = false;
+    @Override
+    public void onStart() {
+        super.onStart();
+        running=true;
+
+        if (sign != -1) {
+            tvPrice.setText("¥"+sign_1);
+            tvXinghao.setText(sign_2);
+        }
+        SharedPreferences preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        String price = preferences.getString("jyShopPrice", "");
+        String power = preferences.getString("jyShopPower", "");
+        if(!Utils.isEmpty(price))
+            tvPrice.setText("¥"+price);
+        if(!Utils.isEmpty(power))
+            tvXinghao.setText("¥"+power);
+    }
+
+    @Override
+    public void onStop() {
+        super.onStop();
+        running=false;
+    }
+
 
     @Override
     public void onResume() {
@@ -188,6 +239,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         super.onResume();
     }
 
+    String power;
     private View contentViewSign, view_dis;
     private PopupWindow mPopWindow;
     private ImageView img_close;
@@ -196,7 +248,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     private TextView tv_price, tv_name, tv_jia, tv_jian, tv_num, tv_cart, tv_buy;
     private EvaluateXhAdapter adapter_xh;
     int sign = -1;
-
+    private ImageView img_shop_pic;
     private void showPopup() {
 
 
@@ -205,13 +257,17 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
         view_dis = contentViewSign.findViewById(R.id.view_dis);
         labelsView = (FlowTagView) contentViewSign.findViewById(R.id.labels);
+        tv_name= (TextView) contentViewSign.findViewById(R.id.tv_name);
+        tv_name.setText(goodsName);
+        img_shop_pic= (ImageView) contentViewSign.findViewById(R.id.img_shop_pic);
+        Picasso.with(getActivity()).load(headerImg).into(img_shop_pic);
         adapter_xh = new EvaluateXhAdapter(context, R.layout.item_xinghao);
         list = new ArrayList<>();
-
         for (int i = 0; i < list_price.size(); i++) {
             list.add(list_price.get(i).getPower() + "");
         }
         adapter_xh.setItems(list);
+        Log.e("qqqqqZZZZ222",sign+"???");
         if (sign != -1) {
             adapter_xh.setSelection(sign);
         }
@@ -226,10 +282,18 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 String e = adapter_xh.getItem(position).toString();
                 tv_price.setText("¥" + list_price.get(position).getPrice());
                 tvPrice.setText("¥" + list_price.get(position).getPrice());
+                power=list.get(position);
                 tvXinghao.setText(list.get(position));
                 price = list_price.get(position).getPrice() + "";
                 priceId = list_price.get(position).getPriceId();
                 goodsId = list_price.get(position).getGoodsId() + "";
+
+                SharedPreferences preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putString("jyShopPrice", price);
+                editor.putString("jyShopPower", power);
+                editor.commit();
+
 //                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();
 //                datas.clear();
 //                datas.addAll(initData(e));
@@ -353,9 +417,12 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
     int pos = 0;
+
+
     JSONObject jsonObject;
-    String name, type, img, price = "0";
+    String name, type, img, price = "0",goodsName,headerImg;
     Double weight;
+
 
     class getShopAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -368,14 +435,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
                     JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
                     JsonArray list = content.getAsJsonArray("goodsPrice");
-
+                    headerImg=returnData.getString("headerImg");
+                    goodsName=returnData.getString("goodsName");
                     if ("100".equals(code)) {
                         Gson gson = new Gson();
                         for (JsonElement user : list) {
@@ -387,7 +455,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                             type = returnData.getString("simpleDescribe");
                             weight = returnData.getDouble("weight");
                         }
-
                     }
                 }
             } catch (Exception e) {
@@ -408,12 +475,12 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 if (tvType != null)
                     tvType.setText(type);
 
-                if(imgPic!=null) {
+                if (imgPic != null) {
                     Picasso.with(mContext)
                             .load(img)
                             .into(imgPic);//此种策略并不会压缩图片
                 }
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
@@ -424,7 +491,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             }
 
-            
             isWeight = true;
             if (isAddress)
                 getTime();
@@ -447,7 +513,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -472,7 +538,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     if (tvAddress != null)
                         tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                     isAddress = true;
-                    Log.e("qqqqqqqRRRR",tvAddress.getText().toString());
                     receiveId = receive.getReceiveId() + "";
                     if (isWeight)
                         getTime();
@@ -497,7 +562,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -514,7 +579,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Toast.makeText(mContext, "已加入购物车", Toast.LENGTH_SHORT).show();
                 mPopWindow.dismiss();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
@@ -537,6 +602,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         // 步骤2:获取某一值
         goodsId = bundle.getString("goodsId");
         userId = bundle.getString("userId");
+        if(!Utils.isEmpty(bundle.getString("sign_1"))){
+            Log.e("qqqqqqqqqqqqGGGG",bundle.getString("sign_1"));
+        }
         Map<String, Object> params = new HashMap<>();
 
         params.put("goodsId", goodsId);
@@ -551,23 +619,32 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     public void sendMessage(ICallBack callBack) {
 
         callBack.get_message_from_Fragment(priceId + "", num);
-        callBack.getPrice(price + "", priceId, num, goodsId, sign);
+        callBack.getPrice(price + "", priceId, num, goodsId, sign,power);
 
     }
 
     public interface ICallBack {
         void get_message_from_Fragment(String string, int num);
 
-        void getPrice(String price, int priceId, int num, String goodId, int sign);
+        void getPrice(String price, int priceId, int num, String goodId, int sign, String power);
     }
 
 
+    String sign_1,sign_2;
     public void setData(String price, String power, int s) {
         tvPrice.setText("¥" + price);
         tvXinghao.setText(power);
         this.price = price;
+
+        Log.e("qqqqqZZZZ",s+","+price+","+power);
         sign = s;
+        sign_1=price;
+        sign_2=power;
+
     }
+
+
+
 
 
     long time, recLen;
@@ -584,7 +661,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -621,9 +698,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 Date date = new Date(recLen);
                 SimpleDateFormat format = new SimpleDateFormat("yyyy年MM月dd日", Locale.getDefault());
                 String time = format.format(date);
-                if (tvTime!=null)
+                if (tvTime != null)
                     tvTime.setText("23.00前下单，预计（" + time.substring(5, time.length()) + "）送达");
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
@@ -645,7 +722,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         map.put("weight", weight);
         new getPostFeeAsync().execute(map);
     }
-
 
 
 }

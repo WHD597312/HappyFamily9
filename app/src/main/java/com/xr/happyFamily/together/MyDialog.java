@@ -37,6 +37,7 @@ public class MyDialog extends Dialog {
     }
     //显示dialog的方法
     public static MyDialog showDialog(Context context){
+        isStart=true;
         dialog = new MyDialog(context, R.style.JyDialog);//dialog样式
         dialog.setContentView(R.layout.dialog_layout);//dialog布局文件
         dialog.setCanceledOnTouchOutside(false);//点击外部不允许关闭dialog
@@ -106,6 +107,8 @@ public class MyDialog extends Dialog {
         public void onFinish() {
             Log.e("Tag", "倒计时完成"+context.toString());
             boolean isConn= NetWorkUtil.isConn(context);
+
+            Log.e("qqqqqTag",isStart+"???");
             if( isStart) {
                 if (isConn) {
                     Toast.makeText(context, "加载超时请重试", Toast.LENGTH_SHORT).show();

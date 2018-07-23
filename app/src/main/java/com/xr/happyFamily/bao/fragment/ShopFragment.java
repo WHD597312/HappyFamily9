@@ -221,7 +221,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         if(!Utils.isEmpty(price))
             tvPrice.setText("¥"+price);
         if(!Utils.isEmpty(power))
-            tvXinghao.setText("¥"+power);
+            tvXinghao.setText(""+power);
     }
 
     @Override

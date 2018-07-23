@@ -465,7 +465,6 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 tvFahuo.setText("发货时间:" + sendTime);
                 tvZhifubao.setText("交易号:" + paymentSeq);
                 tvDingdan.setText("订单编号:" + orderNumber);
-                tvYunfei.setText("¥" + postFee);
                 tvPrice.setText("¥" + paidAmount);
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();

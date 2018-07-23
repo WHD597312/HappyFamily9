@@ -122,7 +122,7 @@ public class ShopXQActivity extends AppCompatActivity {
         SharedPreferences.Editor editor = preferences.edit();
         editor.putString("jyShopPrice", "");
         editor.putString("jyShopPower", "");
-        editor.commit(); 
+        editor.commit();
         initView();
         setmTitle();
     }

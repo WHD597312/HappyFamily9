@@ -375,7 +375,7 @@ public class ShopConfActivity extends AppCompatActivity {
 //
                 isPrice=true;
                  post_fee=(int)((postFreeBeans.get(0).getExpressList().get(0).getFee()*10+5)/10);
-                tvYunfei.setText("+¥"+post_fee);
+
                 tvMoney.setText("¥" + (money+post_fee));
 //                tvMoney=
                 if(isPrice&&isShopData)

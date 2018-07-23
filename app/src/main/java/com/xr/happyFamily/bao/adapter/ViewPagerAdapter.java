@@ -1,6 +1,7 @@
 package com.xr.happyFamily.bao.adapter;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Build;
 import android.support.annotation.RequiresApi;
 import android.support.v4.view.PagerAdapter;
@@ -14,8 +15,10 @@ import android.widget.Toast;
 
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bean.ShopBannerBean;
+import com.xr.happyFamily.bean.ShopPageBean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -136,7 +139,11 @@ public class ViewPagerAdapter extends PagerAdapter {
         public void onClick(View v) {
             for(int i=0;i<imgae_ids.length;i++){
                 if (v.getId()==imgae_ids[i]){
-//                    Toast.makeText(mContext, "图片"+(i+1)+"被点击", Toast.LENGTH_SHORT).show();
+                    Intent intent  = new Intent(v.getContext(),ShopXQActivity.class);
+                    intent.putExtra("goodsId",shopBannerBeans.get(i).getGoodsId()+"");
+
+                    Log.e("qqqqqqqqqqIIII",shopBannerBeans.get(i).getGoodsId()+"????");
+                    mContext.startActivity(intent);
                 }
             }
         }

@@ -225,11 +225,15 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     tvPrice.setText("¥" + price);
             }
         }
-        if (sign_type == 1) {
-            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
-            viewBottom.setFocusable(true);
-            viewBottom.setFocusableInTouchMode(true);
-        }
+//        if (sign_type == 1) {
+//            viewBottom.setFocusable(true);
+//            viewBottom.setFocusableInTouchMode(true);
+//            scrollView.post(new Runnable() {
+//                public void run() {
+//                    scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+//                }
+//            });
+//        }
 
     }
 

@@ -15,7 +15,7 @@
        android:textColor="#6e6e6e"
        android:layout_centerHorizontal="true"
        android:background="@color/white"
-       android:padding="@dimen/dp_jy_12"
+       android:padding="@dimen/dp_jy_14"
        android:text="A    安徽"/>
 
 </RelativeLayout>

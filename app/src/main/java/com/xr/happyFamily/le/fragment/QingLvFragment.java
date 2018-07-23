@@ -193,8 +193,6 @@ public class QingLvFragment extends BaseFragment {
         for (int i = 0; i < clockBeanList.size(); i++) {
             time[i][0] = clockBeanList.get(i).getClockHour();
             time[i][1] = clockBeanList.get(i).getClockMinute();
-            Log.e("qqqqqqqqLLLL", clockBeanDao.findClockByClockId(clockBeanList.get(i).getClockId()).get(0).getFlag() + "???"+clockBeanList.get(i).getClockId());
-            Log.e("qqqqqqqqqxxxxx", clockBeanList.get(i).getFlag() +"?222222");
         }
         timeBar.setTime(time, 1);
         qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList, userId,mqService);

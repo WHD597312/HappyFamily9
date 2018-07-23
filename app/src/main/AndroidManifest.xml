@@ -439,6 +439,7 @@
         <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:theme="@style/ImagePickerThemeFullScreen"/>
+        <activity android:name=".le.clock.MusicActivity"/>
     </application>
 
 </manifest>

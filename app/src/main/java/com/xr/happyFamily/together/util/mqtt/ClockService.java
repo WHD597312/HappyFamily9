@@ -53,6 +53,7 @@ public class ClockService extends Service {
     public void onCreate() {
         super.onCreate();
         timeDao = new TimeDaoImpl(this);
+        clockDao=new ClockDaoImpl(this);
         preferences = this.getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
     }
 
@@ -113,6 +114,7 @@ public class ClockService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .build();
         startForeground(110,notification);
+        startClock();
         return START_NOT_STICKY;
     }
 
@@ -386,7 +388,6 @@ public class ClockService extends Service {
         int second = calendar.get(Calendar.SECOND);
         int nowminutes = hour * 60 *60 + minutes*60+second;
 
-        clockDao=new ClockDaoImpl(this);
 
 
         int finishTime = 0;
@@ -404,7 +405,9 @@ public class ClockService extends Service {
             }
         }
 
+        clockDao=new ClockDaoImpl(this);
         clockBeanList = clockDao.findTimeByMin();
+        Log.e("QqqqqqqqLLL",clockBeanList.size()+"???");
         for (int i = 0; i < clockBeanList.size(); i++) {
             clockBean = clockBeanList.get(i);
             if (!(clockBean.getClockCreater() + "").equals(userId)) {
@@ -427,7 +430,6 @@ public class ClockService extends Service {
                         finishTime = sumMin;
                     Log.e("qqqqqqqqqqqLLLL", "Time-----" + finishTime + "????" + nowminutes);
                     Log.e("qqqqqqqqqqqLLLL1111", "Time-----" + finishTime + "????" + nowminutes);
-                    break;
                 }
             }
         }

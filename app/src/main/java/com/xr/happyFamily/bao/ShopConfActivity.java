@@ -322,6 +322,7 @@ public class ShopConfActivity extends AppCompatActivity {
                 else {
                         isAddress=false;
                         Toast.makeText(mContext,"请先填写默认地址",Toast.LENGTH_SHORT).show();
+                        finish();
                     tvConfAddress.setText("地址");
                     tvConfName.setText("姓名");
                     tvConfTel.setText("电话");

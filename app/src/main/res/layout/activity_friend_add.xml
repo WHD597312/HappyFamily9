@@ -87,5 +87,6 @@
         android:hint="我是..."
         android:padding="@dimen/dp_jy_12"
         android:gravity="top"
-        android:textSize="@dimen/sp_12"/>
+        android:textSize="@dimen/sp_14"
+        android:layout_marginBottom="@dimen/dp_jy_20"/>
 </LinearLayout>

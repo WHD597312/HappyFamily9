@@ -144,6 +144,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 
         Log.e("qqqqqqqqWWWW", clockBeanList.get(position).getClockId()+"???"+userInfoList.size());
 
+
         if (!(clockBeanList.get(position).getClockCreater() + "").equals(userId)) {
             holder.tv_name.setText(userInfoList.get(0).getUsername());
             holder.img_btn.setVisibility(View.GONE);
@@ -174,7 +175,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 public void onClick(View v) {
                     Intent intent = new Intent(context, QinglvEditActivity.class);
                     intent.putExtra("clock", clockBeanList.get(position));
-                    Log.e("qqqqqqqIIII11111",userInfoList.get(1).getUserId()+"???");
+                    Log.e("qqqqqqqIIII11111",userInfoList.get(1).getUserId()+"???"+userInfoList.size());
                     intent.putExtra("loveId", userInfoList.get(1).getUserId());
                     context.startActivity(intent);
                 }

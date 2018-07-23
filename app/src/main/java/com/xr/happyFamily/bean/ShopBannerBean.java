@@ -20,7 +20,16 @@ public class ShopBannerBean {
     private String createTime;
     private String updateTime;
     private int delState;
+    private int goodsId;
     private AdPosition adPosition;
+
+    public void setGoodsId(int goodsId) {
+        this.goodsId = goodsId;
+    }
+    public int getGoodsId() {
+        return goodsId;
+    }
+
     public void setAdId(int adId) {
         this.adId = adId;
     }

@@ -322,6 +322,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         for (int i = 0; i < shopBannerBeans.size(); i++) {
             view.findViewById(imgae_dots[i]).setVisibility(View.VISIBLE);
         }
+
         ViewPagerAdapter viewPagerAdapter = new ViewPagerAdapter(mContext, mImageList, viewPager, shopBannerBeans);
         viewPager.setAdapter(viewPagerAdapter);
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
@@ -633,6 +634,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
             String result = HttpUtils.doGet(mContext, url);
 
+            Log.e("qqqqqRRRR",result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {

@@ -1,11 +1,14 @@
 package com.xr.happyFamily.together.util.mqtt;
 
+import android.app.AlertDialog;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
@@ -13,6 +16,7 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.WindowManager;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -29,6 +33,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.le.BtClock.RingReceiver;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.bean.MsgFriendBean;
 import com.xr.happyFamily.le.clock.MsgActivity;
@@ -37,8 +42,11 @@ import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.FriendData;
 import com.xr.happyFamily.le.pojo.MsgData;
 import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.le.view.btClockjsDialog4;
+import com.xr.happyFamily.le.view.btClockjsDialog5;
 import com.xr.happyFamily.main.FamilyFragmentManager;
 import com.xr.happyFamily.main.MainActivity;
+import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
@@ -657,8 +665,6 @@ public class MQService extends Service {
                     userList.setSwitchs(jsonObject.getInt("switchs"));
                     userList.setCreaterName(jsonObject.getString("createrName"));
                     List<ClockBean> findClock = clockBeanDao.findClockByClockId(jsonObject.getInt("clockId"));
-
-
                     MsgData msgData = new MsgData();
                     msgData.setCreateTime(jsonObject.getLong("createTime"));
                     msgData.setUserName(jsonObject.getString("createrName"));
@@ -673,7 +679,6 @@ public class MQService extends Service {
                                 userInfo1.setClockId(userList.getClockId());
                                 userInfosDao.insert(userInfo1);
                             }
-
                         } else {
                             msgData.setState(2);
                             ClockBean userList2 = findClock.get(0);
@@ -683,16 +688,17 @@ public class MQService extends Service {
                             userList2.setClockHour(userList.getClockHour());
                             userList2.setClockMinute(userList.getClockMinute());
                             clockBeanDao.update(userList2);
+//                            showDialog();
                         }
 
                         if (isNew) {
                             SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
-                            String str = preferences.getString("clockNew", "");
-                            if("new".equals(str)) {
+//                            String str = preferences.getString("clockNew", "");
+//                            if("new".equals(str)) {
                                 if (!(userList.getClockCreater() + "").equals(userId)) {
                                     if (!QingLvFragment.running)
                                         gotoClockActivity();
-                                }
+//                                }
                             }
                         }
                     } else if (state == 1) {
@@ -708,13 +714,13 @@ public class MQService extends Service {
                         }
                         if (isNew) {
                             SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
-                            String str = preferences.getString("clockNew", "");
-                            if("new".equals(str)) {
+//                            String str = preferences.getString("clockNew", "");
+//                            if("new".equals(str)) {
                                 if (!(userList.getClockCreater() + "").equals(userId)) {
                                     if (!QingLvFragment.running)
                                         gotoClockActivity();
                                 }
-                            }
+//                            }
                         }
 
 
@@ -740,11 +746,14 @@ public class MQService extends Service {
                             Log.e("qqqqAAAA", isAdd + "????");
                             if (isAdd) {
                                 msgData.setState(1);
-                                clockBeanDao.insert(userList);
-                                for (JsonElement userInfo : userInfos) {
-                                    UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
-                                    userInfo1.setClockId(userList.getClockId());
-                                    userInfosDao.insert(userInfo1);
+                                List<ClockBean> findLish=clockBeanDao.findClockByClockId(userList.getClockId());
+                                if(findLish.size()==0) {
+                                    clockBeanDao.insert(userList);
+                                    for (JsonElement userInfo : userInfos) {
+                                        UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
+                                        userInfo1.setClockId(userList.getClockId());
+                                        userInfosDao.insert(userInfo1);
+                                    }
                                 }
                             }
                         } else {
@@ -835,6 +844,7 @@ public class MQService extends Service {
             return null;
         }
     }
+
 
     /**
      * 获得订阅MQTT的所有主题
@@ -969,5 +979,30 @@ public class MQService extends Service {
         intent.putExtra("type","MQServer");
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
         mContext.startActivity(intent);
+    }
+
+
+
+    private void showDialog() {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Receive new Message show or not");
+        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i("owen", "Yes is clicked");
+            }
+        });
+
+        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialogInterface, int i) {
+                Log.i("owen", "No is clicked");
+            }
+        });
+
+        AlertDialog alertDialog = builder.create();
+        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        alertDialog.setCanceledOnTouchOutside(true);
+        alertDialog.show();
     }
 }

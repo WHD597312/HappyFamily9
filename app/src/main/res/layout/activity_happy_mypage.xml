@@ -111,7 +111,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_jy_5"
-                            android:text="有1.2万人在玩"
+                            android:text="1.2万人在玩"
                             android:textColor="@color/happy_gray"
                             android:textSize="@dimen/sp_12" />
                     </LinearLayout>

@@ -102,7 +102,8 @@ public class QingLvFragment extends BaseFragment {
         tcTime.setFormat12Hour(null);
         tcTime.setFormat24Hour("HH:mm");
 
-
+        clockBeanList = new ArrayList<>();
+        userInfoList = new ArrayList<>();
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
 
@@ -168,15 +169,15 @@ public class QingLvFragment extends BaseFragment {
     List<ClockBean> clockBeanList;
     List<UserInfo> userInfoList;
 
-    List<ClockBean> allClockList;
+    List<ClockBean>  allClockList;
     List<UserInfo> allUserInfoList;
 
     public void upClock() {
         getData();
         clockBeanDao = new ClockDaoImpl(getActivity().getApplicationContext());
         userInfosDao = new UserInfosDaoImpl(getActivity().getApplicationContext());
-        clockBeanList = new ArrayList<>();
-        userInfoList = new ArrayList<>();
+        clockBeanList.clear();
+        userInfoList .clear();
         allClockList = clockBeanDao.findAll();
         allUserInfoList = userInfosDao.findAll();
 

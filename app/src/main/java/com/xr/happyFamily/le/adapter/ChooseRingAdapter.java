@@ -36,7 +36,7 @@ public class ChooseRingAdapter extends RecyclerView.Adapter<ChooseRingAdapter.My
     private int clicked;
     private TimeDaoImpl timeDao;
 
-    private int lastPos=-1;
+    private int lastPos=0;
 
     public ChooseRingAdapter(Context context, List list) {
         this.context = context;

@@ -99,6 +99,9 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
                     holder.tv_time.setVisibility(View.GONE);
             }
         }
+
+        if(position==0)
+            holder.tv_time.setVisibility(View.VISIBLE);
         else{
             holder.tv_time.setText(times1);
             if(position>0){

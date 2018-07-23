@@ -149,7 +149,14 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         getShopData(1, lastState);
         mLayoutManager = new StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL);
         shopAdapter = new WaterFallAdapter(this, list_shop);
-
+        shopAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(ShopSearchResultActivity.this, ShopXQActivity.class);
+                intent.putExtra("goodsId", list_shop.get(position).getGoodsId() + "");
+                startActivity(intent);
+            }
+        });
         recyclerview.setLayoutManager(mLayoutManager);
         recyclerview.setAdapter(shopAdapter);
 

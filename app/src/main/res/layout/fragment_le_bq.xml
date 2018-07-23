@@ -49,7 +49,7 @@
 
     <EditText
         android:id="@+id/et_le_bq"
-        android:hint="请输入你要添加标签的内容"
+        android:hint="请输入你要添加标签的内容,不超过15字"
         android:layout_width="match_parent"
         android:layout_height="206dp"
         android:layout_marginLeft="@dimen/dp_jy_12"
@@ -57,5 +57,6 @@
         android:layout_marginTop="@dimen/dp_jy_20"
         android:background="@null"
         android:gravity="top|left"
+        android:maxLength="15"
         android:inputType="textMultiLine" />
 </LinearLayout>

@@ -1,6 +1,5 @@
 package com.xr.happyFamily.bao.fragment;
 
-import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -15,6 +14,7 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -38,8 +38,6 @@ import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.login.login.LoginActivity;
-import com.xr.happyFamily.main.FamilyFragmentManager;
-import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -70,7 +68,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
     Unbinder unbinder;
-    private static ShopXQActivity father=new ShopXQActivity();
+    private static ShopXQActivity father = new ShopXQActivity();
     Context mContext;
     @BindView(R.id.tv_name)
     TextView tvName;
@@ -104,6 +102,10 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     TextView tv2;
     @BindView(R.id.swipe_content)
     PullToRefreshLayout swipeContent;
+    @BindView(R.id.view_bottom)
+    View viewBottom;
+    @BindView(R.id.scrollView)
+    ScrollView scrollView;
 
 
     @Nullable
@@ -140,7 +142,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 //        tvTime.setText("23.00前下单，预计明天（"+date .toString() +"送达");
 //        tvXinghao.setText(power);
 //        tvPrice.setText(price);
-
 
 
         return view;
@@ -206,28 +207,36 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
     public static boolean running = false;
+
     @Override
     public void onStart() {
         super.onStart();
-        running=true;
+        running = true;
 
-        if (sign != -1) {
-            tvPrice.setText("¥"+sign_1);
-            tvXinghao.setText(sign_2);
-        }
+
         SharedPreferences preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         String price = preferences.getString("jyShopPrice", "");
         String power = preferences.getString("jyShopPower", "");
-        if(!Utils.isEmpty(price))
-            tvPrice.setText("¥"+price);
-        if(!Utils.isEmpty(power))
-            tvXinghao.setText(""+power);
+        if (!Utils.isEmpty(power)) {
+            if (!"0".equals(power)) {
+                Log.e("qqqqqqqqqPPPP",power);
+                tvXinghao.setText("" + power);
+                if (!Utils.isEmpty(price))
+                    tvPrice.setText("¥" + price);
+            }
+        }
+        if (sign_type == 1) {
+            scrollView.fullScroll(ScrollView.FOCUS_DOWN);
+            viewBottom.setFocusable(true);
+            viewBottom.setFocusableInTouchMode(true);
+        }
+
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        running=false;
+        running = false;
     }
 
 
@@ -249,6 +258,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     private EvaluateXhAdapter adapter_xh;
     int sign = -1;
     private ImageView img_shop_pic;
+
     private void showPopup() {
 
 
@@ -257,9 +267,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
         view_dis = contentViewSign.findViewById(R.id.view_dis);
         labelsView = (FlowTagView) contentViewSign.findViewById(R.id.labels);
-        tv_name= (TextView) contentViewSign.findViewById(R.id.tv_name);
+        tv_name = (TextView) contentViewSign.findViewById(R.id.tv_name);
         tv_name.setText(goodsName);
-        img_shop_pic= (ImageView) contentViewSign.findViewById(R.id.img_shop_pic);
+        img_shop_pic = (ImageView) contentViewSign.findViewById(R.id.img_shop_pic);
         Picasso.with(getActivity()).load(headerImg).into(img_shop_pic);
         adapter_xh = new EvaluateXhAdapter(context, R.layout.item_xinghao);
         list = new ArrayList<>();
@@ -267,7 +277,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             list.add(list_price.get(i).getPower() + "");
         }
         adapter_xh.setItems(list);
-        Log.e("qqqqqZZZZ222",sign+"???");
+        Log.e("qqqqqZZZZ222", sign + "???");
         if (sign != -1) {
             adapter_xh.setSelection(sign);
         }
@@ -282,7 +292,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 String e = adapter_xh.getItem(position).toString();
                 tv_price.setText("¥" + list_price.get(position).getPrice());
                 tvPrice.setText("¥" + list_price.get(position).getPrice());
-                power=list.get(position);
+                power = list.get(position);
                 tvXinghao.setText(list.get(position));
                 price = list_price.get(position).getPrice() + "";
                 priceId = list_price.get(position).getPriceId();
@@ -420,7 +430,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
 
 
     JSONObject jsonObject;
-    String name, type, img, price = "0",goodsName,headerImg;
+    String name, type, img, price = "0", goodsName, headerImg;
     Double weight;
 
 
@@ -442,8 +452,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
                     JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
                     JsonArray list = content.getAsJsonArray("goodsPrice");
-                    headerImg=returnData.getString("headerImg");
-                    goodsName=returnData.getString("goodsName");
+                    headerImg = returnData.getString("headerImg");
+                    goodsName = returnData.getString("goodsName");
                     if ("100".equals(code)) {
                         Gson gson = new Gson();
                         for (JsonElement user : list) {
@@ -602,8 +612,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         // 步骤2:获取某一值
         goodsId = bundle.getString("goodsId");
         userId = bundle.getString("userId");
-        if(!Utils.isEmpty(bundle.getString("sign_1"))){
-            Log.e("qqqqqqqqqqqqGGGG",bundle.getString("sign_1"));
+        if (!Utils.isEmpty(bundle.getString("sign_1"))) {
+            Log.e("qqqqqqqqqqqqGGGG", bundle.getString("sign_1"));
         }
         Map<String, Object> params = new HashMap<>();
 
@@ -619,7 +629,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     public void sendMessage(ICallBack callBack) {
 
         callBack.get_message_from_Fragment(priceId + "", num);
-        callBack.getPrice(price + "", priceId, num, goodsId, sign,power);
+        callBack.getPrice(price + "", priceId, num, goodsId, sign, power);
 
     }
 
@@ -630,21 +640,21 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    String sign_1,sign_2;
-    public void setData(String price, String power, int s) {
-        tvPrice.setText("¥" + price);
-        tvXinghao.setText(power);
-        this.price = price;
+    String sign_1, sign_2;
+    int sign_type;
 
-        Log.e("qqqqqZZZZ",s+","+price+","+power);
+    public void setData(String price, String power, int s, int type) {
+        this.price = price;
         sign = s;
-        sign_1=price;
-        sign_2=power;
+        sign_1 = price;
+        sign_2 = power;
+        sign_type=type;
+
+        Log.e("QqqqqqqTTTT", type + "????");
+
+
 
     }
-
-
-
 
 
     long time, recLen;

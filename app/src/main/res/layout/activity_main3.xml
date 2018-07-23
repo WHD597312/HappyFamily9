@@ -71,17 +71,6 @@
                     android:gravity="center"
                     android:paddingLeft="10dp"
                     android:text="¥ 0.00"
-
-                    />
-
-                <TextView
-                    android:id="@+id/tv_shopcart_freight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:paddingLeft="3dp"
-                    android:text="（不含运费）"
-
                     />
 
             </LinearLayout>

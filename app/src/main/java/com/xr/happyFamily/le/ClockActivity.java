@@ -133,7 +133,7 @@ public class ClockActivity extends AppCompatActivity implements LeFragmentManage
         setContentView(R.layout.activity_clock);
         ButterKnife.bind(this);
         type=getIntent().getStringExtra("type");
-        Log.e("qqqqqTTT",type);
+        if(Utils.isEmpty(type))
         if(type.equals("MQServer")){
             Toast.makeText(this,"有新的闹钟请确认",Toast.LENGTH_SHORT).show();
         }

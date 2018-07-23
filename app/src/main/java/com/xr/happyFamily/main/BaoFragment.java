@@ -232,6 +232,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 list_shop.clear();
                 countTimer=new CountTimer(5000,1000);
                 countTimer.start();
+
                 getShopData(lastVisibleItem, page);
             }
 
@@ -472,6 +473,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
 
     private void getShopData(int id, int page) {
+
+        if(lastVisibleItem==1)
+//        homePage.get(id-1)
+
+            Log.e("qqqqqRRRR",isRefresh+"???");
         if(!isRefresh) {
             dialog = MyDialog.showDialog(mContext);
             dialog.show();
@@ -479,9 +485,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         Map<String, Object> params = new HashMap<>();
         if (id == 0) {
             llTuijian.setVisibility(View.VISIBLE);
-        } else
+            params.put("categoryId", 0 + "");
+        } else {
             llTuijian.setVisibility(View.GONE);
-        params.put("categoryId", id + "");
+            int cate=homePage.get(id-1).getCategoryId();
+            params.put("categoryId", cate + "");
+        }
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
         new ShopAsync().execute(params);
@@ -541,6 +550,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 }
                 if(isShopData&&isBanner&&isPage)
                 MyDialog.closeDialog(dialog);
+
             }
         }
     }
@@ -589,7 +599,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 Map<String, Object> map = null;
                 list_more.clear();
                 list_title.clear();
-                titles[0] = "全部";
+                titles[0] = "推荐";
                 list_title.add(titles[0]);
                 map = new HashMap<String, Object>();
                 map.put("title", titles[0]);
@@ -606,6 +616,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 moreAdapter.notifyDataSetChanged();
                 if(isShopData&&isBanner&&isPage)
                     MyDialog.closeDialog(dialog);
+
+
             }
         }
     }

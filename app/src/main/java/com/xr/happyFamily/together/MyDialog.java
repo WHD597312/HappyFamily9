@@ -1,6 +1,7 @@
 package com.xr.happyFamily.together;
 
 
+import android.app.Activity;
 import android.app.Dialog;
 import android.content.Context;
 import android.os.CountDownTimer;
@@ -109,16 +110,16 @@ public class MyDialog extends Dialog {
             boolean isConn= NetWorkUtil.isConn(context);
 
             Log.e("qqqqqTag",isStart+"???");
-            if( isStart) {
+            if( isStart&&!((Activity)context).isFinishing()) {
                 if (isConn) {
                     Toast.makeText(context, "加载超时请重试", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(context, "请检查网络", Toast.LENGTH_SHORT).show();
                 }
+                ;
                 if(dialog!=null)
                 dialog.dismiss();
             }
-
 
         }
     }

@@ -136,7 +136,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         public void onClick(View v) {
             for(int i=0;i<imgae_ids.length;i++){
                 if (v.getId()==imgae_ids[i]){
-                    Toast.makeText(mContext, "图片"+(i+1)+"被点击", Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(mContext, "图片"+(i+1)+"被点击", Toast.LENGTH_SHORT).show();
                 }
             }
         }

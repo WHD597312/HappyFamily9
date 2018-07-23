@@ -538,7 +538,7 @@ public class ShopXQActivity extends AppCompatActivity {
                 editor.putString("jyShopPower", returnPrice);
                 editor.commit();
                 if(shopFragment.running)
-                shopFragment.setData(price, list_price.get(position).getPower() + "", sign);
+                shopFragment.setData(price, list_price.get(position).getPower() + "", sign,0);
 //                Toast.makeText(mContext, "i am:" + e, Toast.LENGTH_SHORT).show();
 //                datas.clear();
 //                datas.addAll(initData(e));
@@ -791,7 +791,7 @@ public class ShopXQActivity extends AppCompatActivity {
     public void gotoShop(){
         vp_flower.setCurrentItem(0);
         if(returnPrice.equals("0"))
-        shopFragment.setData(price, returnPrice + "", sign);
+        shopFragment.setData(price, returnPrice + "", sign,1);
 
         if (priceId == -1) {
             shopFragment.sendMessage(new ShopFragment.ICallBack() {
@@ -802,7 +802,7 @@ public class ShopXQActivity extends AppCompatActivity {
                 @Override
                 public void getPrice(String price, int priceId, int num, String goodId, int sign,String power) {
                     if (sign != -1) {
-                        shopFragment.setData(price,  power, sign);
+                        shopFragment.setData(price,  power, sign,0);
                     }
                 }
             });

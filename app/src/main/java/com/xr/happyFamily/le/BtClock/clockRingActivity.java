@@ -39,7 +39,7 @@ public class clockRingActivity extends Activity {
     @BindView(R.id.colockring_recyc)
     RecyclerView recyclerView;
     private TimeDaoImpl timeDao;
-    private List<String> mData = new ArrayList<String>(Arrays.asList("睡猫觉", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression","梦醒时分","甜甜女生","38列车搞笑","小娘子"));
+    private List<String> mData = new ArrayList<String>(Arrays.asList("学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression","梦醒时分","甜甜女生","38列车搞笑","小娘子"));
     ChooseRingAdapter adapter;
     Time time;
     int hour, minutes;

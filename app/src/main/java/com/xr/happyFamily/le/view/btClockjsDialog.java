@@ -86,7 +86,7 @@ public class btClockjsDialog extends Dialog {
         times= timeDao.findTimesByHourAndMin(hour,minute);
         time=times.get(0);
         String name =  time.getRingName();
-        if ("睡猫觉".equals(name)){
+        if ("学猫叫".equals(name)){
             mediaPlayer = MediaPlayer.create(mcontext, R.raw.music1);
             mediaPlayer.start();//一进来就播放
             mediaPlayer.setLooping(true);

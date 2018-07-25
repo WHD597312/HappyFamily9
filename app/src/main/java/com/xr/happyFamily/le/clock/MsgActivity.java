@@ -250,6 +250,7 @@ public class MsgActivity extends AppCompatActivity {
                     MsgData msgData=new MsgData();
                     msgData.setCreateTime(jsonObject.getLong("createTime"));
                     msgData.setUserName(jsonObject.getString("createrName"));
+                    Log.e("qqqqqqSSSSaaa2222",jsonObject.getInt("state")+"????");
                     msgData.setState(jsonObject.getInt("state"));
                     msgDataList.add(0,msgData);
                     msgClockAdapter.notifyDataSetChanged();
@@ -265,6 +266,7 @@ public class MsgActivity extends AppCompatActivity {
                 else
                     state=6;
                 msgData.setUserName(str[0]);
+                Log.e("qqqqqqSSSSaaa",state+"????");
                 msgData.setState(state);
                 msgData.setCreateTime(Long.parseLong(str[2]));
                 msgDataList.add(0,msgData);

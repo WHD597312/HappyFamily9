@@ -60,6 +60,22 @@ public class ZhenFragment extends Fragment {
         unbinder=ButterKnife.bind(this,view);
         myAdapter=new MyAdapter(getActivity());
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        list_info.setAdapter(myAdapter);
+        return view;
+    }
+    @OnClick({R.id.head})
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.head:
+                Intent intent=new Intent(getActivity(), PersonInfoActivity.class);
+                startActivityForResult(intent,7000);
+                break;
+        }
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
         if (preferences.contains("image")){
             String image=preferences.getString("image","");
             if (!Utils.isEmpty(image)){
@@ -81,22 +97,6 @@ public class ZhenFragment extends Fragment {
             String phone=preferences.getString("phone","");
             tv_phone.setText(phone);
         }
-        list_info.setAdapter(myAdapter);
-        return view;
-    }
-    @OnClick({R.id.head})
-    public void onClick(View view){
-        switch (view.getId()){
-            case R.id.head:
-                Intent intent=new Intent(getActivity(), PersonInfoActivity.class);
-                startActivityForResult(intent,7000);
-                break;
-        }
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
         list_info.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

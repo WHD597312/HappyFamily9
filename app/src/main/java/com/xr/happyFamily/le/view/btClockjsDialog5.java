@@ -70,9 +70,7 @@ public class btClockjsDialog5 extends Dialog {
 
         service = new Intent(mcontext, ClockService.class);
         isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
-        if (mqService != null) {
-            mqService.startClock();
-        }
+
     }
 
 
@@ -123,6 +121,9 @@ public class btClockjsDialog5 extends Dialog {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_queren:
+                if (mqService != null) {
+                    mqService.startClock();
+                }
                 dismiss();
                 break;
 

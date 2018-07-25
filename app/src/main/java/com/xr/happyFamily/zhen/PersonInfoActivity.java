@@ -148,11 +148,12 @@ public class PersonInfoActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(username)){
                     Toast.makeText(PersonInfoActivity.this,"用户名称不能为空",Toast.LENGTH_SHORT).show();
                 }else {
+
                     Map<String,Object> params=new HashMap<>();
                     String userId=preferences.getString("userId","");
                     boolean sex2=preferences.getBoolean("sex",false);
-                    String birthday=preferences.getString("birthday","");
-                    Date date =new Date(Long.parseLong(birthday));
+                    String birthday2=preferences.getString("birthday","");
+                    Date date =new Date(Long.parseLong(birthday2));
                     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                     String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
                     int flag=0;
@@ -719,6 +720,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                         code=100;
                         SharedPreferences.Editor editor=preferences.edit();
                         editor.putString("username",username);
+                        editor.commit();
                         if (sex!=-1){
                             if (sex==1){
                                 editor.putBoolean("sex",true);

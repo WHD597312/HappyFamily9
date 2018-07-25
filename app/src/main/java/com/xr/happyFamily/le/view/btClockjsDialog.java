@@ -142,7 +142,7 @@ public class btClockjsDialog extends Dialog {
         service = new Intent(mcontext, ClockService.class);
 
         isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
-
+        preferences=mcontext.getSharedPreferences("trueCount",Context.MODE_PRIVATE);
     }
 //    @Override
 //    public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -247,6 +247,9 @@ public class btClockjsDialog extends Dialog {
                     if (z == a) {
                         dismiss();
                         mediaPlayer.stop();
+                        SharedPreferences.Editor editor= preferences.edit();
+                        editor.putBoolean("ring",false);
+                        editor.commit();
                         if (mqService != null) {
                             mqService.startClock();
                         }

@@ -362,7 +362,9 @@ public class FamilyFragment extends Fragment {
     public void setTemperature(String temperature) {
         this.temperature = temperature;
         if (!TextUtils.isEmpty(temperature)){
-            tv_23_my.setText(temperature);
+            if (tv_23_my!=null){
+                tv_23_my.setText(temperature);
+            }
         }
     }
 

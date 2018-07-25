@@ -39,13 +39,14 @@ public class ClockService extends Service {
     private ClockDaoImpl clockDao;
     private UserInfosDaoImpl userInfosDao;
     SharedPreferences preferences;
-    Boolean Ring = false;
+    Boolean Ring ;
     Time ti;
     ClockBean cl;
     ClockBeanDao clockBeanDao;
     ClockBean clockBean;
     List<ClockBean> clockBeanList;
     String userId;
+
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
      */
@@ -114,7 +115,7 @@ public class ClockService extends Service {
                 .setWhen(System.currentTimeMillis())
                 .build();
         startForeground(110,notification);
-        startClock();
+//        startClock();
         return START_NOT_STICKY;
     }
 
@@ -155,6 +156,8 @@ public class ClockService extends Service {
             Log.e("Tag", "倒计时完成");
             //设置倒计时结束之后的按钮样式
             clockDao = new ClockDaoImpl(ClockService.this);
+            List<ClockBean> clockFinishList=clockDao.findTimeByMin();
+            Ring = preferences.getBoolean("ring",false);
             boolean isBt = false;
             boolean isJy = false;
                 List<Time > times = timeDao.findTimeByMin();
@@ -191,8 +194,8 @@ public class ClockService extends Service {
             }
 
             if (!isBt) {
-                for (int i = 0; i < clockBeanList.size(); i++) {
-                    cl = clockBeanList.get(i);
+                for (int i = 0; i < clockFinishList.size(); i++) {
+                    cl = clockFinishList.get(i);
                     int switchs = cl.getSwitchs();
                     boolean open;
                     if (switchs == 1) {
@@ -220,6 +223,7 @@ public class ClockService extends Service {
                 wakeLock.acquire();
 //wakeLock.acquire(1000);
                 wakeLock.release();
+                Log.e("qqqqqRRRR",Ring+"???");
                 if (Ring == false) {
                     if (isBt)
                         ring();
@@ -228,6 +232,7 @@ public class ClockService extends Service {
                     Ring = true;
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("trueCount", false);
+                    editor.putBoolean("ring",true);
                     editor.commit();
                 }
             }
@@ -260,14 +265,17 @@ public class ClockService extends Service {
 //                time.setOpen(false);
 //                timeDao.update(time);
                 clolkDialog1();
+
             } else if (ti.getFlag() == 2) {
 //                time.setOpen(false);
 //                timeDao.update(time);
                 clolkDialog2();
+
             } else if (ti.getFlag() == 3) {
 //                time.setOpen(false);
 //                timeDao.update(time);
                 clolkDialog3();
+
             }
         }
     }
@@ -312,7 +320,7 @@ public class ClockService extends Service {
         dialog4.setOnPositiveClickListener(new btClockjsDialog4.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-              Ring = false;
+
             }
         });
 
@@ -338,7 +346,7 @@ public class ClockService extends Service {
         dialog2.setOnPositiveClickListener(new btClockjsDialog2.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-                Ring = false;
+
             }
         });
         dialog2.setCanceledOnTouchOutside(false);
@@ -363,7 +371,7 @@ public class ClockService extends Service {
         dialog.setOnPositiveClickListener(new btClockjsDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-                Ring = false;
+
             }
         });
         dialog.setCanceledOnTouchOutside(false);
@@ -386,8 +394,6 @@ public class ClockService extends Service {
         int minutes = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
         int nowminutes = hour * 60 *60 + minutes*60+second;
-
-
 
         int finishTime = 0;
         times = timeDao.findTimeByMin();
@@ -441,6 +447,7 @@ public class ClockService extends Service {
         countTimer.start();
         SharedPreferences.Editor editor = preferences.edit();
         editor.putBoolean("trueCount", true);
+        editor.putBoolean("ring",false);
         editor.commit();
 
         int time = counttime * 1000;

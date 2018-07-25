@@ -16,7 +16,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
-   <!-- 锁屏显示界面-->
+    <!-- 锁屏显示界面-->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
     <!-- 拍照权限 -->
     <uses-permission android:name="android.permission.CAMERA" />
@@ -146,19 +146,21 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".login.login.qdActivity">
+        <activity
+            android:name=".login.login.qdActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".login.login.GuideActivity"
+        <activity
+            android:name=".login.login.GuideActivity"
             android:label=""
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            />
-        <activity android:name=".login.login.LoginActivity"/>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".login.login.LoginActivity" />
         <activity
             android:name=".zhen.AboutActivity"
             android:label=""
@@ -219,9 +221,15 @@
             android:name=".jia.AddhourseActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".jia.ManagementActivity" />
-        <activity android:name=".jia.ChangeEquipmentActivity" />
-        <activity android:name=".jia.activity.AddDeviceActivity" />
+        <activity
+            android:name=".jia.ManagementActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.ChangeEquipmentActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.AddDeviceActivity"
+            android:screenOrientation="portrait" />
 
         <receiver
             android:name=".le.BtClock.RingReceiver"
@@ -235,7 +243,8 @@
         <activity
             android:name=".main.MainActivity"
             android:hardwareAccelerated="true"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.ShareDeviceActivity"
             android:screenOrientation="portrait"
@@ -253,7 +262,8 @@
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
             android:hardwareAccelerated="true"
-            android:label="@string/app_name" />
+            android:label="@string/app_name"
+            android:screenOrientation="portrait" />
 
         <activity
             android:name=".jia.xnty.AircleanerActivity"
@@ -339,69 +349,87 @@
         <activity android:name=".bao.TestActivity" />
         <activity
             android:name=".bao.ShopCartActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.WuLiuActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.ShopAddressActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.ShopAddAddressActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".bao.ShopConfActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.ShopDingdanActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         />
         <activity
             android:name=".bao.ShopSearchActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.ShopShangchengActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.ShopDingdanXQActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.ShopSearchResultActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.EditAddressActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".bao.TuiKuanActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.TuiKuanXQActivity"
             android:launchMode="singleTop" />
         <activity
             android:name=".bao.PingLunActivity"
-            android:launchMode="singleTask" />
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.PingLunSuccessActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.WoDePingLunActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.TuiKuanSuccessActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.PaySuccessActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.PayFailActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".bao.alipay.PayActivity"
-            android:launchMode="singleTop" />
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
         <activity
             android:name=".wxapi.WXPayActiviy"
             android:exported="true"
-            android:launchMode="singleTop">
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
 
@@ -415,38 +443,82 @@
             android:exported="true"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="adjustPan|stateHidden" />
-        <activity android:name=".le.PageActivity" />
+
         <activity
             android:name=".le.FaBuActivity"
             android:screenOrientation="portrait"
             android:windowSoftInputMode="stateVisible|adjustPan" />
-        <activity android:name=".le.XuYuanActivity" />
-        <activity android:name=".le.XQActivity" />
-        <activity android:name=".le.PiPeiActivity" />
-        <activity android:name=".le.YouYuanActivity" />
-        <activity android:name=".le.MsgActivity" />
-        <activity android:name=".le.HistoryActivity" />
-        <activity android:name=".le.ClockActivity"
-            android:launchMode="singleTop"/>
-        <activity android:name=".le.clock.QinglvEditActivity" />
-        <activity android:name=".le.clock.QunzuEditActivity" />
-        <activity android:name=".le.clock.QinglvAddActivity" />
-        <activity android:name=".le.clock.QunzuAddActivity" />
-        <activity android:name=".le.clock.MsgActivity" />
-        <activity android:name=".zhen.SettingActivity" />
-        <activity android:name=".zhen.PersonInfoActivity" />
-        <activity android:name=".jia.activity.SmartTerminalActivity" />
-        <activity android:name=".jia.activity.SmartLinkedActivity" />
-        <activity android:name=".le.clock.FriendFindActivity" />
-        <activity android:name=".le.clock.FriendAddActivity" />
-        <activity android:name=".zhen.AccountActivity" />
-        <activity android:name=".zhen.ReSetpswdActivity" />
-        <activity android:name=".zhen.HelpActivity" />
-        <activity android:name=".le.clock.MusicActivity"/>
+        <activity
+            android:name=".le.XuYuanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.XQActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.PiPeiActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.YouYuanActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.MsgActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.HistoryActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.ClockActivity"
+            android:launchMode="singleTop"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.QinglvEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.QunzuEditActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.QinglvAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.QunzuAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.MsgActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zhen.SettingActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zhen.PersonInfoActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.SmartTerminalActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.SmartLinkedActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.FriendFindActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.FriendAddActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zhen.AccountActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zhen.ReSetpswdActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zhen.HelpActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.clock.MusicActivity"
+            android:screenOrientation="portrait" />
         <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
-            android:theme="@style/ImagePickerThemeFullScreen"/>
-        <activity android:name=".le.clock.MusicActivity"/>
+            android:screenOrientation="portrait"
+            android:theme="@style/ImagePickerThemeFullScreen" />
     </application>
 
 </manifest>

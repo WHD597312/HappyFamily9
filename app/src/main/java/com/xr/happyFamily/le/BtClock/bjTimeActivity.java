@@ -81,8 +81,15 @@ public class bjTimeActivity extends AppCompatActivity {
        lable=time.getLable();
        style=time.getStyle();
        String ring = time.getRingName();
-       tv_bjtime_gb.setText(style);
-        tv_bjclock_ring.setText(ring);
+        tv_bjtime_gb.setText(style);
+       if ("".equals(ring)){
+           tv_bjclock_ring.setText("学猫叫");
+           time.setRingName("学猫叫");
+           timeDao.update(time);
+       }else {
+           tv_bjclock_ring.setText(ring);
+       }
+
        //闹钟数字
         timepicker1.setMaxValue(23);
         timepicker1.setMinValue(00);
@@ -123,6 +130,7 @@ public class bjTimeActivity extends AppCompatActivity {
                 if (Utils.isEmpty(time.getStyle())){
                     time.setStyle("听歌识曲");
                     time.setFlag(1);
+                    time.setRingName("学猫叫");
                 }
                 time.setOpen(true);
                 int sumMin=hour*60+minutes;

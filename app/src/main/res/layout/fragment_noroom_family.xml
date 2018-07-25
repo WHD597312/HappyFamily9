@@ -45,10 +45,11 @@
             <ImageView
                 android:layout_width="@dimen/dp_jy_18"
                 android:layout_height="@dimen/dp_jy_18"
-                android:layout_centerVertical="true"
+                android:layout_centerInParent="true"
                 android:layout_marginLeft="@dimen/dp_jy_5"
                 android:layout_toRightOf="@+id/tv_noroom_hoursename"
                 android:src="@mipmap/jt_xz" />
+
             <ImageButton
                 android:id="@+id/ib_croom"
                 android:layout_width="@dimen/dp_jy_20"

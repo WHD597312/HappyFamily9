@@ -74,6 +74,7 @@ public class btClockjsDialog4 extends Dialog {
         service = new Intent(mcontext, ClockService.class);
 
         isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
+        preferences=mcontext.getSharedPreferences("trueCount",Context.MODE_PRIVATE);
 //        Window win =getWindow();
 //        WindowManager.LayoutParams winParams = win.getAttributes();
 //        winParams.flags |= (WindowManager.LayoutParams.FLAG_DISMISS_KEYGUARD
@@ -135,6 +136,9 @@ public class btClockjsDialog4 extends Dialog {
                 if (name.equals(songName)){
                     mediaPlayer.stop();
                     dismiss();
+                    SharedPreferences.Editor editor= preferences.edit();
+                    editor.putBoolean("ring",false);
+                    editor.commit();
                     if (mqService != null) {
                         mqService.startClock();
                     }

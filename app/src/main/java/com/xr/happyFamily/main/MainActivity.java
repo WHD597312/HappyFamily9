@@ -354,6 +354,19 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
             family = "family";
+        }else if (!TextUtils.isEmpty(zhen)){
+            id_bto_jia_img.setImageResource(R.mipmap.jia);
+            id_bto_bao_img.setImageResource(R.mipmap.bao);
+            id_bto_zhen_img.setImageResource(R.mipmap.zhen1);
+            idBtoLeImg.setImageResource(R.mipmap.le);
+            FragmentTransaction zhenTransaction = fragmentManager.beginTransaction();
+            zhenTransaction.replace(R.id.layout_body, zhenFragment);
+            zhenTransaction.commit();
+            if (mPositionPreferences.contains("position")) {
+                mPositionPreferences.edit().clear().commit();
+            }
+            family = "";
+            zhen="zhen";
         }
         if(isFirst){
             subClock();
@@ -374,6 +387,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     }
 
 
+    private String zhen;
 
     @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
     public void onClick(View view) {
@@ -396,6 +410,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
                 idBtoLeImg.setImageResource(R.mipmap.le);
                 family = "family";
+                zhen="";
                 break;
             case R.id.id_bto_bao:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -409,6 +424,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     mPositionPreferences.edit().clear().commit();
                 }
                 family = "";
+                zhen="";
                 break;
             case R.id.id_bto_le:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -422,6 +438,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     mPositionPreferences.edit().clear().commit();
                 }
                 family = "";
+                zhen="";
                 break;
             case R.id.id_bto_zhen:
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
@@ -435,6 +452,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     mPositionPreferences.edit().clear().commit();
                 }
                 family = "";
+                zhen="zhen";
                 break;
         }
     }

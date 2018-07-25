@@ -111,7 +111,7 @@ public class QinglvClockDialog extends Dialog {
 //        iv_zl_njxx2.setTag("close");
 //        iv_zl_njxx3.setTag("close");
 
-
+        preferences=mcontext.getSharedPreferences("trueCount",Context.MODE_PRIVATE);
         audioMa = (AudioManager) mcontext.getSystemService(Context.AUDIO_SERVICE);
         audioMa.setStreamVolume(AudioManager.STREAM_MUSIC, audioMa.getStreamMaxVolume
                 (AudioManager.STREAM_MUSIC), AudioManager.FLAG_SHOW_UI);
@@ -183,7 +183,11 @@ public class QinglvClockDialog extends Dialog {
             case R.id.tv_queren:
                 dismiss();
                 mediaPlayer.stop();
-
+                SharedPreferences.Editor editor= preferences.edit();
+                editor.putBoolean("ring",false);
+                if (mqService != null) {
+                    mqService.startClock();
+                }
                 break;
 
         }

@@ -79,6 +79,9 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
 
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
+
+            Log.e("qqqqqLLLLaaa",data.get(position).getState()+"???");
+
         long lcc = data.get(position).getCreateTime();
         SimpleDateFormat sdr = new SimpleDateFormat("HH时mm分");
         String times = sdr.format(new Date(lcc * 1000L));
@@ -95,8 +98,11 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
             holder.tv_time.setVisibility(View.VISIBLE);
             holder.tv_time.setText(times);
             if(position>0){
-                if((lcc-data.get(position-1).getCreateTime())<5*60)
+                Log.e("qqqqqqTTTTMMMM",lcc+","+data.get(position-1).getCreateTime());
+                if((data.get(position-1).getCreateTime()-lcc)<5*60)
                     holder.tv_time.setVisibility(View.GONE);
+                else
+                    holder.tv_time.setVisibility(View.VISIBLE);
             }
         }else {
 

@@ -162,7 +162,7 @@ public class btClockjsDialog2 extends Dialog {
         service = new Intent(mcontext, ClockService.class);
 
         isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
-
+        preferences=mcontext.getSharedPreferences("trueCount",Context.MODE_PRIVATE);
     }
 
 
@@ -283,6 +283,9 @@ public class btClockjsDialog2 extends Dialog {
                 if (choose.equals(answer)){
                     mediaPlayer.stop();
                     dismiss();
+                    SharedPreferences.Editor editor= preferences.edit();
+                    editor.putBoolean("ring",false);
+                    editor.commit();
                 }else {
                     Toast.makeText(mcontext, "输入错误请从新输入", Toast.LENGTH_SHORT).show();
                     new getQuestionAsync().execute();

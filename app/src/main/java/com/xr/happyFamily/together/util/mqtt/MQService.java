@@ -12,6 +12,7 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
@@ -86,6 +87,7 @@ public class MQService extends Service {
     private MsgDaoImpl msgDao;
 
     private Context mContext = this;
+    CountTimer countTimer;
 //    boolean isNew = false;
     /***
      * 模块类型
@@ -103,6 +105,7 @@ public class MQService extends Service {
     String clientId;
     private LocalBinder binder = new LocalBinder();
 
+
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
      */
@@ -113,6 +116,7 @@ public class MQService extends Service {
         deviceChildDao = new DeviceChildDaoImpl(this);
         friendDataDao = new FriendDataDaoImpl(this);
         msgDao = new MsgDaoImpl(this);
+
         init();
     }
 
@@ -133,6 +137,9 @@ public class MQService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         connect();
+        isFinish = false;
+        countTimer = new CountTimer(20000, 1000);
+        countTimer.start();
         SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
         String[] clocks = clockData.split(",");
@@ -591,6 +598,7 @@ public class MQService extends Service {
                         else
                             state = 6;
                         msgData.setUserName(str[0]);
+                        Log.e("qqqqqqSSSSaaa111",state+"????");
                         msgData.setState(state);
                         msgData.setCreateTime(Long.parseLong(str[2]));
                         List<MsgData> msgDataList = msgDao.findMsgByState(Long.parseLong(str[2]));
@@ -605,7 +613,6 @@ public class MQService extends Service {
                     SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
                     String clockData = preferences.getString("clockData", "");
                     String[] clocks = clockData.split(",");
-                    clockNum=clocks.length;
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putString("clockData", message);
                     Log.e("qqqqqHHHHH", message + "------" + clockData);
@@ -628,8 +635,7 @@ public class MQService extends Service {
                         if (newMap.get(newClocks[j]) == null) {
                             String str = "p99/" + newClocks[j] + "/clockuniversal";
                             boolean success = subscribe(str, 1);
-//                            isNew = /**/true;
-
+//                            isNew = true;
 
                         }
 
@@ -713,12 +719,12 @@ public class MQService extends Service {
 //                            SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
 //                            String str = preferences.getString("clockNew", "");
 //                            if("new".equals(str)) {
-                            if (!(userList.getClockCreater() + "").equals(userId)) {
-                                Message msg = Message.obtain();
-                                msg.what = 1;   //标志消息的标志
-                                handler.sendMessage(msg);
+                        if (!(userList.getClockCreater() + "").equals(userId)) {
+                            Message msg = Message.obtain();
+                            msg.what = 1;   //标志消息的标志
+                            handler.sendMessage(msg);
 //                                }
-                            }
+                        }
 //                        }
                     } else if (state == 1) {
                         msgData.setState(1);
@@ -735,12 +741,12 @@ public class MQService extends Service {
 //                                SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
 //                            String str = preferences.getString("clockNew", "");
 //                            if("new".equals(str)) {
-                                if (!(userList.getClockCreater() + "").equals(userId)) {
+                            if (!(userList.getClockCreater() + "").equals(userId)) {
 
-                                    Message msg = Message.obtain();
-                                    msg.what = 1;   //标志消息的标志
-                                    handler.sendMessage(msg);
-                                }
+                                Message msg = Message.obtain();
+                                msg.what = 1;   //标志消息的标志
+                                handler.sendMessage(msg);
+                            }
 
 //                            }
 //                            }
@@ -779,6 +785,12 @@ public class MQService extends Service {
                                             userInfosDao.insert(userInfo1);
                                         }
                                     }
+
+                                    if (!(userList.getClockCreater() + "").equals(userId)) {
+                                        Message msg = Message.obtain();
+                                        msg.what = 1;   //标志消息的标志
+                                        handler.sendMessage(msg);
+                                    }
                                 }
                             }
                         } else {
@@ -812,6 +824,8 @@ public class MQService extends Service {
 
                     Log.e("qqqqqqqqqMMMM", msgDataList.size() + "??");
                     if (!userId.equals(jsonObject.getString("clockCreater"))) {
+                        List<MsgData> msgDataList2 = msgDao.findMsgByState(msgData.getCreateTime());
+                        if (msgDataList2.size() == 0)
                         msgDao.insert(msgData);
                         SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
                         String str = preferences.getString("clockNew", "");
@@ -1011,13 +1025,11 @@ public class MQService extends Service {
     };
 
     btClockjsDialog5 dialog4;
-    int diaSign = 0, clockNum = 0;
-    boolean isFinish=false;
+
+    boolean isFinish = false;
 
     private void showDialog() {
-        diaSign++;
-        Log.e("qqqqSSSPP",diaSign+","+clockNum);
-        if (diaSign > clockNum) {
+        if (isFinish) {
             dialog4 = new btClockjsDialog5(this);
             dialog4.setOnNegativeClickListener(new btClockjsDialog5.OnNegativeClickListener() {
                 @Override
@@ -1046,9 +1058,39 @@ public class MQService extends Service {
         @Override
         protected Void doInBackground(String... macs) {
             String macAddress = macs[0];
-                String topicName = "p99/" + macAddress + "/clockuniversal";
-                boolean success =subscribe(topicName, 1);
+            String topicName = "p99/" + macAddress + "/clockuniversal";
+            boolean success = subscribe(topicName, 1);
             return null;
+        }
+    }
+
+
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+
+        @Override
+        public void onFinish() {
+            Log.e("Tag", "倒计时完成");
+            isFinish = true;
+
+
         }
     }
 }

@@ -124,26 +124,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 
-        if (preferences.contains("phone") && preferences.contains("password")) {
-            login="login";
-            String phone1=preferences.getString("phone","");
-            String password1=preferences.getString("password","");
-            Map<String, Object> params = new HashMap<>();
-            phone=phone1;
-            password=password1;
-            params.put("phone", phone);
-            params.put("password", password);
-            et_name.setText(phone);
-            et_pswd.setText(password);
-            if (NetWorkUtil.isConn(this)){
-                new LoginAsyncTask().execute(params);
-            }else {
-                Intent intent=new Intent(this,MainActivity.class);
-                intent.putExtra("load","load");
-                intent.putExtra("login","login");
-                startActivity(intent);
-            }
-        }
+
 
     }
 
@@ -530,13 +511,23 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                             String headImgUrl=returnData.getString("headImgUrl");
                             editor.putString("headImgUrl",headImgUrl);
                         }
+                        String userId3=returnData.getString("userId");
+                        String username=returnData.getString("userName");
+                        String phone=returnData.getString("phone");
                         String birthday=returnData.getString("birthday");
-                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-                        Date date=format.parse(birthday);
-                        long ts = date.getTime();
-                        String res = String.valueOf(ts);
+                        editor.putString("username",username);
+                        editor.putString("userId",userId3);
+                        editor.putString("phone",phone);
+                        if (!TextUtils.isEmpty(birthday)){
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                            Date date=format.parse(birthday);
+                            long ts = date.getTime();
+                            String res = String.valueOf(ts);
+                            editor.putString("birthday",res);
+                        }else {
+                            editor.putString("birthday","");
+                        }
                         editor.putBoolean("sex",sex);
-                        editor.putString("birthday",res);
                         editor.commit();
                         JSONArray houseDevices = returnData.getJSONArray("houseDevices");
                         for (int i = 0; i < houseDevices.length(); i++) {

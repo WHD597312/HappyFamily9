@@ -244,7 +244,6 @@ public class QingLvFragment extends BaseFragment {
             if (mqService != null) {
                 String topicName = "p99/" + macAddress + "/clockuniversal";
                 boolean success = mqService.subscribe(topicName, 1);
-
             }
             return null;
         }

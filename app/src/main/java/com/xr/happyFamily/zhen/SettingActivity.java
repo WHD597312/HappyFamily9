@@ -18,11 +18,18 @@ import android.widget.Toast;
 
 import com.donkingliang.groupedadapter.adapter.GroupedRecyclerViewAdapter;
 import com.donkingliang.groupedadapter.holder.BaseViewHolder;
+import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
+import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.TimeDaoImpl;
+import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
 
 import java.io.File;
 import java.util.List;
@@ -39,7 +46,14 @@ public class SettingActivity extends AppCompatActivity {
     Unbinder unbinder;
     private MyApplication application;
     SharedPreferences preferences;
-    private RoomDaoImpl roomDao;
+    private RoomDaoImpl roomDao;/**房间数据库*/
+    private DeviceChildDaoImpl deviceChildDao;/**设备数据库*/
+    private HourseDaoImpl hourseDao;/**家庭数据库*/
+    private ClockDaoImpl clockDao;/**闹钟数据库*/
+    private FriendDataDaoImpl friendDataDao;/**好友数据库*/
+    private TimeDaoImpl timeDao;/**闹钟数据库*/
+    private UserInfosDaoImpl userInfosDao;/**联系人数据库*/
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -51,6 +65,14 @@ public class SettingActivity extends AppCompatActivity {
             application= (MyApplication) getApplication();
             application.addActivity(this);
         }
+        hourseDao=new HourseDaoImpl(getApplicationContext());
+        roomDao=new RoomDaoImpl(getApplicationContext());
+        deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
+        clockDao=new ClockDaoImpl(getApplicationContext());
+        friendDataDao=new FriendDataDaoImpl(getApplicationContext());
+        timeDao=new TimeDaoImpl(getApplicationContext());
+        userInfosDao=new UserInfosDaoImpl(getApplicationContext());
+
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         unbinder=ButterKnife.bind(this);
         adatper=new SettingAdatper(this);
@@ -89,6 +111,14 @@ public class SettingActivity extends AppCompatActivity {
                         file.delete();
                     }
                 }
+                hourseDao.deleteAll();
+                roomDao.deleteAll();
+                deviceChildDao.deleteAll();
+                clockDao.deleteAll();
+                timeDao.deleteAll();
+                userInfosDao.deleteAll();
+                friendDataDao.deleteAll();
+
                 SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
                 mPositionPreferences.edit().clear().commit();
                 Intent exit=new Intent(this, LoginActivity.class);

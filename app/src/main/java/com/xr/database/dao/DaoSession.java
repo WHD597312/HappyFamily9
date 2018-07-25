@@ -8,25 +8,23 @@ import org.greenrobot.greendao.database.Database;
 import org.greenrobot.greendao.identityscope.IdentityScopeType;
 import org.greenrobot.greendao.internal.DaoConfig;
 
-import com.xr.happyFamily.jia.pojo.DeviceChild;
-import com.xr.happyFamily.jia.pojo.Hourse;
-import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.pojo.TimeTask;
-import com.xr.happyFamily.le.pojo.Time;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.pojo.UserInfo;
-import com.xr.happyFamily.le.pojo.UserBean;
 import com.xr.happyFamily.le.pojo.FriendData;
 import com.xr.happyFamily.le.pojo.MsgData;
 
-import com.xr.database.dao.DeviceChildDao;
-import com.xr.database.dao.HourseDao;
-import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.TimeTaskDao;
-import com.xr.database.dao.TimeDao;
+import com.xr.database.dao.DeviceChildDao;
+import com.xr.database.dao.RoomDao;
+import com.xr.database.dao.HourseDao;
 import com.xr.database.dao.ClockBeanDao;
+import com.xr.database.dao.TimeDao;
 import com.xr.database.dao.UserInfoDao;
-import com.xr.database.dao.UserBeanDao;
 import com.xr.database.dao.FriendDataDao;
 import com.xr.database.dao.MsgDataDao;
 
@@ -39,25 +37,23 @@ import com.xr.database.dao.MsgDataDao;
  */
 public class DaoSession extends AbstractDaoSession {
 
-    private final DaoConfig deviceChildDaoConfig;
-    private final DaoConfig hourseDaoConfig;
-    private final DaoConfig roomDaoConfig;
     private final DaoConfig timeTaskDaoConfig;
-    private final DaoConfig timeDaoConfig;
+    private final DaoConfig deviceChildDaoConfig;
+    private final DaoConfig roomDaoConfig;
+    private final DaoConfig hourseDaoConfig;
     private final DaoConfig clockBeanDaoConfig;
+    private final DaoConfig timeDaoConfig;
     private final DaoConfig userInfoDaoConfig;
-    private final DaoConfig userBeanDaoConfig;
     private final DaoConfig friendDataDaoConfig;
     private final DaoConfig msgDataDaoConfig;
 
-    private final DeviceChildDao deviceChildDao;
-    private final HourseDao hourseDao;
-    private final RoomDao roomDao;
     private final TimeTaskDao timeTaskDao;
-    private final TimeDao timeDao;
+    private final DeviceChildDao deviceChildDao;
+    private final RoomDao roomDao;
+    private final HourseDao hourseDao;
     private final ClockBeanDao clockBeanDao;
+    private final TimeDao timeDao;
     private final UserInfoDao userInfoDao;
-    private final UserBeanDao userBeanDao;
     private final FriendDataDao friendDataDao;
     private final MsgDataDao msgDataDao;
 
@@ -65,29 +61,26 @@ public class DaoSession extends AbstractDaoSession {
             daoConfigMap) {
         super(db);
 
+        timeTaskDaoConfig = daoConfigMap.get(TimeTaskDao.class).clone();
+        timeTaskDaoConfig.initIdentityScope(type);
+
         deviceChildDaoConfig = daoConfigMap.get(DeviceChildDao.class).clone();
         deviceChildDaoConfig.initIdentityScope(type);
-
-        hourseDaoConfig = daoConfigMap.get(HourseDao.class).clone();
-        hourseDaoConfig.initIdentityScope(type);
 
         roomDaoConfig = daoConfigMap.get(RoomDao.class).clone();
         roomDaoConfig.initIdentityScope(type);
 
-        timeTaskDaoConfig = daoConfigMap.get(TimeTaskDao.class).clone();
-        timeTaskDaoConfig.initIdentityScope(type);
-
-        timeDaoConfig = daoConfigMap.get(TimeDao.class).clone();
-        timeDaoConfig.initIdentityScope(type);
+        hourseDaoConfig = daoConfigMap.get(HourseDao.class).clone();
+        hourseDaoConfig.initIdentityScope(type);
 
         clockBeanDaoConfig = daoConfigMap.get(ClockBeanDao.class).clone();
         clockBeanDaoConfig.initIdentityScope(type);
 
+        timeDaoConfig = daoConfigMap.get(TimeDao.class).clone();
+        timeDaoConfig.initIdentityScope(type);
+
         userInfoDaoConfig = daoConfigMap.get(UserInfoDao.class).clone();
         userInfoDaoConfig.initIdentityScope(type);
-
-        userBeanDaoConfig = daoConfigMap.get(UserBeanDao.class).clone();
-        userBeanDaoConfig.initIdentityScope(type);
 
         friendDataDaoConfig = daoConfigMap.get(FriendDataDao.class).clone();
         friendDataDaoConfig.initIdentityScope(type);
@@ -95,72 +88,65 @@ public class DaoSession extends AbstractDaoSession {
         msgDataDaoConfig = daoConfigMap.get(MsgDataDao.class).clone();
         msgDataDaoConfig.initIdentityScope(type);
 
-        deviceChildDao = new DeviceChildDao(deviceChildDaoConfig, this);
-        hourseDao = new HourseDao(hourseDaoConfig, this);
-        roomDao = new RoomDao(roomDaoConfig, this);
         timeTaskDao = new TimeTaskDao(timeTaskDaoConfig, this);
-        timeDao = new TimeDao(timeDaoConfig, this);
+        deviceChildDao = new DeviceChildDao(deviceChildDaoConfig, this);
+        roomDao = new RoomDao(roomDaoConfig, this);
+        hourseDao = new HourseDao(hourseDaoConfig, this);
         clockBeanDao = new ClockBeanDao(clockBeanDaoConfig, this);
+        timeDao = new TimeDao(timeDaoConfig, this);
         userInfoDao = new UserInfoDao(userInfoDaoConfig, this);
-        userBeanDao = new UserBeanDao(userBeanDaoConfig, this);
         friendDataDao = new FriendDataDao(friendDataDaoConfig, this);
         msgDataDao = new MsgDataDao(msgDataDaoConfig, this);
 
-        registerDao(DeviceChild.class, deviceChildDao);
-        registerDao(Hourse.class, hourseDao);
-        registerDao(Room.class, roomDao);
         registerDao(TimeTask.class, timeTaskDao);
-        registerDao(Time.class, timeDao);
+        registerDao(DeviceChild.class, deviceChildDao);
+        registerDao(Room.class, roomDao);
+        registerDao(Hourse.class, hourseDao);
         registerDao(ClockBean.class, clockBeanDao);
+        registerDao(Time.class, timeDao);
         registerDao(UserInfo.class, userInfoDao);
-        registerDao(UserBean.class, userBeanDao);
         registerDao(FriendData.class, friendDataDao);
         registerDao(MsgData.class, msgDataDao);
     }
     
     public void clear() {
-        deviceChildDaoConfig.clearIdentityScope();
-        hourseDaoConfig.clearIdentityScope();
-        roomDaoConfig.clearIdentityScope();
         timeTaskDaoConfig.clearIdentityScope();
-        timeDaoConfig.clearIdentityScope();
+        deviceChildDaoConfig.clearIdentityScope();
+        roomDaoConfig.clearIdentityScope();
+        hourseDaoConfig.clearIdentityScope();
         clockBeanDaoConfig.clearIdentityScope();
+        timeDaoConfig.clearIdentityScope();
         userInfoDaoConfig.clearIdentityScope();
-        userBeanDaoConfig.clearIdentityScope();
         friendDataDaoConfig.clearIdentityScope();
         msgDataDaoConfig.clearIdentityScope();
-    }
-
-    public DeviceChildDao getDeviceChildDao() {
-        return deviceChildDao;
-    }
-
-    public HourseDao getHourseDao() {
-        return hourseDao;
-    }
-
-    public RoomDao getRoomDao() {
-        return roomDao;
     }
 
     public TimeTaskDao getTimeTaskDao() {
         return timeTaskDao;
     }
 
-    public TimeDao getTimeDao() {
-        return timeDao;
+    public DeviceChildDao getDeviceChildDao() {
+        return deviceChildDao;
+    }
+
+    public RoomDao getRoomDao() {
+        return roomDao;
+    }
+
+    public HourseDao getHourseDao() {
+        return hourseDao;
     }
 
     public ClockBeanDao getClockBeanDao() {
         return clockBeanDao;
     }
 
-    public UserInfoDao getUserInfoDao() {
-        return userInfoDao;
+    public TimeDao getTimeDao() {
+        return timeDao;
     }
 
-    public UserBeanDao getUserBeanDao() {
-        return userBeanDao;
+    public UserInfoDao getUserInfoDao() {
+        return userInfoDao;
     }
 
     public FriendDataDao getFriendDataDao() {

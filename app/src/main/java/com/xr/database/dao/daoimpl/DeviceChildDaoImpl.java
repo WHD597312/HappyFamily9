@@ -93,8 +93,7 @@ public class DeviceChildDaoImpl {
      */
     public List<DeviceChild> findHouseInRoomDevices(long houseId,long roomId){
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId));
-        return deviceChildDao.queryBuilder().where(whereCondition).orderDesc
-                (DeviceChildDao.Properties.DeviceId).list();
+        return deviceChildDao.queryBuilder().where(whereCondition).orderAsc(DeviceChildDao.Properties.DeviceId).list();
     }
 
     /***
@@ -125,7 +124,7 @@ public class DeviceChildDaoImpl {
      */
     public List<DeviceChild> findShareDevice(int userId){
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.UserId.eq(userId),DeviceChildDao.Properties.Share.eq("share"));
-        return deviceChildDao.queryBuilder().where(whereCondition).orderDesc(DeviceChildDao.Properties.DeviceId).list();
+        return deviceChildDao.queryBuilder().where(whereCondition).orderAsc(DeviceChildDao.Properties.DeviceId).list();
     }
 
     /***
@@ -178,7 +177,7 @@ public class DeviceChildDaoImpl {
      * @return
      */
     public List<DeviceChild> findLinkedDevices(long houseId,long roomId,int type,int linkedSensorId,int linked){
-        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.Type.eq(type),DeviceChildDao.Properties.LinkedSensorId.eq(linkedSensorId),DeviceChildDao.Properties.Linked.eq(linked));
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.Type.eq(type),DeviceChildDao.Properties.LinkedSensorId.eq(linkedSensorId),DeviceChildDao.Properties.Linked.eq(linked),DeviceChildDao.Properties.ShareId.notEq(Long.MAX_VALUE));
         return deviceChildDao.queryBuilder().where(whereCondition).orderAsc(DeviceChildDao.Properties.Id).list();
     }
     public DeviceChild findDeviceByDeviceId(long houseId,long roomId,int deviceId){

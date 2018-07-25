@@ -13,7 +13,7 @@
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
         android:orientation="vertical"
-        app:layout_heightPercent="83%"
+        app:layout_heightPercent="86%"
         app:layout_widthPercent="100%">
 
         <RelativeLayout
@@ -29,30 +29,40 @@
                 android:layout_height="match_parent">
                 <ImageButton
                     android:id="@+id/image_change"
-                    android:layout_width="@dimen/dp_jy_23"
-                    android:layout_height="@dimen/dp_jy_23"
+                    android:layout_width="@dimen/dp_jy_20"
+                    android:layout_height="@dimen/dp_jy_20"
                     android:layout_alignParentRight="true"
                     android:layout_marginRight="@dimen/dp_jy_14"
                     android:layout_marginTop="@dimen/dp_jy_13"
                     android:background="@null"
                     android:scaleType="centerCrop"
                     android:src="@mipmap/weishengjian1" />
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_jy_12"
+                    android:layout_marginTop="@dimen/dp_jy_12"
+                    >
 
                 <TextView
                     android:id="@+id/tv_my_hourse"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_jy_12"
-                    android:layout_marginTop="@dimen/dp_jy_12"
                     android:textSize="@dimen/sp_16"
                     android:text="Cofen的家"
+                    android:layout_centerInParent="true"
                     android:textColor="@color/white" />
                 <ImageView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/dp_jy_18"
+                    android:layout_height="@dimen/dp_jy_18"
                     android:layout_toRightOf="@+id/tv_my_hourse"
-                    android:layout_alignTop="@id/tv_my_hourse"
+                    android:src="@mipmap/jt_xz"
+                    android:layout_centerInParent="true"
+                    android:layout_marginLeft="@dimen/dp_jy_5"
                     />
+
+
+                </RelativeLayout>
                 <TextView
                     android:id="@+id/tv_wd_my"
                     android:layout_width="wrap_content"
@@ -60,7 +70,7 @@
                     android:layout_marginLeft="@dimen/dp_jy_28"
                     android:layout_marginBottom="@dimen/dp_jy_8"
                     android:layout_alignBottom="@+id/tv_23_my"
-                    android:text="室温"
+                    android:text="环境"
                     android:textColor="@color/color_white"
 
                     />
@@ -84,7 +94,7 @@
                     android:layout_height="@dimen/dp_jy_100"
                     android:layout_marginLeft="@dimen/dp_jy_12"
                     android:layout_below="@+id/tv_23_my"
-                    android:layout_marginTop="@dimen/dp_jy_10"
+                    android:layout_marginTop="@dimen/dp_jy_30"
                     android:background="@mipmap/bj_m3x">
 
                     <TextView
@@ -107,8 +117,8 @@
                     <ImageView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginLeft="@dimen/dp_jy_93"
-                        android:layout_marginTop="@dimen/dp_jy_13"
+                        android:layout_marginLeft="@dimen/dp_jy_99"
+                        android:layout_marginTop="@dimen/dp_jy_15"
                         android:src="@mipmap/xnty" />
 
 
@@ -119,9 +129,9 @@
                     android:id="@+id/tv_eq_my"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_below="@id/tv_wd_my"
+                    android:layout_below="@id/rl_home_xnty"
                     android:layout_marginLeft="@dimen/dp_jy_12"
-                    android:layout_marginTop="@dimen/dp_jy_131"
+                    android:layout_marginTop="@dimen/dp_jy_30"
                     android:text="常用设备"
                     android:textColor="@color/white"
                     android:textSize="14sp" />
@@ -208,7 +218,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
-        android:layout_marginBottom="@dimen/dp_jy_30"
+        android:layout_marginBottom="@dimen/dp_jy_12"
         android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginRight="@dimen/dp_jy_12"
         android:background="@mipmap/button"

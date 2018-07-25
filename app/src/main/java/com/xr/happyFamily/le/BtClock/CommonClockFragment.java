@@ -11,7 +11,10 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.TypedArray;
+import android.graphics.Canvas;
 import android.graphics.Rect;
+import android.graphics.drawable.Drawable;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -86,9 +89,11 @@ public class CommonClockFragment extends BaseFragment {
             time= times.get(i);
             Log.e("time", "onCreateView:--> "+time.getOpen() );
         }
-        adapter = new ChooseTimeAdapter(getActivity(),times);
-        recyclerView.setAdapter(adapter);
-        connection=adapter.getConnection();
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(getActivity(), DividerItemDecoration.VERTICAL_LIST));
+//        adapter = new ChooseTimeAdapter(getActivity(),times);
+//        recyclerView.setAdapter(adapter);
+//        connection=adapter.getConnection();
         return view;
     }
 
@@ -102,9 +107,11 @@ public class CommonClockFragment extends BaseFragment {
             times = timeDao.findByAllTime();
             Log.e("qqqqqqqqqNNN",times.get(0).getHour()+"");
             adapter = new ChooseTimeAdapter(getActivity(),times);
-            recyclerView.setAdapter(adapter);
-        }
 
+            recyclerView.setAdapter(adapter);
+
+            connection=adapter.getConnection();
+        }
     }
 
 
@@ -151,24 +158,90 @@ public class CommonClockFragment extends BaseFragment {
         }
     }
 
-    //控制item的间距
-//    class SpaceItemDecoration extends RecyclerView.ItemDecoration {
-//        int mSpace;
-//
-//        @Override
-//        public void getItemOffsets(Rect outRect, View view, RecyclerView parent, RecyclerView.State state) {
-//            super.getItemOffsets(outRect, view, parent, state);
-////            outRect.left = mSpace;
-////            outRect.right = mSpace;
-//            outRect.bottom = mSpace;
-//            if (parent.getChildAdapterPosition(view) == 0) {
-//                outRect.top = mSpace;
-//            }
-//
-//        }
-//
-//        public SpaceItemDecoration(int space) {
-//            this.mSpace = space;
-//        }
-//    }
+//    控制item的间距
+private Drawable mDivider;
+
+    public class DividerItemDecoration extends RecyclerView.ItemDecoration {
+
+
+        private final int[] ATTRS = new int[]{
+                android.R.attr.listDivider
+        };
+
+        public static final int HORIZONTAL_LIST = LinearLayoutManager.HORIZONTAL;
+
+        public static final int VERTICAL_LIST = LinearLayoutManager.VERTICAL;
+
+        private Drawable mDivider;
+
+        private int mOrientation;
+
+        public DividerItemDecoration(Context context, int orientation) {
+            final TypedArray a = context.obtainStyledAttributes(ATTRS);
+            mDivider = a.getDrawable(0);
+            a.recycle();
+            setOrientation(orientation);
+        }
+
+        public void setOrientation(int orientation) {
+            if (orientation != HORIZONTAL_LIST && orientation != VERTICAL_LIST) {
+                throw new IllegalArgumentException("invalid orientation");
+            }
+            mOrientation = orientation;
+        }
+
+        @Override
+        public void onDraw(Canvas c, RecyclerView parent) {
+//        Log.v("recyclerview - itemdecoration", "onDraw()");
+
+            if (mOrientation == VERTICAL_LIST) {
+                drawVertical(c, parent);
+            } else {
+                drawHorizontal(c, parent);
+            }
+        }
+
+
+        public void drawVertical(Canvas c, RecyclerView parent) {
+            final int left = parent.getPaddingLeft();
+            final int right = parent.getWidth() - parent.getPaddingRight();
+
+            final int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                final View child = parent.getChildAt(i);
+                RecyclerView v = new RecyclerView(parent.getContext());
+                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                        .getLayoutParams();
+                final int top = child.getBottom() + params.bottomMargin;
+                final int bottom = top + mDivider.getIntrinsicHeight();
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
+
+        public void drawHorizontal(Canvas c, RecyclerView parent) {
+            final int top = parent.getPaddingTop();
+            final int bottom = parent.getHeight() - parent.getPaddingBottom();
+
+            final int childCount = parent.getChildCount();
+            for (int i = 0; i < childCount; i++) {
+                final View child = parent.getChildAt(i);
+                final RecyclerView.LayoutParams params = (RecyclerView.LayoutParams) child
+                        .getLayoutParams();
+                final int left = child.getRight() + params.rightMargin;
+                final int right = left + mDivider.getIntrinsicHeight();
+                mDivider.setBounds(left, top, right, bottom);
+                mDivider.draw(c);
+            }
+        }
+
+        @Override
+        public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
+            if (mOrientation == VERTICAL_LIST) {
+                outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+            } else {
+                outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
+            }
+        }
+    }
 }

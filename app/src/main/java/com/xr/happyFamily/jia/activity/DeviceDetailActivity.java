@@ -366,6 +366,14 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (popupWindow!=null && popupWindow.isShowing()){
+                backgroundAlpha(1f);
+                return false;
+            }
+            if (popupWindow1!=null && popupWindow1.isShowing()){
+                backgroundAlpha(1f);
+                return false;
+            }
             application.removeActivity(this);
             return true;
         }
@@ -407,11 +415,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
+
         //添加弹出、弹入的动画
         popupWindow.setAnimationStyle(R.style.Popupwindow);
-
+        backgroundAlpha(0.4f);
         ColorDrawable dw = new ColorDrawable(0x30000000);
         popupWindow.setBackgroundDrawable(dw);
         popupWindow.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -422,6 +431,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 switch (v.getId()) {
                     case R.id.image_cancle:
                         popupWindow.dismiss();
+                        backgroundAlpha(1f);
                         break;
                     case R.id.image_ensure:
                         int sh= tv_timer_hour.getValue();
@@ -430,6 +440,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         setMode(deviceChild);
                         send(deviceChild);
                         popupWindow.dismiss();
+                        backgroundAlpha(1f);
                         break;
                 }
             }
@@ -438,6 +449,22 @@ public class DeviceDetailActivity extends AppCompatActivity {
         image_cancle.setOnClickListener(listener);
         image_ensure.setOnClickListener(listener);
     }
+
+
+
+
+
+
+
+    //设置蒙版
+    private void backgroundAlpha(float f) {
+        WindowManager.LayoutParams lp =getWindow().getAttributes();
+        lp.alpha = f;
+        getWindow().setAttributes(lp);
+    }
+
+
+
 
     ImageView image_low_rate;
     ImageView image_middle_rate;

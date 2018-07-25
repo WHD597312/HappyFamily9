@@ -11,6 +11,8 @@ import com.xr.database.dao.FriendDataDao;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.FriendData;
 
+import org.greenrobot.greendao.query.WhereCondition;
+
 import java.util.List;
 
 
@@ -60,5 +62,10 @@ public class FriendDataDaoImpl {
     }
     public void  deleteAll(){
         friendDataDao.deleteAll();
+    }
+
+    public List<FriendData> findFriendBySendId(int senderId){
+        WhereCondition whereCondition=friendDataDao.queryBuilder().and(FriendDataDao.Properties.SenderId.eq(senderId),FriendDataDao.Properties.SenderId.eq(senderId));
+        return friendDataDao.queryBuilder().where(whereCondition).list();
     }
 }

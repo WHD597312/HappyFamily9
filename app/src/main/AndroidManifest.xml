@@ -146,13 +146,19 @@
             </intent-filter>
         </receiver>
 
-        <activity android:name=".login.login.LoginActivity">
+        <activity android:name=".login.login.qdActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity android:name=".login.login.GuideActivity"
+            android:label=""
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity android:name=".login.login.LoginActivity"/>
         <activity
             android:name=".zhen.AboutActivity"
             android:label=""
@@ -436,6 +442,7 @@
         <activity android:name=".zhen.AccountActivity" />
         <activity android:name=".zhen.ReSetpswdActivity" />
         <activity android:name=".zhen.HelpActivity" />
+        <activity android:name=".le.clock.MusicActivity"/>
         <activity
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:theme="@style/ImagePickerThemeFullScreen"/>

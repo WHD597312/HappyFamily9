@@ -361,6 +361,9 @@ public class FamilyFragment extends Fragment {
 
     public void setTemperature(String temperature) {
         this.temperature = temperature;
+        if (!TextUtils.isEmpty(temperature)){
+            tv_23_my.setText(temperature);
+        }
     }
 
     @Override
@@ -434,9 +437,10 @@ public class FamilyFragment extends Fragment {
                         for (int i = 0; i < commonDevices.size(); i++) {
                             DeviceChild deviceChild = commonDevices.get(i);
                             String mac = deviceChild.getMacAddress();
-                            if (mac.equals(macAddress) && deviceChild2 != null) {
-                                commonDevices.set(i, deviceChild2);
-                                mGridViewAdapter.notifyDataSetChanged();
+                            if (mac.equals(macAddress) && deviceChild2 == null) {
+                                Toast.makeText(getActivity(), "该设备已重置", Toast.LENGTH_SHORT).show();
+                                commonDevices.remove(deviceChild);
+                                mGridViewAdapter .notifyDataSetChanged();
                                 break;
                             }
                         }

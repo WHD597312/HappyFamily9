@@ -67,7 +67,6 @@ public class RegistFinishActivity extends AppCompatActivity {
     @BindView(R.id.btn_ffinish)
     Button buttonf;
     GifDrawable gifDrawable;
-    int firstClick = 1;
     int temp=-1;
     SharedPreferences preferences;
     Calendar calendar;
@@ -158,7 +157,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                 datePicker.setVisibility(View.VISIBLE);
                 break;
             case R.id.btn_ffinish:
-                if (firstClick==1){
+
                     String name = editTextf.getText().toString().trim();
                     if (TextUtils.isEmpty(name)) {
                         Utils.showToast(this, "昵称不能为空");
@@ -180,8 +179,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                     params.put("phone",phone);
                     params.put("password",password);
                     new RegistAsyncTask().execute(params);
-                    firstClick=0;
-                }
+
 
                 break;
         }

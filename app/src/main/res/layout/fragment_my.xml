@@ -78,8 +78,17 @@
                     android:text="1352250152"
                     android:textColor="@color/white" />
             </RelativeLayout>
-
         </RelativeLayout>
+        <ImageView
+            android:id="@+id/imageView2"
+            android:layout_width="@dimen/dp_jy_25"
+            android:layout_height="@dimen/dp_jy_25"
+            android:layout_alignParentEnd="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_20"
+            android:src="@mipmap/image_editor"
+            android:scaleType="centerCrop"
+            />
     </RelativeLayout>
 
     <ListView
@@ -89,6 +98,6 @@
         android:layout_marginLeft="@dimen/dp_jy_15"
         android:layout_marginRight="@dimen/dp_jy_15"
         android:layout_marginTop="@dimen/dp_jy_150"
-        android:background="@color/white"
+        android:background="@drawable/bg_shape3"
         android:divider="@null" />
 </RelativeLayout>

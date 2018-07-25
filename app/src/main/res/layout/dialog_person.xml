@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_jy_160"
+    android:layout_height="wrap_content"
     android:background="@drawable/bg_shape"
-    android:layout_centerInParent="true"
     android:id="@+id/rl_homed_rename">
     <TextView
         android:id="@+id/tv_homed_rename"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="修改用户名称"
         android:textColor="@color/color_gray4"
         android:layout_centerHorizontal="true"
-        android:gravity="center"
+        android:textSize="@dimen/sp_16"
         android:layout_marginTop="@dimen/dp_jy_20"
 
         />
@@ -20,57 +19,51 @@
         android:id="@+id/et_name"
         android:layout_below="@+id/tv_homed_rename"
         android:layout_marginTop="@dimen/dp_jy_21"
-        android:layout_width="match_parent"
-        android:background="@drawable/edit_back"
-        android:layout_height="@dimen/dp_jy_40"
+        android:layout_width="@dimen/dp_jy_250"
+        android:background="@null"
         android:hint="修改用户名称"
-        android:layout_marginLeft="@dimen/dp_jy_10"
-        android:layout_marginRight="@dimen/dp_jy_10"
-        android:paddingLeft="@dimen/dp_jy_2"
-        android:textSize="16sp"
+        android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         />
 
     <LinearLayout
+        android:layout_below="@+id/et_name"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
         android:layout_centerHorizontal="true"
-        android:background="@color/color_gray"
-        android:layout_marginLeft="@dimen/dp_jy_10"
-        android:layout_marginRight="@dimen/dp_jy_10"
+        android:layout_marginTop="@dimen/dp_jy_36"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginBottom="@dimen/dp_jy_25"
         android:orientation="horizontal">
 
-        <TextView
+
+        <Button
             android:id="@+id/tv_dialog_qx"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_jy_35"
+            android:background="@drawable/bg_shape_anniugray"
+            android:text="取消"
+            android:layout_marginRight="@dimen/dp_jy_12"
             android:layout_gravity="center"
-            android:layout_weight="1"
-            android:gravity="right"
-            android:paddingRight="@dimen/dp_jy_21"
-            android:textColor="@color/black"
-            android:text="取消" />
-
-        <TextView
-            android:layout_width="0dp"
-            android:layout_height="50dp"
-            android:layout_weight="1"
             android:gravity="center"
-            android:text="|"
-            android:textColor="@color/color_gray2"
-            android:textSize="26sp" />
+            android:layout_weight="1"
+            />
 
-        <TextView
+        <Button
             android:id="@+id/tv_dialog_qd"
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_height="@dimen/dp_jy_35"
             android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_detail_back"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:textColor="@color/white"
+            android:text="确定"
             android:layout_weight="1"
-            android:gravity="left"
-            android:paddingLeft="@dimen/dp_jy_21"
-            android:textColor="@color/black"
-            android:text="确定" />
+            />
+
+
 
     </LinearLayout>
 </RelativeLayout>

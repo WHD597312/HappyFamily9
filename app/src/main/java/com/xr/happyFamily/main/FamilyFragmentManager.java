@@ -21,6 +21,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
@@ -49,63 +50,79 @@ public class FamilyFragmentManager extends Fragment {
     private long houseId;
     private long roomId;
     ViewPager viewPager;
-    List<Room> rooms=new ArrayList<>();
+    List<Room> rooms = new ArrayList<>();
     private SharedPreferences mPositionPreferences;
     SharedPreferences roomPreferences;
-    public static boolean running=false;
+    public static boolean running = false;
     private DeviceChildDaoImpl deviceChildDao;
-    private List<DeviceChild> shareChildren=new ArrayList<>();
+    private List<DeviceChild> shareChildren = new ArrayList<>();
     SharedPreferences preferences;
     private String city;
     boolean isBound;
     String load;
+    NoRoomFragment noRoomFragment;
+    FamilyFragment familyFragment;
+    private HourseDaoImpl hourseDao;
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        Log.i("FamilyFragmentManager","-->onCreateView");
-        if (view==null){
+        Log.i("FamilyFragmentManager", "-->onCreateView");
+        if (view == null) {
             view = inflater.inflate(R.layout.fragment_family_manager, container, false);
             viewPager = (ViewPager) view.findViewById(R.id.viewPager);
+            hourseDao = new HourseDaoImpl(getActivity());
             roomPreferences = getActivity().getSharedPreferences("room", MODE_PRIVATE);
             mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
             Bundle bundle = getArguments();
             houseId = bundle.getLong("houseId");
-            load=bundle.getString("load");
-            String temperature=bundle.getString("temperature");
+            Hourse hourse = hourseDao.findById(houseId);
+            load = bundle.getString("load");
+            if (hourse != null) {
+                String houseAddress = city = hourse.getHouseAddress();
+
+                city = houseAddress;
+                if (city.contains("市")) {
+                    city = city.substring(0, city.length() - 1);
+                }
+
+            }
+            String temperature = bundle.getString("temperature");
             roomDao = new RoomDaoImpl(getActivity());
-            deviceChildDao=new DeviceChildDaoImpl(getActivity());
+            deviceChildDao = new DeviceChildDaoImpl(getActivity());
 
             List<Room> allRoomInHouse = roomDao.findAllRoomInHouse(houseId);
-            List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
+            List<DeviceChild> deviceChildren = deviceChildDao.findHouseDevices(houseId);
 
             preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
-            String userIdStr=preferences.getString("userId","");
-            if (!TextUtils.isEmpty(userIdStr)){
-                int userId=Integer.parseInt(userIdStr);
-                shareChildren=deviceChildDao.findShareDevice(userId);
+            String userIdStr = preferences.getString("userId", "");
+            if (!TextUtils.isEmpty(userIdStr)) {
+                int userId = Integer.parseInt(userIdStr);
+                shareChildren = deviceChildDao.findShareDevice(userId);
             }
             for (int i = 0; i < allRoomInHouse.size(); i++) {
                 Room room = allRoomInHouse.get(i);
                 rooms.add(room);
             }
             fragmentList = new ArrayList<>();
-            if (deviceChildren==null || deviceChildren.isEmpty()) {
-                NoRoomFragment noRoomFragment = new NoRoomFragment();
+            if (deviceChildren.isEmpty() && shareChildren.isEmpty()) {
+                noRoomFragment = new NoRoomFragment();
+                new WeatherAsync().execute();
                 noRoomFragment.setHouseId(houseId);
-                noRoomFragment.setTemperature(temperature);
                 fragmentList.add(noRoomFragment);
+
             } else {
-                FamilyFragment familyFragment = new FamilyFragment();
-                familyFragment.setTemperature(temperature);
+                familyFragment = new FamilyFragment();
+                new WeatherAsync().execute();
                 familyFragment.setHouseId(houseId);
                 fragmentList.add(familyFragment);
             }
             Log.i("roomtList", "-->" + rooms.size());
             for (int i = 0; i < rooms.size(); i++) {
-                RoomFragment roomFragment=new RoomFragment();
+                RoomFragment roomFragment = new RoomFragment();
                 roomFragment.setRoomId(rooms.get(i).getRoomId());
                 fragmentList.add(roomFragment);
-                Log.i("qqqqqq",rooms.get(i).getRoomName());
+                Log.i("qqqqqq", rooms.get(i).getRoomName());
             }
             Log.i("fragmentList", "-->" + fragmentList.size());
             FragmentStatePagerAdapter adapter = new FamilyAdapter(getFragmentManager(), fragmentList);
@@ -114,13 +131,16 @@ public class FamilyFragmentManager extends Fragment {
             viewPager.addOnPageChangeListener(listener);
             if (mPositionPreferences.contains("position")) {
                 int position = mPositionPreferences.getInt("position", 0);
-                Log.i("mPositionPreferences","-->"+position);
+                Log.i("mPositionPreferences", "-->" + position);
                 viewPager.setCurrentItem(position);
                 if (callValueValue != null) {
                     callValueValue.setPosition(position);
                 }
                 listener.onPageSelected(position);
             } else {
+                if (callValueValue != null) {
+                    callValueValue.setPosition(0);
+                }
                 viewPager.setCurrentItem(0);
                 listener.onPageSelected(0);
             }
@@ -130,53 +150,94 @@ public class FamilyFragmentManager extends Fragment {
         return view;
     }
 
+    class WeatherAsync extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            String temperature = null;
+            try {
+                String url = "http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "UTF-8");
+                String result = HttpUtils.getOkHpptRequest(url);
+                Log.i("result", "-->" + result);
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String msg = jsonObject.getString("msg");
+                    if ("success".equals(msg)) {
+                        JSONArray jsonArray = jsonObject.getJSONArray("result");
+                        int len = jsonArray.length();
+                        JSONObject jsonObject2 = jsonArray.getJSONObject(0);
+                        temperature = jsonObject2.getString("temperature");
+                        Log.i("temperature", "-->" + temperature);
+                    }
+
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return temperature;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (noRoomFragment != null) {
+                noRoomFragment.setTemperature(s);
+            }
+            if (familyFragment != null) {
+                familyFragment.setTemperature(s);
+            }
+        }
+    }
+
     MQService mqService;
     boolean bound;
-    ServiceConnection connection=new ServiceConnection() {
+    ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             mqService = binder.getService();
             bound = true;
-            if (!TextUtils.isEmpty(load)){
-                List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
+            if (!TextUtils.isEmpty(load)) {
+                List<DeviceChild> deviceChildren = deviceChildDao.findHouseDevices(houseId);
                 new LoadDevicesAsync().execute(deviceChildren);
             }
         }
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
 
         }
     };
+
     class
-    LoadDevicesAsync extends AsyncTask<List<DeviceChild>,Void,Void>{
+    LoadDevicesAsync extends AsyncTask<List<DeviceChild>, Void, Void> {
 
         @Override
         protected Void doInBackground(List<DeviceChild>... lists) {
-            List<DeviceChild> list=lists[0];
+            List<DeviceChild> list = lists[0];
             for (DeviceChild deviceChild : list) {
                 String macAddress = deviceChild.getMacAddress();
-                int type=deviceChild.getType();
-                String onlineTopicName="";
-                String offlineTopicName="";
-                switch (type){
+                int type = deviceChild.getType();
+                String onlineTopicName = "";
+                String offlineTopicName = "";
+                switch (type) {
                     case 2:
                         onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                        offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                        offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
                         break;
                     case 3:
-                        onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
-                        offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
+                        onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
                         break;
                 }
                 try {
-                    if (bound){
-                        Log.i("topic","-->"+onlineTopicName);
-                        boolean step1=mqService.subscribe(onlineTopicName,1);
-                        boolean step2=mqService.subscribe(offlineTopicName,1);
-                        Log.i("step","-->"+step1+","+step2);
+                    if (bound) {
+                        Log.i("topic", "-->" + onlineTopicName);
+                        boolean step1 = mqService.subscribe(onlineTopicName, 1);
+                        boolean step2 = mqService.subscribe(offlineTopicName, 1);
+                        Log.i("step", "-->" + step1 + "," + step2);
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
             }
@@ -187,33 +248,35 @@ public class FamilyFragmentManager extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        Log.i("FamilyFragmentManager","-->onStart");
-        running=true;
+        Log.i("FamilyFragmentManager", "-->onStart");
+        running = true;
     }
+
     @Override
     public void onAttach(Context context) {
         super.onAttach(context);
         callValueValue = (CallValueValue) getActivity();
     }
+
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-        if (view!=null){
+        if (view != null) {
             if (null != view) {
                 ((ViewGroup) view.getParent()).removeView(view);
             }
         }
-        if (isBound){
+        if (isBound) {
             getActivity().unbindService(connection);
         }
-        running=false;
+        running = false;
     }
 
     @Override
     public void onStop() {
         super.onStop();
-        Log.i("FamilyFragmentManager","-->onStop");
-        running=false;
+        Log.i("FamilyFragmentManager", "-->onStop");
+        running = false;
     }
 
     //实现页面变化监听器OnPageChangeListener
@@ -258,20 +321,20 @@ public class FamilyFragmentManager extends Fragment {
          * arg0是页面跳转完后得到的页面的Position（位置编号）。
          */
         public void onPageSelected(int poistion) {
-            Log.i("position","-->"+poistion);
-            Log.i("size","-->"+fragmentList.size());
+            Log.i("position", "-->" + poistion);
+            Log.i("size", "-->" + fragmentList.size());
             if (callValueValue != null) {
                 callValueValue.setPosition(poistion);
             }
 
-            if (poistion>0){
+            if (poistion > 0) {
 //                Room room=rooms.get(poistion-1);
 //                long houseId=room.getHouseId();
 //                long roomId=room.getRoomId();
 //                RoomFragment.houseId=houseId;
 //                RoomFragment.roomId=roomId;
-                Message message=handler.obtainMessage();
-                message.what=poistion;
+                Message message = handler.obtainMessage();
+                message.what = poistion;
                 handler.sendMessage(message);
 //                SharedPreferences.Editor editor=mPositionPreferences.edit();
 //                editor.putInt("position",poistion-1);
@@ -280,32 +343,25 @@ public class FamilyFragmentManager extends Fragment {
 
         }
     }
+
     CallValueValue callValueValue;
+
     public interface CallValueValue {
         public void setPosition(int position);
     }
-    Handler handler=new Handler(){
+
+    Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             try {
-                int position=msg.what;
-                int sum=rooms.size();
-                Log.i("mPosition","-->"+position);
-                SharedPreferences.Editor editor=mPositionPreferences.edit();
-                editor.putInt("position",position);
+                int position = msg.what;
+                int sum = rooms.size();
+                Log.i("mPosition", "-->" + position);
+                SharedPreferences.Editor editor = mPositionPreferences.edit();
+                editor.putInt("position", position);
                 editor.commit();
-                RoomFragment.index=position-1;
-                Room room=rooms.get(position-1);
-                if (room!=null){
-                    RoomFragment roomFragment= (RoomFragment) fragmentList.get(position);
-                    RoomFragment.index=position-1;
-                    long houseId=room.getHouseId();
-                    long roomId=room.getRoomId();
-                    String name=room.getRoomName();
-                    Log.i("handleMessage", "handleMessage: "+name);
-                }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

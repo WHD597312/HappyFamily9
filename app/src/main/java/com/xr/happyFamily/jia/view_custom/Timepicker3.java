@@ -106,7 +106,7 @@ public class Timepicker3 extends NumberPicker {
             if (pf.getName().equals("mSelectionDivider")) {
                 pf.setAccessible(true);
                 try {
-                  pf.set(picker, new ColorDrawable(this.getResources().getColor(R.color.color_gray2)));
+                  pf.set(picker, new ColorDrawable(this.getResources().getColor(R.color.transparent)));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {

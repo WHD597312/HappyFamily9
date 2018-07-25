@@ -2,34 +2,42 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:orientation="vertical"
+    android:background="#f5f5f5"
     android:layout_height="match_parent">
-    <LinearLayout
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        >
+    <RelativeLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
         android:id="@+id/li_change"
-        android:layout_gravity="center_horizontal"
         >
+
         <TextView
+            android:id="@+id/tv_t1"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_jy_50"
-            android:text="选择房间"
-            android:textSize="@dimen/sp_16"
-            android:textColor="@color/black"
             android:gravity="center"
+            android:text="选择房间"
+            android:textColor="@color/color_black3"
+            android:textSize="@dimen/sp_16"
 
             />
-        <ImageButton
+        <ImageView
             android:id="@+id/ib_change"
+            android:layout_toRightOf="@+id/tv_t1"
             android:layout_width="wrap_content"
-            android:paddingLeft="@dimen/dp_jy_7"
             android:layout_height="@dimen/dp_jy_50"
+            android:layout_marginLeft="@dimen/dp_jy_2"
             android:background="@null"
-            android:src="@mipmap/xiala3x"
+            android:src="@mipmap/jt_xl"
             />
 
-    </LinearLayout>
-
+    </RelativeLayout>
+    </RelativeLayout>
     <ListView
         android:id="@+id/change_list"
         android:layout_width="match_parent"

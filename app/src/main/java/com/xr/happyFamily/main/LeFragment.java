@@ -32,7 +32,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
-import com.xr.database.dao.daoimpl.UserBeanDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.ClockActivity;
@@ -40,13 +39,13 @@ import com.xr.happyFamily.le.adapter.HappyFootAdapter;
 import com.xr.happyFamily.le.adapter.HappyViewPagerAdapter;
 import com.xr.happyFamily.le.bean.HappyBannerBean;
 import com.xr.happyFamily.le.pojo.ClockBean;
-import com.xr.happyFamily.le.pojo.UserBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.noBirthdayDialog;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.zhen.PersonInfoActivity;
 
 import org.json.JSONObject;
 
@@ -107,11 +106,10 @@ public class LeFragment extends Fragment {
     View view;
     Unbinder unbinder;
     private MyDialog dialog;
-    UserBean userBean;
     SharedPreferences preferences;
     String userId;
 
-    UserBeanDaoImpl userBeanDao;
+
     int page = 1;
     HappyFootAdapter happyFootAdapter;
 
@@ -123,7 +121,7 @@ public class LeFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
         ((ImageView) view.findViewById(imgae_dots[lastBanner])).setImageResource(R.mipmap.ic_shop_banner);
         happyBannerBeans = new ArrayList<>();
-        footBean=new ArrayList<>();
+        footBean = new ArrayList<>();
         isStop = false;
         dialog = MyDialog.showDialog(getActivity());
         dialog.show();
@@ -132,21 +130,25 @@ public class LeFragment extends Fragment {
         happyFootAdapter = new HappyFootAdapter(getActivity(), footBean);
         recyclerView.setAdapter(happyFootAdapter);
         isFinish = false;
-        page=1;
+        page = 1;
         getBanner("head", page);
         getBanner("foot", 1);
 
-        userBeanDao = new UserBeanDaoImpl(getActivity().getApplicationContext());
-        userBeanDao.deleteAll();
-        userBean = new UserBean();
-        preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
-        birthday = preferences.getString("birthday", "");
-        userId = preferences.getString("userId", "");
-        new getClocksByUserId().execute();
+
+
         return view;
     }
 
     String birthday;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        birthday = preferences.getString("birthday", "");
+        userId = preferences.getString("userId", "");
+//        new getClocksByUserId().execute();
+    }
 
     public void initData() {
         //初始化和图片
@@ -244,13 +246,15 @@ public class LeFragment extends Fragment {
         birthdaydialog.setOnNegativeClickListener(new noBirthdayDialog.OnNegativeClickListener() {
             @Override
             public void onNegativeClick() {
+
                 birthdaydialog.dismiss();
             }
         });
         birthdaydialog.setOnPositiveClickListener(new noBirthdayDialog.OnPositiveClickListener() {
             @Override
             public void onPositiveClick() {
-
+                Intent intent = new Intent(getActivity(), PersonInfoActivity.class);
+                startActivity(intent);
                 birthdaydialog.dismiss();
             }
         });
@@ -267,117 +271,16 @@ public class LeFragment extends Fragment {
             case R.id.ll_clock:
 
 
-//
-//                if (birthday == null) {
-//
-//
-//
-//                } else {
-//
-//
-//                    if ("Xiaomi".equals(Build.MANUFACTURER)) {//小米手机
-//
-//                        requestPermission();
-//                    } else if ("Meizu".equals(Build.MANUFACTURER)) {//魅族手机
-//
-//                        requestPermission();
-//                    } else {//其他手机
-//
-//                        if (Build.VERSION.SDK_INT >= 23) {
-//                            if (!Settings.canDrawOverlays(getActivity())) {
-//                                Toast.makeText(getActivity(), "请允许app在最上层显示否则某些功能无法使用", Toast.LENGTH_SHORT).show();
-//                                Intent intent = new Intent(Settings.ACTION_MANAGE_OVERLAY_PERMISSION);
-//                                startActivityForResult(intent, 12);
-//                            } else {
-                switchActivity();
-//                            }
-//                        } else {
-//                            switchActivity();
-//                        }
-//                    }
-//                }
+                if ("".equals(birthday)) {
+                    clolkDialog1();
+
+                } else {
+                    Intent intent = new Intent(getActivity(),ClockActivity.class);
+                    intent.putExtra("type","asd");
+                    startActivity(intent);
+                }
                 break;
         }
-    }
-
-
-    @Override
-    public void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == 11) {
-            if (isFloatWindowOpAllowed(getActivity())) {//已经开启
-                switchActivity();
-            } else {
-
-                Toast.makeText(getActivity(), "开启悬浮窗失败", Toast.LENGTH_SHORT).show();
-            }
-        } else if (requestCode == 12) {
-            if (Build.VERSION.SDK_INT >= 23) {
-                if (!Settings.canDrawOverlays(getActivity())) {
-
-                    Toast.makeText(getActivity(), "权限授予失败,无法开启悬浮窗", Toast.LENGTH_SHORT).show();
-                } else {
-                    switchActivity();
-                }
-            }
-        }
-
-    }
-
-    /**
-     * 跳转Activity
-     */
-    private void switchActivity() {
-        Intent intent = new Intent(getActivity(), ClockActivity.class);
-        intent.putExtra("type", "wenchao");
-        startActivityForResult(intent, MAIN_CODE);
-    }
-
-    /**
-     * 判断悬浮窗权限
-     *
-     * @param context
-     * @return
-     */
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static boolean isFloatWindowOpAllowed(Context context) {
-        final int version = Build.VERSION.SDK_INT;
-        if (version >= 19) {
-            return checkOp(context, 24);  // AppOpsManager.OP_SYSTEM_ALERT_WINDOW
-        } else {
-            if ((context.getApplicationInfo().flags & 1 << 27) == 1 << 27) {
-                return true;
-            } else {
-                return false;
-            }
-        }
-    }
-
-    @TargetApi(Build.VERSION_CODES.KITKAT)
-    public static boolean checkOp(Context context, int op) {
-        final int version = Build.VERSION.SDK_INT;
-
-        if (version >= 19) {
-            AppOpsManager manager = (AppOpsManager) context.getSystemService(Context.APP_OPS_SERVICE);
-            try {
-                Class<?> spClazz = Class.forName(manager.getClass().getName());
-                Method method = manager.getClass().getDeclaredMethod("checkOp", int.class, int.class, String.class);
-                int property = (Integer) method.invoke(manager, op,
-                        Binder.getCallingUid(), context.getPackageName());
-                Log.e("399", " property: " + property);
-
-                if (AppOpsManager.MODE_ALLOWED == property) {
-                    return true;
-                } else {
-                    return false;
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            Log.e("399", "Below API 19 cannot invoke!");
-        }
-        return false;
     }
 
 
@@ -387,8 +290,6 @@ public class LeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
-
-
     }
 
     boolean isFinish = false;
@@ -446,16 +347,18 @@ public class LeFragment extends Fragment {
                 if (isFinish) {
                     MyDialog.closeDialog(dialog);
                     happyFootAdapter.notifyDataSetChanged();
-                    initData();//初始化数据
-                    initView();//初始化View，设置适配器
-                    autoPlayView();//开启线程，自动播放
+                    try {
+                        initData();//初始化数据
+                        initView();//初始化View，设置适配器
+                        autoPlayView();//开启线程，自动播放
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
                 } else {
                     page++;
                     getBanner("head", page);
                 }
-
-
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity().getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
@@ -468,57 +371,53 @@ public class LeFragment extends Fragment {
         }
     }
 
-
-    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-
-
-            String url = "/happy/clock/getClocksByUserId";
-            url = url + "?userId=" + userId;
-            String result = HttpUtils.doGet(getActivity(), url);
-            Log.e("qqqqqqqqRRR", userId + "?" + result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    if (result.length() < 6) {
-                        code = result;
-                    }
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-
-                    //开始
-                    JSONObject returnData1 = jsonObject.getJSONObject("returnData");
-                    String birthday = returnData1.getString("birthday");
-                    userBean.setBirthday(birthday);
-                    userBeanDao.insert(userBean);
-                    //结束
-
-
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(getActivity().getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
-                SharedPreferences preferences;
-                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
-                MyDialog.setStart(false);
-                if (preferences.contains("password")) {
-                    preferences.edit().remove("password").commit();
-                }
-                startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
-            }
-        }
-    }
+//
+//    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
+//        @Override
+//        protected String doInBackground(Map<String, Object>... maps) {
+//
+//
+//            String url = "/happy/clock/getClocksByUserId";
+//            url = url + "?userId=" + userId;
+//            String result = HttpUtils.doGet(getActivity(), url);
+//            Log.e("qqqqqqqqRRR", userId + "?" + result);
+//            String code = "";
+//            try {
+//                if (!Utils.isEmpty(result)) {
+//                    if (result.length() < 6) {
+//                        code = result;
+//                    }
+//                    JSONObject jsonObject = new JSONObject(result);
+//                    code = jsonObject.getString("returnCode");
+//
+//                    //开始
+//                    JSONObject returnData1 = jsonObject.getJSONObject("returnData");
+//                    String birthday = returnData1.getString("birthday");
+//                    //结束
+//                }
+//            } catch (Exception e) {
+//                e.printStackTrace();
+//            }
+//            return code;
+//        }
+//
+//        @Override
+//        protected void onPostExecute(String s) {
+//            super.onPostExecute(s);
+//            if (!Utils.isEmpty(s) && "100".equals(s)) {
+//
+//            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
+//                Toast.makeText(getActivity().getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+//                SharedPreferences preferences;
+//                preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+//                MyDialog.setStart(false);
+//                if (preferences.contains("password")) {
+//                    preferences.edit().remove("password").commit();
+//                }
+//                startActivity(new Intent(getActivity().getApplicationContext(), LoginActivity.class));
+//            }
+//        }
+//    }
 
     public void getBanner(String site, int page) {
         Map<String, Object> params = new HashMap<>();

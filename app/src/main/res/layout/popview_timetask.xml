@@ -6,10 +6,10 @@
     android:layout_height="match_parent"
     android:layout_gravity="bottom"
     android:gravity="bottom"
-    android:background="@drawable/shape_timer_task"
+    android:background="@color/white"
     android:orientation="vertical"
     >
-
+    <!--android:background="@drawable/shape_timer_task"-->
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -46,43 +46,46 @@
     </RelativeLayout>
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_210"
+        android:layout_height="@dimen/dp_jy_170"
         >
 
-        <View
-            android:id="@+id/view_hour1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_2"
-            android:layout_marginLeft="@dimen/dp_jy_29"
-            android:layout_marginRight="@dimen/dp_jy_29"
-            android:layout_marginTop="@dimen/dp_jy_79"
-            android:background="@color/color_gray2" />
-        <View
-            android:id="@+id/view_hour2"
-            android:layout_below="@+id/view_hour1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_2"
-            android:layout_marginLeft="@dimen/dp_jy_29"
-            android:layout_marginRight="@dimen/dp_jy_29"
-            android:layout_marginTop="@dimen/dp_jy_48"
-            android:background="@color/color_gray2" />
+
        <LinearLayout
            android:layout_width="match_parent"
            android:layout_height="wrap_content"
            android:orientation="horizontal"
            android:layout_centerInParent="true"
+           android:layout_marginLeft="@dimen/dp_jy_12"
            android:gravity="center"
            >
 
 
         <com.xr.happyFamily.jia.view_custom.Timepicker3
             android:descendantFocusability="blocksDescendants"
+            android:background="@color/white"
             android:id="@+id/tv_hour"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_jy_208"
+            android:layout_height="@dimen/dp_jy_170"
 
             />
        </LinearLayout>
+        <View
+            android:id="@+id/view_hour1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_1"
+            android:layout_marginLeft="@dimen/dp_jy_29"
+            android:layout_marginRight="@dimen/dp_jy_29"
+            android:layout_marginTop="@dimen/dp_jy_59"
+            android:background="@color/color_gray2" />
+        <View
+            android:id="@+id/view_hour2"
+            android:layout_below="@+id/view_hour1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_1"
+            android:layout_marginLeft="@dimen/dp_jy_29"
+            android:layout_marginRight="@dimen/dp_jy_29"
+            android:layout_marginTop="@dimen/dp_jy_48"
+            android:background="@color/color_gray2" />
     </RelativeLayout>
 
 </LinearLayout>

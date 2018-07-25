@@ -1,5 +1,6 @@
 package com.xr.happyFamily.jia;
 
+import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -9,6 +10,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
@@ -18,6 +20,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.PopupWindow;
@@ -34,10 +37,16 @@ import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
 import com.xr.happyFamily.jia.adapter.ChooseHouseAdapter;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.JsonBean;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.titleview.TitleView;
+import com.xr.happyFamily.jia.view_custom.DeleteHomeDialog;
+import com.xr.happyFamily.jia.view_custom.DeleteHourseDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
+import com.xr.happyFamily.main.MainActivity;
+import com.xr.happyFamily.main.RoomFragment;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.JsonFileReader;
 import com.xr.happyFamily.together.util.Utils;
@@ -95,10 +104,10 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
 
     List<City> cities = null;
     City city = null;
-
+    SharedPreferences preferences;
     List<District> districts = null;
     District district = null;
-
+    String userId;
     int sign_sheng = 0, sign_city = 0, isDefault = 1, receiveId = 0;
     String receiveProvince, receiveCity, receiveCounty, receiveAddress;
 
@@ -119,6 +128,8 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
             textViewn.setText(houseName);
             textViewa.setText(houseAddress);
         }
+        preferences=getSharedPreferences("my",MODE_PRIVATE);
+        userId = preferences.getString("userId","");
 
     }
 
@@ -129,11 +140,10 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
 
     @Override
     protected void onRestart() {
-
         super.onRestart();
     }
 
-    @OnClick({R.id.rl_rename_it1,R.id.rl_rename_it2,R.id.iv_rename_back})
+    @OnClick({R.id.rl_rename_it1,R.id.rl_rename_it2,R.id.iv_rename_back,R.id.tv_rename_del})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_rename_it1:
@@ -145,10 +155,80 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
             case R.id.iv_rename_back:
                 Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
                 startActivity(intent);
-
+                break;
+            case R.id.tv_rename_del:
+                deleteHourseDialog();
                 break;
         }
     }
+
+
+
+
+    private void deleteHourseDialog() {
+        final DeleteHourseDialog dialog = new DeleteHourseDialog(mContext);
+        dialog.setOnNegativeClickListener(new DeleteHourseDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new DeleteHourseDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                new DeleteHourseAsync().execute();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+
+    class DeleteHourseAsync extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0;
+            String url = ip+"/family/house/deleteHouse" + "?houseId=" + houseId + "&userId=" + userId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("result", "-->" + result);
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode = jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)) {
+                        code = 100;
+                       Hourse hourse= hourseDao.findById(houseId);
+                       hourseDao.delete(hourse);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 100:
+                    Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RenameHourseActivity.this,ChooseHourseActivity.class);
+                    startActivity(intent);
+                    break;
+                default:
+                    Toast.makeText(mContext, "删除失败", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+
+
+
+
+
+        //三级联动
     private ImageView img_close;
     private View view_dis;
     private ListView listCity;

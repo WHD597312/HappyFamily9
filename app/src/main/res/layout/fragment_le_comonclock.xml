@@ -45,7 +45,7 @@
         android:id="@+id/commonclock_recyc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-
+        android:layout_marginTop="@dimen/dp_jy_12"
         />
 
 

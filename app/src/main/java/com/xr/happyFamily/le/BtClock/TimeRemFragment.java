@@ -14,9 +14,8 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.xr.database.dao.daoimpl.UserBeanDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.le.pojo.UserBean;
+
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -31,8 +30,7 @@ public class TimeRemFragment extends Fragment {
     View view;
     Unbinder unbinder;
     String ip = "http://47.98.131.11:8084";
-    UserBeanDaoImpl userBeanDao;
-    UserBean userBean;
+
     @BindView(R.id.tv_sgjs_year)
     TextView tv_sgjs_year;
     @BindView(R.id.tv_sgjs_month)

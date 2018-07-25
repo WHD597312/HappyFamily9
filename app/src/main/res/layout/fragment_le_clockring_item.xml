@@ -11,7 +11,7 @@
         android:text="love me"
         android:layout_marginLeft="@dimen/dp_jy_12"
        android:layout_centerVertical="true"
-        android:textSize="20sp"
+        android:textSize="@dimen/sp_14"
         />
 
 
@@ -27,6 +27,7 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         style="@style/horizontal_line_style"
+        android:background="#f5f5f5"
         android:layout_alignParentBottom="true"
         android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginRight="@dimen/dp_jy_12"

@@ -175,8 +175,8 @@ public class addTimeActivity extends AppCompatActivity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 666) {
-            Intent intent = getIntent();
-            text1 = intent.getStringExtra("text");
+
+            text1 = data.getStringExtra("text");
             tv_bjtime_bq.setText(text1);
         }
         if (resultCode == 111) {

@@ -23,7 +23,17 @@
             android:layout_centerInParent="true"
             android:text="家庭编辑"
             android:textColor="@color/black"
-            android:textSize="20sp" />
+            android:textSize="@dimen/sp_20" />
+        <TextView
+            android:id="@+id/tv_rename_del"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="删除"
+            android:layout_alignParentRight="true"
+            android:textSize="@dimen/sp_18"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
 
     </RelativeLayout>
 

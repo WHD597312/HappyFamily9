@@ -87,6 +87,7 @@
                 android:layout_alignParentStart="true"
                 android:layout_alignParentTop="true">
 
+
                 <TextView
                     android:id="@+id/tv_balcony_wd1"
                     android:layout_width="wrap_content"
@@ -162,6 +163,7 @@
                     android:textSize="28sp" />
 
                 <TextView
+                    android:id="@+id/tv1"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignTop="@id/tv_balcony_c"

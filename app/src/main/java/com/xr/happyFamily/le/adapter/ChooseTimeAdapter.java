@@ -139,8 +139,7 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
                holder.img_kg.setImageResource(R.mipmap.bt_kgg);
 
            }
-
-
+           holder.tv_day1.setText(data.get(position).getStyle());
 
 
 //        tv_time = (TextView) view.findViewById(R.id.tv_clock_time);

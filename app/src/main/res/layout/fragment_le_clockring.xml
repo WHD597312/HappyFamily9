@@ -71,6 +71,7 @@
         android:layout_height="wrap_content"
         android:text="默认铃声"
         android:layout_marginBottom="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_12"
         />
     <android.support.v7.widget.RecyclerView
         android:id="@+id/colockring_recyc"

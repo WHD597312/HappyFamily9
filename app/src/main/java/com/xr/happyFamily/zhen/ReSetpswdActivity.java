@@ -69,7 +69,7 @@ public class ReSetpswdActivity extends AppCompatActivity {
                 break;
             case R.id.btn_ensure:
                 oldPswd=et_oldpswd.getText().toString().trim();
-                newPswd=et_oldpswd.getText().toString().trim();
+                newPswd=et_newpswd.getText().toString().trim();
                 ensurePswd=et_ensurepswd.getText().toString().trim();
                 if (TextUtils.isEmpty(oldPswd)){
                     Toast.makeText(this,"请输入旧密码",Toast.LENGTH_SHORT).show();
@@ -87,7 +87,9 @@ public class ReSetpswdActivity extends AppCompatActivity {
                         break;
                     }
                 }
-                if (!newPswd.equals(ensurePswd)){
+                if (newPswd.equals(ensurePswd)){
+
+                }else {
                     Toast.makeText(this,"新密码与确认密码不同",Toast.LENGTH_SHORT).show();
                     break;
                 }

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@mipmap/g1"
+    android:orientation="vertical"
+    android:id="@+id/layout"
+    >
+
+    <TextView
+        android:visibility="gone"
+        android:id="@+id/tv_guild"
+        android:layout_width="@dimen/dp_jy_150"
+        android:layout_height="@dimen/dp_jy_30"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_guild25"
+        android:text="立即体验"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_jy_37"/>
+
+</RelativeLayout>

@@ -73,8 +73,8 @@ public class MsgDaoImpl {
         msgDataDao.deleteAll();
     }
 
-//    public List<ClockBean> findMsgByTime(int clockId){
-//        WhereCondition whereCondition=msgDataDao.queryBuilder().and(ClockBeanDao.Properties.ClockId.eq(clockId),ClockBeanDao.Properties.ClockId.eq(clockId));
-//        return msgDataDao.queryBuilder().where(whereCondition).list();
-//    }
+    public List<MsgData> findMsgByState(long time){
+        WhereCondition whereCondition=msgDataDao.queryBuilder().and(MsgDataDao.Properties.CreateTime.eq(time),MsgDataDao.Properties.CreateTime.eq(time));
+        return msgDataDao.queryBuilder().where(whereCondition).list();
+    }
 }

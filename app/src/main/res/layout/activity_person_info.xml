@@ -6,6 +6,7 @@
     android:layout_height="match_parent"
     tools:context=".zhen.PersonInfoActivity"
     android:background="#faf9f9"
+    android:id="@+id/layout2"
     >
 
     <RelativeLayout

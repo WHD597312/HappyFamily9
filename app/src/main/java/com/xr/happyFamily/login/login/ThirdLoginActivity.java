@@ -147,7 +147,6 @@ public class ThirdLoginActivity extends AppCompatActivity {
                         Utils.showToast(this,"请输入密码");
                         return;
                     }
-
                     Map<String,Object> params=new HashMap<>();
                     params.put("phone",phone2);
                     params.put("code",code);
@@ -184,10 +183,9 @@ public class ThirdLoginActivity extends AppCompatActivity {
                 try {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                   if (code=="100"){
+                   if ("100".equals(code)){
                        new hourseAsyncTask().execute();
                    }
-
 
                 } catch (Exception e) {
                     e.printStackTrace();
@@ -254,13 +252,23 @@ public class ThirdLoginActivity extends AppCompatActivity {
                             String headImgUrl=returnData.getString("headImgUrl");
                             editor.putString("headImgUrl",headImgUrl);
                         }
+                        String userId3=returnData.getString("userId");
+                        String username=returnData.getString("userName");
+                        String phone=returnData.getString("phone");
                         String birthday=returnData.getString("birthday");
-                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-                        Date date=format.parse(birthday);
-                        long ts = date.getTime();
-                        String res = String.valueOf(ts);
+                        editor.putString("username",username);
+                        editor.putString("userId",userId3);
+                        editor.putString("phone",phone);
+                        if (!TextUtils.isEmpty(birthday)){
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                            Date date=format.parse(birthday);
+                            long ts = date.getTime();
+                            String res = String.valueOf(ts);
+                            editor.putString("birthday",res);
+                        }else {
+                            editor.putString("birthday","");
+                        }
                         editor.putBoolean("sex",sex);
-                        editor.putString("birthday",res);
                         editor.commit();
                         JSONArray houseDevices = returnData.getJSONArray("houseDevices");
                         for (int i = 0; i < houseDevices.length(); i++) {
@@ -320,6 +328,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                                 String deviceName=jsonObject3.getString("deviceName");
                                 int deviceType=jsonObject3.getInt("deviceType");
                                 int roomId=jsonObject3.getInt("roomId");
+                                String roomName=jsonObject3.getString("roomName");
                                 String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
                                 List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=null;
@@ -331,6 +340,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                                     }
                                 }
                                 if (deviceChild2!=null){
+                                    deviceChild2.setRoomName(roomName);
                                     deviceChildDao.update(deviceChild2);
                                 }else if (deviceChild2==null){
                                     if (deviceChild2==null){
@@ -341,6 +351,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                                         deviceChild2.setMacAddress(deviceMacAddress);
                                         deviceChild2.setType(deviceType);
                                         deviceChild2.setRoomId(roomId);
+                                        deviceChild2.setRoomName(roomName);
                                         deviceChildDao.insert(deviceChild2);
                                     }
                                 }
@@ -396,12 +407,14 @@ public class ThirdLoginActivity extends AppCompatActivity {
                     Utils.showToast(ThirdLoginActivity.this, "查询失败");
                     break;
                 case 100:
+                    Intent intent = new Intent(ThirdLoginActivity.this, MainActivity.class);
                     if (mPositionPreferences.contains("position")){
                         mPositionPreferences.edit().clear().commit();
                     }
+
                     Utils.showToast(ThirdLoginActivity.this, "登录成功");
-                    Intent intent = new Intent(ThirdLoginActivity.this, MainActivity.class);
-                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent.putExtra("login0","login0");
+
                     intent.putExtra("load","load");
                     intent.putExtra("login","login");
                     startActivity(intent);
@@ -477,7 +490,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
         public void onTick(long millisUntilFinished) {
             Log.e("Tag", "倒计时=" + (millisUntilFinished/1000));
             if (btn_get_code!=null){
-                btn_get_code.setText(millisUntilFinished / 1000 + "s后重新发送");
+                btn_get_code.setText(millisUntilFinished / 1000 + "s");
                 //设置倒计时中的按钮外观
                 btn_get_code.setClickable(false);//倒计时过程中将按钮设置为不可点击
 //            btn_get_code.setBackgroundColor(Color.parseColor("#c7c7c7"));

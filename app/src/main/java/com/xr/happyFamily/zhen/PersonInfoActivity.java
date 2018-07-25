@@ -26,6 +26,7 @@ import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -108,13 +109,24 @@ public class PersonInfoActivity extends AppCompatActivity {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 switch (position){
                     case 0:
-                        popupWindow();
+                        if (popupWindow==null || !popupWindow.isShowing()){
+                            showPopup();
+                        }
                         break;
                     case 4:
-                        updatePersonDialog();
+                        if (popupWindow==null || !popupWindow.isShowing()){
+                            updatePersonDialog();
+                        }
+                        break;
+                    case 6:
+                        if (popupWindow==null || !popupWindow.isShowing()){
+                            popupSexView();
+                        }
                         break;
                     case 8:
-                        popupWindow2();
+                        if (popupWindow==null || !popupWindow.isShowing()){
+                            popupWindow2();
+                        }
                         break;
                 }
             }
@@ -138,22 +150,24 @@ public class PersonInfoActivity extends AppCompatActivity {
                 }else {
                     Map<String,Object> params=new HashMap<>();
                     String userId=preferences.getString("userId","");
-                    boolean sex=preferences.getBoolean("sex",false);
+                    boolean sex2=preferences.getBoolean("sex",false);
                     String birthday=preferences.getString("birthday","");
                     Date date =new Date(Long.parseLong(birthday));
                     SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
                     String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
                     int flag=0;
-                    if (sex){
+                    if (sex2){
                         flag=1;
                     }else {
                         flag=0;
                     }
+                    sex=-1;
                     params.put("userId",userId);
                     params.put("sex",flag);
                     params.put("username",username);
                     params.put("birthday",time);
                     new UpdatePersonAsync().execute(params);
+
                     dialog.dismiss();
                 }
             }
@@ -165,6 +179,11 @@ public class PersonInfoActivity extends AppCompatActivity {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.back:
+                if (popupWindow!=null && popupWindow.isShowing()){
+                    backgroundAlpha(1.0f);
+                    popupWindow.dismiss();
+                    break;
+                }
                 finish();
                 break;
         }
@@ -173,7 +192,12 @@ public class PersonInfoActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeAllActivity();
+            if (popupWindow!=null && popupWindow.isShowing()){
+                backgroundAlpha(1.0f);
+                popupWindow.dismiss();
+                return false;
+            }
+            application.removeActivity(this);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -204,8 +228,9 @@ public class PersonInfoActivity extends AppCompatActivity {
 
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
+        backgroundAlpha(0.4f);
         //添加弹出、弹入的动画
         popupWindow.setAnimationStyle(R.style.Popupwindow);
 
@@ -218,26 +243,29 @@ public class PersonInfoActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_cancle:
-                        popupWindow.dismiss();
+                            backgroundAlpha(1.0f);
+                            popupWindow.dismiss();
                         break;
                     case R.id.btn_ensure:
-                        Map<String,Object> params=new HashMap<>();
-                        String userId=preferences.getString("userId","");
-                        boolean sex=preferences.getBoolean("sex",false);
-                        birthday=year+"-"+month+"-"+day;
+                            Map<String, Object> params = new HashMap<>();
+                            String userId = preferences.getString("userId", "");
+                            boolean sex2 = preferences.getBoolean("sex", false);
+                            birthday = year + "-" + month + "-" + day;
 
-                        int flag=0;
-                        if (sex){
-                            flag=1;
-                        }else {
-                            flag=0;
-                        }
-                        params.put("userId",userId);
-                        params.put("sex",flag);
-                        params.put("username",username);
-                        params.put("birthday",birthday);
-                        new UpdatePersonAsync().execute(params);
-                        popupWindow.dismiss();
+                            int flag = 0;
+                            if (sex2) {
+                                flag = 1;
+                            } else {
+                                flag = 0;
+                            }
+                            sex=-1;
+                            params.put("userId", userId);
+                            params.put("sex", flag);
+                            params.put("username", username);
+                            params.put("birthday", birthday);
+                            new UpdatePersonAsync().execute(params);
+                            backgroundAlpha(1.0f);
+                            popupWindow.dismiss();
                         break;
 
                 }
@@ -335,10 +363,15 @@ public class PersonInfoActivity extends AppCompatActivity {
                     convertView.setMinimumHeight(3);
                     break;
                 case 6:
-                    convertView=View.inflate(context,R.layout.person_common,null);
-                    viewHolder2=new ViewHolder2(convertView);
-                    viewHolder2.tv_left.setText(strs[3]);
-                    viewHolder2.tv_right.setText("男");
+                    convertView=View.inflate(context,R.layout.person_name,null);
+                    viewHolder3=new ViewHolder3(convertView);
+                    viewHolder3.tv_head.setText(strs[3]);
+                    boolean sex=preferences.getBoolean("sex",false);
+                    if (sex){
+                        viewHolder3.tv_name.setText("男");
+                    }else {
+                        viewHolder3.tv_name.setText("女");
+                    }
                     break;
                 case 7:
                     convertView=View.inflate(context,R.layout.view3,null);
@@ -348,13 +381,18 @@ public class PersonInfoActivity extends AppCompatActivity {
                     convertView=View.inflate(context,R.layout.person_birth,null);
                     viewHolder4=new ViewHolder4(convertView);
                     viewHolder4.tv_birth.setText(strs[4]);
-                    String birthday=preferences.getString("birthday","");
-                    Date date =new Date(Long.parseLong(birthday));
-                    SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
 
-                    //设置转化格式
-                    String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
-                    viewHolder4.tv_birthday.setText(time);
+                    String birthday=preferences.getString("birthday","");
+                    if (!TextUtils.isEmpty(birthday)){
+                        Date date =new Date(Long.parseLong(birthday));
+                        SimpleDateFormat sdf=new SimpleDateFormat("yyyy年MM月dd日");
+
+                        //设置转化格式
+                        String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
+                        viewHolder4.tv_birthday.setText(time);
+                    }
+
+
                     break;
             }
             return convertView;
@@ -373,6 +411,7 @@ public class PersonInfoActivity extends AppCompatActivity {
             }
         }
         class ViewHolder3{
+            @BindView(R.id.tv_head) TextView tv_head;
             @BindView(R.id.tv_name) TextView tv_name;
             public ViewHolder3(View view){
                 ButterKnife.bind(this,view);
@@ -387,6 +426,17 @@ public class PersonInfoActivity extends AppCompatActivity {
         }
     }
 
+
+    //设置蒙版
+    private void backgroundAlpha(float f) {
+        WindowManager.LayoutParams lp =getWindow().getAttributes();
+        lp.alpha = f;
+        getWindow().setAttributes(lp);
+    }
+
+
+
+
     private PopupWindow popupWindow;
 
     //底部popupWindow
@@ -399,11 +449,11 @@ public class PersonInfoActivity extends AppCompatActivity {
         int height = getResources().getDisplayMetrics().heightPixels;
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
         //添加弹出、弹入的动画
         popupWindow.setAnimationStyle(R.style.Popupwindow);
-
+        backgroundAlpha(0.4f);
         ColorDrawable dw = new ColorDrawable(0x30000000);
         popupWindow.setBackgroundDrawable(dw);
         popupWindow.showAtLocation(list_set, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
@@ -414,7 +464,7 @@ public class PersonInfoActivity extends AppCompatActivity {
     private void setButtonListeners(View layout) {
         Button camera = (Button) layout.findViewById(R.id.camera);
         Button gallery = (Button) layout.findViewById(R.id.gallery);
-        Button cancel = (Button) layout.findViewById(R.id.cancel);
+        TextView cancel = (TextView) layout.findViewById(R.id.cancel);
 
         camera.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -433,6 +483,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                         startCamera();
                     }
                 }
+                backgroundAlpha(1.0f);
                 popupWindow.dismiss();
             }
         });
@@ -453,6 +504,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                         startGallery();
                     }
                 }
+                backgroundAlpha(1.0f);
                 popupWindow.dismiss();
             }
         });
@@ -460,6 +512,7 @@ public class PersonInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (popupWindow != null && popupWindow.isShowing()) {
+                    backgroundAlpha(1.0f);
                     popupWindow.dismiss();
                 }
             }
@@ -482,6 +535,7 @@ public class PersonInfoActivity extends AppCompatActivity {
     public void startCamera() {
         File path = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DCIM);
         imageFile = new File(getExternalCacheDir(), "background3.png");
+        backgroundAlpha(1.0f);
         try {
             if (imageFile.exists()) {
                 imageFile.delete();
@@ -508,6 +562,7 @@ public class PersonInfoActivity extends AppCompatActivity {
 
     //打开相册
     public void startGallery() {
+        backgroundAlpha(1.0f);
         Intent intent1 = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
         intent1.setDataAndType(MediaStore.Images.Media.EXTERNAL_CONTENT_URI, "image/*");
 
@@ -664,12 +719,21 @@ public class PersonInfoActivity extends AppCompatActivity {
                         code=100;
                         SharedPreferences.Editor editor=preferences.edit();
                         editor.putString("username",username);
-                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-                        Date date=format.parse(birthday);
-                        long ts = date.getTime();
-                        String res = String.valueOf(ts);
-                        editor.putString("birthday",res);
-                        editor.commit();
+                        if (sex!=-1){
+                            if (sex==1){
+                                editor.putBoolean("sex",true);
+                            }else if (sex==0){
+                                editor.putBoolean("sex",false);
+                            }
+                            editor.commit();
+                        }else {
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                            Date date=format.parse(birthday);
+                            long ts = date.getTime();
+                            String res = String.valueOf(ts);
+                            editor.putString("birthday",res);
+                            editor.commit();
+                        }
                     }
                 }
             }catch (Exception e){
@@ -683,6 +747,7 @@ public class PersonInfoActivity extends AppCompatActivity {
             super.onPostExecute(code);
             switch (code){
                 case 100:
+
                     Toast.makeText(PersonInfoActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
                     adapter.notifyDataSetChanged();
                     break;
@@ -734,5 +799,181 @@ public class PersonInfoActivity extends AppCompatActivity {
                 upImage(file2);
                 break;
         }
+    }
+
+    int sex=-1;
+    public void popupSexView(){
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return;
+        }
+        View view = View.inflate(this, R.layout.popview_sex, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        TextView image_cancle= (TextView) view.findViewById(R.id.cancel);
+
+        Button boy= (Button) view.findViewById(R.id.camera);
+        Button girl= (Button) view.findViewById(R.id.gallery);
+
+
+        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow.setFocusable(false);
+        popupWindow.setOutsideTouchable(false);
+
+        backgroundAlpha2(0.5f);
+
+        popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.cancel:
+                        backgroundAlpha(1.0f);
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.camera:
+                        backgroundAlpha(1.0f);
+                        Map<String,Object> params=new HashMap<>();
+                        String userId=preferences.getString("userId","");
+                        sex=1;
+                        birthday=preferences.getString("birthday","");
+                        Date date =new Date(Long.parseLong(birthday));
+                        SimpleDateFormat sdf=new SimpleDateFormat("yyyy-MM-dd");
+                        String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
+
+                        params.put("userId",userId);
+                        params.put("sex",1);
+                        params.put("username",username);
+                        params.put("birthday",time);
+                        new UpdatePersonAsync().execute(params);
+                        popupWindow.dismiss();
+                        break;
+                    case R.id.gallery:
+                        backgroundAlpha(1.0f);
+                        Map<String,Object> params2=new HashMap<>();
+                        String userId2=preferences.getString("userId","");
+                        birthday=preferences.getString("birthday","");
+                        Date date2 =new Date(Long.parseLong(birthday));
+                        SimpleDateFormat sdf2=new SimpleDateFormat("yyyy-MM-dd");
+                        String time2=sdf2.format(date2);//将Date对象转化为yyyy-MM-dd形式的字符串
+                        sex=0;
+                        params2.put("userId",userId2);
+                        params2.put("sex",0);
+                        params2.put("username",username);
+                        params2.put("birthday",time2);
+                        new UpdatePersonAsync().execute(params2);
+                        popupWindow.dismiss();
+                        break;
+
+                }
+            }
+        };
+        image_cancle.setOnClickListener(listener);
+        boy.setOnClickListener(listener);
+        girl.setOnClickListener(listener);
+    }
+
+
+    private View contentViewSign;
+    private Context mContext;
+    private Button camera, gallery;
+    TextView cancel;
+    boolean isPopup=false;
+    private void showPopup() {
+        if (popupWindow != null && popupWindow.isShowing()) {
+            return;
+        }
+        contentViewSign = LayoutInflater.from(PersonInfoActivity.this).inflate(R.layout.changepicture, null);
+        popupWindow = new PopupWindow(contentViewSign);
+        popupWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        popupWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
+        popupWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
+        popupWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow.setFocusable(false);
+//        popupWindow.setBackgroundDrawable(new BitmapDrawable());
+        popupWindow.setOutsideTouchable(false);
+        backgroundAlpha2(0.5f);
+        //添加pop窗口关闭事件
+        popupWindow.setOnDismissListener(new poponDismissListener());
+        popupWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+
+        camera = (Button) contentViewSign.findViewById(R.id.camera);
+        gallery = (Button) contentViewSign.findViewById(R.id.gallery);
+        cancel = (TextView) contentViewSign.findViewById(R.id.cancel);
+        camera.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    //在此处添加你的按键处理 xxx
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        //android 6.0权限问题
+                        if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERAPRESS);
+                        } else {
+                            startCamera();
+                        }
+                    } else {
+                        startCamera();
+                    }
+                }
+                backgroundAlpha(1.0f);
+                popupWindow.dismiss();
+            }
+        });
+        gallery.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    if (Build.VERSION.SDK_INT >= 23) {
+                        //android 6.0权限问题
+                        if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+                                ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
+                        } else {
+                            startGallery();
+                        }
+
+                    } else {
+                        startGallery();
+                    }
+                }
+                backgroundAlpha(1.0f);
+                popupWindow.dismiss();
+            }
+        });
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (popupWindow != null && popupWindow.isShowing()) {
+                    isPopup=false;
+                    backgroundAlpha(1.0f);
+                    popupWindow.dismiss();
+                }
+            }
+        });
+    }
+
+
+    public void backgroundAlpha2(float bgAlpha) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = bgAlpha; //0.0-1.0
+        getWindow().setAttributes(lp); //添加pop窗口关闭事件
+    }
+
+
+
+
+    class poponDismissListener implements PopupWindow.OnDismissListener {
+
+        @Override
+        public void onDismiss() {
+            // TODO Auto-generated method stub
+            backgroundAlpha(1f);
+        }
+
     }
 }

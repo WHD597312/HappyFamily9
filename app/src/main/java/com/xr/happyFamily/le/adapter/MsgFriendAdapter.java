@@ -20,6 +20,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.le.bean.MsgFriendBean;
@@ -212,9 +213,13 @@ public class MsgFriendAdapter extends RecyclerView.Adapter<MsgFriendAdapter.MyVi
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
                 Toast.makeText(context, "操作成功", Toast.LENGTH_SHORT).show();
+                FriendDataDaoImpl friendDataDao = new FriendDataDaoImpl(context);
+                List<FriendData> friendDataList = friendDataDao.findFriendBySendId(data.get(pos).getSenderId());
+                if (friendDataList.size() != 0)
+                    friendDataDao.delete(friendDataList.get(0));
                 data.remove(pos);
                 notifyDataSetChanged();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(context.getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = context.getSharedPreferences("my", MODE_PRIVATE);

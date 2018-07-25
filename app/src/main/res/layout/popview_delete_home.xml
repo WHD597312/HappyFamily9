@@ -9,7 +9,7 @@
         android:id="@+id/tv_homed_del"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="确定删除房间吗？"
+        android:text="您确定要删除吗？"
         android:textColor="@color/color_gray4"
         android:textSize="16sp"
         android:layout_centerHorizontal="true"

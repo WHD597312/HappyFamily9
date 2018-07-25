@@ -19,8 +19,8 @@
 
     <ImageView
         android:id="@+id/image_arrow"
-        android:layout_width="@dimen/dp_jy_20"
-        android:layout_height="@dimen/dp_jy_20"
+        android:layout_width="@dimen/dp_jy_6"
+        android:layout_height="@dimen/dp_jy_12"
         android:layout_centerVertical="true"
         android:layout_alignParentRight="true"
         android:src="@mipmap/image_arrow"

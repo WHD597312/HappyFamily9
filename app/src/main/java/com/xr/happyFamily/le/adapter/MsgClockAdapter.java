@@ -98,17 +98,18 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
                 if((lcc-data.get(position-1).getCreateTime())<5*60)
                     holder.tv_time.setVisibility(View.GONE);
             }
+        }else {
+
+                holder.tv_time.setVisibility(View.VISIBLE);
+                holder.tv_time.setText(times1);
+                if(position>0){
+                    if(times1.equals( sdr1.format(new Date(data.get(position-1).getCreateTime() * 1000L))))
+                        holder.tv_time.setVisibility(View.GONE);
+                }
+
         }
 
-        if(position==0)
-            holder.tv_time.setVisibility(View.VISIBLE);
-        else{
-            holder.tv_time.setText(times1);
-            if(position>0){
-                if(times1.equals( sdr1.format(new Date(data.get(position-1).getCreateTime() * 1000L))))
-                    holder.tv_time.setVisibility(View.GONE);
-            }
-        }
+
         holder.tv_name.setText(data.get(position).getUserName());
         String cont = null;
         switch (data.get(position).getState()){

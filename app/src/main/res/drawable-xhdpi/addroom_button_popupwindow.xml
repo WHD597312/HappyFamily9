@@ -4,6 +4,7 @@
 
     <corners
         android:radius="@dimen/dp_jy_10"></corners>
+
     <!-- 边距 -->
     <!--<padding-->
         <!--android:bottom="10dp"-->
@@ -13,7 +14,7 @@
     <!-- 边框宽度,颜色 -->
     <stroke
         android:width="@dimen/dp_jy_1"
-        android:color="@color/black"></stroke>
+        android:color="@color/white"></stroke>
 
     <solid android:color="#FFFFFF"></solid>
 

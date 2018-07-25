@@ -1,11 +1,23 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+     android:layout_height="wrap_content"
+    android:layout_width="match_parent">
+    <TextView
 
-    android:layout_width="match_parent"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_1"
+        style="@style/horizontal_line_style"
+        android:background="#f5f5f5"
+        />
+
+<LinearLayout
+
+    android:layout_width="wrap_content"
     android:layout_height="50dp"
     android:background="@color/white"
     android:orientation="horizontal"
     >
+
     <LinearLayout
         android:id="@+id/id_bto_jia"
         android:layout_width="0dp"
@@ -127,3 +139,4 @@
     </LinearLayout>
 
 </LinearLayout>
+</RelativeLayout>

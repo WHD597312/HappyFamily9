@@ -14,6 +14,7 @@ import android.widget.TextView;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
+import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.ChooseHourseActivity;
 import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.pojo.Hourse;
@@ -44,9 +45,14 @@ public class NoRoomFragment extends Fragment {
         unbinder=ButterKnife.bind(this,view);
         hourseDao=new HourseDaoImpl(getActivity());
         hourse=hourseDao.findById(houseId);
-        String hourseName = hourse.getHouseName();
-        String address=hourse.getHouseAddress();
-        textViewhousename.setText(hourseName+"."+address);
+        if (hourse!=null){
+            if (!TextUtils.isEmpty(temperature)){
+                tv_23_my1.setText(temperature);
+            }
+            String hourseName = hourse.getHouseName();
+            String address=hourse.getHouseAddress();
+            textViewhousename.setText(hourseName+"·"+address);
+        }
         return view;
     }
 
@@ -58,7 +64,7 @@ public class NoRoomFragment extends Fragment {
         }
     }
 
-    @OnClick({R.id.rl_page,R.id.btn_add_room,R.id.tv_noroom_hoursename})
+    @OnClick({R.id.rl_page,R.id.btn_add_room,R.id.tv_noroom_hoursename,R.id.ib_croom})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.rl_page:
@@ -74,6 +80,12 @@ public class NoRoomFragment extends Fragment {
                 Intent intent2=new Intent(getActivity(), ChooseHourseActivity.class);
                 startActivity(intent2);
                 break;
+            case R.id.ib_croom:
+                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
+                intent3.putExtra("houseId", houseId);
+                startActivityForResult(intent3, MREQUEST_CODE);
+                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+                break;
         }
     }
 
@@ -83,6 +95,9 @@ public class NoRoomFragment extends Fragment {
 
     public void setTemperature(String temperature) {
         this.temperature = temperature;
+        if (!TextUtils.isEmpty(temperature)){
+            tv_23_my1.setText(temperature);
+        }
     }
 
     public void setHouseId(long houseId) {

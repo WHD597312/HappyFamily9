@@ -1,5 +1,6 @@
 package com.xr.happyFamily.login.rigest;
 
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -58,7 +59,7 @@ public class RegistActivity extends AppCompatActivity {
     GifDrawable gifDrawable;
     Context mContext;
     Animation rotate;
-    int firstClick = 1;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -112,12 +113,27 @@ public class RegistActivity extends AppCompatActivity {
             }
         }
     };
+
+    private ProgressDialog progressDialog;
+    public void showProgressDialog(String message) {
+        progressDialog = new ProgressDialog(this);
+        progressDialog.setMessage(message);
+        progressDialog.setCancelable(false);
+        progressDialog.show();
+    }
+
+    //隐藏dialog
+    public void hideProgressDialog() {
+        if (progressDialog != null)
+            progressDialog.dismiss();
+    }
+
     @OnClick({R.id.btn_finish,R.id.btn_get_code,})
     public void onClick(View view){
         switch (view.getId()){
 
             case R.id.btn_finish:
-                if (firstClick==1){
+
                     String phone2 = et_phone.getText().toString().trim();
                     String code=et_code.getText().toString().trim();
                     String password=et_password.getText().toString().trim();
@@ -140,9 +156,10 @@ public class RegistActivity extends AppCompatActivity {
                     params.put("password",password);
 
                     new RegistAsyncTask().execute(params);
+                    showProgressDialog("请稍后。。。。");
 //                new getShopAsync().execute(params);
-                    firstClick=0;
-                }
+
+
 
                 break;
             case R.id.btn_get_code:
@@ -186,9 +203,11 @@ public class RegistActivity extends AppCompatActivity {
             switch (s) {
                 case "10003":
                     Utils.showToast(RegistActivity.this, "手机验证码错误，请重试");
+                    hideProgressDialog();
                     break;
                 case "100":
-                    Utils.showToast(RegistActivity.this, "创建成功");
+//                    Utils.showToast(RegistActivity.this, "创建成功");
+                    hideProgressDialog();
                     SharedPreferences.Editor editor = preferences.edit();
                     String phone = et_phone.getText().toString().trim();
                     String password = et_password.getText().toString().trim();
@@ -201,6 +220,10 @@ public class RegistActivity extends AppCompatActivity {
                         startActivity(intent);
                     }
                     break;
+                    default:
+                        Utils.showToast(RegistActivity.this, "注册失败，请重试");
+                        hideProgressDialog();
+                        break;
             }
         }
     }
@@ -268,7 +291,7 @@ public class RegistActivity extends AppCompatActivity {
         public void onTick(long millisUntilFinished) {
             Log.e("Tag", "倒计时=" + (millisUntilFinished/1000));
             if (btn_get_code!=null){
-                btn_get_code.setText(millisUntilFinished / 1000 + "s后重新发送");
+                btn_get_code.setText(millisUntilFinished / 1000 + "s");
                 //设置倒计时中的按钮外观
                 btn_get_code.setClickable(false);//倒计时过程中将按钮设置为不可点击
 //            btn_get_code.setBackgroundColor(Color.parseColor("#c7c7c7"));
@@ -287,7 +310,7 @@ public class RegistActivity extends AppCompatActivity {
 //            btn_get_code.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_blue_light));
 //            btn_get_code.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
             if (btn_get_code!=null){
-                btn_get_code.setTextSize(18);
+                btn_get_code.setTextSize(16);
                 btn_get_code.setText("重新发送");
                 btn_get_code.setClickable(true);
             }

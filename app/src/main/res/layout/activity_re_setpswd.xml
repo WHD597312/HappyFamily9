@@ -109,7 +109,7 @@
         android:id="@+id/tv_desc"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="密码至少6个字符"
+        android:text="密码至少6位"
         android:paddingLeft="@dimen/dp_jy_10"
         android:layout_marginTop="@dimen/dp_jy_10"
         />

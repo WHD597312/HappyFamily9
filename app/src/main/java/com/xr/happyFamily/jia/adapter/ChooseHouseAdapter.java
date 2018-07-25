@@ -129,7 +129,6 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
                     intent.putExtra("houseName", houseName);
                     intent.putExtra("houseAddress", houseAddress);
                     intent.putExtra("houseId", houseId);
-
                     context.startActivity(intent);
                 }
             }

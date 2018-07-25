@@ -12,9 +12,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.xr.database.dao.daoimpl.UserBeanDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.le.pojo.UserBean;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -34,11 +36,25 @@ public class DeathCountFragment extends Fragment {
         view = inflater.inflate(R.layout.fragment_le_sgjs2, container, false);
         unbinder = ButterKnife.bind(this, view);
         preferences = getActivity().getSharedPreferences("this", Context.MODE_PRIVATE);
-       int year= preferences.getInt("years",0);
-        tv_sw_sm.setText("你还有"+(100-year)+"余年的寿命");
-        tv_sw_sjj.setText(("睡"+(100-year)*365)+"次觉");
-        tv_sw_week.setText(("有"+(100-year)*365/7)+"个周末");
-        tv_sw_eat.setText("吃"+(int)((100-year)*12*0.132)+"吨粮食");
+        SharedPreferences preferences=getActivity().getSharedPreferences("my", Context.MODE_PRIVATE);
+        String birthday =preferences.getString("birthday","");
+        try {
+            Date d1 =new Date(Long.parseLong(birthday));
+            String format = "yyyy-MM-dd";
+            DateFormat sdf = new SimpleDateFormat(format);
+            Date d2 = new Date(System.currentTimeMillis());//你也可以获取当前时间   long diff = d1.getTime() - d2.getTime();//这样得到的差值是微秒级别
+            long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
+            long days = diff / (1000 * 60 * 60 * 24);
+            int year = (int)(days/365);
+            tv_sw_sm.setText("你还有"+(100-year)+"余年的寿命");
+            tv_sw_sjj.setText(("睡"+(100-year)*365)+"次觉");
+            tv_sw_week.setText(("有"+(100-year)*365/7)+"个周末");
+            tv_sw_eat.setText("吃"+(int)((100-year)*12*0.132)+"吨粮食");
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
         return view;
     }
     @OnClick({R.id.iv_sgjs_fh2})

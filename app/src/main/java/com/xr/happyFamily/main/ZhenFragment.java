@@ -84,10 +84,10 @@ public class ZhenFragment extends Fragment {
         list_info.setAdapter(myAdapter);
         return view;
     }
-    @OnClick({R.id.layout})
+    @OnClick({R.id.head})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.layout:
+            case R.id.head:
                 Intent intent=new Intent(getActivity(), PersonInfoActivity.class);
                 startActivityForResult(intent,7000);
                 break;
@@ -186,7 +186,8 @@ public class ZhenFragment extends Fragment {
         @Override
         public View getView(int position, View convertView, ViewGroup parent) {
             ViewHolder viewHolder=null;
-            int imgs[]={R.mipmap.optimal,R.mipmap.secure,R.mipmap.feedback,R.mipmap.aboutus, R.mipmap.setting};
+            int imgs[]={R.mipmap.optimal,R.mipmap.secure,R.mipmap.feedback,R.mipmap.aboutus,
+                    R.mipmap.setting};
             String strs[]={"优点子","账号与安全","帮助与反馈","关于我们","设置"};
             switch (position){
 //                case 0:
@@ -206,7 +207,8 @@ public class ZhenFragment extends Fragment {
                 case 0:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
-                    viewHolder.image_icon.setImageResource(imgs[1]);
+//                    viewHolder.image_icon.setImageResource(imgs[1]);
+                    Glide.with(getActivity()).load(R.mipmap.secure).override(50,50).into(viewHolder.image_icon);
                     viewHolder.tv_item.setText(strs[1]);
                     break;
                 case 1:
@@ -216,7 +218,8 @@ public class ZhenFragment extends Fragment {
                 case 2:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
-                    viewHolder.image_icon.setImageResource(imgs[2]);
+//                    viewHolder.image_icon.setImageResource(imgs[2]);
+                    Glide.with(getActivity()).load(R.mipmap.feedback).override(50,50).into(viewHolder.image_icon);
                     viewHolder.tv_item.setText(strs[2]);
                     break;
                 case 3:
@@ -226,7 +229,8 @@ public class ZhenFragment extends Fragment {
                 case 4:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
-                    viewHolder.image_icon.setImageResource(imgs[3]);
+//                    viewHolder.image_icon.setImageResource(imgs[3]);
+                    Glide.with(getActivity()).load(R.mipmap.aboutus).override(50,50).into(viewHolder.image_icon);
                     viewHolder.tv_item.setText(strs[3]);
                     break;
                 case 5:
@@ -236,7 +240,8 @@ public class ZhenFragment extends Fragment {
                 case 6:
                     convertView=View.inflate(context,R.layout.item_my,null);
                     viewHolder=new ViewHolder(convertView);
-                    viewHolder.image_icon.setImageResource(imgs[4]);
+//                    viewHolder.image_icon.setImageResource(imgs[4]);
+                    Glide.with(getActivity()).load(R.mipmap.setting).override(50,50).into(viewHolder.image_icon);
                     viewHolder.tv_item.setText(strs[4]);
                     break;
             }

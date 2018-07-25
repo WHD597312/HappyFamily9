@@ -65,53 +65,63 @@ public class RoomAdapter extends ArrayAdapter {
             String image="";
             if ("客厅".equals(roomType)){
                 image="living_room.png";
+                viewHolder.tv_change_2.setText("Living Room");
             }else if ("卧室".equals(roomType)){
                 image="bedroom.png";
+                viewHolder.tv_change_2.setText("Bedroom");
             }else if ("餐厅".equals(roomType)){
                 image="canteen.png";
+                viewHolder.tv_change_2.setText("Canteen");
             }else if ("卫生间".equals(roomType)){
                 image="toilet.png";
-            }else if ("卧室".equals(roomType)){
-                image="bedroom.png";
-            }else if ("餐厅".equals(roomType)){
-                image="canteen.png";
-            }else if ("卫生间".equals(roomType)){
-                image="toilet.png";
+                viewHolder.tv_change_2.setText("Toilet");
             }else if ("浴室".equals(roomType)){
-                image="bedroom.png";
+                image="bathroom.png";
+                viewHolder.tv_change_2.setText("Bathroom");
             }else if ("厨房".equals(roomType)){
                 image="kitchen.png";
+                viewHolder.tv_change_2.setText("Kitchen");
             }else if ("儿童房".equals(roomType)){
                 image="childrens_room.png";
+                viewHolder.tv_change_2.setText("Childrens Room");
             }else if ("婴儿房".equals(roomType)){
                 image="baby_room.png";
+                viewHolder.tv_change_2.setText("Baby Room");
             }else if ("活动室".equals(roomType)){
                 image="activity_room.png";
+                viewHolder.tv_change_2.setText("Activity Room");
             }else if ("媒体房".equals(roomType)){
                 image="media_room.png";
+                viewHolder.tv_change_2.setText("Media Room");
             }else if ("办公室".equals(roomType)){
                 image="office.png";
+                viewHolder.tv_change_2.setText("Office");
             }else if ("休闲室".equals(roomType)){
                 image="lounge.png";
+                viewHolder.tv_change_2.setText("Lounge");
             }else if ("书房".equals(roomType)){
                 image="study.png";
+                viewHolder.tv_change_2.setText("Study");
             }else if ("工作室".equals(roomType)){
                 image="studio.png";
+                viewHolder.tv_change_2.setText("Studio");
             }else if ("衣帽间".equals(roomType)){
                 image="cloakroom.png";
+                viewHolder.tv_change_2.setText("Cloakroom");
             }else if ("后院".equals(roomType)){
                 image="backyard.png";
+                viewHolder.tv_change_2.setText("Backyard");
             }
             String url=imageUrl+image;
             Glide.with(mContext).load(url).into(viewHolder.iv_change);
             viewHolder.tv_change_1.setText(room.getRoomName());//为文本视图设置文本内容
         }
-
         return convertView;
     }
     class ViewHolder{
         @BindView(R.id.iv_change) ImageView iv_change;
         @BindView(R.id.tv_change_1) TextView tv_change_1;
+        @BindView(R.id.tv_change_2) TextView tv_change_2;
         public ViewHolder(View view){
             ButterKnife.bind(this,view);
         }

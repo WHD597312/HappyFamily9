@@ -26,15 +26,41 @@
             android:textColor="@color/color_white"
 
             />
-        <TextView
-            android:id="@+id/tv_noroom_hoursename"
+
+        <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textColor="@color/white"
-            android:layout_marginTop="@dimen/dp_jy_12"
             android:layout_marginLeft="@dimen/dp_jy_12"
-            android:text="xxxxx的家"
-            />
+            android:layout_marginTop="@dimen/dp_jy_12">
+
+            <TextView
+                android:id="@+id/tv_noroom_hoursename"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:text="xxxxx的家"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_16" />
+
+            <ImageView
+                android:layout_width="@dimen/dp_jy_18"
+                android:layout_height="@dimen/dp_jy_18"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_jy_5"
+                android:layout_toRightOf="@+id/tv_noroom_hoursename"
+                android:src="@mipmap/jt_xz" />
+            <ImageButton
+                android:id="@+id/ib_croom"
+                android:layout_width="@dimen/dp_jy_20"
+                android:layout_height="@dimen/dp_jy_20"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_14"
+                android:layout_marginTop="@dimen/dp_jy_13"
+                android:background="@null"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/weishengjian1" />
+        </RelativeLayout>
+
         <TextView
             android:id="@+id/tv_23_my1"
             android:layout_width="wrap_content"
@@ -89,7 +115,7 @@
                 android:layout_height="@dimen/dp_jy_166"
                 android:layout_alignLeft="@id/tv_xnty_my1"
                 android:layout_alignTop="@+id/tv_xnty_my1"
-                android:layout_marginLeft="@dimen/dp_jy_133"
+                android:layout_marginLeft="@dimen/dp_jy_110"
                 android:src="@mipmap/mypage_xnty" />
 
             <TextView

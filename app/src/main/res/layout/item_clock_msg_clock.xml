@@ -32,24 +32,17 @@
         android:layout_height="wrap_content"
         android:id="@+id/tv_name"
         android:textSize="@dimen/sp_12"
-        android:text="“你瞅啥”"
         android:textColor="#3393ED"/>
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_12"
-        android:text="已拉你进入群"
-        android:textColor="#666666"/>
+
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_context"
         android:textSize="@dimen/sp_12"
-        android:text="【都是大傻逼】"
-        android:ellipsize="start"
-        android:lines="1"
+         android:singleLine="true"
+        android:ellipsize="end"
         android:textColor="#666666"/>
 </LinearLayout>
 </LinearLayout>

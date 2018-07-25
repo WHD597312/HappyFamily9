@@ -200,13 +200,12 @@ public class ClockService extends Service {
                     } else {
                         open = false;
                     }
-                    sumMin = cl.getSumMinute() * 60;
+                    sumMin = cl.getClockHour()*60+cl.getClockMinute() ;
                     Log.e("open", "onFinish:--> " + open);
                     Calendar calendar = Calendar.getInstance();
                     int hour = calendar.get(Calendar.HOUR_OF_DAY);
                     int minutes = calendar.get(Calendar.MINUTE);
-                    int second = calendar.get(Calendar.SECOND);
-                    int nowminutes = hour * 60 * 60 + minutes * 60 + second;
+                    int nowminutes = hour * 60  + minutes ;
                     if (sumMin == nowminutes && true == open) {
                         isJy = true;
                         isBt = false;
@@ -419,10 +418,13 @@ public class ClockService extends Service {
                 } else {
                     open = false;
                 }
-                sumMin = clockBean.getSumMinute() * 60;
+                sumMin = ((clockBean.getClockHour() * 60)+clockBean.getClockMinute())*60;
+                Log.e("qqqqqqqqqqqLLLL22222",sumMin+","+nowminutes);
                 if (sumMin<nowminutes){
                     sumMin= sumMin+24*60*60;
                 }
+
+
                 if (sumMin >= nowminutes && true == open) {
                     if (finishTime == 0)
                         finishTime = sumMin;
@@ -467,5 +469,7 @@ public class ClockService extends Service {
     public void update(Time time){
         timeDao.update(time);
     }
+
+
 
 }

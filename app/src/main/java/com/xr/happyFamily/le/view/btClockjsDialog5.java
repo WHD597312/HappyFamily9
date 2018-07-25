@@ -8,26 +8,18 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.Uri;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.preference.PreferenceManager;
 import android.support.annotation.NonNull;
-import android.util.Log;
-import android.view.KeyEvent;
 import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.pojo.Time;
-import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 
-import java.util.Calendar;
 import java.util.List;
-import java.util.Random;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -40,6 +32,14 @@ import butterknife.OnClick;
 public class btClockjsDialog5 extends Dialog {
 
 
+    @BindView(R.id.tv_title)
+    TextView tvTitle;
+    @BindView(R.id.tv_context)
+    TextView tvContext;
+    @BindView(R.id.tv_quxiao)
+    TextView tvQuxiao;
+    @BindView(R.id.tv_queren)
+    TextView tvQueren;
     private String name;
 
     String text;
@@ -52,7 +52,8 @@ public class btClockjsDialog5 extends Dialog {
     Time time;
     Intent service;
     boolean isBound;
-//        public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;//定义屏蔽参数
+
+    //        public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;//定义屏蔽参数
     public btClockjsDialog5(@NonNull Context context) {
         super(context, R.style.MyDialog);
         mcontext = context;
@@ -61,14 +62,16 @@ public class btClockjsDialog5 extends Dialog {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.dialog_test);
+        setContentView(R.layout.popup_main);
         ButterKnife.bind(this);
+        tvTitle.setText("情侣闹钟");
+        tvContext.setText("您有新的情侣闹钟");
+        tvQuxiao.setVisibility(View.GONE);
 
         service = new Intent(mcontext, ClockService.class);
         isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
 
     }
-
 
 
     @Override
@@ -80,7 +83,7 @@ public class btClockjsDialog5 extends Dialog {
     @Override
     protected void onStop() {
         super.onStop();
-        if (isBound){
+        if (isBound) {
             mcontext.unbindService(connection);
         }
     }
@@ -100,7 +103,7 @@ public class btClockjsDialog5 extends Dialog {
 
     ClockService mqService;
     boolean bound;
-    ServiceConnection connection=new ServiceConnection() {
+    ServiceConnection connection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
             ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
@@ -114,10 +117,10 @@ public class btClockjsDialog5 extends Dialog {
         }
     };
 
-    @OnClick({R.id.bt_qd})
+    @OnClick({R.id.tv_queren})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.bt_qd:
+            case R.id.tv_queren:
                 if (mqService != null) {
                     mqService.startClock();
                 }

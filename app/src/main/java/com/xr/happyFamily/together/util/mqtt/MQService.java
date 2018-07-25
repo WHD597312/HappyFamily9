@@ -12,7 +12,9 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
@@ -688,7 +690,9 @@ public class MQService extends Service {
                             userList2.setClockHour(userList.getClockHour());
                             userList2.setClockMinute(userList.getClockMinute());
                             clockBeanDao.update(userList2);
-//                            showDialog();
+                            Message msg =Message.obtain();
+                            msg.what=1;   //标志消息的标志
+                            handler.sendMessage(msg);
                         }
 
                         if (isNew) {
@@ -981,28 +985,41 @@ public class MQService extends Service {
         mContext.startActivity(intent);
     }
 
+  Handler handler= new Handler(){
+      @Override
+      public void handleMessage(Message msg) {
+          super.handleMessage(msg);
+          switch (msg.what){
+              case  1:
+                  showDialog();
+                  break;
+          }
+      }
+  };
 
+    btClockjsDialog5 dialog4;
 
     private void showDialog() {
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setMessage("Receive new Message show or not");
-        builder.setPositiveButton("Yes", new DialogInterface.OnClickListener() {
+        dialog4 = new btClockjsDialog5(this);
+        dialog4.setOnNegativeClickListener(new btClockjsDialog5.OnNegativeClickListener() {
             @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.i("owen", "Yes is clicked");
+            public void onNegativeClick() {
+//                dialog.dismiss();
+            }
+        });
+        dialog4.setOnPositiveClickListener(new btClockjsDialog5.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+
             }
         });
 
-        builder.setNegativeButton("No", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialogInterface, int i) {
-                Log.i("owen", "No is clicked");
-            }
-        });
+        dialog4.setCanceledOnTouchOutside(false);
+        dialog4.setCancelable(false);
+        dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
-        AlertDialog alertDialog = builder.create();
-        alertDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-        alertDialog.setCanceledOnTouchOutside(true);
-        alertDialog.show();
+
+        dialog4.show();
+
     }
 }

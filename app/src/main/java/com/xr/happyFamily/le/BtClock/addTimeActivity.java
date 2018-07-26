@@ -137,8 +137,10 @@ public class addTimeActivity extends AppCompatActivity {
                 if (Utils.isEmpty(time.getStyle())) {
                     time.setStyle("听歌识曲");
                     time.setFlag(1);
-                    time.setRingName("学猫叫");
-                }
+
+                }if (Utils.isEmpty(time.getRingName())){
+                time.setRingName("学猫叫");
+            }
                 int sumMin = hour * 60 + minutes;
                 time.setSumMin(sumMin);
                 time.setOpen(true);

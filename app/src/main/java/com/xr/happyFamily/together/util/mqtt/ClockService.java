@@ -405,8 +405,11 @@ public class ClockService extends Service {
                 sumMin= sumMin+24*60*60;
             }
             if (sumMin >= nowminutes && true == open) {
-                finishTime = sumMin;
-                break;
+//                finishTime = sumMin;
+                if (finishTime == 0)
+                    finishTime = sumMin;
+                else if (sumMin < finishTime)
+                    finishTime = sumMin;
             }
         }
 

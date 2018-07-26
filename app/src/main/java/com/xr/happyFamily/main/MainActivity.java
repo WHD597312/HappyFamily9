@@ -22,6 +22,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -457,12 +458,19 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         }
     }
 
+    private int first=0;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeAllActivity();
-            family = "";
-            return true;
+            first++;
+            if (first==2){
+                application.removeAllActivity();
+                family = "";
+                return true;
+            }else if (first<2){
+                Toast.makeText(MainActivity.this,"请再按一次退出p99",Toast.LENGTH_SHORT).show();
+                return false;
+            }
         }
         return super.onKeyDown(keyCode, event);
     }

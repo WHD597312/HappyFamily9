@@ -194,6 +194,7 @@
             android:text="输出模式"
             android:textSize="@dimen/sp_16"
             android:layout_below="@+id/layout_body"
+            android:visibility="gone"
             android:layout_marginTop="@dimen/dp_jy_10"
 
             />

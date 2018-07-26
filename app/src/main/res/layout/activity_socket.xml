@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#373740"
+    android:orientation="vertical"
+    android:splitMotionEvents="false">
+
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="8%"
+        app:layout_widthPercent="100%"
+        >
+        <ImageView
+            android:id="@+id/image_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:src="@mipmap/socket_back"
+            android:padding="10dp"
+            android:layout_centerVertical="true"
+            />
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_40"
+            android:text="智能插座"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:layout_centerVertical="true"
+            android:textSize="@dimen/sp_18"
+            />
+
+        <ImageView
+            android:id="@+id/image_more"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="@dimen/dp_jy_10"
+            android:padding="@dimen/dp_jy_12"
+            android:src="@mipmap/image_more1" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/relative"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_heightPercent="87%"
+        app:layout_widthPercent="100%"
+        android:layout_below="@+id/head"
+        android:visibility="visible"
+        >
+        <RelativeLayout
+            android:id="@+id/layout_body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+
+            <ImageView
+                android:id="@+id/image_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:layout_marginTop="@dimen/dp_jy_65"
+                android:src="@mipmap/socket"
+                />
+
+
+        </RelativeLayout>
+
+        <TextView
+            android:layout_marginTop="@dimen/dp_jy_20"
+            android:id="@+id/tv_switch_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="插座电源已开启"
+            android:textColor="@color/white"
+            android:layout_below="@+id/layout_body"
+            android:gravity="center"
+            android:textSize="@dimen/sp_16"
+            />
+        <TextView
+            android:id="@+id/tv_close_socket"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/tv_switch_state"
+            android:text="15：00关闭插座"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center"
+            android:textColor="@color/color_gray"
+            />
+        <RelativeLayout
+            android:layout_alignParentBottom="true"
+            android:id="@+id/relative4"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+
+            >
+            <ImageView
+                android:id="@+id/image_timer"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
+                android:scaleType="centerInside"
+                android:src="@mipmap/socket_timer"
+                android:layout_marginLeft="75px"
+                />
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_timer"
+                android:layout_alignLeft="@+id/image_timer"
+                android:layout_alignRight="@+id/image_timer"
+                android:text="定时"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+
+            <ImageView
+                android:id="@+id/socket_switch"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
+                android:layout_centerInParent="true"
+                android:layout_alignTop="@+id/image_timer"
+                android:scaleType="centerInside"
+                android:src="@mipmap/image_switch" />
+            <TextView
+                android:id="@+id/tv_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_timer"
+                android:layout_alignLeft="@+id/socket_switch"
+                android:layout_alignRight="@+id/socket_switch"
+                android:text="开关"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+            <TextView
+                android:id="@+id/tv_mode"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_above="@+id/image_timer"
+                android:layout_alignLeft="@+id/image_timer"
+                android:layout_alignRight="@+id/image_timer"
+                android:gravity="center"
+                android:text="锁定模式"
+                />
+
+            <ImageView
+                android:id="@+id/image_meter"
+                android:layout_width="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_60"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="75px"
+                android:scaleType="centerInside"
+                android:src="@mipmap/meter" />
+            <TextView
+                android:id="@+id/tv_meter"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_meter"
+                android:layout_alignLeft="@+id/image_meter"
+                android:layout_alignRight="@+id/image_meter"
+                android:text="电力表"
+                android:gravity="center"
+                android:textColor="@color/white"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+    <TextView
+        android:id="@+id/tv_offline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_weight="5"
+        android:text="设备已离线"
+        app:layout_heightPercent="87%"
+        app:layout_widthPercent="100%"
+        android:gravity="center"
+        android:textSize="@dimen/sp_25"
+        android:layout_centerInParent="true"
+        android:visibility="gone"
+        />
+
+</android.support.percent.PercentRelativeLayout>

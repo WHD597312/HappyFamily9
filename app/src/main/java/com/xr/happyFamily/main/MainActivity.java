@@ -464,7 +464,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             first++;
             if (first==2){
-                
+
                 application.removeAllActivity();
                 family = "";
                 return true;

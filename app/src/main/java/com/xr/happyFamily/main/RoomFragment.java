@@ -604,7 +604,6 @@ public class RoomFragment extends Fragment {
                     intent2.putExtra("refersh","refresh");
                     intent2.putExtra("houseId",houseId);
                     startActivity(intent2);
-                    getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
                     break;
                 default:
                     Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();

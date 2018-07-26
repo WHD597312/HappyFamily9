@@ -279,7 +279,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="运费"
+                    android:text="运费："
                     android:textColor="@color/shop_context"
                     android:textSize="@dimen/sp_12" />
 
@@ -288,7 +288,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="right"
-                    android:text="+¥0"
+                    android:text="商家包邮"
                     android:textColor="@color/shop_price"
                     android:textSize="@dimen/sp_12" />
 

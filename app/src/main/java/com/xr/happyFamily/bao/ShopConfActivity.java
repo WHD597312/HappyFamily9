@@ -231,7 +231,7 @@ public class ShopConfActivity extends AppCompatActivity {
                     params.put("paymentId", 1);
                     params.put("orderDetailsList", mlist);
                     //邮费
-                    params.put("postFee", post_fee);
+                    params.put("postFee", 0);
                     new postOrderAsync().execute(params);
                 }
                 else {

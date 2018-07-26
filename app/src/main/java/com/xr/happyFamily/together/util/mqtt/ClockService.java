@@ -56,6 +56,8 @@ public class ClockService extends Service {
         timeDao = new TimeDaoImpl(this);
         clockDao=new ClockDaoImpl(this);
         preferences = this.getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
+        SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
     }
 
     @Nullable

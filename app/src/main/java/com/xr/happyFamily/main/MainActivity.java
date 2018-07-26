@@ -126,8 +126,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             application.addActivity(this);
         }
 
-
-
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 

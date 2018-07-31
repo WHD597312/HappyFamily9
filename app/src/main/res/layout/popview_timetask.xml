@@ -66,8 +66,15 @@
             android:id="@+id/tv_hour"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_jy_170"
-
             />
+           <com.xr.happyFamily.jia.view_custom.Timepicker3
+               android:descendantFocusability="blocksDescendants"
+               android:background="@color/white"
+               android:id="@+id/tv_min"
+               android:layout_width="wrap_content"
+               android:layout_height="@dimen/dp_jy_170"
+               android:visibility="gone"
+               />
        </LinearLayout>
         <View
             android:id="@+id/view_hour1"

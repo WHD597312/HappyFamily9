@@ -1,6 +1,7 @@
 package com.xr.happyFamily.together.chart;
 
 import android.graphics.Color;
+import android.graphics.drawable.GradientDrawable;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -13,6 +14,7 @@ import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
+import com.xr.happyFamily.R;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,15 +47,19 @@ public class LineChartManager {
         //折线图例 标签 设置
         Legend legend = lineChart.getLegend();
         legend.setForm(Legend.LegendForm.LINE);
-        legend.setTextSize(11f);
+        legend.setTextSize(0f);
         //显示位置
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setDrawInside(false);
-        lineChart.setScaleXEnabled(false);/**禁止缩放x轴*/
-        lineChart.setScaleYEnabled(true);/**缩放y轴*/
+//        lineChart.removeView(legend);
 
+        legend.setEnabled(false);
+        lineChart.setScaleXEnabled(false);/**禁止缩放x轴*/
+        lineChart.setScaleYEnabled(false);/**缩放y轴*/
+
+        xAxis.setTextColor(Color.WHITE);
         //XY轴的设置
         //X轴设置显示位置在底部
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -73,6 +79,7 @@ public class LineChartManager {
      */
     private void initLineDataSet(LineDataSet lineDataSet, int color, boolean mode) {
         lineDataSet.setColor(color);
+
         lineDataSet.setCircleColor(color);
         lineDataSet.setLineWidth(1f);
         lineDataSet.setCircleRadius(1f);
@@ -83,9 +90,11 @@ public class LineChartManager {
         lineDataSet.setDrawFilled(mode);
         lineDataSet.setFormLineWidth(1f);
         lineDataSet.setFormSize(15.f);
+        lineDataSet.setValueTextColor(Color.WHITE);
 
         //线模式为圆滑曲线（默认折线）
         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+
     }
 
     /**
@@ -104,6 +113,11 @@ public class LineChartManager {
         }
         // 每一个LineDataSet代表一条线
         LineDataSet lineDataSet = new LineDataSet(entries, label);
+
+//        lineDataSet.setFillColor(Color.parseColor("#5a5a5a"));
+
+        GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,new int[]{Color.parseColor("#cc4b4c50"),Color.GRAY});
+        lineDataSet.setFillDrawable(grad);
         initLineDataSet(lineDataSet, color, true);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();
@@ -111,8 +125,13 @@ public class LineChartManager {
         LineData data = new LineData(dataSets);
         //设置X轴的刻度数
         xAxis.setAxisLineColor(Color.WHITE);
-        xAxis.setTextColor(Color.WHITE);
-        xAxis.setLabelCount(xAxisValues.size(), true);
+        xAxis.setTextColor(Color.parseColor("#3b3b40"));
+        xAxis.setLabelCount(xAxisValues.size(), false);
+        xAxis.setEnabled(true);
+
+
+        xAxis.setDrawAxisLine(true);
+        leftAxis.setDrawAxisLine(true);
         data.setDrawValues(false);
         lineChart.setData(data);
     }
@@ -228,7 +247,9 @@ public class LineChartManager {
         Description description = new Description();
         description.setText(str);
         description.setTextColor(Color.WHITE);
+        description.setEnabled(false);
         lineChart.setDescription(description);
+
         lineChart.invalidate();
     }
 }

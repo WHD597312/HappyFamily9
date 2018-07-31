@@ -27,6 +27,8 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupMenu;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
@@ -42,7 +44,9 @@ import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
+import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.DeleteDeviceDialog;
@@ -75,7 +79,7 @@ public class RoomFragment extends Fragment {
     int mPosition;
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
-
+    @BindView(R.id.balcony_li)  LinearLayout balcony_li;
     private List<DeviceChild> deviceChildren;
     @BindView(R.id.gv_balcony_home)
     MyGridview mGridView;
@@ -196,8 +200,7 @@ public class RoomFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    if (type == 3) {
+                    } else if (type == 3) {
                         Intent intent = new Intent(getActivity(), SmartTerminalActivity.class);
                         String deviceName = deviceChild.getName();
                         long deviceId = deviceChild.getId();
@@ -205,6 +208,18 @@ public class RoomFragment extends Fragment {
                         intent.putExtra("deviceId", deviceId);
                         intent.putExtra("houseId", houseId);
                         startActivityForResult(intent, 6000);
+                    }else if (type==4){
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), SocketActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -251,7 +266,6 @@ public class RoomFragment extends Fragment {
         IntentFilter intentFilter = new IntentFilter("RoomFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
-
         Intent service = new Intent(getActivity(), MQService.class);
         isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
     }
@@ -260,10 +274,11 @@ public class RoomFragment extends Fragment {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.balcony_li:
-                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
-                intent3.putExtra("houseId", houseId);
-                startActivityForResult(intent3, 6000);
-                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+//                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
+//                intent3.putExtra("houseId", houseId);
+//                startActivityForResult(intent3, 6000);
+//                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+                popupmenuWindow();
                 break;
             case R.id.iv_home_fh:
                 Intent intent2 = new Intent(getActivity(), MainActivity.class);
@@ -282,6 +297,66 @@ public class RoomFragment extends Fragment {
                 break;
         }
     }
+
+    List<Room> rooms;
+    RoomAdapter adapter;
+    private PopupWindow popupWindow1;
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+
+        View view = View.inflate(getActivity(), R.layout.activity_home_change, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+
+        ListView change_list = (ListView) view.findViewById(R.id.change_list);
+        RelativeLayout li_change = (RelativeLayout) view.findViewById(R.id.li_change);
+        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.ChangroomPopupwindow);
+//        ColorDrawable dw = new ColorDrawable(getActivity().getResources().getColor(R.color.white));
+//        popupWindow1.setBackgroundDrawable(dw);
+        popupWindow1.showAsDropDown(balcony_li, 0, 0);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        rooms = roomDao.findAllRoomInHouse(houseId);
+        adapter = new RoomAdapter(getActivity(), R.layout.activity_home_change_item, rooms);
+//        ListView listView = (ListView) findViewById(R.id.change_list);
+
+        change_list.setAdapter(adapter);
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.li_change:
+                        popupWindow1.dismiss();
+                        break;
+                }
+            }
+        };
+
+        change_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("onItemClick","-->"+position);
+                Intent intent = new Intent(getActivity(),MainActivity.class);
+                intent.putExtra("houseId",houseId);
+                SharedPreferences.Editor editor=mPositionPreferences.edit();
+                editor.putInt("position",position+1);
+                editor.commit();
+                popupWindow1.dismiss();
+                startActivity(intent);
+            }
+        });
+        li_change.setOnClickListener(listener);
+    }
+
+
+
 
     public void setHouseId(long houseId) {
         this.houseId = houseId;
@@ -593,7 +668,6 @@ public class RoomFragment extends Fragment {
             }
             return code;
         }
-
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);

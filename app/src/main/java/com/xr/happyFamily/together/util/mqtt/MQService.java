@@ -36,6 +36,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
+import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.le.BtClock.RingReceiver;
 import com.xr.happyFamily.le.ClockActivity;
@@ -140,7 +141,7 @@ public class MQService extends Service {
         isFinish = false;
         countTimer = new CountTimer(20000, 1000);
         countTimer.start();
-        SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
         String[] clocks = clockData.split(",");
         for (int i = 0; i < clocks.length; i++) {
@@ -269,7 +270,9 @@ public class MQService extends Service {
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/sensor1")) {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
-            } else if (topicName.startsWith("p99")) {
+            } else if (topicName.startsWith("p99/socket1")){
+                macAddress=topicName.substring(12,topicName.lastIndexOf("/"));
+            }else if (topicName.startsWith("p99")) {
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
             int type = -1;/**产品类型*/
@@ -353,6 +356,8 @@ public class MQService extends Service {
                         messageJsonArray = messageJsonObject.getJSONArray("Warmer");
                     } else if (messageJsonObject != null && messageJsonObject.has("TempHumPM2_5")) {
                         messageJsonArray = messageJsonObject.getJSONArray("TempHumPM2_5");
+                    }else if (messageJsonObject!=null && messageJsonObject.has("Socket")){
+                        messageJsonArray = messageJsonObject.getJSONArray("Socket");
                     }
                     if (!TextUtils.isEmpty(productType)) {
                         type = Integer.parseInt(productType);
@@ -373,7 +378,6 @@ public class MQService extends Service {
 
                         } else {
                             if (messageJsonArray != null) {
-
                                 busModel = messageJsonArray.getInt(3);
                                 int mMcuVersion = messageJsonArray.getInt(4);
                                 mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
@@ -520,6 +524,66 @@ public class MQService extends Service {
                         }
                         break;
                     case 4:
+                        if (!TextUtils.isEmpty(productType)) {
+
+                        } else {
+                            if (messageJsonArray != null) {
+                                int socketPowerHigh;/**功率参数高位*/
+                                int socketPowerLow;/**功率参数低位*/
+                                int socketTemp;/**插座温度*/
+                                int socketState;/**插座当前状态*/
+                                int socketTimer;/**插座定时模式*/
+                                int socketTimerOpenHour;/**插座定时模式开的 时*/
+                                int socketTimerOpenMin;/**插座定时模式开的 分*/
+                                int socketTimerCloseHour;/**插座定时模式关的 时*/
+                                int socketTimerCloseMin;/**插座定时模式关的 分*/
+                                int socketCurrent;/**插座当前电流值*/
+                                int socketVal;/**插座当前电压值*/
+                                int socketPowerConsume;/**插座当前耗电量总度数*/
+
+                                busModel = messageJsonArray.getInt(3);
+                                int mMcuVersion = messageJsonArray.getInt(4);
+                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                                int mWifiVersion = messageJsonArray.getInt(5);
+                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                                socketPowerHigh = messageJsonArray.getInt(7);
+                                socketPowerLow=messageJsonArray.getInt(8);
+                                socketTemp=messageJsonArray.getInt(9);
+                                int state=messageJsonArray.getInt(10);
+                                int x[]=TenTwoUtil.changeToTwo(state);
+                                socketState= x[7];
+//                                socketTimer=x[6];
+
+                                socketTimerOpenHour=messageJsonArray.getInt(11);
+                                socketTimerOpenMin=messageJsonArray.getInt(12);
+
+//                                socketTimerCloseHour=messageJsonArray.getInt(13);
+//                                socketTimerCloseMin=messageJsonArray.getInt(14);
+                                socketCurrent=messageJsonArray.getInt(13);
+                                socketVal=messageJsonArray.getInt(14);
+                                socketPowerConsume=messageJsonArray.getInt(15);
+
+                                if (deviceChild != null) {
+                                    deviceChild.setBusModel(busModel);
+                                    deviceChild.setMcuVersion(mcuVersion);
+                                    deviceChild.setWifiVersion(wifiVersion);
+                                    deviceChild.setSocketPowerHigh(socketPowerHigh);
+                                    deviceChild.setSocketPowerLow(socketPowerLow);
+                                    deviceChild.setSocketTemp(socketTemp);
+                                    deviceChild.setSocketState(socketState);
+//                                    deviceChild.setSocketTimer(socketTimer);
+                                    deviceChild.setSocketTimerOpenHour(socketTimerOpenHour);
+                                    deviceChild.setSocketTimerOpenMin(socketTimerOpenMin);
+//                                    deviceChild.setSocketTimerCloseHour(socketTimerCloseHour);
+//                                    deviceChild.setSocketTimerCloseMin(socketTimerCloseMin);
+                                    deviceChild.setSocketCurrent(socketCurrent);
+                                    deviceChild.setSocketVal(socketVal);
+                                    deviceChild.setSocketPowerConsume(socketPowerConsume);
+                                    deviceChild.setOnline(true);
+                                    deviceChildDao.update(deviceChild);
+                                }
+                            }
+                        }
                         break;
                     case 5:
                         break;
@@ -555,6 +619,11 @@ public class MQService extends Service {
                     sendBroadcast(mqttIntent);
                 } else if (SmartTerminalActivity.running) {
                     Intent mqttIntent = new Intent("SmartTerminalActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
+                }else if (SocketActivity.running){
+                    Intent mqttIntent = new Intent("SocketActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
@@ -610,7 +679,7 @@ public class MQService extends Service {
                 Log.e("qqqqqqqqqqWWW", macAddress + "," + topicName);
 
                 if (macAddress.equals("clockuniversal")) {
-                    SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+                    SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
                     String clockData = preferences.getString("clockData", "");
                     String[] clocks = clockData.split(",");
                     SharedPreferences.Editor editor = preferences.edit();
@@ -916,6 +985,11 @@ public class MQService extends Service {
                 case 3:
                     onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
                     offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                case 4:
+                    onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;

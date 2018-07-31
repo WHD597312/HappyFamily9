@@ -24,7 +24,7 @@ public class GridViewAdapter extends ArrayAdapter {
     private int layoutResourceId;
     private List<DeviceChild> mGridData;
 
-    int img[]={R.mipmap.sb_dnq,R.mipmap.sb_znzd};
+    int img[]={R.mipmap.sb_dnq,R.mipmap.sb_znzd,R.mipmap.image_socket};
     public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
         super(context, resource, objects);
         this.mContext = context;
@@ -110,6 +110,34 @@ public class GridViewAdapter extends ArrayAdapter {
                             holder.tv_device_switch.setText("电压低");
                         }else {
                             holder.tv_device_switch.setText("在线");
+                        }
+                    }else {
+                        holder.view.setVisibility(View.GONE);
+                        holder.tv_device_switch.setText("离线");
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                    }
+                }else if (type==4){
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("智能插座");
+                    }else {
+                        String roomName=item.getRoomName();
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
+                    boolean online=item.getOnline();
+                    Log.i("online","-->"+online);
+//                    int sensorState=item.getSensorState();
+                    int socketState=item.getSocketState();
+                    Log.i("online","-->"+socketState);
+                    item.setImg(img[2]);
+                    if (online){
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                        holder.view.setVisibility(View.VISIBLE);
+                        if (socketState==1){
+                            holder.tv_device_switch.setText("电源开");
+                        }else if (socketState==0){
+                            holder.tv_device_switch.setText("电源关");
                         }
                     }else {
                         holder.view.setVisibility(View.GONE);

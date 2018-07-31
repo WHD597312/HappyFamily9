@@ -738,7 +738,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         friendDataDao.deleteAll();
 //        clockBeanDao.deleteAll();
 //        userInfosDao.deleteAll();
-        SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
         Log.e("qqqqqqqqqDDDD",clockData);
         clocks = clockData.split(",");
@@ -746,7 +746,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
     //取消订阅
     public void unsubClock(){
-        SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+        SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
         Log.e("qqqqqqqqqDDDD",clockData);
         clocks = clockData.split(",");

@@ -22,7 +22,10 @@ import android.view.ViewGroup;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.AdapterView;
+import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.PopupMenu;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -39,9 +42,12 @@ import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
+import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
+import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
+import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.DeleteDeviceDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -68,6 +74,8 @@ public class FamilyFragment extends Fragment {
     private long houseId;
     @BindView(R.id.rl_home_xnty)
     RelativeLayout rl_home_xnty;
+    @BindView(R.id.rl_roomf_rl)
+    RelativeLayout rl_roomf_rl;
     private String temperature;
     @BindView(R.id.tv_23_my) TextView tv_23_my;/**家庭温度*/
     /**
@@ -120,9 +128,10 @@ public class FamilyFragment extends Fragment {
         unbinder = ButterKnife.bind(this, view);
 
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
         String strUserId = preferences.getString("userId", "");
         userId = Integer.parseInt(strUserId);
-
+        roomDao = new RoomDaoImpl(getActivity());
         deviceChildDao = new DeviceChildDaoImpl(getActivity());
         hourseDao = new HourseDaoImpl(getActivity());
         return view;
@@ -227,13 +236,86 @@ public class FamilyFragment extends Fragment {
                 startActivityForResult(intent, MREQUEST_CODE);
                 break;
             case R.id.image_change:
-                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
-                intent3.putExtra("houseId", houseId);
-                startActivityForResult(intent3, MREQUEST_CODE);
-                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+//                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
+//                intent3.putExtra("houseId", houseId);
+//                startActivityForResult(intent3, MREQUEST_CODE);
+//                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+                popupmenuWindow();
                 break;
         }
     }
+
+
+
+
+
+    RoomDaoImpl roomDao;
+    Room room;
+    List<Room> rooms;
+    RoomAdapter adapter;
+    private PopupWindow popupWindow1;
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+
+        View view = View.inflate(getActivity(), R.layout.activity_home_change, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+
+        ListView change_list = (ListView) view.findViewById(R.id.change_list);
+        RelativeLayout li_change = (RelativeLayout) view.findViewById(R.id.li_change);
+        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.ChangroomPopupwindow);
+//        ColorDrawable dw = new ColorDrawable(getActivity().getResources().getColor(R.color.white));
+//        popupWindow1.setBackgroundDrawable(dw);
+        popupWindow1.showAsDropDown(rl_roomf_rl, 0, 0);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        rooms = roomDao.findAllRoomInHouse(houseId);
+        adapter = new RoomAdapter(getActivity(), R.layout.activity_home_change_item, rooms);
+//        ListView listView = (ListView) findViewById(R.id.change_list);
+
+        change_list.setAdapter(adapter);
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()){
+                    case R.id.li_change:
+                        popupWindow1.dismiss();
+
+                        break;
+                }
+            }
+        };
+
+        change_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("onItemClick","-->"+position);
+                Intent intent = new Intent(getActivity(),MainActivity.class);
+                intent.putExtra("houseId",houseId);
+                SharedPreferences.Editor editor=mPositionPreferences.edit();
+                editor.putInt("position",position+1);
+                editor.commit();
+                popupWindow1.dismiss();
+                startActivity(intent);
+            }
+        });
+        li_change.setOnClickListener(listener);
+    }
+
+
+
+
+
+
+
+
 
     public void setHouseId(long houseId) {
         this.houseId = houseId;
@@ -282,29 +364,42 @@ public class FamilyFragment extends Fragment {
                     DeviceChild deviceChild = commonDevices.get(position);
                     int type=deviceChild.getType();
                     boolean online=deviceChild.getOnline();
-                    mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
+
                     mPositionPreferences.edit().clear().commit();
 
-                    if (type==2){
-                        if (online){
+
+                    if (type == 2) {
+                        if (online) {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
                             Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
                             intent.putExtra("deviceName", deviceName);
                             intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
-                        }else {
-                            Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
-                    } else if (type==3){
-                        Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
+                    } else if (type == 3) {
+                        Intent intent = new Intent(getActivity(), SmartTerminalActivity.class);
                         String deviceName = deviceChild.getName();
                         long deviceId = deviceChild.getId();
                         intent.putExtra("deviceName", deviceName);
                         intent.putExtra("deviceId", deviceId);
-                        intent.putExtra("houseId",houseId);
-                        startActivityForResult(intent,6000);
+                        intent.putExtra("houseId", houseId);
+                        startActivityForResult(intent, 6000);
+                    }else if (type==4){
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), SocketActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });
@@ -329,26 +424,39 @@ public class FamilyFragment extends Fragment {
                     boolean online=deviceChild.getOnline();
                     mPositionPreferences = getActivity().getSharedPreferences("position", MODE_PRIVATE);
                     mPositionPreferences.edit().clear().commit();
-                    if (online){
-                        if (type==2){
+
+                    if (type == 2) {
+                        if (online) {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
                             Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
                             intent.putExtra("deviceName", deviceName);
                             intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
-                        }else if (type==3){
-                            Intent intent=new Intent(getActivity(), SmartTerminalActivity.class);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (type == 3) {
+                        Intent intent = new Intent(getActivity(), SmartTerminalActivity.class);
+                        String deviceName = deviceChild.getName();
+                        long deviceId = deviceChild.getId();
+                        intent.putExtra("deviceName", deviceName);
+                        intent.putExtra("deviceId", deviceId);
+                        intent.putExtra("houseId", houseId);
+                        startActivityForResult(intent, 6000);
+                    }else if (type==4){
+                        if (online) {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), SocketActivity.class);
                             intent.putExtra("deviceName", deviceName);
                             intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId",houseId);
-                            startActivityForResult(intent,6000);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
-                    }else {
-                        Toast.makeText(getActivity(),"该设备离线",Toast.LENGTH_SHORT).show();
                     }
                 }
             });

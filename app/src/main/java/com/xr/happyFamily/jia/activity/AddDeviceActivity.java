@@ -210,12 +210,12 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     Utils.showToast(AddDeviceActivity.this, "请输入wifi密码");
                     break;
                 }
-                if (!TextUtils.isEmpty(ssid)) {
-                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
-                }
-//                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
-//                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-//                mac="5asdfghi89ha";
+//                if (!TextUtils.isEmpty(ssid)) {
+//                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+//                }
+                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
+                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+                mac="5asdfghi89hb";
                 break;
         }
     }
@@ -452,6 +452,9 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                         }else if (3==deviceType){
                             onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
                             offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
+                        }else if (4==deviceType){
+                            onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
                         }
                         if (!TextUtils.isEmpty(onlineTopicName)){
                             boolean success = mqService.subscribe(onlineTopicName, 1);

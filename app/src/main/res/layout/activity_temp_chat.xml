@@ -1,82 +1,165 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#3b3b40"
     android:orientation="vertical"
-    android:background="#373740"
     tools:context=".jia.activity.TempChatActivity">
 
     <RelativeLayout
+        android:id="@+id/relative"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_50"
-        android:gravity="center_vertical"
-        android:id="@+id/relative"
-        >
+        android:gravity="center_vertical">
+
         <ImageView
             android:id="@+id/img_back"
             android:layout_width="@dimen/dp_jy_40"
             android:layout_height="@dimen/dp_jy_40"
-            android:src="@mipmap/socket_back"
-            android:scaleType="centerInside"
             android:layout_centerVertical="true"
-            />
+            android:scaleType="centerInside"
+            android:src="@mipmap/socket_back" />
+
         <TextView
             android:id="@+id/tv_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
             android:layout_centerHorizontal="true"
             android:layout_centerInParent="true"
+            android:layout_centerVertical="true"
+            android:text="电力统计"
             android:textColor="@color/color_white"
-            android:text="设备状态"
-            android:textSize="@dimen/sp_20"
-            />
+            android:textSize="@dimen/sp_20" />
     </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_du"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/relative"
+        android:layout_marginLeft="@dimen/dp_jy_15"
+        android:gravity="center"
+        android:text="度"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12" />
+
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
-        android:layout_height="380dp"/>
-    <TextView
-        android:id="@+id/tv_power"
+        android:layout_height="380dp"
+        android:layout_below="@+id/tv_du" />
+
+    <LinearLayout
+        android:id="@+id/layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="状态"
-        android:textSize="@dimen/sp_18"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/black"
-        android:gravity="center_vertical"
-        />
+        android:layout_below="@id/line_chart"
+        android:layout_marginTop="-10dp"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/tv_mon"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周一"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_tue"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周二"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_wed"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周三"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_thu"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周四"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_fri"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周五"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_sta"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周六"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_sun"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:text="周日"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="@dimen/dp_jy_20"
+        android:layout_height="@dimen/dp_jy_1"
+        android:layout_below="@+id/layout"
+        android:layout_marginLeft="@dimen/dp_jy_20"
+        android:layout_marginTop="@dimen/dp_jy_20"
+        android:background="@color/white" />
+
     <TextView
-        android:id="@+id/tv_voltage"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="电压"
-        android:textSize="@dimen/sp_18"
-        android:layout_marginLeft="10dp"
-        android:gravity="center_vertical"
-        />
+        android:layout_above="@+id/line_chart"
+        android:layout_alignParentEnd="true"
+        android:layout_marginRight="@dimen/dp_jy_20"
+        android:text="2018-8-12"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_15" />
+
     <TextView
-        android:id="@+id/tv_current"
-        android:layout_width="match_parent"
+        android:id="@+id/tv_line"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="规格"
-        android:layout_marginTop="10dp"
-        android:textSize="@dimen/sp_18"
-        android:layout_marginLeft="10dp"
-        android:textColor="@color/black"
-        android:gravity="center_vertical"
-        />
-    <TextView
-        android:id="@+id/tv_roatPower"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:textSize="@dimen/sp_18"
-        android:layout_marginLeft="10dp"
-        android:gravity="center_vertical"
-        android:text="sss"
-        />
-</LinearLayout>
+        android:layout_below="@+id/layout"
+        android:layout_toRightOf="@+id/view"
+        android:text="电力曲线"
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:textColor="@color/white" />
+</RelativeLayout>
 
 

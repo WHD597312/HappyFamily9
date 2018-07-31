@@ -16,6 +16,7 @@ public class DeviceChild implements Serializable{
     int deviceUsedCount;/**设备被用户使用的次数*/
     String roomName;/**房间名称*/
     String common;/**常用设备*/
+    String share;/**分享设备*/
     int type;/**设备类型*/
     int busModel;/**商业模式*/
     String macAddress;/**mac地址*/
@@ -51,6 +52,166 @@ public class DeviceChild implements Serializable{
     int sorsorPm;/**PM2.5粉尘传感器数据*/
     int sensorOx;/**氧浓度传感器数据*/
     int sensorHcho;/**甲醛数据*/
+
+    int socketPowerHigh;/**插座高功率参数*/
+    int socketPowerLow;/**插座低功率参数*/
+    int socketTemp;/**插座温度*/
+    int socketState;/**插座当前状态*/
+    int socketTimer;/**插座定时模式*/
+    int socketTimerOpenHour;/**插座定时模式开的 时*/
+    int socketTimerOpenMin;/**插座定时模式开的 分*/
+
+
+    int socketTimerCloseHour;/**插座定时模式关的 时*/
+    int socketTimerCloseMin;/**插座定时模式关的 分*/
+    int socketCurrent;/**插座当前电流值*/
+    int socketVal;/**插座当前电压值*/
+    int socketPowerConsume;/**插座当前耗电量总度数*/
+    public int getSocketPowerConsume() {
+        return this.socketPowerConsume;
+    }
+
+    public void setSocketPowerConsume(int socketPowerConsume) {
+        this.socketPowerConsume = socketPowerConsume;
+    }
+    public int getSocketVal() {
+        return this.socketVal;
+    }
+    public void setSocketVal(int socketVal) {
+        this.socketVal = socketVal;
+    }
+    public int getSocketCurrent() {
+        return this.socketCurrent;
+    }
+    public void setSocketCurrent(int socketCurrent) {
+        this.socketCurrent = socketCurrent;
+    }
+    public int getSocketTimerCloseMin() {
+        return this.socketTimerCloseMin;
+    }
+    public void setSocketTimerCloseMin(int socketTimerCloseMin) {
+        this.socketTimerCloseMin = socketTimerCloseMin;
+    }
+    public int getSocketTimerCloseHour() {
+        return this.socketTimerCloseHour;
+    }
+    public void setSocketTimerCloseHour(int socketTimerCloseHour) {
+        this.socketTimerCloseHour = socketTimerCloseHour;
+    }
+    public int getSocketTimerOpenMin() {
+        return this.socketTimerOpenMin;
+    }
+    public void setSocketTimerOpenMin(int socketTimerOpenMin) {
+        this.socketTimerOpenMin = socketTimerOpenMin;
+    }
+    public int getSocketTimerOpenHour() {
+        return this.socketTimerOpenHour;
+    }
+    public void setSocketTimerOpenHour(int socketTimerOpenHour) {
+        this.socketTimerOpenHour = socketTimerOpenHour;
+    }
+    public int getSocketTimer() {
+        return this.socketTimer;
+    }
+    public void setSocketTimer(int socketTimer) {
+        this.socketTimer = socketTimer;
+    }
+    public int getSocketState() {
+        return this.socketState;
+    }
+    public void setSocketState(int socketState) {
+        this.socketState = socketState;
+    }
+    public int getSocketTemp() {
+        return this.socketTemp;
+    }
+    public void setSocketTemp(int socketTemp) {
+        this.socketTemp = socketTemp;
+    }
+    public int getSocketPowerLow() {
+        return this.socketPowerLow;
+    }
+    public void setSocketPowerLow(int socketPowerLow) {
+        this.socketPowerLow = socketPowerLow;
+    }
+    public int getSocketPowerHigh() {
+        return this.socketPowerHigh;
+    }
+    public void setSocketPowerHigh(int socketPowerHigh) {
+        this.socketPowerHigh = socketPowerHigh;
+    }
+    public int getSensorHcho() {
+        return this.sensorHcho;
+    }
+    public void setSensorHcho(int sensorHcho) {
+        this.sensorHcho = sensorHcho;
+    }
+    public int getSensorOx() {
+        return this.sensorOx;
+    }
+    public void setSensorOx(int sensorOx) {
+        this.sensorOx = sensorOx;
+    }
+    public int getSorsorPm() {
+        return this.sorsorPm;
+    }
+    public void setSorsorPm(int sorsorPm) {
+        this.sorsorPm = sorsorPm;
+    }
+    public int getSensorSimpleHum() {
+        return this.sensorSimpleHum;
+    }
+    public void setSensorSimpleHum(int sensorSimpleHum) {
+        this.sensorSimpleHum = sensorSimpleHum;
+    }
+    public int getSensorSimpleTemp() {
+        return this.sensorSimpleTemp;
+    }
+    public void setSensorSimpleTemp(int sensorSimpleTemp) {
+        this.sensorSimpleTemp = sensorSimpleTemp;
+    }
+    public int getSensorState() {
+        return this.sensorState;
+    }
+    public void setSensorState(int sensorState) {
+        this.sensorState = sensorState;
+    }
+    public long getShareId() {
+        return this.shareId;
+    }
+    public void setShareId(long shareId) {
+        this.shareId = shareId;
+    }
+    public int getLinkedSensorId() {
+        return this.linkedSensorId;
+    }
+    public void setLinkedSensorId(int linkedSensorId) {
+        this.linkedSensorId = linkedSensorId;
+    }
+    public int getLinked() {
+        return this.linked;
+    }
+    public void setLinked(int linked) {
+        this.linked = linked;
+    }
+    public int getDeviceId() {
+        return this.deviceId;
+    }
+    public void setDeviceId(int deviceId) {
+        this.deviceId = deviceId;
+    }
+    public int getImg() {
+        return this.img;
+    }
+    public void setImg(int img) {
+        this.img = img;
+    }
+    public int getUserId() {
+        return this.userId;
+    }
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
     public int getEndCode() {
         return this.endCode;
     }
@@ -147,6 +308,12 @@ public class DeviceChild implements Serializable{
     public void setWaramerSetTemp(int waramerSetTemp) {
         this.waramerSetTemp = waramerSetTemp;
     }
+    public String getWifiVersion() {
+        return this.wifiVersion;
+    }
+    public void setWifiVersion(String wifiVersion) {
+        this.wifiVersion = wifiVersion;
+    }
     public String getMcuVersion() {
         return this.mcuVersion;
     }
@@ -159,17 +326,11 @@ public class DeviceChild implements Serializable{
     public void setTimerMoudle(int timerMoudle) {
         this.timerMoudle = timerMoudle;
     }
-    public Long getId() {
-        return this.id;
+    public String getName() {
+        return this.name;
     }
-    public void setId(Long id) {
-        this.id = id;
-    }
-    public int getType() {
-        return this.type;
-    }
-    public void setType(int type) {
-        this.type = type;
+    public void setName(String name) {
+        this.name = name;
     }
     public String getMacAddress() {
         return this.macAddress;
@@ -177,132 +338,17 @@ public class DeviceChild implements Serializable{
     public void setMacAddress(String macAddress) {
         this.macAddress = macAddress;
     }
-    public String getName() {
-        return this.name;
-    }
-    public void setName(String name) {
-        this.name = name;
-    }
-    public long getHouseId() {
-        return this.houseId;
-    }
-    public void setHouseId(long houseId) {
-        this.houseId = houseId;
-    }
-    public long getRoomId() {
-        return this.roomId;
-    }
-    public void setRoomId(long roomId) {
-        this.roomId = roomId;
-    }
-    public int getDeviceUsedCount() {
-        return this.deviceUsedCount;
-    }
-    public void setDeviceUsedCount(int deviceUsedCount) {
-        this.deviceUsedCount = deviceUsedCount;
-    }
     public int getBusModel() {
         return this.busModel;
     }
     public void setBusModel(int busModel) {
         this.busModel = busModel;
     }
-    public String getWifiVersion() {
-        return this.wifiVersion;
+    public int getType() {
+        return this.type;
     }
-    public void setWifiVersion(String wifiVersion) {
-        this.wifiVersion = wifiVersion;
-    }
-    public int getUserId() {
-        return this.userId;
-    }
-    public void setUserId(int userId) {
-        this.userId = userId;
-    }
-    public int getImg() {
-        return this.img;
-    }
-    public void setImg(int img) {
-        this.img = img;
-    }
-    public int getDeviceId() {
-        return this.deviceId;
-    }
-    public void setDeviceId(int deviceId) {
-        this.deviceId = deviceId;
-    }
-    public long getShareId() {
-        return this.shareId;
-    }
-    public void setShareId(long shareId) {
-        this.shareId = shareId;
-    }
-    public boolean getOnline() {
-        return this.online;
-    }
-    public void setOnline(boolean online) {
-        this.online = online;
-    }
-    public int getSensorHcho() {
-        return this.sensorHcho;
-    }
-    public void setSensorHcho(int sensorHcho) {
-        this.sensorHcho = sensorHcho;
-    }
-    public int getSensorOx() {
-        return this.sensorOx;
-    }
-    public void setSensorOx(int sensorOx) {
-        this.sensorOx = sensorOx;
-    }
-    public int getSorsorPm() {
-        return this.sorsorPm;
-    }
-    public void setSorsorPm(int sorsorPm) {
-        this.sorsorPm = sorsorPm;
-    }
-    public int getSensorSimpleHum() {
-        return this.sensorSimpleHum;
-    }
-    public String share;
-    public void setSensorSimpleHum(int sensorSimpleHum) {
-        this.sensorSimpleHum = sensorSimpleHum;
-    }
-    public int getSensorSimpleTemp() {
-        return this.sensorSimpleTemp;
-    }
-    public void setSensorSimpleTemp(int sensorSimpleTemp) {
-        this.sensorSimpleTemp = sensorSimpleTemp;
-    }
-    public int getSensorState() {
-        return this.sensorState;
-    }
-    public void setSensorState(int sensorState) {
-        this.sensorState = sensorState;
-    }
-    public int getLinked() {
-        return this.linked;
-    }
-    public void setLinked(int linked) {
-        this.linked = linked;
-    }
-    public String getShare() {
-        return this.share;
-    }
-    public void setShare(String share) {
-        this.share = share;
-    }
-    public int getLinkedSensorId() {
-        return this.linkedSensorId;
-    }
-    public void setLinkedSensorId(int linkedSensorId) {
-        this.linkedSensorId = linkedSensorId;
-    }
-    public String getRoomName() {
-        return this.roomName;
-    }
-    public void setRoomName(String roomName) {
-        this.roomName = roomName;
+    public void setType(int type) {
+        this.type = type;
     }
     public String getCommon() {
         return this.common;
@@ -310,14 +356,52 @@ public class DeviceChild implements Serializable{
     public void setCommon(String common) {
         this.common = common;
     }
-   
-    @Generated(hash = 1973447423)
-    public DeviceChild() {
+    public String getRoomName() {
+        return this.roomName;
+    }
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+    public int getDeviceUsedCount() {
+        return this.deviceUsedCount;
+    }
+    public void setDeviceUsedCount(int deviceUsedCount) {
+        this.deviceUsedCount = deviceUsedCount;
+    }
+    public long getRoomId() {
+        return this.roomId;
+    }
+    public void setRoomId(long roomId) {
+        this.roomId = roomId;
+    }
+    public long getHouseId() {
+        return this.houseId;
+    }
+    public void setHouseId(long houseId) {
+        this.houseId = houseId;
+    }
+    public boolean getOnline() {
+        return this.online;
+    }
+    public void setOnline(boolean online) {
+        this.online = online;
+    }
+    public Long getId() {
+        return this.id;
+    }
+    public void setId(Long id) {
+        this.id = id;
     }
 
+    public String getShare() {
+        return this.share;
+    }
+
+    public void setShare(String share) {
+        this.share = share;
+    }
 
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
-        this.id = id;
         this.houseId = houseId;
         this.roomId = roomId;
         this.deviceUsedCount = deviceUsedCount;
@@ -327,22 +411,23 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
     }
 
-    public DeviceChild(int type, String macAddress, int deviceId, int linked,String name) {
-        this.type = type;
-        this.macAddress = macAddress;
-        this.deviceId = deviceId;
-        this.linked = linked;
-        this.name=name;
-    }
-
-    @Generated(hash = 1374294374)
-    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common,
-            int type, int busModel, String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion,
-            int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower,
-            int warmerRunState, int deviceState, String rateState, int lockState, int screenState, int curRunState2,
-            int curRunState3, int timerHour, int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked,
-            int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx,
-            int sensorHcho, String share) {
+    @Generated(hash = 1391150219)
+    public DeviceChild(Long id, boolean online, long houseId, long roomId,
+            int deviceUsedCount, String roomName, String common, String share,
+            int type, int busModel, String macAddress, String name,
+            int timerMoudle, String mcuVersion, String wifiVersion,
+            int waramerSetTemp, int warmerCurTemp, int warmerSampleData,
+            int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
+            int deviceState, String rateState, int lockState, int screenState,
+            int curRunState2, int curRunState3, int timerHour, int timerMin,
+            int checkCode, int endCode, int userId, int img, int deviceId,
+            int linked, int linkedSensorId, long shareId, int sensorState,
+            int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx,
+            int sensorHcho, int socketPowerHigh, int socketPowerLow,
+            int socketTemp, int socketState, int socketTimer,
+            int socketTimerOpenHour, int socketTimerOpenMin,
+            int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent,
+            int socketVal, int socketPowerConsume) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -350,6 +435,7 @@ public class DeviceChild implements Serializable{
         this.deviceUsedCount = deviceUsedCount;
         this.roomName = roomName;
         this.common = common;
+        this.share = share;
         this.type = type;
         this.busModel = busModel;
         this.macAddress = macAddress;
@@ -385,7 +471,24 @@ public class DeviceChild implements Serializable{
         this.sorsorPm = sorsorPm;
         this.sensorOx = sensorOx;
         this.sensorHcho = sensorHcho;
-        this.share = share;
+        this.socketPowerHigh = socketPowerHigh;
+        this.socketPowerLow = socketPowerLow;
+        this.socketTemp = socketTemp;
+        this.socketState = socketState;
+        this.socketTimer = socketTimer;
+        this.socketTimerOpenHour = socketTimerOpenHour;
+        this.socketTimerOpenMin = socketTimerOpenMin;
+        this.socketTimerCloseHour = socketTimerCloseHour;
+        this.socketTimerCloseMin = socketTimerCloseMin;
+        this.socketCurrent = socketCurrent;
+        this.socketVal = socketVal;
+        this.socketPowerConsume = socketPowerConsume;
     }
+
+    @Generated(hash = 1973447423)
+    public DeviceChild() {
+    }
+
+
     
 }

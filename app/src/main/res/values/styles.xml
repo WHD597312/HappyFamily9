@@ -116,4 +116,8 @@
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
     <style name="AppTheme.PopupOverlay" parent="ThemeOverlay.AppCompat.Light" />
+    <style name="ChangroomPopupwindow">
+        <item name="android:windowEnterAnimation">@anim/changroomwindow_out</item>
+        <item name="android:windowExitAnimation">@anim/changroomwindow_back</item>
+    </style>
 </resources>

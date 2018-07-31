@@ -146,7 +146,7 @@
         </receiver>
 
         <activity
-            android:name=".jia.activity.TempChatActivity"
+            android:name=".login.login.qdActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -516,6 +516,13 @@
             android:name="com.lzy.imagepicker.ui.ImagePreviewDelActivity"
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
+        <activity
+            android:name=".jia.activity.TempChatActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.SocketActivity"
+            android:screenOrientation="portrait" />
+        <activity android:name=".jia.activity.DehumidifierActivity"></activity>
     </application>
 
 </manifest>

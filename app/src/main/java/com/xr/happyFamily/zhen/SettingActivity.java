@@ -22,6 +22,7 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.MsgDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
@@ -53,6 +54,7 @@ public class SettingActivity extends AppCompatActivity {
     private FriendDataDaoImpl friendDataDao;/**好友数据库*/
     private TimeDaoImpl timeDao;/**闹钟数据库*/
     private UserInfosDaoImpl userInfosDao;/**联系人数据库*/
+    private MsgDaoImpl msgDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -72,6 +74,7 @@ public class SettingActivity extends AppCompatActivity {
         friendDataDao=new FriendDataDaoImpl(getApplicationContext());
         timeDao=new TimeDaoImpl(getApplicationContext());
         userInfosDao=new UserInfosDaoImpl(getApplicationContext());
+        msgDao=new MsgDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         unbinder=ButterKnife.bind(this);
@@ -118,6 +121,7 @@ public class SettingActivity extends AppCompatActivity {
                 timeDao.deleteAll();
                 userInfosDao.deleteAll();
                 friendDataDao.deleteAll();
+                msgDao.deleteAll();
 
                 SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
                 mPositionPreferences.edit().clear().commit();

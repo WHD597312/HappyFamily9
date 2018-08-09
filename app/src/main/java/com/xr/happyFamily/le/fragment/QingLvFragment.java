@@ -13,7 +13,6 @@ import android.os.IBinder;
 import android.support.annotation.Nullable;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,14 +23,12 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.MsgDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.BaseFragment;
-import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.adapter.ClockQinglvAdapter;
-
-import com.xr.happyFamily.le.adapter.ClockQunzuAdapter;
 import com.xr.happyFamily.le.clock.MsgActivity;
 import com.xr.happyFamily.le.clock.QinglvAddActivity;
 import com.xr.happyFamily.le.pojo.ClockBean;
@@ -44,8 +41,6 @@ import com.xr.happyFamily.together.util.mqtt.MQService;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -78,6 +73,10 @@ public class QingLvFragment extends BaseFragment {
     RecyclerView recyclerView;
     @BindView(R.id.img_add)
     ImageView imgAdd;
+    @BindView(R.id.tv_num)
+    TextView tvNum;
+    @BindView(R.id.tv_flag)
+    TextView tvFlag;
 
     private boolean isBound = false;
     MessageReceiver receiver;
@@ -88,8 +87,7 @@ public class QingLvFragment extends BaseFragment {
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
     SharedPreferences preferences;
-    String userId, clockData;
-    String[] clocks;
+    String userId;
     Intent service;
 
     @Nullable
@@ -106,8 +104,6 @@ public class QingLvFragment extends BaseFragment {
         userInfoList = new ArrayList<>();
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
-
-
         service = new Intent(getActivity(), MQService.class);
 
         IntentFilter intentFilter = new IntentFilter("QingLvFragment");
@@ -118,9 +114,11 @@ public class QingLvFragment extends BaseFragment {
 //        for(int i=1081;i<1085;i++){
 //            Map<String, Object> params = new HashMap<>();
 //            params.put("id", i);
-//            new deleteClock().execute(params);}
+//        new deleteClock().execute();
+//    }
 
-        getData();
+
+//        getData();
 
 
         return view;
@@ -169,15 +167,15 @@ public class QingLvFragment extends BaseFragment {
     List<ClockBean> clockBeanList;
     List<UserInfo> userInfoList;
 
-    List<ClockBean>  allClockList;
+    List<ClockBean> allClockList;
     List<UserInfo> allUserInfoList;
 
     public void upClock() {
-        getData();
+//        getData();
         clockBeanDao = new ClockDaoImpl(getActivity().getApplicationContext());
         userInfosDao = new UserInfosDaoImpl(getActivity().getApplicationContext());
         clockBeanList.clear();
-        userInfoList .clear();
+        userInfoList.clear();
         allClockList = clockBeanDao.findAll();
         allUserInfoList = userInfosDao.findAll();
 
@@ -195,12 +193,21 @@ public class QingLvFragment extends BaseFragment {
             time[i][1] = clockBeanList.get(i).getClockMinute();
         }
         timeBar.setTime(time, 1);
-        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList, userId,mqService);
+        if (clockBeanList.size() > 0)
+            tvFlag.setText(clockBeanList.get(0).getFlag());
+        qinglvAdapter = new ClockQinglvAdapter((ClockActivity) getActivity(), clockBeanList, userId, mqService);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(qinglvAdapter);
 
         qinglvAdapter.notifyDataSetChanged();
+        long msgTime = preferences.getLong("msgTime", 0);
+        MsgDaoImpl msgDao = new MsgDaoImpl(getActivity());
+        int msgNum = msgDao.findNumbByTime(msgTime);
+        if (msgNum == 0) {
+            tvNum.setVisibility(View.GONE);
+        } else
+            tvNum.setText(msgNum + "");
     }
 
     @Override
@@ -210,12 +217,11 @@ public class QingLvFragment extends BaseFragment {
         isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
         upClock();
 
+
     }
 
 
-
-
-    public  MQService mqService;
+    public MQService mqService;
     private boolean bound = false;
     private String deviceName;
     ServiceConnection connection = new ServiceConnection() {
@@ -223,11 +229,11 @@ public class QingLvFragment extends BaseFragment {
         public void onServiceConnected(ComponentName name, IBinder service) {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             mqService = binder.getService();
-            if(mqService!=null){
-               qinglvAdapter.setMqService(mqService);
+            if (mqService != null) {
+                qinglvAdapter.setMqService(mqService);
             }
             bound = true;
-            getData();
+//            getData();
         }
 
         @Override
@@ -235,19 +241,6 @@ public class QingLvFragment extends BaseFragment {
             bound = false;
         }
     };
-
-
-    private class getClockAsync extends AsyncTask<String, Void, Void> {
-        @Override
-        protected Void doInBackground(String... macs) {
-            String macAddress = macs[0];
-            if (mqService != null) {
-                String topicName = "p99/" + macAddress + "/clockuniversal";
-                boolean success = mqService.subscribe(topicName, 1);
-            }
-            return null;
-        }
-    }
 
 
     class MessageReceiver extends BroadcastReceiver {
@@ -259,30 +252,42 @@ public class QingLvFragment extends BaseFragment {
     }
 
 
-    public void getData() {
-        clockData = preferences.getString("clockData", "");
-        clocks = clockData.split(",");
-        for (int i = 0; i < clocks.length; i++) {
-            new getClockAsync().execute(clocks[i]);
-        }
-    }
+    //    public void getData() {
+//        clockData = preferences.getString("clockData", "");
+//        clocks = clockData.split(",");
+//        for (int i = 0; i < clocks.length; i++) {
+//            new getClockAsync().execute(clocks[i]);
+//        }
+//    }
 
+    //    private class getClockAsync extends AsyncTask<String, Void, Void> {
+//        @Override
+//        protected Void doInBackground(String... macs) {
+//            String macAddress = macs[0];
+//            if (mqService != null) {
+//                String topicName = "p99/" + macAddress + "/clockuniversal";
+//                boolean success = mqService.subscribe(topicName, 1);
+//            }
+//            return null;
+//        }
+//    }
 
 
     class deleteClock extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-            Map<String, Object> params = maps[0];
             String url = "/happy/clock/deleteClock";
-            url = url + "?clockCreater=1031&clockId=" + params.get("id");
+            url = url + "?clockCreater=1031" + "&clockId=1412";
             String result = HttpUtils.doGet(context, url);
-//            Log.e("qqqqqqqRRR", result);
+            Log.e("qqqqqqqRRR", result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -298,4 +303,5 @@ public class QingLvFragment extends BaseFragment {
             }
         }
     }
+
 }

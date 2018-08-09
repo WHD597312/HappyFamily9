@@ -15,7 +15,6 @@ public class TabFragmentPagerAdapter extends FragmentPagerAdapter {
     private Context context;
     public TabFragmentPagerAdapter(FragmentManager fm, List<Fragment> list) {
         super(fm);
-
         this.mlist = list;
         notifyDataSetChanged();
     }

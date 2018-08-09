@@ -7,15 +7,18 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
@@ -47,10 +50,14 @@ public class NoRoomFragment extends Fragment {
     private long houseId;
     @BindView(R.id.rl_page) RelativeLayout rl_page;
     @BindView(R.id.rl_noroom_rl) RelativeLayout rl_noroom_rl;
+    @BindView(R.id.ib_croom) ImageButton ib_croom;
     @BindView(R.id.tv_noroom_hoursename)
     TextView textViewhousename;
+    @BindView(R.id.tv_bz1)
+    TextView tv_bz1;
     private String temperature;
     SharedPreferences mPositionPreferences;
+    private RoomDaoImpl roomDao;
 
     @Nullable
     @Override
@@ -98,18 +105,26 @@ public class NoRoomFragment extends Fragment {
                 startActivity(intent2);
                 break;
             case R.id.ib_croom:
+                List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
+                if (rooms==null || rooms.isEmpty()){
+                    Toast.makeText(getActivity(),"这个家还没有房间!",Toast.LENGTH_SHORT).show();
+                }else {
+
+                    popupmenuWindow();
+                }
+
 //                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
 //                intent3.putExtra("houseId", houseId);
 //                startActivityForResult(intent3, MREQUEST_CODE);
 //                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
-                popupmenuWindow();
+//
                 break;
         }
     }
 
 
 
-    RoomDaoImpl roomDao;
+
     Room room;
     List<Room> rooms;
     RoomAdapter adapter;
@@ -134,7 +149,7 @@ public class NoRoomFragment extends Fragment {
         popupWindow1.setAnimationStyle(R.style.ChangroomPopupwindow);
 //        ColorDrawable dw = new ColorDrawable(getActivity().getResources().getColor(R.color.white));
 //        popupWindow1.setBackgroundDrawable(dw);
-        popupWindow1.showAsDropDown(rl_noroom_rl, 0, 0);
+        popupWindow1.showAsDropDown(tv_bz1, 0, 0);
 //        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
         //添加按键事件监听
 
@@ -147,6 +162,7 @@ public class NoRoomFragment extends Fragment {
             public void onClick(View v) {
                 switch (v.getId()){
                     case R.id.li_change:
+                        rl_noroom_rl.setVisibility(View.VISIBLE);
                         popupWindow1.dismiss();
 
                         break;
@@ -168,12 +184,6 @@ public class NoRoomFragment extends Fragment {
         });
         li_change.setOnClickListener(listener);
     }
-
-
-
-
-
-
 
     public String getTemperature() {
         return temperature;

@@ -181,11 +181,11 @@ public class CustomSwipeRefreshLayout extends SwipeRefreshLayout {
         loadLayout.setLayoutParams(listLayoutParams);
         loadLayout.setGravity(Gravity.CENTER_HORIZONTAL);
         //dialog
-        android.view.ViewGroup.LayoutParams layoutParams =new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams =new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         ProgressBar progressBar=new ProgressBar(context,null,android.R.attr.progressBarStyleInverse);
         progressBar.setLayoutParams(layoutParams);
         //textview
-        android.view.ViewGroup.LayoutParams layoutParams2 =new android.view.ViewGroup.LayoutParams(android.view.ViewGroup.LayoutParams.WRAP_CONTENT, android.view.ViewGroup.LayoutParams.MATCH_PARENT);
+        LayoutParams layoutParams2 =new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.MATCH_PARENT);
         TextView textView=new TextView(context);
         textView.setText("正在加载.....");
         textView.setTextSize(15);

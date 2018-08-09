@@ -10,15 +10,20 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
+import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.InputType;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -170,6 +175,29 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     }
 
     @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (mEsptouchTask != null) {
+                mEsptouchTask.interrupt();
+            }
+
+            if (popupWindow2!=null && popupWindow2.isShowing()){
+                if (gifDrawable != null && gifDrawable.isRunning()) {
+                    gifDrawable.stop();
+                }
+                popupWindow2.dismiss();
+                backgroundAlpha(1f);
+                return false;
+            }
+            Intent intent = new Intent(this, MainActivity.class);
+            intent.putExtra("houseId", houseId);
+            setResult(6000,intent);
+            finish();
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
+    @Override
     protected void onResume() {
         super.onResume();
         running = true;
@@ -179,12 +207,16 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
-                if (gifDrawable != null && gifDrawable.isPlaying()) {
-                    gifDrawable.stop();
-                    image_gif.setVisibility(View.GONE);
-                    et_wifi.setEnabled(true);
-                    bt_add_finish.setEnabled(true);
-                    nice_spinner.setEnabled(true);
+                if (mEsptouchTask != null) {
+                    mEsptouchTask.interrupt();
+                }
+
+                if (popupWindow2!=null && popupWindow2.isShowing()){
+                    if (gifDrawable != null && gifDrawable.isRunning()) {
+                        gifDrawable.stop();
+                    }
+                    popupWindow2.dismiss();
+                    backgroundAlpha(1f);
                     break;
                 }
                 Intent intent = new Intent(this, MainActivity.class);
@@ -210,12 +242,16 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     Utils.showToast(AddDeviceActivity.this, "请输入wifi密码");
                     break;
                 }
-//                if (!TextUtils.isEmpty(ssid)) {
-//                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
-//                }
-                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
-                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-                mac="5asdfghi89hb";
+                nice_spinner.setEnabled(false);
+                et_wifi.setEnabled(false);
+                bt_add_finish.setEnabled(false);
+                if (!TextUtils.isEmpty(ssid)) {
+                    popupmenuWindow3();
+                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+                }
+//                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
+//                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+//                mac="5asdfghi89hb";
                 break;
         }
     }
@@ -295,10 +331,55 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         }
     }
 
+    private PopupWindow popupWindow2;
+    GifImageView image_heater_help;
+    public void popupmenuWindow3() {
+        if (popupWindow2 != null && popupWindow2.isShowing()) {
+            return;
+        }
+        View view = View.inflate(this, R.layout.popup_help2, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        image_heater_help = (GifImageView) view.findViewById(R.id.image_heater_help);
+        try {
+            gifDrawable = new GifDrawable(getResources(), R.mipmap.touxiang3);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        image_heater_help.setVisibility(View.VISIBLE);
+        if (gifDrawable != null) {
+            gifDrawable.start();
+            image_heater_help.setImageDrawable(gifDrawable);
+        }
+
+
+        popupWindow2 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow2.setFocusable(true);
+        popupWindow2.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow2.setAnimationStyle(R.style.Popupwindow);
+        backgroundAlpha(0.6f);
+        popupWindow2.setFocusable(false);
+        popupWindow2.setOutsideTouchable(false);
+//        ColorDrawable dw = new ColorDrawable(0x30000000);
+//        popupWindow.setBackgroundDrawable(dw);
+        popupWindow2.showAsDropDown(et_wifi, 0, -100);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+    }
+    //设置蒙版
+    private void backgroundAlpha(float f) {
+        WindowManager.LayoutParams lp = getWindow().getAttributes();
+        lp.alpha = f;
+        getWindow().setAttributes(lp);
+    }
+    private IEsptouchTask mEsptouchTask;
     private class EsptouchAsyncTask3 extends AsyncTask<String, Void, List<IEsptouchResult>> {
 
 
-        private IEsptouchTask mEsptouchTask;
+
         // without the lock, if the user tap confirm and cancel quickly enough,
         // the bug will arise. the reason is follows:
         // 0. task is starting created, but not finished
@@ -313,10 +394,12 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
 //            addDeviceDialog=new AddDeviceDialog(AddDeviceActivity.this);
 //            addDeviceDialog.setCanceledOnTouchOutside(false);
 //            addDeviceDialog.show();
-            mProgressDialog = new ProgressDialog(AddDeviceActivity.this);
-            mProgressDialog.setMessage("正在配置, 请耐心等待...");
-            mProgressDialog.setCanceledOnTouchOutside(false);
-            mProgressDialog.show();
+//            mProgressDialog = new ProgressDialog(AddDeviceActivity.this);
+//            mProgressDialog.setMessage("正在配置, 请耐心等待...");
+//            mProgressDialog.setCanceledOnTouchOutside(false);
+//            mProgressDialog.show();
+            CountTimer countTimer = new CountTimer(30000, 1000);
+            countTimer.start();
         }
 
         @Override
@@ -355,7 +438,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                         String ssid = resultInList.getBssid();
 
                         sb.append("配置成功" + ssid);
-                        mProgressDialog.dismiss();
                         if (!TextUtils.isEmpty(ssid)) {
                             Intent service = new Intent(AddDeviceActivity.this, MQService.class);
                             isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
@@ -372,11 +454,68 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     }
                 } else {
                     Utils.showToast(AddDeviceActivity.this, "配置失败");
-                    mProgressDialog.dismiss();
                 }
             }
         }
     }
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+//            btn_get_code.setBackgroundColor(Color.parseColor("#c7c7c7"));
+//            btn_get_code.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.black));
+//            btn_get_code.setTextSize(16);
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+        @Override
+        public void onFinish() {
+            Log.e("Tag", "倒计时完成");
+
+                if (popupWindow2!=null && popupWindow2.isShowing()){
+                    if (gifDrawable != null && gifDrawable.isPlaying()) {
+                        gifDrawable.stop();
+
+                        if (et_wifi != null) {
+                            et_wifi.setEnabled(true);
+                        }
+                        if (nice_spinner != null) {
+                            nice_spinner.setEnabled(true);
+                        }
+                        if (bt_add_finish != null) {
+                            bt_add_finish.setEnabled(true);
+                            Utils.showToast(AddDeviceActivity.this, "配置失败");
+                        }
+
+                        if (mEsptouchTask != null) {
+                            mEsptouchTask.interrupt();
+                        }
+                    }
+                    popupWindow2.dismiss();
+                    backgroundAlpha(1f);
+
+            }
+            //设置倒计时结束之后的按钮样式
+//            btn_get_code.setBackgroundColor(ContextCompat.getColor(getApplicationContext(), android.R.color.holo_blue_light));
+//            btn_get_code.setTextColor(ContextCompat.getColor(getApplicationContext(), android.R.color.white));
+//            btn_get_code.setTextSize(18);
+//            if (progressDialog != null) {
+//                progressDialog.dismiss();
+//            }
+        }
+    }
+
 
     @Override
     protected void onStop() {

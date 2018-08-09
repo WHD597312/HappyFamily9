@@ -27,6 +27,7 @@ import android.widget.TextView;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.UserBean;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.xnty.SmartSocket;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -74,10 +75,15 @@ public class RegistFinishActivity extends AppCompatActivity {
     String password;
     String birthday;
     Animation rotate;
+    MyApplication application;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_registfinish);
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+        application.addActivity(this);
         unbinder = ButterKnife.bind(this);
         rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
         /*imagefs.setAnimation(rotate);
@@ -210,7 +216,7 @@ public class RegistFinishActivity extends AppCompatActivity {
             switch (s) {
 
                 case "100":
-                    Utils.showToast(RegistFinishActivity.this, "创建成功");
+
                         Context mcontext = RegistFinishActivity.this;
                         dia = new Dialog(mcontext, R.style.edit_AlertDialog_style);//设置进入时跳出提示框
                         dia.setContentView(R.layout.activity_regist_dialog);

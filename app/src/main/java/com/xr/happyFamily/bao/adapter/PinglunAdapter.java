@@ -95,6 +95,11 @@ public class PinglunAdapter extends RecyclerView.Adapter<PinglunAdapter.MyViewHo
         for (int i = 0; i < buyerRate; i++) {
             holder.imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);
         }
+        if(buyerRate<5){
+            for (int i = buyerRate; i < 5; i++) {
+                holder.imgs[i].setImageResource(R.mipmap.ic_pl_xx_false);
+            }
+        }
 
 
         holder.tv_time.setText(TimeUtils.getTime(list.get(sign).getCreateTime() + ""));

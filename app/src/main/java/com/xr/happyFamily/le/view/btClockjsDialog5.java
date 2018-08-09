@@ -25,6 +25,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static android.content.Context.MODE_PRIVATE;
+
 
 /**
  * 制懒闹钟计算关闭
@@ -36,8 +38,6 @@ public class btClockjsDialog5 extends Dialog {
     TextView tvTitle;
     @BindView(R.id.tv_context)
     TextView tvContext;
-    @BindView(R.id.tv_quxiao)
-    TextView tvQuxiao;
     @BindView(R.id.tv_queren)
     TextView tvQueren;
     private String name;
@@ -52,21 +52,28 @@ public class btClockjsDialog5 extends Dialog {
     Time time;
     Intent service;
     boolean isBound;
+    int dialogSign;
 
     //        public static final int FLAG_HOMEKEY_DISPATCHED = 0x80000000;//定义屏蔽参数
-    public btClockjsDialog5(@NonNull Context context) {
+    public btClockjsDialog5(@NonNull Context context,int dialogSign) {
         super(context, R.style.MyDialog);
         mcontext = context;
+        this.dialogSign=dialogSign;
+        isShow=true;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.popup_main);
+        setContentView(R.layout.popup_clock);
         ButterKnife.bind(this);
-        tvTitle.setText("情侣闹钟");
-        tvContext.setText("您有新的情侣闹钟");
-        tvQuxiao.setVisibility(View.GONE);
+        if(dialogSign==3) {
+            tvTitle.setText("情侣闹钟");
+            tvContext.setText("您有新的情侣闹钟");
+        }else if(dialogSign==2){
+            tvTitle.setText("群组闹钟");
+            tvContext.setText("您有新的群组闹钟");
+        }
 
         service = new Intent(mcontext, ClockService.class);
         isBound = mcontext.bindService(service, connection, Context.BIND_AUTO_CREATE);
@@ -124,9 +131,13 @@ public class btClockjsDialog5 extends Dialog {
                 if (mqService != null) {
                     mqService.startClock();
                 }
+                SharedPreferences preferences = mcontext.getSharedPreferences("my", MODE_PRIVATE);
+                SharedPreferences.Editor editor = preferences.edit();
+                editor.putBoolean("isClockPopShow", false);
+                editor.commit();
                 dismiss();
+                isShow=false;
                 break;
-
         }
     }
 
@@ -160,5 +171,10 @@ public class btClockjsDialog5 extends Dialog {
 
     public interface OnKeyListener {
         void OnKeyListener();
+    }
+
+    boolean isShow=false;
+    public boolean getShow(){
+        return isShow;
     }
 }

@@ -2,6 +2,7 @@ package com.xr.happyFamily.zhen;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.xr.happyFamily.R;
@@ -36,9 +37,12 @@ public class AboutActivity extends AppCompatActivity {
         }
     }
     @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-        application.removeActivity(this);
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeActivity(this);//**退出主页面*//*
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
     }
 
     @Override

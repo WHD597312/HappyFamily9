@@ -76,36 +76,24 @@ public class QinglvClockDialog extends Dialog {
 
 
         clockBeanList = clockDao.findTimesByHourAndMin(hour, minute);
-        clockBean = clockBeanList.get(0);
-        String name = clockBean.getMusic();
-        loveNmae=clockBean.getCreaterName();
-        flag=clockBean.getFlag();
-        tvTitle.setText(loveNmae);
-        tvContext.setText(flag);
-        if ("学猫叫".equals(name)) {
-            mediaPlayer = MediaPlayer.create(mcontext, R.raw.music1);
-            mediaPlayer.start();//一进来就播放
-            mediaPlayer.setLooping(true);
-        } else if ("芙蓉雨".equals(name)) {
-            mediaPlayer = MediaPlayer.create(mcontext, R.raw.music2);
-            mediaPlayer.start();//一进来就播放
-            mediaPlayer.setLooping(true);
-        } else if ("浪人琵琶".equals(name)) {
-            mediaPlayer = MediaPlayer.create(mcontext, R.raw.lrpp);
-            mediaPlayer.start();//一进来就播放
-            mediaPlayer.setLooping(true);
-        } else if ("阿里郎".equals(name)) {
-            mediaPlayer = MediaPlayer.create(mcontext, R.raw.all);
-            mediaPlayer.start();//一进来就播放
-            mediaPlayer.setLooping(true);
-        } else if ("that girl".equals(name)) {
-            mediaPlayer = MediaPlayer.create(mcontext, R.raw.girl);
-            mediaPlayer.start();//一进来就播放
-            mediaPlayer.setLooping(true);
-        } else if ("expression".equals(name)) {
-            mediaPlayer = MediaPlayer.create(mcontext, R.raw.ex);
-            mediaPlayer.start();//一进来就播放
-            mediaPlayer.setLooping(true);
+        for(int i=0;i<clockBeanList.size();i++){
+            clockBean = clockBeanList.get(i );
+            if (clockBean.getSwitchs()==1) {
+                name = clockBean.getMusic();
+                loveNmae = clockBean.getCreaterName();
+                flag = clockBean.getFlag();
+                tvTitle.setText(loveNmae);
+                tvContext.setText(flag);
+            }
+        }
+        String[] str = {"阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"};
+        int[] musicId = {R.raw.m1, R.raw.m2, R.raw.m3, R.raw.m4, R.raw.m5, R.raw.m6, R.raw.m7, R.raw.m8, R.raw.m9, R.raw.m10};
+        for (int i = 0; i < str.length; i++) {
+            if (name.equals(str[i])) {
+                mediaPlayer = MediaPlayer.create(mcontext, musicId[i]);
+                mediaPlayer.start();//一进来就播放
+                mediaPlayer.setLooping(true);
+            }
         }
 //        iv_zl_njxx1.setTag("open");
 //        iv_zl_njxx2.setTag("close");

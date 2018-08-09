@@ -35,6 +35,7 @@ import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
+import com.xr.happyFamily.jia.activity.ShareDeviceActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
@@ -42,7 +43,9 @@ import com.xr.happyFamily.le.BtClock.RingReceiver;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.bean.MsgFriendBean;
 import com.xr.happyFamily.le.clock.MsgActivity;
+import com.xr.happyFamily.le.clock.QunzuAddActivity;
 import com.xr.happyFamily.le.fragment.QingLvFragment;
+import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.FriendData;
 import com.xr.happyFamily.le.pojo.MsgData;
@@ -148,7 +151,6 @@ public class MQService extends Service {
             new getClockAsync().execute(clocks[i]);
         }
         return super.onStartCommand(intent, flags, startId);
-
     }
 
     /**
@@ -627,6 +629,11 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
+                }else if (ShareDeviceActivity.running){
+                    Intent mqttIntent = new Intent("ShareDeviceActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
                 }
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 //创建通知建设类
@@ -667,19 +674,19 @@ public class MQService extends Service {
                         else
                             state = 6;
                         msgData.setUserName(str[0]);
-                        Log.e("qqqqqqSSSSaaa111",state+"????");
                         msgData.setState(state);
                         msgData.setCreateTime(Long.parseLong(str[2]));
-                        List<MsgData> msgDataList = msgDao.findMsgByState(Long.parseLong(str[2]));
+                        List<MsgData> msgDataList = msgDao.findMsgByTime(Long.parseLong(str[2]));
                         if (msgDataList.size() == 0)
                             msgDao.insert(msgData);
                     }
                 }
 
                 Log.e("qqqqqqqqqqWWW", macAddress + "," + topicName);
+                Log.e("qqqqqqqqqqWWW", message);
 
                 if (macAddress.equals("clockuniversal")) {
-                    SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
+                    SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
                     String clockData = preferences.getString("clockData", "");
                     String[] clocks = clockData.split(",");
                     SharedPreferences.Editor editor = preferences.edit();
@@ -736,7 +743,17 @@ public class MQService extends Service {
                         sendBroadcast(mqttIntent);
                     }
 
+
+                    Log.e("qqqqqRRRRR", QunZuFragment.running + "?");
+                    if (QunZuFragment.running) {
+                        Intent mqttIntent = new Intent("QunzuFragment");
+                        mqttIntent.putExtra("msg", message);
+                        sendBroadcast(mqttIntent);
+                    }
+
                 } else if (topicName.contains("clockuniversal")) {
+                    boolean isShow = preferences.getBoolean("isClockPopShow", false);
+                    Log.e("qqqqqIsShow",isShow+"???");
                     JSONObject jsonObject = new JSONObject(message);
                     JsonObject content = new JsonParser().parse(message).getAsJsonObject();
                     //添加闹钟
@@ -762,9 +779,11 @@ public class MQService extends Service {
                     msgData.setCreateTime(jsonObject.getLong("createTime"));
                     msgData.setUserName(jsonObject.getString("createrName"));
                     if (state == 2) {
-
                         if (findClock.size() == 0) {
-                            msgData.setState(1);
+                            if(userList.getClockType()==3)
+                                msgData.setState(1);
+                            else
+                                msgData.setState(11);
                             clockBeanDao.insert(userList);
                             JsonArray userInfos = content.getAsJsonArray("userInfos");
                             Gson gson = new Gson();
@@ -774,7 +793,10 @@ public class MQService extends Service {
                                 userInfosDao.insert(userInfo1);
                             }
                         } else {
-                            msgData.setState(2);
+                            if(userList.getClockType()==3)
+                                msgData.setState(2);
+                            else
+                                msgData.setState(12);
                             ClockBean userList2 = findClock.get(0);
                             userList2.setSwitchs(jsonObject.getInt("switchs"));
                             userList2.setFlag(userList.getFlag());
@@ -783,20 +805,17 @@ public class MQService extends Service {
                             userList2.setClockMinute(userList.getClockMinute());
                             clockBeanDao.update(userList2);
                         }
-
-//                        if (isNew) {
-//                            SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
-//                            String str = preferences.getString("clockNew", "");
-//                            if("new".equals(str)) {
-                        if (!(userList.getClockCreater() + "").equals(userId)) {
+                        if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                            dialogSign = userList.getClockType();
                             Message msg = Message.obtain();
                             msg.what = 1;   //标志消息的标志
                             handler.sendMessage(msg);
-//                                }
                         }
-//                        }
                     } else if (state == 1) {
-                        msgData.setState(1);
+                        if(userList.getClockType()==3)
+                            msgData.setState(1);
+                        else
+                            msgData.setState(11);
                         if (findClock.size() == 0) {
                             clockBeanDao.insert(userList);
                             JsonArray userInfos = content.getAsJsonArray("userInfos");
@@ -806,110 +825,143 @@ public class MQService extends Service {
                                 userInfo1.setClockId(userList.getClockId());
                                 userInfosDao.insert(userInfo1);
                             }
-//                            if (isNew) {
-//                                SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
-//                            String str = preferences.getString("clockNew", "");
-//                            if("new".equals(str)) {
-                            if (!(userList.getClockCreater() + "").equals(userId)) {
-
+                            if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                                dialogSign = userList.getClockType();
                                 Message msg = Message.obtain();
                                 msg.what = 1;   //标志消息的标志
                                 handler.sendMessage(msg);
                             }
 
-//                            }
-//                            }
                         }
 
-
                     } else if (state == 3) {
-                        msgData.setState(3);
+                        if(userList.getClockType()==3)
+                            msgData.setState(3);
+                        else
+                            msgData.setState(13);
                         if (findClock.size() != 0) {
                             clockBeanDao.delete(findClock.get(0));
                         }
                     } else if (state == 4) {
                         List<UserInfo> findUser = userInfosDao.findUserInfoByClockId(userList.getClockId());
-                        if (findClock.size() == 0) {
-                            boolean isAdd = false;
-                            JsonArray userInfos = content.getAsJsonArray("userInfos");
-                            Gson gson = new Gson();
-                            for (JsonElement userInfo : userInfos) {
-                                UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
-                                Log.e("qqqqAAAA", userId + "????" + userInfo1.getUserId() + "");
-                                if (userId.equals(userInfo1.getUserId() + "")) {
-                                    isAdd = true;
-                                }
-                            }
-
-                            Log.e("qqqqAAAA", isAdd + "????");
-                            if (isAdd) {
-                                if (findClock.size() == 0) {
-                                    msgData.setState(1);
-                                    List<ClockBean> findLish = clockBeanDao.findClockByClockId(userList.getClockId());
-                                    if (findLish.size() == 0) {
-                                        clockBeanDao.insert(userList);
-                                        for (JsonElement userInfo : userInfos) {
-                                            UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
-                                            userInfo1.setClockId(userList.getClockId());
-                                            userInfosDao.insert(userInfo1);
-                                        }
-                                    }
-
-                                    if (!(userList.getClockCreater() + "").equals(userId)) {
-                                        Message msg = Message.obtain();
-                                        msg.what = 1;   //标志消息的标志
-                                        handler.sendMessage(msg);
-                                    }
-                                }
-                            }
-                        } else {
+                        if (findUser.size() > 0) {
                             for (int i = 0; i < findUser.size(); i++) {
                                 userInfosDao.delete(findUser.get(i));
                             }
-                            JsonArray userInfos = content.getAsJsonArray("userInfos");
-                            Gson gson = new Gson();
-                            for (JsonElement userInfo : userInfos) {
-                                UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
-                                userInfo1.setClockId(userList.getClockId());
-                                userInfosDao.insert(userInfo1);
+                        }
+                        boolean isAdd = false;
+                        JsonArray userInfos = content.getAsJsonArray("userInfos");
+                        Gson gson = new Gson();
+                        for (JsonElement userInfo : userInfos) {
+                            UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
+                            if (userId.equals(userInfo1.getUserId() + "")) {
+                                isAdd = true;
+                            }
+                        }
+
+                        if (findClock.size() == 0) {
+                            if (isAdd) {
+                                if(userList.getClockType()==3)
+                                    msgData.setState(1);
+                                else
+                                    msgData.setState(11);
+                                clockBeanDao.insert(userList);
+                                for (JsonElement userInfo : userInfos) {
+                                    UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
+                                    userInfo1.setClockId(userList.getClockId());
+                                    userInfosDao.insert(userInfo1);
+                                }
+                                if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                                    dialogSign = userList.getClockType();
+                                    Message msg = Message.obtain();
+                                    msg.what = 1;   //标志消息的标志
+                                    handler.sendMessage(msg);
+                                }
+                            }
+                        } else {
+                            ClockBean userList2 = findClock.get(0);
+                            if (isAdd) {
+                                if(userList.getClockType()==3)
+                                    msgData.setState(2);
+                                else
+                                    msgData.setState(12);
+                                userList2.setSwitchs(jsonObject.getInt("switchs"));
+                                userList2.setFlag(userList.getFlag());
+                                userList2.setMusic(userList.getMusic());
+                                userList2.setClockHour(userList.getClockHour());
+                                userList2.setClockMinute(userList.getClockMinute());
+                                clockBeanDao.update(userList2);
+                                for (JsonElement userInfo : userInfos) {
+                                    UserInfo userInfo1 = gson.fromJson(userInfo, UserInfo.class);
+                                    userInfo1.setClockId(userList.getClockId());
+                                    userInfosDao.insert(userInfo1);
+                                }
+                                if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                                    dialogSign = userList.getClockType();
+                                    Message msg = Message.obtain();
+                                    msg.what = 1;   //标志消息的标志
+                                    handler.sendMessage(msg);
+                                }
+                            } else {
+                                clockBeanDao.delete(userList2);
                             }
                         }
                     }
 
 
-                    Log.e("qqqqqZZZZ", clockBeanDao.findAll().size() + "??");
-                    if (QingLvFragment.running) {
+                    if (userList.getClockType() == 3 && QingLvFragment.running) {
                         Intent mqttIntent = new Intent("QingLvFragment");
                         mqttIntent.putExtra("msg", message);
                         sendBroadcast(mqttIntent);
                     }
+                    Log.e("qqqqqZZZZ", userList.getClockType() + "??" + QunZuFragment.running);
+                    if (QunzuAddActivity.running) {
+                        Intent mqttIntent = new Intent("QunzuAddActivity");
+                        mqttIntent.putExtra("msg", message);
+                        sendBroadcast(mqttIntent);
+                    }
+                    if (userList.getClockType() == 2 && QunZuFragment.running) {
+                        Intent mqttIntent = new Intent("QunzuFragment");
+                        mqttIntent.putExtra("msg", message);
+                        sendBroadcast(mqttIntent);
+                    }
 
-//                    if (ClockActivity.running) {
-//                        Log.e("qqqqqqqqqqWWW1111", "3333333");
-//                        gotoClockActivity();
-//                    }
-                    List<MsgData> msgDataList = msgDao.findMsgByTime();
-
-
-                    Log.e("qqqqqqqqqMMMM", msgDataList.size() + "??");
                     if (!userId.equals(jsonObject.getString("clockCreater"))) {
-                        List<MsgData> msgDataList2 = msgDao.findMsgByState(msgData.getCreateTime());
-                        if (msgDataList2.size() == 0)
-                        msgDao.insert(msgData);
-                        SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
+                        List<MsgData> msgDataList2 = msgDao.findMsgByTime(msgData.getCreateTime());
+                        if (msgDataList2.size() == 0) {
+
+                            msgDao.insert(msgData);
+                        }
+                        SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
                         String str = preferences.getString("clockNew", "");
                         if ("new".equals(str)) {
-                            if (msgData.getState() == 1 || msgData.getState() == 4) {
+                            int msgState = msgData.getState();
+                            if (msgState == 1 || msgState == 2) {
                                 //设置跳转的页面
+                                Intent dataIntent = new Intent(getApplicationContext(), ClockActivity.class);
+                                dataIntent.putExtra("type", "MQService");
                                 PendingIntent intent = PendingIntent.getActivity(getApplicationContext(),
-                                        100, new Intent(getApplicationContext(), ClockActivity.class),
+                                        100, dataIntent,
                                         PendingIntent.FLAG_CANCEL_CURRENT);
                                 //设置跳转
                                 builder.setContentIntent(intent);
                                 //设置通知栏标题
                                 builder.setContentTitle("新的闹钟消息");
+
                                 //设置通知栏内容
-                                builder.setContentText(msgData.getUserName() + "创建了新的情侣闹钟");
+                                String title = "";
+                                if (userList.getClockType() == 3) {
+                                    if (msgState == 1)
+                                        title = "创建了新的情侣闹钟";
+                                    else
+                                        title = "修改了情侣闹钟";
+                                } else if (userList.getClockType() == 2) {
+                                    if (msgState == 1)
+                                        title = "创建了新的群组闹钟";
+                                    else
+                                        title = "修改了群组闹钟";
+                                }
+                                builder.setContentText(msgData.getUserName() + title);
                                 //设置
                                 builder.setDefaults(Notification.DEFAULT_ALL);
                                 //创建通知类
@@ -919,7 +971,6 @@ public class MQService extends Service {
                                 manager.notify(0, notification);
                             }
                             if (msgData.getState() == 3) {
-
                                 //设置跳转的页面
                                 PendingIntent intent = PendingIntent.getActivity(getApplicationContext(),
                                         100, new Intent(getApplicationContext(), ClockActivity.class),
@@ -929,7 +980,12 @@ public class MQService extends Service {
                                 //设置通知栏标题
                                 builder.setContentTitle("新的闹钟消息");
                                 //设置通知栏内容
-                                builder.setContentText(msgData.getUserName() + "删除了情侣闹钟");
+                                String title = "";
+                                if (userList.getClockType() == 3)
+                                    title = "删除了情侣闹钟";
+                                else if (userList.getClockType() == 2)
+                                    title = "删除了群组闹钟";
+                                builder.setContentText(msgData.getUserName() + title);
                                 //设置
                                 builder.setDefaults(Notification.DEFAULT_ALL);
                                 //创建通知类
@@ -940,9 +996,8 @@ public class MQService extends Service {
                             }
                         }
                     }
-
-
                 }
+
 
 
                 //标记  运行控件
@@ -958,10 +1013,11 @@ public class MQService extends Service {
      * 获得订阅MQTT的所有主题
      */
     String userId;
+    SharedPreferences preferences;
 
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
-        SharedPreferences preferences;
+
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
@@ -1085,7 +1141,7 @@ public class MQService extends Service {
         }
     }
 
-
+    int dialogSign = 0;
     Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
@@ -1104,7 +1160,7 @@ public class MQService extends Service {
 
     private void showDialog() {
         if (isFinish) {
-            dialog4 = new btClockjsDialog5(this);
+            dialog4 = new btClockjsDialog5(MQService.this,dialogSign);
             dialog4.setOnNegativeClickListener(new btClockjsDialog5.OnNegativeClickListener() {
                 @Override
                 public void onNegativeClick() {

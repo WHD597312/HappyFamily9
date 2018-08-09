@@ -73,7 +73,7 @@ public class MsgDaoImpl {
         msgDataDao.deleteAll();
     }
 
-    public List<MsgData> findMsgByState(long time){
+    public List<MsgData> findMsgByTime(long time){
         WhereCondition whereCondition=msgDataDao.queryBuilder().and(MsgDataDao.Properties.CreateTime.eq(time),MsgDataDao.Properties.CreateTime.eq(time));
         return msgDataDao.queryBuilder().where(whereCondition).list();
     }

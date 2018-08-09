@@ -43,6 +43,7 @@ import com.xr.happyFamily.le.view.QinglvTimepicker;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
@@ -149,6 +150,7 @@ public class QinglvEditActivity extends AppCompatActivity {
         notificationManager = (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
 
 
+        Log.e("qqqqqqqqqIIIII1111",loveId+"??");
         qinglvAdapter = new ClockAddQinglvAdapter(this, list_friend);
         qinglvAdapter.setUserId(loveId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
@@ -197,10 +199,15 @@ public class QinglvEditActivity extends AppCompatActivity {
                 startActivityForResult(intent2, 666);
                 break;
             case R.id.tv_lrsd_qd:
+                if ("请填写标签".equals(tvTag.getText().toString())) {
+                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
+                    break;
+                }
                 hour = timeLe1.getValue();
                 minutes = timeLe2.getValue();
                 String member = qinglvAdapter.getMember();
                 int state=2;
+                Log.e("qqqqqEdit",oldMemId+"?"+member);
                 if (!(oldMemId + "").equals(member)) {
                     Log.e("qqqqqqII", oldMemId + "," + member);
                     clockMember = userId + "," + member;
@@ -208,16 +215,14 @@ public class QinglvEditActivity extends AppCompatActivity {
                     new changeClockInfo().execute();
                     state=4;
                 }
-
                 String image = preferences.getString("image", "");
                 String username = preferences.getString("username", "");
                 String phone = preferences.getString("phone", "");
                 String birthday = preferences.getString("birthday", "");
-                String str = birthday.substring(0, 4);
+                String str = TimeUtils.getTime(birthday);
                 Calendar c = Calendar.getInstance();//
-                int age = c.get(Calendar.YEAR) - Integer.parseInt(str) + 1;
+                int age = c.get(Calendar.YEAR) - Integer.parseInt(str.substring(0,4)) + 1;
                 boolean sex = preferences.getBoolean("sex", false);
-
                 List<ClickFriendBean> userInfos = new ArrayList<>();
                 ClickFriendBean userInfo = list_friend.get(qinglvAdapter.getItem());
                 ClickFriendBean myInfo = new ClickFriendBean();
@@ -245,22 +250,17 @@ public class QinglvEditActivity extends AppCompatActivity {
                 myInfo.setUsername(username);
                 userInfos.add(myInfo);
                 userInfos.add(userInfo);
-
                 map.put("userInfos", userInfos);
                 map.put("clockCreater", userId);
                 map.put("createrName", username);
                 map.put("clockType", 3);
-
                 long timeStampSec = System.currentTimeMillis()/1000;
                 String timestamp = String.format("%010d", timeStampSec);
                 long createTime=Long.parseLong(timestamp);
                 map.put("createTime", createTime);
                 macAddress = JSON.toJSONString(map, true);
                 new addMqttAsync().execute(macAddress);
-
-
                 dialog.show();
-
                 break;
         }
     }
@@ -334,6 +334,7 @@ public class QinglvEditActivity extends AppCompatActivity {
             String url = "/happy/clock/changeClockMember";
             url = url + "?clockMember=" + clockMember + "&clockCreater=" + userId + "&clockId=" + clockId;
             String result = HttpUtils.doGet(mContext, url);
+            Log.e("qqqqqqqRRR1111", url);
             Log.e("qqqqqqqRRR", result);
             String code = "";
             try {
@@ -379,7 +380,7 @@ public class QinglvEditActivity extends AppCompatActivity {
         }
 
         if (resultCode==111){
-            String[] str={"学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"};
+            String[] str = {"阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"};
             int pos=0;
             pos=data.getIntExtra("pos",0);
             String text=str[pos];
@@ -412,11 +413,8 @@ public class QinglvEditActivity extends AppCompatActivity {
             String macAddress = macs[0];
             boolean step2 = false;
             if (mqService != null) {
-
-
                 String topicName = "p99/3_" + clockId + "/clockuniversal";
                 step2 = mqService.publish(topicName, 1, macAddress);
-
                 Log.e("qqqqqqSSSSS",macAddress);
             }
             return step2;

@@ -5,25 +5,25 @@
     xmlns:tc="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
- <LinearLayout
-     android:layout_width="match_parent"
-     android:layout_height="match_parent"
-     android:background="@color/white"
-     android:gravity="center"
-     android:orientation="vertical">
-  <ImageView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:src="@mipmap/bg_develop"/>
+ <!--<LinearLayout-->
+     <!--android:layout_width="match_parent"-->
+     <!--android:layout_height="match_parent"-->
+     <!--android:background="@color/white"-->
+     <!--android:gravity="center"-->
+     <!--android:orientation="vertical">-->
+  <!--<ImageView-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:src="@mipmap/bg_develop"/>-->
 
-  <TextView
-      android:layout_width="wrap_content"
-      android:layout_height="wrap_content"
-      android:textSize="@dimen/sp_15"
-      android:textColor="@color/shop_title"
-      android:text="开发中，敬请期待~"
-      android:layout_marginTop="@dimen/dp_jy_20"/>
- </LinearLayout>
+  <!--<TextView-->
+      <!--android:layout_width="wrap_content"-->
+      <!--android:layout_height="wrap_content"-->
+      <!--android:textSize="@dimen/sp_15"-->
+      <!--android:textColor="@color/shop_title"-->
+      <!--android:text="开发中，敬请期待~"-->
+      <!--android:layout_marginTop="@dimen/dp_jy_20"/>-->
+ <!--</LinearLayout>-->
  <RelativeLayout
      android:layout_width="match_parent"
      android:layout_height="@dimen/dp_jy_50"
@@ -54,6 +54,18 @@
       android:layout_centerVertical="true"
       android:layout_alignParentRight="true"
       android:src="@mipmap/ic_clock_msg"/>
+
+  <TextView
+      android:id="@+id/tv_num"
+      android:layout_width="@dimen/dp_jy_15"
+      android:layout_height="@dimen/dp_jy_15"
+      android:layout_alignParentRight="true"
+      android:background="@drawable/bg_pop_clock_qz25"
+      android:layout_marginTop="@dimen/dp_jy_10"
+      android:layout_marginRight="@dimen/dp_jy_4"
+      android:textSize="@dimen/sp_12"
+      android:textColor="@color/white"
+      android:gravity="center"/>
 
 
 
@@ -91,13 +103,6 @@
       android:layout_alignBottom="@+id/arcprogressBar"
       >
 
-   <ImageView
-       android:layout_above="@+id/tc_time"
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:layout_centerHorizontal="true"
-
-       android:src="@mipmap/bg_qinglv"/>
 
    <TextClock
        android:id="@+id/tc_time"
@@ -109,12 +114,13 @@
        android:textColor="#3682ff"/>
 
    <TextView
+       android:id="@+id/tv_flag"
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:textColor="#9e9e9e"
-       android:text="感冒好了么?别忘记吃药"
+       android:text="群组闹钟"
        android:layout_centerHorizontal="true"
-       android:textSize="@dimen/sp_12"
+       android:textSize="@dimen/sp_14"
        android:layout_below="@+id/tc_time"/>
   </RelativeLayout>
  </RelativeLayout>

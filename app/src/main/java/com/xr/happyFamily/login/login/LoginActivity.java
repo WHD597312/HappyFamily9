@@ -123,9 +123,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
-
-
-
     }
 
     SharedPreferences preferences;
@@ -133,7 +130,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     @Override
     protected void onStart() {
         super.onStart();
-
         if (preferences.contains("phone") && !preferences.contains("password")) {
             String phone = preferences.getString("phone", "");
             et_name.setText(phone);
@@ -288,8 +284,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         msg.obj = platform;
         UIHandler.sendMessage(msg, this);   //发送消息
         Log.e("test", "授权成功" );
-        Log.e("msg", "onComplete:--> "+msg.toString() );
-
+        Log.e("msg", "onComplete:--> "+msg.toString());
     }
 
     //登陆授权错误的回调
@@ -410,7 +405,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         if (progressDialog != null)
             progressDialog.dismiss();
     }
-
 
 
     @Override

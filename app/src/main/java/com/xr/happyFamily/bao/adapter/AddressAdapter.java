@@ -71,7 +71,7 @@ public class AddressAdapter extends RecyclerView.Adapter<AddressAdapter.MyViewHo
      * 按钮点击事件对应的接口
      */
     public interface ButtonInterface{
-        public void onclick( View view,int position);
+        public void onclick(View view, int position);
     }
 
     @Override

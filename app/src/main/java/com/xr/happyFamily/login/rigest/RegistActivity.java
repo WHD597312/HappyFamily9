@@ -23,6 +23,7 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.together.util.Mobile;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -128,7 +129,7 @@ public class RegistActivity extends AppCompatActivity {
             progressDialog.dismiss();
     }
 
-    @OnClick({R.id.btn_finish,R.id.btn_get_code,})
+    @OnClick({R.id.btn_finish,R.id.btn_get_code})
     public void onClick(View view){
         switch (view.getId()){
 
@@ -139,15 +140,15 @@ public class RegistActivity extends AppCompatActivity {
                     String password=et_password.getText().toString().trim();
                     if (TextUtils.isEmpty(phone2)){
                         Utils.showToast(this,"手机号码不能为空");
-                        return;
+                        break;
                     }
                     if (TextUtils.isEmpty(code)){
                         Utils.showToast(this,"请输入验证码");
-                        return;
+                        break;
                     }
                     if (TextUtils.isEmpty(password)){
                         Utils.showToast(this,"请输入密码");
-                        return;
+                        break;
                     }
 
                     Map<String,Object> params=new HashMap<>();
@@ -156,7 +157,7 @@ public class RegistActivity extends AppCompatActivity {
                     params.put("password",password);
 
                     new RegistAsyncTask().execute(params);
-                    showProgressDialog("请稍后。。。。");
+                    showProgressDialog("请稍后...");
 //                new getShopAsync().execute(params);
 
 
@@ -167,9 +168,15 @@ public class RegistActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this,"手机号码不能为空");
                 } else {
-                    SMSSDK.getVerificationCode("86", phone);
-                    CountTimer countTimer=new CountTimer(60000,1000);
-                    countTimer.start();
+                    boolean flag = Mobile.isMobile(phone);
+                    if (flag) {
+                        SMSSDK.getVerificationCode("86", phone);
+
+                        CountTimer countTimer = new CountTimer(60000, 1000);
+                        countTimer.start();
+                    } else {
+                        Utils.showToast(this, "手机号码不合法");
+                    }
                 }
                 break;
         }

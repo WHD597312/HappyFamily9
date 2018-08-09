@@ -67,4 +67,7 @@ public class UserInfosDaoImpl {
     public List<UserInfo> findUserInfoByClockId(int clockId){
         return userInfoDao.queryBuilder().where(UserInfoDao.Properties.ClockId.eq(clockId)).orderAsc(UserInfoDao.Properties.ClockId).list();
     }
+    public List<UserInfo> findUserInfoByUserId(String userId){
+        return userInfoDao.queryBuilder().where(UserInfoDao.Properties.UserId.eq(userId)).orderAsc(UserInfoDao.Properties.UserId).list();
+    }
 }

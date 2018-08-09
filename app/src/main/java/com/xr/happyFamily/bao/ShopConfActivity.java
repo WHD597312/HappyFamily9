@@ -376,8 +376,7 @@ public class ShopConfActivity extends AppCompatActivity {
 //
                 isPrice=true;
                  post_fee=(int)((postFreeBeans.get(0).getExpressList().get(0).getFee()*10+5)/10);
-
-                tvMoney.setText("¥" + (money+post_fee));
+                tvMoney.setText("¥" + money);
 //                tvMoney=
                 if(isPrice&&isShopData)
                     MyDialog.closeDialog(dialog);
@@ -426,7 +425,7 @@ public class ShopConfActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 if(sign_pay==2){
-                    Toast.makeText(mContext,"银联",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"暂不支持银联支付",Toast.LENGTH_SHORT).show();
                 }else {
                     if (sign_pay == 0) {
                         Intent intent = new Intent(ShopConfActivity.this, PayActivity.class);

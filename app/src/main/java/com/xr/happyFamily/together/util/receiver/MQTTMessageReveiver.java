@@ -10,6 +10,7 @@ import android.util.Log;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
+import com.xr.happyFamily.jia.activity.ShareDeviceActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.main.FamilyFragmentManager;
 import com.xr.happyFamily.together.http.NetWorkUtil;
@@ -53,6 +54,10 @@ public class MQTTMessageReveiver extends BroadcastReceiver {
                 context.sendBroadcast(mqttIntent);
             }else if (DeviceDetailActivity.running){
                 Intent mqttIntent=new Intent("DeviceDetailActivity");
+                mqttIntent.putExtra("noNet","noNet");
+                context.sendBroadcast(mqttIntent);
+            }else if (ShareDeviceActivity.running){
+                Intent mqttIntent=new Intent("ShareDeviceActivity");
                 mqttIntent.putExtra("noNet","noNet");
                 context.sendBroadcast(mqttIntent);
             }

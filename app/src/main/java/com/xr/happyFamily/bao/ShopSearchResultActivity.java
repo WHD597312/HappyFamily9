@@ -29,6 +29,8 @@ import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.view.MyHeadRefreshView;
+import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bao.view.MyScrollview;
 import com.xr.happyFamily.bean.PersonCard;
 import com.xr.happyFamily.bean.ShopBean;
@@ -117,13 +119,16 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         goodsName = getIntent().getExtras().getString("goodsName");
 
-
+        swipeContent.setHeaderView(new MyHeadRefreshView(this));
+        swipeContent.setFooterView(new MyLoadMoreView(this));
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
                 page=1;
                 isRefresh=true;
                 list_shop.clear();
+                countTimer = new CountTimer(5000, 1000);
+                countTimer.start();
                 getShopData(1, lastState);
             }
 
@@ -131,6 +136,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             public void loadMore() {
                 isLoading=true;
                 page++;
+                countTimer = new CountTimer(5000, 1000);
+                countTimer.start();
                 getShopData(page, lastState);
             }
         });
@@ -354,5 +361,35 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         }
     }
 
+    private static CountTimer countTimer;
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
 
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+        @Override
+        public void onFinish() {
+            if (isRefresh) {
+                swipeContent.finishRefresh();
+                Toast.makeText(ShopSearchResultActivity.this, "加载超时请重试", Toast.LENGTH_SHORT).show();
+            }
+            if (isLoading) {
+                swipeContent.finishLoadMore();
+                Toast.makeText(ShopSearchResultActivity.this, "加载超时请重试", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
 }

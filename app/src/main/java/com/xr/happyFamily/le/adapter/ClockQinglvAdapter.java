@@ -72,10 +72,9 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 
     MQService mqService;
 
-    public ClockQinglvAdapter(ClockActivity context, List<ClockBean> clockBeanList,  String userId, MQService mqService) {
+    public ClockQinglvAdapter(ClockActivity context, List<ClockBean> clockBeanList, String userId, MQService mqService) {
         this.context = context;
         this.clockBeanList = clockBeanList;
-
         this.userId = userId;
         this.mqService = mqService;
 
@@ -118,9 +117,8 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
         userInfosDao = new UserInfosDaoImpl(context.getApplicationContext());
-        userInfoList=userInfosDao.findUserInfoByClockId(clockBeanList.get(position).getClockId());
+        userInfoList = userInfosDao.findUserInfoByClockId(clockBeanList.get(position).getClockId());
 
-        Log.e("qqqqqqqqWWWW",userInfosDao.findAll().size()+"ppppppppp");
 
         String hourStr = "";
         int hour = clockBeanList.get(position).getClockHour();
@@ -135,14 +133,8 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         holder.tv_time.setText(hourStr + ":" + minStr);
         holder.tv_context.setText(clockBeanList.get(position).getFlag());
 
-
-
-
-
         final int[] sign = {Integer.parseInt(clockBeanList.get(position).getSwitchs() + "")};
 
-
-        Log.e("qqqqqqqqWWWW", clockBeanList.get(position).getClockId()+"???"+userInfoList.size());
 
 
         if (!(clockBeanList.get(position).getClockCreater() + "").equals(userId)) {
@@ -154,8 +146,9 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 holder.tv_time.setTextColor(Color.parseColor("#828282"));
             }
         } else {
+            Log.e("qqqqqqqqName2222", userInfoList.get(0).getUsername()+","+userInfoList.get(1).getUsername());
             holder.tv_name.setText(userInfoList.get(1).getUsername());
-            Log.e("qqqqqqqqqqWWWWW",clockBeanList.get(position).getSwitchs()+"??"+clockBeanList.get(position).getClockMinute());
+            final List<UserInfo> myUserInfo=userInfoList;
             if (clockBeanList.get(position).getSwitchs() == 0) {
                 holder.img_btn.setImageResource(R.drawable.btn_clock_false);
             } else {
@@ -165,7 +158,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
             holder.rl_item.setOnLongClickListener(new View.OnLongClickListener() {
                 @Override
                 public boolean onLongClick(View v) {
-                    showPopup(userInfoList,position);
+                    showPopup(userInfoList, position);
                     return false;
                 }
             });
@@ -175,8 +168,8 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 public void onClick(View v) {
                     Intent intent = new Intent(context, QinglvEditActivity.class);
                     intent.putExtra("clock", clockBeanList.get(position));
-                    Log.e("qqqqqqqIIII11111",userInfoList.get(1).getUserId()+"???"+userInfoList.size());
-                    intent.putExtra("loveId", userInfoList.get(1).getUserId());
+                    Log.e("qqqqqqqIIII11111", myUserInfo.get(1).getUserId() + "???" +position);
+                    intent.putExtra("loveId", myUserInfo.get(1).getUserId());
                     context.startActivity(intent);
                 }
             });
@@ -191,21 +184,20 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 upPos = position;
                 if (clockBeanList.get(position).getSwitchs() == 1) {
                     upState = 0;
-                    upSwitch(userInfoList, position, 0,2);
+                    upSwitch(userInfoList, position, 0, 2);
 
                 } else {
                     upState = 1;
-                    upSwitch(userInfoList, position, 1,2);
+                    upSwitch(userInfoList, position, 1, 2);
                 }
 
             }
         });
 
 
-
     }
 
-    public void upSwitch(List<UserInfo> myUserInfoList, int position, int state,int del) {
+    public void upSwitch(List<UserInfo> myUserInfoList, int position, int state, int del) {
         SharedPreferences preferences;
         preferences = context.getSharedPreferences("my", MODE_PRIVATE);
 //                    holder.img_btn.setImageResource(R.drawable.btn_clock_false);
@@ -214,10 +206,11 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         String phone = preferences.getString("phone", "");
         boolean sex = preferences.getBoolean("sex", false);
         String birthday = preferences.getString("birthday", "");
+
+        Log.e("qqqqBir",birthday);
         String str = birthday.substring(0, 4);
         Calendar c = Calendar.getInstance();//
         int age = c.get(Calendar.YEAR) - Integer.parseInt(str) + 1;
-
         List<ClickFriendBean> userInfos = new ArrayList<>();
         ClickFriendBean userInfo = new ClickFriendBean();
         ClickFriendBean myInfo = new ClickFriendBean();
@@ -259,10 +252,10 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         map.put("clockCreater", userId);
         map.put("clockType", 3);
 
-        long timeStampSec = System.currentTimeMillis()/1000;
+        long timeStampSec = System.currentTimeMillis() / 1000;
         String timestamp = String.format("%010d", timeStampSec);
         map.put("createrName", username);
-        long createTime=Long.parseLong(timestamp);
+        long createTime = Long.parseLong(timestamp);
         map.put("createTime", createTime);
         String macAddress = JSON.toJSONString(map, true);
         new addMqttAsync().execute(macAddress);
@@ -346,7 +339,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
                 delPos = pos;
                 clockCreater = clockBeanList.get(pos).getClockCreater();
                 clockId = clockBeanList.get(pos).getClockId();
-                upSwitch(myUserInfoList, pos, 0,3);
+                upSwitch(myUserInfoList, pos, 0, 3);
                 new deleteClock().execute();
                 //刷新数据
             }
@@ -418,12 +411,8 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Toast.makeText(context, "删除闹钟成功", Toast.LENGTH_SHORT).show();
-//                clockBeanDao.delete(clockBeanList.get(delPos));
-//                clockBeanList.remove(clockBeanList.get(delPos));
-//                context.upQinglvData();
                 mPopWindow.dismiss();
-//                notifyDataSetChanged();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(context.getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = context.getSharedPreferences("my", MODE_PRIVATE);
@@ -466,8 +455,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
             if (mqService != null) {
                 String topicName = "p99/3_" + clockId + "/clockuniversal";
                 step2 = mqService.publish(topicName, 1, macAddress);
-
-                Log.e("qqqqqqSSSS1111", step2 + "?"+topicName+","+macAddress);
+                Log.e("qqqqqqSSSS1111", step2 + "?" + topicName + "," + macAddress);
             }
             return step2;
         }
@@ -495,7 +483,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 
 
     public void setMqService(MQService mqService) {
-        this.mqService=mqService;
+        this.mqService = mqService;
         notifyDataSetChanged();
 
     }

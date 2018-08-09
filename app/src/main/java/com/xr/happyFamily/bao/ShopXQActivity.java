@@ -145,6 +145,8 @@ public class ShopXQActivity extends AppCompatActivity {
         circle.add("详情");
         Bundle extras = getIntent().getExtras();
         goodsId = extras.getString("goodsId");
+
+        Log.e("qqqqqGGGGG",goodsId+"?");
         SharedPreferences userSettings = getSharedPreferences("my", 0);
         String userId = userSettings.getString("userId", "1000");
 

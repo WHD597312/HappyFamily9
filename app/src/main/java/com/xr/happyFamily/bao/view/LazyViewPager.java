@@ -39,7 +39,7 @@ import android.widget.Scroller;
 /**
  * Layout manager that allows the user to flip left and right through pages of
  * data. You supply an implementation of a
- * {@link android.support.v4.view.PagerAdapter} to generate the pages that the
+ * {@link PagerAdapter} to generate the pages that the
  * view shows.
  *
  * <p>
@@ -441,7 +441,7 @@ public class LazyViewPager extends ViewGroup {
      * @param marginPixels
      *            Distance between adjacent pages in pixels
      * @see #getPageMargin()
-     * @see #setPageMarginDrawable(android.graphics.drawable.Drawable)
+     * @see #setPageMarginDrawable(Drawable)
      * @see #setPageMarginDrawable(int)
      */
     public void setPageMargin(int marginPixels) {
@@ -515,7 +515,7 @@ public class LazyViewPager extends ViewGroup {
     }
 
     /**
-     * Like {@link android.view.View#scrollBy}, but scroll smoothly instead of
+     * Like {@link View#scrollBy}, but scroll smoothly instead of
      * immediately.
      *
      * @param x
@@ -528,7 +528,7 @@ public class LazyViewPager extends ViewGroup {
     }
 
     /**
-     * Like {@link android.view.View#scrollBy}, but scroll smoothly instead of
+     * Like {@link View#scrollBy}, but scroll smoothly instead of
      * immediately.
      *
      * @param x

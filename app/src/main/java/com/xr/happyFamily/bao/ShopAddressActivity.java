@@ -303,7 +303,7 @@ public class ShopAddressActivity extends AppCompatActivity implements AddressAda
         mPopWindow.setOutsideTouchable(true);
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
-        mPopWindow.setOnDismissListener(new ShopAddressActivity.poponDismissListener());
+        mPopWindow.setOnDismissListener(new poponDismissListener());
         mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 

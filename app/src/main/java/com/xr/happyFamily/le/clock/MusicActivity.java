@@ -32,7 +32,8 @@ public class MusicActivity extends Activity {
     @BindView(R.id.colockring_recyc)
     RecyclerView recyclerView;
     private TimeDaoImpl timeDao;
-    private List<String> mData = new ArrayList<String>(Arrays.asList("学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression"));
+
+    private List<String> mData = new ArrayList<String>(Arrays.asList("阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"));
     ChooseRingAdapter adapter;
     Time time;
     int hour, minutes;

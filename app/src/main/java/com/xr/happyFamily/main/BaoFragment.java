@@ -2,14 +2,11 @@ package com.xr.happyFamily.main;
 
 import android.content.Context;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.annotation.Nullable;
-import android.support.annotation.RequiresApi;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
@@ -22,7 +19,6 @@ import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.GridView;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.PopupWindow;
@@ -37,6 +33,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
+import com.jwenfeng.library.pulltorefresh.view.HeadView;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopCartActivity;
@@ -48,13 +45,14 @@ import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
 import com.xr.happyFamily.bao.view.LinearGradientView;
+import com.xr.happyFamily.bao.view.MyHeadRefreshView;
+import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bao.view.MyScrollview;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopPageBean;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
-import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -131,6 +129,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     LinearLayout llNodata;
 
     public static final int MAIN_CODE = 1000;
+
     private RecyclerView.LayoutManager shopLayoutManager;
     private LinearLayoutManager titleLayoutManager;
     private WaterFallAdapter shopAdapter;
@@ -160,12 +159,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     SimpleAdapter moreAdapter;
     List<Map<String, Object>> list_more;
 
-    int lastBanner=0;
+    int lastBanner = 0;
 
-    boolean isLoading=false,isRefresh=false;
+    boolean isLoading = false, isRefresh = false;
 
     //判断三个后台数据是否获取完成
-    boolean isBanner=false,isShopData=false,isPage=false;
+    boolean isBanner = false, isShopData = false, isPage = false;
 
     @Nullable
     @Override
@@ -176,6 +175,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         mContext = getContext();
 
         isStop = false;
+        isShopData = false;
         init();
         homePage = new ArrayList<>();
         new getHomePageAsync().execute();
@@ -189,12 +189,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     public void onStop() {
 
         super.onStop();
-        Log.e("qqqqqqLL", lastVisibleItem + "??");
     }
 
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
     }
 
     private void init() {
@@ -221,26 +221,35 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             public void onItemClick(View view, int position) {
                 Intent intent = new Intent(mContext, ShopXQActivity.class);
                 intent.putExtra("goodsId", list_shop.get(position).getGoodsId() + "");
-                startActivityForResult(intent,MAIN_CODE);
+                startActivityForResult(intent, MAIN_CODE);
             }
         });
+
+
+        swipeContent.setHeaderView(new MyHeadRefreshView(getActivity()));
+        swipeContent.setFooterView(new MyLoadMoreView(getActivity()));
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
-                page=1;
-                isRefresh=true;
+                page = 1;
+                isRefresh = true;
                 list_shop.clear();
-                countTimer=new CountTimer(5000,1000);
+                if (countTimer != null)
+                    countTimer.cancel();
+                countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
-
-                getShopData(lastVisibleItem, page);
+                getData();
             }
 
             @Override
             public void loadMore() {
                 page++;
-                isLoading=true;
-                    getShopData(lastVisibleItem, page);
+                isLoading = true;
+                if (countTimer != null)
+                    countTimer.cancel();
+                countTimer = new CountTimer(5000, 1000);
+                countTimer.start();
+                getShopData(lastVisibleItem, page);
             }
         });
 
@@ -253,9 +262,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 list_shop.clear();
                 lastVisibleItem = position;
                 page = 1;
-                getShopData(lastVisibleItem, page);
-
-
+                upData(lastVisibleItem);
             }
         });
         //下拉选项相关适配器
@@ -268,24 +275,21 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 llNodata.setVisibility(View.GONE);
                 rvTitle.setVisibility(View.VISIBLE);
 
-                MoveToPosition(titleLayoutManager,rvTitle,position);
+                MoveToPosition(titleLayoutManager, rvTitle, position);
 
                 mainTitleAdapter.setPosition(position);
                 mainTitleAdapter.notifyDataSetChanged();
                 lastVisibleItem = position;
                 list_shop.clear();
-                getShopData(lastVisibleItem, 1);
+                upData(lastVisibleItem);
 
             }
 
         });
 
 
-
-        ((ImageView)view.findViewById(imgae_dots[lastBanner])).setImageResource(R.mipmap.ic_shop_banner);;
-        getShopData(lastVisibleItem, 1);
-        mainTitleAdapter.setPosition(lastVisibleItem); //传递当前的点击位置
-        mainTitleAdapter.notifyDataSetChanged(); //通知刷新
+        ((ImageView) view.findViewById(imgae_dots[lastBanner])).setImageResource(R.mipmap.ic_shop_banner);
+        ;
 
     }
 
@@ -310,8 +314,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             mImageList.add(iv);
         }
     }
-
-
 
 
     /**
@@ -344,7 +346,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                         img_old.setImageResource(R.mipmap.ic_shop_banner_wei);
                     }
                 }
-                lastBanner=position%shopBannerBeans.size();
+                lastBanner = position % shopBannerBeans.size();
             }
 
             @Override
@@ -362,34 +364,33 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
      */
     private void autoPlayView() {
         //自动播放图片
-        if(thread==null) {
+        if (thread == null) {
             thread = new Thread(new Runnable() {
-                        @Override
-                        public void run() {
-                            while (!isStop) {
-                                if (getActivity() != null) {
-                                    getActivity().runOnUiThread(new Runnable() {
-                                        @Override
-                                        public void run() {
-                                            viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                                        }
-                                    });
-                                    SystemClock.sleep(PAGER_TIOME);
+                @Override
+                public void run() {
+                    while (!isStop) {
+                        if (getActivity() != null) {
+                            getActivity().runOnUiThread(new Runnable() {
+                                @Override
+                                public void run() {
+                                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
                                 }
-                            }
+                            });
+                            SystemClock.sleep(PAGER_TIOME);
                         }
-                    });
+                    }
+                }
+            });
             thread.start();
         }
     }
-
 
 
     @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
-                startActivityForResult(new Intent(mContext, ShopSearchActivity.class),MAIN_CODE);
+                startActivityForResult(new Intent(mContext, ShopSearchActivity.class), MAIN_CODE);
                 break;
             case R.id.image_more:
                 showPopup();
@@ -412,7 +413,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
 
     private void showPopup() {
-
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shopcart, null);
         tv_shopcart = (TextView) contentViewSign.findViewById(R.id.tv_shopcart);
         tv_dingdan = (TextView) contentViewSign.findViewById(R.id.tv_dingdan);
@@ -447,15 +447,15 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.tv_shopcart:
-                startActivityForResult(new Intent(mContext, ShopCartActivity.class),MAIN_CODE);
+                startActivityForResult(new Intent(mContext, ShopCartActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_dingdan:
-                startActivityForResult(new Intent(mContext, ShopDingdanActivity.class),MAIN_CODE);
+                startActivityForResult(new Intent(mContext, ShopDingdanActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_shangcheng:
-                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class),MAIN_CODE);
+                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
         }
@@ -475,21 +475,23 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
     private void getShopData(int id, int page) {
 
-        if(lastVisibleItem==1)
-//        homePage.get(id-1)
-
-            Log.e("qqqqqRRRR",isRefresh+"???");
-        if(!isRefresh) {
-            dialog = MyDialog.showDialog(mContext);
-            dialog.show();
-        }
+//        if (lastVisibleItem == 1)
+////        homePage.get(id-1)
+//
+//            Log.e("qqqqqRRRR", isRefresh + "???");
+//        if (!isRefresh && !isLoading) {
+//            if (page != 1) {
+//                dialog = MyDialog.showDialog(mContext);
+//                dialog.show();
+//            }
+//        }
         Map<String, Object> params = new HashMap<>();
         if (id == 0) {
             llTuijian.setVisibility(View.VISIBLE);
             params.put("categoryId", 0 + "");
         } else {
             llTuijian.setVisibility(View.GONE);
-            int cate=homePage.get(id-1).getCategoryId();
+            int cate = homePage.get(id - 1).getCategoryId();
             params.put("categoryId", cate + "");
         }
         params.put("pageNum", page + "");
@@ -504,27 +506,44 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             String url = "goods/getGoodsByGoodsCategory";
             String result = HttpUtils.myPostOkHpptRequest(mContext, url, params);
             String code = "";
+            int page = Integer.parseInt("" + params.get("pageNum"));
+            int categoryId = Integer.parseInt("" + params.get("categoryId"));
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
                     JSONObject returnData = jsonObject.getJSONObject("returnData");
-                    JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("list");
-                    if ("100".equals(code)) {
-                        Gson gson = new Gson();
-                        if (list.size() > 0) {
-                            isData = true;
-                            for (JsonElement user : list) {
-                                //通过反射 得到UserBean.class
-                                ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
-                                list_shop.add(userList);
-                            }
-                        } else {
-                            page--;
-                            isData = false;
+                    if (page == 1) {
+                        if (categoryId == 0) {
+                            data[0] = returnData.toString();
+                            dataSign[0] = true;
                         }
+                        for (int i = 0; i < homePage.size(); i++) {
+                            if (categoryId == homePage.get(i).getCategoryId()) {
+                                data[i + 1] = returnData.toString();
+                                dataSign[i + 1] = true;
+                            }
+                        }
+                    }
+                    else {
+                        JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
+                        JsonArray list = content.getAsJsonArray("list");
+                        if ("100".equals(code)) {
+                            code="1000";
+                            Gson gson = new Gson();
+                            if (list.size() > 0) {
+                                isData = true;
+                                for (JsonElement user : list) {
+                                    //通过反射 得到UserBean.class
+                                    ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
+                                    list_shop.add(userList);
+                                }
+                            } else {
+                                page--;
+                                isData = false;
+                            }
 
+                        }
                     }
                 }
             } catch (Exception e) {
@@ -537,27 +556,41 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                isShopData=true;
-                shopAdapter.notifyDataSetChanged();
-                if(isLoading)
-                swipeContent.finishLoadMore();
-                if (isRefresh)
-                swipeContent.finishRefresh();
+                isShopData = true;
+                for (int i = 0; i < dataSign.length; i++) {
+                    if (dataSign[i] == false) {
+                        isShopData = false;
+                    }
+                }
+                if (isShopData) {
+                    if (isRefresh) {
+                        isRefresh = false;
+                        swipeContent.finishRefresh();
+                    }
+                    mainTitleAdapter.setPosition(lastVisibleItem); //传递当前的点击位置
+                    mainTitleAdapter.notifyDataSetChanged(); //通知刷新
+                    upData(lastVisibleItem);
+                    shopAdapter.notifyDataSetChanged();
+                }
 
-                isRefresh=false;
-                isLoading=false;
+
+                if (isShopData && isBanner && isPage)
+                    MyDialog.closeDialog(dialog);
+            }else if("1000".equals(s)){
+                if (isLoading) {
+                    swipeContent.finishLoadMore();
+                    shopAdapter.notifyDataSetChanged();
+                }isLoading = false;
                 if (!isData) {
                     Toast.makeText(mContext, "无更多商品", Toast.LENGTH_SHORT).show();
                 }
-                if(isShopData&&isBanner&&isPage)
-                MyDialog.closeDialog(dialog);
-
             }
         }
     }
 
 
     List<ShopPageBean> homePage;
+
     class getHomePageAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -595,7 +628,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                isPage=true;
+                isPage = true;
                 titles = new String[homePage.size() + 1];
                 Map<String, Object> map = null;
                 list_more.clear();
@@ -615,9 +648,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
                 mainTitleAdapter.notifyDataSetChanged();
                 moreAdapter.notifyDataSetChanged();
-                if(isShopData&&isBanner&&isPage)
-                    MyDialog.closeDialog(dialog);
 
+
+                if (isShopData && isBanner && isPage)
+                    MyDialog.closeDialog(dialog);
+                getData();
 
             }
         }
@@ -633,8 +668,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             String url = "/ad/getAdByPage?pageNum=1&pageRow=10";
 
             String result = HttpUtils.doGet(mContext, url);
-
-            Log.e("qqqqqRRRR",result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
@@ -669,17 +702,16 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                isBanner=true;
+                isBanner = true;
                 initData();//初始化数据
                 initView();//初始化View，设置适配器
                 autoPlayView();//开启线程，自动播放
 
-                if(isShopData&&isBanner&&isPage)
+                if (isShopData && isBanner && isPage)
                     MyDialog.closeDialog(dialog);
             }
         }
     }
-
 
 
     class CountTimer extends CountDownTimer {
@@ -702,8 +734,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
          */
         @Override
         public void onFinish() {
-            if(isRefresh) {
+            if (isRefresh) {
                 swipeContent.finishRefresh();
+                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+            }
+            if (isLoading) {
+                swipeContent.finishLoadMore();
                 Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
             }
         }
@@ -726,8 +762,32 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
     }
 
+    String[] data;
+    boolean[] dataSign;
 
+    public void getData() {
+        if (!isRefresh) {
+            dialog = MyDialog.showDialog(mContext);
+            dialog.show();
+        }
+        data = new String[homePage.size() + 1];
+        dataSign = new boolean[homePage.size() + 1];
+        for (int i = 0; i < homePage.size() + 1; i++) {
+            dataSign[i] = false;
+            getShopData(i, 1);
+        }
+    }
 
-
-
+    public void upData(int i) {
+        list_shop.clear();
+        JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
+        JsonArray list = content.getAsJsonArray("list");
+        Gson gson = new Gson();
+        for (JsonElement user : list) {
+            //通过反射 得到UserBean.class
+            ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
+            list_shop.add(userList);
+        }
+        shopAdapter.notifyDataSetChanged();
+    }
 }

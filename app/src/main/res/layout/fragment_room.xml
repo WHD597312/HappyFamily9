@@ -7,8 +7,12 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bj_home"
-
     android:orientation="vertical">
+    <TextView
+        android:id="@+id/tv_bz2"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        />
 
     <ScrollView
         android:layout_width="0dp"
@@ -224,13 +228,6 @@
     </ScrollView>
 
 
-    <View
-        android:id="@+id/view_balcony"
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_15"
-        android:layout_marginLeft="@dimen/dp_jy_49"
-        android:layout_marginRight="@dimen/dp_jy_49"
-        android:background="@null" />
 
     <Button
         android:id="@+id/btn_add_device"

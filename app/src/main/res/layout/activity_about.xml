@@ -36,7 +36,9 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_jy_20"
-        android:src="@mipmap/zhen_about" />
+        android:src="@mipmap/zhen_about"
+        android:scaleType="centerInside"
+        />
 
     <TextView
         android:layout_width="wrap_content"
@@ -63,12 +65,13 @@
             android:textSize="@dimen/sp_16" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/dp_jy_15"
+            android:layout_height="@dimen/dp_jy_15"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_jy_12"
-            android:src="@mipmap/hourse_xz" />
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/right_back"
+            android:scaleType="centerInside"
+            android:layout_marginRight="@dimen/dp_jy_10" />
 
     </RelativeLayout>
 
@@ -92,12 +95,13 @@
             android:textSize="@dimen/sp_16" />
 
         <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentRight="true"
+            android:layout_width="@dimen/dp_jy_15"
+            android:layout_height="@dimen/dp_jy_15"
             android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_jy_12"
-            android:src="@mipmap/hourse_xz" />
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/right_back"
+            android:scaleType="centerInside"
+            android:layout_marginRight="@dimen/dp_jy_10"  />
 
     </RelativeLayout>
 

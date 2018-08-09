@@ -8,10 +8,13 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Binder;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.support.annotation.RequiresApi;
+import android.util.ArraySet;
 import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
@@ -25,11 +28,14 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.pojo.ClockBean;
 import com.xr.happyFamily.le.pojo.Time;
 import com.xr.happyFamily.le.view.QinglvClockDialog;
+import com.xr.happyFamily.le.view.QunzuClockDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog;
 import com.xr.happyFamily.le.view.btClockjsDialog2;
 import com.xr.happyFamily.le.view.btClockjsDialog4;
 import java.util.Calendar;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
 public class ClockService extends Service {
@@ -39,6 +45,7 @@ public class ClockService extends Service {
     private ClockDaoImpl clockDao;
     private UserInfosDaoImpl userInfosDao;
     SharedPreferences preferences;
+    SharedPreferences clockPreferences;
     Boolean Ring ;
     Time ti;
     ClockBean cl;
@@ -58,6 +65,8 @@ public class ClockService extends Service {
         preferences = this.getSharedPreferences("trueCount", MODE_MULTI_PROCESS);
         SharedPreferences preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
+        Log.e("qqqqqqYYYYY","1111111111");
+
     }
 
     @Nullable
@@ -110,9 +119,16 @@ public class ClockService extends Service {
         }
     }
 
+    @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
 //        return super.onStartCommand(intent, flags, startId);
+        clockPreferences = this.getSharedPreferences("password", MODE_MULTI_PROCESS);
+        SharedPreferences.Editor editor2 = clockPreferences.edit();
+        Set<String> setList=new ArraySet<>();
+        editor2.putStringSet("clockSignTime", setList);
+
+        editor2.commit();
         Notification notification=new Notification.Builder(getApplicationContext())
                 .setWhen(System.currentTimeMillis())
                 .build();
@@ -198,23 +214,26 @@ public class ClockService extends Service {
             if (!isBt) {
                 for (int i = 0; i < clockFinishList.size(); i++) {
                     cl = clockFinishList.get(i);
-                    int switchs = cl.getSwitchs();
-                    boolean open;
-                    if (switchs == 1) {
-                        open = true;
-                    } else {
-                        open = false;
-                    }
-                    sumMin = cl.getClockHour()*60+cl.getClockMinute() ;
-                    Log.e("open", "onFinish:--> " + open);
-                    Calendar calendar = Calendar.getInstance();
-                    int hour = calendar.get(Calendar.HOUR_OF_DAY);
-                    int minutes = calendar.get(Calendar.MINUTE);
-                    int nowminutes = hour * 60  + minutes ;
-                    if (sumMin == nowminutes && true == open) {
-                        isJy = true;
-                        isBt = false;
-                        break;
+
+                    if(!(cl.getClockType()==3&&userId.equals(cl.getClockCreater()))) {
+                        int switchs = cl.getSwitchs();
+                        boolean open;
+                        if (switchs == 1) {
+                            open = true;
+                        } else {
+                            open = false;
+                        }
+                        sumMin = cl.getClockHour() * 60 + cl.getClockMinute();
+                        Log.e("open", "onFinish:--> " + open);
+                        Calendar calendar = Calendar.getInstance();
+                        int hour = calendar.get(Calendar.HOUR_OF_DAY);
+                        int minutes = calendar.get(Calendar.MINUTE);
+                        int nowminutes = hour * 60 + minutes;
+                        if (sumMin == nowminutes && true == open) {
+                            isJy = true;
+                            isBt = false;
+                            break;
+                        }
                     }
                 }
             }
@@ -225,12 +244,17 @@ public class ClockService extends Service {
                 wakeLock.acquire();
 //wakeLock.acquire(1000);
                 wakeLock.release();
-                Log.e("qqqqqRRRR",Ring+"???");
                 if (Ring == false) {
                     if (isBt)
                         ring();
-                    else if (isJy)
-                        qinglvDialog();
+                    else if (isJy){
+                        Log.e("qqqqqCCC",cl.getClockType()+"???");
+                        if(cl.getClockType()==2)
+                            qunzuDialog();
+                        else
+                            qinglvDialog();
+                    }
+
                     Ring = true;
                     SharedPreferences.Editor editor = preferences.edit();
                     editor.putBoolean("trueCount", false);
@@ -304,10 +328,33 @@ public class ClockService extends Service {
         qinglvClockDialog.show();
     }
 
+
+    private void qunzuDialog() {
+        qunzuClockDialog = new QunzuClockDialog(this);
+
+        qunzuClockDialog.setOnNegativeClickListener(new QunzuClockDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+//                dialog.dismiss();
+            }
+        });
+        qunzuClockDialog.setOnPositiveClickListener(new QunzuClockDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                Ring = false;
+            }
+        });
+        qunzuClockDialog.setCanceledOnTouchOutside(false);
+        qunzuClockDialog.setCancelable(false);
+        qunzuClockDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        qunzuClockDialog.show();
+    }
+
     btClockjsDialog dialog;
     btClockjsDialog2 dialog2;
     btClockjsDialog4 dialog4;
     QinglvClockDialog qinglvClockDialog;
+    QunzuClockDialog qunzuClockDialog;
 
     private void clolkDialog1() {//听歌识曲
         dialog4 = new btClockjsDialog4(this);
@@ -391,12 +438,12 @@ public class ClockService extends Service {
     public void startClock() {
         int firstHour = 0;
         int firstMinutes = 0;
+
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int minutes = calendar.get(Calendar.MINUTE);
         int second = calendar.get(Calendar.SECOND);
         int nowminutes = hour * 60 *60 + minutes*60+second;
-
         int finishTime = 0;
         times = timeDao.findTimeByMin();
         for (int i = 0; i < times.size(); i++) {
@@ -408,10 +455,12 @@ public class ClockService extends Service {
             }
             if (sumMin >= nowminutes && true == open) {
 //                finishTime = sumMin;
-                if (finishTime == 0)
+                if (finishTime == 0) {
                     finishTime = sumMin;
-                else if (sumMin < finishTime)
+                }
+                else if (sumMin < finishTime) {
                     finishTime = sumMin;
+                }
             }
         }
 
@@ -420,7 +469,7 @@ public class ClockService extends Service {
         Log.e("QqqqqqqqLLL",clockBeanList.size()+"???");
         for (int i = 0; i < clockBeanList.size(); i++) {
             clockBean = clockBeanList.get(i);
-            if (!(clockBean.getClockCreater() + "").equals(userId)) {
+            if (!(clockBean.getClockCreater() + "").equals(userId)||(clockBean.getClockType()==2)) {
                 Log.e("qqqqqqqqqqqLLLLpppp", clockBean.getClockHour() + "????" + clockBean.getClockMinute());
                 int switchs = clockBean.getSwitchs();
                 boolean open;
@@ -437,23 +486,41 @@ public class ClockService extends Service {
 
 
                 if (sumMin >= nowminutes && true == open) {
-                    if (finishTime == 0)
+                    if (finishTime == 0) {
                         finishTime = sumMin;
-                    else if (sumMin < finishTime)
+                    }
+                    else if (sumMin < finishTime) {
                         finishTime = sumMin;
-                    Log.e("qqqqqqqqqqqLLLL", "Time-----" + finishTime + "????" + nowminutes);
-                    Log.e("qqqqqqqqqqqLLLL1111", "Time-----" + finishTime + "????" + nowminutes);
+                    }
                 }
             }
         }
-        Log.e("qqqqqqqqqqqLLLL2222", "Time-----" + finishTime + "????" + nowminutes);
-        counttime = finishTime - nowminutes;
-        countTimer = new ClockService.CountTimer(counttime * 1000, 1000);
-        countTimer.start();
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putBoolean("trueCount", true);
-        editor.putBoolean("ring",false);
-        editor.commit();
+        Log.e("qqqqqqqqqqMMMMM","3333333");
+        Set<String> timesSet=new HashSet<>();
+        timesSet=clockPreferences.getStringSet("clockSignTime",timesSet);
+        String[] timeData = (String[]) timesSet.toArray(new String[timesSet.size()]);   //将SET转换为数组
+        boolean isTime=false;
+        for(int i=0;i<timeData.length;i++){
+            if(timeData[i].equals(""+finishTime))
+                isTime=true;
+        }
+        Log.e("qqqqqqqqqqMMMMM","222222_"+finishTime);
+       if(!isTime) {
+           SharedPreferences.Editor editor2 = clockPreferences.edit();
+           timesSet.add(finishTime+"");
+           editor2.putStringSet("clockSignTime", timesSet);
+           editor2.commit();
+
+           Log.e("qqqqqqqqqqMMMMM","11111111");
+
+           counttime = finishTime - nowminutes;
+           countTimer = new CountTimer(counttime * 1000, 1000);
+           countTimer.start();
+           SharedPreferences.Editor editor = preferences.edit();
+           editor.putBoolean("trueCount", true);
+           editor.putBoolean("ring", false);
+           editor.commit();
+       }
 
         int time = counttime * 1000;
 //        AlarmManager am = (AlarmManager) this.getSystemService(Context.ALARM_SERVICE);

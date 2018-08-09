@@ -54,14 +54,14 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
     }
 
     @Override
-    public ShopCartAdapter.MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public MyViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         View view;
         view = LayoutInflater.from(context).inflate(R.layout.item_shopcart, parent, false);
-        return new ShopCartAdapter.MyViewHolder(view);
+        return new MyViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(final ShopCartAdapter.MyViewHolder holder, final int position) {
+    public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
 
 
@@ -252,12 +252,12 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
         return headerView;
     }
 
-    private ShopCartAdapter.OnItemClickListener mOnItemClickListener;
+    private OnItemClickListener mOnItemClickListener;
     public interface OnItemClickListener{
         void onItemClick(View view, int position);
     }
 
-    public void setOnItemClickListener(ShopCartAdapter.OnItemClickListener mOnItemClickListener){
+    public void setOnItemClickListener(OnItemClickListener mOnItemClickListener){
         this.mOnItemClickListener = mOnItemClickListener;
     }
 
@@ -370,7 +370,7 @@ public class ShopCartAdapter extends RecyclerView.Adapter<ShopCartAdapter.MyView
         mPopWindow.setOutsideTouchable(true);
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
-        mPopWindow.setOnDismissListener(new ShopCartAdapter.poponDismissListener());
+        mPopWindow.setOnDismissListener(new poponDismissListener());
         mPopWindow.showAtLocation(((Activity)context).getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 

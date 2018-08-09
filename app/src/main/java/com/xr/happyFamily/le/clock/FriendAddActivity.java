@@ -104,7 +104,10 @@ public class FriendAddActivity extends AppCompatActivity {
 
             case R.id.title_rightText:
                 dialog = MyDialog.showDialog(this);
-                new getClockUsers().execute();
+                if ((clickFriendBean.getUserId() + "").equals(userId))
+                    Toast.makeText(mContext, "无法添加自己为好友", Toast.LENGTH_SHORT).show();
+                else
+                    new getClockUsers().execute();
                 break;
             case R.id.back:
                 finish();
@@ -121,12 +124,11 @@ public class FriendAddActivity extends AppCompatActivity {
         protected String doInBackground(Map<String, Object>... maps) {
 
 
-
-            if(!Utils.isEmpty(etInfo.getText().toString() ))
-                info=etInfo.getText().toString();
+            if (!Utils.isEmpty(etInfo.getText().toString()))
+                info = etInfo.getText().toString();
 
             String url = "/happy/clock/addClockFriend";
-            url = url + "?senderId=" + userId+"&acceptorId="+clickFriendBean.getUserId()+"&remark="+info;
+            url = url + "?senderId=" + userId + "&acceptorId=" + clickFriendBean.getUserId() + "&remark=" + info;
             String result = HttpUtils.doGet(mContext, url);
             Log.e("qqqqqqqqRRR", result);
             String code = "";
@@ -161,9 +163,9 @@ public class FriendAddActivity extends AppCompatActivity {
             super.onPostExecute(s);
             MyDialog.closeDialog(dialog);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-               Toast.makeText(mContext,"发送好友申请成功",Toast.LENGTH_SHORT).show();
-               finish();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                Toast.makeText(mContext, "发送好友申请成功", Toast.LENGTH_SHORT).show();
+                finish();
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -172,7 +174,8 @@ public class FriendAddActivity extends AppCompatActivity {
                     preferences.edit().remove("password").commit();
                 }
                 startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
-            }else { Toast.makeText(mContext,returnMsg,Toast.LENGTH_SHORT).show();
+            } else {
+                Toast.makeText(mContext, returnMsg, Toast.LENGTH_SHORT).show();
 
             }
         }

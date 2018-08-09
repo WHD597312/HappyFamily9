@@ -348,7 +348,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 break;
             case R.id.image_switch:
                 String tag= (String) image_switch.getTag();
-
                 List<DeviceChild> deviceChildren=deviceChildDao.findLinkedDevices(houseId,roomId,2,sensorId,1);
                 if ("close".equals(tag)){
                     for (Map.Entry<String,DeviceChild> entry:linkDeviceChildMap.entrySet()){

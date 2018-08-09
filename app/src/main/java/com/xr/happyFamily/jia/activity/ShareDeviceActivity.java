@@ -1,7 +1,9 @@
 package com.xr.happyFamily.jia.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
 import android.graphics.drawable.ColorDrawable;
@@ -13,6 +15,8 @@ import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
@@ -20,6 +24,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
@@ -28,9 +33,14 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.share.PlatformUtil;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
+import com.xr.happyFamily.together.util.Utils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -48,8 +58,11 @@ public class ShareDeviceActivity extends AppCompatActivity {
     private DeviceChild deviceChild;
     private SharedPreferences preferences;
     private String createQRCode = HttpUtils.ipAddress + "/family/device/createQRCode";
+    private String getDeviceVersion=HttpUtils.ipAddress+"/family/device/getVersions";
     @BindView(R.id.img_qrCode)
     ImageView img_qrCode;
+    @BindView(R.id.tv_version) TextView tv_version;
+    long houseId;
     /**
      * 二维码
      */
@@ -68,6 +81,10 @@ public class ShareDeviceActivity extends AppCompatActivity {
     private DeviceChildDaoImpl deviceChildDao;
     File file;
     private Bitmap mBitmap;
+    int type;
+    public static boolean running=false;
+
+    MessageReceiver receiver;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -80,17 +97,24 @@ public class ShareDeviceActivity extends AppCompatActivity {
             application.addActivity(this);
         }
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
+
         Intent intent = getIntent();
         long id = intent.getLongExtra("deviceId", 0);
         deviceChild = deviceChildDao.findById(id);
+        houseId=deviceChild.getHouseId();
+        type=deviceChild.getType();
         if (deviceChild != null) {
+            tv_version.setText(deviceChild.getWifiVersion()+","+deviceChild.getMcuVersion());
             String name = deviceChild.getName();
             tv_device.setText(name);
         }
+        IntentFilter intentFilter = new IntentFilter("ShareDeviceActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
         new ShareQrCodeAsync().execute();
     }
 
-    @OnClick({R.id.back, R.id.image_more})
+    @OnClick({R.id.back, R.id.image_more,R.id.btn_update_version})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -99,7 +123,16 @@ public class ShareDeviceActivity extends AppCompatActivity {
             case R.id.image_more:
                 popupShare();
                 break;
+            case R.id.btn_update_version:
+                new GetDeviceVersionAsync().execute();
+                break;
         }
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        running=true;
     }
 
     private PopupWindow popupWindow;
@@ -174,6 +207,10 @@ public class ShareDeviceActivity extends AppCompatActivity {
         if (popupWindow!=null){
             popupWindow.dismiss();
         }
+        if (receiver!=null){
+            unregisterReceiver(receiver);
+        }
+        running=false;
     }
 
     @Override
@@ -255,5 +292,62 @@ public class ShareDeviceActivity extends AppCompatActivity {
 //        // 第三步：最后通知图库更新
 //        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.parse("file://" + file)));
         //context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(file)));
+    }
+    class GetDeviceVersionAsync extends AsyncTask<Void, Void, String> {
+
+        @Override
+        protected String doInBackground(Void... voids) {
+            int code = 0;
+            String s=null;
+            String url = getDeviceVersion + "?type="+type;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("result2", "-->" + result);
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode = jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)) {
+                        JSONArray returnData=jsonObject.getJSONArray("returnData");
+                        String wifiVersion2=returnData.getString(0);
+                        String mcuVersion2=returnData.getString(1);
+                        s=wifiVersion2+","+mcuVersion2;
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return s;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!TextUtils.isEmpty(s)){
+                tv_version.setText(s);
+            }
+        }
+    }
+    class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String macAddress=intent.getStringExtra("macAddress");
+            String noNet=intent.getStringExtra("noNet");
+            DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
+            if (!Utils.isEmpty(noNet)){
+                Utils.showToast(ShareDeviceActivity.this,"网络已断开，请设置网络");
+            }else {
+                if (!Utils.isEmpty(macAddress) && deviceChild2==null && deviceChild.getMacAddress().equals(macAddress)){
+                    Utils.showToast(ShareDeviceActivity.this,"该设备已被重置");
+                    Intent intent2=new Intent(ShareDeviceActivity.this,MainActivity.class);
+                    intent2.putExtra("houseId",houseId);
+                    startActivity(intent2);
+                }else if (Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild.getMacAddress().equals(deviceChild2.getMacAddress())){
+                    deviceChild=deviceChild2;
+                    deviceChildDao.update(deviceChild);
+                    tv_version.setText(deviceChild.getWifiVersion()+","+deviceChild.getMcuVersion());
+                }
+            }
+        }
     }
 }

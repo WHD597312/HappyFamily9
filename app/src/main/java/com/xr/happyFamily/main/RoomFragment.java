@@ -108,7 +108,8 @@ public class RoomFragment extends Fragment {
     TextView tv_balcony_c;
     @BindView(R.id.tv1)
     TextView tv1;
-
+    @BindView(R.id.tv_bz2)
+    TextView tv_bz2;
     SharedPreferences roomPreferences;
     public static int index;
     private SharedPreferences mPositionPreferences;
@@ -321,7 +322,7 @@ public class RoomFragment extends Fragment {
         popupWindow1.setAnimationStyle(R.style.ChangroomPopupwindow);
 //        ColorDrawable dw = new ColorDrawable(getActivity().getResources().getColor(R.color.white));
 //        popupWindow1.setBackgroundDrawable(dw);
-        popupWindow1.showAsDropDown(balcony_li, 0, 0);
+        popupWindow1.showAsDropDown(tv_bz2, 0, 0);
 //        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
         //添加按键事件监听
 
@@ -640,6 +641,7 @@ public class RoomFragment extends Fragment {
                         code = 100;
 
                         if (mdeledeviceChild != null) {
+                            mGridData.remove(mdeledeviceChild);
                             String macAddress = mdeledeviceChild.getMacAddress();
                             int type = mdeledeviceChild.getType();
                             String onlineTopicName = "";
@@ -674,10 +676,11 @@ public class RoomFragment extends Fragment {
             switch (code) {
                 case 100:
                     Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
-                    Intent intent2=new Intent(getActivity(),MainActivity.class);
-                    intent2.putExtra("refersh","refresh");
-                    intent2.putExtra("houseId",houseId);
-                    startActivity(intent2);
+                    mGridViewAdapter.notifyDataSetChanged();
+//                    Intent intent2=new Intent(getActivity(),MainActivity.class);
+//                    intent2.putExtra("refersh","refresh");
+//                    intent2.putExtra("houseId",houseId);
+//                    startActivity(intent2);
                     break;
                 default:
                     Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();

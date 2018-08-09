@@ -164,6 +164,11 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             }
+        }else {
+            Intent intent=new Intent();
+            intent.putExtra("houseId",houseId);
+            setResult(6000,intent);
+            finish();
         }
         curAngle=wheelBar.getmStartAngle();
         if (curAngle>0){/**顺时钟转*/
@@ -377,6 +382,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             application.removeActivity(this);
             return true;
         }
+
         return super.onKeyDown(keyCode, event);
     }
     private void initTimer(){//设置定时时间

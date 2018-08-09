@@ -11,7 +11,7 @@ import android.graphics.Rect;
 import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.view.MotionEvent;
-import android.widget.SeekBar;
+
 
 import com.xr.happyFamily.R;
 

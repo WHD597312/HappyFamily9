@@ -209,8 +209,19 @@ public class FamilyFragment extends Fragment {
             switch (code) {
                 case 100:
                     Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
-                    shareDevices.remove(mdeledeviceChild);
-                    shareViewAdapter.notifyDataSetChanged();
+//                    shareDevices.remove(mdeledeviceChild);
+//                    shareViewAdapter.notifyDataSetChanged();
+                    List<DeviceChild> deviceChildren= deviceChildDao.findHouseCommonDevices(houseId);
+                    List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
+                    if (deviceChildren.isEmpty() && shareDevices2.isEmpty()){
+                        Intent intent2=new Intent(getActivity(),MainActivity.class);
+                        intent2.putExtra("refersh","refresh");
+                        intent2.putExtra("houseId",houseId);
+                        startActivity(intent2);
+                    }else {
+                        shareViewAdapter.remove(mdeledeviceChild);
+                        shareViewAdapter.notifyDataSetChanged();
+                    }
                     break;
                 default:
                     Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();
@@ -538,8 +549,17 @@ public class FamilyFragment extends Fragment {
                             String mac = deviceChild.getMacAddress();
                             if (mac.equals(macAddress) && deviceChild2 == null) {
                                 Toast.makeText(getActivity(), "该设备已重置", Toast.LENGTH_SHORT).show();
-                                shareViewAdapter.remove(deviceChild);
-                                shareViewAdapter.notifyDataSetChanged();
+                                List<DeviceChild> deviceChildren= deviceChildDao.findHouseCommonDevices(houseId);
+                                List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
+                                if (deviceChildren.isEmpty() && shareDevices2.isEmpty()){
+                                    Intent intent2=new Intent(getActivity(),MainActivity.class);
+                                    intent2.putExtra("refersh","refresh");
+                                    intent2.putExtra("houseId",houseId);
+                                    startActivity(intent2);
+                                }else {
+                                    shareViewAdapter.remove(deviceChild);
+                                    shareViewAdapter.notifyDataSetChanged();
+                                }
                                 break;
                             }
                         }
@@ -549,8 +569,17 @@ public class FamilyFragment extends Fragment {
                             String mac = deviceChild.getMacAddress();
                             if (mac.equals(macAddress) && deviceChild2 == null) {
                                 Toast.makeText(getActivity(), "该设备已重置", Toast.LENGTH_SHORT).show();
-                                commonDevices.remove(deviceChild);
-                                mGridViewAdapter .notifyDataSetChanged();
+                                List<DeviceChild> deviceChildren= deviceChildDao.findHouseCommonDevices(houseId);
+                                List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
+                                if (deviceChildren.isEmpty() && shareDevices2.isEmpty()){
+                                    Intent intent2=new Intent(getActivity(),MainActivity.class);
+                                    intent2.putExtra("refersh","refresh");
+                                    intent2.putExtra("houseId",houseId);
+                                    startActivity(intent2);
+                                }else {
+                                    commonDevices.remove(deviceChild);
+                                    mGridViewAdapter .notifyDataSetChanged();
+                                }
                                 break;
                             }
                         }

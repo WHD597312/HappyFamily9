@@ -1,5 +1,6 @@
 package com.xr.happyFamily.bao;
 
+import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -7,41 +8,17 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.text.TextUtils;
-import android.util.Log;
-import android.widget.Toast;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.LinearLayout;
 
-import com.alipay.sdk.app.PayTask;
-import com.google.gson.Gson;
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonParser;
+import com.jwenfeng.library.pulltorefresh.view.HeadView;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.bao.alipay.PayResult;
-import com.xr.happyFamily.bean.OrderListBean;
-import com.xr.happyFamily.jia.MyApplication;
-import com.xr.happyFamily.jia.xnty.ArcProgressBar;
-import com.xr.happyFamily.le.view.CompletedView;
-import com.xr.happyFamily.le.view.MyHorizontalScrollView;
-import com.xr.happyFamily.le.view.MyHorizontalScrollViewAdapter;
-import com.xr.happyFamily.le.view.TimeBar;
-import com.xr.happyFamily.together.MyDialog;
-import com.xr.happyFamily.together.http.HttpUtils;
-import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.bao.view.DoubleWaveView;
 
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Random;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import butterknife.BindView;
 import butterknife.ButterKnife;
+
 
 /**
  * Created by win7 on 2018/5/22.
@@ -49,23 +26,28 @@ import butterknife.ButterKnife;
 
 public class TestActivity extends AppCompatActivity {
 
-    String orderNumber;
-    private TimeBar timeBar;
-    int change = 0;
-    int i;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
         ButterKnife.bind(this);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
-        MyApplication application = (MyApplication) getApplication();
-        application.addActivity(this);
-        timeBar = (TimeBar) findViewById(R.id.arcprogressBar);
+        final DoubleWaveView doubleWaveView= (DoubleWaveView) findViewById(R.id.doubleWaveView);
+        doubleWaveView.setProHeight(80);
+
+        Button btn_queding= (Button) findViewById(R.id.btn_queding);
+        final EditText editText= (EditText) findViewById(R.id.ed_num);
+        btn_queding.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doubleWaveView.setProHeight(Integer.parseInt(editText.getText().toString()));
+            }
+        });
 
 
     }
+
+
 
 }

@@ -92,7 +92,10 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        if (!Utils.isEmpty(data.get(position).getHeadImgUrl()))
+        if (Utils.isEmpty(data.get(position).getHeadImgUrl())) {
+
+            holder.img_touxiang.setImageResource(R.mipmap.ic_touxiang_moren);
+        } else
             Glide.with(context).load(data.get(position).getHeadImgUrl()).transform(new GlideCircleTransform(context.getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(holder.img_touxiang);
 
         holder.tv_name.setText(data.get(position).getUsername().toString());
@@ -115,8 +118,8 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
         }
 
         if (isFirst) {
-            Log.e("qqqqqqqqqIIIII222",loveId+"????");
-            if (data.get(position).getUserId() ==loveId) {
+            Log.e("qqqqqqqqqIIIII222", loveId + "????");
+            if (data.get(position).getUserId() == loveId) {
                 isFirst = false;
                 sign[0] = 1;
                 this.selPosition = position;
@@ -194,7 +197,7 @@ public class ClockAddQinglvAdapter extends RecyclerView.Adapter<ClockAddQinglvAd
         return selPosition;
     }
 
-    private int loveId=-1;
+    private int loveId = -1;
 
     public void setUserId(int loveId) {
         this.loveId = loveId;

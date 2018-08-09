@@ -83,8 +83,8 @@ public class bjTimeActivity extends AppCompatActivity {
        String ring = time.getRingName();
         tv_bjtime_gb.setText(style);
        if ("".equals(ring)){
-           tv_bjclock_ring.setText("学猫叫");
-           time.setRingName("学猫叫");
+           tv_bjclock_ring.setText("阿里郎");
+           time.setRingName("阿里郎");
            timeDao.update(time);
        }else {
            tv_bjclock_ring.setText(ring);
@@ -101,7 +101,7 @@ public class bjTimeActivity extends AppCompatActivity {
         timepicker2.setValue(calendar.get(Calendar.MINUTE));
 //        timepicker2.setBackgroundColor(Color.WHITE);
         timepicker2.setNumberPickerDividerColor(timepicker2);
-        timrClock=getSharedPreferences("clock",Context.MODE_PRIVATE);
+        timrClock=getSharedPreferences("password",Context.MODE_PRIVATE);
         service = new Intent(this, ClockService.class);
         startService(service);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
@@ -130,7 +130,7 @@ public class bjTimeActivity extends AppCompatActivity {
                 if (Utils.isEmpty(time.getStyle())){
                     time.setStyle("听歌识曲");
                     time.setFlag(1);
-                    time.setRingName("学猫叫");
+                    time.setRingName("阿里郎");
                 }
                 time.setOpen(true);
                 int sumMin=hour*60+minutes;
@@ -206,9 +206,9 @@ public class bjTimeActivity extends AppCompatActivity {
             time.setLable(text);
         }
         if (resultCode==111){
-
+            String[] str = {"阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"};
             int pos=data.getIntExtra("pos",0);
-            List<String> mData = new ArrayList<String>(Arrays.asList("学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎","that girl","expression","梦醒时分","甜甜女生","38列车搞笑","小娘子"));
+            List<String> mData = new ArrayList<String>(Arrays.asList(str));
             if (pos!=-1){
                 String text=mData.get(pos);
                 tv_bjclock_ring.setText(text);

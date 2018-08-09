@@ -548,7 +548,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                     JsonArray list = content.getAsJsonArray("traces");
                     Gson gson = new Gson();
                     //通过反射 得到UserBean.class
-                    JsonElement user = list.get(0);
+                    JsonElement user = list.get(list.size()-1);
                     WuLiuBean userList = gson.fromJson(user, WuLiuBean.class);
                     wuliu = userList.getAcceptStation();
                     wuliu_time = userList.getAcceptTime();

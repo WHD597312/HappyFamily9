@@ -132,7 +132,7 @@ public class PayFailActivity extends AppCompatActivity {
                 break;
             case R.id.tv_zhifu:
                 if(sign_pay==2){
-                    Toast.makeText(mContext,"银联",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(mContext,"暂不支持银联支付",Toast.LENGTH_SHORT).show();
                 }else {
                     if (sign_pay == 0) {
                         Intent intent = new Intent(PayFailActivity.this, PayActivity.class);

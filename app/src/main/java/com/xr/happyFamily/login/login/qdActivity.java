@@ -10,11 +10,14 @@ import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
+import android.widget.Toast;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
@@ -44,11 +47,16 @@ public class qdActivity extends Activity {
     String url = "http://47.98.131.11:8084/login/auth";
     String ip = "http://47.98.131.11:8084";
     SharedPreferences mPositionPreferences;
+    private MyApplication application;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_qdy);
-         str=new qdActivity().getShared("tag", qdActivity.this);
+        if (application == null) {
+            application = (MyApplication) getApplication();
+        }
+        application.addActivity(this);
+         str=getShared("tag", qdActivity.this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
@@ -56,50 +64,80 @@ public class qdActivity extends Activity {
 
         Integer time = 2000;  //设置等待时间，单位为毫秒
         mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
-        Handler handler = new Handler();
+        if(str.equals("")){
+            startActivity(new Intent(qdActivity.this, GuideActivity.class));
+
+        }else {
+            if (preferences.contains("phone") && preferences.contains("password")) {
+                phone=preferences.getString("phone","");
+                password=preferences.getString("password","");
+                Map<String, Object> params = new HashMap<>();
+                params.put("phone", phone);
+                params.put("password", password);
+
+                if (NetWorkUtil.isConn(qdActivity.this)){
+                    new LoginAsyncTask().execute(params);
+                }else {
+                    Intent intent=new Intent(qdActivity.this,MainActivity.class);
+                    intent.putExtra("load","load");
+                    intent.putExtra("login","login");
+                    startActivity(intent);
+                }
+            }else {
+                Intent intent=new Intent(qdActivity.this, LoginActivity.class);
+                startActivity(intent);
+            }
+        }
+       /* Handler handler = new Handler();
         //当计时结束时，跳转至主界面
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                if(str.equals("")){
-                    startActivity(new Intent(qdActivity.this, GuideActivity.class));
-
-                }else {
-                    if (preferences.contains("phone") && preferences.contains("password")) {
-                         phone=preferences.getString("phone","");
-                         password=preferences.getString("password","");
-                        Map<String, Object> params = new HashMap<>();
-                        params.put("phone", phone);
-                        params.put("password", password);
-
-                        if (NetWorkUtil.isConn(qdActivity.this)){
-                            new LoginAsyncTask().execute(params);
-                        }else {
-                            Intent intent=new Intent(qdActivity.this,MainActivity.class);
-                            intent.putExtra("load","load");
-                            intent.putExtra("login","login");
-                            startActivity(intent);
-                        }
-                    }else {
-                        Intent intent=new Intent(qdActivity.this, LoginActivity.class);
-                        startActivity(intent);
-                        qdActivity.this.finish();
-                    }
-
-
-
-                }
+//                if(str.equals("")){
+//                    startActivity(new Intent(qdActivity.this, GuideActivity.class));
+//
+//                }else {
+//                    if (preferences.contains("phone") && preferences.contains("password")) {
+//                         phone=preferences.getString("phone","");
+//                         password=preferences.getString("password","");
+//                        Map<String, Object> params = new HashMap<>();
+//                        params.put("phone", phone);
+//                        params.put("password", password);
+//
+//                        if (NetWorkUtil.isConn(qdActivity.this)){
+//                            new LoginAsyncTask().execute(params);
+//                        }else {
+//                            Intent intent=new Intent(qdActivity.this,MainActivity.class);
+//                            intent.putExtra("load","load");
+//                            intent.putExtra("login","login");
+//                            startActivity(intent);
+//                        }
+//                    }else {
+//                        Intent intent=new Intent(qdActivity.this, LoginActivity.class);
+//                        startActivity(intent);
+//                    }
+//
+//
+//
+//                }
 
 
             }
-        }, time);
+        }, time);*/
     }
 
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeActivity(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
-
 
             int code = 0;
             Map<String, Object> params = maps[0];
@@ -138,19 +176,30 @@ public class qdActivity extends Activity {
             super.onPostExecute(code);
             switch (code) {
                 case 10002:
+                    if(preferences.contains("password")){
+                        preferences.edit().remove("password").commit();
+                    }
                     Utils.showToast(qdActivity.this, "手机号码未注册");
-
+                    Intent intent=new Intent(qdActivity.this, LoginActivity.class);
+                    startActivity(intent);
                     break;
                 case 10004:
+                    if(preferences.contains("password")){
+                        preferences.edit().remove("password").commit();
+                    }
                     Utils.showToast(qdActivity.this, "用户名或密码错误");
-
-
+                    Intent intent2=new Intent(qdActivity.this, LoginActivity.class);
+                    startActivity(intent2);
                     break;
                 case 100:
 
                     break;
                 default:
-
+                    if(preferences.contains("password")){
+                        preferences.edit().remove("password").commit();
+                    }
+                    Intent intent3=new Intent(qdActivity.this, LoginActivity.class);
+                    startActivity(intent3);
                     break;
             }
         }

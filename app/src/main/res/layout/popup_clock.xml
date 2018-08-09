@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:gravity="center"
+    >
+
+    <RelativeLayout
+        android:layout_width="340dp"
+        android:layout_height="200dp"
+        android:orientation="vertical"
+        android:background="@drawable/bg_shape_search"
+        >
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textSize="@dimen/sp_17"
+            android:layout_marginTop="@dimen/dp_jy_26"
+            android:layout_centerHorizontal="true"
+            android:textColor="#E6444444"/>
+
+
+        <TextView
+            android:id="@+id/tv_context"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#7F7F7F"
+            android:layout_below="@+id/tv_title"
+            android:layout_centerHorizontal="true"
+
+            android:layout_marginTop="@dimen/dp_jy_20"
+            android:textSize="@dimen/sp_15" />
+
+
+
+
+
+            <TextView
+                android:id="@+id/tv_queren"
+                android:layout_width="@dimen/dp_jy_276"
+                android:background="@drawable/bg_shape_stroke_green25"
+                android:layout_height="@dimen/dp_jy_44"
+                android:layout_weight="1"
+                android:textColor="#04e553"
+                android:gravity="center"
+                android:textSize="@dimen/sp_15"
+                android:layout_centerHorizontal="true"
+                android:layout_marginBottom="@dimen/dp_jy_20"
+                android:layout_alignParentBottom="true"
+                android:text="知道了"/>
+
+
+
+
+
+        </RelativeLayout>
+
+
+</LinearLayout>
+
+

@@ -17,6 +17,8 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.adapter.ShopXqAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.bao.view.MyHeadRefreshView;
+import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.together.MyDialog;
 
 import java.util.ArrayList;
@@ -74,6 +76,8 @@ public class XiangQingFragment extends BaseFragment implements View.OnClickListe
         imgList = Arrays.asList(str);
         shopXqAdapter = new ShopXqAdapter(getActivity(), imgList);
         recyclerView.setAdapter(shopXqAdapter);
+        swipeContent.setHeaderView(new MyHeadRefreshView(getActivity()));
+        swipeContent.setFooterView(new MyLoadMoreView(getActivity()));
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {

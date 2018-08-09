@@ -144,7 +144,7 @@
             android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_35"
-            android:text="狼爱上羊"
+            android:text="阿里郎"
             android:textColor="@color/color_gray2"
             />
         <ImageView

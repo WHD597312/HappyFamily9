@@ -387,11 +387,18 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
 
     private String zhen;
-
+    int click=0;
+    int click2=0;
+    int click3=0;
+    int click4=0;
     @OnClick({R.id.id_bto_jia, R.id.id_bto_bao,R.id.id_bto_le,R.id.id_bto_zhen})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.id_bto_jia:
+                first=0;
+                if (click==1){
+                    break;
+                }
                 if (mPositionPreferences.contains("position")) {
                     mPositionPreferences.edit().clear().commit();
                 }
@@ -410,8 +417,16 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 idBtoLeImg.setImageResource(R.mipmap.le);
                 family = "family";
                 zhen="";
+                click=1;
+                click2=0;
+                click3=0;
+                click4=0;
                 break;
             case R.id.id_bto_bao:
+                first=0;
+                if (click2==1){
+                    break;
+                }
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
                 id_bto_bao_img.setImageResource(R.mipmap.bao1);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
@@ -424,8 +439,16 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 }
                 family = "";
                 zhen="";
+                click=0;
+                click2=1;
+                click3=0;
+                click4=0;
                 break;
             case R.id.id_bto_le:
+                first=0;
+                if (click3==1){
+                    break;
+                }
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 idBtoLeImg.setImageResource(R.mipmap.le1);
@@ -438,8 +461,17 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 }
                 family = "";
                 zhen="";
+                click=0;
+                click2=0;
+                click3=1;
+                click4=0;
+
                 break;
             case R.id.id_bto_zhen:
+                first=0;
+                if (click4==1){
+                    break;
+                }
                 id_bto_jia_img.setImageResource(R.mipmap.jia);
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen1);
@@ -452,6 +484,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 }
                 family = "";
                 zhen="zhen";
+                click=0;
+                click2=0;
+                click3=0;
+                click4=1;
+
                 break;
         }
     }
@@ -462,7 +499,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         if (keyCode == KeyEvent.KEYCODE_BACK) {
             first++;
             if (first==2){
-
                 application.removeAllActivity();
                 family = "";
                 return true;
@@ -511,6 +547,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
+            click=1;
+            click2=0;
+            click3=0;
+            click4=0;
         }
     }
 
@@ -525,6 +565,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         } else if (position == 0) {
             layout_bottom.setVisibility(View.VISIBLE);
         }
+
     }
 
     class LoadUserImageAsync extends AsyncTask<Void, Void, Void> {

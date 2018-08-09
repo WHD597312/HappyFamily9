@@ -39,7 +39,7 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
     private int defItem = -1;
     private OnItemListener onItemListener;
     private int type = 0;
-
+    boolean isFirst = true;
 
     public ClockAddQunzuAdapter(Context context, List<ClickFriendBean> list) {
         this.context = context;
@@ -89,23 +89,23 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-        if(!Utils.isEmpty(data.get(position).getHeadImgUrl()))
+        if(Utils.isEmpty(data.get(position).getHeadImgUrl()))
+            holder.img_touxiang.setImageResource(R.mipmap.ic_touxiang_moren);
+        else
             Glide.with(context).load(data.get(position).getHeadImgUrl()).transform(new GlideCircleTransform(context.getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(holder.img_touxiang);
         holder.tv_name.setText(data.get(position).getUsername());
 //        holder.tv_context.setText(data.get(position).get("context").toString());
         final int[] sign = {0};
 
-        if(myUserInfoList.size()>0){
-
-                for(int j=0;j<myUserInfoList.size();j++)
-                if (data.get(position).getUserId()==myUserInfoList.get(j).getUserId()) {
+        holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_false);
+        if(users!=null){
+            for(int j=0;j<users.length;j++)
+                if ((data.get(position).getUserId()+"").equals(users[j])) {
                     sign[0]=1;
+                    Log.e("qqqqqqqVVV",position+"???");
                     holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_true);
                     data.get(position).setMemSign(1);
                 }
-
-
-
         }
 
         holder.img_touxiang.setOnClickListener(new View.OnClickListener() {
@@ -116,7 +116,7 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
                     holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_false);
                     data.get(position).setMemSign(0);
                 } else {
-                    sign[0] = 1;
+                    sign[0] = 1; Log.e("qqqqqqqVVV22222",position+"???");
                     holder.img_sign.setImageResource(R.mipmap.ic_clock_qunzu_true);
                     data.get(position).setMemSign(1);
                 }
@@ -175,17 +175,29 @@ public class ClockAddQunzuAdapter extends RecyclerView.Adapter<ClockAddQunzuAdap
             str=str+data.get(i).getUserId()+",";
         }
         if(str.length()<1){
-            Toast.makeText(context,"请选择添加成员",Toast.LENGTH_SHORT).show();
             str="00";
         }
         return str.substring(0,str.length()-1);
+    }
 
+    public String getMemSign(){
+        String str="";
+        for(int i=0;i<data.size();i++){
+            if (data.get(i).getMemSign()==1)
+                str=str+i+",";
+        }
+        if(str.length()<1){
+            str="00";
+        }
+        return str.substring(0,str.length()-1);
     }
 
 
-    private List<UserInfo> myUserInfoList = new ArrayList<>();
-    public void setUserInfoList(List<UserInfo> myUserInfoList ){
-        this.myUserInfoList=myUserInfoList;
+    private String user ;
+    String[] users;
+    public void setUserInfoList(String user ){
+        this.user=user;
+        users=user.split(",");
         notifyDataSetChanged();
     }
 

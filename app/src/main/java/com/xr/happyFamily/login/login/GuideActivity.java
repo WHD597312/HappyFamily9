@@ -10,6 +10,7 @@ import android.support.v7.app.AppCompatActivity;
 
 import com.xr.happyFamily.R;
 
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.adapter.FamilyAdapter;
 import com.xr.happyFamily.jia.adapter.TabFragmentPagerAdapter;
 import com.xr.happyFamily.login.login.GuideFragment;
@@ -25,11 +26,16 @@ public class GuideActivity extends AppCompatActivity {
     ViewPager viewPager;
     List<Fragment> guildList;
     private qdActivity utils;
+    private MyApplication application;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         unbinder = ButterKnife.bind(this);
         setContentView(R.layout.activity_guild);
+        if (application==null){
+            application= (MyApplication) getApplication();
+        }
+        application.addActivity(this);
         utils = new qdActivity();
         utils.saveShared("tag", "tag", this);
         viewPager = (ViewPager) findViewById(R.id.guild_viewpager);

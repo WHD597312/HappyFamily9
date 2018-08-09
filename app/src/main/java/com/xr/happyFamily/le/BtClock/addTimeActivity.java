@@ -139,7 +139,7 @@ public class addTimeActivity extends AppCompatActivity {
                     time.setFlag(1);
 
                 }if (Utils.isEmpty(time.getRingName())){
-                time.setRingName("学猫叫");
+                time.setRingName("阿里郎");
             }
                 int sumMin = hour * 60 + minutes;
                 time.setSumMin(sumMin);

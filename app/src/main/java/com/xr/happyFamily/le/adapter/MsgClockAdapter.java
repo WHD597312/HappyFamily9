@@ -9,6 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -75,12 +76,10 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
     }
 
 
-
-
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
-            Log.e("qqqqqLLLLaaa",data.get(position).getState()+"???");
+        Log.e("qqqqqLLLLaaa", data.get(position).getState() + "???");
 
         long lcc = data.get(position).getCreateTime();
         SimpleDateFormat sdr = new SimpleDateFormat("HH时mm分");
@@ -88,57 +87,70 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
         SimpleDateFormat sdr1 = new SimpleDateFormat("yyyy年MM月dd日");
         String times1 = sdr1.format(new Date(lcc * 1000L));
         Date date = new Date();
-        long l = 24*60*60*1000; //每天的毫秒数
+        long l = 24 * 60 * 60 * 1000; //每天的毫秒数
         //date.getTime()是现在的毫秒数，它 减去 当天零点到现在的毫秒数（ 现在的毫秒数%一天总的毫秒数，取余。），理论上等于零点的毫秒数，不过这个毫秒数是UTC+0时区的。
         //减8个小时的毫秒值是为了解决时区的问题。
-        long today=date.getTime() - (date.getTime()%l) - 8* 60 * 60 *1000;
+        long today = date.getTime() - (date.getTime() % l) - 8 * 60 * 60 * 1000;
 
-        Log.e("qqqqqqqqqqqTTTT",lcc*1000+","+today);
-        if(lcc*1000>today) {
+        Log.e("qqqqqqqqqqqTTTT", lcc * 1000 + "," + today);
+        if (lcc * 1000 > today) {
             holder.tv_time.setVisibility(View.VISIBLE);
             holder.tv_time.setText(times);
-            if(position>0){
-                Log.e("qqqqqqTTTTMMMM",lcc+","+data.get(position-1).getCreateTime());
-                if((data.get(position-1).getCreateTime()-lcc)<5*60)
+            if (position > 0) {
+                Log.e("qqqqqqTTTTMMMM", lcc + "," + data.get(position - 1).getCreateTime());
+                if ((data.get(position - 1).getCreateTime() - lcc) < 5 * 60)
                     holder.tv_time.setVisibility(View.GONE);
                 else
                     holder.tv_time.setVisibility(View.VISIBLE);
             }
-        }else {
+        } else {
 
-                holder.tv_time.setVisibility(View.VISIBLE);
-                holder.tv_time.setText(times1);
-                if(position>0){
-                    if(times1.equals( sdr1.format(new Date(data.get(position-1).getCreateTime() * 1000L))))
-                        holder.tv_time.setVisibility(View.GONE);
-                }
+            holder.tv_time.setVisibility(View.VISIBLE);
+            holder.tv_time.setText(times1);
+            if (position > 0) {
+                if (times1.equals(sdr1.format(new Date(data.get(position - 1).getCreateTime() * 1000L))))
+                    holder.tv_time.setVisibility(View.GONE);
+            }
 
         }
 
 
         holder.tv_name.setText(data.get(position).getUserName());
         String cont = null;
-        switch (data.get(position).getState()){
+        switch (data.get(position).getState()) {
             case 1:
             case 4:
-                cont="添加了情侣闹钟";
+                cont = "添加了情侣闹钟";
                 break;
             case 2:
-                cont="修改了情侣闹钟";
+                cont = "修改了情侣闹钟";
                 break;
             case 3:
-                cont="删除了情侣闹钟";
+                cont = "删除了情侣闹钟";
+                break;
+            case 11:
+            case 14:
+                cont = "添加了群组闹钟";
+                break;
+            case 12:
+                cont = "修改了群组闹钟";
+                break;
+            case 13:
+                cont = "删除了群组闹钟";
                 break;
             case 5:
-                cont="同意了您的好友请求";
+                cont = "同意了您的好友请求";
                 break;
             case 6:
-                cont="拒绝了您的好友请求";
+                cont = "拒绝了您的好友请求";
                 break;
+            default:
+                holder.ll_data.setVisibility(View.GONE);
+                break;
+
         }
         holder.tv_context.setText(cont);
 //
-
 
 
     }
@@ -165,8 +177,8 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
     class MyViewHolder extends RecyclerView.ViewHolder {
 
 
-        TextView tv_name,tv_context,tv_time;
-        RelativeLayout rl_item;
+        TextView tv_name, tv_context, tv_time;
+        LinearLayout ll_data;
 
         public MyViewHolder(View view) {
             super(view);
@@ -174,14 +186,13 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
             tv_time = (TextView) view.findViewById(R.id.tv_time);
             tv_name = (TextView) view.findViewById(R.id.tv_name);
             tv_context = (TextView) view.findViewById(R.id.tv_context);
+            ll_data = (LinearLayout) view.findViewById(R.id.ll_data);
 
 
         }
 
 
     }
-
-
 
 
 }

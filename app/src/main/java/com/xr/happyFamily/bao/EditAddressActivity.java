@@ -246,6 +246,8 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
         rl_sheng = (RelativeLayout) contentViewSign.findViewById(R.id.rl_sheng);
         rl_shi = (RelativeLayout) contentViewSign.findViewById(R.id.rl_shi);
         rl_qu = (RelativeLayout) contentViewSign.findViewById(R.id.rl_qu);
+        rl_qu.setVisibility(View.GONE);
+        rl_shi.setVisibility(View.GONE);
         img_sheng = (ImageView) contentViewSign.findViewById(R.id.img_sheng);
         img_shi = (ImageView) contentViewSign.findViewById(R.id.img_shi);
         img_qu = (ImageView) contentViewSign.findViewById(R.id.img_qu);
@@ -268,13 +270,14 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                         tv_sheng.setText(receiveProvince);
                         sign_sheng = position;
                         upData(1);
-
+                        rl_shi.setVisibility(View.VISIBLE);
                         break;
                     case 1:
                         receiveCity = data.get(position);
                         tv_shi.setText(receiveCity);
                         sign_city = position;
                         upData(2);
+                        rl_qu.setVisibility(View.VISIBLE);
                         break;
                     case 2:
                         receiveCounty = data.get(position);

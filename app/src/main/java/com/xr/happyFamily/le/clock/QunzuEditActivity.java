@@ -3,11 +3,14 @@ package com.xr.happyFamily.le.clock;
 import android.app.AlarmManager;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
@@ -19,6 +22,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.alibaba.fastjson.JSON;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -38,11 +42,15 @@ import com.xr.happyFamily.le.view.QunzuTimepicker;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.TimeUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.ClockService;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -92,8 +100,12 @@ public class QunzuEditActivity extends AppCompatActivity {
     private ClockDaoImpl clockBeanDao;
     private UserInfosDaoImpl userInfosDao;
 
-    private List<UserInfo> myUserInfoList = new ArrayList<>();
+    private String uesr;
     private ClockBean clockBean;
+    String member, clockId;
+    private boolean isBound = false,isClockBound=false;
+
+    String macAddress;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -112,8 +124,13 @@ public class QunzuEditActivity extends AppCompatActivity {
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
         clockBean = (ClockBean) getIntent().getSerializableExtra("clock");
-        myUserInfoList = (ArrayList<UserInfo>) getIntent().getSerializableExtra("uesr");
 
+        Intent service = new Intent(mContext, ClockService.class);
+        isClockBound = bindService(service, clockConnection, Context.BIND_AUTO_CREATE);
+
+        uesr = getIntent().getStringExtra("uesr");
+        Log.e("qqqqqUUUU", uesr);
+        clockId = clockBean.getClockId() + "";
         int hour = clockBean.getClockHour();
 //分钟
         int minute = clockBean.getClockMinute();
@@ -135,16 +152,37 @@ public class QunzuEditActivity extends AppCompatActivity {
 
 
         qunzuAdapter = new ClockAddQunzuAdapter(this, list_friend);
-        qunzuAdapter.setUserInfoList(myUserInfoList);
+        qunzuAdapter.setUserInfoList(uesr);
         mLayoutManager = new StaggeredGridLayoutManager(4, StaggeredGridLayoutManager.VERTICAL);
         recyclerView.setLayoutManager(mLayoutManager);
         recyclerView.setAdapter(qunzuAdapter);
+        Intent service2 = new Intent(mContext, MQService.class);
+        isBound = bindService(service2, connection, Context.BIND_AUTO_CREATE);
+    }
+
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        list_friend.clear();
         dialog = MyDialog.showDialog(this);
         dialog.show();
         new getClockFriends().execute();
+        qunzuAdapter.notifyDataSetChanged();
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq})
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (isBound) {
+            unbindService(connection);
+        }
+        if (isClockBound)
+            unbindService(clockConnection);
+    }
+
+    ClockBean editClock;
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq,R.id.rl_music})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.img_add:
@@ -157,256 +195,98 @@ public class QunzuEditActivity extends AppCompatActivity {
                 Intent intent2 = new Intent(this, bqOfColckActivity.class);
                 startActivityForResult(intent2, 101);
                 break;
+            case R.id.rl_music:
+                Intent intent3 = new Intent(this, MusicActivity.class);
+                startActivityForResult(intent3, 111);
+                break;
             case R.id.tv_lrsd_qd:
-
-                hour = timeLe1.getValue();
-                minutes = timeLe2.getValue();
-//                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
-//                if (time == null) {
-//                    time = new Time();
-//                }
-//                time.setHour(hour);
-//                time.setMinutes(minutes);
-//                timeDao.insert(time);
-//                Calendar c = Calendar.getInstance();//c：当前系统时间
-//                c.set(Calendar.HOUR_OF_DAY, hour);//把小时设为你选择的小时
-//                c.set(Calendar.MINUTE, minutes);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0x101, new Intent("com.zking.android29_alarm_notification.RING"), 0);//上下文 请求码  启动哪一个广播 标志位
-//                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-//                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
-//                setResult(600);
-
-                Map map = new HashMap();
-                map.put("clockId", clockBean.getClockId());
-                map.put("clockHour", hour);
-                map.put("clockMinute", minutes);
-                map.put("clockDay", "0");
                 if ("请填写标签".equals(tvTag.getText().toString())) {
                     Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
                     break;
-                } else
-                    map.put("flag", tvTag.getText().toString());
-                map.put("music", tvMusic.getText().toString());
-                map.put("switchs", 1);
-                String member = qunzuAdapter.getMember();
+                }
+                member = qunzuAdapter.getMember();
                 if ("0".equals(member)) {
+                    Toast.makeText(mContext, "请添加闹钟成员", Toast.LENGTH_SHORT).show();
                     break;
-                } else
+                } else {
+                    int state = 2;
+                    Log.e("qqqqqqUUUU", uesr + "||||||" + userId + "," + member);
+                    if (!uesr.equals(userId + "," + member)) {
+                        dialog.show();
+                        new changeClockInfo().execute();
+                        state = 4;
+                    }
+                    hour = timeLe1.getValue();
+                    minutes = timeLe2.getValue();
+                    Map map = new HashMap();
+                    map.put("state", state);
+                    map.put("clockId", clockId);
+                    map.put("clockHour", hour);
+                    map.put("clockMinute", minutes);
+                    map.put("clockDay", "0");
+                    map.put("flag", tvTag.getText().toString());
+                    map.put("music", tvMusic.getText().toString());
+                    map.put("switchs", clockBean.getSwitchs());
 
-                    map.put("clockMember", userId + "," + member);
-                Log.e("qqqqqqqMMMM", member);
-                map.put("clockCreater", userId);
-                dialog.show();
-                new changeClockInfo().execute(map);
+
+                    List<ClockBean> findLish = clockBeanDao.findClockByClockId(Integer.parseInt(clockId));
+                    editClock=findLish.get(0);
+                    editClock.setClockHour(hour);
+                    editClock.setClockMinute(minutes);
+                    editClock.setFlag(tvTag.getText().toString());
+                    editClock.setClockDay("0");
+                    editClock.setMusic(tvMusic.getText().toString());
+
+
+
+                    List<ClickFriendBean> userInfos = new ArrayList<>();
+
+                    String image = preferences.getString("headImgUrl", "");
+                    Log.e("qqqqIIImg",image);
+                    String username = preferences.getString("username", "");
+                    String phone = preferences.getString("phone", "");
+                    String birthday = preferences.getString("birthday", "");
+                    String str = TimeUtils.getTime(birthday);
+                    Calendar c = Calendar.getInstance();//
+                    int age = c.get(Calendar.YEAR) - Integer.parseInt(str.substring(0,4)) + 1;
+                    boolean sex = preferences.getBoolean("sex", false);
+                    ClickFriendBean myInfo = new ClickFriendBean();
+                    if (Utils.isEmpty(image)) {
+                        myInfo.setHeadImgUrl("null");
+                    }else
+                        myInfo.setHeadImgUrl(image);
+                    myInfo.setMemSign(0);
+                    myInfo.setAge(age);
+                    myInfo.setPhone(phone);
+                    myInfo.setSex(sex);
+                    myInfo.setUserId(Integer.parseInt(userId));
+                    myInfo.setUsername(username);
+                    userInfos.add(myInfo);
+                    String mums[]=qunzuAdapter.getMemSign().split(",");
+                    for(int i=0;i<mums.length;i++){
+                        Log.e("qqqqqMMMM",mums[i]);
+                        ClickFriendBean userInfo = list_friend.get(Integer.parseInt(mums[i]));
+                        if (Utils.isEmpty(userInfo.getHeadImgUrl())) {
+                            userInfo.setHeadImgUrl("null");
+                        }
+                        userInfos.add(userInfo);
+                    }
+                    map.put("userInfos", userInfos);
+                    map.put("clockCreater", userId);
+                    map.put("createrName", username);
+                    map.put("clockType", 2);
+                    long timeStampSec = System.currentTimeMillis()/1000;
+                    String timestamp = String.format("%010d", timeStampSec);
+                    long createTime=Long.parseLong(timestamp);
+                    map.put("createTime", createTime);
+                    macAddress = JSON.toJSONString(map, true);
+                    new addMqttAsync().execute(macAddress);
+                    dialog.show();
+                }
                 break;
         }
     }
 
-
-//
-//    private boolean mIsShowing = false;
-//    private PopupWindow popupWindow;
-//    ImageView image1, image2, image3, image4, image5, image6, image7, image8;
-//    RelativeLayout relativeLayout1, relativeLayout2, relativeLayout3, relativeLayout4, relativeLayout5,
-//            relativeLayout6, relativeLayout7, relativeLayout8;
-//    Button buttonqx, buttonqd;
-//    List<String> weeks;
-//    String week=" ";
-//
-//    private void initPopup() {
-//        if (popupWindow != null && popupWindow.isShowing()) {
-//            return;
-//        }
-//        weeks=new ArrayList<>();
-//        View parent = ((ViewGroup) this.findViewById(android.R.id.content)).getChildAt(0);
-//        View pop = View.inflate(this, R.layout.fragment_addday_poup, null);
-//        image1 = (ImageView) pop.findViewById(R.id.iv_add_day1);
-//        image2 = (ImageView) pop.findViewById(R.id.iv_add_day2);
-//        image3 = (ImageView) pop.findViewById(R.id.iv_add_day3);
-//        image4 = (ImageView) pop.findViewById(R.id.iv_add_day4);
-//        image5 = (ImageView) pop.findViewById(R.id.iv_add_day5);
-//        image6 = (ImageView) pop.findViewById(R.id.iv_add_day6);
-//        image7 = (ImageView) pop.findViewById(R.id.iv_add_day7);
-//        image8 = (ImageView) pop.findViewById(R.id.iv_add_no);
-//        relativeLayout1 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r1);
-//        relativeLayout2 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r2);
-//        relativeLayout3 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r3);
-//        relativeLayout4 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r4);
-//        relativeLayout5 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r5);
-//        relativeLayout6 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r6);
-//        relativeLayout7 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r7);
-//        relativeLayout8 = (RelativeLayout) pop.findViewById(R.id.rl_addday_r8);
-//        buttonqd = (Button) pop.findViewById(R.id.bt_addday_qd);
-//        buttonqx = (Button) pop.findViewById(R.id.bt_addday_qx);
-//        image1.setTag("close");
-//        image2.setTag("close");
-//        image3.setTag("close");
-//        image4.setTag("close");
-//        image5.setTag("close");
-//        image6.setTag("close");
-//        image7.setTag("close");
-//        image8.setTag("open");
-//        image8.setImageResource(R.mipmap.lrclock_dh);
-////        popupWindow = new PopupWindow(pop, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-//        popupWindow = new PopupWindow(pop, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-//        //点击空白处时，隐藏掉pop窗口
-//        popupWindow.setFocusable(true);
-//        popupWindow.setTouchable(true);
-//        popupWindow.setOutsideTouchable(true);
-////        popupWindow.setBackgroundDrawable(new BitmapDrawable(getResources(), (Bitmap) null));
-//        ColorDrawable dw = new ColorDrawable(0x30000000);
-//        popupWindow.setBackgroundDrawable(dw);
-//        popupWindow.setAnimationStyle(R.style.Popupwindow);
-//        popupWindow.showAtLocation(parent, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-////        mIsShowing = false;
-//        View.OnClickListener listener = new View.OnClickListener() {
-//            public void onClick(View v) {
-//                switch (v.getId()) {
-//                    case R.id.bt_addday_qx:
-//                        popupWindow.dismiss();
-//                        weeks.clear();
-//                        break;
-//                    case R.id.bt_addday_qd:
-//                        weeks.clear();
-//                        if ("open".equals(image1.getTag())) {
-//                            weeks.add(" 周一 ");
-//                        }
-//                        if ("open".equals(image2.getTag())) {
-//                            weeks.add(" 周二 ");
-//                        }
-//                        if ("open".equals(image3.getTag())) {
-//                            weeks.add(" 周三 ");
-//                        }
-//                        if ("open".equals(image4.getTag())) {
-//                            weeks.add(" 周四 ");
-//                        }
-//                        if ("open".equals(image5.getTag())) {
-//                            weeks.add(" 周五 ");
-//                        }
-//                        if ("open".equals(image6.getTag())) {
-//                            weeks.add(" 周六 ");
-//                        }
-//                        if ("open".equals(image7.getTag())) {
-//                            weeks.add(" 周日 ");
-//                        }
-//                        if ("open".equals(image8.getTag())) {
-//                            weeks.add(" 不重复 ");
-//                        }
-//                        for (int i=0;i<weeks.size();i++){
-//                            week += weeks.get(i);
-//                        }
-//                        tv_lesd_week.setText(week);
-//                        popupWindow.dismiss();
-//                        break;
-//                    case R.id.rl_addday_r8:
-//                        if ("close".equals(image8.getTag())) {
-//                            image8.setImageResource(R.mipmap.lrclock_dh);
-//                            image1.setImageResource(0);
-//                            image2.setImageResource(0);
-//                            image3.setImageResource(0);
-//                            image4.setImageResource(0);
-//                            image5.setImageResource(0);
-//                            image6.setImageResource(0);
-//                            image7.setImageResource(0);
-//                            image8.setTag("open");
-//                            image7.setTag("close");
-//                            image6.setTag("close");
-//                            image5.setTag("close");
-//                            image4.setTag("close");
-//                            image3.setTag("close");
-//                            image2.setTag("close");
-//                            image1.setTag("close");
-//
-//                        } else if ("open".equals(image8.getTag())) {
-//                            image8.setImageResource(0);
-//                            image8.setTag("close");
-//                        }
-//
-//                        break;
-//                    case R.id.rl_addday_r7:
-//                        if ("close".equals(image7.getTag())) {
-//                            image8.setImageResource(0);
-//                            image7.setImageResource(R.mipmap.lrclock_dh);
-//                            image7.setTag("open");
-//                        } else if ("open".equals(image7.getTag())) {
-//                            image7.setImageResource(0);
-//                            image7.setTag("close");
-//                        }
-//                        break;
-//                    case R.id.rl_addday_r1:
-//                        if ("close".equals(image1.getTag())) {
-//                            image8.setImageResource(0);
-//                            image1.setImageResource(R.mipmap.lrclock_dh);
-//                            image1.setTag("open");
-//                        } else if ("open".equals(image1.getTag())) {
-//                            image1.setImageResource(0);
-//                            image1.setTag("close");
-//                        }
-//                        break;
-//                    case R.id.rl_addday_r2:
-//                        if ("close".equals(image2.getTag())) {
-//                            image8.setImageResource(0);
-//                            image2.setImageResource(R.mipmap.lrclock_dh);
-//                            image2.setTag("open");
-//                        } else if ("open".equals(image2.getTag())) {
-//                            image2.setImageResource(0);
-//                            image2.setTag("close");
-//                        }
-//                        break;
-//                    case R.id.rl_addday_r3:
-//                        if ("close".equals(image3.getTag())) {
-//                            image8.setImageResource(0);
-//                            image3.setImageResource(R.mipmap.lrclock_dh);
-//                            image3.setTag("open");
-//                        } else if ("open".equals(image3.getTag())) {
-//                            image3.setImageResource(0);
-//                            image3.setTag("close");
-//                        }
-//                        break;
-//                    case R.id.rl_addday_r4:
-//                        if ("close".equals(image4.getTag())) {
-//                            image8.setImageResource(0);
-//                            image4.setImageResource(R.mipmap.lrclock_dh);
-//                            image4.setTag("open");
-//                        } else if ("open".equals(image4.getTag())) {
-//                            image4.setImageResource(0);
-//                            image4.setTag("close");
-//                        }
-//                        break;
-//                    case R.id.rl_addday_r5:
-//                        if ("close".equals(image5.getTag())) {
-//                            image8.setImageResource(0);
-//                            image5.setImageResource(R.mipmap.lrclock_dh);
-//                            image5.setTag("open");
-//                        } else if ("open".equals(image5.getTag())) {
-//                            image5.setImageResource(0);
-//                            image5.setTag("close");
-//                        }
-//                        break;
-//                    case R.id.rl_addday_r6:
-//                        if ("close".equals(image6.getTag())) {
-//                            image8.setImageResource(0);
-//                            image6.setImageResource(R.mipmap.lrclock_dh);
-//                            image6.setTag("open");
-//                        } else if ("open".equals(image6.getTag())) {
-//                            image6.setImageResource(0);
-//                            image6.setTag("close");
-//                        }
-//                        break;
-//                }
-//            }
-//        };
-//        relativeLayout1.setOnClickListener(listener);
-//        relativeLayout2.setOnClickListener(listener);
-//        relativeLayout3.setOnClickListener(listener);
-//        relativeLayout4.setOnClickListener(listener);
-//        relativeLayout5.setOnClickListener(listener);
-//        relativeLayout6.setOnClickListener(listener);
-//        relativeLayout7.setOnClickListener(listener);
-//        relativeLayout8.setOnClickListener(listener);
-//        buttonqd.setOnClickListener(listener);
-//        buttonqx.setOnClickListener(listener);
-//    }
 
     List<ClickFriendBean> list_friend = new ArrayList<>();
 
@@ -452,8 +332,7 @@ public class QunzuEditActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
                 qunzuAdapter.notifyDataSetChanged();
-
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -469,52 +348,11 @@ public class QunzuEditActivity extends AppCompatActivity {
     class changeClockInfo extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-
-            Map<String, Object> params = maps[0];
-            String url = "/happy/clock/changeClockInfo";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
-            Log.e("qqqqqqqRRR", result);
-            String code = "";
-            try {
-                if (!Utils.isEmpty(result)) {
-                    if (result.length() < 6) {
-                        code=result;
-                    }
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-                new getClocksByUserId().execute();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
-                SharedPreferences preferences;
-                preferences = getSharedPreferences("my", MODE_PRIVATE);
-                MyDialog.setStart(false);
-                if (preferences.contains("password")) {
-                    preferences.edit().remove("password").commit();
-                }
-                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
-            }
-        }
-    }
-
-
-    class getClocksByUserId extends AsyncTask<Map<String, Object>, Void, String> {
-        @Override
-        protected String doInBackground(Map<String, Object>... maps) {
-            String url = "/happy/clock/getClocksByUserId";
-            url = url + "?userId=" + userId;
+            String url = "/happy/clock/changeClockMember";
+            url = url + "?clockMember=" + userId + "," + member + "&clockCreater=" + userId + "&clockId=" + clockId;
             String result = HttpUtils.doGet(mContext, url);
-            Log.e("qqqqqqqqRRR", userId + "?" + result);
+            Log.e("qqqqqqqRRR1111", url);
+            Log.e("qqqqqqqRRR", result);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
@@ -523,24 +361,7 @@ public class QunzuEditActivity extends AppCompatActivity {
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                    String retrunData = jsonObject.getString("returnData");
-                    JsonObject content = new JsonParser().parse(retrunData.toString()).getAsJsonObject();
-                    JsonArray list = content.getAsJsonArray("clockGroup");
-                    Gson gson = new Gson();
-                    clockBeanDao.deleteAll();
-                    userInfosDao.deleteAll();
-                    for (JsonElement user : list) {
-                        ClockBean userList = gson.fromJson(user, ClockBean.class);
-                        userList.setSumMinute(userList.getClockHour()*60+userList.getClockMinute());
-                        clockBeanDao.insert(userList);
-                        JsonObject userInfo = new JsonParser().parse(user.toString()).getAsJsonObject();
-                        JsonArray userInfoList = userInfo.getAsJsonArray("userInfos");
-                        for (JsonElement myUserInfo : userInfoList) {
-                            UserInfo userInfo1 = gson.fromJson(myUserInfo, UserInfo.class);
-                            userInfo1.setClockId(userList.getClockId());
-                            userInfosDao.insert(userInfo1);
-                        }
-                    }
+
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -552,10 +373,8 @@ public class QunzuEditActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
-                finish();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+//                new getClocksByUserId().execute();
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -578,5 +397,75 @@ public class QunzuEditActivity extends AppCompatActivity {
             Log.i("text", "onCreate: -->22222" + text);
             tvTag.setText(text);
         }
+        if (resultCode == 111) {
+            String[] str = {"阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"};
+            int pos = 0;
+            pos = data.getIntExtra("pos", 0);
+            String text = str[pos];
+            tvMusic.setText(text);
+//            time.setRingName(text);
+        }
     }
+
+
+    MQService mqService;
+    private boolean bound = false;
+    private String deviceName;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            bound = false;
+        }
+    };
+
+    private class addMqttAsync extends AsyncTask<String, Void, Boolean> {
+        @Override
+        protected Boolean doInBackground(String... macs) {
+            String macAddress = macs[0];
+            boolean step2 = false;
+            if (mqService != null) {
+                String topicName = "p99/2_" + clockId + "/clockuniversal";
+                step2 = mqService.publish(topicName, 1, macAddress);
+                Log.e("qqqqqqSSSSS", macAddress);
+            }
+            return step2;
+        }
+
+        @Override
+        protected void onPostExecute(Boolean s) {
+            super.onPostExecute(s);
+            if (s) {
+                if(clockService!=null)
+                    clockService.startClock();
+                MyDialog.closeDialog(dialog);
+                Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
+                clockBeanDao.update(editClock);
+                finish();
+            } else
+                Toast.makeText(mContext, "请检查网络", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
+    ClockService clockService;
+    ServiceConnection clockConnection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            clockService = binder.getService();
+
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 }

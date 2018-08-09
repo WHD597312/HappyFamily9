@@ -6,6 +6,7 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -25,6 +26,8 @@ import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
+import com.xr.happyFamily.bao.view.MyHeadRefreshView;
+import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.OrderListBean;
 import com.xr.happyFamily.jia.MyApplication;
@@ -117,13 +120,16 @@ public class ShopDingdanActivity extends AppCompatActivity {
         dingdanAdapter = new DingdanAdapter(ShopDingdanActivity.this, orderDetailsLists);
         recyclerview.setAdapter(dingdanAdapter);
 
-
+        swipeContent.setHeaderView(new MyHeadRefreshView(this));
+        swipeContent.setFooterView(new MyLoadMoreView(this));
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
                 page = 1;
                 isRefresh = true;
                 orderDetailsLists.clear();
+                countTimer = new CountTimer(5000, 1000);
+                countTimer.start();
                 getDingDan(lastSign, page);
             }
 
@@ -131,6 +137,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
             public void loadMore() {
                 page++;
                 isLoading = true;
+                countTimer = new CountTimer(5000, 1000);
+                countTimer.start();
                 getDingDan(lastSign, page);
             }
         });
@@ -208,7 +216,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     dingDanAsync dingDanAsync;
 
     public void getDingDan(int state, int page) {
-        if (!isRefresh) {
+        if (!isRefresh&&!isLoading) {
             dialog = MyDialog.showDialog(mContext);
 
             dialog.show();
@@ -450,4 +458,38 @@ public class ShopDingdanActivity extends AppCompatActivity {
 
         upData(lastSign, "返回刷新");
     }
+
+    private static CountTimer countTimer;
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+        @Override
+        public void onFinish() {
+            if (isRefresh) {
+                swipeContent.finishRefresh();
+                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+            }
+            if (isLoading) {
+                swipeContent.finishLoadMore();
+                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+
+
 }

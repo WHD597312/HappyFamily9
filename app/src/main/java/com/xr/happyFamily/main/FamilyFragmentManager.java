@@ -63,7 +63,8 @@ public class FamilyFragmentManager extends Fragment {
     NoRoomFragment noRoomFragment;
     FamilyFragment familyFragment;
     private HourseDaoImpl hourseDao;
-
+    int userId;
+    FragmentStatePagerAdapter adapter;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -80,14 +81,12 @@ public class FamilyFragmentManager extends Fragment {
             load = bundle.getString("load");
             if (hourse != null) {
                 String houseAddress = city = hourse.getHouseAddress();
-
                 city = houseAddress;
                 if (city.contains("市")) {
                     city = city.substring(0, city.length() - 1);
                 }
-
             }
-            String temperature = bundle.getString("temperature");
+
             roomDao = new RoomDaoImpl(getActivity());
             deviceChildDao = new DeviceChildDaoImpl(getActivity());
 
@@ -97,7 +96,7 @@ public class FamilyFragmentManager extends Fragment {
             preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
             String userIdStr = preferences.getString("userId", "");
             if (!TextUtils.isEmpty(userIdStr)) {
-                int userId = Integer.parseInt(userIdStr);
+                userId = Integer.parseInt(userIdStr);
                 shareChildren = deviceChildDao.findShareDevice(userId);
             }
             for (int i = 0; i < allRoomInHouse.size(); i++) {
@@ -105,14 +104,15 @@ public class FamilyFragmentManager extends Fragment {
                 rooms.add(room);
             }
             fragmentList = new ArrayList<>();
+            noRoomFragment = new NoRoomFragment();
+            familyFragment = new FamilyFragment();
             if (deviceChildren.isEmpty() && shareChildren.isEmpty()) {
-                noRoomFragment = new NoRoomFragment();
                 new WeatherAsync().execute();
                 noRoomFragment.setHouseId(houseId);
                 fragmentList.add(noRoomFragment);
 
             } else {
-                familyFragment = new FamilyFragment();
+
                 new WeatherAsync().execute();
                 familyFragment.setHouseId(houseId);
                 fragmentList.add(familyFragment);
@@ -125,30 +125,27 @@ public class FamilyFragmentManager extends Fragment {
                 Log.i("qqqqqq", rooms.get(i).getRoomName());
             }
             Log.i("fragmentList", "-->" + fragmentList.size());
-            FragmentStatePagerAdapter adapter = new FamilyAdapter(getFragmentManager(), fragmentList);
+            adapter = new FamilyAdapter(getFragmentManager(), fragmentList);
             viewPager.setAdapter(adapter);
             MyOnPageChangeListener listener = new MyOnPageChangeListener(getActivity(), viewPager, fragmentList.size());
             viewPager.addOnPageChangeListener(listener);
             if (mPositionPreferences.contains("position")) {
                 int position = mPositionPreferences.getInt("position", 0);
                 Log.i("mPositionPreferences", "-->" + position);
-                viewPager.setCurrentItem(position);
+
+
                 if (callValueValue != null) {
                     callValueValue.setPosition(position);
                 }
+                viewPager.setCurrentItem(position);
                 listener.onPageSelected(position);
-            } else {
-                if (callValueValue != null) {
-                    callValueValue.setPosition(0);
-                }
-                viewPager.setCurrentItem(0);
-                listener.onPageSelected(0);
             }
         }
         Intent service = new Intent(getActivity(), MQService.class);
         isBound = getActivity().bindService(service, connection, Context.BIND_AUTO_CREATE);
         return view;
     }
+
 
     class WeatherAsync extends AsyncTask<Void, Void, String> {
 
@@ -326,8 +323,20 @@ public class FamilyFragmentManager extends Fragment {
             if (callValueValue != null) {
                 callValueValue.setPosition(poistion);
             }
+            if (poistion==0){
+                shareChildren.clear();
+                shareChildren = deviceChildDao.findShareDevice(userId);
+                List<DeviceChild> deviceChildren=deviceChildDao.findHouseDevices(houseId);
+                if (deviceChildren.isEmpty() && shareChildren.isEmpty()) {
+                    noRoomFragment.setHouseId(houseId);
+                    fragmentList.set(0,noRoomFragment);
+                } else {
+                    familyFragment.setHouseId(houseId);
+                    fragmentList.set(0,familyFragment);
+                }
+            }
 
-            if (poistion > 0) {
+
 //                Room room=rooms.get(poistion-1);
 //                long houseId=room.getHouseId();
 //                long roomId=room.getRoomId();
@@ -339,7 +348,8 @@ public class FamilyFragmentManager extends Fragment {
 //                SharedPreferences.Editor editor=mPositionPreferences.edit();
 //                editor.putInt("position",poistion-1);
 //                editor.commit();
-            }
+
+
 
         }
     }
@@ -361,6 +371,9 @@ public class FamilyFragmentManager extends Fragment {
                 SharedPreferences.Editor editor = mPositionPreferences.edit();
                 editor.putInt("position", position);
                 editor.commit();
+                if (position==0){
+                    adapter.notifyDataSetChanged();
+                }
             } catch (Exception e) {
                 e.printStackTrace();
             }

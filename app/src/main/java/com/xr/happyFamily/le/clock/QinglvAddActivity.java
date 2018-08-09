@@ -114,13 +114,11 @@ public class QinglvAddActivity extends AppCompatActivity {
         timeDao = new TimeDaoImpl(getApplicationContext());
 
         times = new ArrayList<>();
-
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
 
-        Intent service = new Intent(mContext, MQService.class);
-        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-
+//        Intent service = new Intent(mContext, MQService.class);
+//        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
         times = timeDao.findByAllTime();
         Calendar calendar = Calendar.getInstance();
         //小时
@@ -160,9 +158,9 @@ public class QinglvAddActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        if (isBound) {
-            unbindService(connection);
-        }
+//        if (isBound) {
+//            unbindService(connection);
+//        }
     }
 
     @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq, R.id.rl_music})
@@ -185,21 +183,6 @@ public class QinglvAddActivity extends AppCompatActivity {
             case R.id.tv_lrsd_qd:
                 hour = timeLe1.getValue();
                 minutes = timeLe2.getValue();
-//                Log.i("zzzzzzzzz", "onClick:--> " + hour + "...." + minutes);
-//                if (time == null) {
-//                    time = new Time();
-//                }
-//                time.setHour(hour);
-//                time.setMinutes(minutes);
-//                timeDao.insert(time);
-//                Calendar c = Calendar.getInstance();//c：当前系统时间
-//                c.set(Calendar.HOUR_OF_DAY, hour);//把小时设为你选择的小时
-//                c.set(Calendar.MINUTE, minutes);
-//                PendingIntent pendingIntent = PendingIntent.getBroadcast(this, 0x101, new Intent("com.zking.android29_alarm_notification.RING"), 0);//上下文 请求码  启动哪一个广播 标志位
-//                am.set(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), pendingIntent);//RTC_WAKEUP:唤醒屏幕  getTimeInMillis():拿到这个时间点的毫秒值 pendingIntent:发送广播
-//                am.setRepeating(AlarmManager.RTC_WAKEUP, c.getTimeInMillis(), 60 * 60 * 24 * 1000, pendingIntent);
-//                setResult(600);
-
                 Map map = new HashMap();
                 map.put("clockHour", hour);
                 map.put("clockMinute", minutes);
@@ -323,61 +306,6 @@ public class QinglvAddActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
                 finish();
-//                String image = preferences.getString("image", "");
-//                String username = preferences.getString("username", "");
-//                String phone = preferences.getString("phone", "");
-//                boolean sex = preferences.getBoolean("sex", false);
-//                String birthday = preferences.getString("birthday", "");
-//                Date date = new Date(Long.parseLong(birthday));
-//                SimpleDateFormat format =new SimpleDateFormat("yyyy-MM-dd HH:mm:ss",
-//                        Locale.getDefault());
-//                String str = format.format(date).substring(0, 4);
-//                Log.e("qqqqqqqAAA",format.format(date)+","+str);
-//                Calendar c = Calendar.getInstance();//
-//                int age = c.get(Calendar.YEAR) - Integer.parseInt(str) + 1;
-//
-//                List<ClickFriendBean> userInfos = new ArrayList<>();
-//                ClickFriendBean userInfo = list_friend.get(qinglvAdapter.getItem());
-//                ClickFriendBean myInfo = new ClickFriendBean();
-//                if (Utils.isEmpty(userInfo.getHeadImgUrl())) {
-//                    userInfo.setHeadImgUrl("null");
-//                }
-//                Map map = new HashMap();
-//                map.put("state", 1);
-//                map.put("clockId", clockId);
-//                map.put("clockHour", hour);
-//                map.put("clockMinute", minutes);
-//                map.put("clockDay", "0");
-//                map.put("flag", tvTag.getText().toString());
-//                map.put("music", tvMusic.getText().toString());
-//                map.put("switchs", 1);
-//                String member = qinglvAdapter.getMember();
-//
-//                if (Utils.isEmpty(image)) {
-//                    myInfo.setHeadImgUrl("null");
-//                }
-//                myInfo.setMemSign(0);
-//                myInfo.setAge(age);
-//                myInfo.setPhone(phone);
-//                myInfo.setSex(sex);
-//                myInfo.setUserId(Integer.parseInt(userId));
-//                myInfo.setUsername(username);
-//                userInfos.add(myInfo);
-//                userInfos.add(userInfo);
-//
-//                map.put("userInfos", userInfos);
-//                map.put("clockCreater", userId);
-//                map.put("createrName", username);
-//                map.put("clockType", 3);
-//
-//                long timeStampSec = System.currentTimeMillis() / 1000;
-//                String timestamp = String.format("%010d", timeStampSec);
-//                long createTime = Long.parseLong(timestamp);
-//                map.put("createTime", createTime);
-//                macAddress = JSON.toJSONString(map, true);
-
-
-//                new addMqttAsync().execute(macAddress);
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
@@ -400,7 +328,7 @@ public class QinglvAddActivity extends AppCompatActivity {
             tvTag.setText(text);
         }
         if (resultCode == 111) {
-            String[] str = {"学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎", "that girl", "expression"};
+            String[] str = {"阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"};
             int pos = 0;
             pos = data.getIntExtra("pos", 0);
             String text = str[pos];
@@ -409,50 +337,25 @@ public class QinglvAddActivity extends AppCompatActivity {
         }
     }
 
-    private class addMqttAsync extends AsyncTask<String, Void, Boolean> {
-        @Override
-        protected Boolean doInBackground(String... macs) {
-            String macAddress = macs[0];
-            boolean step2 = false;
-            if (mqService != null) {
-                String topicName = "p99/3_" + clockId + "/clockuniversal";
-                step2 = mqService.publish(topicName, 1, macAddress);
-                MyDialog.closeDialog(dialog);
-
-            }
-            return step2;
-        }
-
-        @Override
-        protected void onPostExecute(Boolean s) {
-            super.onPostExecute(s);
-            if (s) {
-                MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
-                finish();
-            }
-        }
-    }
 
 
-    MQService mqService;
-    private boolean bound = false;
-    private String deviceName;
-    ServiceConnection connection = new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            MQService.LocalBinder binder = (MQService.LocalBinder) service;
-            mqService = binder.getService();
-            bound = true;
-
-
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            bound = false;
-        }
-    };
+//
+//    MQService mqService;
+//    private boolean bound = false;
+//    private String deviceName;
+//    ServiceConnection connection = new ServiceConnection() {
+//        @Override
+//        public void onServiceConnected(ComponentName name, IBinder service) {
+//            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+//            mqService = binder.getService();
+//            bound = true;
+//        }
+//
+//        @Override
+//        public void onServiceDisconnected(ComponentName name) {
+//            bound = false;
+//        }
+//    };
 
 
 }

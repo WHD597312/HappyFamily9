@@ -36,6 +36,8 @@ import com.xr.happyFamily.bao.base.BaseFragment;
 import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
+import com.xr.happyFamily.bao.view.MyHeadRefreshView;
+import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
@@ -78,8 +80,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     TextView tvPrice;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-    @BindView(R.id.img_address)
-    ImageView imgAddress;
     @BindView(R.id.tv_time)
     TextView tvTime;
     @BindView(R.id.tv_weight)
@@ -117,6 +117,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         getData();
         Calendar c = Calendar.getInstance();//
 
+        swipeContent.setHeaderView(new MyHeadRefreshView(getActivity()));
+        swipeContent.setFooterView(new MyLoadMoreView(getActivity()));
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
@@ -169,10 +171,10 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    @OnClick({R.id.img_address, R.id.tv_xinghao, R.id.tv_address})
+    @OnClick({ R.id.tv_xinghao, R.id.tv_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
-            case R.id.img_address:
+
             case R.id.tv_address:
                 startActivityForResult(new Intent(getActivity(), ShopAddressActivity.class), 101);
                 break;
@@ -691,8 +693,6 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                             postFreeBeans.add(userList);
                         }
                         time = (long) (((int) postFreeBeans.get(0).getExpressList().get(0).getEstimatedDeliveryTime()) + 1) * 60 * 60 * 1000;
-
-                        Log.e("qqqqqqqqTTT111111", time + "???");
                         long getNowTimeLong = System.currentTimeMillis();
 
                         recLen = time + getNowTimeLong;//这样得到的差值是级别

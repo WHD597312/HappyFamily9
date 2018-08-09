@@ -172,6 +172,8 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
 
         // 步骤2:获取某一值
         goodsId = bundle.getString("goodsId");
+
+        Log.e("qqqqqGGGGG",goodsId+"?");
         String userId = bundle.getString("userId");
         Map<String, Object> params = new HashMap<>();
         params.put("goodsId", goodsId);

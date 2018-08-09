@@ -616,6 +616,7 @@ public class MQService extends Service {
                     mqttIntent.putExtra("sharedId", sharedId);
                     sendBroadcast(mqttIntent);
                 } else if (MsgActivity.running) {
+                    
                     Intent mqttIntent = new Intent("Friend");
                     mqttIntent.putExtra("msg", message);
                     sendBroadcast(mqttIntent);

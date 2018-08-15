@@ -503,7 +503,7 @@ public class MQService extends Service {
                                 int mWifiVersion = messageJsonArray.getInt(5);
                                 wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
                                 int sensorState = messageJsonArray.getInt(7);
-                                sensorSimpleTemp = messageJsonArray.getInt(8) - 128;
+                                sensorSimpleTemp = messageJsonArray.getInt(8);
                                 sensorSimpleHum = messageJsonArray.getInt(9) - 128;
                                 sorsorPm = messageJsonArray.getInt(10) - 128;
                                 sensorOx = messageJsonArray.getInt(11) - 128;

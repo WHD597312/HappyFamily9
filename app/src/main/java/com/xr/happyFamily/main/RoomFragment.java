@@ -764,12 +764,14 @@ public class RoomFragment extends Fragment {
                     DeviceChild deviceChild = mGridData.get(i);
                     String mac = deviceChild.getMacAddress();
                     if (mac.equals(macAddress) && deviceChild2 == null) {
+                        mGridData.remove(deviceChild);
+                        mGridViewAdapter.notifyDataSetChanged();
                         Toast.makeText(getActivity(), "该设备已重置", Toast.LENGTH_SHORT).show();
-                        Intent intent2=new Intent(getActivity(),MainActivity.class);
-                        intent2.putExtra("houseId",houseId);
-                        intent2.putExtra("refersh","refersh");
-                        startActivity(intent2);
-                        getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+//                        Intent intent2=new Intent(getActivity(),MainActivity.class);
+//                        intent2.putExtra("houseId",houseId);
+//                        intent2.putExtra("refersh","refersh");
+//                        startActivity(intent2);
+//                        getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
                         break;
                     } else if (mac.equals(macAddress) && deviceChild2 != null) {
                         mGridData.set(i, deviceChild2);

@@ -226,12 +226,24 @@ public class FamilyFragmentManager extends Fragment {
                         onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
                         break;
+                    case 4:
+                        onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                        break;
                 }
                 try {
                     if (bound) {
                         Log.i("topic", "-->" + onlineTopicName);
-                        boolean step1 = mqService.subscribe(onlineTopicName, 1);
-                        boolean step2 = mqService.subscribe(offlineTopicName, 1);
+                        boolean step1=false;
+                        boolean step2=false;
+                        if(!TextUtils.isEmpty(onlineTopicName)){
+                            step1 = mqService.subscribe(onlineTopicName, 1);
+                        }
+                        if (!TextUtils.isEmpty(offlineTopicName)){
+                            step2 = mqService.subscribe(offlineTopicName, 1);
+                            Log.i("step", "-->" + step1 + "," + step2);
+                        }
+
                         Log.i("step", "-->" + step1 + "," + step2);
                     }
                 } catch (Exception e) {

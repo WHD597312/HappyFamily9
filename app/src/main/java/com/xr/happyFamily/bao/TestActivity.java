@@ -32,18 +32,8 @@ public class TestActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
-        ButterKnife.bind(this);
-        final DoubleWaveView doubleWaveView= (DoubleWaveView) findViewById(R.id.doubleWaveView);
-        doubleWaveView.setProHeight(80);
 
-        Button btn_queding= (Button) findViewById(R.id.btn_queding);
-        final EditText editText= (EditText) findViewById(R.id.ed_num);
-        btn_queding.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                doubleWaveView.setProHeight(Integer.parseInt(editText.getText().toString()));
-            }
-        });
+
 
 
     }

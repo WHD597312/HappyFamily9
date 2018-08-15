@@ -1,11 +1,18 @@
 package com.xr.happyFamily.wxapi;
 
 import android.content.Intent;
+import android.os.Bundle;
 import android.widget.Toast;
+
+import com.tencent.mm.opensdk.openapi.IWXAPI;
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+
 import cn.sharesdk.wechat.utils.WXAppExtendObject;
 import cn.sharesdk.wechat.utils.WXMediaMessage;
 import cn.sharesdk.wechat.utils.WechatHandlerActivity;
 public class WXEntryActivity extends WechatHandlerActivity{
+
+
 
     /**
      * 处理微信发出的向第三方应用请求app message

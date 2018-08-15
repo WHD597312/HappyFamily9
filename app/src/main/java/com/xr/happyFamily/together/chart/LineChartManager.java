@@ -1,6 +1,8 @@
 package com.xr.happyFamily.together.chart;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.graphics.drawable.GradientDrawable;
 
 import com.github.mikephil.charting.animation.Easing;
@@ -20,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineChartManager {
+
     private LineChart lineChart;
     private YAxis leftAxis;   //左边Y轴
     private YAxis rightAxis;  //右边Y轴
@@ -105,7 +108,7 @@ public class LineChartManager {
      * @param label
      * @param color
      */
-    public void showLineChart(List<Integer> xAxisValues, List<Integer> yAxisValues, String label, int color) {
+    public void showLineChart(Context context,List<Integer> xAxisValues, List<Integer> yAxisValues, String label, int color) {
         initLineChart();
         ArrayList<Entry> entries = new ArrayList<>();
         for (int i = 0; i < xAxisValues.size(); i++) {
@@ -117,7 +120,10 @@ public class LineChartManager {
 //        lineDataSet.setFillColor(Color.parseColor("#5a5a5a"));
 
         GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,new int[]{Color.parseColor("#cc4b4c50"),Color.GRAY});
-        lineDataSet.setFillDrawable(grad);
+
+        Drawable drawable = context.getResources().getDrawable(R.drawable.fade_blue);
+        lineDataSet.setDrawFilled(true);
+        lineDataSet.setFillDrawable(drawable);
         initLineDataSet(lineDataSet, color, true);
 
         ArrayList<ILineDataSet> dataSets = new ArrayList<>();

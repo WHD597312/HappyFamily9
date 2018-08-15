@@ -185,6 +185,9 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 if (gifDrawable != null && gifDrawable.isRunning()) {
                     gifDrawable.stop();
                 }
+                nice_spinner.setEnabled(true);
+                et_wifi.setEnabled(true);
+                bt_add_finish.setEnabled(true);
                 popupWindow2.dismiss();
                 backgroundAlpha(1f);
                 return false;
@@ -215,6 +218,9 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     if (gifDrawable != null && gifDrawable.isRunning()) {
                         gifDrawable.stop();
                     }
+                    nice_spinner.setEnabled(true);
+                    et_wifi.setEnabled(true);
+                    bt_add_finish.setEnabled(true);
                     popupWindow2.dismiss();
                     backgroundAlpha(1f);
                     break;
@@ -398,8 +404,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
 //            mProgressDialog.setMessage("正在配置, 请耐心等待...");
 //            mProgressDialog.setCanceledOnTouchOutside(false);
 //            mProgressDialog.show();
-            CountTimer countTimer = new CountTimer(30000, 1000);
-            countTimer.start();
+//            CountTimer countTimer = new CountTimer(30000, 1000);
+//            countTimer.start();
         }
 
         @Override
@@ -443,6 +449,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                             isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
                             mac = ssid;
                         }
+
                         count++;
                         if (count >= maxDisplayCount) {
                             break;
@@ -453,7 +460,29 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                                 + " more result(s) without showing\n");
                     }
                 } else {
-                    Utils.showToast(AddDeviceActivity.this, "配置失败");
+                    if (popupWindow2!=null && popupWindow2.isShowing()){
+                        if (gifDrawable != null && gifDrawable.isPlaying()) {
+                            gifDrawable.stop();
+
+                            if (et_wifi != null) {
+                                et_wifi.setEnabled(true);
+                            }
+                            if (nice_spinner != null) {
+                                nice_spinner.setEnabled(true);
+                            }
+                            if (bt_add_finish != null) {
+                                bt_add_finish.setEnabled(true);
+                                Utils.showToast(AddDeviceActivity.this, "配置失败");
+                            }
+
+                            if (mEsptouchTask != null) {
+                                mEsptouchTask.interrupt();
+                            }
+                        }
+                        popupWindow2.dismiss();
+                        backgroundAlpha(1f);
+
+                    }
                 }
             }
         }
@@ -636,6 +665,14 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             super.onPostExecute(code);
             switch (code) {
                 case 100:
+                    if (popupWindow2!=null && popupWindow2.isShowing()){
+                        if (gifDrawable != null && gifDrawable.isPlaying()) {
+                            gifDrawable.stop();
+                        }
+                        popupWindow2.dismiss();
+                        backgroundAlpha(1f);
+
+                    }
                     addSuccess="success";
                     Toast.makeText(AddDeviceActivity.this, "添加成功", Toast.LENGTH_LONG).show();
                     if (isBound) {
@@ -649,8 +686,28 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     setResult(6000,intent);
                     finish();
                     break;
-                case 2001:
-                    Toast.makeText(AddDeviceActivity.this, "添加失败", Toast.LENGTH_LONG).show();
+                default:
+                    if (popupWindow2!=null && popupWindow2.isShowing()){
+                        if (gifDrawable != null && gifDrawable.isPlaying()) {
+                            gifDrawable.stop();
+
+                            if (et_wifi != null) {
+                                et_wifi.setEnabled(true);
+                            }
+                            if (nice_spinner != null) {
+                                nice_spinner.setEnabled(true);
+                            }
+                            if (bt_add_finish != null) {
+                                bt_add_finish.setEnabled(true);
+                                Toast.makeText(AddDeviceActivity.this, "添加失败", Toast.LENGTH_LONG).show();
+                            }
+                            if (mEsptouchTask != null) {
+                                mEsptouchTask.interrupt();
+                            }
+                        }
+                        popupWindow2.dismiss();
+                        backgroundAlpha(1f);
+                    }
                     break;
             }
         }

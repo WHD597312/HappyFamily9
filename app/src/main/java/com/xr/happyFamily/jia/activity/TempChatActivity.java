@@ -2,6 +2,7 @@ package com.xr.happyFamily.jia.activity;
 
 import android.content.Intent;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -12,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.data.LineDataSet;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
@@ -162,8 +164,10 @@ public class TempChatActivity extends AppCompatActivity {
                 names.add("温度曲线");
 
 
+                Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
+                setChartFillDrawable(drawable);
                 //创建多条折线的图表
-                lineChartManager1.showLineChart(xValues, yValues.get(0), names.get(0), colours.get(0));
+                lineChartManager1.showLineChart(TempChatActivity.this,xValues, yValues.get(0), names.get(0), colours.get(0));
                 lineChartManager1.setDescription("");
                 lineChartManager1.setYAxis(60, 0, 7);
                 lineChartManager1.setHightLimitLine(60,"度",0);
@@ -175,6 +179,20 @@ public class TempChatActivity extends AppCompatActivity {
         super.onDestroy();
         if (unbinder!=null){
             unbinder.unbind();
+        }
+    }
+    /**
+     * 设置线条填充背景颜色
+     *
+     * @param drawable
+     */
+    public void setChartFillDrawable(Drawable drawable) {
+        if (line_chart.getData() != null && line_chart.getData().getDataSetCount() > 0) {
+            LineDataSet lineDataSet = (LineDataSet) line_chart.getData().getDataSetByIndex(0);
+            //避免在 initLineDataSet()方法中 设置了 lineDataSet.setDrawFilled(false); 而无法实现效果
+            lineDataSet.setDrawFilled(true);
+            lineDataSet.setFillDrawable(drawable);
+            line_chart.invalidate();
         }
     }
 }

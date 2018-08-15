@@ -1,5 +1,6 @@
 package com.xr.happyFamily.jia.activity;
 
+import android.app.Activity;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
@@ -87,6 +88,12 @@ public class ShareDeviceActivity extends AppCompatActivity {
     MessageReceiver receiver;
 
     @Override
+    protected void onRestart() {
+        super.onRestart();
+        Log.i("share","-->onRestart");
+    }
+
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_device);
@@ -98,6 +105,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
         }
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 
+        Log.i("share","-->onCreate");
         Intent intent = getIntent();
         long id = intent.getLongExtra("deviceId", 0);
         deviceChild = deviceChildDao.findById(id);
@@ -108,6 +116,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
             String name = deviceChild.getName();
             tv_device.setText(name);
         }
+
         IntentFilter intentFilter = new IntentFilter("ShareDeviceActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
@@ -132,8 +141,17 @@ public class ShareDeviceActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+        Log.i("share","-->onResume");
         running=true;
     }
+
+    @Override
+    protected void onPause() {
+        Log.i("share","-->onPause");
+        super.onPause();
+    }
+
+
 
     private PopupWindow popupWindow;
 
@@ -170,12 +188,12 @@ public class ShareDeviceActivity extends AppCompatActivity {
                         break;
                     case R.id.tv_send_wechat:
                         if (mBitmap!=null){
-                            PlatformUtil.shareWechatFriend(getApplication(), mBitmap);
+                            PlatformUtil.shareWechatFriend(ShareDeviceActivity.this, mBitmap);
                         }
                         break;
                     case R.id.tv_send_qq:
                         if (mBitmap!=null){
-                            PlatformUtil.shareImageToQQ(getApplication(),mBitmap);
+                            PlatformUtil.shareImageToQQ(ShareDeviceActivity.this,mBitmap);
                         }
                         break;
                     case R.id.tv_cancel:
@@ -192,6 +210,8 @@ public class ShareDeviceActivity extends AppCompatActivity {
         tv_cancel.setOnClickListener(listener);
     }
 
+
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -207,21 +227,23 @@ public class ShareDeviceActivity extends AppCompatActivity {
         if (popupWindow!=null){
             popupWindow.dismiss();
         }
-        if (receiver!=null){
-            unregisterReceiver(receiver);
-        }
+
+        Log.i("share","-->onStop");
         running=false;
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
-
+        Log.i("share","-->onDestroy");
         if (popupWindow!=null){
             popupWindow.dismiss();
         }
         if (mBitmap!=null){
             BitmapCompressUtils.recycleBitmap(mBitmap);
+        }
+        if (receiver!=null){
+            unregisterReceiver(receiver);
         }
     }
 
@@ -323,6 +345,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!TextUtils.isEmpty(s)){
+                Utils.showToast(ShareDeviceActivity.this,"更新成功");
                 tv_version.setText(s);
             }
         }

@@ -1,5 +1,6 @@
 package com.xr.happyFamily.together.share;
 
+import android.app.Activity;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -11,6 +12,8 @@ import android.os.Build;
 import android.provider.MediaStore;
 import android.support.v4.content.FileProvider;
 import android.widget.Toast;
+
+import com.xr.happyFamily.wxapi.WXEntryActivity;
 
 import java.io.File;
 import java.util.List;
@@ -71,21 +74,25 @@ public class PlatformUtil {
      *
      * @param bitmap
      */
-    public static void shareImageToQQ(Context mContext,Bitmap bitmap) {
+    public static void shareImageToQQ(Activity mContext,Bitmap bitmap) {
         if (PlatformUtil.isQQClientAvailable(mContext)) {
             try {
                 Uri uriToImage = Uri.parse(MediaStore.Images.Media.insertImage(
                         mContext.getContentResolver(), bitmap, null, null));
                 Intent shareIntent = new Intent();
+//                shareIntent.setPackage("com.tencent.mobileqq");
                 shareIntent.setAction(Intent.ACTION_SEND);
                 shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
-                shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                shareIntent.setFlags(Intent.FLAG_ACTIVITY_
+// K);
+
                 shareIntent.setType("image/*");
                 // 遍历所有支持发送图片的应用。找到需要的应用
                 ComponentName componentName = new ComponentName("com.tencent.mobileqq", "com.tencent.mobileqq.activity.JumpActivity");
 
                 shareIntent.setComponent(componentName);
                 mContext.startActivity(shareIntent);
+//                mContext.startActivity(Intent.createChooser(shareIntent, "Share"));
             } catch (Exception e) {
 //            ContextUtil.getInstance().showToastMsg("分享图片到**失败");
             }
@@ -98,14 +105,14 @@ public class PlatformUtil {
      * @param bitmap
      */
     public static void
-    shareWechatFriend(Context context,Bitmap bitmap){
+    shareWechatFriend(Activity context, Bitmap bitmap){
         if (PlatformUtil.isWeChatAvailable(context)){
             Uri uriToImage = Uri.parse(MediaStore.Images.Media.insertImage(
                     context.getContentResolver(), bitmap, null, null));
             Intent shareIntent = new Intent();
             shareIntent.setAction(Intent.ACTION_SEND);
             shareIntent.putExtra(Intent.EXTRA_STREAM, uriToImage);
-            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//            shareIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
             shareIntent.setType("image/*");
             // 遍历所有支持发送图片的应用。找到需要的应用
             ComponentName componentName = new ComponentName("com.tencent.mm", "com.tencent.mm.ui.tools.ShareImgUI");

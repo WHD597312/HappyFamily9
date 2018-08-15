@@ -132,8 +132,6 @@ public class FamilyFragmentManager extends Fragment {
             if (mPositionPreferences.contains("position")) {
                 int position = mPositionPreferences.getInt("position", 0);
                 Log.i("mPositionPreferences", "-->" + position);
-
-
                 if (callValueValue != null) {
                     callValueValue.setPosition(position);
                 }

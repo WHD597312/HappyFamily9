@@ -496,7 +496,28 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private int first=0;
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
+
         if (keyCode == KeyEvent.KEYCODE_BACK) {
+            if (FamilyFragmentManager.running){
+                int postion=mPositionPreferences.getInt("position", 0);
+                if (postion>0){
+                    mPositionPreferences.edit().putInt("position",0).commit();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+                    FamilyFragmentManager familyFragmentManager = new FamilyFragmentManager();
+                    Bundle bundle = new Bundle();
+                    bundle.putLong("houseId", houseId);
+                    bundle.putString("load","");
+                    bundle.putString("temperature", temperature);
+                    familyFragmentManager.setArguments(bundle);
+                    fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
+                    fragmentTransaction.commit();
+                    click=1;
+                    click2=0;
+                    click3=0;
+                    click4=0;
+                    return false;
+                }
+            }
             first++;
             if (first==2){
                 application.removeAllActivity();

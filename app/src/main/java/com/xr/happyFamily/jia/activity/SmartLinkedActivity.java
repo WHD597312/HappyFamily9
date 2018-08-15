@@ -21,6 +21,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -51,7 +52,7 @@ public class SmartLinkedActivity extends AppCompatActivity {
     long houseId;
     long roomId;
     int linkedSensorId;
-
+    DeviceChild sensorChild;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,7 +70,7 @@ public class SmartLinkedActivity extends AppCompatActivity {
         Intent intent=getIntent();
         sensorId=intent.getIntExtra("sensorId",0);
         long id= intent.getLongExtra("Id",0);
-        DeviceChild sensorChild=deviceChildDao.findById(id);
+        sensorChild=deviceChildDao.findById(id);
         linkedSensorId=sensorChild.getDeviceId();
         houseId=sensorChild.getHouseId();
         roomId=sensorChild.getRoomId();
@@ -80,11 +81,14 @@ public class SmartLinkedActivity extends AppCompatActivity {
         }
         adapter=new LinkdAdapter(this,list);
         list_linked.setAdapter(adapter);
+        if (NetWorkUtil.isConn(SmartLinkedActivity.this)){
+            new GetLinkedAsync().execute();
+        }
     }
     @Override
     public void onBackPressed() {
         Intent intent=new Intent();
-        intent.putExtra("list",new ArrayList<>());
+        intent.putExtra("list",(Serializable) list);
         setResult(100,intent);
         finish();
     }
@@ -94,7 +98,7 @@ public class SmartLinkedActivity extends AppCompatActivity {
         switch (view.getId()){
             case R.id.image_back:
                 Intent intent=new Intent();
-                intent.putExtra("list",new ArrayList<>());
+                intent.putExtra("list",(Serializable) list);
                 setResult(100,intent);
                 finish();
                 break;
@@ -203,6 +207,59 @@ public class SmartLinkedActivity extends AppCompatActivity {
             }
         }
     }
+    private String linkedUrl = HttpUtils.ipAddress + "/family/device/sensors/getDevicesInRoom";
+    class GetLinkedAsync extends AsyncTask<Void, Void, List<DeviceChild>> {
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+        }
+
+        @Override
+        protected List<DeviceChild> doInBackground(Void... voids) {
+            int code = 0;
+            List<DeviceChild> list=new ArrayList<>();
+            int Id = sensorChild.getDeviceId();
+            int type = sensorChild.getType();
+            long roomId = sensorChild.getRoomId();
+            String url = linkedUrl + "?deviceId=" + Id + "&deviceType=" + type + "&roomId=" + roomId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("GetLinkedAsync", "-->" + result);
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode = jsonObject.getString("returnCode");
+                    code = Integer.parseInt(returnCode);
+                    if ("100".equals(returnCode)) {
+                        JSONArray returnData = jsonObject.getJSONArray("returnData");
+                        for (int i = 0; i < returnData.length(); i++) {
+                            JSONObject device = returnData.getJSONObject(i);
+                            int deviceId = device.getInt("deviceId");
+                            int isLinked = device.getInt("isLinked");
+                            DeviceChild deviceChild = deviceChildDao.findDeviceByDeviceId(houseId, roomId, deviceId);
+                            deviceChild.setLinked(isLinked);
+                            deviceChild.setLinkedSensorId(sensorId);
+                            linkedMap.put(deviceId,deviceChild);
+                            deviceChildDao.update(deviceChild);
+                            list.add(deviceChild);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return list;
+        }
+
+        @Override
+        protected void onPostExecute(List<DeviceChild> linkedList) {
+            super.onPostExecute(linkedList);
+            if (linkedList!=null && !linkedList.isEmpty()){
+                list.clear();
+                list.addAll(linkedList);
+                adapter.notifyDataSetChanged();
+            }
+        }
+    }
     class ChooseAsync extends AsyncTask<Map<String,Object>,Void,Integer>{
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
@@ -249,5 +306,4 @@ public class SmartLinkedActivity extends AppCompatActivity {
             }
         }
     }
-
 }

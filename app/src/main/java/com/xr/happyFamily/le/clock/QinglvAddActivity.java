@@ -32,6 +32,7 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQinglvAdapter;
@@ -188,7 +189,7 @@ public class QinglvAddActivity extends AppCompatActivity {
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
                 if ("请填写标签".equals(tvTag.getText().toString())) {
-                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请添加标签");
                     break;
                 } else
                     map.put("flag", tvTag.getText().toString());
@@ -196,7 +197,7 @@ public class QinglvAddActivity extends AppCompatActivity {
                 map.put("switchs", 1);
                 String member = qinglvAdapter.getMember();
                 if ("0".equals(member)) {
-                    Toast.makeText(mContext, "请选择添加成员", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast( "请选择添加成员");
                     break;
                 } else
 
@@ -304,7 +305,7 @@ public class QinglvAddActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                Toast.makeText(mContext, "添加闹钟成功", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("添加闹钟成功");
                 finish();
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();

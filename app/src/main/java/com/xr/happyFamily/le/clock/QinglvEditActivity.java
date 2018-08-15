@@ -32,6 +32,7 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQinglvAdapter;
@@ -200,7 +201,7 @@ public class QinglvEditActivity extends AppCompatActivity {
                 break;
             case R.id.tv_lrsd_qd:
                 if ("请填写标签".equals(tvTag.getText().toString())) {
-                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请添加标签");
                     break;
                 }
                 hour = timeLe1.getValue();
@@ -241,7 +242,8 @@ public class QinglvEditActivity extends AppCompatActivity {
 
                 if (Utils.isEmpty(image)) {
                     myInfo.setHeadImgUrl("null");
-                }
+                }else
+                    myInfo.setHeadImgUrl(image);
                 myInfo.setMemSign(0);
                 myInfo.setAge(age);
                 myInfo.setPhone(phone);
@@ -425,10 +427,10 @@ public class QinglvEditActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (s) {
                 MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext, "修改成功", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("修改成功");
                 finish();
             } else
-                Toast.makeText(mContext, "请检查网络", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("请检查网络");
         }
     }
 }

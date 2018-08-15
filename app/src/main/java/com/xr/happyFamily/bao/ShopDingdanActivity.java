@@ -26,6 +26,7 @@ import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.view.MyHeadRefreshView;
 import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bean.OrderBean;
@@ -128,6 +129,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 page = 1;
                 isRefresh = true;
                 orderDetailsLists.clear();
+                if (countTimer != null)
+                    countTimer.cancel();
                 countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
                 getDingDan(lastSign, page);
@@ -315,7 +318,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
                     dingdanAdapter.notifyDataSetChanged();
                     if (page > 1)
                         page--;
-                    Toast.makeText(ShopDingdanActivity.this, "无更多订单", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("无更多订单");
                     if (isLoading) {
                         isLoading = false;
                         swipeContent.finishLoadMore();
@@ -482,11 +485,11 @@ public class ShopDingdanActivity extends AppCompatActivity {
         public void onFinish() {
             if (isRefresh) {
                 swipeContent.finishRefresh();
-                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("加载超时请重试");
             }
             if (isLoading) {
                 swipeContent.finishLoadMore();
-                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("加载超时请重试");
             }
         }
     }

@@ -88,6 +88,9 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                 WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
         setContentView(R.layout.activity_qrscanner);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         if (application == null) {
             application = (MyApplication) getApplication();
             application.addActivity(this);

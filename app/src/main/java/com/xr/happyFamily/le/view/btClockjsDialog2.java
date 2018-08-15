@@ -247,10 +247,7 @@ public class btClockjsDialog2 extends Dialog {
 
             case R.id.bt_zl_njqd:
                 if (choose.equals(answer)){
-                    if (mediaPlayer!=null){
-                        mediaPlayer.stop();
-                    }
-
+                    mediaPlayer.stop();
                     dismiss();
                     SharedPreferences.Editor editor= preferences.edit();
                     editor.putBoolean("ring",false);

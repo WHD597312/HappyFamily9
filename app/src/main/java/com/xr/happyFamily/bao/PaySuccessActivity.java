@@ -25,6 +25,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bean.PersonCard;
 import com.xr.happyFamily.bean.ShopBean;
@@ -233,7 +234,7 @@ public class PaySuccessActivity extends AppCompatActivity {
                 tvPrice.setText(money+"");
 
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("用户信息超时请重新登陆");
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
                 MyDialog.setStart(false);
@@ -304,7 +305,7 @@ public class PaySuccessActivity extends AppCompatActivity {
                 if (shopAdapter!=null)
                 shopAdapter.notifyDataSetChanged();
                 if(!isData){
-                    Toast.makeText(PaySuccessActivity.this,"无更多商品",Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("无更多商品");
                 }
                 if (dialog!=null)
                 MyDialog.closeDialog(dialog);

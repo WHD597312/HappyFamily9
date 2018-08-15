@@ -33,6 +33,7 @@ import com.xr.happyFamily.bao.TuiKuanSuccessActivity;
 import com.xr.happyFamily.bao.TuiKuanXQActivity;
 import com.xr.happyFamily.bao.WuLiuActivity;
 import com.xr.happyFamily.bao.alipay.PayActivity;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.login.login.LoginActivity;
@@ -202,7 +203,7 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                         context.startActivity(intent);
                         break;
                     case 2:
-                        Toast.makeText(context, "该商品暂未发货", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showShortToast("该商品暂未发货");
                         break;
                     case 3:
                         //待收货  查看物流

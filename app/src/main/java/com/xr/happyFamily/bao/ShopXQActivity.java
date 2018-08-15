@@ -44,6 +44,7 @@ import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
 import com.xr.happyFamily.bao.adapter.EvaluateXhAdapter;
 import com.xr.happyFamily.bao.adapter.MyViewPageAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
@@ -472,7 +473,7 @@ public class ShopXQActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                Toast.makeText(ShopXQActivity.this, "已加入购物车", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast( "已加入购物车");
                 if (mPopWindow != null) {
                     mPopWindow.dismiss();
                 }

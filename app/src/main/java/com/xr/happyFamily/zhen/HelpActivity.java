@@ -135,13 +135,13 @@ public class HelpActivity extends AppCompatActivity implements ImagePickerAdapte
                     paramsMap.put("userId",userId);
                     paramsMap.put("description",description);
                     Map<String,Object> fileMap=new HashMap<>();
-                    for (int i = 0; i < selImageList.size(); i++) {
-                        if (i>=1){
-                            break;
-                        }
-                        String newPath = BitmapUtils.compressImageUpload(selImageList.get(i).path);
-                        fileMap.put(selImageList.get(i).name+i,new File(newPath));
-                    }
+//                    for (int i = 0; i < selImageList.size(); i++) {
+//                        if (i>=1){
+//                            break;
+//                        }
+//                        String newPath = BitmapUtils.compressImageUpload(selImageList.get(i).path);
+//                        fileMap.put(selImageList.get(i).name+i,new File(newPath));
+//                    }
                     new UpFeedbackAsync().execute(paramsMap,fileMap);
                 }else {
                     Toast.makeText(this,"请检查网络",Toast.LENGTH_SHORT).show();
@@ -156,7 +156,7 @@ public class HelpActivity extends AppCompatActivity implements ImagePickerAdapte
         imagePicker.setCrop(true);                            //允许裁剪（单选才有效）
         imagePicker.setSaveRectangle(true);                   //是否按矩形区域保存
         imagePicker.setSelectLimit(3);              //选中数量限制
-        imagePicker.setMultiMode(true);                      //多选
+        imagePicker.setMultiMode(false);                      //多选
         imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
         imagePicker.setFocusWidth(800);                       //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
         imagePicker.setFocusHeight(800);                      //裁剪框的高度。单位像素（圆形自动取宽高最小值）

@@ -30,6 +30,7 @@ import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.bao.adapter.DingdanAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
@@ -230,7 +231,8 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
         map.put("switchs", state);
         if (Utils.isEmpty(image)) {
             myInfo.setHeadImgUrl("null");
-        }
+        }else
+            myInfo.setHeadImgUrl(image);
         myInfo.setMemSign(0);
         myInfo.setAge(age);
         myInfo.setPhone(phone);
@@ -477,7 +479,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 //                Log.e("qqqqqqqqqqWWWWW??",test.get(0).getSwitchs()+"????");
 //                setDao();
             } else
-                Toast.makeText(context, "请检查网络", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("请检查网络");
         }
     }
 

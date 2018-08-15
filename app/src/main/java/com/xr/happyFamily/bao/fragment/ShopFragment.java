@@ -33,6 +33,7 @@ import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
 import com.xr.happyFamily.bao.adapter.EvaluateXhAdapter;
 import com.xr.happyFamily.bao.base.BaseFragment;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
 import com.xr.happyFamily.bao.view.FlowTagView;
@@ -335,7 +336,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     params.put("quantity", num);
                     new addShopAsync().execute(params);
                 } else {
-                    Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast( "请选择商品规格");
                 }
 
             }
@@ -593,7 +594,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                Toast.makeText(mContext, "已加入购物车", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast( "已加入购物车");
                 mPopWindow.dismiss();
             } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();

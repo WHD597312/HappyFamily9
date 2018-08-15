@@ -31,6 +31,7 @@ import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.BtClock.bqOfColckActivity;
 import com.xr.happyFamily.le.adapter.ClockAddQunzuAdapter;
@@ -201,16 +202,15 @@ public class QunzuEditActivity extends AppCompatActivity {
                 break;
             case R.id.tv_lrsd_qd:
                 if ("请填写标签".equals(tvTag.getText().toString())) {
-                    Toast.makeText(mContext, "请添加标签", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请添加标签");
                     break;
                 }
                 member = qunzuAdapter.getMember();
                 if ("0".equals(member)) {
-                    Toast.makeText(mContext, "请添加闹钟成员", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请添加闹钟成员");
                     break;
                 } else {
                     int state = 2;
-                    Log.e("qqqqqqUUUU", uesr + "||||||" + userId + "," + member);
                     if (!uesr.equals(userId + "," + member)) {
                         dialog.show();
                         new changeClockInfo().execute();

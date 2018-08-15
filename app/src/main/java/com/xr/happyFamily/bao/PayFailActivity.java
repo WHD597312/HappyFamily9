@@ -16,6 +16,7 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.alipay.PayActivity;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
@@ -132,7 +133,7 @@ public class PayFailActivity extends AppCompatActivity {
                 break;
             case R.id.tv_zhifu:
                 if(sign_pay==2){
-                    Toast.makeText(mContext,"暂不支持银联支付",Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("暂不支持银联支付");
                 }else {
                     if (sign_pay == 0) {
                         Intent intent = new Intent(PayFailActivity.this, PayActivity.class);
@@ -218,7 +219,7 @@ public class PayFailActivity extends AppCompatActivity {
                 if (tvAdd!=null)
                 tvAdd.setText(address);
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("用户信息超时请重新登陆");
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
                 MyDialog.setStart(false);

@@ -44,6 +44,7 @@ import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bao.view.MyHeadRefreshView;
 import com.xr.happyFamily.bao.view.MyLoadMoreView;
@@ -582,7 +583,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                     shopAdapter.notifyDataSetChanged();
                 }isLoading = false;
                 if (!isData) {
-                    Toast.makeText(mContext, "无更多商品", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("无更多商品");
                 }
             }
         }

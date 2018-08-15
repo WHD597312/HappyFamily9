@@ -25,6 +25,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ConfListAdapter;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.bao.alipay.PayActivity;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.Goods;
 import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
@@ -235,7 +236,7 @@ public class ShopConfActivity extends AppCompatActivity {
                     new postOrderAsync().execute(params);
                 }
                 else {
-                    Toast.makeText(mContext,"请先设置收货地址",Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请先设置收货地址");
                 }
 //                startActivityForResult(new Intent(this, PaySuccessActivity.class), 101);
                 break;
@@ -425,7 +426,7 @@ public class ShopConfActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 if(sign_pay==2){
-                    Toast.makeText(mContext,"暂不支持银联支付",Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("暂不支持银联支付");
                 }else {
                     if (sign_pay == 0) {
                         Intent intent = new Intent(ShopConfActivity.this, PayActivity.class);

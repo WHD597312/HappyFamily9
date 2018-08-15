@@ -26,6 +26,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.EvaluateAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bao.view.LinearGradientView;
 import com.xr.happyFamily.bean.HotWordBean;
@@ -91,7 +92,6 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
 
         initView();
         new getHotWordsAsync().execute();
-        getHistory();
 
 
     }
@@ -130,7 +130,7 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
                 break;
             case R.id.title_rightText:
                 if (edGoods.getText().toString().length() == 0) {
-                    Toast.makeText(ShopSearchActivity.this, "请输入关键词", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入关键词");
                 } else {
 
                     Intent intent = new Intent(ShopSearchActivity.this, ShopSearchResultActivity.class);
@@ -193,6 +193,7 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
                 SharedPreferences.Editor editor = getSharedPreferences("SearchHistoryList", MODE_PRIVATE).edit();
                 editor.clear();
                 editor.commit();
+                loadList.clear();
                 llHis.setVisibility(View.GONE);
                 lgHis.setVisibility(View.GONE);
                 mPopWindow.dismiss();
@@ -225,6 +226,9 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
         if(loadList.size()==0){
             llHis.setVisibility(View.GONE);
             lgHis.setVisibility(View.GONE);
+        }else {
+            llHis.setVisibility(View.VISIBLE);
+            lgHis.setVisibility(View.VISIBLE);
         }
     }
 
@@ -253,9 +257,10 @@ public class ShopSearchActivity extends AppCompatActivity implements View.OnClic
 
 
     @Override
-    protected void onRestart() {
-        super.onRestart();
+    protected void onStart() {
+        super.onStart();
         getHistory();
+        Log.e("qqqqSS","111");
     }
 
 

@@ -33,13 +33,14 @@ android {
         applicationId "com.xr.happyFamily"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 1
-        versionName "1.0"
+        versionCode 2
+        versionName "2.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         renderscriptTargetApi 25    //添加
         renderscriptSupportModeEnabled true  //添加
     }
+
     buildTypes {
         release {
             minifyEnabled false

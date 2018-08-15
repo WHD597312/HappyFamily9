@@ -22,6 +22,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.adapter.FriendFindAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
@@ -141,7 +142,7 @@ public class FriendFindActivity extends AppCompatActivity {
 
             }else  if (!Utils.isEmpty(s) && "5004".equals(s)) {
                 MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext,returnMsg,Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast(returnMsg);
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;

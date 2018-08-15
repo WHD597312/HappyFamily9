@@ -33,6 +33,7 @@ import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.TimeLineAdapter;
 import com.xr.happyFamily.bao.adapter.WuLiuXQAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.util.WuLiuData;
 import com.xr.happyFamily.bao.view.MyListView;
 import com.xr.happyFamily.bean.OrderBean;
@@ -153,7 +154,7 @@ public class WuLiuActivity extends AppCompatActivity {
                 break;
             case R.id.img_call:
                 if (tel.equals("0"))
-                    Toast.makeText(WuLiuActivity.this, "暂无配送员联系方式", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("暂无配送员联系方式");
                 else
                     showPopup();
                 break;

@@ -34,6 +34,7 @@ import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
 import com.xr.happyFamily.bao.adapter.WuLiuListAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.util.WuLiuData;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.WuLiuListBean;
@@ -152,15 +153,15 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
                 params.put("orderNumber", orderNumber);
                 params.put("orderId", orderId);
                 if ("请选择".equals(tvChoose.getText().toString())) {
-                    Toast.makeText(TuiKuanActivity.this, "请选择退款原因", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请选择退款原因");
                     break;
                 } else params.put("reason", tvChoose.getText().toString());
                 if (wuliuCode.equals("0")) {
-                    Toast.makeText(TuiKuanActivity.this, "请选择物流类型", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请选择物流类型");
                     break;
                 } else params.put("shipperCode", wuliuCode);
                 if (TextUtils.isEmpty(edWuliuId.getText())) {
-                    Toast.makeText(TuiKuanActivity.this, "请填写物流单号", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请填写物流单号");
                     break;
                 } else params.put("logisticCode", edWuliuId.getText().toString());
 
@@ -443,7 +444,7 @@ public class TuiKuanActivity extends AppCompatActivity implements View.OnClickLi
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
-                Toast.makeText(TuiKuanActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("修改成功");
                 Intent intent = new Intent(TuiKuanActivity.this, TuiKuanXQActivity.class);
                 intent.putExtra("orderId", orderNumber);
                 startActivity(intent);

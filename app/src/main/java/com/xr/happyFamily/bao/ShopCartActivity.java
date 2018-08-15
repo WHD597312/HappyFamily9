@@ -32,6 +32,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.ShopCartAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.ShoppingCart;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopCartBean;
@@ -234,7 +235,7 @@ public class ShopCartActivity extends AppCompatActivity {
                         }
                         intent.putExtra("weight", weight);
                         startActivity(intent);
-                    }else Toast.makeText(ShopCartActivity.this,"请选择购买商品",Toast.LENGTH_SHORT).show();
+                    }else  ToastUtil.showShortToast("请选择购买商品");
 
 
 

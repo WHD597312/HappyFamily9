@@ -29,6 +29,7 @@ import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.view.MyHeadRefreshView;
 import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bao.view.MyScrollview;
@@ -127,6 +128,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                 page=1;
                 isRefresh=true;
                 list_shop.clear();
+                if (countTimer != null)
+                    countTimer.cancel();
                 countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
                 getShopData(1, lastState);
@@ -136,6 +139,8 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             public void loadMore() {
                 isLoading=true;
                 page++;
+                if (countTimer != null)
+                    countTimer.cancel();
                 countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
                 getShopData(page, lastState);
@@ -342,7 +347,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
                         llNodata.setVisibility(View.VISIBLE);
                         recyclerview.setVisibility(View.GONE);
                     } else
-                        Toast.makeText(ShopSearchResultActivity.this, "无更多商品", Toast.LENGTH_SHORT).show();
+                        ToastUtil.showShortToast("无更多商品");
                 } else {
                     llNodata.setVisibility(View.GONE);
                     recyclerview.setVisibility(View.VISIBLE);

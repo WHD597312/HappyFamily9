@@ -21,6 +21,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.adapter.FriendFindAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
@@ -105,7 +106,7 @@ public class FriendAddActivity extends AppCompatActivity {
             case R.id.title_rightText:
                 dialog = MyDialog.showDialog(this);
                 if ((clickFriendBean.getUserId() + "").equals(userId))
-                    Toast.makeText(mContext, "无法添加自己为好友", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("无法添加自己为好友");
                 else
                     new getClockUsers().execute();
                 break;
@@ -175,7 +176,7 @@ public class FriendAddActivity extends AppCompatActivity {
                 }
                 startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
             } else {
-                Toast.makeText(mContext, returnMsg, Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast( returnMsg);
 
             }
         }

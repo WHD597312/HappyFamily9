@@ -27,6 +27,7 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.CityAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
@@ -167,19 +168,19 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                 params.put("userId", url);
                 params.put("receiveId", receiveId);
                 if (Utils.isEmpty(edName.getText().toString())) {
-                    Toast.makeText(this, "请输入收货人", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入收货人");
                     break;
                 } else
                     params.put("contact", edName.getText().toString());
                 if (Utils.isEmpty(edTel.getText().toString())) {
-                    Toast.makeText(this, "请输入联系电话", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入联系电话");
                     break;
                 } else if (Mobile.isMobile(edTel.getText().toString()))
                     params.put("tel", edTel.getText().toString());
                 else
-                    Toast.makeText(this, "请输入正确联系电话", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast( "请输入正确联系电话");
                 if (Utils.isEmpty(tvAddress.getText().toString())) {
-                    Toast.makeText(this, "请输入所在地址", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入所在地址");
                     break;
                 } else {
                     params.put("receiveProvince", receiveProvince);
@@ -187,7 +188,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     params.put("receiveCounty", receiveCounty);
                 }
                 if (Utils.isEmpty(edAddress.getText().toString())) {
-                    Toast.makeText(this, "请输入详细地址", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入详细地址");
                     break;
                 } else
                     params.put("receiveAddress", edAddress.getText().toString());
@@ -347,7 +348,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                     data.add(cities.get(a).getName());
                 }
             } else {
-                Toast.makeText(EditAddressActivity.this, "请选择省份", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast( "请选择省份");
             }
         } else if (i == 2) {
             if (cities.size() > 0) {
@@ -357,7 +358,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
                         data.add(districts.get(a).getName());
                 }
             } else {
-                Toast.makeText(EditAddressActivity.this, "请选择城市", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("请选择城市");
             }
         }
 
@@ -492,10 +493,10 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
-                Toast.makeText(mContext, "编辑地址成功", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast( "编辑地址成功");
                 finish();
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("用户信息超时请重新登陆");
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
                 MyDialog.setStart(false);

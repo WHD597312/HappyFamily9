@@ -35,6 +35,7 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.DingDanXQAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.myOrderBean;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.ShopBean;
@@ -180,7 +181,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
                 ClipData mClipData = ClipData.newPlainText("Label", orderNumber);
                 // 将ClipData内容放到系统剪贴板里。
                 cm.setPrimaryClip(mClipData);
-                Toast.makeText(mContext,"复制成功",Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("复制成功");
                 break;
             case R.id.img1:
                 showPopup(1);
@@ -510,7 +511,7 @@ public class ShopDingdanXQActivity extends AppCompatActivity implements View.OnC
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 MyDialog.closeDialog(dialog);
                 finish();
-                Toast.makeText(mContext, "取消订单成功", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("取消订单成功");
 
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();

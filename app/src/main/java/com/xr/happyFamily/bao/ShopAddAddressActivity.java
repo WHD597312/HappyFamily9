@@ -28,6 +28,7 @@ import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.CityAdapter;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.City;
 import com.xr.happyFamily.bao.bean.District;
 import com.xr.happyFamily.bao.bean.Province;
@@ -164,20 +165,20 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                 String url = userSettings.getString("userId", "1000");
                 Map<String, Object> params = new HashMap<>();
                 if (Utils.isEmpty(edName.getText().toString()))
-                    Toast.makeText(this, "请输入收货人", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入收货人");
                 else
                     params.put("contact", edName.getText().toString());
                 params.put("userId", url);
                 if (Utils.isEmpty(edTel.getText().toString())){
-                    Toast.makeText(this, "请输入联系电话", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入联系电话");
                     break;
                 }
                 else if(Mobile.isMobile(edTel.getText().toString()))
                     params.put("tel", edTel.getText().toString());
                 else
-                    Toast.makeText(this, "请输入正确联系电话", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入正确联系电话");
                 if (Utils.isEmpty(tvAddress.getText().toString())) {
-                    Toast.makeText(this, "请输入所在地址", Toast.LENGTH_SHORT).show();
+                    ToastUtil.showShortToast("请输入所在地址");
                     break;
 
                 }
@@ -349,7 +350,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                     data.add(cities.get(a).getName());
                 }
             } else {
-                Toast.makeText(ShopAddAddressActivity.this, "请选择省份", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("请选择省份");
             }
         } else if (i == 2) {
             if (cities.size() > 0) {
@@ -358,7 +359,7 @@ public class ShopAddAddressActivity extends AppCompatActivity implements View.On
                     data.add(districts.get(a).getName());
                 }
             } else {
-                Toast.makeText(ShopAddAddressActivity.this, "请选择城市", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("请选择城市");
             }
         }
 

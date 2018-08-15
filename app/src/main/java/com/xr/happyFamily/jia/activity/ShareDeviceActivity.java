@@ -97,6 +97,9 @@ public class ShareDeviceActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_share_device);
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().hide();
+        }
         unbinder = ButterKnife.bind(this);
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         if (application == null) {

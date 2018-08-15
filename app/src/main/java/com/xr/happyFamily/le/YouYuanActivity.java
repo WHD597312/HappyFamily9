@@ -17,6 +17,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.le.adapter.YouYuanAdapter;
 
 import java.util.ArrayList;
@@ -146,7 +147,7 @@ public class YouYuanActivity extends AppCompatActivity {
         tv_queding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Toast.makeText(YouYuanActivity.this,"已发送好友申请",Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("已发送好友申请");
                 mPopWindow.dismiss();
             }
         });

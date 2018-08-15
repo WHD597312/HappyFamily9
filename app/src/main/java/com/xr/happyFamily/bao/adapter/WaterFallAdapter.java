@@ -57,8 +57,6 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
         Picasso.with(mContext)
                 .load(url)
                 .into(holder2.userAvatar);//此种策略并不会压缩图片
-
-
 //        Picasso.with(mContext).load(myList.getImage()).into(holder2.userAvatar);
 //        holder2.userAvatar.getLayoutParams().height = personCard.imgHeight; //从数据源中获取图片高度，动态设置到控件上
         holder2.tv_name.setText(myList.getGoodsName());

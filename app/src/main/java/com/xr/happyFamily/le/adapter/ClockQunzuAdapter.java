@@ -28,6 +28,7 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
 import com.xr.happyFamily.le.clock.QunzuAddActivity;
@@ -472,7 +473,7 @@ public class ClockQunzuAdapter extends RecyclerView.Adapter<ClockQunzuAdapter.My
                     clockBeanList.get(upPos).setSwitchs(1);
 
             } else
-                Toast.makeText(context, "请检查网络", Toast.LENGTH_SHORT).show();
+                ToastUtil.showShortToast("请检查网络");
         }
     }
 

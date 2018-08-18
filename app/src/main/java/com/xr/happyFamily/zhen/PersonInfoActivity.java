@@ -45,6 +45,7 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
@@ -268,9 +269,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                             backgroundAlpha(1.0f);
                             popupWindow.dismiss();
                         break;
-
                 }
-
             }
         };
 
@@ -279,12 +278,15 @@ public class PersonInfoActivity extends AppCompatActivity {
         month=calendar.get(Calendar.MONTH);
         day=calendar.get(Calendar.DAY_OF_MONTH);
         hour=calendar.get(Calendar.HOUR_OF_DAY);
-
+        datePicker.setMaxDate(new Date().getTime());
 
 
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override
             public void onDateChanged(DatePicker view, int mYear, int monthOfYear, int dayOfMonth) {
+                if (mYear>year){
+                    mYear=year;
+                }
                 year=mYear;
                 month=monthOfYear+1;
                 day=dayOfMonth;

@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".jia.activity.PurifierActivity">
+
+    <RelativeLayout
+        android:id="@+id/layout_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/purifierback">
+
+        <RelativeLayout
+            android:id="@+id/head"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_45">
+
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="@dimen/dp_jy_40"
+                android:layout_height="@dimen/dp_jy_40"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                android:src="@mipmap/nav_back" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_40"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="智能终端"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_20" />
+
+            <ImageView
+                android:id="@+id/image_more"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginEnd="@dimen/dp_jy_10"
+                android:padding="@dimen/dp_jy_12"
+                android:src="@mipmap/image_more1" />
+        </RelativeLayout>
+
+        <View
+            android:id="@+id/view1"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_20"
+            android:layout_below="@+id/head"
+            android:background="@drawable/bg_shape_gradient2" />
+
+        <RelativeLayout
+            android:id="@+id/body"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/view1"
+            android:background="@drawable/bg_shape_gradient">
+
+            <View
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_alignBottom="@+id/img"
+                android:layout_alignLeft="@+id/img"
+                android:layout_alignRight="@+id/img"
+                android:layout_alignTop="@+id/img"
+                android:background="@color/white" />
+
+            <com.xr.happyFamily.bao.view.DoubleWaveView
+                android:id="@+id/doubleW"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignBottom="@+id/img"
+                android:layout_alignLeft="@+id/img"
+                android:layout_alignRight="@+id/img"
+                android:layout_alignTop="@+id/img"
+                android:layout_centerInParent="true" />
+
+            <ImageView
+                android:id="@+id/img"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/water_purifier" />
+        </RelativeLayout>
+
+        <com.xr.happyFamily.jia.view_custom.Themometer
+            android:id="@+id/themometer"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_60"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@id/view1"
+            android:layout_marginRight="@dimen/dp_jy_30" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_bottom"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
+        <RelativeLayout
+            android:id="@+id/layout_wt_record"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerVertical="true">
+
+            <ImageView
+                android:id="@+id/image_wt_record"
+                android:layout_width="@dimen/dp_jy_45"
+                android:layout_height="@dimen/dp_jy_45"
+                android:layout_marginLeft="@dimen/dp_jy_33"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/water_recode" />
+
+            <TextView
+                android:id="@+id/tv_wt_record"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/image_wt_record"
+                android:layout_alignRight="@+id/image_wt_record"
+                android:layout_below="@+id/image_wt_record"
+                android:gravity="center"
+                android:text="制热"
+                android:textSize="@dimen/sp_15" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_switch"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/layout_wt_record"
+            android:layout_alignTop="@+id/layout_wt_record"
+            android:layout_centerHorizontal="true">
+
+            <ImageView
+                android:id="@+id/image_switch"
+                android:layout_width="@dimen/dp_jy_45"
+                android:layout_height="@dimen/dp_jy_45"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/switching" />
+
+            <TextView
+                android:id="@+id/tv_switch"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignLeft="@+id/image_switch"
+                android:layout_alignRight="@+id/image_switch"
+                android:layout_below="@+id/image_switch"
+                android:gravity="center"
+                android:text="开关"
+                android:textSize="@dimen/sp_15" />
+        </RelativeLayout>
+
+        <RelativeLayout
+            android:id="@+id/layout_living"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/layout_wt_record"
+            android:layout_alignParentRight="true"
+            android:layout_alignTop="@+id/layout_wt_record"
+            android:layout_marginRight="@dimen/dp_jy_33">
+
+            <ImageView
+                android:id="@+id/image_living"
+                android:layout_width="@dimen/dp_jy_45"
+                android:layout_height="@dimen/dp_jy_45"
+                android:layout_marginLeft="@dimen/dp_jy_5"
+                android:scaleType="centerCrop"
+                android:src="@mipmap/living" />
+
+            <TextView
+                android:id="@+id/tv_living"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/image_living"
+                android:gravity="center"
+                android:text="滤芯寿命"
+                android:textSize="@dimen/sp_15"
+
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+</LinearLayout>

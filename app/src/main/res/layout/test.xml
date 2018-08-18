@@ -4,21 +4,34 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
- <FrameLayout
-     android:layout_width="match_parent"
-     android:layout_height="match_parent">
+  <com.xr.happyFamily.jia.view_custom.Themometer
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/them"
+      />
 
+
+
+
+  <com.xr.happyFamily.jia.view_custom.DoubleWaveView
+      android:id="@+id/doubleW"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_centerInParent="true"
+      android:layout_alignTop="@+id/img"
+      android:layout_alignBottom="@+id/img"
+      android:layout_alignLeft="@+id/img"
+      android:layout_alignRight="@+id/img"
+      />
   <ImageView
-      android:layout_width="match_parent"
-      android:layout_height="match_parent"
-      android:contentDescription="@null"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:id="@+id/img"
+      android:src="@mipmap/water_purifier"
       android:scaleType="centerCrop"
-      android:src="@mipmap/mypage"/>
+      android:layout_centerInParent="true"
+      />
 
-  <com.xr.happyFamily.jia.view_custom.SnowView
-      android:layout_width="match_parent"
-      android:layout_height="@dimen/dp_jy_160"/>
 
- </FrameLayout>
 
 </RelativeLayout>

@@ -1,17 +1,14 @@
 package com.xr.happyFamily.jia.view_custom;
 
-import android.animation.ValueAnimator;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.DrawFilter;
 import android.graphics.Paint;
 import android.graphics.PaintFlagsDrawFilter;
-import android.graphics.Path;
 import android.util.AttributeSet;
-import android.util.Log;
 import android.view.View;
-import android.view.animation.LinearInterpolator;
+
 public class DoubleWaveView extends View {
 
     // 波纹颜色
@@ -37,6 +34,8 @@ public class DoubleWaveView extends View {
     private Paint mWavePaint;
     private Paint mWavePaint2;
     private DrawFilter mDrawFilter;
+    private Paint circlePaint;/**圆画笔*/
+    private int radius;
 
     public DoubleWaveView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -62,19 +61,25 @@ public class DoubleWaveView extends View {
         // 设置画笔颜色
         mWavePaint2.setColor(Color.parseColor("#6DF0FF"));
         mDrawFilter = new PaintFlagsDrawFilter(0, Paint.ANTI_ALIAS_FLAG | Paint.FILTER_BITMAP_FLAG);
+
+
+        circlePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+        circlePaint.setColor(Color.WHITE);
+        circlePaint.setDither(true);
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         // 从canvas层面去除绘制时锯齿
-        canvas.setDrawFilter(mDrawFilter);
+
+
         resetPositonY();
 
         for (int i = 0; i < mTotalWidth; i++) {
             // 减400只是为了控制波纹绘制的y的在屏幕的位置，大家可以改成一个变量，然后动态改变这个变量，从而形成波纹上升下降效果
             // 绘制第一条水波纹
-            Log.e("qqqqqMMMMM",mTotalHeight+","+mResetOneYPositions[i]);
+
             canvas.drawLine(i, (float)( (mTotalHeight - mResetOneYPositions[i])*proHeight), i,
                     mTotalHeight,
                     mWavePaint);
@@ -83,6 +88,7 @@ public class DoubleWaveView extends View {
                     mTotalHeight,
                     mWavePaint2);
         }
+
         // 改变两条波纹的移动点
         mXOneOffset += mXOffsetSpeedOne;
         mXTwoOffset += mXOffsetSpeedTwo;

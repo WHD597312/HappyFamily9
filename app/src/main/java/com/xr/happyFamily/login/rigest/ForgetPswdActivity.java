@@ -17,6 +17,7 @@ import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
@@ -43,6 +44,7 @@ public class ForgetPswdActivity extends AppCompatActivity
     Unbinder unbinder;
     SharedPreferences preferences;
     private String url="http://47.98.131.11:8084/user/forgetPassword";
+    private String ip="http://47.98.131.11:8084";
     GifDrawable gifDrawable;
     @BindView(R.id.iv_fg_tb)
     ImageView imageView6;
@@ -138,9 +140,9 @@ public class ForgetPswdActivity extends AppCompatActivity
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this,"手机号码不能为空");
                 } else {
-                    SMSSDK.getVerificationCode("86", phone);
-                    CountTimer countTimer=new CountTimer(60000,1000);
-                    countTimer.start();
+                    Map<String,Object> params1=new HashMap<>();
+                    params1.put("phone",phone);
+                    new PhoneExiseAsyncTask().execute(params1);
                 }
                 break;
             case R.id.iv_for_fh:
@@ -148,6 +150,49 @@ public class ForgetPswdActivity extends AppCompatActivity
                 break;
         }
     }
+    CountTimer countTimer;
+    class  PhoneExiseAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+        String phone;
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code="";
+            Map<String,Object> params = maps[0];
+            phone = params.get("phone").toString();
+            String result = HttpUtils.postOkHpptRequest(ip+"/user/isPhoneHasExist",params);
+            if (!Utils.isEmpty(result)){
+
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    code= jsonObject.getString("returnCode");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            switch (s){
+                case "100":
+                    Toast.makeText(ForgetPswdActivity.this,"手机号未注册",Toast.LENGTH_SHORT).show();
+                    break;
+                case "10001":
+                    SMSSDK.getVerificationCode("86",phone);
+                    countTimer=new CountTimer(60000,1000);
+                    countTimer.start();
+
+                    break;
+            }
+        }
+    }
+
 
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
@@ -240,6 +285,9 @@ public class ForgetPswdActivity extends AppCompatActivity
         super.onDestroy();
         if (unbinder!=null){
             unbinder.unbind();
+        }
+        if (countTimer!=null){
+            countTimer.cancel();
         }
         SMSSDK.unregisterEventHandler(eventHandler);
     }

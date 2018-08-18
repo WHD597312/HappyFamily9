@@ -14,6 +14,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.Toast;
+
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
@@ -22,6 +24,7 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
+import com.xr.happyFamily.login.rigest.RegistActivity;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -163,14 +166,54 @@ public class ThirdLoginActivity extends AppCompatActivity {
                 if (TextUtils.isEmpty(phone)) {
                     Utils.showToast(this,"手机号码不能为空");
                 } else {
-                    SMSSDK.getVerificationCode("86", phone);
-                    CountTimer countTimer=new CountTimer(60000,1000);
-                    countTimer.start();
+                    Map<String,Object> params1=new HashMap<>();
+                    params1.put("phone",phone);
+                    new PhoneExiseAsyncTask().execute(params1);
                 }
                 break;
         }
     }
+   CountTimer countTimer;
+    class  PhoneExiseAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
+        String phone;
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String code="";
+            Map<String,Object> params = maps[0];
+            phone = params.get("phone").toString();
+            String result = HttpUtils.postOkHpptRequest(ip+"/user/isPhoneHasExist",params);
+            if (!Utils.isEmpty(result)){
 
+                JSONObject jsonObject = null;
+                try {
+                    jsonObject = new JSONObject(result);
+                    code= jsonObject.getString("returnCode");
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+
+            }
+
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            switch (s){
+                case "100":
+                    SMSSDK.getVerificationCode("86",phone);
+                    countTimer=new CountTimer(60000,1000);
+                    countTimer.start();
+                    break;
+                case "10001":
+                    Toast.makeText(ThirdLoginActivity.this,"手机号已存在",Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override
@@ -521,6 +564,9 @@ public class ThirdLoginActivity extends AppCompatActivity {
         super.onDestroy();
         if (unbinder!=null){
             unbinder.unbind();
+        }
+        if (countTimer!=null){
+            countTimer.cancel();
         }
         SMSSDK.unregisterEventHandler(eventHandler);
     }

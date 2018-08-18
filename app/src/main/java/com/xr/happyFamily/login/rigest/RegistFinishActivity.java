@@ -190,6 +190,8 @@ public class RegistFinishActivity extends AppCompatActivity {
                 break;
         }
     }
+
+
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override

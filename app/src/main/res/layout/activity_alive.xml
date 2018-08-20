@@ -1,0 +1,276 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+      <RelativeLayout
+          android:id="@+id/rl_live_head"
+          android:layout_width="match_parent"
+          android:layout_height="@dimen/dp_jy_205"
+          android:background="@mipmap/live_bj"
+          >
+
+
+          <ImageView
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:src="@mipmap/nav_back"
+              />
+          <TextView
+              android:layout_width="match_parent"
+              android:layout_height="@dimen/dp_jy_50"
+              android:textColor="@color/white"
+              android:text="滤芯寿命"
+              android:gravity="center"
+              android:textSize="@dimen/sp_18"
+              />
+      </RelativeLayout>
+      <TextView
+          android:id="@+id/tv_ts"
+          android:layout_width="wrap_content"
+          android:layout_height="wrap_content"
+          android:layout_marginTop="@dimen/dp_jy_10"
+          android:text="提示：当滤芯少于10%时，请尽快更换滤芯"
+          android:textSize="@dimen/sp_12"
+          android:textColor="#ff6528"
+          android:layout_below="@id/rl_live_head"
+          android:layout_centerHorizontal="true"
+          />
+    <RelativeLayout
+        android:id="@+id/rl_alive1"
+        android:layout_below="@+id/tv_ts"
+        android:layout_marginTop="@dimen/dp_jy_18"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="@dimen/dp_jy_108"
+         android:layout_marginLeft="@dimen/dp_jy_45"
+        >
+
+        <com.xr.happyFamily.jia.CircleProgressView
+            android:id="@+id/cp_alive1"
+            android:layout_width="@dimen/dp_jy_108"
+            android:layout_height="@dimen/dp_jy_150"
+            android:layout_centerInParent="true"
+            app:location_start="bottom"
+            app:progress_color1="#65bdfd" />
+
+        <TextView
+            android:id="@+id/tv_live_num1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:text="95"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_30" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@id/tv_live_num1"
+            android:layout_toRightOf="@+id/tv_live_num1"
+            android:text="%"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_live_num1"
+            android:layout_centerHorizontal="true"
+            android:text="PPF"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_12" />
+
+    </RelativeLayout>
+        <TextView
+            android:id="@+id/tv_testbz1"
+            android:layout_width="@dimen/dp_jy_108"
+            android:layout_height="wrap_content"
+            android:text="聚丙烯熔喷滤芯"
+            android:layout_below="@+id/rl_alive1"
+            android:textColor="#4a4a4a"
+            android:gravity="center"
+            android:layout_marginLeft="@dimen/dp_jy_45"
+            android:textSize="@dimen/sp_12"
+            android:layout_marginTop="@dimen/dp_jy_19"
+            />
+
+    <RelativeLayout
+        android:id="@+id/rl_alive2"
+        android:layout_alignTop="@+id/rl_alive1"
+        android:layout_marginRight="@dimen/dp_jy_45"
+        android:layout_alignParentRight="true"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="@dimen/dp_jy_108"
+        >
+
+        <com.xr.happyFamily.jia.CircleProgressView
+            android:id="@+id/cp_alive2"
+            android:layout_width="@dimen/dp_jy_108"
+            android:layout_height="@dimen/dp_jy_108"
+           android:layout_centerInParent="true"
+            app:location_start="bottom"
+            app:progress_color1="#4fff32" />
+        <TextView
+            android:id="@+id/tv_live_num2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="70"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_30"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4a4a4a"
+            android:layout_toRightOf="@+id/tv_live_num2"
+            android:text="%"
+            android:layout_alignBottom="@id/tv_live_num2"
+            android:textSize="@dimen/sp_12"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="CTO"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_12"
+            android:layout_below="@+id/tv_live_num2"
+            />
+
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/tv_testbz2"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="wrap_content"
+        android:text="前置综合性碳滤芯"
+        android:layout_below="@+id/rl_alive2"
+        android:textColor="#4a4a4a"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/dp_jy_45"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/sp_12"
+        android:layout_marginTop="@dimen/dp_jy_19"
+        />
+    <RelativeLayout
+        android:id="@+id/rl_alive3"
+        android:layout_below="@+id/tv_testbz1"
+        android:layout_marginTop="@dimen/dp_jy_28"
+        android:layout_marginLeft="@dimen/dp_jy_45"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="@dimen/dp_jy_108"
+        >
+
+        <com.xr.happyFamily.jia.CircleProgressView
+            android:id="@+id/cp_alive3"
+            android:layout_width="@dimen/dp_jy_108"
+            android:layout_height="@dimen/dp_jy_150"
+            android:layout_centerInParent="true"
+            app:location_start="bottom"
+            app:progress_color1="#ffce23" />
+        <TextView
+            android:id="@+id/tv_live_num3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="40"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_30"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4a4a4a"
+            android:layout_toRightOf="@+id/tv_live_num3"
+            android:text="%"
+            android:layout_alignBottom="@id/tv_live_num3"
+            android:textSize="@dimen/sp_12"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="PPF"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_12"
+            android:layout_below="@+id/tv_live_num3"
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_testbz3"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="wrap_content"
+        android:text="前置综合性碳滤芯"
+        android:layout_below="@+id/rl_alive4"
+        android:textColor="#4a4a4a"
+        android:gravity="center"
+        android:layout_marginLeft="@dimen/dp_jy_45"
+        android:textSize="@dimen/sp_12"
+        android:layout_marginTop="@dimen/dp_jy_19"
+        />
+
+    <RelativeLayout
+        android:id="@+id/rl_alive4"
+        android:layout_below="@+id/tv_testbz2"
+        android:layout_alignParentRight="true"
+        android:layout_marginTop="@dimen/dp_jy_28"
+        android:layout_marginRight="@dimen/dp_jy_45"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="@dimen/dp_jy_108"
+        >
+
+        <com.xr.happyFamily.jia.CircleProgressView
+            android:id="@+id/cp_alive4"
+            android:layout_width="119dp"
+            android:layout_height="115dp"
+            android:layout_centerInParent="true"
+            app:location_start="bottom"
+            app:progress_color1="#ff2b2b" />
+        <TextView
+            android:id="@+id/tv_live_num4"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="15"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_28"
+            android:layout_centerInParent="true"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="#4a4a4a"
+            android:layout_toRightOf="@+id/tv_live_num4"
+            android:text="%"
+            android:layout_alignBottom="@id/tv_live_num4"
+            android:textSize="@dimen/sp_12"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:text="PPF"
+            android:textColor="#4a4a4a"
+            android:textSize="@dimen/sp_12"
+            android:layout_below="@+id/tv_live_num4"
+            />
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_testbz4"
+        android:layout_width="@dimen/dp_jy_108"
+        android:layout_height="wrap_content"
+        android:text="前置综合性碳滤芯"
+        android:layout_below="@+id/rl_alive4"
+        android:textColor="#4a4a4a"
+        android:gravity="center"
+        android:layout_marginRight="@dimen/dp_jy_45"
+        android:layout_alignParentRight="true"
+        android:textSize="@dimen/sp_12"
+        android:layout_marginTop="@dimen/dp_jy_19"
+        />
+
+
+
+</RelativeLayout>

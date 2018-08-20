@@ -178,164 +178,163 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
         }
 
 
-        holder.img2.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (Integer.parseInt(list.get(position).getState() + "")) {
-                    case 1:
-                        //待支付 取消支付
-                        showPopup(position);
-                        break;
+            holder.img2.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(list.size()>0) {
+                        switch (Integer.parseInt(list.get(position).getState() + "")) {
+                            case 1:
+                                //待支付 取消支付
+                                showPopup(position);
+                                break;
 
-                }
-            }
-        });
-        holder.img3.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                switch (Integer.parseInt(list.get(position).getState() + "")) {
-                    case 1:
-                        Intent intent=new Intent(context, PayFailActivity.class);
-                        intent.putExtra("type", "DingDan");
-                        intent.putExtra("orderNumber", list.get(position).getOrderNumber());
-//                        intent.putExtra("orderDetailsLists", (Serializable) orderDetailsLists);
-                        intent.putExtra("money", list.get(position).getDetailsAmount());
-                        context.startActivity(intent);
-                        break;
-                    case 2:
-                        ToastUtil.showShortToast("该商品暂未发货");
-                        break;
-                    case 3:
-                        //待收货  查看物流
-                        Intent intent3 = new Intent(context, WuLiuActivity.class);
-                        intent3.putExtra("logisticCode", list.get(position).getLogisticCode());
-                        intent3.putExtra("shipperCode", list.get(position).getShipperCode());
-                        intent3.putExtra("orderNumber",list.get(position).getOrderNumber());
-                        context.startActivity(intent3);
-                        break;
-                    case 4:
-                        //已收货  评论
-                        ArrayList<String> img = new ArrayList<>();
-                        ArrayList<Integer> orderId = new ArrayList<>();
-                        ArrayList<Integer> priceId = new ArrayList<>();
-                        ArrayList<Integer> goodsId = new ArrayList<>();
-                        Map<String, String> map = new HashMap<>();
-
-
-                        for (int i = 0; i < position + 1; i++) {
-                            if (list.get(i).getOrderId() == list.get(position).getOrderId()) {
-                                img.add(list.get(i).getImage());
-                                orderId.add(list.get(i).getOrderId());
-                                priceId.add(list.get(i).getPriceId());
-                                goodsId.add(Integer.parseInt(list.get(i).getGoodsId()));
-
-                            }
                         }
+                    }
+                }
+            });
+            holder.img3.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if(list.size()>0) {
+                    switch (Integer.parseInt(list.get(position).getState() + "")) {
+                        case 1:
+                            Intent intent = new Intent(context, PayFailActivity.class);
+                            intent.putExtra("type", "DingDan");
+                            intent.putExtra("orderNumber", list.get(position).getOrderNumber());
+//                        intent.putExtra("orderDetailsLists", (Serializable) orderDetailsLists);
+                            intent.putExtra("money", list.get(position).getDetailsAmount());
+                            context.startActivity(intent);
+                            break;
+                        case 2:
+                            ToastUtil.showShortToast("该商品暂未发货");
+                            break;
+                        case 3:
+                            //待收货  查看物流
+                            Intent intent3 = new Intent(context, WuLiuActivity.class);
+                            intent3.putExtra("logisticCode", list.get(position).getLogisticCode());
+                            intent3.putExtra("shipperCode", list.get(position).getShipperCode());
+                            intent3.putExtra("orderNumber", list.get(position).getOrderNumber());
+                            context.startActivity(intent3);
+                            break;
+                        case 4:
+                            //已收货  评论
+                            ArrayList<String> img = new ArrayList<>();
+                            ArrayList<Integer> orderId = new ArrayList<>();
+                            ArrayList<Integer> priceId = new ArrayList<>();
+                            ArrayList<Integer> goodsId = new ArrayList<>();
+                            Map<String, String> map = new HashMap<>();
+
+
+                            for (int i = 0; i < position + 1; i++) {
+                                if (list.get(i).getOrderId() == list.get(position).getOrderId()) {
+                                    img.add(list.get(i).getImage());
+                                    orderId.add(list.get(i).getOrderId());
+                                    priceId.add(list.get(i).getPriceId());
+                                    goodsId.add(Integer.parseInt(list.get(i).getGoodsId()));
+
+                                }
+                            }
 //                        for(int i=0;i<list.size();i++) {
 //                            img.add(list.get(position).getImage());
 //                        }
-                        Intent intent1 = new Intent(context, PingLunActivity.class);
-                        intent1.putStringArrayListExtra("img", img);
-                        intent1.putIntegerArrayListExtra("orderId", orderId);
-                        intent1.putIntegerArrayListExtra("priceId", priceId);
-                        intent1.putIntegerArrayListExtra("goodsId", goodsId);
-                        context.startActivity(intent1);
-                        break;
-                    case 5:
-                        //退款  退款详情
-                        if (refundState == 0)
-                        {
-                            Intent intent2 = new Intent(v.getContext(), TuiKuanXQActivity.class);
-                            intent2.putExtra("orderId", list.get(position).getOrderNumber() + "");
-                            v.getContext().startActivity(intent2);
-                        }
-                        else if (refundState == 1) {
-                            Intent intent5=new Intent(context, TuiKuanSuccessActivity.class);
-                            intent5.putExtra("sign",refundState);
-                            intent5.putExtra("money",list.get(position).getDetailsAmount());
-                            intent5.putExtra("time",TimeUtils.getTime(list.get(position).getRefundTime()));
-                            context.startActivity(intent5);
-                        }
-                        else if (refundState == 2)
-                        {
-                            Intent intent4=new Intent(context, TuiKuanSuccessActivity.class);
-                            intent4.putExtra("sign",refundState);
-                            intent4.putExtra("money",list.get(position).getDetailsAmount());
-                            intent4.putExtra("time",TimeUtils.getTime(list.get(position).getRefundTime()));
+                            Intent intent1 = new Intent(context, PingLunActivity.class);
+                            intent1.putStringArrayListExtra("img", img);
+                            intent1.putIntegerArrayListExtra("orderId", orderId);
+                            intent1.putIntegerArrayListExtra("priceId", priceId);
+                            intent1.putIntegerArrayListExtra("goodsId", goodsId);
+                            context.startActivity(intent1);
+                            break;
+                        case 5:
+                            //退款  退款详情
+                            if (refundState == 0) {
+                                Intent intent2 = new Intent(v.getContext(), TuiKuanXQActivity.class);
+                                intent2.putExtra("orderId", list.get(position).getOrderNumber() + "");
+                                v.getContext().startActivity(intent2);
+                            } else if (refundState == 1) {
+                                Intent intent5 = new Intent(context, TuiKuanSuccessActivity.class);
+                                intent5.putExtra("sign", refundState);
+                                intent5.putExtra("money", list.get(position).getDetailsAmount());
+                                intent5.putExtra("time", TimeUtils.getTime(list.get(position).getRefundTime()));
+                                context.startActivity(intent5);
+                            } else if (refundState == 2) {
+                                Intent intent4 = new Intent(context, TuiKuanSuccessActivity.class);
+                                intent4.putExtra("sign", refundState);
+                                intent4.putExtra("money", list.get(position).getDetailsAmount());
+                                intent4.putExtra("time", TimeUtils.getTime(list.get(position).getRefundTime()));
 //                            intent4.putExtra("time",list.get(position).)
-                            context.startActivity(intent4);
-                        }
-                        break;
+                                context.startActivity(intent4);
+                            }
+                            break;
+                    }
+                    }
                 }
-            }
-        });
-        holder.rl_dd.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                String state = list.get(position).getState();
-                switch (state) {
-                    case "1":
-                    case "2":
-                    case "3":
-                    case "4":
-                        Intent intent = new Intent(v.getContext(), ShopDingdanXQActivity.class);
-                        intent.putExtra("orderId", list.get(position).getOrderNumber() + "");
-                        v.getContext().startActivity(intent);
-                        break;
-                    case "5":
-                        if (refundState == 0)
-                        {
-                            Intent intent2 = new Intent(v.getContext(), TuiKuanXQActivity.class);
-                            intent2.putExtra("orderId", list.get(position).getOrderNumber() + "");
-                            v.getContext().startActivity(intent2);
-                        }
-                        else if (refundState == 1) {
-                            Intent intent3=new Intent(context, TuiKuanSuccessActivity.class);
-                            intent3.putExtra("sign",refundState);
-                            intent3.putExtra("money",list.get(position).getDetailsAmount());
-                            intent3.putExtra("time",TimeUtils.getTime(list.get(position).getRefundTime()));
-                            context.startActivity(intent3);
-                        }
-                        else if (refundState == 2)
-                        {
-                            Intent intent4=new Intent(context, TuiKuanSuccessActivity.class);
-                            intent4.putExtra("sign",refundState);
-                            intent4.putExtra("money",list.get(position).getDetailsAmount());
-                            intent4.putExtra("time",TimeUtils.getTime(list.get(position).getRefundTime()));
+            });
+            holder.rl_dd.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    if (list.size() > 0) {
+                        String state = list.get(position).getState();
+                        switch (state) {
+                            case "1":
+                            case "2":
+                            case "3":
+                            case "4":
+                                Intent intent = new Intent(v.getContext(), ShopDingdanXQActivity.class);
+                                intent.putExtra("orderId", list.get(position).getOrderNumber() + "");
+                                v.getContext().startActivity(intent);
+                                break;
+                            case "5":
+                                if (refundState == 0) {
+                                    Intent intent2 = new Intent(v.getContext(), TuiKuanXQActivity.class);
+                                    intent2.putExtra("orderId", list.get(position).getOrderNumber() + "");
+                                    v.getContext().startActivity(intent2);
+                                } else if (refundState == 1) {
+                                    Intent intent3 = new Intent(context, TuiKuanSuccessActivity.class);
+                                    intent3.putExtra("sign", refundState);
+                                    intent3.putExtra("money", list.get(position).getDetailsAmount());
+                                    intent3.putExtra("time", TimeUtils.getTime(list.get(position).getRefundTime()));
+                                    context.startActivity(intent3);
+                                } else if (refundState == 2) {
+                                    Intent intent4 = new Intent(context, TuiKuanSuccessActivity.class);
+                                    intent4.putExtra("sign", refundState);
+                                    intent4.putExtra("money", list.get(position).getDetailsAmount());
+                                    intent4.putExtra("time", TimeUtils.getTime(list.get(position).getRefundTime()));
 //                            intent4.putExtra("time",list.get(position).)
-                            context.startActivity(intent4);
+                                    context.startActivity(intent4);
+                                }
+                                break;
                         }
-                        break;
+                    }
+
                 }
-
+            });      if(list.size()>0) {
+            if (!list.get(position).getFirst()) {
+                holder.view_sign.setVisibility(View.GONE);
+                holder.tv_state.setVisibility(View.GONE);
+                holder.tv_time.setVisibility(View.GONE);
+            } else {
+                holder.view_sign.setVisibility(View.VISIBLE);
+                holder.tv_state.setVisibility(View.VISIBLE);
+                holder.tv_time.setVisibility(View.VISIBLE);
             }
-        });
-        if (!list.get(position).getFirst()) {
-            holder.view_sign.setVisibility(View.GONE);
-            holder.tv_state.setVisibility(View.GONE);
-            holder.tv_time.setVisibility(View.GONE);
-        } else {
-            holder.view_sign.setVisibility(View.VISIBLE);
-            holder.tv_state.setVisibility(View.VISIBLE);
-            holder.tv_time.setVisibility(View.VISIBLE);
-        }
 
-        if (!list.get(position).getFinish()) {
-            holder.rl_sign.setVisibility(View.GONE);
-            holder.ll2.setVisibility(View.GONE);
-            holder.view2.setVisibility(View.GONE);
-            holder.ll3.setVisibility(View.GONE);
-        } else {
-            holder.rl_sign.setVisibility(View.VISIBLE);
-            holder.ll2.setVisibility(View.VISIBLE);
-            holder.view2.setVisibility(View.VISIBLE);
-            holder.ll3.setVisibility(View.VISIBLE);
-        }
+            if (!list.get(position).getFinish()) {
+                holder.rl_sign.setVisibility(View.GONE);
+                holder.ll2.setVisibility(View.GONE);
+                holder.view2.setVisibility(View.GONE);
+                holder.ll3.setVisibility(View.GONE);
+            } else {
+                holder.rl_sign.setVisibility(View.VISIBLE);
+                holder.ll2.setVisibility(View.VISIBLE);
+                holder.view2.setVisibility(View.VISIBLE);
+                holder.ll3.setVisibility(View.VISIBLE);
+            }
 
-        if (list.get(position).getIsRate() == 1) {
-            holder.rl_sign.setVisibility(View.GONE);
-        } else {
-            holder.rl_sign.setVisibility(View.VISIBLE);
+            if (list.get(position).getIsRate() == 1) {
+                holder.rl_sign.setVisibility(View.GONE);
+            } else {
+                holder.rl_sign.setVisibility(View.VISIBLE);
+            }
         }
     }
 

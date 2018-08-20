@@ -74,7 +74,7 @@ public class DoubleWaveView extends View {
         for (int i = 0; i < mTotalWidth; i++) {
             // 减400只是为了控制波纹绘制的y的在屏幕的位置，大家可以改成一个变量，然后动态改变这个变量，从而形成波纹上升下降效果
             // 绘制第一条水波纹
-
+            Log.e("qqqqqMMMMM",mTotalHeight+","+mResetOneYPositions[i]);
             canvas.drawLine(i, (float)( (mTotalHeight - mResetOneYPositions[i])*proHeight), i,
                     mTotalHeight,
                     mWavePaint);
@@ -83,7 +83,6 @@ public class DoubleWaveView extends View {
                     mTotalHeight,
                     mWavePaint2);
         }
-
         // 改变两条波纹的移动点
         mXOneOffset += mXOffsetSpeedOne;
         mXTwoOffset += mXOffsetSpeedTwo;

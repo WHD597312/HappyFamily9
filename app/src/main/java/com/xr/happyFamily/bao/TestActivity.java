@@ -30,9 +30,6 @@ import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
 import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.xr.happyFamily.R;
-
-import com.xr.happyFamily.jia.view_custom.DoubleWaveView;
-import com.xr.happyFamily.jia.view_custom.Themometer;
 import com.xr.happyFamily.jia.xnty.ArcProgressBar;
 
 
@@ -50,10 +47,9 @@ import butterknife.Unbinder;
 
 public class TestActivity extends AppCompatActivity {
 
+
+
     Unbinder unbinder;
-    Themometer themometer;
-    Button btn_set;
-    EditText et_num;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -64,17 +60,6 @@ public class TestActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
 
 
-        themometer= (Themometer) findViewById(R.id.themometer);
-//        btn_set=(Button) findViewById(R.id.btn_set);
-//        et_num = (EditText) findViewById(R.id.et_num);
-//        btn_set.setOnClickListener(new View.OnClickListener() {
-//
-//            @Override
-//            public void onClick(View v) {
-//                double value = Double.parseDouble(et_num.getText().toString());
-//                themometer.setTemperature((float)value);
-//            }
-//        });
     }
 
 }

@@ -14,9 +14,11 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.alipay.PayActivity;
 import com.xr.happyFamily.bao.base.ToastUtil;
+import com.xr.happyFamily.bao.util.WXUtil;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
@@ -140,9 +142,13 @@ public class PayFailActivity extends AppCompatActivity {
                         intent.putExtra("orderNumber", orderNumber);
                         startActivity(intent);
                     } else if (sign_pay == 1) {
-                        Intent intent = new Intent(PayFailActivity.this, WXPayActiviy.class);
-                        intent.putExtra("orderNumber", orderNumber);
-                        startActivity(intent);
+                        if(WXUtil.isWeChatAppInstalled(mContext)) {
+                            Intent intent = new Intent(mContext, WXPayActiviy.class);
+                            intent.putExtra("orderNumber", orderNumber);
+                            startActivity(intent);
+                        }
+                        else
+                            ToastUtil.showShortToast("请先安装微信");
                     }
 
                     finish();
@@ -230,6 +236,7 @@ public class PayFailActivity extends AppCompatActivity {
             }
         }
     }
+
 
 
 

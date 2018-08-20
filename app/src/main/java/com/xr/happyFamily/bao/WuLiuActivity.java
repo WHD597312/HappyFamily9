@@ -122,10 +122,11 @@ public class WuLiuActivity extends AppCompatActivity {
         wuLiuListAdapter = new WuLiuXQAdapter(mContext, orderDetailsLists);
         recyclerView.setAdapter(wuLiuListAdapter);
         Bundle bundle = getIntent().getExtras();
-        logisticCode = bundle.get("logisticCode").toString();
-        shipperCode = bundle.get("shipperCode").toString();
-        orderNumber = bundle.get("orderNumber").toString();
-
+        if (bundle!=null) {
+            logisticCode = bundle.get("logisticCode").toString();
+            shipperCode = bundle.get("shipperCode").toString();
+            orderNumber = bundle.get("orderNumber").toString();
+        }
         Log.e("qqqqqqqqqNNNN", orderNumber);
         for (int i = 0; i < wuLiuListBeanList.size(); i++) {
             if (shipperCode.equals(wuLiuListBeanList.get(i).getCode()))

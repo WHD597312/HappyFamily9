@@ -13,6 +13,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.PersonCard;
@@ -54,7 +55,7 @@ public class WaterFallAdapter extends RecyclerView.Adapter {
         Log.e("qqqqqqqqqqq333",myList.getImage());
         String url = myList.getImage();
         //得到可用的图片
-        Picasso.with(mContext)
+        Glide.with(mContext)
                 .load(url)
                 .into(holder2.userAvatar);//此种策略并不会压缩图片
 //        Picasso.with(mContext).load(myList.getImage()).into(holder2.userAvatar);

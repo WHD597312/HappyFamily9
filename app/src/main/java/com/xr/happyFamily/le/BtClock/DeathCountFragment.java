@@ -46,7 +46,7 @@ public class DeathCountFragment extends Fragment {
             long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
             long days = diff / (1000 * 60 * 60 * 24);
             int year = (int)(days/365);
-            tv_sw_sm.setText("你还有"+(100-year)+"余年的寿命");
+            tv_sw_sm.setText("你还有"+(89-year)+"余年的寿命");
             tv_sw_sjj.setText(("睡"+(100-year)*365)+"次觉");
             tv_sw_week.setText(("有"+(100-year)*365/7)+"个周末");
             tv_sw_eat.setText("吃"+(int)((100-year)*12*0.132)+"吨粮食");

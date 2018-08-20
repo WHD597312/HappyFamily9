@@ -44,7 +44,7 @@
 
     <com.xr.happyFamily.bao.view.LinearGradientView
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/dp_jy_3" />
+        android:layout_height="@dimen/dp_jy_1" />
 
     <com.xr.happyFamily.bao.view.ViewPagerSlide
         android:id="@+id/vp_flower"

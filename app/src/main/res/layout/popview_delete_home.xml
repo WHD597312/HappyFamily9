@@ -19,8 +19,8 @@
     <LinearLayout
         android:layout_below="@+id/tv_homed_del"
         android:layout_marginTop="@dimen/dp_jy_45"
-        android:layout_marginLeft="@dimen/dp_jy_12"
-        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_20"
+        android:layout_marginRight="@dimen/dp_jy_20"
         android:layout_marginBottom="@dimen/dp_jy_25"
         android:orientation="horizontal"
         android:layout_width="match_parent"

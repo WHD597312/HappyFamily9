@@ -22,6 +22,7 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
@@ -128,6 +129,8 @@ public class PingLunActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.title_rightText:
+                boolean isConn= NetWorkUtil.isConn(this);
+                if (isConn){
                 Map<String, Object> map = new HashMap<>();
 
                 List<Object> rates=new ArrayList<>();
@@ -165,7 +168,9 @@ public class PingLunActivity extends AppCompatActivity {
 //                startActivity(new Intent(this, PingLunSuccessActivity.class));
                 break;
 
-
+                }else {
+                    Toast.makeText(this,"请检查网络",Toast.LENGTH_SHORT).show();
+                }
             case R.id.img_choose:
                 if (isChoose) {
                     imgChoose.setImageResource(R.mipmap.weixuanzhong3x);

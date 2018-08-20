@@ -18,6 +18,7 @@ import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -363,6 +364,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         try {
+            if (jsonObject!=null)
             tv_name.setText(jsonObject.getString("goodsName"));
         } catch (JSONException e) {
             e.printStackTrace();
@@ -493,7 +495,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     tvType.setText(type);
 
                 if (imgPic != null) {
-                    Picasso.with(mContext)
+                    Glide.with(mContext)
                             .load(img)
                             .into(imgPic);//此种策略并不会压缩图片
                 }

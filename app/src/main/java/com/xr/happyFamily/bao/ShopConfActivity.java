@@ -29,6 +29,7 @@ import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.bao.bean.Goods;
 import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.bean.Receive;
+import com.xr.happyFamily.bao.util.WXUtil;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.PostFreeBean;
 import com.xr.happyFamily.bean.ShopCartBean;
@@ -97,18 +98,18 @@ public class ShopConfActivity extends AppCompatActivity {
     TextView tvShopPrice;
     @BindView(R.id.tv_yunfei)
     TextView tvYunfei;
-    Boolean isAddress=true;
+    Boolean isAddress = true;
 
     private List<ShopCartBean> mGoPayList = new ArrayList<>();
     List<Map<String, Object>> mlist = new ArrayList<>();
     int money;
     Double weight;
-    String type ;
+    String type;
     ConfListAdapter confListAdapter;
     DingDanXQAdapter dingDanXQAdapter;
     private MyDialog dialog;
 
-    boolean isShopData=false,isPrice=false;
+    boolean isShopData = false, isPrice = false;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -146,21 +147,20 @@ public class ShopConfActivity extends AppCompatActivity {
         new getAddressAsync().execute(params);
         Bundle bundle = getIntent().getExtras();
         type = bundle.getString("type");
-        if("DingDan".equals(type)){
+        if ("DingDan".equals(type)) {
             recyclerView.setAdapter(dingDanXQAdapter);
-            orderNumber=bundle.get("orderNumber").toString();
-            tvMoney.setText("¥"+bundle.get("money").toString());
+            orderNumber = bundle.get("orderNumber").toString();
+            tvMoney.setText("¥" + bundle.get("money").toString());
             Map<String, Object> map = new HashMap<>();
             new getOrderAsync().execute(map);
-        }
-        else if ("Cart".equals(type)) {
-            isShopData=true;
-            money=bundle.getInt("money");
-            weight=bundle.getDouble("weight");
+        } else if ("Cart".equals(type)) {
+            isShopData = true;
+            money = bundle.getInt("money");
+            weight = bundle.getDouble("weight");
             mGoPayList = (ArrayList<ShopCartBean>) getIntent().getSerializableExtra("mGoPayList");
             confListAdapter = new ConfListAdapter(ShopConfActivity.this, mGoPayList);
             recyclerView.setAdapter(confListAdapter);
-            tvShopPrice.setText("¥"+bundle.get("money").toString());
+            tvShopPrice.setText("¥" + bundle.get("money").toString());
             for (int i = 0; i < mGoPayList.size(); i++) {
                 Map<String, Object> map = new HashMap<>();
                 map.put("goodsId", mGoPayList.get(i).getGoods().getGoodsId());
@@ -171,14 +171,14 @@ public class ShopConfActivity extends AppCompatActivity {
             }
 
         } else {
-            isShopData=true;
-            ShopCartBean shopCartBean=new ShopCartBean();
-            Goods goods=new Goods();
+            isShopData = true;
+            ShopCartBean shopCartBean = new ShopCartBean();
+            Goods goods = new Goods();
             goods.setGoodsName(bundle.getString("name"));
             goods.setSimpleDescribe(bundle.getString("context"));
             goods.setImage(bundle.getString("img"));
             ShopCartBean.GoodsPrice goodsPrice = new ShopCartBean.GoodsPrice();
-            Log.e("qqqqqqqqqPPP",bundle.getString("price")+"?");
+            Log.e("qqqqqqqqqPPP", bundle.getString("price") + "?");
             goodsPrice.setPrice(Integer.parseInt(bundle.getString("price")));
             shopCartBean.setGoods(goods);
             shopCartBean.setGoodsPrice(goodsPrice);
@@ -190,7 +190,7 @@ public class ShopConfActivity extends AppCompatActivity {
             map.put("goodsId", bundle.getString("goodsId"));
             map.put("num", bundle.getString("num"));
             map.put("priceId", bundle.getString("priceId"));
-            weight=Double.parseDouble(bundle.getString("weight"));
+            weight = Double.parseDouble(bundle.getString("weight"));
             mlist.add(map);
         }
         money = bundle.getInt("money");
@@ -222,8 +222,8 @@ public class ShopConfActivity extends AppCompatActivity {
                 sign_pay = 2;
                 break;
             case R.id.tv_shopcart_submit:
-                if(isAddress) {
-                    if(type.equals("DingDan")){
+                if (isAddress) {
+                    if (type.equals("DingDan")) {
 
                     }
                     Map<String, Object> params = new HashMap<>();
@@ -234,8 +234,7 @@ public class ShopConfActivity extends AppCompatActivity {
                     //邮费
                     params.put("postFee", 0);
                     new postOrderAsync().execute(params);
-                }
-                else {
+                } else {
                     ToastUtil.showShortToast("请先设置收货地址");
                 }
 //                startActivityForResult(new Intent(this, PaySuccessActivity.class), 101);
@@ -245,7 +244,7 @@ public class ShopConfActivity extends AppCompatActivity {
     }
 
 
-    String receiveId="-1";
+    String receiveId = "-1";
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
@@ -284,7 +283,7 @@ public class ShopConfActivity extends AppCompatActivity {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -307,7 +306,7 @@ public class ShopConfActivity extends AppCompatActivity {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 if (!"null".equals(returnData)) {
-                    isAddress=true;
+                    isAddress = true;
                     tvConfAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                     tvConfName.setText(receive.getContact());
                     tvConfTel.setText(receive.getTel());
@@ -319,22 +318,22 @@ public class ShopConfActivity extends AppCompatActivity {
                     new getPostFeeAsync().execute(params);
 
 
-                }
-                else {
-                        isAddress=false;
-                        Toast.makeText(mContext,"请先填写默认地址",Toast.LENGTH_SHORT).show();
-                        finish();
+                } else {
+                    isAddress = false;
+                    Toast.makeText(mContext, "请先填写默认地址", Toast.LENGTH_SHORT).show();
+                    finish();
                     tvConfAddress.setText("地址");
                     tvConfName.setText("姓名");
                     tvConfTel.setText("电话");
-                    }
+                }
             }
         }
     }
 
 
-    int post_fee ;
-    List<PostFreeBean> postFreeBeans=new ArrayList<>();
+    int post_fee;
+    List<PostFreeBean> postFreeBeans = new ArrayList<>();
+
     class getPostFeeAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
@@ -346,7 +345,7 @@ public class ShopConfActivity extends AppCompatActivity {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -356,7 +355,7 @@ public class ShopConfActivity extends AppCompatActivity {
                         JsonArray list = content.getAsJsonArray("RecommendDetail");
                         Gson gson = new Gson();
 
-                        for(int i=0;i<list.size();i++){
+                        for (int i = 0; i < list.size(); i++) {
                             JsonElement use = list.get(i);
                             PostFreeBean userList = gson.fromJson(use, PostFreeBean.class);
                             postFreeBeans.add(userList);
@@ -374,14 +373,12 @@ public class ShopConfActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-//
-                isPrice=true;
-                 post_fee=(int)((postFreeBeans.get(0).getExpressList().get(0).getFee()*10+5)/10);
+                isPrice = true;
+                post_fee = (int) ((postFreeBeans.get(0).getExpressList().get(0).getFee() * 10 + 5) / 10);
                 tvMoney.setText("¥" + money);
-//                tvMoney=
-                if(isPrice&&isShopData)
+                if (isPrice && isShopData)
                     MyDialog.closeDialog(dialog);
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -394,7 +391,7 @@ public class ShopConfActivity extends AppCompatActivity {
         }
     }
 
-    String orderId,orderNumber;
+    String orderId, orderNumber;
 
     class postOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -407,7 +404,7 @@ public class ShopConfActivity extends AppCompatActivity {
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code=result;
+                        code = result;
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
@@ -425,23 +422,26 @@ public class ShopConfActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                if(sign_pay==2){
+                if (sign_pay == 2) {
                     ToastUtil.showShortToast("暂不支持银联支付");
-                }else {
+                } else {
                     if (sign_pay == 0) {
                         Intent intent = new Intent(ShopConfActivity.this, PayActivity.class);
                         intent.putExtra("orderNumber", orderNumber);
                         startActivity(intent);
                     } else if (sign_pay == 1) {
-                        Intent intent = new Intent(ShopConfActivity.this, WXPayActiviy.class);
-                        intent.putExtra("orderNumber", orderNumber);
-                        startActivity(intent);
+                        if (WXUtil.isWeChatAppInstalled(mContext)) {
+                            Intent intent = new Intent(mContext, WXPayActiviy.class);
+                            intent.putExtra("orderNumber", orderNumber);
+                            startActivity(intent);
+                        } else
+                            ToastUtil.showShortToast("请先安装微信");
                     }
 
                     finish();
                 }
 
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -455,13 +455,14 @@ public class ShopConfActivity extends AppCompatActivity {
     }
 
     List<OrderBean.OrderDetailsList> orderDetailsLists = new ArrayList<>();
+
     class getOrderAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
 
             Map<String, Object> params = maps[0];
             String url = "/order/getOrderByOrderNumber";
-            url = url + "?orderNumber=" +orderNumber;
+            url = url + "?orderNumber=" + orderNumber;
             String result = HttpUtils.doGet(mContext, url);
             String code = "";
             try {
@@ -493,12 +494,12 @@ public class ShopConfActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                isShopData=true;
+                isShopData = true;
                 dingDanXQAdapter.notifyDataSetChanged();
 
-                if(isShopData&&isAddress)
-                MyDialog.closeDialog(dialog);
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                if (isShopData && isAddress)
+                    MyDialog.closeDialog(dialog);
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);

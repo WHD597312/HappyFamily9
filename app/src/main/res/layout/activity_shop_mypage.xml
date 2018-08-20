@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:background="@color/color_gray">
 
     <RelativeLayout
         android:layout_width="match_parent"
@@ -58,8 +59,8 @@
 
         <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
             android:id="@+id/swipe_content"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_below="@id/rv_title">
 
 
@@ -79,6 +80,21 @@
            >
 
 
+            <LinearLayout
+                android:id="@+id/ll_header"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:gravity="center_horizontal"
+                android:visibility="gone">
+                <ProgressBar
+                    android:layout_width="@dimen/dp_jy_40"
+                    android:layout_height="@dimen/dp_jy_40" />
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="222222222222"/>
+            </LinearLayout>
 
             <include layout="@layout/shop_banner" />
 
@@ -142,7 +158,6 @@
             android:layout_alignParentRight="true"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_jy_44"
-
             android:gravity="center"
 
             android:orientation="horizontal">

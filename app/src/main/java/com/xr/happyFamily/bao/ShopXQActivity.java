@@ -620,8 +620,10 @@ public class ShopXQActivity extends AppCompatActivity {
         });
 
         try {
-            if(!Utils.isEmpty(jsonObject.getString("goodsName")))
-            tv_name.setText(jsonObject.getString("goodsName"));
+            if (jsonObject!=null) {
+                if (!Utils.isEmpty(jsonObject.getString("goodsName")))
+                    tv_name.setText(jsonObject.getString("goodsName"));
+            }
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -793,28 +795,28 @@ public class ShopXQActivity extends AppCompatActivity {
 
     public void gotoShop(){
         vp_flower.setCurrentItem(0);
-        if(returnPrice.equals("0"))
-        shopFragment.setData(price, returnPrice + "", sign,1);
-
-        if (priceId == -1) {
-            shopFragment.sendMessage(new ShopFragment.ICallBack() {
-                @Override
-                public void get_message_from_Fragment(String string,int num) {
-
-                }
-                @Override
-                public void getPrice(String price, int priceId, int num, String goodId, int sign,String power) {
-                    if (sign != -1) {
-                        shopFragment.setData(price,  power, sign,0);
-                    }
-                }
-            });
-        } else {
-            Map<String, Object> params = new HashMap<>();
-            params.put("priceId", priceId);
-            params.put("quantity", num);
-            new addShopAsync().execute(params);
-        }
+//        if(returnPrice.equals("0"))
+//        shopFragment.setData(price, returnPrice + "", sign,1);
+//
+//        if (priceId == -1) {
+//            shopFragment.sendMessage(new ShopFragment.ICallBack() {
+//                @Override
+//                public void get_message_from_Fragment(String string,int num) {
+//
+//                }
+//                @Override
+//                public void getPrice(String price, int priceId, int num, String goodId, int sign,String power) {
+//                    if (sign != -1) {
+//                        shopFragment.setData(price,  power, sign,0);
+//                    }
+//                }
+//            });
+//        } else {
+//            Map<String, Object> params = new HashMap<>();
+//            params.put("priceId", priceId);
+//            params.put("quantity", num);
+//            new addShopAsync().execute(params);
+//        }
     }
     public void gotoXiangQing(){
         vp_flower.setCurrentItem(2);

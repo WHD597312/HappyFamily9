@@ -54,6 +54,7 @@
         android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginRight="@dimen/dp_jy_12"
         android:dividerHeight="@dimen/dp_jy_12"
+        android:divider="#00ffffff"
         android:background="@null"
         >
 

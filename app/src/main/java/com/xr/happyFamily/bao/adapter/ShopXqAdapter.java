@@ -77,12 +77,13 @@ public class ShopXqAdapter extends RecyclerView.Adapter<ShopXqAdapter.MyViewHold
     public void onBindViewHolder(MyViewHolder holder, final int position) {
         Log.e("qqqqqqqqIIII",data.get(position));
         String str=data.get(position);
-        String str1 = null;
+        String str1 = "";
         if (str != null) {
             Pattern pattern = Pattern.compile(" |\t|\r|\n|\\s*");
             Matcher matcher = pattern.matcher(str);
             str1 = matcher.replaceAll("");
         }
+        if (str1.length()>0)
         Picasso.with(context).load(str1)
                 .placeholder(R.mipmap.bg_loading)
                .into(holder.img_footBanner);

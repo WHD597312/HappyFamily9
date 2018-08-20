@@ -81,15 +81,19 @@ public class XiangQingFragment extends BaseFragment implements View.OnClickListe
         swipeContent.setRefreshListener(new BaseRefreshListener() {
             @Override
             public void refresh() {
-                swipeContent.finishRefresh();
-                final ShopXQActivity shopXQActivity = (ShopXQActivity) getActivity();
-                shopXQActivity.gotoShop();
+                if (swipeContent!=null) {
+                    swipeContent.finishRefresh();
+                    final ShopXQActivity shopXQActivity = (ShopXQActivity) getActivity();
+                    shopXQActivity.gotoShop();
+                }
             }
 
             @Override
             public void loadMore() {
-                swipeContent.finishLoadMore();
-                Toast.makeText(getActivity(), "已滑动到底部了", Toast.LENGTH_SHORT).show();
+                if (swipeContent!=null) {
+                    swipeContent.finishLoadMore();
+                    Toast.makeText(getActivity(), "已滑动到底部了", Toast.LENGTH_SHORT).show();
+                }
             }
         });
 
@@ -129,7 +133,7 @@ public class XiangQingFragment extends BaseFragment implements View.OnClickListe
     }
 
 
-    String imgData;
+    String imgData="";
 
     public void setData(String s) {
         imgData = s;

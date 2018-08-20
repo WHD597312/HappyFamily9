@@ -59,9 +59,7 @@
                     android:textColor="#ff0000"
                     android:textSize="@dimen/sp_12" />
 
-                <com.xr.happyFamily.bao.view.LinearGradientView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_jy_3" />
+
 
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -90,9 +88,7 @@
                         android:textSize="@dimen/dp_jy_12" />
                 </LinearLayout>
 
-                <com.xr.happyFamily.bao.view.LinearGradientView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_jy_3" />
+
 
 
                 <TextView
@@ -109,14 +105,12 @@
                     android:textSize="@dimen/sp_12" />
 
 
-                <com.xr.happyFamily.bao.view.LinearGradientView
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/dp_jy_3" />
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="@color/white"
+                    android:layout_marginTop="@dimen/dp_jy_12"
                     android:padding="@dimen/dp_jy_12">
 
                     <TextView

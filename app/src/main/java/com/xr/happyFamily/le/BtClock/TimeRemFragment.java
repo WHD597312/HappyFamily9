@@ -70,14 +70,14 @@ SharedPreferences preferences;
             long diff = d2.getTime() - d1.getTime();//这样得到的差值是微秒级别
             long days = diff / (1000 * 60 * 60 * 24);
             int years = (int)(days/365);
-            int months= (int)( days%365/12);
-            int day = (int) (days%365%12);
+            int months= (int)( days%365/30);
+            int day = (int) (days%365%30);
             SharedPreferences.Editor editor = preferences.edit();
             editor.putInt("years",years);
             editor.apply();
             tv_sgjs_year.setText(years+"");
             tv_sgjs_liveyear.setText("你已经活了"+years+"年了");
-            tv_sjjs_canlive.setText("如果你的生活规律，在健康的状态下，你还可以活"+(100-years)+"年");
+            tv_sjjs_canlive.setText("如果你的生活规律，在健康的状态下，你还可以活"+(89-years)+"年");
             tv_sgjs_month.setText(months+"");
             tv_sgjs_day.setText(day+"");
         } catch (Exception e) {

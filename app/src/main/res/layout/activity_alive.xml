@@ -42,7 +42,7 @@
         android:layout_marginTop="@dimen/dp_jy_18"
         android:layout_width="@dimen/dp_jy_108"
         android:layout_height="@dimen/dp_jy_108"
-         android:layout_marginLeft="@dimen/dp_jy_45"
+         android:layout_marginLeft="@dimen/dp_jy_40"
         >
 
         <com.xr.happyFamily.jia.CircleProgressView
@@ -97,7 +97,7 @@
     <RelativeLayout
         android:id="@+id/rl_alive2"
         android:layout_alignTop="@+id/rl_alive1"
-        android:layout_marginRight="@dimen/dp_jy_45"
+        android:layout_marginRight="@dimen/dp_jy_40"
         android:layout_alignParentRight="true"
         android:layout_width="@dimen/dp_jy_108"
         android:layout_height="@dimen/dp_jy_108"
@@ -157,7 +157,7 @@
         android:id="@+id/rl_alive3"
         android:layout_below="@+id/tv_testbz1"
         android:layout_marginTop="@dimen/dp_jy_28"
-        android:layout_marginLeft="@dimen/dp_jy_45"
+        android:layout_marginLeft="@dimen/dp_jy_40"
         android:layout_width="@dimen/dp_jy_108"
         android:layout_height="@dimen/dp_jy_108"
         >
@@ -216,7 +216,7 @@
         android:layout_below="@+id/tv_testbz2"
         android:layout_alignParentRight="true"
         android:layout_marginTop="@dimen/dp_jy_28"
-        android:layout_marginRight="@dimen/dp_jy_45"
+        android:layout_marginRight="@dimen/dp_jy_40"
         android:layout_width="@dimen/dp_jy_108"
         android:layout_height="@dimen/dp_jy_108"
         >

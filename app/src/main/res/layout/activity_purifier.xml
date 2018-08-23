@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -9,9 +9,11 @@
 
     <RelativeLayout
         android:id="@+id/layout_head"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="@mipmap/purifierback">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:background="@mipmap/purifierback"
+        app:layout_heightPercent="69%"
+        app:layout_widthPercent="100%">
 
         <RelativeLayout
             android:id="@+id/head"
@@ -32,7 +34,7 @@
                 android:layout_height="@dimen/dp_jy_40"
                 android:layout_centerVertical="true"
                 android:gravity="center"
-                android:text="智能终端"
+                android:text="净水器"
                 android:textColor="@color/white"
                 android:textSize="@dimen/sp_20" />
 
@@ -47,19 +49,22 @@
                 android:src="@mipmap/image_more1" />
         </RelativeLayout>
 
-        <View
-            android:id="@+id/view1"
+        <TextView
+            android:id="@+id/tv_offline"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_20"
-            android:layout_below="@+id/head"
-            android:background="@drawable/bg_shape_gradient2" />
+            android:layout_height="match_parent"
+            android:layout_centerInParent="true"
+            android:gravity="center"
+            android:text="设备已离线"
+            android:textSize="@dimen/sp_25"
+            android:visibility="gone" />
 
         <RelativeLayout
             android:id="@+id/body"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/view1"
-            android:background="@drawable/bg_shape_gradient">
+            android:layout_below="@+id/head"
+            android:layout_marginTop="@dimen/dp_jy_65">
 
             <View
                 android:layout_width="wrap_content"
@@ -87,34 +92,231 @@
                 android:layout_centerInParent="true"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/water_purifier" />
+
+            <TextView
+                android:id="@+id/textView7"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="69dp"
+                android:text="过滤后TDS"
+                android:textColor="#4ba8ff"
+                 />
+
+            <TextView
+                android:id="@+id/tv_tds_value"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="10"
+                android:textColor="#4ba8ff"
+                android:textSize="@dimen/sp_40"
+                />
+
+
         </RelativeLayout>
 
-        <com.xr.happyFamily.jia.view_custom.Themometer
-            android:id="@+id/themometer"
-            android:layout_width="@dimen/dp_jy_40"
-            android:layout_height="@dimen/dp_jy_60"
+        <com.xr.happyFamily.jia.view_custom.VerticalProgressBar
+            android:id="@+id/vp_progress"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignBottom="@+id/img2"
+            android:layout_alignLeft="@+id/img2"
+            android:layout_alignRight="@+id/img2"
+            android:layout_alignTop="@+id/img2"
+             />
+
+        <ImageView
+            android:id="@+id/img2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:layout_alignTop="@id/view1"
-            android:layout_marginRight="@dimen/dp_jy_30" />
+            android:layout_below="@id/head"
+            android:layout_marginRight="@dimen/dp_jy_10"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:src="@mipmap/temp_back" />
+
+        <TextView
+            android:id="@+id/tv_temp_value"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_below="@+id/img2"
+            android:layout_alignLeft="@+id/img2"
+            android:layout_alignRight="@+id/img2"
+            android:layout_marginRight="@dimen/dp_jy_10"
+            android:gravity="center"
+            android:text="30℃"
+            android:textColor="@color/white" />
+        <!--<com.xr.happyFamily.jia.view_custom.Themometer-->
+        <!--android:id="@+id/themometer"-->
+        <!--android:layout_width="@dimen/dp_jy_42"-->
+        <!--android:layout_height="@dimen/dp_jy_60"-->
+        <!--android:layout_alignParentRight="true"-->
+        <!--android:layout_below="@id/head"-->
+        <!--android:layout_marginRight="@dimen/dp_jy_30"-->
+        <!--android:layout_marginTop="@dimen/dp_jy_10"-->
+        <!--/>-->
     </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/layout_bottom"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true">
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_below="@+id/layout_head"
+        app:layout_heightPercent="31%"
+        app:layout_widthPercent="100%">
+
+
+        <LinearLayout
+            android:id="@+id/bottom_top"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_alignParentTop="true"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_40"
+            android:layout_marginTop="@dimen/dp_jy_5"
+            android:orientation="horizontal">
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/layout_cold"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_cold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/img_uncold" />
+
+                    <TextView
+                        android:id="@+id/tv_cold"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/img_cold"
+                        android:layout_alignRight="@+id/img_cold"
+                        android:layout_below="@+id/img_cold"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:gravity="center"
+                        android:text="低温" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/layout_normal"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/img_unnormal_temp" />
+
+                    <TextView
+                        android:id="@+id/tv_normal"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/img_normal"
+                        android:layout_alignRight="@+id/img_normal"
+                        android:layout_below="@+id/img_normal"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:gravity="center"
+                        android:text="常温" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+            <RelativeLayout
+
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/layout_high"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_high"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/img_unhigh_temp" />
+
+                    <TextView
+                        android:id="@+id/tv_high"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/img_high"
+                        android:layout_alignRight="@+id/img_high"
+                        android:layout_below="@+id/img_high"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:gravity="center"
+                        android:text="高温" />
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+            <RelativeLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1">
+
+                <RelativeLayout
+                    android:id="@+id/layout_water"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content">
+
+                    <ImageView
+                        android:id="@+id/img_water"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:scaleType="centerCrop"
+                        android:src="@mipmap/img_unwater" />
+
+                    <TextView
+                        android:id="@+id/tv_water"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/img_water"
+                        android:layout_alignRight="@+id/img_water"
+                        android:layout_below="@+id/img_water"
+                        android:layout_marginTop="@dimen/dp_jy_3"
+                        android:gravity="center"
+                        android:text="热水" />
+                </RelativeLayout>
+            </RelativeLayout>
+        </LinearLayout>
 
         <RelativeLayout
             android:id="@+id/layout_wt_record"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerVertical="true">
+            android:layout_below="@+id/bottom_top"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/dp_jy_25">
 
             <ImageView
                 android:id="@+id/image_wt_record"
-                android:layout_width="@dimen/dp_jy_45"
-                android:layout_height="@dimen/dp_jy_45"
-                android:layout_marginLeft="@dimen/dp_jy_33"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_jy_50"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/water_recode" />
 
@@ -122,11 +324,11 @@
                 android:id="@+id/tv_wt_record"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/image_wt_record"
-                android:layout_alignRight="@+id/image_wt_record"
                 android:layout_below="@+id/image_wt_record"
+                android:layout_marginLeft="@dimen/dp_jy_45"
                 android:gravity="center"
-                android:text="制热"
+                android:text="用水记录"
+                android:textColor="#20e2ff"
                 android:textSize="@dimen/sp_15" />
         </RelativeLayout>
 
@@ -134,27 +336,29 @@
             android:id="@+id/layout_switch"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_alignBottom="@+id/layout_wt_record"
-            android:layout_alignTop="@+id/layout_wt_record"
-            android:layout_centerHorizontal="true">
+            android:layout_below="@+id/bottom_top"
+            android:layout_centerHorizontal="true"
+            android:layout_centerVertical="true"
+            android:layout_marginTop="@dimen/dp_jy_22">
 
             <ImageView
                 android:id="@+id/image_switch"
-                android:layout_width="@dimen/dp_jy_45"
-                android:layout_height="@dimen/dp_jy_45"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/switching" />
 
-            <TextView
-                android:id="@+id/tv_switch"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignLeft="@+id/image_switch"
-                android:layout_alignRight="@+id/image_switch"
-                android:layout_below="@+id/image_switch"
-                android:gravity="center"
-                android:text="开关"
-                android:textSize="@dimen/sp_15" />
+            <!--<TextView-->
+            <!--android:id="@+id/tv_switch"-->
+            <!--android:layout_width="wrap_content"-->
+            <!--android:layout_height="wrap_content"-->
+            <!--android:layout_alignLeft="@+id/image_switch"-->
+            <!--android:layout_alignRight="@+id/image_switch"-->
+            <!--android:layout_below="@+id/image_switch"-->
+            <!--android:gravity="center"-->
+            <!--android:text="开关"-->
+            <!--android:textColor="#20e2ff"-->
+            <!--android:textSize="@dimen/sp_15" />-->
         </RelativeLayout>
 
         <RelativeLayout
@@ -168,9 +372,9 @@
 
             <ImageView
                 android:id="@+id/image_living"
-                android:layout_width="@dimen/dp_jy_45"
-                android:layout_height="@dimen/dp_jy_45"
-                android:layout_marginLeft="@dimen/dp_jy_5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="@dimen/dp_jy_8"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/living" />
 
@@ -181,11 +385,9 @@
                 android:layout_below="@+id/image_living"
                 android:gravity="center"
                 android:text="滤芯寿命"
-                android:textSize="@dimen/sp_15"
-
-                />
+                android:textColor="#20e2ff"
+                android:textSize="@dimen/sp_15" />
         </RelativeLayout>
 
     </RelativeLayout>
-
-</LinearLayout>
+</android.support.percent.PercentRelativeLayout>

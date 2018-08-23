@@ -207,9 +207,9 @@ public class Themometer extends android.support.v7.widget.AppCompatImageView {
         float beginY = getPaddingTop() + (41.5f - begin) / (41.5f - 34.5f) * totalH;
         //
         Rect r2 = new Rect(); // RectF对象
-        r2.left = this.width - getPaddingRight() - circle_radius - circle_radius / 3 + 5 + circle_radius / 4; // 左边
+//        r2.left = this.width - getPaddingRight() - circle_radius - circle_radius / 3 + 5 + circle_radius / 4; // 左边
         r2.top = (int) beginY; // 上边
-        r2.right = this.width - getPaddingRight() - circle_radius + circle_radius / 3 - 5 - circle_radius / 10; // 右边
+//        r2.right = this.width - getPaddingRight() - circle_radius + circle_radius / 3 - 5 - circle_radius / 10; // 右边
         r2.bottom = (int) (beginY + recH); // 下边
         // canvas.drawRect(r2, mPaint);
 
@@ -332,9 +332,9 @@ public class Themometer extends android.support.v7.widget.AppCompatImageView {
         mPaint.setAntiAlias(true);
 
         RectF r2 = new RectF(); // RectF对象
-        r2.left = this.width - getPaddingRight() - circle_radius - circle_radius / 3 + 5; // 左边
+//        r2.left = this.width - getPaddingRight() - circle_radius - circle_radius / 3 ; // 左边
         r2.top = getPaddingTop() + 5; // 上边
-        r2.right = this.width - getPaddingRight() - circle_radius + circle_radius / 3 - 5; // 右边
+//        r2.right = this.width - getPaddingRight() - circle_radius + circle_radius / 3; // 右边
         r2.bottom = this.height - getPaddingBottom() - circle_radius - 5; // 下边
         canvas.drawRoundRect(r2, 20, 20, mPaint);
     }

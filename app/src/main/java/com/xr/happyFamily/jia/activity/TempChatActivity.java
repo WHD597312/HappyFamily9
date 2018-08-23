@@ -18,6 +18,7 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.together.NumberToString;
 import com.xr.happyFamily.together.chart.LineChartManager;
 import com.xr.happyFamily.together.http.HttpUtils;
 
@@ -42,6 +43,8 @@ public class TempChatActivity extends AppCompatActivity {
     private long deviceId;
     private DeviceChildDaoImpl deviceChildDao;
     private DeviceChild deviceChild;
+    //设置x轴的数据
+    ArrayList<String> xValues = new ArrayList<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,6 +72,9 @@ public class TempChatActivity extends AppCompatActivity {
         String s=year+"-"+month+"-"+day;
         tv_time.setText(s);
         new LoadChartAsync().execute();
+
+
+
     }
 
     @OnClick({R.id.img_back})
@@ -95,8 +101,6 @@ public class TempChatActivity extends AppCompatActivity {
         return super.onKeyDown(keyCode, event);
     }
     class LoadChartAsync extends AsyncTask<Void,Void,List<Integer>>{
-
-
         @Override
         protected List<Integer> doInBackground(Void... voids) {
             int code=0;
@@ -111,7 +115,6 @@ public class TempChatActivity extends AppCompatActivity {
                     String returnCode=jsonObject.getString("returnCode");
                     code=Integer.parseInt(returnCode);
                     if (100==code){
-
                         JSONObject returnData=jsonObject.getJSONObject("returnData");
                         int mondayKWH=returnData.getInt("mondayKWH");
                         int tuesdayKWH=returnData.getInt("tuesdayKWH");
@@ -141,18 +144,23 @@ public class TempChatActivity extends AppCompatActivity {
             super.onPostExecute(list);
             if (!list.isEmpty()){
                 LineChartManager lineChartManager1 = new LineChartManager(line_chart);
-
-
                 //设置x轴的数据
-                ArrayList<Integer> xValues = new ArrayList<>();
-                for (int i = 0; i <7; i++) {
-                    xValues.add(i);
+                ArrayList<String> xValues = new ArrayList<>();
+                for (int i = 1; i <=7; i++) {
+                    if (i==7){
+                        xValues.add("周日");
+                    }else {
+                        String s1=NumberToString.toChinese(i+"");
+                        xValues.add("周"+s1);
+                    }
                 }
 
-                //设置y轴的数据()
-                List<List<Integer>> yValues = new ArrayList<>();
-
-                yValues.add(list);
+//                //设置y轴的数据()
+//                List<Float> yValues = new ArrayList<>();
+//
+//                for (int j = 0; j <= 10; j++) {
+//                    yValues.add((float) (Math.random() * 60));
+//                }
 
                 //颜色集合
                 List<Integer> colours = new ArrayList<>();
@@ -167,10 +175,15 @@ public class TempChatActivity extends AppCompatActivity {
                 Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
                 setChartFillDrawable(drawable);
                 //创建多条折线的图表
-                lineChartManager1.showLineChart(TempChatActivity.this,xValues, yValues.get(0), names.get(0), colours.get(0));
+                lineChartManager1.showLineChart(TempChatActivity.this,xValues, list, names.get(0), colours.get(0));
                 lineChartManager1.setDescription("");
                 lineChartManager1.setYAxis(60, 0, 7);
                 lineChartManager1.setHightLimitLine(60,"度",0);
+//                //创建多条折线的图表
+//                lineChartManager1.showLineChart(TempChatActivity.this,xValues, yValues.get(0), names.get(0), colours.get(0));
+//                lineChartManager1.setDescription("");
+//                lineChartManager1.setYAxis(60, 0, 7);
+//                lineChartManager1.setHightLimitLine(60,"度",0);
             }
         }
     }

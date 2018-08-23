@@ -2,6 +2,7 @@ package com.xr.happyFamily.jia.activity;
 
 import android.animation.ValueAnimator;
 import android.annotation.SuppressLint;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
@@ -13,10 +14,17 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.github.mikephil.charting.charts.BarChart;
 import com.xr.happyFamily.R;
 
 import com.xr.happyFamily.jia.view_custom.DoubleWaveView;
+import com.xr.happyFamily.jia.view_custom.VerticalProgressBar;
+import com.xr.happyFamily.together.chart.BarChartManager;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
@@ -27,13 +35,13 @@ import butterknife.ButterKnife;
 public class TestActivity extends AppCompatActivity {
 
 
-
+    @BindView(R.id.vp_progress) VerticalProgressBar vpProgressBar;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
-
+        ButterKnife.bind(this);
+        vpProgressBar.setProgress(50);
     }
-
 
 }

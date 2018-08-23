@@ -215,8 +215,12 @@ public class qdActivity extends Activity {
 //            Map<String, Object> params = maps[0];
             String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
             String result = HttpUtils.getOkHpptRequest(url);
+
             Log.i("ffffffff", "--->: " + result);
             try {
+                if (TextUtils.isEmpty(result)){
+                    code=-2000;
+                }
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
@@ -300,20 +304,20 @@ public class qdActivity extends Activity {
                                 int roomId=jsonObject3.getInt("roomId");
                                 String roomName=jsonObject3.getString("roomName");
                                 String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
-                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-                                DeviceChild deviceChild2=null;
-                                for (DeviceChild deviceChild:deviceChildren){
-                                    int deviceId2=deviceChild.getDeviceId();
-                                    if (deviceId2==deviceId){
-                                        deviceChild2=deviceChild;
-                                        break;
-                                    }
-                                }
+//                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                                DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
+//                                for (DeviceChild deviceChild:deviceChildren){
+//                                    int deviceId2=deviceChild.getDeviceId();
+//                                    if (deviceId2==deviceId){
+//                                        deviceChild2=deviceChild;
+//                                        break;
+//                                    }
+//                                }
                                 if (deviceChild2!=null){
                                     deviceChild2.setRoomName(roomName);
                                     deviceChildDao.update(deviceChild2);
                                 }else if (deviceChild2==null){
-                                    if (deviceChild2==null){
+
                                         deviceChild2=new DeviceChild();
                                         deviceChild2.setUserId(userId);
                                         deviceChild2.setName(deviceName);
@@ -323,7 +327,7 @@ public class qdActivity extends Activity {
                                         deviceChild2.setRoomId(roomId);
                                         deviceChild2.setRoomName(roomName);
                                         deviceChildDao.insert(deviceChild2);
-                                    }
+
                                 }
                             }
                             JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
@@ -334,19 +338,19 @@ public class qdActivity extends Activity {
                                 int deviceType=jsonObject2.getInt("deviceType");
                                 int roomId=jsonObject2.getInt("roomId");
                                 String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
-                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-                                DeviceChild deviceChild2=null;
-                                for (DeviceChild deviceChild:deviceChildren){
-                                    int deviceId2=deviceChild.getDeviceId();
-                                    if (deviceId2==deviceId){
-                                        deviceChild2=deviceChild;
-                                        break;
-                                    }
-                                }
+//                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+                                DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
+//                                for (DeviceChild deviceChild:deviceChildren){
+//                                    int deviceId2=deviceChild.getDeviceId();
+//                                    if (deviceId2==deviceId){
+//                                        deviceChild2=deviceChild;
+//                                        break;
+//                                    }
+//                                }
                                 if (deviceChild2!=null){
                                     deviceChildDao.update(deviceChild2);
                                 }else if (deviceChild2==null){
-                                    if (deviceChild2==null){
+
                                         deviceChild2=new DeviceChild();
                                         deviceChild2.setUserId(userId);
                                         deviceChild2.setShareId(Long.MAX_VALUE);
@@ -357,7 +361,6 @@ public class qdActivity extends Activity {
                                         deviceChild2.setRoomId(roomId);
                                         deviceChild2.setShare("share");
                                         deviceChildDao.insert(deviceChild2);
-                                    }
                                 }
 
                             }
@@ -379,12 +382,20 @@ public class qdActivity extends Activity {
                 case 100:
                     Intent intent = new Intent(qdActivity.this, MainActivity.class);
                     mPositionPreferences.edit().clear().commit();
-
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("load","load");
                     intent.putExtra("login","login");
                     startActivity(intent);
-                    qdActivity.this.finish();
+                    break;
+                case -2000:
+                    Intent intent2 = new Intent(qdActivity.this, MainActivity.class);
+                    mPositionPreferences.edit().clear().commit();
+
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    intent2.putExtra("load","load");
+                    intent2.putExtra("login","login");
+                    startActivity(intent2);
+
                     break;
             }
         }

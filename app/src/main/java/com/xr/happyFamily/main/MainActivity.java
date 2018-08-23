@@ -659,7 +659,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                             }
                             JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
 
-                            Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
+//                            Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
                             for (int j = 0; j < roomDevices.length(); j++) {
                                 JSONObject roomObject = roomDevices.getJSONObject(j);
                                 int roomId = roomObject.getInt("roomId");

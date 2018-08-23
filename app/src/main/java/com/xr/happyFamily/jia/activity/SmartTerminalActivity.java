@@ -492,15 +492,20 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
-            switch (code) {
-                case 100:
-                    Utils.showToast(SmartTerminalActivity.this, "修改成功");
-                    tv_title.setText(deviceName);
-                    break;
-                default:
-                    Utils.showToast(SmartTerminalActivity.this, "修改失败");
-                    break;
+            try {
+                switch (code) {
+                    case 100:
+                        Utils.showToast(SmartTerminalActivity.this, "修改成功");
+                        tv_title.setText(deviceName);
+                        break;
+                    default:
+                        Utils.showToast(SmartTerminalActivity.this, "修改失败");
+                        break;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
     }
 
@@ -549,6 +554,8 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
             linkList.clear();
+            list.clear();
+            getBitWheelInfos();
             linkList = (List<DeviceChild>) data.getSerializableExtra("list");
             linkDeviceChildMap.clear();
             List<SmartTerminalInfo> infoList = new ArrayList<>();
@@ -753,6 +760,8 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                             }
                         }
                         if (deviceChild4 != null) {
+                            list.clear();
+                            getBitWheelInfos();
                             String name = deviceChild4.getName();
                             linkList.remove(deviceChild4);
                             Toast.makeText(SmartTerminalActivity.this, name + "设备已重置", Toast.LENGTH_SHORT).show();

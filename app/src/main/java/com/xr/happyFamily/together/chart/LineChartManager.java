@@ -3,7 +3,6 @@ package com.xr.happyFamily.together.chart;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.graphics.drawable.GradientDrawable;
 
 import com.github.mikephil.charting.animation.Easing;
 import com.github.mikephil.charting.charts.LineChart;
@@ -15,6 +14,7 @@ import com.github.mikephil.charting.components.YAxis;
 import com.github.mikephil.charting.data.Entry;
 import com.github.mikephil.charting.data.LineData;
 import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.IndexAxisValueFormatter;
 import com.github.mikephil.charting.interfaces.datasets.ILineDataSet;
 import com.xr.happyFamily.R;
 
@@ -22,7 +22,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LineChartManager {
-
     private LineChart lineChart;
     private YAxis leftAxis;   //左边Y轴
     private YAxis rightAxis;  //右边Y轴
@@ -50,19 +49,16 @@ public class LineChartManager {
         //折线图例 标签 设置
         Legend legend = lineChart.getLegend();
         legend.setForm(Legend.LegendForm.LINE);
-        legend.setTextSize(0f);
+        legend.setTextSize(11f);
+        legend.setTextColor(Color.WHITE);
         //显示位置
         legend.setVerticalAlignment(Legend.LegendVerticalAlignment.BOTTOM);
         legend.setHorizontalAlignment(Legend.LegendHorizontalAlignment.LEFT);
         legend.setOrientation(Legend.LegendOrientation.HORIZONTAL);
         legend.setDrawInside(false);
-//        lineChart.removeView(legend);
-
-        legend.setEnabled(false);
         lineChart.setScaleXEnabled(false);/**禁止缩放x轴*/
-        lineChart.setScaleYEnabled(false);/**缩放y轴*/
+        lineChart.setScaleYEnabled(true);/**缩放y轴*/
 
-        xAxis.setTextColor(Color.WHITE);
         //XY轴的设置
         //X轴设置显示位置在底部
         xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
@@ -82,7 +78,8 @@ public class LineChartManager {
      */
     private void initLineDataSet(LineDataSet lineDataSet, int color, boolean mode) {
         lineDataSet.setColor(color);
-
+        //显示边界
+        lineChart.setDrawBorders(false);
         lineDataSet.setCircleColor(color);
         lineDataSet.setLineWidth(1f);
         lineDataSet.setCircleRadius(1f);
@@ -93,11 +90,12 @@ public class LineChartManager {
         lineDataSet.setDrawFilled(mode);
         lineDataSet.setFormLineWidth(1f);
         lineDataSet.setFormSize(15.f);
-        lineDataSet.setValueTextColor(Color.WHITE);
-
+        xAxis.setAxisLineColor(Color.WHITE);
+        leftAxis.setAxisLineColor(Color.WHITE);
+        xAxis.setAxisLineWidth(1.5f);
+        leftAxis.setAxisLineWidth(1.5f);
         //线模式为圆滑曲线（默认折线）
         lineDataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
-
     }
 
     /**
@@ -108,19 +106,14 @@ public class LineChartManager {
      * @param label
      * @param color
      */
-    public void showLineChart(Context context,List<Integer> xAxisValues, List<Integer> yAxisValues, String label, int color) {
+    public void showLineChart(Context context, List<String> xAxisValues, List<Integer> yAxisValues, String label, int color) {
         initLineChart();
         ArrayList<Entry> entries = new ArrayList<>();
         for (int i = 0; i < xAxisValues.size(); i++) {
-            entries.add(new Entry(xAxisValues.get(i), yAxisValues.get(i)));
+            entries.add(new Entry(i, yAxisValues.get(i)));
         }
         // 每一个LineDataSet代表一条线
         LineDataSet lineDataSet = new LineDataSet(entries, label);
-
-//        lineDataSet.setFillColor(Color.parseColor("#5a5a5a"));
-
-        GradientDrawable grad = new GradientDrawable(GradientDrawable.Orientation.TOP_BOTTOM,new int[]{Color.parseColor("#cc4b4c50"),Color.GRAY});
-
         Drawable drawable = context.getResources().getDrawable(R.drawable.fade_blue);
         lineDataSet.setDrawFilled(true);
         lineDataSet.setFillDrawable(drawable);
@@ -130,14 +123,10 @@ public class LineChartManager {
         dataSets.add(lineDataSet);
         LineData data = new LineData(dataSets);
         //设置X轴的刻度数
-        xAxis.setAxisLineColor(Color.WHITE);
-        xAxis.setTextColor(Color.parseColor("#3b3b40"));
-        xAxis.setLabelCount(xAxisValues.size(), false);
-        xAxis.setEnabled(true);
-
-
-        xAxis.setDrawAxisLine(true);
-        leftAxis.setDrawAxisLine(true);
+        xAxis.setLabelCount(xAxisValues.size(), true);
+        xAxis.setTextColor(Color.WHITE);
+        leftAxis.setTextColor(Color.WHITE);
+        xAxis.setValueFormatter(new IndexAxisValueFormatter(xAxisValues));
         data.setDrawValues(false);
         lineChart.setData(data);
     }
@@ -185,8 +174,7 @@ public class LineChartManager {
         leftAxis.setAxisMaximum(max);
         leftAxis.setAxisMinimum(min);
         leftAxis.setLabelCount(labelCount, false);
-        leftAxis.setTextColor(Color.WHITE);
-        leftAxis.setAxisLineColor(Color.WHITE);
+
         rightAxis.setAxisMaximum(max);
         rightAxis.setAxisMinimum(min);
         rightAxis.setLabelCount(labelCount, false);
@@ -252,10 +240,7 @@ public class LineChartManager {
     public void setDescription(String str) {
         Description description = new Description();
         description.setText(str);
-        description.setTextColor(Color.WHITE);
-        description.setEnabled(false);
         lineChart.setDescription(description);
-
         lineChart.invalidate();
     }
 }

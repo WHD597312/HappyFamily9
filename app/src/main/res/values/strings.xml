@@ -19,4 +19,6 @@
     <string name="ok">确定</string>
     <string name="title_activity_account">AccountActivity</string>
     <string name="app">p99</string>
+    <string name="login_only_can_input">qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890</string>
+    <string name="rule_text">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+&#060;&#062;&#064;&#038;&#034;</string>
 </resources>

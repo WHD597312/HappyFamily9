@@ -838,15 +838,20 @@ public class DeviceDetailActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
-            switch (code){
-                case 100:
-                    Utils.showToast(DeviceDetailActivity.this, "修改成功");
-                    tv_title.setText(deviceName);
-                    break;
+            try {
+                switch (code){
+                    case 100:
+                        Utils.showToast(DeviceDetailActivity.this, "修改成功");
+                        tv_title.setText(deviceName);
+                        break;
                     default:
                         Utils.showToast(DeviceDetailActivity.this, "修改失败");
                         break;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
+
         }
     }
     @Override

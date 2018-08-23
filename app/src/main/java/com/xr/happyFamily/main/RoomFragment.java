@@ -43,6 +43,7 @@ import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
+import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
@@ -188,7 +189,6 @@ public class RoomFragment extends Fragment {
                     DeviceChild deviceChild = mGridData.get(position);
                     int type = deviceChild.getType();
                     boolean online = deviceChild.getOnline();
-
                     if (type == 2) {
                         if (online) {
                             String deviceName = deviceChild.getName();
@@ -221,6 +221,14 @@ public class RoomFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
+                    }else if (type==8){
+                        String deviceName = deviceChild.getName();
+                        long deviceId = deviceChild.getId();
+                        Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                        intent.putExtra("deviceName", deviceName);
+                        intent.putExtra("deviceId", deviceId);
+                        intent.putExtra("houseId", houseId);
+                        startActivityForResult(intent, 6000);
                     }
                 }
             });

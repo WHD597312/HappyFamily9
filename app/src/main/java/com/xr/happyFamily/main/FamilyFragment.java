@@ -41,6 +41,7 @@ import com.xr.happyFamily.jia.ChooseHourseActivity;
 import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
+import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
@@ -411,6 +412,14 @@ public class FamilyFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
+                    }else if (type==8){
+                        String deviceName = deviceChild.getName();
+                        long deviceId = deviceChild.getId();
+                        Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                        intent.putExtra("deviceName", deviceName);
+                        intent.putExtra("deviceId", deviceId);
+                        intent.putExtra("houseId", houseId);
+                        startActivityForResult(intent, 6000);
                     }
                 }
             });
@@ -468,6 +477,14 @@ public class FamilyFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
+                    }else if (type==8){
+                        String deviceName = deviceChild.getName();
+                        long deviceId = deviceChild.getId();
+                        Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                        intent.putExtra("deviceName", deviceName);
+                        intent.putExtra("deviceId", deviceId);
+                        intent.putExtra("houseId", houseId);
+                        startActivityForResult(intent, 6000);
                     }
                 }
             });

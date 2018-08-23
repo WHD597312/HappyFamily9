@@ -97,7 +97,7 @@
         </receiver>
 
         <activity
-            android:name=".jia.LiveActivity"
+            android:name=".login.login.qdActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -444,7 +444,16 @@
             android:name=".jia.activity.SocketActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".jia.activity.DehumidifierActivity" />
-
+        <activity
+            android:name=".jia.activity.PurifierActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity
+            android:name=".jia.activity.UseWaterRecordActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.LiveActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

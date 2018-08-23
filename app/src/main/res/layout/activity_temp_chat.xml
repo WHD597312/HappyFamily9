@@ -51,93 +51,15 @@
         android:layout_height="380dp"
         android:layout_below="@+id/tv_du" />
 
-    <LinearLayout
-        android:id="@+id/layout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/line_chart"
-        android:layout_marginTop="-10dp"
-        android:orientation="horizontal">
 
-        <TextView
-            android:id="@+id/tv_mon"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周一"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_tue"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周二"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_wed"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周三"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_thu"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周四"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_fri"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周五"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_sta"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周六"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-
-        <TextView
-            android:id="@+id/tv_sun"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:text="周日"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_12" />
-    </LinearLayout>
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="@dimen/dp_jy_20"
-        android:layout_height="@dimen/dp_jy_1"
-        android:layout_below="@+id/layout"
-        android:layout_marginLeft="@dimen/dp_jy_20"
-        android:layout_marginTop="@dimen/dp_jy_20"
-        android:background="@color/white" />
+    <!--<View-->
+        <!--android:id="@+id/view"-->
+        <!--android:layout_width="@dimen/dp_jy_20"-->
+        <!--android:layout_height="@dimen/dp_jy_1"-->
+        <!--android:layout_below="@+id/layout"-->
+        <!--android:layout_marginLeft="@dimen/dp_jy_20"-->
+        <!--android:layout_marginTop="@dimen/dp_jy_20"-->
+        <!--android:background="@color/white" />-->
 
     <TextView
         android:id="@+id/tv_time"
@@ -150,16 +72,16 @@
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15" />
 
-    <TextView
-        android:id="@+id/tv_line"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/layout"
-        android:layout_toRightOf="@+id/view"
-        android:text="电力曲线"
-        android:layout_marginLeft="@dimen/dp_jy_5"
-        android:layout_marginTop="@dimen/dp_jy_10"
-        android:textColor="@color/white" />
+    <!--<TextView-->
+        <!--android:id="@+id/tv_line"-->
+        <!--android:layout_width="wrap_content"-->
+        <!--android:layout_height="wrap_content"-->
+        <!--android:layout_below="@+id/layout"-->
+        <!--android:layout_toRightOf="@+id/view"-->
+        <!--android:text="电力曲线"-->
+        <!--android:layout_marginLeft="@dimen/dp_jy_5"-->
+        <!--android:layout_marginTop="@dimen/dp_jy_10"-->
+        <!--android:textColor="@color/white" />-->
 </RelativeLayout>
 
 

@@ -87,9 +87,6 @@ public class SmartLinkedActivity extends AppCompatActivity {
     }
     @Override
     public void onBackPressed() {
-        Intent intent=new Intent();
-        intent.putExtra("list",(Serializable) list);
-        setResult(100,intent);
         finish();
     }
 
@@ -97,9 +94,6 @@ public class SmartLinkedActivity extends AppCompatActivity {
     public void onClick(View view){
         switch (view.getId()){
             case R.id.image_back:
-                Intent intent=new Intent();
-                intent.putExtra("list",(Serializable) list);
-                setResult(100,intent);
                 finish();
                 break;
             case R.id.btn_ensure:

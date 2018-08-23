@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".jia.activity.UseWaterRecordActivity"
+    android:background="@color/white"
+    >
+
+    <RelativeLayout
+        android:id="@+id/layout_head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@mipmap/purifier_back"
+        >
+        <RelativeLayout
+            android:id="@+id/head"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_45"
+            >
+            <ImageView
+                android:id="@+id/image_back"
+                android:layout_width="@dimen/dp_jy_40"
+                android:layout_height="@dimen/dp_jy_40"
+                android:layout_centerVertical="true"
+                android:scaleType="centerInside"
+                android:src="@mipmap/nav_back" />
+
+            <TextView
+                android:id="@+id/tv_title"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_40"
+                android:layout_centerVertical="true"
+                android:gravity="center"
+                android:text="用水记录"
+                android:textColor="@color/white"
+                android:textSize="@dimen/sp_20" />
+        </RelativeLayout>
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_below="@+id/head"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_middle"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_marginTop="@dimen/dp_jy_60"
+        >
+        <TextView
+            android:id="@+id/tv_day"
+            android:layout_width="@dimen/dp_jy_55"
+            android:layout_height="@dimen/dp_jy_55"
+            android:layout_alignParentLeft="true"
+            android:layout_marginLeft="@dimen/dp_jy_50"
+            android:background="@drawable/shape_blue_cirlce"
+            android:gravity="center"
+            android:text="日"
+            android:textColor="@color/white" />
+
+        <TextView
+            android:id="@+id/tv_week"
+            android:layout_width="@dimen/dp_jy_55"
+            android:layout_height="@dimen/dp_jy_55"
+            android:layout_alignTop="@+id/tv_day"
+            android:layout_alignBottom="@+id/tv_day"
+            android:layout_centerHorizontal="true"
+            android:text="周"
+            android:gravity="center"
+            android:background="@drawable/shape_white_circle"
+            android:textColor="#808080"
+            />
+        <TextView
+            android:id="@+id/tv_month"
+            android:layout_width="@dimen/dp_jy_55"
+            android:layout_height="@dimen/dp_jy_55"
+            android:layout_alignTop="@+id/tv_day"
+            android:layout_alignBottom="@+id/tv_day"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_jy_50"
+            android:text="月"
+            android:gravity="center"
+            android:background="@drawable/shape_white_circle"
+            android:textColor="#808080"
+            />
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="2018年9日(本日用水量)"
+        android:layout_below="@+id/layout_middle"
+        android:layout_marginTop="@dimen/dp_jy_20"
+        android:layout_marginLeft="@dimen/dp_jy_10"
+        android:gravity="center_vertical"
+        />
+    <com.github.mikephil.charting.charts.BarChart
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:layout_below="@+id/tv_date"
+        android:id="@+id/bar_chart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_230"
+        />
+
+    <TextView
+        android:id="@+id/tv_unit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentStart="true"
+        android:layout_below="@+id/tv_date"
+        android:layout_marginLeft="@dimen/dp_jy_20"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:text="(ML)" />
+
+    <TextView
+        android:id="@+id/tv_num"
+        android:layout_width="@dimen/dp_jy_60"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/bar_chart"
+        android:text="5"
+        android:textColor="#20e2ff"
+        android:textSize="@dimen/sp_40"
+        android:gravity="center"
+        android:layout_marginTop="@dimen/dp_jy_50"
+        android:layout_alignLeft="@+id/textView16"
+        android:layout_alignRight="@+id/textView16"
+        />
+
+    <TextView
+        android:id="@+id/tv_num2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignTop="@+id/tv_num"
+        android:textColor="#20e2ff"
+        android:textSize="@dimen/sp_40"
+        android:gravity="center"
+        android:text="10"
+        android:layout_alignLeft="@+id/textView17"
+        android:layout_alignRight="@+id/textView17"
+        />
+
+    <TextView
+        android:id="@+id/textView16"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_num"
+        android:layout_marginLeft="@dimen/dp_jy_40"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:text="今日用水量(L)" />
+
+    <TextView
+        android:id="@+id/textView17"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_alignTop="@+id/textView16"
+        android:text="今日TDS过滤"
+        android:layout_marginRight="@dimen/dp_jy_40"
+        />
+</RelativeLayout>

@@ -142,7 +142,7 @@ public class MQService extends Service {
     public int onStartCommand(Intent intent, int flags, int startId) {
         connect();
         isFinish = false;
-        countTimer = new CountTimer(20000, 1000);
+        countTimer = new CountTimer(5000, 1000);
         countTimer.start();
         SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
@@ -312,13 +312,14 @@ public class MQService extends Service {
             if (AddDeviceActivity.running) {
 
             } else {
-                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
-                for (DeviceChild deviceChild2 : deviceChildren) {
-                    if (macAddress.equals(deviceChild2.getMacAddress())) {
-                        deviceChild = deviceChild2;
-                        break;
-                    }
-                }
+                deviceChild=deviceChildDao.findDeviceByMacAddress2(macAddress);
+//                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
+//                for (DeviceChild deviceChild2 : deviceChildren) {
+//                    if (macAddress.equals(deviceChild2.getMacAddress())) {
+//                        deviceChild = deviceChild2;
+//                        break;
+//                    }
+//                }
             }
             try {
 
@@ -473,8 +474,6 @@ public class MQService extends Service {
                                 deviceChild.setEndCode(endCode);
                             }
                             int ss = deviceChild.getDeviceId();
-                            Log.i("ssssss", "-->" + ss);
-                            Log.i("warmerCurTemp2222", "-->" + deviceChild.getWarmerCurTemp());
                             int deviceUsedCount = deviceChild.getDeviceUsedCount();
                             deviceChild.setDeviceUsedCount(deviceUsedCount + 1);
                             deviceChild.setOnline(true);
@@ -915,7 +914,6 @@ public class MQService extends Service {
                         mqttIntent.putExtra("msg", message);
                         sendBroadcast(mqttIntent);
                     }
-                    Log.e("qqqqqZZZZ", userList.getClockType() + "??" + QunZuFragment.running);
                     if (QunzuAddActivity.running) {
                         Intent mqttIntent = new Intent("QunzuAddActivity");
                         mqttIntent.putExtra("msg", message);
@@ -999,8 +997,6 @@ public class MQService extends Service {
                     }
                 }
 
-
-
                 //标记  运行控件
             } catch (Exception e) {
                 e.printStackTrace();
@@ -1018,7 +1014,6 @@ public class MQService extends Service {
 
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
-
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
@@ -1139,6 +1134,17 @@ public class MQService extends Service {
             } catch (Exception e) {
                 e.printStackTrace();
             }
+        }
+    }
+
+    /**
+     * 取消所有的订阅
+     */
+    public void cancelAllsubscibe() {
+        List<String> list = getTopicNames();
+        for (int i = 0; i < list.size(); i++) {
+            String s = list.get(i);
+            unsubscribe(s);
         }
     }
 

@@ -84,6 +84,31 @@ public class DeviceChildDaoImpl {
         List<DeviceChild> deviceChildren=deviceChildDao.queryBuilder().where(DeviceChildDao.Properties.HouseId.eq(houseId)).orderAsc(DeviceChildDao.Properties.Id).list();
         return deviceChildren;
     }
+    /**
+     * 根据macAddress来查询设备
+     * @param macAddress
+     * @return
+     */
+    public List<DeviceChild> findDeviceByMacAddress(String macAddress){
+        return deviceChildDao.queryBuilder().where(DeviceChildDao.Properties.MacAddress.eq(macAddress)).list();
+    }
+
+    /**
+     * 根据macAddress来查询设备
+     * @param macAddress
+     * @return
+     */
+    public DeviceChild findDeviceByMacAddress2(String macAddress){
+        return deviceChildDao.queryBuilder().where(DeviceChildDao.Properties.MacAddress.eq(macAddress)).unique();
+    }
+    /**
+     * 批量删除设备
+     * @param list
+     */
+    public void deleteDevices(List<DeviceChild> list){
+        deviceChildDao.deleteInTx(list);
+    }
+
 
     /**
      * 查询家庭里面房间中的设备

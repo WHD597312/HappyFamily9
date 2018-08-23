@@ -259,14 +259,18 @@ public class SocketActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
-            switch (code){
-                case 100:
-                    Utils.showToast(SocketActivity.this, "修改成功");
-                    tv_title.setText(deviceName);
-                    break;
-                default:
-                    Utils.showToast(SocketActivity.this, "修改失败");
-                    break;
+            try {
+                switch (code){
+                    case 100:
+                        Utils.showToast(SocketActivity.this, "修改成功");
+                        tv_title.setText(deviceName);
+                        break;
+                    default:
+                        Utils.showToast(SocketActivity.this, "修改失败");
+                        break;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

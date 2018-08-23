@@ -4,11 +4,7 @@ package com.xr.happyFamily.jia;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Bitmap;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -16,28 +12,14 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ImageView;
 import android.widget.ListView;
-
-import com.bumptech.glide.Glide;
-import com.xr.database.dao.RoomDao;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
-
 import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.Room;
-import com.xr.happyFamily.login.rigest.RegistActivity;
-import com.xr.happyFamily.login.rigest.RegistFinishActivity;
-import com.xr.happyFamily.main.MainActivity;
-import com.xr.happyFamily.together.util.BitmapCompressUtils;
-
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.TextView;
-
-import java.io.File;
 import java.util.ArrayList;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;

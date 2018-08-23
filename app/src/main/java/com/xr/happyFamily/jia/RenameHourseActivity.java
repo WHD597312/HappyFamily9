@@ -15,6 +15,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -132,6 +133,14 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         userId = preferences.getString("userId","");
 
     }
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode == KeyEvent.KEYCODE_BACK) {
+            application.removeActivity(this);
+            return true;
+        }
+        return super.onKeyDown(keyCode, event);
+    }
 
     @Override
     public void onStart() {
@@ -153,8 +162,9 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                  showPopup();
                 break;
             case R.id.iv_rename_back:
-                Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
-                startActivity(intent);
+//                Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
+////                startActivity(intent);
+                finish();
                 break;
             case R.id.tv_rename_del:
                 deleteHourseDialog();

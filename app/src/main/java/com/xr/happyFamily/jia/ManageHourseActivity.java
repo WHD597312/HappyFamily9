@@ -71,7 +71,8 @@ public class ManageHourseActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeActivity(this);
+            setResult(3000);
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -109,6 +110,7 @@ public class ManageHourseActivity extends AppCompatActivity {
                 break;
             case R.id.iv_choose_back1:
 //                startActivity(new Intent(this,ChooseHourseActivity.class));
+                setResult(3000);
                 finish();
                 break;
         }

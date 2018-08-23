@@ -73,7 +73,9 @@ public class ChooseHourseActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeActivity(this);
+//            application.removeActivity(this);
+            startActivity(new Intent(this,MainActivity.class));
+
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -96,7 +98,8 @@ public class ChooseHourseActivity extends AppCompatActivity {
         switch (view.getId()) {
             case R.id.tv_hourse_gl:
                 Intent intent = new Intent(this, ManageHourseActivity.class);
-                startActivity(intent);
+                startActivityForResult(intent,3000);
+//                startActivity(intent);
                 break;
             case R.id.iv_choose_back:
                 startActivity(new Intent(this, MainActivity.class));
@@ -117,5 +120,12 @@ public class ChooseHourseActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==3000){
+            houses = hourseDao.findAllHouse();
+            adapter = new ChooseHouseAdapter(this, houses);
+            adapter.setClicked(-1);
+            recyclerView.setAdapter(adapter);
+            adapter.setSign(2);
+        }
     }
 }

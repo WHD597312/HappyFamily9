@@ -397,6 +397,15 @@ public class qdActivity extends Activity {
                     startActivity(intent2);
 
                     break;
+                    default:
+                        Intent intent3 = new Intent(qdActivity.this, MainActivity.class);
+                        mPositionPreferences.edit().clear().commit();
+
+//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
+                        intent3.putExtra("load","load");
+                        intent3.putExtra("login","login");
+                        startActivity(intent3);
+                        break;
             }
         }
     }

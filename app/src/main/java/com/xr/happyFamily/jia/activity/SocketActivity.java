@@ -75,7 +75,7 @@ public class SocketActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_socket);
-        if (application!=null){
+        if (application==null){
             application= (MyApplication) getApplication();
             application.addActivity(this);
         }
@@ -506,7 +506,9 @@ public class SocketActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeActivity(this);
+            if (application!=null){
+                application.removeActivity(this);
+            }
             return true;
         }
         return super.onKeyDown(keyCode, event);

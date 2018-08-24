@@ -17,7 +17,7 @@ public class isWeiXin {
 
 
         api = WXAPIFactory.createWXAPI(context, "Your WeChat AppId");
-        if (api.isWXAppInstalled() && api.isWXAppSupportAPI()) {
+        if (api.isWXAppInstalled()) {
             return true;
         } else {
             final PackageManager packageManager = context.getPackageManager();// 获取packagemanager

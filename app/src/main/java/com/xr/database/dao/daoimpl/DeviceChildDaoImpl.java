@@ -207,6 +207,6 @@ public class DeviceChildDaoImpl {
     }
     public DeviceChild findDeviceByDeviceId(long houseId,long roomId,int deviceId){
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.DeviceId.eq(deviceId));
-        return deviceChildDao.queryBuilder().where(whereCondition).list().get(0);
+        return deviceChildDao.queryBuilder().where(whereCondition).unique();
     }
 }

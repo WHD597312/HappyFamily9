@@ -175,7 +175,7 @@ public class FamilyFragment extends Fragment {
                 if (!TextUtils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     String returnCode = jsonObject.getString("returnCode");
-                    if ("100".equals(returnCode)) {
+                    if ("100".equals(returnCode) || "400".equals(returnCode)) {
                         code = 100;
                         if (mdeledeviceChild != null) {
                             String macAddress = mdeledeviceChild.getMacAddress();

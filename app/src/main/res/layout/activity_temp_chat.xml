@@ -20,7 +20,7 @@
             android:layout_height="@dimen/dp_jy_40"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/socket_back" />
+            android:src="@mipmap/nav_back" />
 
         <TextView
             android:id="@+id/tv_name"

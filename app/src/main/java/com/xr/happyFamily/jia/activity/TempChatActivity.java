@@ -123,13 +123,13 @@ public class TempChatActivity extends AppCompatActivity {
                         int fridayKWH=returnData.getInt("fridayKWH");
                         int saturdayKWH=returnData.getInt("saturdayKWH");
                         int sundayKWH=returnData.getInt("sundayKWH");
-                        list.add(mondayKWH);
-                        list.add(tuesdayKWH);
-                        list.add(wednesdayKWH);
-                        list.add(thursdayKWH);
-                        list.add(fridayKWH);
-                        list.add(saturdayKWH);
-                        list.add(sundayKWH);
+                        list.add(30);
+                        list.add(20);
+                        list.add(42);
+                        list.add(34);
+                        list.add(16);
+                        list.add(54);
+                        list.add(25);
                     }
                     Log.i("result","-->"+result);
                 }catch (Exception e){

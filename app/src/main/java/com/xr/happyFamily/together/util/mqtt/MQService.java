@@ -1045,6 +1045,12 @@ public class MQService extends Service {
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;
+                case 8:
+                    onlineTopicName="p99/wPurifier/"+macAddress+"/transfer";
+                    offlineTopicName="p99/wPurifier/"+macAddress+"/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                    break;
             }
         }
         list.add(friendTopic);

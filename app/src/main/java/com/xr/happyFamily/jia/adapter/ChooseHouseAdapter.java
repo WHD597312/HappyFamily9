@@ -105,6 +105,7 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
                 if (sign == 1) {
                     Log.i("dddddddd", "???????????");
 
+
                     HourseDaoImpl hourseDao = new HourseDaoImpl(context);
                     List<Hourse> houses = hourseDao.findAllHouse();
                     Hourse house = houses.get(position);

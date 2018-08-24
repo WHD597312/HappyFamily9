@@ -252,19 +252,18 @@ public class qdActivity extends Activity {
                             String houseName = houseObject.getString("houseName");
                             String houseAddress = houseObject.getString("houseAddress");
                             int userId = houseObject.getInt("userId");
-                            Hourse hourse = hourseDao.findById((long) id);
-                            if (hourse != null) {
-                                hourse.setHouseName(houseName);
-                                hourse.setHouseAddress(houseAddress);
-                                hourse.setUserId(userId);
-                                hourseDao.update(hourse);
-                            } else {
-                                hourse = new Hourse((long) id, houseName, houseAddress, userId);
+//                            Hourse hourse = hourseDao.findById((long) id);
+//                            if (hourse != null) {
+//                                hourse.setHouseName(houseName);
+//                                hourse.setHouseAddress(houseAddress);
+//                                hourse.setUserId(userId);
+//                                hourseDao.update(hourse);
+//                            } else {
+                               Hourse hourse = new Hourse((long) id, houseName, houseAddress, userId);
                                 hourseDao.insert(hourse);
                                 Log.i("dddddd1", "doInBackground:---> " + hourse);
-                            }
+//                            }
                             JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
-
                             Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
                             for (int j = 0; j < roomDevices.length(); j++) {
                                 JSONObject roomObject = roomDevices.getJSONObject(j);
@@ -277,7 +276,6 @@ public class qdActivity extends Activity {
                                 Room room = new Room((long) roomId, roomName, houseId, roomType, 0,"");
                                 Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
                                 roomDao.insert(room);
-
                                 JSONArray deviceList = roomObject.getJSONArray("deviceList");
                                 for (int k = 0; k < deviceList.length(); k++) {
                                     JSONObject device = deviceList.getJSONObject(k);
@@ -295,41 +293,41 @@ public class qdActivity extends Activity {
                                     deviceChildDao.insert(deviceChild);
                                 }
                             }
-                            JSONArray deviceCommons=houseObject.getJSONArray("deviceCommons");
-                            for (int j = 0; j < deviceCommons.length(); j++) {
-                                JSONObject jsonObject3=deviceCommons.getJSONObject(j);
-                                int deviceId=jsonObject3.getInt("deviceId");
-                                String deviceName=jsonObject3.getString("deviceName");
-                                int deviceType=jsonObject3.getInt("deviceType");
-                                int roomId=jsonObject3.getInt("roomId");
-                                String roomName=jsonObject3.getString("roomName");
-                                String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
-//                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
-                                DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
-//                                for (DeviceChild deviceChild:deviceChildren){
-//                                    int deviceId2=deviceChild.getDeviceId();
-//                                    if (deviceId2==deviceId){
-//                                        deviceChild2=deviceChild;
-//                                        break;
-//                                    }
+//                            JSONArray deviceCommons=houseObject.getJSONArray("deviceCommons");
+//                            for (int j = 0; j < deviceCommons.length(); j++) {
+//                                JSONObject jsonObject3=deviceCommons.getJSONObject(j);
+//                                int deviceId=jsonObject3.getInt("deviceId");
+//                                String deviceName=jsonObject3.getString("deviceName");
+//                                int deviceType=jsonObject3.getInt("deviceType");
+//                                int roomId=jsonObject3.getInt("roomId");
+//                                String roomName=jsonObject3.getString("roomName");
+//                                String deviceMacAddress=jsonObject3.getString("deviceMacAddress");
+////                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
+//                                DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
+////                                for (DeviceChild deviceChild:deviceChildren){
+////                                    int deviceId2=deviceChild.getDeviceId();
+////                                    if (deviceId2==deviceId){
+////                                        deviceChild2=deviceChild;
+////                                        break;
+////                                    }
+////                                }
+//                                if (deviceChild2!=null){
+//                                    deviceChild2.setRoomName(roomName);
+//                                    deviceChildDao.update(deviceChild2);
+//                                }else if (deviceChild2==null){
+//
+//                                        deviceChild2=new DeviceChild();
+//                                        deviceChild2.setUserId(userId);
+//                                        deviceChild2.setName(deviceName);
+//                                        deviceChild2.setDeviceId(deviceId);
+//                                        deviceChild2.setMacAddress(deviceMacAddress);
+//                                        deviceChild2.setType(deviceType);
+//                                        deviceChild2.setRoomId(roomId);
+//                                        deviceChild2.setRoomName(roomName);
+//                                        deviceChildDao.insert(deviceChild2);
+//
 //                                }
-                                if (deviceChild2!=null){
-                                    deviceChild2.setRoomName(roomName);
-                                    deviceChildDao.update(deviceChild2);
-                                }else if (deviceChild2==null){
-
-                                        deviceChild2=new DeviceChild();
-                                        deviceChild2.setUserId(userId);
-                                        deviceChild2.setName(deviceName);
-                                        deviceChild2.setDeviceId(deviceId);
-                                        deviceChild2.setMacAddress(deviceMacAddress);
-                                        deviceChild2.setType(deviceType);
-                                        deviceChild2.setRoomId(roomId);
-                                        deviceChild2.setRoomName(roomName);
-                                        deviceChildDao.insert(deviceChild2);
-
-                                }
-                            }
+//                            }
                             JSONArray deviceShareds=houseObject.getJSONArray("deviceShareds");
                             for (int x = 0; x < deviceShareds.length(); x++) {
                                 JSONObject jsonObject2=deviceShareds.getJSONObject(x);

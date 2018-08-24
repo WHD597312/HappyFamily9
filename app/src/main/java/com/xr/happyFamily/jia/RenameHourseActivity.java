@@ -120,6 +120,10 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         mContext=RenameHourseActivity.this;
         hourseDao= new HourseDaoImpl(getApplicationContext());
 
+        if (application==null){
+            application= (MyApplication) getApplication();
+            application.addActivity(this);
+        }
         Intent intent = getIntent();
           String houseName=  intent.getStringExtra("houseName");
         String houseAddress =  intent.getStringExtra("houseAddress");

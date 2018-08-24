@@ -54,10 +54,10 @@ public class LiveActivity extends AppCompatActivity {
         circleProgressView3.setCurrent(40);
         circleProgressView4.setCurrent(15);
     }
-    @OnClick({R.id.image_back})
+    @OnClick({R.id.img_back})
     public void onClick(View view){
         switch (view.getId()){
-            case R.id.image_back:
+            case R.id.img_back:
                 finish();
                 break;
         }

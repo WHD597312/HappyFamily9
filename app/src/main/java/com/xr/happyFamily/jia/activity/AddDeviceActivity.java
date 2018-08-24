@@ -349,7 +349,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 }
 //                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
 //                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-//                mac="5asdfghi89hb";
+//                mac="5asdfghi89hc";
                 break;
         }
     }

@@ -30,6 +30,7 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
+import com.xr.happyFamily.jia.xnty.NoFastClickUtils;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
@@ -124,18 +125,21 @@ public class SocketActivity extends AppCompatActivity {
                 popupTimerWindow();
                 break;
             case R.id.socket_switch:
-                int socketState=deviceChild.getSocketState();
-                if (socketState==0){
-                    deviceChild.setSocketState(1);
-                    deviceChild.setSocketTimerOpenHour(0);
-                    deviceChild.setSocketTimerOpenMin(0);
-                }else if (socketState==1){
-                    deviceChild.setSocketTimerOpenHour(0);
-                    deviceChild.setSocketTimerOpenMin(0);
-                    deviceChild.setSocketState(0);
+                if (NoFastClickUtils.isFastClick()){
+                    int socketState=deviceChild.getSocketState();
+                    if (socketState==0){
+                        deviceChild.setSocketState(1);
+                        deviceChild.setSocketTimerOpenHour(0);
+                        deviceChild.setSocketTimerOpenMin(0);
+                    }else if (socketState==1){
+                        deviceChild.setSocketTimerOpenHour(0);
+                        deviceChild.setSocketTimerOpenMin(0);
+                        deviceChild.setSocketState(0);
+                    }
+                    setMode(deviceChild);
+                    send(deviceChild);
                 }
-                setMode(deviceChild);
-                send(deviceChild);
+
                 break;
             case R.id.image_more:
                 popupmenuWindow();

@@ -273,13 +273,22 @@ public class PersonInfoActivity extends AppCompatActivity {
             }
         };
 
+        String birthday=preferences.getString("birthday","");
         Calendar calendar= Calendar.getInstance();
+        if (!TextUtils.isEmpty(birthday)){
+            try {
+                Date date=new Date(Long.parseLong(birthday));
+                calendar.setTime(date);
+            }catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+
         year=calendar.get(Calendar.YEAR);
         month=calendar.get(Calendar.MONTH);
         day=calendar.get(Calendar.DAY_OF_MONTH);
         hour=calendar.get(Calendar.HOUR_OF_DAY);
         datePicker.setMaxDate(new Date().getTime());
-
 
         datePicker.init(year, month, day, new DatePicker.OnDateChangedListener() {
             @Override

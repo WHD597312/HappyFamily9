@@ -153,6 +153,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                     if (password.length()<6||password.length()>18){
                         Utils.showToast(this,"密码位数应该大于6小于18");
                     }else {
+                        
                         Map<String,Object> params=new HashMap<>();
                         params.put("phone",phone2);
                         params.put("code",code);

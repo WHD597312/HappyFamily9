@@ -22,6 +22,7 @@ import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.TextView;
@@ -38,6 +39,7 @@ import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.share.PlatformUtil;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
+import com.xr.happyFamily.together.util.GlideCacheUtil;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
@@ -242,9 +244,9 @@ public class ShareDeviceActivity extends AppCompatActivity {
         if (popupWindow!=null){
             popupWindow.dismiss();
         }
-        if (mBitmap!=null){
-            BitmapCompressUtils.recycleBitmap(mBitmap);
-        }
+//        if (mBitmap!=null){
+//            BitmapCompressUtils.recycleBitmap(mBitmap);
+//        }
         if (receiver!=null){
             unregisterReceiver(receiver);
         }
@@ -267,7 +269,6 @@ public class ShareDeviceActivity extends AppCompatActivity {
                             .centerCrop()
                             .into(180, 180)
                             .get();
-
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -278,9 +279,13 @@ public class ShareDeviceActivity extends AppCompatActivity {
         @Override
         protected void onPostExecute(Bitmap bitmap) {
             super.onPostExecute(bitmap);
-            if (bitmap != null) {
-                img_qrCode.setImageBitmap(bitmap);
-                mBitmap=bitmap;
+            try {
+                if (bitmap != null) {
+                    img_qrCode.setImageBitmap(bitmap);
+                    mBitmap=bitmap;
+                }
+            }catch (Exception e){
+                e.printStackTrace();
             }
         }
     }

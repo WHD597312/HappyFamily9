@@ -606,7 +606,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 if (bitmap != null) {
                     File file = BitmapCompressUtils.compressImage(bitmap);
                     preferences.edit().putString("image", file.getPath()).commit();
-                    BitmapCompressUtils.recycleBitmap(bitmap);
+//                    BitmapCompressUtils.recycleBitmap(bitmap);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

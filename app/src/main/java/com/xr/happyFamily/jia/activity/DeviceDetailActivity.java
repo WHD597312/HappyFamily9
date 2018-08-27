@@ -47,6 +47,7 @@ import com.xr.happyFamily.jia.view_custom.SemicircleBar;
 import com.xr.happyFamily.jia.view_custom.SmartWheelBar;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
 import com.xr.happyFamily.jia.view_custom.UpdateDeviceDialog;
+import com.xr.happyFamily.jia.xnty.NoFastClickUtils;
 import com.xr.happyFamily.jia.xnty.Timepicker;
 import com.xr.happyFamily.jia.xnty.Timepicker2;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -311,59 +312,72 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.image_switch:
-                deviceState=deviceChild.getDeviceState();
-                if (deviceState==0){
-                    deviceChild.setDeviceState(1);
-                }else if (deviceState==1){
-                    deviceChild.setDeviceState(0);
+                if (NoFastClickUtils.isFastClick()){
+                    deviceState=deviceChild.getDeviceState();
+                    if (deviceState==0){
+                        deviceChild.setDeviceState(1);
+                    }else if (deviceState==1){
+                        deviceChild.setDeviceState(0);
+                    }
+                    setMode(deviceChild);
+                    send(deviceChild);
                 }
-                setMode(deviceChild);
-                send(deviceChild);
+
                 break;
             case R.id.image_timer:
-                deviceState=deviceChild.getDeviceState();
-                if (deviceState==0){
-                    Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
-                }else if (deviceState==1){
-                    popupTimerWindow();
+                if (NoFastClickUtils.isFastClick()){
+                    deviceState=deviceChild.getDeviceState();
+                    if (deviceState==0){
+                        Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
+                    }else if (deviceState==1){
+                        popupTimerWindow();
+                    }
                 }
+
                 break;
             case R.id.image_rate:
-                deviceState=deviceChild.getDeviceState();
-                if (deviceState==0){
-                    Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
-                }else if (deviceState==1){
-                    popupRateView();
+                if (NoFastClickUtils.isFastClick()){
+                    deviceState=deviceChild.getDeviceState();
+                    if (deviceState==0){
+                        Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
+                    }else if (deviceState==1){
+                        popupRateView();
+                    }
                 }
                 break;
             case R.id.image_lock:
-                int lockState=deviceChild.getLockState();
-                deviceState=deviceChild.getDeviceState();
-                if (deviceState==0){
-                    Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
-                }else if (deviceState==1){
-                    if (lockState==1){
-                        deviceChild.setLockState(0);
-                    }else if (lockState==0){
-                        deviceChild.setLockState(1);
+                if (NoFastClickUtils.isFastClick()){
+                    int lockState=deviceChild.getLockState();
+                    deviceState=deviceChild.getDeviceState();
+                    if (deviceState==0){
+                        Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
+                    }else if (deviceState==1){
+                        if (lockState==1){
+                            deviceChild.setLockState(0);
+                        }else if (lockState==0){
+                            deviceChild.setLockState(1);
+                        }
+                        setMode(deviceChild);
+                        send(deviceChild);
                     }
-                    setMode(deviceChild);
-                    send(deviceChild);
                 }
+
                 break;
             case R.id.image_screen:
-                int screenState=deviceChild.getScreenState();
-                deviceState=deviceChild.getDeviceState();
-                if (deviceState==0){
-                    Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
-                }else if (deviceState==1) {
-                    if (screenState==1){
-                        deviceChild.setScreenState(0);
-                    }else if (screenState==0){
-                        deviceChild.setScreenState(1);
+                if (NoFastClickUtils.isFastClick()){
+                    int screenState=deviceChild.getScreenState();
+                    deviceState=deviceChild.getDeviceState();
+                    if (deviceState==0){
+                        Toast.makeText(this,"设备已关机",Toast.LENGTH_SHORT).show();
+                    }else if (deviceState==1) {
+                        if (screenState==1){
+                            deviceChild.setScreenState(0);
+                        }else if (screenState==0){
+                            deviceChild.setScreenState(1);
+                        }
+                        setMode(deviceChild);
+                        send(deviceChild);
                     }
-                    setMode(deviceChild);
-                    send(deviceChild);
                 }
                 break;
         }

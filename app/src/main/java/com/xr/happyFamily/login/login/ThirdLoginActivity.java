@@ -150,14 +150,19 @@ public class ThirdLoginActivity extends AppCompatActivity {
                         Utils.showToast(this,"请输入密码");
                         return;
                     }
-                    Map<String,Object> params=new HashMap<>();
-                    params.put("phone",phone2);
-                    params.put("code",code);
-                    params.put("password",password);
-                    params.put("userId",userId);
-                    new RegistAsyncTask().execute(params);
+                    if (password.length()<6||password.length()>18){
+                        Utils.showToast(this,"密码位数应该大于6小于18");
+                    }else {
+                        Map<String,Object> params=new HashMap<>();
+                        params.put("phone",phone2);
+                        params.put("code",code);
+                        params.put("password",password);
+                        params.put("userId",userId);
+                        new RegistAsyncTask().execute(params);
 //                new getShopAsync().execute(params);
-                    firstClick=0;
+                        firstClick=0;
+                    }
+
                 }
 
                 break;

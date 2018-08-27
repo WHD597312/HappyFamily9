@@ -225,7 +225,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                         final ImageView imageView = (ImageView) dia.findViewById(R.id.iv_dialogr);
                         imageView.setBackgroundResource(R.mipmap.regest_success);
                         dia.show();
-                    dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
+                        dia.setCanceledOnTouchOutside(true); // 设置屏幕点击退出
                         Window w = dia.getWindow();
                         WindowManager.LayoutParams lp = w.getAttributes();
                         lp.x = 0;

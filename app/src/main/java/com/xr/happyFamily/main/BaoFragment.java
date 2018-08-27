@@ -199,6 +199,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     }
 
     private void init() {
+        page=1;
         list_title = new ArrayList<>();
         list_shop = new ArrayList<>();
         list_more = new ArrayList<>();

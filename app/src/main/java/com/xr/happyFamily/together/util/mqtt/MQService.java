@@ -16,10 +16,13 @@ import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
+import android.os.PowerManager;
 import android.support.annotation.Nullable;
+import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.WindowManager;
+import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
@@ -30,9 +33,13 @@ import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
+import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.MsgDaoImpl;
+import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.ShareDeviceActivity;
@@ -52,6 +59,7 @@ import com.xr.happyFamily.le.pojo.MsgData;
 import com.xr.happyFamily.le.pojo.UserInfo;
 import com.xr.happyFamily.le.view.btClockjsDialog4;
 import com.xr.happyFamily.le.view.btClockjsDialog5;
+import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.main.FamilyFragmentManager;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.MyDialog;
@@ -83,6 +91,12 @@ public class MQService extends Service {
     private String userName = "admin";
     private String passWord = "Xr7891122";
     String macAddress = "hrrj7895ccf7f6c9fa4";
+    private HourseDaoImpl hourseDao;
+    private RoomDaoImpl roomDao;
+    private TimeDaoImpl timeDao;
+    private UserInfosDaoImpl userInfosDao;
+    private ClockDaoImpl clockDao;
+
     /**
      * 测试的macAddrsss
      */
@@ -109,7 +123,6 @@ public class MQService extends Service {
     String clientId;
     private LocalBinder binder = new LocalBinder();
 
-
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
      */
@@ -117,10 +130,14 @@ public class MQService extends Service {
     public void onCreate() {
         super.onCreate();
         clientId = UUID.getUUID(this);
+        hourseDao = new HourseDaoImpl(this);
         deviceChildDao = new DeviceChildDaoImpl(this);
         friendDataDao = new FriendDataDaoImpl(this);
         msgDao = new MsgDaoImpl(this);
-
+        roomDao = new RoomDaoImpl(this);
+        timeDao = new TimeDaoImpl(this);
+        userInfosDao = new UserInfosDaoImpl(this);
+        clockDao = new ClockDaoImpl(this);
         init();
     }
 
@@ -141,6 +158,7 @@ public class MQService extends Service {
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         connect();
+        Log.i("clientId", "-->" + clientId);
         isFinish = false;
         countTimer = new CountTimer(5000, 1000);
         countTimer.start();
@@ -268,15 +286,19 @@ public class MQService extends Service {
             String topicName = strings[0];/**收到的主题*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
-            if (topicName.startsWith("p99/warmer")) {
+            Log.i("phone67890", "-->" + phone);
+            if (topicName.startsWith("p99/" + phone)) {
+
+            } else if (topicName.startsWith("p99/warmer")) {
                 macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/sensor1")) {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
-            } else if (topicName.startsWith("p99/socket1")){
-                macAddress=topicName.substring(12,topicName.lastIndexOf("/"));
-            }else if (topicName.startsWith("p99")) {
+            } else if (topicName.startsWith("p99/socket1")) {
+                macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
+            } else if (topicName.startsWith("p99")) {
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
+
             int type = -1;/**产品类型*/
             int busModel = -1;/**商业模式*/
             int timerMoudle = -1;/**定时器模式*/
@@ -312,7 +334,10 @@ public class MQService extends Service {
             if (AddDeviceActivity.running) {
 
             } else {
-                deviceChild=deviceChildDao.findDeviceByMacAddress2(macAddress);
+                if (!TextUtils.isEmpty(macAddress)) {
+                    deviceChild = deviceChildDao.findDeviceByMacAddress2(macAddress);
+                }
+
 //                List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
 //                for (DeviceChild deviceChild2 : deviceChildren) {
 //                    if (macAddress.equals(deviceChild2.getMacAddress())) {
@@ -322,7 +347,28 @@ public class MQService extends Service {
 //                }
             }
             try {
+                if (topicName.equals("p99/" + phone + "/login")) {
+                    JSONObject login = new JSONObject(message);
+                    String uuid = login.getString("userId");
+                    String uuid2 = UUID.getUUID(MQService.this);
+                    if (!TextUtils.isEmpty(uuid) && uuid.equals(uuid2)) {
+                        return null;
+                    } else {
+                        Message msg = handler.obtainMessage();
+                        msg.what = 2;
+                        handler.sendMessage(msg);
+                        hourseDao.deleteAll();
+                        roomDao.deleteAll();
+                        deviceChildDao.deleteAll();
+                        clockDao.deleteAll();
+                        timeDao.deleteAll();
+                        userInfosDao.deleteAll();
+                        friendDataDao.deleteAll();
+                        msgDao.deleteAll();
+                        cancelAllsubscibe();
 
+                    }
+                }
                 if ("reSet".equals(message)) {
                     if (deviceChild != null) {
                         long sharedId2 = deviceChild.getShareId();
@@ -344,7 +390,7 @@ public class MQService extends Service {
                     }
                 } else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
 
-                } else if (macAddress.equals("clockuniversal")) {
+                } else if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
 
                 } else if (topicName.contains("clockuniversal")) {
 
@@ -359,7 +405,7 @@ public class MQService extends Service {
                         messageJsonArray = messageJsonObject.getJSONArray("Warmer");
                     } else if (messageJsonObject != null && messageJsonObject.has("TempHumPM2_5")) {
                         messageJsonArray = messageJsonObject.getJSONArray("TempHumPM2_5");
-                    }else if (messageJsonObject!=null && messageJsonObject.has("Socket")){
+                    } else if (messageJsonObject != null && messageJsonObject.has("Socket")) {
                         messageJsonArray = messageJsonObject.getJSONArray("Socket");
                     }
                     if (!TextUtils.isEmpty(productType)) {
@@ -548,21 +594,21 @@ public class MQService extends Service {
                                 int mWifiVersion = messageJsonArray.getInt(5);
                                 wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
                                 socketPowerHigh = messageJsonArray.getInt(7);
-                                socketPowerLow=messageJsonArray.getInt(8);
-                                socketTemp=messageJsonArray.getInt(9);
-                                int state=messageJsonArray.getInt(10);
-                                int x[]=TenTwoUtil.changeToTwo(state);
-                                socketState= x[7];
+                                socketPowerLow = messageJsonArray.getInt(8);
+                                socketTemp = messageJsonArray.getInt(9);
+                                int state = messageJsonArray.getInt(10);
+                                int x[] = TenTwoUtil.changeToTwo(state);
+                                socketState = x[7];
 //                                socketTimer=x[6];
 
-                                socketTimerOpenHour=messageJsonArray.getInt(11);
-                                socketTimerOpenMin=messageJsonArray.getInt(12);
+                                socketTimerOpenHour = messageJsonArray.getInt(11);
+                                socketTimerOpenMin = messageJsonArray.getInt(12);
 
 //                                socketTimerCloseHour=messageJsonArray.getInt(13);
 //                                socketTimerCloseMin=messageJsonArray.getInt(14);
-                                socketCurrent=messageJsonArray.getInt(13);
-                                socketVal=messageJsonArray.getInt(14);
-                                socketPowerConsume=messageJsonArray.getInt(15);
+                                socketCurrent = messageJsonArray.getInt(13);
+                                socketVal = messageJsonArray.getInt(14);
+                                socketPowerConsume = messageJsonArray.getInt(15);
 
                                 if (deviceChild != null) {
                                     deviceChild.setBusModel(busModel);
@@ -624,12 +670,12 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (SocketActivity.running){
+                } else if (SocketActivity.running) {
                     Intent mqttIntent = new Intent("SocketActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (ShareDeviceActivity.running){
+                } else if (ShareDeviceActivity.running) {
                     Intent mqttIntent = new Intent("ShareDeviceActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
@@ -685,7 +731,7 @@ public class MQService extends Service {
                 Log.e("qqqqqqqqqqWWW", macAddress + "," + topicName);
                 Log.e("qqqqqqqqqqWWW", message);
 
-                if (macAddress.equals("clockuniversal")) {
+                if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
                     SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
                     String clockData = preferences.getString("clockData", "");
                     String[] clocks = clockData.split(",");
@@ -753,7 +799,7 @@ public class MQService extends Service {
 
                 } else if (topicName.contains("clockuniversal")) {
                     boolean isShow = preferences.getBoolean("isClockPopShow", false);
-                    Log.e("qqqqqIsShow",isShow+"???");
+                    Log.e("qqqqqIsShow", isShow + "???");
                     JSONObject jsonObject = new JSONObject(message);
                     JsonObject content = new JsonParser().parse(message).getAsJsonObject();
                     //添加闹钟
@@ -780,7 +826,7 @@ public class MQService extends Service {
                     msgData.setUserName(jsonObject.getString("createrName"));
                     if (state == 2) {
                         if (findClock.size() == 0) {
-                            if(userList.getClockType()==3)
+                            if (userList.getClockType() == 3)
                                 msgData.setState(1);
                             else
                                 msgData.setState(11);
@@ -793,7 +839,7 @@ public class MQService extends Service {
                                 userInfosDao.insert(userInfo1);
                             }
                         } else {
-                            if(userList.getClockType()==3)
+                            if (userList.getClockType() == 3)
                                 msgData.setState(2);
                             else
                                 msgData.setState(12);
@@ -812,7 +858,7 @@ public class MQService extends Service {
                             handler.sendMessage(msg);
                         }
                     } else if (state == 1) {
-                        if(userList.getClockType()==3)
+                        if (userList.getClockType() == 3)
                             msgData.setState(1);
                         else
                             msgData.setState(11);
@@ -835,7 +881,7 @@ public class MQService extends Service {
                         }
 
                     } else if (state == 3) {
-                        if(userList.getClockType()==3)
+                        if (userList.getClockType() == 3)
                             msgData.setState(3);
                         else
                             msgData.setState(13);
@@ -861,7 +907,7 @@ public class MQService extends Service {
 
                         if (findClock.size() == 0) {
                             if (isAdd) {
-                                if(userList.getClockType()==3)
+                                if (userList.getClockType() == 3)
                                     msgData.setState(1);
                                 else
                                     msgData.setState(11);
@@ -881,7 +927,7 @@ public class MQService extends Service {
                         } else {
                             ClockBean userList2 = findClock.get(0);
                             if (isAdd) {
-                                if(userList.getClockType()==3)
+                                if (userList.getClockType() == 3)
                                     msgData.setState(2);
                                 else
                                     msgData.setState(12);
@@ -1005,11 +1051,11 @@ public class MQService extends Service {
         }
     }
 
-
     /**
      * 获得订阅MQTT的所有主题
      */
     String userId;
+    String phone;
     SharedPreferences preferences;
 
     public List<String> getTopicNames() {
@@ -1018,9 +1064,11 @@ public class MQService extends Service {
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
         String friendTopic = "p99/+/acceptorId_" + userId + "/friend";
+        phone = preferences.getString("phone", "");
         String friendReplayTopic = "p99/+/acceptorId_" + userId + "/friendReplay";
         String clockTopic = "p99/clockuniversal/userId_" + userId;
         Log.e("qqqqqCCC", friendTopic);
+        list.add("p99/" + phone + "/login");
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
         for (DeviceChild deviceChild : deviceChildren) {
             String macAddress = deviceChild.getMacAddress();
@@ -1046,16 +1094,17 @@ public class MQService extends Service {
                     list.add(offlineTopicName);
                     break;
                 case 8:
-                    onlineTopicName="p99/wPurifier/"+macAddress+"/transfer";
-                    offlineTopicName="p99/wPurifier/"+macAddress+"/lwt";
+                    onlineTopicName = "p99/wPurifier/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/wPurifier/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;
             }
+
+            list.add(friendTopic);
+            list.add(clockTopic);
+            list.add(friendReplayTopic);
         }
-        list.add(friendTopic);
-        list.add(clockTopic);
-        list.add(friendReplayTopic);
         return list;
     }
 
@@ -1088,6 +1137,7 @@ public class MQService extends Service {
     /**
      * 发送MQTT主题
      */
+
     public boolean publish(String topicName, int qos, String payload) {
         boolean flag = false;
         if (client != null && client.isConnected()) {
@@ -1163,6 +1213,27 @@ public class MQService extends Service {
                 case 1:
                     showDialog();
                     break;
+                case 2:
+                    // 获取电源管理器对象
+                    PowerManager pm = (PowerManager) MyApplication.getContext()
+                            .getSystemService(Context.POWER_SERVICE);
+                    boolean screenOn = pm.isScreenOn();
+                    if (!screenOn) {
+                        // 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
+                        PowerManager.WakeLock wl = pm.newWakeLock(
+                                PowerManager.ACQUIRE_CAUSES_WAKEUP |
+                                        PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
+                        wl.acquire(10000); // 点亮屏幕
+                        wl.release(); // 释放
+                    }
+                    Intent notifyIntent = new Intent(MQService.this, LoginActivity.class);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    if (preferences.contains("password")) {
+                        editor.remove("password").commit();
+                    }
+                    Toast.makeText(MQService.this,"该账号已在其他设备上登录",Toast.LENGTH_SHORT).show();
+                    startActivity(notifyIntent);
+                    break;
             }
         }
     };
@@ -1173,7 +1244,7 @@ public class MQService extends Service {
 
     private void showDialog() {
         if (isFinish) {
-            dialog4 = new btClockjsDialog5(MQService.this,dialogSign);
+            dialog4 = new btClockjsDialog5(MQService.this, dialogSign);
             dialog4.setOnNegativeClickListener(new btClockjsDialog5.OnNegativeClickListener() {
                 @Override
                 public void onNegativeClick() {
@@ -1236,4 +1307,5 @@ public class MQService extends Service {
 
         }
     }
+
 }

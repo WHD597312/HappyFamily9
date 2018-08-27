@@ -161,6 +161,7 @@ public class SettingActivity extends AppCompatActivity {
                     SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
                     mPositionPreferences.edit().clear().commit();
                     Intent exit = new Intent(this, LoginActivity.class);
+                    exit.putExtra("logout","logout");
                     startActivity(exit);
                 }
                 break;

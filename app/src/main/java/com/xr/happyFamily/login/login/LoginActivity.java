@@ -1,12 +1,15 @@
 package com.xr.happyFamily.login.login;
 
 import android.app.ProgressDialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
+import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
 import android.support.v7.app.AppCompatActivity;
@@ -48,6 +51,7 @@ import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+import com.xr.happyFamily.together.util.mqtt.UUID;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -101,6 +105,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     Animation rotate;
     SharedPreferences mPositionPreferences;
 
+    public static boolean running=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -123,6 +128,12 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
+
+
+        running=true;
+        Intent service = new Intent(LoginActivity.this, MQService.class);
+        startService(service);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
     }
 
     SharedPreferences preferences;
@@ -367,7 +378,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     editor.putString("token", token);
                     editor.putInt("ThirduserId", ThirduserId);
                     editor.commit();
-
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -443,6 +453,10 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         editor.putString("password", password);
                         editor.putString("token", token);
                         editor.putString("username",username);
+                        if (!TextUtils.isEmpty(phone) && mqService!=null){
+                            boolean success=mqService.subscribe("p99/"+phone+"/login",1);
+                            Log.i("gggggg","-->"+success);
+                        }
                         boolean success=editor.commit();
                         if (success){
                             new hourseAsyncTask().execute();
@@ -507,7 +521,8 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         }
                         String userId3=returnData.getString("userId");
                         String username=returnData.getString("userName");
-                        String phone=returnData.getString("phone");
+                        String phone=returnData.getString("phone").trim();
+                        Log.i("phone222","-->"+phone);
                         String birthday=returnData.getString("birthday");
                         editor.putString("username",username);
                         editor.putString("userId",userId3);
@@ -523,6 +538,16 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         }
                         editor.putBoolean("sex",sex);
                         editor.commit();
+                        String uuid=UUID.getUUID(LoginActivity.this);
+                        if (!TextUtils.isEmpty(uuid)){
+                            JSONObject login=new JSONObject();
+                            login.put("userId",uuid);
+                            String ss=login.toString();
+                            if (mqService!=null){
+                                boolean success=mqService.publish("p99/"+phone+"/login",1,ss);
+                                Log.i("success","-->"+success);
+                            }
+                        }
                         JSONArray houseDevices = returnData.getJSONArray("houseDevices");
                         for (int i = 0; i < houseDevices.length(); i++) {
                             JSONObject houseObject = houseDevices.getJSONObject(i);
@@ -661,6 +686,8 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     Utils.showToast(LoginActivity.this, "查询失败");
                     break;
                 case 100:
+
+
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     if (mPositionPreferences.contains("position")){
                         mPositionPreferences.edit().clear().commit();
@@ -681,8 +708,29 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        running=false;
         if (unbinder != null) {
             unbinder.unbind();
         }
+        if (isBound==true &&connection!=null){
+            unbindService(connection);
+        }
     }
+
+    MQService mqService;
+    boolean bound;
+    boolean isBound;
+    ServiceConnection connection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 }

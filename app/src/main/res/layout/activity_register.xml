@@ -151,6 +151,7 @@
           android:layout_toRightOf="@+id/image_pwd"
           android:layout_marginLeft="@dimen/dp_jy_14"
           android:layout_marginTop="@dimen/dp_jy_28"
+
           android:background="@null"
           android:ems="10"
           android:hint="请输入密码"

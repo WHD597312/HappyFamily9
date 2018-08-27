@@ -151,14 +151,19 @@ public class RegistActivity extends AppCompatActivity {
                         Utils.showToast(this,"请输入密码");
                         break;
                     }
+                    if (password.length()<6||password.length()>18){
+                        Utils.showToast(this,"密码位数应该大于6小于18");
+                    }else {
+                        Map<String,Object> params=new HashMap<>();
+                        params.put("phone",phone2);
+                        params.put("code",code);
+                        params.put("password",password);
 
-                    Map<String,Object> params=new HashMap<>();
-                    params.put("phone",phone2);
-                    params.put("code",code);
-                    params.put("password",password);
+                        new RegistAsyncTask().execute(params);
+                        showProgressDialog("请稍后...");
+                    }
 
-                    new RegistAsyncTask().execute(params);
-                    showProgressDialog("请稍后...");
+
 //                new getShopAsync().execute(params);
 
 

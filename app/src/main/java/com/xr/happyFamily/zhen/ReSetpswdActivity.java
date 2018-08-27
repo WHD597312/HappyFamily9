@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
@@ -93,11 +94,16 @@ public class ReSetpswdActivity extends AppCompatActivity {
                     Toast.makeText(this,"新密码与确认密码不同",Toast.LENGTH_SHORT).show();
                     break;
                 }
-                Map<String,Object> params=new HashMap<>();
-                params.put("phone",phone);
-                params.put("oldPassword",password);
-                params.put("password",ensurePswd);
-                new ResetpswdAsync().execute(params);
+                if (newPswd.length()<6||newPswd.length()>18){
+                    Utils.showToast(this,"密码位数应该大于6小于18");
+                }else {
+                    Map<String,Object> params=new HashMap<>();
+                    params.put("phone",phone);
+                    params.put("oldPassword",password);
+                    params.put("password",ensurePswd);
+                    new ResetpswdAsync().execute(params);
+
+                }
                 break;
         }
     }

@@ -2,6 +2,8 @@ package com.xr.happyFamily.main;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
@@ -52,6 +54,7 @@ import com.xr.happyFamily.bao.view.MyScrollview;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopPageBean;
+import com.xr.happyFamily.jia.xnty.CsjActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -246,6 +249,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             @Override
             public void loadMore() {
                 page++;
+                Log.e("qqqqPage",page+"");
                 isLoading = true;
                 if (countTimer != null)
                     countTimer.cancel();
@@ -430,7 +434,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
         //点击空白处时，隐藏掉pop窗口
         mPopWindow.setFocusable(true);
-//        mPopWindow.setBackgroundDrawable(new BitmapDrawable());
+        mPopWindow.setBackgroundDrawable(new BitmapDrawable(
+                getActivity().getApplicationContext().getResources(),
+                Bitmap.createBitmap(1, 1, Bitmap.Config.ARGB_8888)
+        ));
         mPopWindow.setOutsideTouchable(true);
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
@@ -457,7 +464,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_shangcheng:
-                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class), MAIN_CODE);
+                startActivityForResult(new Intent(mContext, CsjActivity.class), MAIN_CODE);
+//                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
         }
@@ -474,7 +482,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
     }
 
-
+    ShopAsync shopAsync;
     private void getShopData(int id, int page) {
 
 //        if (lastVisibleItem == 1)
@@ -498,6 +506,15 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         }
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
+        if(isLoading){
+            if (shopAsync != null && shopAsync.getStatus() == AsyncTask.Status.RUNNING) {
+                shopAsync.cancel(true);
+            } else {
+                shopAsync = new ShopAsync();
+                shopAsync.execute(params);
+            }
+        }
+        else
         new ShopAsync().execute(params);
     }
 
@@ -541,7 +558,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                                     list_shop.add(userList);
                                 }
                             } else {
-                                page--;
                                 isData = false;
                             }
 
@@ -582,9 +598,13 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 if (isLoading) {
                     swipeContent.finishLoadMore();
                     shopAdapter.notifyDataSetChanged();
-                }isLoading = false;
+
+                }
+                isLoading = false;
+
                 if (!isData) {
                     ToastUtil.showShortToast("无更多商品");
+                    page--;
                 }
             }
         }
@@ -743,6 +763,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             if (isLoading) {
                 swipeContent.finishLoadMore();
                 Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+                page--;
             }
         }
     }

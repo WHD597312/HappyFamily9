@@ -42,7 +42,11 @@ import butterknife.Unbinder;
 import cn.smssdk.EventHandler;
 import cn.smssdk.SMSSDK;
 import pl.droidsonroids.gif.GifDrawable;
-
+ /***
+  *
+  * 微信三方第一次登录
+  *
+  * **/
 public class ThirdLoginActivity extends AppCompatActivity {
 
     private String TAG="RegistActivity";
@@ -153,7 +157,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                     if (password.length()<6||password.length()>18){
                         Utils.showToast(this,"密码位数应该大于6小于18");
                     }else {
-                        
+
                         Map<String,Object> params=new HashMap<>();
                         params.put("phone",phone2);
                         params.put("code",code);
@@ -180,6 +184,10 @@ public class ThirdLoginActivity extends AppCompatActivity {
         }
     }
    CountTimer countTimer;
+    /**
+     *
+     * 电话号码已注册无法发送验证码
+     * ****/
     class  PhoneExiseAsyncTask extends AsyncTask<Map<String,Object>,Void,String>{
         String phone;
         @Override
@@ -220,6 +228,10 @@ public class ThirdLoginActivity extends AppCompatActivity {
             }
         }
     }
+    /****
+     *
+     * 注册逻辑
+     * ******/
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override

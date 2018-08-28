@@ -135,7 +135,6 @@ public class LeFragment extends Fragment {
         getBanner("foot", 1);
 
 
-
         return view;
     }
 
@@ -275,8 +274,8 @@ public class LeFragment extends Fragment {
                     clolkDialog1();
 
                 } else {
-                    Intent intent = new Intent(getActivity(),ClockActivity.class);
-                    intent.putExtra("type","asd");
+                    Intent intent = new Intent(getActivity(), ClockActivity.class);
+                    intent.putExtra("type", "asd");
                     startActivity(intent);
                 }
                 break;
@@ -347,12 +346,14 @@ public class LeFragment extends Fragment {
                 if (isFinish) {
                     MyDialog.closeDialog(dialog);
                     happyFootAdapter.notifyDataSetChanged();
-                    try {
-                        initData();//初始化数据
-                        initView();//初始化View，设置适配器
-                        autoPlayView();//开启线程，自动播放
-                    }catch (Exception e){
-                        e.printStackTrace();
+                    if (happyBannerBeans.size() > 0) {
+                        try {
+                            initData();//初始化数据
+                            initView();//初始化View，设置适配器
+                            autoPlayView();//开启线程，自动播放
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
                     }
                 } else {
                     page++;

@@ -160,10 +160,10 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_rename_it1:
-                buildUpdateHomeDialog();
+                buildUpdateHomeDialog();//修改名称
                 break;
             case R.id.rl_rename_it2:
-                 showPopup();
+                 showPopup();//三级联动城市
                 break;
             case R.id.iv_rename_back:
 //                Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
@@ -171,7 +171,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                 finish();
                 break;
             case R.id.tv_rename_del:
-                deleteHourseDialog();
+                deleteHourseDialog();//删除家
                 break;
         }
     }

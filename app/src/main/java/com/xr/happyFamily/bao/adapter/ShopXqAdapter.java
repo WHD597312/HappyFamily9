@@ -17,9 +17,11 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.le.bean.HappyBannerBean;
 
+import java.io.BufferedInputStream;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.net.URLConnection;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -75,7 +77,6 @@ public class ShopXqAdapter extends RecyclerView.Adapter<ShopXqAdapter.MyViewHold
 
     @Override
     public void onBindViewHolder(MyViewHolder holder, final int position) {
-        Log.e("qqqqqqqqIIII",data.get(position));
         String str=data.get(position);
         String str1 = "";
         if (str != null) {
@@ -83,10 +84,18 @@ public class ShopXqAdapter extends RecyclerView.Adapter<ShopXqAdapter.MyViewHold
             Matcher matcher = pattern.matcher(str);
             str1 = matcher.replaceAll("");
         }
-        if (str1.length()>0)
-        Picasso.with(context).load(str1)
-                .placeholder(R.mipmap.bg_loading)
-               .into(holder.img_footBanner);
+        if (str1.length()>0) {
+            Picasso.with(context)
+                    .load(str1)
+                    .placeholder(R.mipmap.bg_loading)
+                    .into(holder.img_footBanner);
+
+            //清除缓存
+            Picasso.with(context)
+                    .invalidate(str1);
+        }
+        ;
+
     }
 
     @Override
@@ -120,4 +129,29 @@ public class ShopXqAdapter extends RecyclerView.Adapter<ShopXqAdapter.MyViewHold
 
 
     }
+
+
+    public Bitmap getBitmap(String url) {
+        Bitmap bm = null;
+        try {
+            URL iconUrl = new URL(url);
+            URLConnection conn = iconUrl.openConnection();
+            HttpURLConnection http = (HttpURLConnection) conn;
+
+            int length = http.getContentLength();
+
+            conn.connect();
+            // 获得图像的字符流
+            InputStream is = conn.getInputStream();
+            BufferedInputStream bis = new BufferedInputStream(is, length);
+            bm = BitmapFactory.decodeStream(bis);
+            bis.close();
+            is.close();// 关闭流
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+        return bm;
+    }
+
 }

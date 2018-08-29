@@ -20,6 +20,7 @@ import android.text.TextUtils;
 import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
@@ -345,11 +346,11 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 bt_add_finish.setEnabled(false);
                 if (!TextUtils.isEmpty(ssid)) {
                     popupmenuWindow3();
-                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+//                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
-//                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
-//                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-//                mac="5asdfghi89hd";
+                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
+                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+                mac="5asdfghi29hd";
                 break;
         }
     }
@@ -451,11 +452,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             image_heater_help.setImageDrawable(gifDrawable);
         }
 
-
         popupWindow2 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        //点击空白处时，隐藏掉pop窗口
-        popupWindow2.setFocusable(true);
-        popupWindow2.setOutsideTouchable(true);
+
         //添加弹出、弹入的动画
         popupWindow2.setAnimationStyle(R.style.Popupwindow);
         backgroundAlpha(0.6f);
@@ -463,8 +461,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         popupWindow2.setOutsideTouchable(false);
 //        ColorDrawable dw = new ColorDrawable(0x30000000);
 //        popupWindow.setBackgroundDrawable(dw);
-        popupWindow2.showAsDropDown(et_wifi, 0, -100);
-//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+//        popupWindow2.showAsDropDown(et_wifi, 0, -20);
+        popupWindow2.showAtLocation(et_wifi, Gravity.CENTER, 0, 0);
         //添加按键事件监听
     }
     //设置蒙版
@@ -505,7 +503,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             int taskResultCount = -1;
             synchronized (mLock) {
                 // !!!NOTICE
-
                 String apSsid = mWifiAdmin.getWifiConnectedSsidAscii(params[0]);
                 String apBssid = params[1];
                 String apPassword = params[2];

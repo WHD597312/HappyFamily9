@@ -295,7 +295,9 @@ public class MQService extends Service {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/socket1")) {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
-            } else if (topicName.startsWith("p99")) {
+            }else if (topicName.startsWith("p99/wPurifier1")){
+                macAddress = topicName.substring(14, topicName.lastIndexOf("/"));
+            }else if (topicName.startsWith("p99")) {
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
 
@@ -407,6 +409,8 @@ public class MQService extends Service {
                         messageJsonArray = messageJsonObject.getJSONArray("TempHumPM2_5");
                     } else if (messageJsonObject != null && messageJsonObject.has("Socket")) {
                         messageJsonArray = messageJsonObject.getJSONArray("Socket");
+                    }else if (messageJsonObject!=null && messageJsonObject.has("WPurifier")){
+                        messageJsonArray = messageJsonObject.getJSONArray("WPurifier");
                     }
                     if (!TextUtils.isEmpty(productType)) {
                         type = Integer.parseInt(productType);
@@ -575,11 +579,10 @@ public class MQService extends Service {
 
                         } else {
                             if (messageJsonArray != null) {
-                                int socketPowerHigh;/**功率参数高位*/
-                                int socketPowerLow;/**功率参数低位*/
+                                int socketPower;/**插座功率*/
                                 int socketTemp;/**插座温度*/
                                 int socketState;/**插座当前状态*/
-                                int socketTimer;/**插座定时模式*/
+                                int socketTimer=0;/**插座定时模式*/
                                 int socketTimerOpenHour;/**插座定时模式开的 时*/
                                 int socketTimerOpenMin;/**插座定时模式开的 分*/
                                 int socketTimerCloseHour;/**插座定时模式关的 时*/
@@ -587,44 +590,75 @@ public class MQService extends Service {
                                 int socketCurrent;/**插座当前电流值*/
                                 int socketVal;/**插座当前电压值*/
                                 int socketPowerConsume;/**插座当前耗电量总度数*/
-
+                                int isSocketTimerMode;/**定时模式是否开启*/
                                 busModel = messageJsonArray.getInt(3);
                                 int mMcuVersion = messageJsonArray.getInt(4);
                                 mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
                                 int mWifiVersion = messageJsonArray.getInt(5);
                                 wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
-                                socketPowerHigh = messageJsonArray.getInt(7);
-                                socketPowerLow = messageJsonArray.getInt(8);
-                                socketTemp = messageJsonArray.getInt(9);
+                                int socketPowerHigh = messageJsonArray.getInt(7);
+                                int socketPowerLow = messageJsonArray.getInt(8);
+
+                                String power2=socketPowerHigh/256+socketPowerLow%256+"";
+                                socketPower=Integer.parseInt(power2);
+                                socketTemp = messageJsonArray.getInt(9)-128;
                                 int state = messageJsonArray.getInt(10);
                                 int x[] = TenTwoUtil.changeToTwo(state);
                                 socketState = x[7];
-//                                socketTimer=x[6];
+                                isSocketTimerMode=x[6];
+
 
                                 socketTimerOpenHour = messageJsonArray.getInt(11);
                                 socketTimerOpenMin = messageJsonArray.getInt(12);
 
-//                                socketTimerCloseHour=messageJsonArray.getInt(13);
-//                                socketTimerCloseMin=messageJsonArray.getInt(14);
-                                socketCurrent = messageJsonArray.getInt(13);
-                                socketVal = messageJsonArray.getInt(14);
-                                socketPowerConsume = messageJsonArray.getInt(15);
 
+                                socketTimerCloseHour=messageJsonArray.getInt(13);
+                                socketTimerCloseMin=messageJsonArray.getInt(14);
+                                if (isSocketTimerMode==1){
+                                    if (socketTimerOpenHour==0 && socketTimerOpenMin==0) {
+                                        socketTimer = 2;
+                                    }else {
+                                        socketTimer=1;
+                                    }
+                                }
+                                if (isSocketTimerMode==1){
+                                    if (socketTimerCloseHour==0 && socketTimerCloseMin==0){
+                                        if (socketTimer==1){
+                                        }else {
+                                            socketTimer=2;
+                                        }
+                                    }else {
+                                        socketTimer=0;
+                                    }
+                                }
+                                int highCurrent = messageJsonArray.getInt(15);
+                                int lowCurrent=messageJsonArray.getInt(16);
+                                String socketCurrent2=highCurrent/25+lowCurrent%256+"";
+                                socketCurrent=Integer.parseInt(socketCurrent2);
+                                int highVal = messageJsonArray.getInt(17);
+                                int lowVal=messageJsonArray.getInt(18);
+                                String socketVal2=highVal/256 +lowVal%256+"";
+                                socketVal=Integer.parseInt(socketVal2);
+
+                                int highPowerConsume = messageJsonArray.getInt(19);
+                                int lowPowerConsume=messageJsonArray.getInt(20);
+                                String powerConsume2=highPowerConsume/256 +lowPowerConsume%256+"";
+                                socketPowerConsume=Integer.parseInt(powerConsume2);
                                 if (deviceChild != null) {
+                                    deviceChild.setSocketPower(socketPower);
                                     deviceChild.setBusModel(busModel);
                                     deviceChild.setMcuVersion(mcuVersion);
                                     deviceChild.setWifiVersion(wifiVersion);
-                                    deviceChild.setSocketPowerHigh(socketPowerHigh);
-                                    deviceChild.setSocketPowerLow(socketPowerLow);
                                     deviceChild.setSocketTemp(socketTemp);
                                     deviceChild.setSocketState(socketState);
-//                                    deviceChild.setSocketTimer(socketTimer);
+                                    deviceChild.setIsSocketTimerMode(isSocketTimerMode);
                                     deviceChild.setSocketTimerOpenHour(socketTimerOpenHour);
                                     deviceChild.setSocketTimerOpenMin(socketTimerOpenMin);
-//                                    deviceChild.setSocketTimerCloseHour(socketTimerCloseHour);
-//                                    deviceChild.setSocketTimerCloseMin(socketTimerCloseMin);
+                                    deviceChild.setSocketTimerCloseHour(socketTimerCloseHour);
+                                    deviceChild.setSocketTimerCloseMin(socketTimerCloseMin);
                                     deviceChild.setSocketCurrent(socketCurrent);
                                     deviceChild.setSocketVal(socketVal);
+                                    deviceChild.setSocketTimer(socketTimer);
                                     deviceChild.setSocketPowerConsume(socketPowerConsume);
                                     deviceChild.setOnline(true);
                                     deviceChildDao.update(deviceChild);
@@ -639,6 +673,36 @@ public class MQService extends Service {
                     case 7:
                         break;
                     case 8:
+                        if (messageJsonArray!=null){
+                            int wPurifierEndTime;/**净水器截止使用时间*/
+                            int wPurifierEndFlow;/**净水器截止使用流量*/
+                            String wPurifierState;/**净水器状态*/
+                            int wPurifierFlowData;/**净水器流量数据*/
+                            int wPurifierCurTemp;/**净水器当前温度*/
+                            int wPurifierPrimaryQuqlity;/**净水器原生水质*/
+                            busModel = messageJsonArray.getInt(3);
+                            int mMcuVersion = messageJsonArray.getInt(4);
+                            mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                            int mWifiVersion = messageJsonArray.getInt(5);
+                            wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                            int wPurifierEndTimeHigh=messageJsonArray.getInt(7);
+                            int wPurifierEndTimeLow=messageJsonArray.getInt(8);
+                            String wPurifierEndTime2=wPurifierEndTimeHigh/256 + wPurifierEndTimeLow%256+"";
+                            wPurifierEndTime=Integer.parseInt(wPurifierEndTime2);
+                            int wPurifierEndFlowHigh=messageJsonArray.getInt(9);
+                            int wPurifierEndFlowLow=messageJsonArray.getInt(10);
+                            String wPurifierEndFlow2=wPurifierEndFlowHigh/256+wPurifierEndFlowLow%256+"";
+                            wPurifierEndFlow=Integer.parseInt(wPurifierEndFlow2);
+                            int state=messageJsonArray.getInt(11);
+                            int []x=TenTwoUtil.changeToTwo(state);
+                            wPurifierState=x[7]+x[6]+x[5]+"";
+                            int wPurifierFlowDataHigh=messageJsonArray.getInt(12);
+                            int wPurifierFlowDataLow=messageJsonArray.getInt(13);
+                            String wPurifierFlowData2=wPurifierFlowDataHigh/256+wPurifierFlowDataLow%256+"";
+                            wPurifierFlowData=Integer.parseInt(wPurifierFlowData2);
+                            wPurifierCurTemp=messageJsonArray.getInt(14)-128;
+                            wPurifierPrimaryQuqlity=messageJsonArray.getInt(15);
+                        }
                         break;
                 }
                 Log.i("FamilyFragmentManager", "-->" + FamilyFragmentManager.running);
@@ -1094,8 +1158,8 @@ public class MQService extends Service {
                     list.add(offlineTopicName);
                     break;
                 case 8:
-                    onlineTopicName = "p99/wPurifier/" + macAddress + "/transfer";
-                    offlineTopicName = "p99/wPurifier/" + macAddress + "/lwt";
+                    onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;

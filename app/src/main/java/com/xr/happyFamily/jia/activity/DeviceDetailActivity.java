@@ -719,7 +719,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
             x[6]=0;
             x[7]=0;
 
-
             int dataContent=TenTwoUtil.changeToTen(x);
             sum=sum+dataContent;
             jsonArray.put(5,dataContent);/**数据内容 开关，功率状态，屏幕状态，屏保状态*/

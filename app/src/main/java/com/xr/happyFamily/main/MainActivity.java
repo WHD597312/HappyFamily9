@@ -359,6 +359,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             id_bto_zhen_img.setImageResource(R.mipmap.zhen1);
             idBtoLeImg.setImageResource(R.mipmap.le);
             FragmentTransaction zhenTransaction = fragmentManager.beginTransaction();
+            zhenFragment=new ZhenFragment();
             zhenTransaction.replace(R.id.layout_body, zhenFragment);
             zhenTransaction.commit();
             if (mPositionPreferences.contains("position")) {

@@ -186,23 +186,29 @@ public class FamilyFragment extends Fragment {
                             int type = mdeledeviceChild.getType();
                             String onlineTopicName = "";
                             String offlineTopicName = "";
-                            switch (type) {
-                                case 2:
-                                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
-                                    break;
-                                case 5:
-                                    onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
-                                    break;
-                                case 6:
-                                    onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
-                                    break;
-                                case 7:
-                                    onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
-                                    break;
+                            if (2 == type) {
+                                onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                                offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                            }else if (3==type){
+                                onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
+                                offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
+                            }else if (4==type){
+                                onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                            }else if (5==type){
+                                onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                            }
+                            else if (6==type){
+                                onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                            }
+                            else if (7==type){
+                                onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                            }else if (8==type){
+                                onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                             }
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);

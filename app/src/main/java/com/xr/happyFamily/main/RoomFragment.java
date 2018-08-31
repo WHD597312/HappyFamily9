@@ -635,29 +635,33 @@ public class RoomFragment extends Fragment {
                             int type = deviceChild.getType();
                             String onlineTopicName = "";
                             String offlineTopicName = "";
-                            switch (type) {
-                                case 2:
+
+                                if (2 == type) {
                                     onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
-                                    break;
-                                case 3:
-                                    onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
-                                    break;
-                                case 5:
+                                    offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                                }else if (3==type){
+                                    onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
+                                    offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
+                                }else if (4==type){
+                                    onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                                }else if (5==type){
                                     onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
                                     offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
-                                    break;
-                                case 6:
+                                }
+                                else if (6==type){
                                     onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
                                     offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
-                                    break;
-                                case 7:
+                                }
+                                else if (7==type){
                                     onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
                                     offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
-                                    break;
+                                }else if (8==type){
+                                    onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                                }
 
-                            }
+
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);
                             }

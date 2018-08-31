@@ -53,6 +53,8 @@ public class DeviceChild implements Serializable{
     int sensorOx;/**氧浓度传感器数据*/
     int sensorHcho;/**甲醛数据*/
 
+    int socketPowerHigh;/**插座高功率参数*/
+    int socketPowerLow;/**插座低功率参数*/
     int socketPower;/**插座功率*/
     int socketTemp;/**插座温度*/
     int socketState;/**插座当前状态*/
@@ -64,6 +66,46 @@ public class DeviceChild implements Serializable{
     int socketCurrent;/**插座当前电流值*/
     int socketVal;/**插座当前电压值*/
     int socketPowerConsume;/**插座当前耗电量总度数*/
+
+
+    //jjjjjjj
+    int timerSwitch=0;/**定时器开关*/
+    int waterLevel=0; //水位量
+    String windLevel; //风速等级
+    int equipRatedPowerHigh;/**设备额定高功率参数*/
+    int equipRatedPowerLow;/**设备额定低功率参数*/
+    int equipCurdPowerHigh;/**设备当前高功率参数*/
+    int equipCurdPowerLow;/**设备当前低功率参数*/
+    int faultCode;/**空调故障代码*/
+
+    String purifierState;//空气净化器当前状态* 00自动 01睡眠
+
+
+    int dehumSetTemp;/**除湿机设定温度*/
+    int dehumSetHum;/**除湿机设定湿度*/
+    int dehumInnerTemp;//除湿机内盘管温度
+    int dehumOuterTemp;//除湿机外盘管温度
+    int dehumSleep;//除湿机睡眠模式 0关闭 1开启
+    int dehumAnion;//除湿机负离子模式 0关闭 1开启
+    int dehumDrying;//除湿机干衣模式 0关闭 1开启
+    int dehumDefrost;//除湿机除霜模式 0关闭 1开启
+
+
+    String aCondState;//空调当前状态 000:  自动模式；001： 制冷模式；010： 制热模式；011： 通风模式；100： 除湿模式；
+    int aCondSetTemp1;/**空调设定温度1*/
+    int aCondSetTemp2;/**空调设定温度2*/
+    int aCondSetData;/**空调设定参数*/
+    int aCondSimpleTemp1;/**空调采样温度1*/
+    int aCondSimpleTemp2;/**空调采样温度2*/
+    int aCondInnerTemp;//空调内盘管温度
+    int aCondOuterTemp;//空调外盘管温度
+
+    int aCondSleep;//空调睡眠模式 0关闭 1开启
+    int aCondSUpDown;// 0:上下摆叶关闭   1：摆叶开启
+    int aCondSLeftRight;//0:左右摆叶关闭   1：摆叶开启
+
+
+
     int socketTimerMode;/**插座计时模式 定时模式，倒计时模式 1为倒计时 2为定时*/
     int isSocketTimerMode;/**定时模式是否开启*/
 
@@ -79,10 +121,303 @@ public class DeviceChild implements Serializable{
     int wPurifierOutQuqlity;/**净水器出水水质*/
     /**净水器滤芯寿命 1-10*/
     int wPurifierfilter1,wPurifierfilter2,wPurifierfilter3,wPurifierfilter4,wPurifierfilter5,wPurifierfilter6,wPurifierfilter7,wPurifierfilter8,wPurifierfilter9,wPurifierfilter10;
+    public int getWPurifierfilter10() {
+        return this.wPurifierfilter10;
+    }
+    public void setWPurifierfilter10(int wPurifierfilter10) {
+        this.wPurifierfilter10 = wPurifierfilter10;
+    }
+    public int getWPurifierfilter9() {
+        return this.wPurifierfilter9;
+    }
+    public void setWPurifierfilter9(int wPurifierfilter9) {
+        this.wPurifierfilter9 = wPurifierfilter9;
+    }
+    public int getWPurifierfilter8() {
+        return this.wPurifierfilter8;
+    }
+    public void setWPurifierfilter8(int wPurifierfilter8) {
+        this.wPurifierfilter8 = wPurifierfilter8;
+    }
+    public int getWPurifierfilter7() {
+        return this.wPurifierfilter7;
+    }
+    public void setWPurifierfilter7(int wPurifierfilter7) {
+        this.wPurifierfilter7 = wPurifierfilter7;
+    }
+    public int getWPurifierfilter6() {
+        return this.wPurifierfilter6;
+    }
+    public void setWPurifierfilter6(int wPurifierfilter6) {
+        this.wPurifierfilter6 = wPurifierfilter6;
+    }
+    public int getWPurifierfilter5() {
+        return this.wPurifierfilter5;
+    }
+    public void setWPurifierfilter5(int wPurifierfilter5) {
+        this.wPurifierfilter5 = wPurifierfilter5;
+    }
+    public int getWPurifierfilter4() {
+        return this.wPurifierfilter4;
+    }
+    public void setWPurifierfilter4(int wPurifierfilter4) {
+        this.wPurifierfilter4 = wPurifierfilter4;
+    }
+    public int getWPurifierfilter3() {
+        return this.wPurifierfilter3;
+    }
+    public void setWPurifierfilter3(int wPurifierfilter3) {
+        this.wPurifierfilter3 = wPurifierfilter3;
+    }
+    public int getWPurifierfilter2() {
+        return this.wPurifierfilter2;
+    }
+    public void setWPurifierfilter2(int wPurifierfilter2) {
+        this.wPurifierfilter2 = wPurifierfilter2;
+    }
+    public int getWPurifierfilter1() {
+        return this.wPurifierfilter1;
+    }
+    public void setWPurifierfilter1(int wPurifierfilter1) {
+        this.wPurifierfilter1 = wPurifierfilter1;
+    }
+    public int getWPurifierOutQuqlity() {
+        return this.wPurifierOutQuqlity;
+    }
+    public void setWPurifierOutQuqlity(int wPurifierOutQuqlity) {
+        this.wPurifierOutQuqlity = wPurifierOutQuqlity;
+    }
+    public int getWPurifierCurTemp() {
+        return this.wPurifierCurTemp;
+    }
+    public void setWPurifierCurTemp(int wPurifierCurTemp) {
+        this.wPurifierCurTemp = wPurifierCurTemp;
+    }
+    public int getWPurifierPrimaryQuqlity() {
+        return this.wPurifierPrimaryQuqlity;
+    }
+    public void setWPurifierPrimaryQuqlity(int wPurifierPrimaryQuqlity) {
+        this.wPurifierPrimaryQuqlity = wPurifierPrimaryQuqlity;
+    }
+    public int getWPurifierFlowData() {
+        return this.wPurifierFlowData;
+    }
+    public void setWPurifierFlowData(int wPurifierFlowData) {
+        this.wPurifierFlowData = wPurifierFlowData;
+    }
+    public String getWPurifierState() {
+        return this.wPurifierState;
+    }
+    public void setWPurifierState(String wPurifierState) {
+        this.wPurifierState = wPurifierState;
+    }
+    public int getWPurifierEndDay() {
+        return this.wPurifierEndDay;
+    }
+    public void setWPurifierEndDay(int wPurifierEndDay) {
+        this.wPurifierEndDay = wPurifierEndDay;
+    }
+    public int getWPurifierEndMonth() {
+        return this.wPurifierEndMonth;
+    }
+    public void setWPurifierEndMonth(int wPurifierEndMonth) {
+        this.wPurifierEndMonth = wPurifierEndMonth;
+    }
+    public int getWPurifierEndYear() {
+        return this.wPurifierEndYear;
+    }
+    public void setWPurifierEndYear(int wPurifierEndYear) {
+        this.wPurifierEndYear = wPurifierEndYear;
+    }
+    public int getWPurifierEndFlow() {
+        return this.wPurifierEndFlow;
+    }
+    public void setWPurifierEndFlow(int wPurifierEndFlow) {
+        this.wPurifierEndFlow = wPurifierEndFlow;
+    }
+    public int getIsSocketTimerMode() {
+        return this.isSocketTimerMode;
+    }
+    public void setIsSocketTimerMode(int isSocketTimerMode) {
+        this.isSocketTimerMode = isSocketTimerMode;
+    }
+    public int getSocketTimerMode() {
+        return this.socketTimerMode;
+    }
+    public void setSocketTimerMode(int socketTimerMode) {
+        this.socketTimerMode = socketTimerMode;
+    }
+    public int getACondSLeftRight() {
+        return this.aCondSLeftRight;
+    }
+    public void setACondSLeftRight(int aCondSLeftRight) {
+        this.aCondSLeftRight = aCondSLeftRight;
+    }
+    public int getACondSUpDown() {
+        return this.aCondSUpDown;
+    }
+    public void setACondSUpDown(int aCondSUpDown) {
+        this.aCondSUpDown = aCondSUpDown;
+    }
+    public int getACondSleep() {
+        return this.aCondSleep;
+    }
+    public void setACondSleep(int aCondSleep) {
+        this.aCondSleep = aCondSleep;
+    }
+    public int getACondOuterTemp() {
+        return this.aCondOuterTemp;
+    }
+    public void setACondOuterTemp(int aCondOuterTemp) {
+        this.aCondOuterTemp = aCondOuterTemp;
+    }
+    public int getACondInnerTemp() {
+        return this.aCondInnerTemp;
+    }
+    public void setACondInnerTemp(int aCondInnerTemp) {
+        this.aCondInnerTemp = aCondInnerTemp;
+    }
+    public int getACondSimpleTemp2() {
+        return this.aCondSimpleTemp2;
+    }
+    public void setACondSimpleTemp2(int aCondSimpleTemp2) {
+        this.aCondSimpleTemp2 = aCondSimpleTemp2;
+    }
+    public int getACondSimpleTemp1() {
+        return this.aCondSimpleTemp1;
+    }
+    public void setACondSimpleTemp1(int aCondSimpleTemp1) {
+        this.aCondSimpleTemp1 = aCondSimpleTemp1;
+    }
+    public int getACondSetData() {
+        return this.aCondSetData;
+    }
+    public void setACondSetData(int aCondSetData) {
+        this.aCondSetData = aCondSetData;
+    }
+    public int getACondSetTemp2() {
+        return this.aCondSetTemp2;
+    }
+    public void setACondSetTemp2(int aCondSetTemp2) {
+        this.aCondSetTemp2 = aCondSetTemp2;
+    }
+    public int getACondSetTemp1() {
+        return this.aCondSetTemp1;
+    }
+    public void setACondSetTemp1(int aCondSetTemp1) {
+        this.aCondSetTemp1 = aCondSetTemp1;
+    }
+    public String getACondState() {
+        return this.aCondState;
+    }
+    public void setACondState(String aCondState) {
+        this.aCondState = aCondState;
+    }
+    public int getDehumDefrost() {
+        return this.dehumDefrost;
+    }
+    public void setDehumDefrost(int dehumDefrost) {
+        this.dehumDefrost = dehumDefrost;
+    }
+    public int getDehumDrying() {
+        return this.dehumDrying;
+    }
+    public void setDehumDrying(int dehumDrying) {
+        this.dehumDrying = dehumDrying;
+    }
+    public int getDehumAnion() {
+        return this.dehumAnion;
+    }
+    public void setDehumAnion(int dehumAnion) {
+        this.dehumAnion = dehumAnion;
+    }
+    public int getDehumSleep() {
+        return this.dehumSleep;
+    }
+    public void setDehumSleep(int dehumSleep) {
+        this.dehumSleep = dehumSleep;
+    }
+    public int getDehumOuterTemp() {
+        return this.dehumOuterTemp;
+    }
+    public void setDehumOuterTemp(int dehumOuterTemp) {
+        this.dehumOuterTemp = dehumOuterTemp;
+    }
+    public int getDehumInnerTemp() {
+        return this.dehumInnerTemp;
+    }
+    public void setDehumInnerTemp(int dehumInnerTemp) {
+        this.dehumInnerTemp = dehumInnerTemp;
+    }
+    public int getDehumSetHum() {
+        return this.dehumSetHum;
+    }
+    public void setDehumSetHum(int dehumSetHum) {
+        this.dehumSetHum = dehumSetHum;
+    }
+    public int getDehumSetTemp() {
+        return this.dehumSetTemp;
+    }
+    public void setDehumSetTemp(int dehumSetTemp) {
+        this.dehumSetTemp = dehumSetTemp;
+    }
+    public String getPurifierState() {
+        return this.purifierState;
+    }
+    public void setPurifierState(String purifierState) {
+        this.purifierState = purifierState;
+    }
+    public int getFaultCode() {
+        return this.faultCode;
+    }
+    public void setFaultCode(int faultCode) {
+        this.faultCode = faultCode;
+    }
+    public int getEquipCurdPowerLow() {
+        return this.equipCurdPowerLow;
+    }
+    public void setEquipCurdPowerLow(int equipCurdPowerLow) {
+        this.equipCurdPowerLow = equipCurdPowerLow;
+    }
+    public int getEquipCurdPowerHigh() {
+        return this.equipCurdPowerHigh;
+    }
+    public void setEquipCurdPowerHigh(int equipCurdPowerHigh) {
+        this.equipCurdPowerHigh = equipCurdPowerHigh;
+    }
+    public int getEquipRatedPowerLow() {
+        return this.equipRatedPowerLow;
+    }
+    public void setEquipRatedPowerLow(int equipRatedPowerLow) {
+        this.equipRatedPowerLow = equipRatedPowerLow;
+    }
+    public int getEquipRatedPowerHigh() {
+        return this.equipRatedPowerHigh;
+    }
+    public void setEquipRatedPowerHigh(int equipRatedPowerHigh) {
+        this.equipRatedPowerHigh = equipRatedPowerHigh;
+    }
+    public String getWindLevel() {
+        return this.windLevel;
+    }
+    public void setWindLevel(String windLevel) {
+        this.windLevel = windLevel;
+    }
+    public int getWaterLevel() {
+        return this.waterLevel;
+    }
+    public void setWaterLevel(int waterLevel) {
+        this.waterLevel = waterLevel;
+    }
+    public int getTimerSwitch() {
+        return this.timerSwitch;
+    }
+    public void setTimerSwitch(int timerSwitch) {
+        this.timerSwitch = timerSwitch;
+    }
     public int getSocketPowerConsume() {
         return this.socketPowerConsume;
     }
-
     public void setSocketPowerConsume(int socketPowerConsume) {
         this.socketPowerConsume = socketPowerConsume;
     }
@@ -140,7 +475,24 @@ public class DeviceChild implements Serializable{
     public void setSocketTemp(int socketTemp) {
         this.socketTemp = socketTemp;
     }
-
+    public int getSocketPower() {
+        return this.socketPower;
+    }
+    public void setSocketPower(int socketPower) {
+        this.socketPower = socketPower;
+    }
+    public int getSocketPowerLow() {
+        return this.socketPowerLow;
+    }
+    public void setSocketPowerLow(int socketPowerLow) {
+        this.socketPowerLow = socketPowerLow;
+    }
+    public int getSocketPowerHigh() {
+        return this.socketPowerHigh;
+    }
+    public void setSocketPowerHigh(int socketPowerHigh) {
+        this.socketPowerHigh = socketPowerHigh;
+    }
     public int getSensorHcho() {
         return this.sensorHcho;
     }
@@ -351,6 +703,12 @@ public class DeviceChild implements Serializable{
     public void setType(int type) {
         this.type = type;
     }
+    public String getShare() {
+        return this.share;
+    }
+    public void setShare(String share) {
+        this.share = share;
+    }
     public String getCommon() {
         return this.common;
     }
@@ -394,192 +752,6 @@ public class DeviceChild implements Serializable{
         this.id = id;
     }
 
-    public String getShare() {
-        return this.share;
-    }
-
-    public void setShare(String share) {
-        this.share = share;
-    }
-
-    public int getSocketTimerMode() {
-        return this.socketTimerMode;
-    }
-
-    public void setSocketTimerMode(int socketTimerMode) {
-        this.socketTimerMode = socketTimerMode;
-    }
-
-    public int getIsSocketTimerMode() {
-        return this.isSocketTimerMode;
-    }
-
-    public void setIsSocketTimerMode(int isSocketTimerMode) {
-        this.isSocketTimerMode = isSocketTimerMode;
-    }
-
-    public int getSocketPower() {
-        return this.socketPower;
-    }
-
-    public void setSocketPower(int socketPower) {
-        this.socketPower = socketPower;
-    }
-
-    public int getWPurifierCurTemp() {
-        return this.wPurifierCurTemp;
-    }
-
-    public void setWPurifierCurTemp(int wPurifierCurTemp) {
-        this.wPurifierCurTemp = wPurifierCurTemp;
-    }
-
-    public int getWPurifierFlowData() {
-        return this.wPurifierFlowData;
-    }
-
-    public void setWPurifierFlowData(int wPurifierFlowData) {
-        this.wPurifierFlowData = wPurifierFlowData;
-    }
-
-    public String getWPurifierState() {
-        return this.wPurifierState;
-    }
-
-    public void setWPurifierState(String wPurifierState) {
-        this.wPurifierState = wPurifierState;
-    }
-
-    public int getWPurifierEndFlow() {
-        return this.wPurifierEndFlow;
-    }
-
-    public void setWPurifierEndFlow(int wPurifierEndFlow) {
-        this.wPurifierEndFlow = wPurifierEndFlow;
-    }
-
-
-
-    public int getWPurifierfilter10() {
-        return this.wPurifierfilter10;
-    }
-
-    public void setWPurifierfilter10(int wPurifierfilter10) {
-        this.wPurifierfilter10 = wPurifierfilter10;
-    }
-
-    public int getWPurifierfilter9() {
-        return this.wPurifierfilter9;
-    }
-
-    public void setWPurifierfilter9(int wPurifierfilter9) {
-        this.wPurifierfilter9 = wPurifierfilter9;
-    }
-
-    public int getWPurifierfilter8() {
-        return this.wPurifierfilter8;
-    }
-
-    public void setWPurifierfilter8(int wPurifierfilter8) {
-        this.wPurifierfilter8 = wPurifierfilter8;
-    }
-
-    public int getWPurifierfilter7() {
-        return this.wPurifierfilter7;
-    }
-
-    public void setWPurifierfilter7(int wPurifierfilter7) {
-        this.wPurifierfilter7 = wPurifierfilter7;
-    }
-
-    public int getWPurifierfilter6() {
-        return this.wPurifierfilter6;
-    }
-
-    public void setWPurifierfilter6(int wPurifierfilter6) {
-        this.wPurifierfilter6 = wPurifierfilter6;
-    }
-
-    public int getWPurifierfilter5() {
-        return this.wPurifierfilter5;
-    }
-
-    public void setWPurifierfilter5(int wPurifierfilter5) {
-        this.wPurifierfilter5 = wPurifierfilter5;
-    }
-
-    public int getWPurifierfilter4() {
-        return this.wPurifierfilter4;
-    }
-
-    public void setWPurifierfilter4(int wPurifierfilter4) {
-        this.wPurifierfilter4 = wPurifierfilter4;
-    }
-
-    public int getWPurifierfilter3() {
-        return this.wPurifierfilter3;
-    }
-
-    public void setWPurifierfilter3(int wPurifierfilter3) {
-        this.wPurifierfilter3 = wPurifierfilter3;
-    }
-
-    public int getWPurifierfilter2() {
-        return this.wPurifierfilter2;
-    }
-
-    public void setWPurifierfilter2(int wPurifierfilter2) {
-        this.wPurifierfilter2 = wPurifierfilter2;
-    }
-
-    public int getWPurifierfilter1() {
-        return this.wPurifierfilter1;
-    }
-
-    public void setWPurifierfilter1(int wPurifierfilter1) {
-        this.wPurifierfilter1 = wPurifierfilter1;
-    }
-
-    public int getWPurifierPrimaryQuqlity() {
-        return this.wPurifierPrimaryQuqlity;
-    }
-
-    public void setWPurifierPrimaryQuqlity(int wPurifierPrimaryQuqlity) {
-        this.wPurifierPrimaryQuqlity = wPurifierPrimaryQuqlity;
-    }
-
-    public int getWPurifierOutQuqlity() {
-        return this.wPurifierOutQuqlity;
-    }
-
-    public void setWPurifierOutQuqlity(int wPurifierOutQuqlity) {
-        this.wPurifierOutQuqlity = wPurifierOutQuqlity;
-    }
-
-    public int getWPurifierEndDay() {
-        return this.wPurifierEndDay;
-    }
-
-    public void setWPurifierEndDay(int wPurifierEndDay) {
-        this.wPurifierEndDay = wPurifierEndDay;
-    }
-
-    public int getWPurifierEndMonth() {
-        return this.wPurifierEndMonth;
-    }
-
-    public void setWPurifierEndMonth(int wPurifierEndMonth) {
-        this.wPurifierEndMonth = wPurifierEndMonth;
-    }
-
-    public int getWPurifierEndYear() {
-        return this.wPurifierEndYear;
-    }
-
-    public void setWPurifierEndYear(int wPurifierEndYear) {
-        this.wPurifierEndYear = wPurifierEndYear;
-    }
-
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.houseId = houseId;
         this.roomId = roomId;
@@ -590,22 +762,20 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
     }
 
-
-
-    @Generated(hash = 1973447423)
-    public DeviceChild() {
-    }
-
-    @Generated(hash = 282078110)
+    @Generated(hash = 2141731801)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
             int warmerCurRunRoatePower, int warmerRunState, int deviceState, String rateState, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour,
             int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp,
-            int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPower, int socketTemp, int socketState, int socketTimer, int socketTimerOpenHour,
-            int socketTimerOpenMin, int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent, int socketVal, int socketPowerConsume, int socketTimerMode,
-            int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData,
-            int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4,
-            int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10) {
+            int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp, int socketState,
+            int socketTimer, int socketTimerOpenHour, int socketTimerOpenMin, int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent, int socketVal,
+            int socketPowerConsume, int timerSwitch, int waterLevel, String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow, int equipCurdPowerHigh, int equipCurdPowerLow,
+            int faultCode, String purifierState, int dehumSetTemp, int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp, int dehumSleep, int dehumAnion, int dehumDrying,
+            int dehumDefrost, String aCondState, int aCondSetTemp1, int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1, int aCondSimpleTemp2, int aCondInnerTemp,
+            int aCondOuterTemp, int aCondSleep, int aCondSUpDown, int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear,
+            int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity,
+            int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7,
+            int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -649,6 +819,8 @@ public class DeviceChild implements Serializable{
         this.sorsorPm = sorsorPm;
         this.sensorOx = sensorOx;
         this.sensorHcho = sensorHcho;
+        this.socketPowerHigh = socketPowerHigh;
+        this.socketPowerLow = socketPowerLow;
         this.socketPower = socketPower;
         this.socketTemp = socketTemp;
         this.socketState = socketState;
@@ -660,6 +832,34 @@ public class DeviceChild implements Serializable{
         this.socketCurrent = socketCurrent;
         this.socketVal = socketVal;
         this.socketPowerConsume = socketPowerConsume;
+        this.timerSwitch = timerSwitch;
+        this.waterLevel = waterLevel;
+        this.windLevel = windLevel;
+        this.equipRatedPowerHigh = equipRatedPowerHigh;
+        this.equipRatedPowerLow = equipRatedPowerLow;
+        this.equipCurdPowerHigh = equipCurdPowerHigh;
+        this.equipCurdPowerLow = equipCurdPowerLow;
+        this.faultCode = faultCode;
+        this.purifierState = purifierState;
+        this.dehumSetTemp = dehumSetTemp;
+        this.dehumSetHum = dehumSetHum;
+        this.dehumInnerTemp = dehumInnerTemp;
+        this.dehumOuterTemp = dehumOuterTemp;
+        this.dehumSleep = dehumSleep;
+        this.dehumAnion = dehumAnion;
+        this.dehumDrying = dehumDrying;
+        this.dehumDefrost = dehumDefrost;
+        this.aCondState = aCondState;
+        this.aCondSetTemp1 = aCondSetTemp1;
+        this.aCondSetTemp2 = aCondSetTemp2;
+        this.aCondSetData = aCondSetData;
+        this.aCondSimpleTemp1 = aCondSimpleTemp1;
+        this.aCondSimpleTemp2 = aCondSimpleTemp2;
+        this.aCondInnerTemp = aCondInnerTemp;
+        this.aCondOuterTemp = aCondOuterTemp;
+        this.aCondSleep = aCondSleep;
+        this.aCondSUpDown = aCondSUpDown;
+        this.aCondSLeftRight = aCondSLeftRight;
         this.socketTimerMode = socketTimerMode;
         this.isSocketTimerMode = isSocketTimerMode;
         this.wPurifierEndFlow = wPurifierEndFlow;
@@ -682,9 +882,10 @@ public class DeviceChild implements Serializable{
         this.wPurifierfilter9 = wPurifierfilter9;
         this.wPurifierfilter10 = wPurifierfilter10;
     }
-
+    @Generated(hash = 1973447423)
+    public DeviceChild() {
+    }
    
-
 
     
 }

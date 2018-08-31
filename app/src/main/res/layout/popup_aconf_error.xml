@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:padding="@dimen/dp_jy_20"
+    android:orientation="vertical"
+    android:gravity="center"
+    android:background="@drawable/bg_fill_white10"
+    xmlns:tc="http://schemas.android.com/apk/res-auto">
+<TextView
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_air_error25"
+    android:id="@+id/tv_error"
+    android:text="制冷系统故障！请检查"
+    android:textColor="@color/white"
+    android:textSize="@dimen/sp_12"
+    android:paddingLeft="@dimen/dp_jy_20"
+    android:paddingRight="@dimen/dp_jy_20"
+    android:paddingTop="@dimen/dp_jy_8"
+    android:paddingBottom="@dimen/dp_jy_8"
+    android:drawableLeft="@mipmap/ic_air_error"
+    android:drawablePadding="@dimen/dp_jy_8"
+    android:gravity="center"/>
+
+    <ImageView
+        android:id="@+id/img_close"
+        android:layout_width="@dimen/dp_jy_60"
+        android:layout_height="@dimen/dp_jy_35"
+        android:src="@mipmap/ic_address_close"
+        android:layout_marginTop="@dimen/dp_jy_15"/>
+
+</LinearLayout>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tc="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:orientation="vertical"
+        android:background="@drawable/bg_fill_white10">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="湿度调节"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center"
+            android:padding="@dimen/dp_jy_16"/>
+        <include
+            layout="@layout/cutline"/>
+
+        <RelativeLayout
+            android:id="@+id/ll_wind"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="@dimen/dp_jy_12"
+            android:paddingBottom="@dimen/dp_jy_22">
+
+            <com.xr.happyFamily.jia.view_custom.HumSeekBar
+                android:id="@+id/humSeekBar"
+                android:layout_width="@dimen/dp_jy_250"
+                android:layout_height="@dimen/dp_jy_60"
+                android:layout_below="@+id/li2_zncz_db3"
+                android:max="50"
+                android:progress="0"
+                android:progressDrawable="@drawable/bg_seekbar_progress_hum"
+                android:thumb="@null"
+                android:layout_centerInParent="true"
+                tc:textHumBackground="@mipmap/ic_seekbar_hum"
+                tc:textHumColor2="@color/black"
+                tc:textHumOrientation="topHum"
+                tc:textHumSize2="15sp" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#0DCEFE"
+                android:text="30%"
+                android:layout_toLeftOf="@id/humSeekBar"
+                android:layout_marginTop="@dimen/dp_jy_25"/>
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#0DCEFE"
+                android:text="80%"
+                android:layout_toRightOf="@id/humSeekBar"
+                android:layout_marginTop="@dimen/dp_jy_25"/>
+        </RelativeLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_hum"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:orientation="horizontal"
+            android:layout_weight="1">
+
+        </LinearLayout>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_45"
+            android:layout_marginLeft="@dimen/dp_jy_30"
+            android:layout_marginRight="@dimen/dp_jy_30"
+            android:layout_marginBottom="@dimen/dp_jy_22"
+            android:background="@drawable/bg_shape_0dcefe25"
+            android:textSize="@dimen/sp_14"
+            android:gravity="center"
+            android:textColor="#0DCEFE"
+            android:text="确定"
+            android:id="@+id/tv_queding"/>
+    </LinearLayout>
+
+</LinearLayout>

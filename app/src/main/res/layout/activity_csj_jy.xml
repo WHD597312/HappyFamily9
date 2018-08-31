@@ -1,0 +1,231 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:tc="http://schemas.android.com/apk/res-auto"
+    xmlns:DoubleWaveView="http://schemas.android.com/tools"
+    android:id="@+id/ll"
+    android:orientation="vertical"
+    android:gravity="center_horizontal"
+    android:background="@color/white">
+ <RelativeLayout
+     android:id="@+id/head"
+     android:layout_width="match_parent"
+     android:layout_height="@dimen/dp_jy_45">
+
+  <ImageView
+      android:id="@+id/image_back"
+      android:layout_width="@dimen/dp_jy_40"
+      android:layout_height="@dimen/dp_jy_40"
+      android:layout_centerVertical="true"
+      android:scaleType="centerInside"
+      android:src="@mipmap/nav_back" />
+
+  <TextView
+      android:id="@+id/tv_title"
+      android:layout_width="match_parent"
+      android:layout_height="@dimen/dp_jy_40"
+      android:layout_centerVertical="true"
+      android:gravity="center"
+      android:text="智能终端"
+      android:textColor="@color/white"
+      android:textSize="@dimen/sp_20" />
+  <ImageView
+      android:id="@+id/image_more"
+      android:layout_width="wrap_content"
+      android:layout_height="match_parent"
+      android:layout_alignParentRight="true"
+      android:layout_centerVertical="true"
+      android:layout_marginEnd="@dimen/dp_jy_10"
+      android:padding="@dimen/dp_jy_12"
+      android:src="@mipmap/image_more1" />
+ </RelativeLayout>
+ <RelativeLayout
+     android:layout_width="wrap_content"
+     android:layout_height="0dp"
+     android:layout_weight="1">
+  <com.xr.happyFamily.bao.view.DoubleWaveView
+      android:id="@+id/doubleWaveView"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:layout_alignRight="@id/img1"
+      android:layout_alignBottom="@id/img1"/>
+  <ImageView
+      android:id="@+id/img1"
+      android:layout_width="wrap_content"
+      android:layout_height="wrap_content"
+      android:src="@mipmap/bg_wave"/>
+
+ </RelativeLayout>
+
+
+ <LinearLayout
+     android:layout_width="match_parent"
+     android:layout_height="wrap_content"
+     android:orientation="horizontal">
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_now"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_jy_3"
+        android:layout_toRightOf="@id/tv_now"
+        android:text="℃"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_12" />
+   </RelativeLayout>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/tv_now"
+       android:text="当前温度"
+       android:textColor="#A8A8A8"
+       android:textSize="@dimen/sp_14" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_nei"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_jy_3"
+        android:layout_toRightOf="@id/tv_nei"
+        android:text="℃"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_12" />
+   </RelativeLayout>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/tv_now"
+       android:text="内盘管温度"
+       android:textColor="#A8A8A8"
+       android:textSize="@dimen/sp_14" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_jy_3"
+        android:layout_toRightOf="@id/tv_set"
+        android:layout_alignBottom="@id/tv_set"
+        android:text="%"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_12" />
+   </RelativeLayout>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/tv_now"
+       android:text="设定温度"
+       android:textColor="#A8A8A8"
+       android:textSize="@dimen/sp_14" />
+  </LinearLayout>
+
+  <LinearLayout
+      android:layout_width="0dp"
+      android:layout_height="wrap_content"
+      android:layout_weight="1"
+      android:gravity="center_horizontal"
+      android:orientation="vertical">
+
+   <RelativeLayout
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:gravity="center_horizontal"
+       android:orientation="horizontal">
+
+    <TextView
+        android:id="@+id/tv_water"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="30"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_24" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="@dimen/dp_jy_3"
+        android:layout_toRightOf="@id/tv_water"
+        android:layout_alignBottom="@id/tv_water"
+        android:text="%"
+        android:textColor="#0DCEFE"
+        android:textSize="@dimen/sp_12" />
+   </RelativeLayout>
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:layout_below="@id/tv_now"
+       android:text="水位"
+       android:textColor="#A8A8A8"
+       android:textSize="@dimen/sp_14" />
+  </LinearLayout>
+ </LinearLayout>
+
+
+ </LinearLayout>

@@ -454,6 +454,15 @@
         <activity
             android:name=".jia.LiveActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.APurifierActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.AConfActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.AConfStateActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

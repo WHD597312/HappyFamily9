@@ -1,0 +1,651 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:orientation="vertical"
+    android:splitMotionEvents="false">
+
+    <RelativeLayout
+        android:id="@+id/head"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/image_back"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:padding="10dp"
+            android:src="@mipmap/fanhui" />
+
+        <TextView
+            android:id="@+id/tv_title"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_40"
+            android:gravity="center"
+            android:text="除湿器"
+            android:textSize="@dimen/sp_18" />
+
+        <ImageView
+            android:id="@+id/image_more"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginEnd="@dimen/dp_jy_10"
+            android:padding="@dimen/dp_jy_12"
+            android:src="@mipmap/gray_more" />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_body"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_below="@id/head">
+
+
+
+    <com.xr.happyFamily.bao.view.TouchScrollView
+        android:id="@+id/scrollView"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_above="@id/ll0"
+        android:fillViewport="true"
+        android:overScrollMode="never">
+
+
+        <LinearLayout
+            android:id="@+id/relative"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:id="@+id/ll_wendu"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/dp_jy_24"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_now"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="30"
+                            android:textColor="#0DCEFE"
+                            android:textSize="@dimen/sp_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/dp_jy_3"
+                            android:layout_toRightOf="@id/tv_now"
+                            android:text="℃"
+                            android:textColor="#0DCEFE"
+                            android:textSize="@dimen/sp_12" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_now"
+                        android:text="当前温度"
+                        android:textColor="#A8A8A8"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="@dimen/dp_jy_12"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:orientation="horizontal">
+
+                        <TextView
+                            android:id="@+id/tv_set"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="30"
+                            android:textColor="#0DCEFE"
+                            android:textSize="@dimen/sp_24" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignBottom="@id/tv_set"
+                            android:layout_marginBottom="@dimen/dp_jy_3"
+                            android:layout_toRightOf="@id/tv_set"
+                            android:text="%"
+                            android:textColor="#0DCEFE"
+                            android:textSize="@dimen/sp_12" />
+                    </RelativeLayout>
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_below="@id/tv_now"
+                        android:text="设定湿度"
+                        android:textColor="#A8A8A8"
+                        android:textSize="@dimen/sp_14" />
+                </LinearLayout>
+
+
+            </LinearLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1">
+
+
+                <RelativeLayout
+                    android:id="@+id/rl2"
+                    android:layout_width="match_parent"
+                    android:layout_height="344dp"
+                    android:layout_centerInParent="true"
+                    android:background="@mipmap/bg_csj_blue"
+                    android:gravity="center">
+
+                    <com.xr.happyFamily.bao.view.DoubleWaveView
+                        android:id="@+id/doubleWaveView"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignBottom="@id/img1"
+                        android:layout_alignRight="@id/img1"
+                        android:layout_centerInParent="true" />
+
+                    <ImageView
+                        android:id="@+id/img1"
+                        android:layout_width="@dimen/dp_jy_196"
+                        android:layout_height="@dimen/dp_jy_254"
+                        android:layout_alignParentStart="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerInParent="true"
+                        android:src="@mipmap/bg_wave" />
+
+
+                </RelativeLayout>
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_centerInParent="true">
+
+                    <TextView
+                        android:id="@+id/tv_water"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:text="30"
+                        android:textColor="#2fb3ff"
+                        android:textSize="60sp" />
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_above="@id/tv_water"
+                        android:layout_centerHorizontal="true"
+                        android:layout_marginBottom="-10dp"
+                        android:text="水位（%）"
+                        android:textColor="#40baff"
+                        android:textSize="@dimen/sp_12" />
+                </RelativeLayout>
+            </RelativeLayout>
+
+
+            <ImageView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@mipmap/dehumidifier" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#11cfff"
+                android:orientation="horizontal">
+
+                <LinearLayout
+                    android:id="@+id/ll_kai"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image_kai"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_csj_kai" />
+
+                    <TextView
+                        android:id="@+id/tv_switch"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/chj_switch"
+                        android:layout_alignRight="@+id/chj_switch"
+                        android:layout_below="@+id/chj_switch"
+                        android:layout_marginTop="@dimen/dp_jy_5"
+                        android:gravity="center"
+                        android:text="开关"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_time"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image_timer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_csj_time" />
+
+                    <TextView
+                        android:id="@+id/tv_timer"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/image_timer"
+                        android:layout_alignRight="@+id/image_timer"
+                        android:layout_below="@+id/image_timer"
+                        android:layout_marginTop="@dimen/dp_jy_5"
+                        android:gravity="center"
+                        android:text="定时"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/ll_hum"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image_hum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_csj_shi" />
+
+                    <TextView
+                        android:id="@+id/tv_hum"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/image_hum"
+                        android:layout_alignRight="@+id/image_hum"
+                        android:layout_below="@+id/image_hum"
+                        android:layout_marginTop="@dimen/dp_jy_5"
+                        android:gravity="center"
+                        android:text="设定湿度"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+
+                <LinearLayout
+                    android:id="@+id/ll_fengsu"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:id="@+id/image_wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_centerInParent="true"
+                        android:scaleType="centerInside"
+                        android:src="@mipmap/ic_csj_fengsu" />
+
+                    <TextView
+                        android:id="@+id/tv_wind"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignLeft="@+id/image_wind"
+                        android:layout_alignRight="@+id/image_wind"
+                        android:layout_below="@+id/image_wind"
+                        android:layout_marginTop="@dimen/dp_jy_5"
+                        android:gravity="center"
+                        android:text="风速"
+                        android:textColor="@color/white" />
+                </LinearLayout>
+            </LinearLayout>
+
+
+            <LinearLayout
+                android:id="@+id/ll_more"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#11cfff"
+                android:visibility="gone"
+                android:orientation="vertical"
+                android:paddingBottom="@dimen/dp_jy_12">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="@dimen/dp_jy_24"
+
+                    android:orientation="horizontal">
+
+                    <LinearLayout
+                        android:id="@+id/ll_shui"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/img_shui"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_csj_shui" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/chj_switch"
+                            android:layout_alignRight="@+id/chj_switch"
+                            android:layout_below="@+id/chj_switch"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:gravity="center"
+                            android:text="睡眠"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_shuang"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/img_shuang"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_csj_shuang" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/image_timer"
+                            android:layout_alignRight="@+id/image_timer"
+                            android:layout_below="@+id/image_timer"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:gravity="center"
+                            android:text="除霜"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+
+                    <LinearLayout
+                        android:id="@+id/ll_fu"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/img_fu"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_csj_fulizi" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/image_hum"
+                            android:layout_alignRight="@+id/image_hum"
+                            android:layout_below="@+id/image_hum"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:gravity="center"
+                            android:text="负离子"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:id="@+id/ll_ganyi"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:orientation="vertical">
+
+                        <ImageView
+                            android:id="@+id/img_ganyi"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:scaleType="centerInside"
+                            android:src="@mipmap/ic_csj_ganyi" />
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_alignLeft="@+id/image_wind"
+                            android:layout_alignRight="@+id/image_wind"
+                            android:layout_below="@+id/image_wind"
+                            android:layout_marginTop="@dimen/dp_jy_5"
+                            android:gravity="center"
+                            android:text="干衣"
+                            android:textColor="@color/white" />
+                    </LinearLayout>
+                </LinearLayout>
+
+
+                <!--<LinearLayout-->
+                    <!--android:layout_width="match_parent"-->
+                    <!--android:layout_height="wrap_content"-->
+                    <!--android:layout_marginTop="@dimen/dp_jy_24"-->
+                    <!--android:orientation="horizontal">-->
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<ImageView-->
+                            <!--android:id="@+id/chj_switch4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:scaleType="centerInside"-->
+                            <!--android:src="@mipmap/chj_switch" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/tv_switch4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignLeft="@+id/chj_switch"-->
+                            <!--android:layout_alignRight="@+id/chj_switch"-->
+                            <!--android:layout_below="@+id/chj_switch"-->
+                            <!--android:layout_marginTop="@dimen/dp_jy_5"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="开关"-->
+                            <!--android:textColor="@color/white" />-->
+                    <!--</LinearLayout>-->
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<ImageView-->
+                            <!--android:id="@+id/image_timer4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:scaleType="centerInside"-->
+                            <!--android:src="@mipmap/chj_timer" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/tv_timer4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignLeft="@+id/image_timer"-->
+                            <!--android:layout_alignRight="@+id/image_timer"-->
+                            <!--android:layout_below="@+id/image_timer"-->
+                            <!--android:layout_marginTop="@dimen/dp_jy_5"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="定时"-->
+                            <!--android:textColor="@color/white" />-->
+                    <!--</LinearLayout>-->
+
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<ImageView-->
+                            <!--android:id="@+id/image_hum4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:scaleType="centerInside"-->
+                            <!--android:src="@mipmap/chj_hum" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/tv_hum4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignLeft="@+id/image_hum"-->
+                            <!--android:layout_alignRight="@+id/image_hum"-->
+                            <!--android:layout_below="@+id/image_hum"-->
+                            <!--android:layout_marginTop="@dimen/dp_jy_5"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="设定湿度"-->
+                            <!--android:textColor="@color/white" />-->
+                    <!--</LinearLayout>-->
+
+                    <!--<LinearLayout-->
+                        <!--android:layout_width="0dp"-->
+                        <!--android:layout_height="wrap_content"-->
+                        <!--android:layout_weight="1"-->
+                        <!--android:gravity="center_horizontal"-->
+                        <!--android:orientation="vertical">-->
+
+                        <!--<ImageView-->
+                            <!--android:id="@+id/image_wind4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_centerInParent="true"-->
+                            <!--android:scaleType="centerInside"-->
+                            <!--android:src="@mipmap/chj_wind" />-->
+
+                        <!--<TextView-->
+                            <!--android:id="@+id/tv_wind4"-->
+                            <!--android:layout_width="wrap_content"-->
+                            <!--android:layout_height="wrap_content"-->
+                            <!--android:layout_alignLeft="@+id/image_wind"-->
+                            <!--android:layout_alignRight="@+id/image_wind"-->
+                            <!--android:layout_below="@+id/image_wind"-->
+                            <!--android:layout_marginTop="@dimen/dp_jy_5"-->
+                            <!--android:gravity="center"-->
+                            <!--android:text="风速"-->
+                            <!--android:textColor="@color/white" />-->
+                    <!--</LinearLayout>-->
+                <!--</LinearLayout>-->
+            </LinearLayout>
+        </LinearLayout>
+    </com.xr.happyFamily.bao.view.TouchScrollView>
+
+    <RelativeLayout
+        android:id="@+id/ll0"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="#11cfff"
+        android:layout_alignParentBottom="true">
+        <ImageView
+            android:id="@+id/img_more"
+            android:fillAfter="true"
+
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_jy_12"
+            android:src="@mipmap/ic_csj_up" />
+
+        <ImageView
+            android:id="@+id/img_more2"
+            android:fillAfter="true"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="@dimen/dp_jy_12"
+            android:src="@mipmap/ic_csj_down"
+            android:visibility="gone"/>
+
+    </RelativeLayout>
+
+    </RelativeLayout>
+    <TextView
+        android:id="@+id/tv_offline"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_centerInParent="true"
+        android:layout_weight="5"
+        android:gravity="center"
+        android:text="设备已离线"
+        android:textSize="@dimen/sp_25"
+        android:visibility="gone"
+        app:layout_heightPercent="92%"
+        app:layout_widthPercent="100%" />
+
+</android.support.percent.PercentRelativeLayout>

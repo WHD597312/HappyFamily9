@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_shape_address"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:padding="@dimen/dp_jy_16"
+            android:text="风速调节"
+            android:textSize="@dimen/sp_16" />
+
+        <include layout="@layout/cutline" />
+
+        <LinearLayout
+            android:id="@+id/ll_wind"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_90"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:id="@+id/ll_wind_low"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_wind_low"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_fengsu1"
+                    android:drawablePadding="@dimen/dp_jy_6"
+                    android:gravity="center"
+                    android:text="低"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_wind_mid"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_wind_mid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_fengsu2"
+                    android:drawablePadding="@dimen/dp_jy_6"
+                    android:gravity="center"
+                    android:text="中"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_wind_height"
+                android:layout_width="0dp"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:gravity="center">
+
+                <TextView
+                    android:id="@+id/tv_wind_height"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:drawableLeft="@mipmap/ic_fengsu3"
+                    android:drawablePadding="@dimen/dp_jy_6"
+                    android:gravity="center"
+                    android:text="高"
+                    android:textColor="@color/shop_context"
+                    android:textSize="@dimen/sp_12" />
+            </LinearLayout>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_hum"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"
+            android:orientation="horizontal">
+
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/tv_queding"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_45"
+            android:layout_marginBottom="@dimen/dp_jy_22"
+            android:layout_marginLeft="@dimen/dp_jy_30"
+            android:layout_marginRight="@dimen/dp_jy_30"
+            android:background="@drawable/bg_shape_stroke_blue25"
+            android:gravity="center"
+            android:text="确定"
+            android:textColor="#5ed890"
+            android:textSize="@dimen/sp_16" />
+    </LinearLayout>
+
+</LinearLayout>

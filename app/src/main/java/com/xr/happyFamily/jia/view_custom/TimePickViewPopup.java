@@ -28,7 +28,7 @@ public class TimePickViewPopup extends PopupWindow {
     private LoopView loop_state, loop_hour, loop_min;
     int[] data = {0, 0, 0};
 
-    public TimePickViewPopup(Context context,int state,int hour,int min) {
+    public TimePickViewPopup(final Context context,int state,int hour,int min) {
         Log.e("qqqqqTime222",state+","+hour+","+min);
         data[0]=state;
         data[1]=hour;
@@ -51,6 +51,7 @@ public class TimePickViewPopup extends PopupWindow {
         //设置背景
         ColorDrawable colorDrawable = new ColorDrawable(0000000000);
         this.setBackgroundDrawable(colorDrawable);
+
 
         tv_queding = (TextView) view.findViewById(R.id.tv_queding);
         tv_quxiao = (TextView) view.findViewById(R.id.tv_quxiao);
@@ -129,6 +130,8 @@ public class TimePickViewPopup extends PopupWindow {
         //设置字体大小
         loop_min.setTextSize(18);
 
+        loop_hour.setInitPosition(0);
+        loop_min.setInitPosition(0);
         loop_state.setInitPosition(state);
         loop_hour.setInitPosition(hour);
         loop_min.setInitPosition(min);
@@ -153,6 +156,7 @@ public class TimePickViewPopup extends PopupWindow {
     }
 
     public int[] getData() {
+        Log.e("qqqqDDD",data[2]+"?");
         return data;
     }
 

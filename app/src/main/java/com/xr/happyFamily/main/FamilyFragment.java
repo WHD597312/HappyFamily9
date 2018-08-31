@@ -40,6 +40,9 @@ import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.ChooseHourseActivity;
 import com.xr.happyFamily.jia.ManagementActivity;
 import com.xr.happyFamily.jia.MyGridview;
+import com.xr.happyFamily.jia.activity.AConfActivity;
+import com.xr.happyFamily.jia.activity.APurifierActivity;
+import com.xr.happyFamily.jia.activity.DehumidifierActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
@@ -187,6 +190,18 @@ public class FamilyFragment extends Fragment {
                                 case 2:
                                     onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
                                     offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                    break;
+                                case 5:
+                                    onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                                    break;
+                                case 6:
+                                    onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                                    break;
+                                case 7:
+                                    onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
                                     break;
                             }
                             if (!TextUtils.isEmpty(onlineTopicName)) {
@@ -414,6 +429,45 @@ public class FamilyFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
+                    }else if (type==5){
+                        if (online){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), DehumidifierActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        }else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else if (type==6){
+                        if (online){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), AConfActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        }else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+
+                    }else if (type==7){
+                        if (online){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), APurifierActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        }else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+
                     }else if (type==8){
                         if (online){
                             String deviceName = deviceChild.getName();
@@ -477,6 +531,42 @@ public class FamilyFragment extends Fragment {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
                             Intent intent = new Intent(getActivity(), SocketActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (type==5){
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), DehumidifierActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+                    }else if (type==6){
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), AConfActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+                    }else if (type==7){
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), APurifierActivity.class);
                             intent.putExtra("deviceName", deviceName);
                             intent.putExtra("deviceId", deviceId);
                             intent.putExtra("houseId", houseId);

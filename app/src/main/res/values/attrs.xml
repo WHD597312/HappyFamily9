@@ -125,4 +125,16 @@
             <enum name="bottom" value="4" />
         </attr>
     </declare-styleable>
+
+
+    <declare-styleable name="HumSeekBar">
+        <attr name="textHumSize2" format="dimension" />
+        <attr name="textHumColor2" format="color" />
+        <attr name="textHumBackground" format="reference" />
+        <attr name="textHumOrientation" format="enum">
+            <enum name="topHum" value="1" />
+            <enum name="bottomHum" value="2" />
+            <enum name="centerHum" value="3" />
+        </attr>
+    </declare-styleable>
 </resources>

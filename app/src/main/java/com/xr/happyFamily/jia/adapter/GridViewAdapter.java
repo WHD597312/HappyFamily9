@@ -143,6 +143,93 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setText("离线");
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
+                }
+                else if (type==5){
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("除湿机");
+                    }else {
+                        String roomName=item.getRoomName();
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
+                    boolean online=item.getOnline();
+                    Log.i("online","-->"+online);
+//                    int sensorState=item.getSensorState();
+                    int socketState=item.getSocketState();
+                    Log.i("online","-->"+socketState);
+                    item.setImg(img[2]);
+                    if (online){
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                        holder.view.setVisibility(View.VISIBLE);
+                        if (socketState==1){
+                            holder.tv_device_switch.setText("电源开");
+                        }else if (socketState==0){
+                            holder.tv_device_switch.setText("电源关");
+                        }
+                    }else {
+                        holder.view.setVisibility(View.GONE);
+                        holder.tv_device_switch.setText("离线");
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                    }
+                }
+                else if (type==6){
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("空调");
+                    }else {
+                        String roomName=item.getRoomName();
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
+                    boolean online=item.getOnline();
+                    Log.i("online","-->"+online);
+//                    int sensorState=item.getSensorState();
+                    int socketState=item.getSocketState();
+                    Log.i("online","-->"+socketState);
+                    item.setImg(img[2]);
+                    if (online){
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                        holder.view.setVisibility(View.VISIBLE);
+                        if (socketState==1){
+                            holder.tv_device_switch.setText("电源开");
+                        }else if (socketState==0){
+                            holder.tv_device_switch.setText("电源关");
+                        }
+                    }else {
+                        holder.view.setVisibility(View.GONE);
+                        holder.tv_device_switch.setText("离线");
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                    }
+                }
+                else if (type==7){
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("空气净化器");
+                    }else {
+                        String roomName=item.getRoomName();
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
+                    boolean online=item.getOnline();
+                    Log.i("online","-->"+online);
+//                    int sensorState=item.getSensorState();
+                    int socketState=item.getSocketState();
+                    Log.i("online","-->"+socketState);
+                    item.setImg(img[2]);
+                    if (online){
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                        holder.view.setVisibility(View.VISIBLE);
+                        if (socketState==1){
+                            holder.tv_device_switch.setText("电源开");
+                        }else if (socketState==0){
+                            holder.tv_device_switch.setText("电源关");
+                        }
+                    }else {
+                        holder.view.setVisibility(View.GONE);
+                        holder.tv_device_switch.setText("离线");
+                        holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                    }
                 }else if (type==8){
                     item.setImg(img[1]);
                     boolean online=item.getOnline();

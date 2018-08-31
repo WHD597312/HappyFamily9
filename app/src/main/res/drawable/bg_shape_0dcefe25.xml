@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<shape xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <!-- 搜素结果分类底部绿条 -->
+    <corners
+        android:radius="@dimen/dp_jy_25"/>
+
+    <stroke android:color="#0dcefe"
+        android:width="1dp"/>
+
+
+
+</shape>

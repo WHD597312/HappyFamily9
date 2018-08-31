@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:DoubleWaveView="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tc="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/ll"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#323948"
+
+    android:orientation="vertical">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="每日温度统计"
+        android:textColor="@color/white"
+        android:layout_marginTop="@dimen/dp_jy_25"
+        android:layout_marginLeft="@dimen/dp_jy_30"
+        android:textSize="@dimen/sp_14"/>
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_jy_12"
+        android:layout_marginLeft="@dimen/dp_jy_8"
+        android:text="温度（℃）"
+        android:textColor="@color/white"
+        android:textSize="@dimen/sp_12"/>
+
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_300"></com.github.mikephil.charting.charts.LineChart>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_jy_12">
+        <View
+            android:id="@+id/view_line"
+            android:layout_width="@dimen/dp_jy_30"
+            android:layout_height="@dimen/dp_jy_2"
+            android:background="@color/white"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_28"/>
+        <TextView
+            android:layout_toRightOf="@id/view_line"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_8"
+            android:text="温度曲线"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:text="时间（小时）"
+            android:layout_marginRight="@dimen/dp_jy_1"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_12"/>
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingTop="@dimen/dp_jy_15"
+        android:paddingBottom="@dimen/dp_jy_15"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_24"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:background="@drawable/bg_shape_fill_air5">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="状态"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            android:id="@+id/tv1"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_power"
+            android:layout_below="@id/tv1"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/white"
+            android:text="功率：0W"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_ya"
+            android:visibility="gone"
+            android:layout_below="@id/tv1"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/white"
+            android:text="电压：0V"
+            android:layout_marginLeft="@dimen/dp_jy_110"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_liu"
+            android:visibility="gone"
+            android:layout_below="@id/tv1"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/white"
+            android:text="电流：0A"
+            android:layout_marginLeft="@dimen/dp_jy_220"/>
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_24"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:background="@drawable/bg_shape_fill_air5">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_jy_3"
+            android:text="规格"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_14"
+            android:id="@+id/tv2"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:id="@+id/tv_guige"
+            android:layout_below="@id/tv2"
+            android:layout_marginTop="@dimen/dp_jy_12"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/white"
+            android:layout_marginBottom="@dimen/dp_jy_3"
+            android:text="额外功率：2000W"/>
+
+    </RelativeLayout>
+
+</LinearLayout>

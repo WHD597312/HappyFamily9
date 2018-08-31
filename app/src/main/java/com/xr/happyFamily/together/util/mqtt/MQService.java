@@ -41,7 +41,10 @@ import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.LiveActivity;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.activity.AConfActivity;
+import com.xr.happyFamily.jia.activity.APurifierActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
+import com.xr.happyFamily.jia.activity.DehumidifierActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.ShareDeviceActivity;
@@ -298,6 +301,12 @@ public class MQService extends Service {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/socket1")) {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
+            }else if(topicName.startsWith("p99/dehumidifier1")){
+                macAddress = topicName.substring(18, topicName.lastIndexOf("/"));
+            }else if(topicName.startsWith("p99/aConditioning1")){
+                macAddress = topicName.substring(19, topicName.lastIndexOf("/"));
+            }else if(topicName.startsWith("p99/aPurifier1")){
+                macAddress = topicName.substring(15, topicName.lastIndexOf("/"));
             }else if (topicName.startsWith("p99/wPurifier1")){
                 macAddress = topicName.substring(15, topicName.lastIndexOf("/"));
             }else if (topicName.startsWith("p99")) {
@@ -323,6 +332,15 @@ public class MQService extends Service {
             int curRunState3 = -1;/**机器当前运行状态2  (保留)*/
             int timerHour = -1;/**定时时间 小时*/
             int timerMin = -1;/**定时时间 分*/
+
+            int timerSwitch=-1;//定时器开关
+            String windLevel=null;//风速等级
+            int waterLevel=-1;//水位量
+            int equipRatedPowerHigh;/**设备额定高功率参数*/
+            int equipRatedPowerLow;/**设备额定低功率参数*/
+            int equipCurdPowerHigh;/**设备当前高功率参数*/
+            int equipCurdPowerLow;/**设备当前低功率参数*/
+            int faultCode;/**设备故障代码*/
             int checkCode = -1;/**校验码*/
             int endCode = -1;/**结束码*/
             String message = strings[1];/**收到的消息*/
@@ -406,6 +424,17 @@ public class MQService extends Service {
                         messageJsonArray = messageJsonObject.getJSONArray("Socket");
                     }else if (messageJsonObject!=null && messageJsonObject.has("WPurifier")){
                         messageJsonArray = messageJsonObject.getJSONArray("WPurifier");
+                    }
+
+                    //jjjjjjjjjjjjjjjjjj
+                    else if (messageJsonObject!=null && messageJsonObject.has("Dehumidifier")){
+                        messageJsonArray = messageJsonObject.getJSONArray("Dehumidifier");
+                    }
+                    else if (messageJsonObject!=null && messageJsonObject.has("AConditioning")){
+                        messageJsonArray = messageJsonObject.getJSONArray("AConditioning");
+                    }
+                    else if (messageJsonObject!=null && messageJsonObject.has("APurifier")){
+                        messageJsonArray = messageJsonObject.getJSONArray("APurifier");
                     }
                     if (!TextUtils.isEmpty(productType)) {
                         type = Integer.parseInt(productType);
@@ -656,10 +685,249 @@ public class MQService extends Service {
 
                         break;
                     case 5:
+//jjjjjjjjjjjjj
+                        //除湿机
+                        if (!TextUtils.isEmpty(productType)) {
+
+                        } else {
+                            int dehumSetTemp;/**除湿机设定温度*/
+                            int dehumSetHum;/**除湿机设定湿度*/
+                            int dehumInnerTemp;//除湿机内盘管温度
+                            int dehumOuterTemp;//除湿机外盘管温度
+
+                            int dehumSleep;//除湿机睡眠模式 0关闭 1开启
+                            int dehumAnion;//除湿机负离子模式 0关闭 1开启
+                            int dehumDrying;//除湿机干衣模式 0关闭 1开启
+                            int dehumDefrost;//除湿机除霜模式 0关闭 1开启
+                            int sensorSimpleTemp;//温度采样数据
+                            int sensorSimpleHum;//湿度采样数据
+                            if (messageJsonArray != null) {
+                                busModel = messageJsonArray.getInt(3);
+                                int mMcuVersion = messageJsonArray.getInt(4);
+                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                                int mWifiVersion = messageJsonArray.getInt(5);
+                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+
+                                warmerRunState = messageJsonArray.getInt(7);
+                                curRunState2 = messageJsonArray.getInt(8);
+                                curRunState3 = messageJsonArray.getInt(9);
+                                int[] x = TenTwoUtil.changeToTwo(warmerRunState);
+                                deviceState = x[7];
+                                timerSwitch = x[6];
+                                windLevel = x[5] + "" + x[4] + "" + x[3];
+                                dehumSleep = x[2];
+                                int[] x2 = TenTwoUtil.changeToTwo(curRunState2);
+                                dehumAnion = x2[7];
+                                dehumDrying = x2[6];
+                                dehumDefrost = x2[5];
+                                dehumSetHum = messageJsonArray.getInt(10);
+                                dehumSetTemp = messageJsonArray.getInt(11);
+                                timerMoudle = messageJsonArray.getInt(12);
+                                timerHour= messageJsonArray.getInt(13);
+                                timerMin= messageJsonArray.getInt(14);
+                                sensorSimpleHum= messageJsonArray.getInt(15)-128;
+                                sensorSimpleTemp= messageJsonArray.getInt(16)-128;
+                                waterLevel=messageJsonArray.getInt(17)-128;
+                                dehumInnerTemp = messageJsonArray.getInt(18)-128;
+                                dehumOuterTemp = messageJsonArray.getInt(19)-128;
+                                equipRatedPowerHigh = messageJsonArray.getInt(20);
+                                equipRatedPowerLow = messageJsonArray.getInt(21);
+                                equipCurdPowerHigh = messageJsonArray.getInt(22);
+                                equipCurdPowerLow = messageJsonArray.getInt(23);
+
+                                Log.e("qqqqPow",equipCurdPowerHigh+","+equipCurdPowerLow);
+                                faultCode = messageJsonArray.getInt(24);
+                                checkCode = messageJsonArray.getInt(25);
+                                endCode = messageJsonArray.getInt(26);
+                                if (deviceChild != null) {
+                                    deviceChild.setBusModel(busModel);
+                                    deviceChild.setMcuVersion(mcuVersion);
+                                    deviceChild.setWifiVersion(wifiVersion);
+                                    deviceChild.setCurRunState2(curRunState2);
+                                    deviceChild.setCurRunState3(curRunState3);
+                                    deviceChild.setDeviceState(deviceState);
+                                    deviceChild.setTimerSwitch(timerSwitch);
+                                    deviceChild.setWindLevel(windLevel);
+                                    deviceChild.setDehumSleep(dehumSleep);
+                                    deviceChild.setDehumAnion(dehumAnion);
+                                    deviceChild.setDehumDrying(dehumDrying);
+                                    deviceChild.setDehumDefrost(dehumDefrost);
+                                    deviceChild.setDehumSetHum(dehumSetHum);
+                                    deviceChild.setDehumSetTemp(dehumSetTemp);
+                                    deviceChild.setTimerMoudle(timerMoudle);
+                                    deviceChild.setTimerHour(timerHour);
+                                    deviceChild.setTimerMin(timerMin);
+                                    deviceChild.setSensorSimpleHum(sensorSimpleHum);
+                                    deviceChild.setSensorSimpleTemp(sensorSimpleTemp);
+                                    deviceChild.setWaterLevel(waterLevel);
+                                    deviceChild.setDehumInnerTemp(dehumInnerTemp);
+                                    deviceChild.setDehumOuterTemp(dehumOuterTemp);
+                                    deviceChild.setEquipCurdPowerHigh(equipCurdPowerHigh);
+                                    deviceChild.setEquipCurdPowerLow(equipCurdPowerLow);
+                                    deviceChild.setEquipRatedPowerHigh(equipRatedPowerHigh);
+                                    deviceChild.setEquipRatedPowerLow(equipRatedPowerLow);
+                                    deviceChild.setFaultCode(faultCode);
+                                    deviceChild.setCheckCode(checkCode);
+                                    deviceChild.setEndCode(endCode);
+                                    deviceChild.setOnline(true);
+                                    deviceChildDao.update(deviceChild);
+                                }else {
+                                }
+                            }
+                        }
                         break;
                     case 6:
+                        //空调
+                        if (!TextUtils.isEmpty(productType)) {
+
+                        } else {
+                            String aCondState;//空调当前状态 000:  自动模式；001： 制冷模式；010： 制热模式；011： 通风模式；100： 除湿模式；
+                            int aCondSetTemp1;/**空调设定温度1*/
+                            int aCondSetTemp2;/**空调设定温度2*/
+                            int aCondSetData;/**空调设定参数*/
+                            int aCondSimpleTemp1;/**空调采样温度1*/
+                            int aCondSimpleTemp2;/**空调采样温度2*/
+                            int aCondInnerTemp;//空调内盘管温度
+                            int aCondOuterTemp;//空调外盘管温度
+                            int aCondSleep;//空调睡眠模式 0关闭 1开启
+                            int aCondSUpDown;// 0:上下摆叶关闭   1：摆叶开启
+                            int aCondSLeftRight;//0:左右摆叶关闭   1：摆叶开启
+                            int sensorSimpleHum;//传感器采样湿度
+
+                            if (messageJsonArray != null) {
+                                busModel = messageJsonArray.getInt(3);
+                                int mMcuVersion = messageJsonArray.getInt(4);
+                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                                int mWifiVersion = messageJsonArray.getInt(5);
+                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+
+                                warmerRunState = messageJsonArray.getInt(7);
+                                curRunState2 = messageJsonArray.getInt(8);
+                                curRunState3 = messageJsonArray.getInt(9);
+                                int[] x = TenTwoUtil.changeToTwo(warmerRunState);
+                                deviceState = x[7];
+                                aCondState = x[6] + "" + x[5] + "" + x[4] ;
+                                aCondSleep = x[3] ;
+                                timerSwitch=x[2];
+                                int[] x2 = TenTwoUtil.changeToTwo(curRunState2);
+                                windLevel = x2[7] + "" + x2[6] + "" + x2[5];
+                                aCondSUpDown = x2[4] ;
+                                aCondSLeftRight=x2[3];
+                                aCondSetTemp1 = messageJsonArray.getInt(10);
+                                aCondSetTemp2 = messageJsonArray.getInt(11);
+                                aCondSetData = messageJsonArray.getInt(12);
+                                timerMoudle= messageJsonArray.getInt(13);
+                                timerHour= messageJsonArray.getInt(14);
+                                timerMin= messageJsonArray.getInt(15);
+                                aCondSimpleTemp1= messageJsonArray.getInt(16)-128;
+                                aCondSimpleTemp2= messageJsonArray.getInt(17)-128;
+                                sensorSimpleHum= messageJsonArray.getInt(18)-128;
+                                aCondInnerTemp= messageJsonArray.getInt(19)-128;
+                                aCondOuterTemp= messageJsonArray.getInt(20)-128;
+                                equipRatedPowerHigh= messageJsonArray.getInt(21);
+                                equipRatedPowerLow= messageJsonArray.getInt(22);
+                                equipCurdPowerHigh= messageJsonArray.getInt(23);
+                                equipCurdPowerLow= messageJsonArray.getInt(24);
+                                faultCode= messageJsonArray.getInt(25);
+                                checkCode = messageJsonArray.getInt(26);
+                                endCode = messageJsonArray.getInt(27);
+                                if (deviceChild != null) {
+                                    deviceChild.setBusModel(busModel);
+                                    deviceChild.setMcuVersion(mcuVersion);
+                                    deviceChild.setWifiVersion(wifiVersion);
+                                    deviceChild.setACondState(aCondState);
+                                    deviceChild.setACondSleep(aCondSleep);
+                                    deviceChild.setCurRunState2(curRunState2);
+                                    deviceChild.setCurRunState3(curRunState3);
+                                    deviceChild.setWindLevel(windLevel);
+                                    deviceChild.setACondSUpDown(aCondSUpDown);
+                                    deviceChild.setACondSLeftRight(aCondSLeftRight);
+                                    deviceChild.setACondSetTemp1(aCondSetTemp1);
+                                    deviceChild.setACondSetTemp2(aCondSetTemp2);
+                                    deviceChild.setACondSetData(aCondSetData);
+                                    deviceChild.setACondSimpleTemp1(aCondSimpleTemp1);
+                                    deviceChild.setACondSimpleTemp2(aCondSimpleTemp2);
+                                    deviceChild.setSensorSimpleHum(sensorSimpleHum);
+                                    deviceChild.setACondInnerTemp(aCondInnerTemp);
+                                    deviceChild.setACondOuterTemp(aCondOuterTemp);
+                                    deviceChild.setEquipRatedPowerHigh(equipRatedPowerHigh);
+                                    deviceChild.setEquipRatedPowerLow(equipRatedPowerLow);
+                                    deviceChild.setEquipCurdPowerHigh(equipCurdPowerHigh);
+                                    deviceChild.setEquipCurdPowerLow(equipCurdPowerLow);
+                                    deviceChild.setFaultCode(faultCode);
+                                    deviceChild.setDeviceState(deviceState);
+                                    deviceChild.setTimerSwitch(timerSwitch);
+                                    deviceChild.setTimerMoudle(timerMoudle);
+                                    deviceChild.setTimerHour(timerHour);
+                                    deviceChild.setTimerMin(timerMin);
+                                    deviceChild.setCheckCode(checkCode);
+                                    deviceChild.setEndCode(endCode);
+                                    deviceChild.setOnline(true);
+                                    deviceChildDao.update(deviceChild);
+                                }else {
+
+                                }
+                            }
+                        }
                         break;
                     case 7:
+                        //jjjjjjjjjjjjj
+                        //空气净化器
+                        if (!TextUtils.isEmpty(productType)) {
+
+                        } else {
+                            String purifierState; //空气净化器状态
+                            int sorsorPm,sensorSimpleTemp,sensorSimpleHum,sensorHcho;
+                            if (messageJsonArray != null) {
+                                busModel = messageJsonArray.getInt(3);
+                                int mMcuVersion = messageJsonArray.getInt(4);
+                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                                int mWifiVersion = messageJsonArray.getInt(5);
+                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+
+                                warmerRunState = messageJsonArray.getInt(7);
+                                curRunState2 = messageJsonArray.getInt(8);
+                                curRunState3 = messageJsonArray.getInt(9);
+                                int[] x = TenTwoUtil.changeToTwo(warmerRunState);
+                                deviceState = x[7];
+                                rateState = x[6] + "" + x[5] + "" + x[4] ;
+                                purifierState = x[3] + "" + x[2];
+                                timerSwitch = x[1];
+                                timerMoudle = messageJsonArray.getInt(10);
+                                timerHour = messageJsonArray.getInt(11);
+                                timerMin = messageJsonArray.getInt(12);
+                                sorsorPm= messageJsonArray.getInt(13)-128;
+                                sensorSimpleTemp= messageJsonArray.getInt(14)-128;
+                                sensorSimpleHum= messageJsonArray.getInt(15)-128;
+                                sensorHcho= messageJsonArray.getInt(16)-128;
+                                checkCode = messageJsonArray.getInt(17);
+                                endCode = messageJsonArray.getInt(18);
+                                if (deviceChild != null) {
+                                    deviceChild.setBusModel(busModel);
+                                    deviceChild.setMcuVersion(mcuVersion);
+                                    deviceChild.setWifiVersion(wifiVersion);
+                                    deviceChild.setCurRunState2(curRunState2);
+                                    deviceChild.setCurRunState3(curRunState3);
+                                    deviceChild.setDeviceState(deviceState);
+                                    deviceChild.setRateState(rateState);
+                                    deviceChild.setPurifierState(purifierState);
+                                    deviceChild.setTimerSwitch(timerSwitch);
+                                    deviceChild.setTimerMoudle(timerMoudle);
+                                    deviceChild.setTimerHour(timerHour);
+                                    deviceChild.setTimerMin(timerMin);
+                                    deviceChild.setSorsorPm(sorsorPm);
+                                    deviceChild.setSensorSimpleTemp(sensorSimpleTemp);
+                                    deviceChild.setSensorSimpleHum(sensorSimpleHum);
+                                    deviceChild.setSensorHcho(sensorHcho);
+                                    deviceChild.setCheckCode(checkCode);
+                                    deviceChild.setEndCode(endCode);
+                                    deviceChild.setOnline(true);
+                                    deviceChildDao.update(deviceChild);
+                                }else {
+
+                                }
+                            }
+                        }
                         break;
                     case 8:
                         if (messageJsonArray!=null){
@@ -789,6 +1057,24 @@ public class MQService extends Service {
                     sendBroadcast(mqttIntent);
                 }else if (TempChatActivity.running){
                     Intent mqttIntent = new Intent("TempChatActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
+                }//jjjjjjjjjjjjjjjjj
+                else if (APurifierActivity.running){
+                    Intent mqttIntent = new Intent("APurifierActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
+                }
+                else if (AConfActivity.running){
+                    Intent mqttIntent = new Intent("AConfActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
+                }
+                else if (DehumidifierActivity.running){
+                    Intent mqttIntent = new Intent("DehumidifierActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
@@ -1202,6 +1488,23 @@ public class MQService extends Service {
                 case 4:
                     onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
                     offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                    break;
+                //jjjjjjjjjjjjjjjjj
+                case 5:
+                    onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                case 6:
+                    onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                    list.add(onlineTopicName);
+                    list.add(offlineTopicName);
+                case 7:
+                    onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;

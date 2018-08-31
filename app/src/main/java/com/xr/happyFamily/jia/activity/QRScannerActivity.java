@@ -298,7 +298,27 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                             String offlineTopicName = "";
                             if (2 == deviceType) {
                                 onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                            }else if (3==deviceType){
+                                onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
+                                offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
+                            }else if (4==deviceType){
+                                onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                            }else if (5==deviceType){
+                                onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                            }
+                            else if (6==deviceType){
+                                onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                            }
+                            else if (7==deviceType){
+                                onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                            }else if (8==deviceType){
+                                onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                             }
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 boolean success = mqService.subscribe(onlineTopicName, 1);

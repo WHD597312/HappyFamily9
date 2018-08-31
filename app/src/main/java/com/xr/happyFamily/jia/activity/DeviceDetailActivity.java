@@ -393,7 +393,10 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 backgroundAlpha(1f);
                 return false;
             }
-            application.removeActivity(this);
+            Intent intent=new Intent();
+            intent.putExtra("houseId",houseId);
+            setResult(6000,intent);
+            finish();
             return true;
         }
 

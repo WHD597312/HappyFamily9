@@ -162,11 +162,12 @@ public class GridViewAdapter extends ArrayAdapter {
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
-                        if (socketState==1){
-                            holder.tv_device_switch.setText("电源开");
-                        }else if (socketState==0){
-                            holder.tv_device_switch.setText("电源关");
-                        }
+                        holder.tv_device_switch.setText("在线");
+//                        if (socketState==1){
+//                            holder.tv_device_switch.setText("电源开");
+//                        }else if (socketState==0){
+//                            holder.tv_device_switch.setText("电源关");
+//                        }
                     }else {
                         holder.view.setVisibility(View.GONE);
                         holder.tv_device_switch.setText("离线");
@@ -191,11 +192,12 @@ public class GridViewAdapter extends ArrayAdapter {
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
-                        if (socketState==1){
-                            holder.tv_device_switch.setText("电源开");
-                        }else if (socketState==0){
-                            holder.tv_device_switch.setText("电源关");
-                        }
+                        holder.tv_device_switch.setText("在线");
+//                        if (socketState==1){
+//                            holder.tv_device_switch.setText("电源开");
+//                        }else if (socketState==0){
+//                            holder.tv_device_switch.setText("电源关");
+//                        }
                     }else {
                         holder.view.setVisibility(View.GONE);
                         holder.tv_device_switch.setText("离线");
@@ -220,11 +222,12 @@ public class GridViewAdapter extends ArrayAdapter {
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
-                        if (socketState==1){
-                            holder.tv_device_switch.setText("电源开");
-                        }else if (socketState==0){
-                            holder.tv_device_switch.setText("电源关");
-                        }
+                        holder.tv_device_switch.setText("在线");
+//                        if (socketState==1){
+//                            holder.tv_device_switch.setText("电源开");
+//                        }else if (socketState==0){
+//                            holder.tv_device_switch.setText("电源关");
+//                        }
                     }else {
                         holder.view.setVisibility(View.GONE);
                         holder.tv_device_switch.setText("离线");

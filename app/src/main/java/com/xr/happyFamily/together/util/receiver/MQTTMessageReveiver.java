@@ -9,6 +9,9 @@ import android.util.Log;
 
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.activity.AConfActivity;
+import com.xr.happyFamily.jia.activity.APurifierActivity;
+import com.xr.happyFamily.jia.activity.DehumidifierActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.ShareDeviceActivity;
@@ -78,6 +81,18 @@ public class MQTTMessageReveiver extends BroadcastReceiver {
                 context.sendBroadcast(mqttIntent);
             }else if (UseWaterRecordActivity.running){
                 Intent mqttIntent=new Intent("UseWaterRecordActivity");
+                mqttIntent.putExtra("noNet","noNet");
+                context.sendBroadcast(mqttIntent);
+            }else if (AConfActivity.running){
+                Intent mqttIntent=new Intent("AConfActivity");
+                mqttIntent.putExtra("noNet","noNet");
+                context.sendBroadcast(mqttIntent);
+            }else if (APurifierActivity.running){
+                Intent mqttIntent=new Intent("APurifierActivity");
+                mqttIntent.putExtra("noNet","noNet");
+                context.sendBroadcast(mqttIntent);
+            }else if (DehumidifierActivity.running){
+                Intent mqttIntent=new Intent("DehumidifierActivity");
                 mqttIntent.putExtra("noNet","noNet");
                 context.sendBroadcast(mqttIntent);
             }

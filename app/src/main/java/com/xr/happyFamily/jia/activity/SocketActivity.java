@@ -699,9 +699,10 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (application != null) {
-                application.removeActivity(this);
-            }
+            Intent intent=new Intent();
+            intent.putExtra("houseId",houseId);
+            setResult(6000,intent);
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);

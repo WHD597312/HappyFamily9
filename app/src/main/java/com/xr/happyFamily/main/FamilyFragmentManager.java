@@ -370,7 +370,7 @@ public class FamilyFragmentManager extends Fragment {
         public void setPosition(int position);
     }
 
-    Handler handler = new Handler() {
+  Handler handler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);

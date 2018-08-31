@@ -140,7 +140,8 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeActivity(this);
+            Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
+            startActivity(intent);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -166,9 +167,9 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                  showPopup();//三级联动城市
                 break;
             case R.id.iv_rename_back:
-//                Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
-////                startActivity(intent);
-                finish();
+                Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
+                startActivity(intent);
+
                 break;
             case R.id.tv_rename_del:
                 deleteHourseDialog();//删除家

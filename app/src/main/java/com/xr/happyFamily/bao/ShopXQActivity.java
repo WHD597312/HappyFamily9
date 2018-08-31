@@ -49,6 +49,7 @@ import com.xr.happyFamily.bao.bean.GoodsPrice;
 import com.xr.happyFamily.bao.fragment.PingJiaFragment;
 import com.xr.happyFamily.bao.fragment.ShopFragment;
 import com.xr.happyFamily.bao.fragment.XiangQingFragment;
+import com.xr.happyFamily.bao.fragment.XiangQingRagment2;
 import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bean.ShopCartBean;
 import com.xr.happyFamily.jia.MyApplication;
@@ -100,7 +101,8 @@ public class ShopXQActivity extends AppCompatActivity {
     String goodsId;
     ShopFragment shopFragment;
     PingJiaFragment pingJiaFragment;
-    XiangQingFragment xiangQingFragment;
+//    XiangQingFragment xiangQingFragment;
+    XiangQingRagment2 xiangQingRagment2;
     int priceId = -1;
     int pos = 0;
     ArrayList<ShopCartBean> mGoPayList = new ArrayList<>();
@@ -153,7 +155,8 @@ public class ShopXQActivity extends AppCompatActivity {
 
         shopFragment = new ShopFragment();
         pingJiaFragment = new PingJiaFragment();
-        xiangQingFragment=new XiangQingFragment();
+//        xiangQingFragment=new XiangQingFragment();
+        xiangQingRagment2 = new XiangQingRagment2();
         Bundle bundle = new Bundle();
         // 步骤5:往bundle中添加数据
         bundle.putString("goodsId", goodsId);
@@ -164,11 +167,12 @@ public class ShopXQActivity extends AppCompatActivity {
         // 步骤6:把数据设置到Fragment中
         shopFragment.setArguments(bundle);
         pingJiaFragment.setArguments(bundle);
-        xiangQingFragment.setArguments(bundle);
+//        xiangQingFragment.setArguments(bundle);
+        xiangQingRagment2.setArguments(bundle);
         fragmentList.add(shopFragment);
         fragmentList.add(pingJiaFragment);
-        fragmentList.add(xiangQingFragment);
-
+//        fragmentList.add(xiangQingFragment);
+        fragmentList.add(xiangQingRagment2);
         for (int i = 0; i < circle.size(); i++) {
             tl_flower.addTab(tl_flower.newTab());
         }
@@ -770,7 +774,9 @@ public class ShopXQActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                xiangQingFragment.setData(detailDescribe);
+//                xiangQingFragment.setData(detailDescribe);
+                  xiangQingRagment2.setId(goodsId);
+
                 MyDialog.closeDialog(dialog);
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {
 

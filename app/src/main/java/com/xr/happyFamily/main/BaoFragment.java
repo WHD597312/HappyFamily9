@@ -248,14 +248,16 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void loadMore() {
-                page++;
-                Log.e("qqqqPage",page+"");
-                isLoading = true;
-                if (countTimer != null)
-                    countTimer.cancel();
-                countTimer = new CountTimer(5000, 1000);
-                countTimer.start();
-                getShopData(lastVisibleItem, page);
+                if(!isLoading) {
+                    page++;
+                    Log.e("qqqqPage", page + "");
+                    isLoading = true;
+                    if (countTimer != null)
+                        countTimer.cancel();
+                    countTimer = new CountTimer(5000, 1000);
+                    countTimer.start();
+                    getShopData(lastVisibleItem, page);
+                }
             }
         });
 
@@ -295,7 +297,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
 
         ((ImageView) view.findViewById(imgae_dots[lastBanner])).setImageResource(R.mipmap.ic_shop_banner);
-        ;
+
 
     }
 

@@ -67,18 +67,38 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property SorsorPm = new Property(40, int.class, "sorsorPm", false, "SORSOR_PM");
         public final static Property SensorOx = new Property(41, int.class, "sensorOx", false, "SENSOR_OX");
         public final static Property SensorHcho = new Property(42, int.class, "sensorHcho", false, "SENSOR_HCHO");
-        public final static Property SocketPowerHigh = new Property(43, int.class, "socketPowerHigh", false, "SOCKET_POWER_HIGH");
-        public final static Property SocketPowerLow = new Property(44, int.class, "socketPowerLow", false, "SOCKET_POWER_LOW");
-        public final static Property SocketTemp = new Property(45, int.class, "socketTemp", false, "SOCKET_TEMP");
-        public final static Property SocketState = new Property(46, int.class, "socketState", false, "SOCKET_STATE");
-        public final static Property SocketTimer = new Property(47, int.class, "socketTimer", false, "SOCKET_TIMER");
-        public final static Property SocketTimerOpenHour = new Property(48, int.class, "socketTimerOpenHour", false, "SOCKET_TIMER_OPEN_HOUR");
-        public final static Property SocketTimerOpenMin = new Property(49, int.class, "socketTimerOpenMin", false, "SOCKET_TIMER_OPEN_MIN");
-        public final static Property SocketTimerCloseHour = new Property(50, int.class, "socketTimerCloseHour", false, "SOCKET_TIMER_CLOSE_HOUR");
-        public final static Property SocketTimerCloseMin = new Property(51, int.class, "socketTimerCloseMin", false, "SOCKET_TIMER_CLOSE_MIN");
-        public final static Property SocketCurrent = new Property(52, int.class, "socketCurrent", false, "SOCKET_CURRENT");
-        public final static Property SocketVal = new Property(53, int.class, "socketVal", false, "SOCKET_VAL");
-        public final static Property SocketPowerConsume = new Property(54, int.class, "socketPowerConsume", false, "SOCKET_POWER_CONSUME");
+        public final static Property SocketPower = new Property(43, int.class, "socketPower", false, "SOCKET_POWER");
+        public final static Property SocketTemp = new Property(44, int.class, "socketTemp", false, "SOCKET_TEMP");
+        public final static Property SocketState = new Property(45, int.class, "socketState", false, "SOCKET_STATE");
+        public final static Property SocketTimer = new Property(46, int.class, "socketTimer", false, "SOCKET_TIMER");
+        public final static Property SocketTimerOpenHour = new Property(47, int.class, "socketTimerOpenHour", false, "SOCKET_TIMER_OPEN_HOUR");
+        public final static Property SocketTimerOpenMin = new Property(48, int.class, "socketTimerOpenMin", false, "SOCKET_TIMER_OPEN_MIN");
+        public final static Property SocketTimerCloseHour = new Property(49, int.class, "socketTimerCloseHour", false, "SOCKET_TIMER_CLOSE_HOUR");
+        public final static Property SocketTimerCloseMin = new Property(50, int.class, "socketTimerCloseMin", false, "SOCKET_TIMER_CLOSE_MIN");
+        public final static Property SocketCurrent = new Property(51, int.class, "socketCurrent", false, "SOCKET_CURRENT");
+        public final static Property SocketVal = new Property(52, int.class, "socketVal", false, "SOCKET_VAL");
+        public final static Property SocketPowerConsume = new Property(53, int.class, "socketPowerConsume", false, "SOCKET_POWER_CONSUME");
+        public final static Property SocketTimerMode = new Property(54, int.class, "socketTimerMode", false, "SOCKET_TIMER_MODE");
+        public final static Property IsSocketTimerMode = new Property(55, int.class, "isSocketTimerMode", false, "IS_SOCKET_TIMER_MODE");
+        public final static Property WPurifierEndFlow = new Property(56, int.class, "wPurifierEndFlow", false, "W_PURIFIER_END_FLOW");
+        public final static Property WPurifierEndYear = new Property(57, int.class, "wPurifierEndYear", false, "W_PURIFIER_END_YEAR");
+        public final static Property WPurifierEndMonth = new Property(58, int.class, "wPurifierEndMonth", false, "W_PURIFIER_END_MONTH");
+        public final static Property WPurifierEndDay = new Property(59, int.class, "wPurifierEndDay", false, "W_PURIFIER_END_DAY");
+        public final static Property WPurifierState = new Property(60, String.class, "wPurifierState", false, "W_PURIFIER_STATE");
+        public final static Property WPurifierFlowData = new Property(61, int.class, "wPurifierFlowData", false, "W_PURIFIER_FLOW_DATA");
+        public final static Property WPurifierPrimaryQuqlity = new Property(62, int.class, "wPurifierPrimaryQuqlity", false, "W_PURIFIER_PRIMARY_QUQLITY");
+        public final static Property WPurifierCurTemp = new Property(63, int.class, "wPurifierCurTemp", false, "W_PURIFIER_CUR_TEMP");
+        public final static Property WPurifierOutQuqlity = new Property(64, int.class, "wPurifierOutQuqlity", false, "W_PURIFIER_OUT_QUQLITY");
+        public final static Property WPurifierfilter1 = new Property(65, int.class, "wPurifierfilter1", false, "W_PURIFIERFILTER1");
+        public final static Property WPurifierfilter2 = new Property(66, int.class, "wPurifierfilter2", false, "W_PURIFIERFILTER2");
+        public final static Property WPurifierfilter3 = new Property(67, int.class, "wPurifierfilter3", false, "W_PURIFIERFILTER3");
+        public final static Property WPurifierfilter4 = new Property(68, int.class, "wPurifierfilter4", false, "W_PURIFIERFILTER4");
+        public final static Property WPurifierfilter5 = new Property(69, int.class, "wPurifierfilter5", false, "W_PURIFIERFILTER5");
+        public final static Property WPurifierfilter6 = new Property(70, int.class, "wPurifierfilter6", false, "W_PURIFIERFILTER6");
+        public final static Property WPurifierfilter7 = new Property(71, int.class, "wPurifierfilter7", false, "W_PURIFIERFILTER7");
+        public final static Property WPurifierfilter8 = new Property(72, int.class, "wPurifierfilter8", false, "W_PURIFIERFILTER8");
+        public final static Property WPurifierfilter9 = new Property(73, int.class, "wPurifierfilter9", false, "W_PURIFIERFILTER9");
+        public final static Property WPurifierfilter10 = new Property(74, int.class, "wPurifierfilter10", false, "W_PURIFIERFILTER10");
     }
 
 
@@ -137,18 +157,38 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"SORSOR_PM\" INTEGER NOT NULL ," + // 40: sorsorPm
                 "\"SENSOR_OX\" INTEGER NOT NULL ," + // 41: sensorOx
                 "\"SENSOR_HCHO\" INTEGER NOT NULL ," + // 42: sensorHcho
-                "\"SOCKET_POWER_HIGH\" INTEGER NOT NULL ," + // 43: socketPowerHigh
-                "\"SOCKET_POWER_LOW\" INTEGER NOT NULL ," + // 44: socketPowerLow
-                "\"SOCKET_TEMP\" INTEGER NOT NULL ," + // 45: socketTemp
-                "\"SOCKET_STATE\" INTEGER NOT NULL ," + // 46: socketState
-                "\"SOCKET_TIMER\" INTEGER NOT NULL ," + // 47: socketTimer
-                "\"SOCKET_TIMER_OPEN_HOUR\" INTEGER NOT NULL ," + // 48: socketTimerOpenHour
-                "\"SOCKET_TIMER_OPEN_MIN\" INTEGER NOT NULL ," + // 49: socketTimerOpenMin
-                "\"SOCKET_TIMER_CLOSE_HOUR\" INTEGER NOT NULL ," + // 50: socketTimerCloseHour
-                "\"SOCKET_TIMER_CLOSE_MIN\" INTEGER NOT NULL ," + // 51: socketTimerCloseMin
-                "\"SOCKET_CURRENT\" INTEGER NOT NULL ," + // 52: socketCurrent
-                "\"SOCKET_VAL\" INTEGER NOT NULL ," + // 53: socketVal
-                "\"SOCKET_POWER_CONSUME\" INTEGER NOT NULL );"); // 54: socketPowerConsume
+                "\"SOCKET_POWER\" INTEGER NOT NULL ," + // 43: socketPower
+                "\"SOCKET_TEMP\" INTEGER NOT NULL ," + // 44: socketTemp
+                "\"SOCKET_STATE\" INTEGER NOT NULL ," + // 45: socketState
+                "\"SOCKET_TIMER\" INTEGER NOT NULL ," + // 46: socketTimer
+                "\"SOCKET_TIMER_OPEN_HOUR\" INTEGER NOT NULL ," + // 47: socketTimerOpenHour
+                "\"SOCKET_TIMER_OPEN_MIN\" INTEGER NOT NULL ," + // 48: socketTimerOpenMin
+                "\"SOCKET_TIMER_CLOSE_HOUR\" INTEGER NOT NULL ," + // 49: socketTimerCloseHour
+                "\"SOCKET_TIMER_CLOSE_MIN\" INTEGER NOT NULL ," + // 50: socketTimerCloseMin
+                "\"SOCKET_CURRENT\" INTEGER NOT NULL ," + // 51: socketCurrent
+                "\"SOCKET_VAL\" INTEGER NOT NULL ," + // 52: socketVal
+                "\"SOCKET_POWER_CONSUME\" INTEGER NOT NULL ," + // 53: socketPowerConsume
+                "\"SOCKET_TIMER_MODE\" INTEGER NOT NULL ," + // 54: socketTimerMode
+                "\"IS_SOCKET_TIMER_MODE\" INTEGER NOT NULL ," + // 55: isSocketTimerMode
+                "\"W_PURIFIER_END_FLOW\" INTEGER NOT NULL ," + // 56: wPurifierEndFlow
+                "\"W_PURIFIER_END_YEAR\" INTEGER NOT NULL ," + // 57: wPurifierEndYear
+                "\"W_PURIFIER_END_MONTH\" INTEGER NOT NULL ," + // 58: wPurifierEndMonth
+                "\"W_PURIFIER_END_DAY\" INTEGER NOT NULL ," + // 59: wPurifierEndDay
+                "\"W_PURIFIER_STATE\" TEXT," + // 60: wPurifierState
+                "\"W_PURIFIER_FLOW_DATA\" INTEGER NOT NULL ," + // 61: wPurifierFlowData
+                "\"W_PURIFIER_PRIMARY_QUQLITY\" INTEGER NOT NULL ," + // 62: wPurifierPrimaryQuqlity
+                "\"W_PURIFIER_CUR_TEMP\" INTEGER NOT NULL ," + // 63: wPurifierCurTemp
+                "\"W_PURIFIER_OUT_QUQLITY\" INTEGER NOT NULL ," + // 64: wPurifierOutQuqlity
+                "\"W_PURIFIERFILTER1\" INTEGER NOT NULL ," + // 65: wPurifierfilter1
+                "\"W_PURIFIERFILTER2\" INTEGER NOT NULL ," + // 66: wPurifierfilter2
+                "\"W_PURIFIERFILTER3\" INTEGER NOT NULL ," + // 67: wPurifierfilter3
+                "\"W_PURIFIERFILTER4\" INTEGER NOT NULL ," + // 68: wPurifierfilter4
+                "\"W_PURIFIERFILTER5\" INTEGER NOT NULL ," + // 69: wPurifierfilter5
+                "\"W_PURIFIERFILTER6\" INTEGER NOT NULL ," + // 70: wPurifierfilter6
+                "\"W_PURIFIERFILTER7\" INTEGER NOT NULL ," + // 71: wPurifierfilter7
+                "\"W_PURIFIERFILTER8\" INTEGER NOT NULL ," + // 72: wPurifierfilter8
+                "\"W_PURIFIERFILTER9\" INTEGER NOT NULL ," + // 73: wPurifierfilter9
+                "\"W_PURIFIERFILTER10\" INTEGER NOT NULL );"); // 74: wPurifierfilter10
     }
 
     /** Drops the underlying database table. */
@@ -239,18 +279,42 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(41, entity.getSorsorPm());
         stmt.bindLong(42, entity.getSensorOx());
         stmt.bindLong(43, entity.getSensorHcho());
-        stmt.bindLong(44, entity.getSocketPowerHigh());
-        stmt.bindLong(45, entity.getSocketPowerLow());
-        stmt.bindLong(46, entity.getSocketTemp());
-        stmt.bindLong(47, entity.getSocketState());
-        stmt.bindLong(48, entity.getSocketTimer());
-        stmt.bindLong(49, entity.getSocketTimerOpenHour());
-        stmt.bindLong(50, entity.getSocketTimerOpenMin());
-        stmt.bindLong(51, entity.getSocketTimerCloseHour());
-        stmt.bindLong(52, entity.getSocketTimerCloseMin());
-        stmt.bindLong(53, entity.getSocketCurrent());
-        stmt.bindLong(54, entity.getSocketVal());
-        stmt.bindLong(55, entity.getSocketPowerConsume());
+        stmt.bindLong(44, entity.getSocketPower());
+        stmt.bindLong(45, entity.getSocketTemp());
+        stmt.bindLong(46, entity.getSocketState());
+        stmt.bindLong(47, entity.getSocketTimer());
+        stmt.bindLong(48, entity.getSocketTimerOpenHour());
+        stmt.bindLong(49, entity.getSocketTimerOpenMin());
+        stmt.bindLong(50, entity.getSocketTimerCloseHour());
+        stmt.bindLong(51, entity.getSocketTimerCloseMin());
+        stmt.bindLong(52, entity.getSocketCurrent());
+        stmt.bindLong(53, entity.getSocketVal());
+        stmt.bindLong(54, entity.getSocketPowerConsume());
+        stmt.bindLong(55, entity.getSocketTimerMode());
+        stmt.bindLong(56, entity.getIsSocketTimerMode());
+        stmt.bindLong(57, entity.getWPurifierEndFlow());
+        stmt.bindLong(58, entity.getWPurifierEndYear());
+        stmt.bindLong(59, entity.getWPurifierEndMonth());
+        stmt.bindLong(60, entity.getWPurifierEndDay());
+ 
+        String wPurifierState = entity.getWPurifierState();
+        if (wPurifierState != null) {
+            stmt.bindString(61, wPurifierState);
+        }
+        stmt.bindLong(62, entity.getWPurifierFlowData());
+        stmt.bindLong(63, entity.getWPurifierPrimaryQuqlity());
+        stmt.bindLong(64, entity.getWPurifierCurTemp());
+        stmt.bindLong(65, entity.getWPurifierOutQuqlity());
+        stmt.bindLong(66, entity.getWPurifierfilter1());
+        stmt.bindLong(67, entity.getWPurifierfilter2());
+        stmt.bindLong(68, entity.getWPurifierfilter3());
+        stmt.bindLong(69, entity.getWPurifierfilter4());
+        stmt.bindLong(70, entity.getWPurifierfilter5());
+        stmt.bindLong(71, entity.getWPurifierfilter6());
+        stmt.bindLong(72, entity.getWPurifierfilter7());
+        stmt.bindLong(73, entity.getWPurifierfilter8());
+        stmt.bindLong(74, entity.getWPurifierfilter9());
+        stmt.bindLong(75, entity.getWPurifierfilter10());
     }
 
     @Override
@@ -335,18 +399,42 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(41, entity.getSorsorPm());
         stmt.bindLong(42, entity.getSensorOx());
         stmt.bindLong(43, entity.getSensorHcho());
-        stmt.bindLong(44, entity.getSocketPowerHigh());
-        stmt.bindLong(45, entity.getSocketPowerLow());
-        stmt.bindLong(46, entity.getSocketTemp());
-        stmt.bindLong(47, entity.getSocketState());
-        stmt.bindLong(48, entity.getSocketTimer());
-        stmt.bindLong(49, entity.getSocketTimerOpenHour());
-        stmt.bindLong(50, entity.getSocketTimerOpenMin());
-        stmt.bindLong(51, entity.getSocketTimerCloseHour());
-        stmt.bindLong(52, entity.getSocketTimerCloseMin());
-        stmt.bindLong(53, entity.getSocketCurrent());
-        stmt.bindLong(54, entity.getSocketVal());
-        stmt.bindLong(55, entity.getSocketPowerConsume());
+        stmt.bindLong(44, entity.getSocketPower());
+        stmt.bindLong(45, entity.getSocketTemp());
+        stmt.bindLong(46, entity.getSocketState());
+        stmt.bindLong(47, entity.getSocketTimer());
+        stmt.bindLong(48, entity.getSocketTimerOpenHour());
+        stmt.bindLong(49, entity.getSocketTimerOpenMin());
+        stmt.bindLong(50, entity.getSocketTimerCloseHour());
+        stmt.bindLong(51, entity.getSocketTimerCloseMin());
+        stmt.bindLong(52, entity.getSocketCurrent());
+        stmt.bindLong(53, entity.getSocketVal());
+        stmt.bindLong(54, entity.getSocketPowerConsume());
+        stmt.bindLong(55, entity.getSocketTimerMode());
+        stmt.bindLong(56, entity.getIsSocketTimerMode());
+        stmt.bindLong(57, entity.getWPurifierEndFlow());
+        stmt.bindLong(58, entity.getWPurifierEndYear());
+        stmt.bindLong(59, entity.getWPurifierEndMonth());
+        stmt.bindLong(60, entity.getWPurifierEndDay());
+ 
+        String wPurifierState = entity.getWPurifierState();
+        if (wPurifierState != null) {
+            stmt.bindString(61, wPurifierState);
+        }
+        stmt.bindLong(62, entity.getWPurifierFlowData());
+        stmt.bindLong(63, entity.getWPurifierPrimaryQuqlity());
+        stmt.bindLong(64, entity.getWPurifierCurTemp());
+        stmt.bindLong(65, entity.getWPurifierOutQuqlity());
+        stmt.bindLong(66, entity.getWPurifierfilter1());
+        stmt.bindLong(67, entity.getWPurifierfilter2());
+        stmt.bindLong(68, entity.getWPurifierfilter3());
+        stmt.bindLong(69, entity.getWPurifierfilter4());
+        stmt.bindLong(70, entity.getWPurifierfilter5());
+        stmt.bindLong(71, entity.getWPurifierfilter6());
+        stmt.bindLong(72, entity.getWPurifierfilter7());
+        stmt.bindLong(73, entity.getWPurifierfilter8());
+        stmt.bindLong(74, entity.getWPurifierfilter9());
+        stmt.bindLong(75, entity.getWPurifierfilter10());
     }
 
     @Override
@@ -400,18 +488,38 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.getInt(offset + 40), // sorsorPm
             cursor.getInt(offset + 41), // sensorOx
             cursor.getInt(offset + 42), // sensorHcho
-            cursor.getInt(offset + 43), // socketPowerHigh
-            cursor.getInt(offset + 44), // socketPowerLow
-            cursor.getInt(offset + 45), // socketTemp
-            cursor.getInt(offset + 46), // socketState
-            cursor.getInt(offset + 47), // socketTimer
-            cursor.getInt(offset + 48), // socketTimerOpenHour
-            cursor.getInt(offset + 49), // socketTimerOpenMin
-            cursor.getInt(offset + 50), // socketTimerCloseHour
-            cursor.getInt(offset + 51), // socketTimerCloseMin
-            cursor.getInt(offset + 52), // socketCurrent
-            cursor.getInt(offset + 53), // socketVal
-            cursor.getInt(offset + 54) // socketPowerConsume
+            cursor.getInt(offset + 43), // socketPower
+            cursor.getInt(offset + 44), // socketTemp
+            cursor.getInt(offset + 45), // socketState
+            cursor.getInt(offset + 46), // socketTimer
+            cursor.getInt(offset + 47), // socketTimerOpenHour
+            cursor.getInt(offset + 48), // socketTimerOpenMin
+            cursor.getInt(offset + 49), // socketTimerCloseHour
+            cursor.getInt(offset + 50), // socketTimerCloseMin
+            cursor.getInt(offset + 51), // socketCurrent
+            cursor.getInt(offset + 52), // socketVal
+            cursor.getInt(offset + 53), // socketPowerConsume
+            cursor.getInt(offset + 54), // socketTimerMode
+            cursor.getInt(offset + 55), // isSocketTimerMode
+            cursor.getInt(offset + 56), // wPurifierEndFlow
+            cursor.getInt(offset + 57), // wPurifierEndYear
+            cursor.getInt(offset + 58), // wPurifierEndMonth
+            cursor.getInt(offset + 59), // wPurifierEndDay
+            cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60), // wPurifierState
+            cursor.getInt(offset + 61), // wPurifierFlowData
+            cursor.getInt(offset + 62), // wPurifierPrimaryQuqlity
+            cursor.getInt(offset + 63), // wPurifierCurTemp
+            cursor.getInt(offset + 64), // wPurifierOutQuqlity
+            cursor.getInt(offset + 65), // wPurifierfilter1
+            cursor.getInt(offset + 66), // wPurifierfilter2
+            cursor.getInt(offset + 67), // wPurifierfilter3
+            cursor.getInt(offset + 68), // wPurifierfilter4
+            cursor.getInt(offset + 69), // wPurifierfilter5
+            cursor.getInt(offset + 70), // wPurifierfilter6
+            cursor.getInt(offset + 71), // wPurifierfilter7
+            cursor.getInt(offset + 72), // wPurifierfilter8
+            cursor.getInt(offset + 73), // wPurifierfilter9
+            cursor.getInt(offset + 74) // wPurifierfilter10
         );
         return entity;
     }
@@ -461,18 +569,38 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setSorsorPm(cursor.getInt(offset + 40));
         entity.setSensorOx(cursor.getInt(offset + 41));
         entity.setSensorHcho(cursor.getInt(offset + 42));
-        entity.setSocketPowerHigh(cursor.getInt(offset + 43));
-        entity.setSocketPowerLow(cursor.getInt(offset + 44));
-        entity.setSocketTemp(cursor.getInt(offset + 45));
-        entity.setSocketState(cursor.getInt(offset + 46));
-        entity.setSocketTimer(cursor.getInt(offset + 47));
-        entity.setSocketTimerOpenHour(cursor.getInt(offset + 48));
-        entity.setSocketTimerOpenMin(cursor.getInt(offset + 49));
-        entity.setSocketTimerCloseHour(cursor.getInt(offset + 50));
-        entity.setSocketTimerCloseMin(cursor.getInt(offset + 51));
-        entity.setSocketCurrent(cursor.getInt(offset + 52));
-        entity.setSocketVal(cursor.getInt(offset + 53));
-        entity.setSocketPowerConsume(cursor.getInt(offset + 54));
+        entity.setSocketPower(cursor.getInt(offset + 43));
+        entity.setSocketTemp(cursor.getInt(offset + 44));
+        entity.setSocketState(cursor.getInt(offset + 45));
+        entity.setSocketTimer(cursor.getInt(offset + 46));
+        entity.setSocketTimerOpenHour(cursor.getInt(offset + 47));
+        entity.setSocketTimerOpenMin(cursor.getInt(offset + 48));
+        entity.setSocketTimerCloseHour(cursor.getInt(offset + 49));
+        entity.setSocketTimerCloseMin(cursor.getInt(offset + 50));
+        entity.setSocketCurrent(cursor.getInt(offset + 51));
+        entity.setSocketVal(cursor.getInt(offset + 52));
+        entity.setSocketPowerConsume(cursor.getInt(offset + 53));
+        entity.setSocketTimerMode(cursor.getInt(offset + 54));
+        entity.setIsSocketTimerMode(cursor.getInt(offset + 55));
+        entity.setWPurifierEndFlow(cursor.getInt(offset + 56));
+        entity.setWPurifierEndYear(cursor.getInt(offset + 57));
+        entity.setWPurifierEndMonth(cursor.getInt(offset + 58));
+        entity.setWPurifierEndDay(cursor.getInt(offset + 59));
+        entity.setWPurifierState(cursor.isNull(offset + 60) ? null : cursor.getString(offset + 60));
+        entity.setWPurifierFlowData(cursor.getInt(offset + 61));
+        entity.setWPurifierPrimaryQuqlity(cursor.getInt(offset + 62));
+        entity.setWPurifierCurTemp(cursor.getInt(offset + 63));
+        entity.setWPurifierOutQuqlity(cursor.getInt(offset + 64));
+        entity.setWPurifierfilter1(cursor.getInt(offset + 65));
+        entity.setWPurifierfilter2(cursor.getInt(offset + 66));
+        entity.setWPurifierfilter3(cursor.getInt(offset + 67));
+        entity.setWPurifierfilter4(cursor.getInt(offset + 68));
+        entity.setWPurifierfilter5(cursor.getInt(offset + 69));
+        entity.setWPurifierfilter6(cursor.getInt(offset + 70));
+        entity.setWPurifierfilter7(cursor.getInt(offset + 71));
+        entity.setWPurifierfilter8(cursor.getInt(offset + 72));
+        entity.setWPurifierfilter9(cursor.getInt(offset + 73));
+        entity.setWPurifierfilter10(cursor.getInt(offset + 74));
      }
     
     @Override

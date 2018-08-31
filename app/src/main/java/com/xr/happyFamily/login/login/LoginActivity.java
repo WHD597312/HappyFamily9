@@ -572,13 +572,12 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                             Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
                             for (int j = 0; j < roomDevices.length(); j++) {
                                 JSONObject roomObject = roomDevices.getJSONObject(j);
-                                int roomId = roomObject.getInt("roomId");
-                                Id = roomId;
+                                long roomId = roomObject.getLong("roomId");
                                 String roomName = roomObject.getString("roomName");
                                 int houseId = roomObject.getInt("houseId");
                                 String roomType = roomObject.getString("roomType");
 
-                                Room room = new Room((long) roomId, roomName, houseId, roomType, 0,"");
+                                Room room = new Room(roomId,roomName, houseId, roomType, 0,"");
                                 Log.i("dddddd11qqq1", "doInBackground:---> " + room.getRoomName() + "," + room.getRoomType());
                                 roomDao.insert(room);
 
@@ -596,6 +595,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                     DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
                                     deviceChild.setDeviceId(deviceId);
                                     deviceChild.setImg(img[0]);
+                                    deviceChild.setRoomName(roomName);
                                     deviceChildDao.insert(deviceChild);
                                 }
                             }
@@ -686,8 +686,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     Utils.showToast(LoginActivity.this, "查询失败");
                     break;
                 case 100:
-
-
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     if (mPositionPreferences.contains("position")){
                         mPositionPreferences.edit().clear().commit();
@@ -696,6 +694,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         Utils.showToast(LoginActivity.this, "登录成功");
                         intent.putExtra("login0","login0");
                     }
+                    running=false;
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("load","load");
                     intent.putExtra("login","login");
@@ -703,6 +702,12 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     break;
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
     }
 
     @Override

@@ -221,13 +221,17 @@ public class RoomFragment extends Fragment {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
                     }else if (type==8){
-                        String deviceName = deviceChild.getName();
-                        long deviceId = deviceChild.getId();
-                        Intent intent = new Intent(getActivity(), PurifierActivity.class);
-                        intent.putExtra("deviceName", deviceName);
-                        intent.putExtra("deviceId", deviceId);
-                        intent.putExtra("houseId", houseId);
-                        startActivityForResult(intent, 6000);
+                        if (online){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        }else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             });

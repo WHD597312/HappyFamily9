@@ -146,16 +146,25 @@ public class GridViewAdapter extends ArrayAdapter {
                 }else if (type==8){
                     item.setImg(img[1]);
                     boolean online=item.getOnline();
+                    Log.i("common","-->"+common);
+                    if (TextUtils.isEmpty(common)){
+                        holder.tv_device_name.setText(item.getName());
+                        holder.tv_device_type.setText("净水器");
+                    }else {
+                        String roomName=item.getRoomName();
+                        Log.i("roomName","-->"+roomName);
+                        holder.tv_device_name.setText(roomName);
+                        holder.tv_device_type.setText(item.getName());
+                    }
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
+                        holder.tv_device_switch.setText("在线");
                     }else {
                         holder.view.setVisibility(View.GONE);
                         holder.tv_device_switch.setText("离线");
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
-                    holder.tv_device_name.setText(item.getName());
-                    holder.tv_device_type.setText("净水器");
                 }
                 Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
             }

@@ -121,6 +121,7 @@ public class FamilyFragment extends Fragment {
     private String deleteDeviceUrl = HttpUtils.ipAddress + "/family/device/deleteDevice";
     private boolean isLongClicked = false;
     SharedPreferences mPositionPreferences;
+    public static boolean running=false;
 
     @Nullable
     @Override
@@ -338,6 +339,7 @@ public class FamilyFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        running=true;
         IntentFilter intentFilter = new IntentFilter("RoomFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
@@ -413,13 +415,18 @@ public class FamilyFragment extends Fragment {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
                     }else if (type==8){
-                        String deviceName = deviceChild.getName();
-                        long deviceId = deviceChild.getId();
-                        Intent intent = new Intent(getActivity(), PurifierActivity.class);
-                        intent.putExtra("deviceName", deviceName);
-                        intent.putExtra("deviceId", deviceId);
-                        intent.putExtra("houseId", houseId);
-                        startActivityForResult(intent, 6000);
+                        if (online){
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        }else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+
                     }
                 }
             });
@@ -522,6 +529,7 @@ public class FamilyFragment extends Fragment {
         if (isBound){
             getActivity().unbindService(connection);
         }
+        running=false;
     }
     MQService mqService;
     boolean bound;
@@ -608,10 +616,10 @@ public class FamilyFragment extends Fragment {
                             String mac = deviceChild.getMacAddress();
                             if (mac.equals(macAddress) && deviceChild2 != null) {
                                 shareDevices.set(i, deviceChild2);
-                                shareViewAdapter.notifyDataSetChanged();
                                 break;
                             }
                         }
+                        shareViewAdapter.notifyDataSetChanged();
                     } else {
                         for (int i = 0; i < commonDevices.size(); i++) {
                             DeviceChild deviceChild = commonDevices.get(i);
@@ -619,10 +627,10 @@ public class FamilyFragment extends Fragment {
                             if (mac.equals(macAddress) && deviceChild2 != null) {
                                 deviceChild2.setCommon("common");
                                 commonDevices.set(i, deviceChild2);
-                                mGridViewAdapter.notifyDataSetChanged();
                                 break;
                             }
                         }
+                        mGridViewAdapter.notifyDataSetChanged();
                     }
                 }
             }

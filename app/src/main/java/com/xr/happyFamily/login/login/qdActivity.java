@@ -290,6 +290,7 @@ public class qdActivity extends Activity {
                                     DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
                                     deviceChild.setDeviceId(deviceId);
                                     deviceChild.setImg(img[0]);
+                                    deviceChild.setRoomName(roomName);
                                     deviceChildDao.insert(deviceChild);
                                 }
                             }

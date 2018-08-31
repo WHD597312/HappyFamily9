@@ -65,6 +65,7 @@
         <attr name="textOrientation" format="enum">
             <enum name="top" value="1" />
             <enum name="bottom" value="2" />
+            <enum name="center" value="3" />
         </attr>
     </declare-styleable>
     <declare-styleable name="ArcProgressBar">

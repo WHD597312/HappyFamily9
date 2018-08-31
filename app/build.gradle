@@ -9,14 +9,14 @@ repositories {
 }
 
 greendao {
-    schemaVersion 23
+    schemaVersion 29
     daoPackage 'com.xr.database.dao'
     targetGenDir 'src/main/java'
 }
 android {
     signingConfigs {
         release {
-            storeFile file('D:/android/HappyFamily/p99.jks')
+            storeFile file('F:/android/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
@@ -108,4 +108,5 @@ dependencies {
     implementation 'com.lzy.widget:imagepicker:0.5.4'
     implementation 'com.github.bumptech.glide:glide:3.7.0'
     implementation 'com.jwenfeng.pulltorefresh:library:1.0.3'
+    implementation 'com.weigan:loopView:0.1.2'
 }

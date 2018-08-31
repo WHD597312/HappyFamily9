@@ -443,7 +443,6 @@
         <activity
             android:name=".jia.activity.SocketActivity"
             android:screenOrientation="portrait" />
-        <activity android:name=".jia.activity.DehumidifierActivity" />
         <activity
             android:name=".jia.activity.PurifierActivity"
             android:screenOrientation="portrait"

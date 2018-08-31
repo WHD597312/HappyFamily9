@@ -339,12 +339,6 @@ public class FamilyFragment extends Fragment {
 
 
 
-
-
-
-
-
-
     public void setHouseId(long houseId) {
         this.houseId = houseId;
     }

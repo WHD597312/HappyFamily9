@@ -685,7 +685,6 @@ public class MQService extends Service {
 
                         break;
                     case 5:
-//jjjjjjjjjjjjj
                         //除湿机
                         if (!TextUtils.isEmpty(productType)) {
 
@@ -871,7 +870,6 @@ public class MQService extends Service {
                         }
                         break;
                     case 7:
-                        //jjjjjjjjjjjjj
                         //空气净化器
                         if (!TextUtils.isEmpty(productType)) {
 
@@ -1060,7 +1058,7 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }//jjjjjjjjjjjjjjjjj
+                }
                 else if (APurifierActivity.running){
                     Intent mqttIntent = new Intent("APurifierActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);

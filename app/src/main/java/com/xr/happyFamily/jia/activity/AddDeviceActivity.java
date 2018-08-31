@@ -713,9 +713,20 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                         }else if (4==deviceType){
                             onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
                             offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                        }else if (5==deviceType){
+                            onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                        }
+                        else if (6==deviceType){
+                            onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                        }
+                        else if (7==deviceType){
+                            onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
                         }else if (8==deviceType){
-                            onlineTopicName = "p99/wPurifier/" + macAddress + "/transfer";
-                            offlineTopicName = "p99/wPurifier/" + macAddress + "/lwt";
+                            onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                         }
                         if (!TextUtils.isEmpty(onlineTopicName)){
                             boolean success = mqService.subscribe(onlineTopicName, 1);

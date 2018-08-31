@@ -18,7 +18,9 @@
         <RelativeLayout
             android:id="@+id/head"
             android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_45">
+            android:layout_height="@dimen/dp_jy_45"
+            android:background="#4dc4ff"
+            >
 
             <ImageView
                 android:id="@+id/image_back"
@@ -149,15 +151,6 @@
             android:gravity="center"
             android:text="30℃"
             android:textColor="@color/white" />
-        <!--<com.xr.happyFamily.jia.view_custom.Themometer-->
-        <!--android:id="@+id/themometer"-->
-        <!--android:layout_width="@dimen/dp_jy_42"-->
-        <!--android:layout_height="@dimen/dp_jy_60"-->
-        <!--android:layout_alignParentRight="true"-->
-        <!--android:layout_below="@id/head"-->
-        <!--android:layout_marginRight="@dimen/dp_jy_30"-->
-        <!--android:layout_marginTop="@dimen/dp_jy_10"-->
-        <!--/>-->
     </RelativeLayout>
 
     <RelativeLayout
@@ -347,18 +340,6 @@
                 android:layout_height="wrap_content"
                 android:scaleType="centerCrop"
                 android:src="@mipmap/switching" />
-
-            <!--<TextView-->
-            <!--android:id="@+id/tv_switch"-->
-            <!--android:layout_width="wrap_content"-->
-            <!--android:layout_height="wrap_content"-->
-            <!--android:layout_alignLeft="@+id/image_switch"-->
-            <!--android:layout_alignRight="@+id/image_switch"-->
-            <!--android:layout_below="@+id/image_switch"-->
-            <!--android:gravity="center"-->
-            <!--android:text="开关"-->
-            <!--android:textColor="#20e2ff"-->
-            <!--android:textSize="@dimen/sp_15" />-->
         </RelativeLayout>
 
         <RelativeLayout

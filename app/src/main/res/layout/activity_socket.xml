@@ -7,7 +7,8 @@
     android:layout_height="match_parent"
     android:background="#373740"
     android:orientation="vertical"
-    android:splitMotionEvents="false">
+    android:splitMotionEvents="false"
+    >
 
     <RelativeLayout
         android:id="@+id/head"

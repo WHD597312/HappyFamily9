@@ -66,6 +66,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
     ImageView img_qrCode;
     @BindView(R.id.tv_version) TextView tv_version;
     long houseId;
+    long id;
     /**
      * 二维码
      */
@@ -112,7 +113,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
 
         Log.i("share","-->onCreate");
         Intent intent = getIntent();
-        long id = intent.getLongExtra("deviceId", 0);
+        id = intent.getLongExtra("deviceId", 0);
         deviceChild = deviceChildDao.findById(id);
         houseId=deviceChild.getHouseId();
         type=deviceChild.getType();
@@ -142,12 +143,18 @@ public class ShareDeviceActivity extends AppCompatActivity {
                 break;
         }
     }
-
     @Override
     protected void onResume() {
         super.onResume();
         Log.i("share","-->onResume");
         running=true;
+        deviceChild = deviceChildDao.findById(id);
+        if (deviceChild==null){
+            Toast.makeText(ShareDeviceActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+            Intent data = new Intent(ShareDeviceActivity.this, MainActivity.class);
+            data.putExtra("houseId", houseId);
+            startActivity(data);
+        }
     }
 
     @Override
@@ -155,6 +162,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
         Log.i("share","-->onPause");
         super.onPause();
     }
+
 
 
 
@@ -373,7 +381,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
                     Intent intent2=new Intent(ShareDeviceActivity.this,MainActivity.class);
                     intent2.putExtra("houseId",houseId);
                     startActivity(intent2);
-                }else if (Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild.getMacAddress().equals(deviceChild2.getMacAddress())){
+                }else if (!Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild.getMacAddress().equals(macAddress)){
                     deviceChild=deviceChild2;
                     deviceChildDao.update(deviceChild);
                     tv_version.setText(deviceChild.getWifiVersion()+","+deviceChild.getMcuVersion());

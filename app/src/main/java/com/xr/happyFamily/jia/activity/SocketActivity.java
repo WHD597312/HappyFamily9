@@ -35,6 +35,7 @@ import com.xr.happyFamily.jia.view_custom.MySeekBar;
 import com.xr.happyFamily.jia.view_custom.TimePickViewPopup;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
 import com.xr.happyFamily.jia.xnty.NoFastClickUtils;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
@@ -108,7 +109,6 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             application.addActivity(this);
         }
         unbinder = ButterKnife.bind(this);
-
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         Intent intent = getIntent();
         deviceId = intent.getLongExtra("deviceId", 0);
@@ -135,6 +135,12 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             }
+        }else {
+            running=false;
+            Intent intent = new Intent();
+            intent.putExtra("houseId", houseId);
+            setResult(6000, intent);
+            finish();
         }
     }
 
@@ -396,36 +402,67 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             @Override
             public void onClick(View v) {
                 int[] timeData = timePickViewPopup.getData();
+                int time=timeData[1];
+                int time2=timeData[2];
                 if (timeData[0] == 0) {
-                    int socketTimer=deviceChild.getSocketTimer();
-                    if (socketTimer==1){
-                        deviceChild.setSocketTimerOpenHour(timeData[1]);
-                        deviceChild.setSocketTimerOpenMin(timeData[2]);
+                    int socketState=deviceChild.getSocketState();
+                    if (socketState==0){
+                        deviceChild.setSocketTimerCloseHour(timeData[1]);
+                        deviceChild.setSocketTimerCloseMin(timeData[2]);
                         deviceChild.setSocketTimerCloseHour(0);
                         deviceChild.setSocketTimerCloseHour(0);
-                    }else if (socketTimer==0){
+
+                        if (time==0 && time2==0){
+                            deviceChild.setSocketTimer(2);
+                            deviceChild.setIsSocketTimerMode(0);
+                        }else {
+                            deviceChild.setSocketTimer(0);
+                            deviceChild.setIsSocketTimerMode(1);
+                        }
+
+                    }else if (socketState==1){
                         deviceChild.setSocketTimerCloseHour(timeData[1]);
                         deviceChild.setSocketTimerCloseMin(timeData[2]);
                         deviceChild.setSocketTimerOpenHour(0);
                         deviceChild.setSocketTimerOpenMin(0);
+                        deviceChild.setSocketTimer(0);
+                        if (time==0 && time2==0){
+                            deviceChild.setSocketTimer(2);
+                            deviceChild.setIsSocketTimerMode(0);
+                        }else {
+                            deviceChild.setSocketTimer(0);
+                            deviceChild.setIsSocketTimerMode(1);
+                        }
                     }
-                    deviceChild.setIsSocketTimerMode(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 } else if (timeData[0] == 1) {
-                    int socketTimer=deviceChild.getSocketTimer();
-                    if (socketTimer==1){
+                    int socketState=deviceChild.getSocketState();
+                    if (socketState==0){
                         deviceChild.setSocketTimerOpenHour(timeData[1]);
                         deviceChild.setSocketTimerOpenMin(timeData[2]);
                         deviceChild.setSocketTimerCloseHour(0);
                         deviceChild.setSocketTimerCloseHour(0);
-                    }else if (socketTimer==0){
+                        if (time==0 && time2==0){
+                            deviceChild.setSocketTimer(2);
+                            deviceChild.setIsSocketTimerMode(0);
+                        }else {
+                            deviceChild.setSocketTimer(1);
+                            deviceChild.setIsSocketTimerMode(1);
+                        }
+                    }else if (socketState==1){
                         deviceChild.setSocketTimerCloseHour(timeData[1]);
                         deviceChild.setSocketTimerCloseMin(timeData[2]);
                         deviceChild.setSocketTimerOpenHour(0);
                         deviceChild.setSocketTimerOpenMin(0);
+                        if (time==0 && time2==0){
+                            deviceChild.setSocketTimer(2);
+                            deviceChild.setIsSocketTimerMode(0);
+                        }else {
+                            deviceChild.setSocketTimer(1);
+                            deviceChild.setIsSocketTimerMode(1);
+                        }
                     }
-                    deviceChild.setIsSocketTimerMode(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 } else if (timeData[0] == 2) {
@@ -434,6 +471,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                     deviceChild.setSocketTimerCloseHour(0);
                     deviceChild.setSocketTimerCloseHour(0);
                     deviceChild.setSocketTimer(2);
+                    deviceChild.setIsSocketTimerMode(0);
                     setMode(deviceChild);
                     send(deviceChild);
                 }
@@ -490,10 +528,9 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                     if (deviceChild2 == null) {
                         Toast.makeText(SocketActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();
-                        Intent data = new Intent();
+                        Intent data = new Intent(SocketActivity.this, MainActivity.class);
                         data.putExtra("houseId", houseId);
-                        SocketActivity.this.setResult(6000, data);
-                        SocketActivity.this.finish();
+                        startActivity(data);
                     } else {
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();
@@ -668,6 +705,12 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
     }
 
     @Override

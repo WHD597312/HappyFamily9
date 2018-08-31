@@ -127,10 +127,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         if (application != null) {
             application.addActivity(this);
         }
-        my = MyApplication.getContext().getSharedPreferences("my", Context.MODE_PRIVATE);
-        Intent service = new Intent(this, MQService.class);
-        startService(service);
-
+        my = getSharedPreferences("my", Context.MODE_PRIVATE);
         IntentFilter intentFilter = new IntentFilter("AddDeviceActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
@@ -350,7 +347,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 }
                 Intent service = new Intent(AddDeviceActivity.this, MQService.class);
                 isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-                mac="5asdfghi29hd";
+                mac="5asdfghi69hd";
                 break;
         }
     }
@@ -811,7 +808,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     class MessageReceiver extends BroadcastReceiver {
         @Override
         public void onReceive(Context context, Intent intent) {
-
             String macAddress = intent.getStringExtra("macAddress");
             int type=intent.getIntExtra("type",0);
             if (!TextUtils.isEmpty(macAddress) && deviceChild != null && macAddress.equals(deviceChild.getMacAddress())) {

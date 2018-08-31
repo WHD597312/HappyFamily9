@@ -121,7 +121,7 @@
         android:layout_width="@dimen/dp_jy_60"
         android:layout_height="wrap_content"
         android:layout_below="@+id/bar_chart"
-        android:text="5"
+        android:text="0"
         android:textColor="#20e2ff"
         android:textSize="@dimen/sp_40"
         android:gravity="center"
@@ -138,7 +138,7 @@
         android:textColor="#20e2ff"
         android:textSize="@dimen/sp_40"
         android:gravity="center"
-        android:text="10"
+        android:text="0"
         android:layout_alignLeft="@+id/textView17"
         android:layout_alignRight="@+id/textView17"
         />

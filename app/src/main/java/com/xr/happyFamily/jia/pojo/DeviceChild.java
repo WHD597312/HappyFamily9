@@ -67,8 +67,11 @@ public class DeviceChild implements Serializable{
     int socketTimerMode;/**插座计时模式 定时模式，倒计时模式 1为倒计时 2为定时*/
     int isSocketTimerMode;/**定时模式是否开启*/
 
-    int wPurifierEndTime;/**净水器截止使用时间*/
+
     int wPurifierEndFlow;/**净水器截止使用流量*/
+    int wPurifierEndYear;/**净水器截止使用时间年*/
+    int wPurifierEndMonth;/**净水器截止使用月*/
+    int wPurifierEndDay;/**净水器截止使用日*/
     String wPurifierState;/**净水器状态*/
     int wPurifierFlowData;/**净水器流量数据*/
     int wPurifierPrimaryQuqlity;/**净水器原生水质*/
@@ -455,13 +458,7 @@ public class DeviceChild implements Serializable{
         this.wPurifierEndFlow = wPurifierEndFlow;
     }
 
-    public int getWPurifierEndTime() {
-        return this.wPurifierEndTime;
-    }
 
-    public void setWPurifierEndTime(int wPurifierEndTime) {
-        this.wPurifierEndTime = wPurifierEndTime;
-    }
 
     public int getWPurifierfilter10() {
         return this.wPurifierfilter10;
@@ -559,6 +556,30 @@ public class DeviceChild implements Serializable{
         this.wPurifierOutQuqlity = wPurifierOutQuqlity;
     }
 
+    public int getWPurifierEndDay() {
+        return this.wPurifierEndDay;
+    }
+
+    public void setWPurifierEndDay(int wPurifierEndDay) {
+        this.wPurifierEndDay = wPurifierEndDay;
+    }
+
+    public int getWPurifierEndMonth() {
+        return this.wPurifierEndMonth;
+    }
+
+    public void setWPurifierEndMonth(int wPurifierEndMonth) {
+        this.wPurifierEndMonth = wPurifierEndMonth;
+    }
+
+    public int getWPurifierEndYear() {
+        return this.wPurifierEndYear;
+    }
+
+    public void setWPurifierEndYear(int wPurifierEndYear) {
+        this.wPurifierEndYear = wPurifierEndYear;
+    }
+
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.houseId = houseId;
         this.roomId = roomId;
@@ -575,16 +596,16 @@ public class DeviceChild implements Serializable{
     public DeviceChild() {
     }
 
-    @Generated(hash = 1601519420)
+    @Generated(hash = 282078110)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
             int warmerCurRunRoatePower, int warmerRunState, int deviceState, String rateState, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour,
             int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp,
             int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPower, int socketTemp, int socketState, int socketTimer, int socketTimerOpenHour,
             int socketTimerOpenMin, int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent, int socketVal, int socketPowerConsume, int socketTimerMode,
-            int isSocketTimerMode, int wPurifierEndTime, int wPurifierEndFlow, String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp,
-            int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6,
-            int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10) {
+            int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData,
+            int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4,
+            int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -641,8 +662,10 @@ public class DeviceChild implements Serializable{
         this.socketPowerConsume = socketPowerConsume;
         this.socketTimerMode = socketTimerMode;
         this.isSocketTimerMode = isSocketTimerMode;
-        this.wPurifierEndTime = wPurifierEndTime;
         this.wPurifierEndFlow = wPurifierEndFlow;
+        this.wPurifierEndYear = wPurifierEndYear;
+        this.wPurifierEndMonth = wPurifierEndMonth;
+        this.wPurifierEndDay = wPurifierEndDay;
         this.wPurifierState = wPurifierState;
         this.wPurifierFlowData = wPurifierFlowData;
         this.wPurifierPrimaryQuqlity = wPurifierPrimaryQuqlity;
@@ -659,6 +682,8 @@ public class DeviceChild implements Serializable{
         this.wPurifierfilter9 = wPurifierfilter9;
         this.wPurifierfilter10 = wPurifierfilter10;
     }
+
+   
 
 
     

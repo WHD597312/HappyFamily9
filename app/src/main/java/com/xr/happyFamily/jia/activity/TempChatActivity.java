@@ -1,6 +1,9 @@
 package com.xr.happyFamily.jia.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -11,6 +14,7 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.data.LineDataSet;
@@ -18,12 +22,15 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.NumberToString;
 import com.xr.happyFamily.together.chart.LineChartManager;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONObject;
 
+import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -39,12 +46,19 @@ public class TempChatActivity extends AppCompatActivity {
     MyApplication application;
     @BindView(R.id.line_chart) LineChart line_chart;
     @BindView(R.id.tv_time) TextView tv_time;
-    private String tempChartLineUrl= HttpUtils.ipAddress+"/family/data/getSocketData";
+    private String tempChartLineUrl= HttpUtils.ipAddress+"/family/data/getDeviceWeekData";
     private long deviceId;
     private DeviceChildDaoImpl deviceChildDao;
     private DeviceChild deviceChild;
+    private long houseId;
     //设置x轴的数据
     ArrayList<String> xValues = new ArrayList<>();
+    MessageReceiver receiver;
+    @BindView(R.id.tv_power) TextView tv_power;/**功率*/
+    @BindView(R.id.tv_val) TextView tv_val;/**电压*/
+    @BindView(R.id.tv_current) TextView tv_current;/**电流*/
+    @BindView(R.id.tv_power_spec) TextView tv_power_spec;/**额定功率*/
+    public static  boolean running=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,16 +79,27 @@ public class TempChatActivity extends AppCompatActivity {
         Intent intent=getIntent();
         deviceId=intent.getLongExtra("deviceId",0);
         deviceChild=deviceChildDao.findById(deviceId);
+        houseId=deviceChild.getHouseId();
         Calendar calendar=Calendar.getInstance();
         int year=calendar.get(Calendar.YEAR);
         int month=calendar.get(Calendar.MONTH)+1;
         int day=calendar.get(Calendar.DAY_OF_MONTH);
         String s=year+"-"+month+"-"+day;
         tv_time.setText(s);
+        int socketPower=deviceChild.getSocketPower()/10;
+        int socketVal=deviceChild.getSocketVal()/10;
+        int socketCurrent=deviceChild.getSocketCurrent();
+        float socketCurrent2=Float.parseFloat(socketCurrent+"");
+        float socketCurrent3=socketCurrent2/1000;
+        BigDecimal decimal=new BigDecimal(socketCurrent3);
+        BigDecimal decimalScale=decimal.setScale(2,BigDecimal.ROUND_HALF_DOWN);
+        tv_power.setText("功率："+socketPower+"W");
+        tv_val.setText("电压："+socketVal+"V");
+        tv_current.setText("电流："+decimalScale+"A");
+        IntentFilter intentFilter = new IntentFilter("TempChatActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
         new LoadChartAsync().execute();
-
-
-
     }
 
     @OnClick({R.id.img_back})
@@ -85,6 +110,21 @@ public class TempChatActivity extends AppCompatActivity {
                 break;
         }
     }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        running=true;
+        deviceChild = deviceChildDao.findById(deviceId);
+        if (deviceChild==null){
+            Toast.makeText(TempChatActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+            long houseId = deviceChild.getHouseId();
+            Intent data = new Intent(TempChatActivity.this, MainActivity.class);
+            data.putExtra("houseId", houseId);
+            startActivity(data);
+        }
+    }
+
 
     /**
      * 返回键功能
@@ -105,8 +145,7 @@ public class TempChatActivity extends AppCompatActivity {
         protected List<Integer> doInBackground(Void... voids) {
             int code=0;
             int deviceId=deviceChild.getDeviceId();
-            int type=deviceChild.getType();
-            String url=tempChartLineUrl+"?deviceId="+deviceId+"&dataType="+type;
+            String url=tempChartLineUrl+"?deviceId="+deviceId+"&dataType=9";
             String result=HttpUtils.getOkHpptRequest(url);
             List<Integer> list=new ArrayList<>();
             if (result!=null){
@@ -116,13 +155,13 @@ public class TempChatActivity extends AppCompatActivity {
                     code=Integer.parseInt(returnCode);
                     if (100==code){
                         JSONObject returnData=jsonObject.getJSONObject("returnData");
-                        int mondayKWH=returnData.getInt("mondayKWH");
-                        int tuesdayKWH=returnData.getInt("tuesdayKWH");
-                        int wednesdayKWH=returnData.getInt("wednesdayKWH");
-                        int thursdayKWH=returnData.getInt("thursdayKWH");
-                        int fridayKWH=returnData.getInt("fridayKWH");
-                        int saturdayKWH=returnData.getInt("saturdayKWH");
-                        int sundayKWH=returnData.getInt("sundayKWH");
+                        int mondayKWH=returnData.getInt("monday");
+                        int tuesdayKWH=returnData.getInt("tuesday");
+                        int wednesdayKWH=returnData.getInt("wednesday");
+                        int thursdayKWH=returnData.getInt("thursday");
+                        int fridayKWH=returnData.getInt("friday");
+                        int saturdayKWH=returnData.getInt("saturday");
+                        int sundayKWH=returnData.getInt("sunday");
                         list.add(mondayKWH);
                         list.add(tuesdayKWH);
                         list.add(wednesdayKWH);
@@ -155,12 +194,7 @@ public class TempChatActivity extends AppCompatActivity {
                     }
                 }
 
-//                //设置y轴的数据()
-//                List<Float> yValues = new ArrayList<>();
-//
-//                for (int j = 0; j <= 10; j++) {
-//                    yValues.add((float) (Math.random() * 60));
-//                }
+
 
                 //颜色集合
                 List<Integer> colours = new ArrayList<>();
@@ -172,8 +206,6 @@ public class TempChatActivity extends AppCompatActivity {
                 names.add("温度曲线");
 
 
-                Drawable drawable = getResources().getDrawable(R.drawable.fade_blue);
-                setChartFillDrawable(drawable);
                 //创建多条折线的图表
                 lineChartManager1.showLineChart(TempChatActivity.this,xValues, list, names.get(0), colours.get(0));
                 lineChartManager1.setDescription("");
@@ -193,7 +225,18 @@ public class TempChatActivity extends AppCompatActivity {
         if (unbinder!=null){
             unbinder.unbind();
         }
+        if (receiver!=null){
+            unregisterReceiver(receiver);
+        }
+        running=false;
     }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
+    }
+
     /**
      * 设置线条填充背景颜色
      *
@@ -206,6 +249,40 @@ public class TempChatActivity extends AppCompatActivity {
             lineDataSet.setDrawFilled(true);
             lineDataSet.setFillDrawable(drawable);
             line_chart.invalidate();
+        }
+    }
+
+    class MessageReceiver extends BroadcastReceiver {
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String macAddress=intent.getStringExtra("macAddress");
+            String noNet=intent.getStringExtra("noNet");
+            DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
+            if (!Utils.isEmpty(noNet)){
+                Utils.showToast(TempChatActivity.this,"网络已断开，请设置网络");
+            }else {
+                if (!Utils.isEmpty(macAddress) && deviceChild2==null && deviceChild.getMacAddress().equals(macAddress)){
+                    Utils.showToast(TempChatActivity.this,"该设备已被重置");
+                    Intent intent2=new Intent(TempChatActivity.this,MainActivity.class);
+                    intent2.putExtra("houseId",houseId);
+                    startActivity(intent2);
+                }else if (!Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild.getMacAddress().equals(macAddress)){
+                    deviceChild=deviceChild2;
+                    deviceChildDao.update(deviceChild);
+                    int socketPower=deviceChild.getSocketPower()/10;
+                    int socketVal=deviceChild.getSocketVal()/10;
+                    int socketCurrent=deviceChild.getSocketCurrent();
+                    float socketCurrent2=Float.parseFloat(socketCurrent+"");
+                    float socketCurrent3=socketCurrent2/1000;
+                    BigDecimal decimal=new BigDecimal(socketCurrent3);
+                    BigDecimal decimalScale=decimal.setScale(2,BigDecimal.ROUND_HALF_DOWN);
+                    tv_power.setText("功率："+socketPower+"W");
+                    tv_val.setText("电压："+socketVal+"V");
+                    tv_current.setText("电流："+decimalScale+"A");
+//                    tv_version.setText(deviceChild.getWifiVersion()+","+deviceChild.getMcuVersion());
+                }
+            }
         }
     }
 }

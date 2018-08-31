@@ -6,7 +6,8 @@
     android:layout_height="match_parent"
     android:background="#3b3b40"
     android:orientation="vertical"
-    tools:context=".jia.activity.TempChatActivity">
+    tools:context=".jia.activity.TempChatActivity"
+    >
 
     <RelativeLayout
         android:id="@+id/relative"
@@ -20,7 +21,8 @@
             android:layout_height="@dimen/dp_jy_40"
             android:layout_centerVertical="true"
             android:scaleType="centerInside"
-            android:src="@mipmap/nav_back" />
+            android:src="@mipmap/nav_back"
+            />
 
         <TextView
             android:id="@+id/tv_name"
@@ -44,23 +46,6 @@
         android:text="度"
         android:textColor="@color/white"
         android:textSize="@dimen/sp_12" />
-
-    <com.github.mikephil.charting.charts.LineChart
-        android:id="@+id/line_chart"
-        android:layout_width="match_parent"
-        android:layout_height="380dp"
-        android:layout_below="@+id/tv_du" />
-
-
-    <!--<View-->
-        <!--android:id="@+id/view"-->
-        <!--android:layout_width="@dimen/dp_jy_20"-->
-        <!--android:layout_height="@dimen/dp_jy_1"-->
-        <!--android:layout_below="@+id/layout"-->
-        <!--android:layout_marginLeft="@dimen/dp_jy_20"-->
-        <!--android:layout_marginTop="@dimen/dp_jy_20"-->
-        <!--android:background="@color/white" />-->
-
     <TextView
         android:id="@+id/tv_time"
         android:layout_width="wrap_content"
@@ -72,16 +57,110 @@
         android:textColor="@color/white"
         android:textSize="@dimen/sp_15" />
 
-    <!--<TextView-->
-        <!--android:id="@+id/tv_line"-->
-        <!--android:layout_width="wrap_content"-->
-        <!--android:layout_height="wrap_content"-->
-        <!--android:layout_below="@+id/layout"-->
-        <!--android:layout_toRightOf="@+id/view"-->
-        <!--android:text="电力曲线"-->
-        <!--android:layout_marginLeft="@dimen/dp_jy_5"-->
-        <!--android:layout_marginTop="@dimen/dp_jy_10"-->
-        <!--android:textColor="@color/white" />-->
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/line_chart"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_250"
+        android:layout_below="@+id/tv_du" />
+    <RelativeLayout
+        android:id="@+id/layout_state"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/line_chart"
+        android:layout_marginTop="@dimen/dp_jy_30"
+        android:layout_marginLeft="@dimen/dp_jy_15"
+        android:layout_marginRight="@dimen/dp_jy_15"
+        android:background="@drawable/shape_chart_back"
+        >
+        <TextView
+            android:id="@+id/tv_state"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="状态"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_jy_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
+            />
+        <TextView
+            android:id="@+id/tv_power"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_state"
+            android:text="功率：0W"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_jy_10"
+            android:layout_alignLeft="@+id/tv_state"
+            />
+
+        <TextView
+            android:id="@+id/tv_val"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_state"
+            android:layout_centerHorizontal="true"
+            android:text="电压：0W"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center"
+            android:layout_alignTop="@+id/tv_power"
+            />
+
+        <TextView
+            android:id="@+id/tv_current"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_state"
+            android:layout_alignParentRight="true"
+            android:text="电流：0A"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center"
+            android:layout_alignTop="@+id/tv_power"
+            android:layout_marginBottom="@dimen/dp_jy_10"
+            android:layout_marginRight="@dimen/dp_jy_20"
+            />
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/layout_spec"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_state"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:layout_marginLeft="@dimen/dp_jy_15"
+        android:layout_marginRight="@dimen/dp_jy_15"
+        android:background="@drawable/shape_chart_back"
+        >
+        <TextView
+            android:id="@+id/tv_spec"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="规格"
+            android:textColor="@color/color_white"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center_vertical"
+            android:layout_marginLeft="@dimen/dp_jy_10"
+            android:layout_marginTop="@dimen/dp_jy_10"
+            />
+        <TextView
+            android:id="@+id/tv_power_spec"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_below="@+id/tv_spec"
+            android:text="额定功率：0W"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_16"
+            android:gravity="center"
+            android:layout_marginTop="@dimen/dp_jy_10"
+            android:layout_alignLeft="@+id/tv_spec"
+            android:layout_marginBottom="@dimen/dp_jy_10"
+            />
+
+    </RelativeLayout>
 </RelativeLayout>
 
 

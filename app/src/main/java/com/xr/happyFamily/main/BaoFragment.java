@@ -466,8 +466,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_shangcheng:
-                startActivityForResult(new Intent(mContext, CsjActivity.class), MAIN_CODE);
-//                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class), MAIN_CODE);
+//                startActivityForResult(new Intent(mContext, CsjActivity.class), MAIN_CODE);
+                startActivityForResult(new Intent(mContext, ShopShangchengActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
         }

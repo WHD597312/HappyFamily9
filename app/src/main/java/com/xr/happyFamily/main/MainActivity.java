@@ -153,10 +153,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         load = intent.getStringExtra("load");
         String login = intent.getStringExtra("login");
          share = intent.getStringExtra("share");
-        if (TextUtils.isEmpty(share)) {
-            Intent service = new Intent(this, MQService.class);
-            startService(service);
-        }
+//        if (TextUtils.isEmpty(share)) {
+//            Intent service = new Intent(this, MQService.class);
+//            startService(service);
+//        }
 
 
         houseId = intent.getLongExtra("houseId", 0);

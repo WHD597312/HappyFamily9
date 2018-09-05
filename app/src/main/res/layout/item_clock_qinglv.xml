@@ -17,21 +17,18 @@
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:textColor="@color/black"
-          android:textSize="@dimen/sp_30"
-          android:text="08:00"/>
+          android:textSize="@dimen/sp_30" />
    <TextView
        android:layout_width="wrap_content"
        android:layout_height="wrap_content"
        android:layout_alignLeft="@id/tv_time"
        android:layout_below="@id/tv_time"
        android:id="@+id/tv_name"
-       android:text="二宝"
        android:textColor="#414141"/>
       <TextView
           android:id="@+id/tv_context"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
-          android:text="起床啦，起床啦"
           android:textColor="#A7A7A7"
           android:layout_toRightOf="@+id/tv_time"
           android:layout_alignTop="@+id/tv_time"

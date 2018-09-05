@@ -120,6 +120,7 @@ public class AirProgress extends View {
     private void initView() {
         int[] screenWH = getScreenWH();
         mScressWidth = screenWH[0];
+        Log.e("qqqqqqqHHHHH",mScressWidth+"??");
         // 外层圆弧的画笔
         mArcPaint = new Paint();
         mArcPaint.setAntiAlias(true);
@@ -154,6 +155,8 @@ public class AirProgress extends View {
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
         super.onMeasure(widthMeasureSpec, heightMeasureSpec);
         int width = 4*mScressWidth/5 /*- 2 * mPdDistance*/;
+
+        Log.e("qqqqqqqqqqXYXXXXX",mScressWidth+"?");
         setMeasuredDimension(width, width);
     }
 
@@ -161,7 +164,6 @@ public class AirProgress extends View {
     protected void onSizeChanged(int w, int h, int oldw, int oldh) {
         super.onSizeChanged(w, h, oldw, oldh);
         mArcCenterX = (int) (w / 2.f);
-
         mArcRect = new RectF();
         mArcRect.top = 0;
         mArcRect.left = 0;
@@ -413,5 +415,12 @@ public class AirProgress extends View {
     boolean isOpen=false;
     public void setOpen(boolean isOpen){
         this.isOpen=isOpen;
+    }
+
+
+    public void setHeight(int height){
+        Log.e("qqqqqqqqXYMMMM","???????????");
+        mScressWidth=height;
+        setMeasuredDimension(getScreenWH()[0], height);
     }
 }

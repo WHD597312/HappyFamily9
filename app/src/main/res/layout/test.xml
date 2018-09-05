@@ -6,23 +6,24 @@
     android:orientation="vertical"
     >
 
-  <com.xr.happyFamily.jia.view_custom.VerticalProgressBar
-      android:id="@+id/vp_progress"
+
+  <EditText
+      android:id="@+id/editText"
       android:layout_width="wrap_content"
       android:layout_height="wrap_content"
-      android:layout_centerInParent="true"
-      android:layout_alignLeft="@+id/img"
-      android:layout_alignRight="@+id/img"
-      android:layout_alignTop="@+id/img"
-      android:layout_alignBottom="@+id/img"
-      />
-    <ImageView
-        android:id="@+id/img"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:src="@mipmap/temp_back"
-        android:layout_centerInParent="true"
-        />
+      android:layout_alignParentTop="true"
+      android:layout_centerHorizontal="true"
+      android:layout_marginTop="134dp"
+      android:ems="10"
+      android:inputType="textPersonName"
+      android:text="" />
 
-
+  <Button
+      android:id="@+id/button"
+      android:layout_width="217dp"
+      android:layout_height="wrap_content"
+      android:layout_alignParentTop="true"
+      android:layout_alignStart="@+id/editText"
+      android:layout_marginTop="209dp"
+      android:text="Button" />
 </RelativeLayout>

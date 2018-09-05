@@ -36,7 +36,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_jy_10"
-            android:text="文成"
             android:textColor="#474747"
             android:textSize="@dimen/sp_12" />
 
@@ -84,7 +83,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="2018.4.3.11:30"
             android:textColor="@color/shop_title"/>
 
 
@@ -103,7 +101,7 @@
         android:textSize="@dimen/sp_12"
         android:background="@color/white"
         android:padding="@dimen/dp_jy_12"
-        android:text="东西很不错，漂亮大气，做工精细，安装也很方便，值得购买。"/>
+ />
 
 
     <ImageView

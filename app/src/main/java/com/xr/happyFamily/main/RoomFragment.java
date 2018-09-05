@@ -83,7 +83,8 @@ public class RoomFragment extends Fragment {
     int mPosition;
     private RoomDaoImpl roomDao;
     private DeviceChildDaoImpl deviceChildDao;
-    @BindView(R.id.balcony_li)  LinearLayout balcony_li;
+    @BindView(R.id.balcony_li)
+    LinearLayout balcony_li;
     private List<DeviceChild> deviceChildren;
     @BindView(R.id.gv_balcony_home)
     MyGridview mGridView;
@@ -211,7 +212,7 @@ public class RoomFragment extends Fragment {
                         intent.putExtra("deviceId", deviceId);
                         intent.putExtra("houseId", houseId);
                         startActivityForResult(intent, 6000);
-                    }else if (type==4){
+                    } else if (type == 4) {
                         if (online) {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
@@ -223,7 +224,7 @@ public class RoomFragment extends Fragment {
                         } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
-                    }   else if (type==5){
+                    } else if (type == 5) {
                         if (online) {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
@@ -232,41 +233,35 @@ public class RoomFragment extends Fragment {
                             intent.putExtra("deviceId", deviceId);
                             intent.putExtra("houseId", houseId);
                             startActivityForResult(intent, 6000);
-                        }
-                        else {
-                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                            }
-                    }
-
-                    else if (type==6){
-                        if (online) {
-                        String deviceName = deviceChild.getName();
-                        long deviceId = deviceChild.getId();
-                        Intent intent = new Intent(getActivity(), AConfActivity.class);
-                        intent.putExtra("deviceName", deviceName);
-                        intent.putExtra("deviceId", deviceId);
-                        intent.putExtra("houseId", houseId);
-                        startActivityForResult(intent, 6000);
-                        }
-                        else {
+                        } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
-                    }
-                    else if (type==7) {
-                        if (online){
-                        String deviceName = deviceChild.getName();
-                        long deviceId = deviceChild.getId();
-                        Intent intent = new Intent(getActivity(), APurifierActivity.class);
-                        intent.putExtra("deviceName", deviceName);
-                        intent.putExtra("deviceId", deviceId);
-                        intent.putExtra("houseId", houseId);
-                        startActivityForResult(intent, 6000);
-                    }
-                    else {
-                        Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                    }
-                    }else if (type==8){
-                        if (online){
+                    } else if (type == 6) {
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), AConfActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (type == 7) {
+                        if (online) {
+                            String deviceName = deviceChild.getName();
+                            long deviceId = deviceChild.getId();
+                            Intent intent = new Intent(getActivity(), APurifierActivity.class);
+                            intent.putExtra("deviceName", deviceName);
+                            intent.putExtra("deviceId", deviceId);
+                            intent.putExtra("houseId", houseId);
+                            startActivityForResult(intent, 6000);
+                        } else {
+                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        }
+                    } else if (type == 8) {
+                        if (online) {
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
                             Intent intent = new Intent(getActivity(), PurifierActivity.class);
@@ -274,7 +269,7 @@ public class RoomFragment extends Fragment {
                             intent.putExtra("deviceId", deviceId);
                             intent.putExtra("houseId", houseId);
                             startActivityForResult(intent, 6000);
-                        }else {
+                        } else {
                             Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                         }
                     }
@@ -358,6 +353,7 @@ public class RoomFragment extends Fragment {
     List<Room> rooms;
     RoomAdapter adapter;
     private PopupWindow popupWindow1;
+
     public void popupmenuWindow() {
         if (popupWindow1 != null && popupWindow1.isShowing()) {
             return;
@@ -389,7 +385,7 @@ public class RoomFragment extends Fragment {
         change_list.setAdapter(adapter);
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {
-                switch (v.getId()){
+                switch (v.getId()) {
                     case R.id.li_change:
                         popupWindow1.dismiss();
                         break;
@@ -399,11 +395,11 @@ public class RoomFragment extends Fragment {
 
         change_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("onItemClick","-->"+position);
-                Intent intent = new Intent(getActivity(),MainActivity.class);
-                intent.putExtra("houseId",houseId);
-                SharedPreferences.Editor editor=mPositionPreferences.edit();
-                editor.putInt("position",position+1);
+                Log.i("onItemClick", "-->" + position);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("houseId", houseId);
+                SharedPreferences.Editor editor = mPositionPreferences.edit();
+                editor.putInt("position", position + 1);
                 editor.commit();
                 popupWindow1.dismiss();
                 startActivity(intent);
@@ -411,8 +407,6 @@ public class RoomFragment extends Fragment {
         });
         li_change.setOnClickListener(listener);
     }
-
-
 
 
     public void setHouseId(long houseId) {
@@ -636,30 +630,28 @@ public class RoomFragment extends Fragment {
                             String onlineTopicName = "";
                             String offlineTopicName = "";
 
-                                if (2 == type) {
-                                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                    offlineTopicName="p99/warmer/"+macAddress+"/lwt";
-                                }else if (3==type){
-                                    onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
-                                    offlineTopicName="p99/sensor1/"+macAddress+"/lwt";
-                                }else if (4==type){
-                                    onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
-                                }else if (5==type){
-                                    onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
-                                }
-                                else if (6==type){
-                                    onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
-                                }
-                                else if (7==type){
-                                    onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
-                                }else if (8==type){
-                                    onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
-                                }
+                            if (2 == type) {
+                                onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                            } else if (3 == type) {
+                                onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                            } else if (4 == type) {
+                                onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                            } else if (5 == type) {
+                                onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                            } else if (6 == type) {
+                                onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                            } else if (7 == type) {
+                                onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                            } else if (8 == type) {
+                                onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                            }
 
 
                             if (!TextUtils.isEmpty(onlineTopicName)) {
@@ -744,6 +736,7 @@ public class RoomFragment extends Fragment {
             }
             return code;
         }
+
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);

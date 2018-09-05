@@ -1,31 +1,31 @@
 package com.xr.happyFamily.jia.activity;
 
-import android.animation.ValueAnimator;
-import android.annotation.SuppressLint;
-import android.graphics.Color;
-import android.os.AsyncTask;
+
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
+
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
+import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 
+import com.alibaba.fastjson.JSON;
 import com.github.mikephil.charting.charts.BarChart;
 import com.xr.happyFamily.R;
 
-import com.xr.happyFamily.jia.view_custom.DoubleWaveView;
-import com.xr.happyFamily.jia.view_custom.VerticalProgressBar;
-import com.xr.happyFamily.together.chart.BarChartManager;
+
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
 
 /**
@@ -35,13 +35,23 @@ import butterknife.ButterKnife;
 public class TestActivity extends AppCompatActivity {
 
 
-    @BindView(R.id.vp_progress) VerticalProgressBar vpProgressBar;
+    @BindView(R.id.editText) EditText editText;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test);
         ButterKnife.bind(this);
-        vpProgressBar.setProgress(50);
     }
+    @OnClick({R.id.button})
+    public void onClick(View view){
+        switch (view.getId()){
+            case R.id.button:
+                String id=editText.getText().toString();
+                Map<String,Object> params=new HashMap<>();
+                params.put("id",id);
+                break;
+        }
+    }
+
 
 }

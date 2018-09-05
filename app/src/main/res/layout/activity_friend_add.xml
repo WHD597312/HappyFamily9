@@ -25,7 +25,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_jy_60"
             android:id="@+id/tv_name"
-            android:text="昵称"
+            android:text=""
             android:textColor="@color/black"
             android:textSize="@dimen/sp_14"
             android:layout_marginTop="@dimen/dp_jy_6"/>
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="@dimen/dp_jy_60"
             android:id="@+id/tv_sex"
-            android:text="男"
+            android:text=""
             android:textColor="#A8A8A8"
             android:textSize="@dimen/sp_12"
             android:layout_marginBottom="@dimen/dp_jy_4"
@@ -48,7 +48,7 @@
             android:layout_toRightOf="@id/tv_sex"
             android:layout_alignTop="@id/tv_sex"
             android:layout_marginLeft="@dimen/dp_jy_10"
-            android:text="22岁"
+            android:text=""
             android:textColor="#A8A8A8"
             android:textSize="@dimen/sp_12"/>
 
@@ -59,7 +59,7 @@
             android:layout_toRightOf="@id/tv_name"
             android:layout_alignBottom="@id/tv_name"
             android:layout_marginLeft="@dimen/dp_jy_20"
-            android:text="17656544695"
+            android:text=""
             android:textColor="#A8A8A8"
             android:textSize="@dimen/sp_12"/>
         

@@ -53,7 +53,6 @@
                 android:layout_marginRight="10dp"
                 android:textColor="@color/color_black"
                 android:text="确定" />
-
             <DatePicker
                 android:id="@+id/datePicker"
                 android:layout_width="match_parent"

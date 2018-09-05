@@ -72,7 +72,7 @@
             android:layout_marginRight="@dimen/dp_jy_8"
             android:layout_toLeftOf="@+id/img_more"
             android:layout_toRightOf="@+id/img_wuliu"
-            android:text="浙江省宁波市慈溪市宗汉镇公司  已签收  签收人：签收查件电话 1806969005"
+            android:text=""
             android:textColor="@color/green3"
             android:textSize="12sp" />
 
@@ -82,7 +82,7 @@
             android:layout_height="wrap_content"
             android:layout_alignLeft="@+id/tv_wuliu"
             android:layout_alignParentBottom="true"
-            android:text="2018-04-01-11:30"
+            android:text=""
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12" />
 
@@ -117,7 +117,7 @@
                     android:layout_marginLeft="@dimen/dp_jy_8"
                     android:layout_marginRight="@dimen/dp_jy_8"
                     android:layout_toRightOf="@+id/img_address"
-                    android:text="收货人：刘艳强"
+                    android:text=""
                     android:textColor="@color/shop_context"
                     android:textSize="@dimen/sp_12" />
 
@@ -126,7 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
-                    android:text="17685399527"
+                    android:text=""
                     android:textColor="@color/shop_context"
                     android:textSize="@dimen/sp_12" />
 
@@ -139,7 +139,7 @@
 
                     android:lines="2"
                     android:layout_marginRight="@dimen/dp_jy_50"
-                    android:text="收货地址:浙江省 宁波市 慈溪市 宗汉镇宗汉大道95号大观园"
+                    android:text=""
                     android:textColor="@color/shop_title"
                     android:textSize="@dimen/sp_12" />
 
@@ -227,7 +227,7 @@
         android:paddingLeft="@dimen/dp_jy_12"
         android:paddingRight="@dimen/dp_jy_12"
         android:paddingTop="@dimen/dp_jy_12"
-        android:text="订单编号：142872040141613623"
+        android:text=""
         android:textColor="@color/shop_context"
         android:textSize="@dimen/sp_12" />
     <TextView
@@ -240,7 +240,7 @@
         android:background="@color/white"
         android:textColor="@color/shop_context"
         android:textSize="@dimen/sp_12"
-        android:text="支付宝交易号：142872040141613623"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/tv_changjian"
@@ -252,7 +252,7 @@
         android:background="@color/white"
         android:textColor="@color/shop_context"
         android:textSize="@dimen/sp_12"
-        android:text="创建时间：2018-04-03-11：30"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/tv_fukuan"
@@ -264,7 +264,7 @@
         android:background="@color/white"
         android:textColor="@color/shop_context"
         android:textSize="@dimen/sp_12"
-        android:text="付款时间：2018-04-03-11：30"/>
+        android:text=""/>
 
     <TextView
         android:id="@+id/tv_fahuo"
@@ -276,7 +276,7 @@
         android:background="@color/white"
         android:textColor="@color/shop_context"
         android:textSize="@dimen/sp_12"
-        android:text="发货时间：2018-04-03-11：30"/>
+        android:text=""/>
 
 
     <com.xr.happyFamily.bao.view.LinearGradientView

@@ -20,6 +20,7 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -166,6 +167,8 @@ public class AConfActivity extends AppCompatActivity {
     TextView tvOffline;
     @BindView(R.id.ll)
     RelativeLayout ll;
+    @BindView(R.id.ll_btn2)
+    LinearLayout llBtn2;
 
 
     private boolean isBound;
@@ -181,7 +184,11 @@ public class AConfActivity extends AppCompatActivity {
     private TimePickViewPopup customViewPopipup;
     private FengSuViewPopup fengSuViewPopup;
 
-
+    boolean isProFinish=false;
+    boolean isBtnMoreFinish=false;
+    boolean isArcFinish=true;
+    float x;
+    float y;
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -191,12 +198,13 @@ public class AConfActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_air);
+        unbinder = ButterKnife.bind(this);
         application = (MyApplication) getApplicationContext();
         if (application != null) {
             application = (MyApplication) getApplication();
             application.addActivity(this);
         }
-        unbinder = ButterKnife.bind(this);
+
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         Intent intent = getIntent();
         deviceId = intent.getLongExtra("deviceId", 0);
@@ -209,7 +217,7 @@ public class AConfActivity extends AppCompatActivity {
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
 //        scrollView.requestDisallowInterceptTouchEvent(true);
-        arcprogressBar = (AirProgress) findViewById(R.id.arcprogressBar);
+
         arcprogressBar.setOnSeekBarChangeListener(new AirProgress.OnSeekBarChangeListener() {
             @Override
             public void onChanged(AirProgress seekbar, int curValue) {
@@ -226,6 +234,49 @@ public class AConfActivity extends AppCompatActivity {
         });
 
 
+
+        rlPro.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                x=rlPro.getY();
+                isProFinish=true;
+                if(isBtnMoreFinish&&isArcFinish){
+                    arcprogressBar.setHeight((int)(y-x));
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) arcprogressBar.getLayoutParams();
+                    params.height = (int)(y-x);
+                    arcprogressBar.setLayoutParams(params);
+                    isArcFinish=false;
+
+                }
+
+                Log.e("qqqqXY",x+"????"+y+","+isBtnMoreFinish+","+isArcFinish);
+            }
+        });
+
+        llBtn2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
+            @Override
+            public void onGlobalLayout() {
+                // TODO Auto-generated method stub
+                y=llBtn2.getY();
+                isBtnMoreFinish=true;
+                Log.e("qqqqXY2222",x+"????"+y+","+isProFinish+","+isArcFinish);
+                if(isProFinish&&isArcFinish)
+                {
+                    isArcFinish=false;
+                    arcprogressBar.setHeight((int)(y-x));
+                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) arcprogressBar.getLayoutParams();
+                    params.height = (int)(y-x);
+                    arcprogressBar.setLayoutParams(params);
+
+                }
+
+            }
+        });
+
+
+
+//        arcprogressBar.setHeight((int)(1081-265));
         circle_anim = AnimationUtils.loadAnimation(this, R.anim.anim_90);
         LinearInterpolator interpolator = new LinearInterpolator();  //设置匀速旋转，在xml文件中设置会出现卡顿
         circle_anim.setInterpolator(interpolator);
@@ -284,10 +335,12 @@ public class AConfActivity extends AppCompatActivity {
                 isMore = true;
                 imgMore.startAnimation(circle_anim);
                 dex = rlPro.getMeasuredHeight() - arcprogressBar.getMeasuredHeight();
+
+                Log.e("qqqqqqDDDDD",dex+"?"+hei);
                 if (dex > hei) {
                     llContext.scrollTo(0, hei / 2);
                 } else {
-                    llContext.scrollTo(0, hei - dex * 2);
+                    llContext.scrollTo(0, hei - dex / 2);
                 }
                 llMore.setVisibility(View.VISIBLE);
 
@@ -775,6 +828,7 @@ public class AConfActivity extends AppCompatActivity {
         equipCurdPowerHigh = deviceChild.getEquipCurdPowerHigh();/**设备当前高功率参数*/
         equipCurdPowerLow = deviceChild.getEquipCurdPowerLow();/**设备当前低功率参数*/
          faultCode = deviceChild.getFaultCode();/**空调故障代码*/
+
 
         if (socketState == 1) {/**当前状态开*/
             imgOpen.setImageResource(R.mipmap.ic_air_kai1);

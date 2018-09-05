@@ -39,7 +39,7 @@
             android:id="@+id/tv_price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="退款金额：¥2500"
+            android:text="退款金额"
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12"
             android:paddingLeft="@dimen/dp_jy_12"/>
@@ -49,7 +49,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:text="退款时间：2018-5-8   18：20"
+            android:text="退款时间"
             android:textColor="@color/shop_title"
             android:textSize="@dimen/sp_12"
             android:padding="@dimen/dp_jy_12"

@@ -81,7 +81,7 @@
                 android:layout_alignTop="@+id/img_shop_pic"
                 android:layout_marginLeft="@dimen/dp_jy_17"
                 android:layout_toRightOf="@+id/img_shop_pic"
-                android:text="电暖气  银色"
+                android:text=""
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_14" />
 
@@ -116,7 +116,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginLeft="@dimen/dp_jy_3"
-                    android:text="2500"
+                    android:text=""
                     android:textColor="@color/shop_price"
                     android:textSize="@dimen/sp_14" />
             </LinearLayout>
@@ -127,7 +127,7 @@
                 android:layout_height="@dimen/dp_jy_20"
                 android:layout_alignBottom="@+id/img_shop_pic"
                 android:layout_alignParentRight="true"
-                android:text="X1" />
+                android:text="" />
 
 
         </RelativeLayout>

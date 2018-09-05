@@ -33,6 +33,7 @@
 	<dimen name="dp_jy_28">41.4556dp</dimen>
 	<dimen name="dp_jy_29">42.9361dp</dimen>
 	<dimen name="dp_jy_30">44.4167dp</dimen>
+	<dimen name="dp_jy_30.25">44.7868dp</dimen>
 	<dimen name="dp_jy_31">45.8972dp</dimen>
 	<dimen name="dp_jy_32">47.3778dp</dimen>
 	<dimen name="dp_jy_33">48.8583dp</dimen>
@@ -63,6 +64,7 @@
 	<dimen name="dp_jy_58">85.8722dp</dimen>
 	<dimen name="dp_jy_59">87.3528dp</dimen>
 	<dimen name="dp_jy_60">88.8333dp</dimen>
+	<dimen name="dp_jy_60.5">89.5736dp</dimen>
 	<dimen name="dp_jy_61">90.3139dp</dimen>
 	<dimen name="dp_jy_62">91.7944dp</dimen>
 	<dimen name="dp_jy_63">93.2750dp</dimen>
@@ -97,6 +99,7 @@
 	<dimen name="dp_jy_92">136.2111dp</dimen>
 	<dimen name="dp_jy_93">137.6917dp</dimen>
 	<dimen name="dp_jy_94">139.1722dp</dimen>
+	<dimen name="dp_jy_94.5">139.9125dp</dimen>
 	<dimen name="dp_jy_95">140.6528dp</dimen>
 	<dimen name="dp_jy_96">142.1333dp</dimen>
 	<dimen name="dp_jy_97">143.6139dp</dimen>
@@ -196,6 +199,7 @@
 	<dimen name="dp_jy_191">282.7861dp</dimen>
 	<dimen name="dp_jy_192">284.2667dp</dimen>
 	<dimen name="dp_jy_193">285.7472dp</dimen>
+	<dimen name="dp_jy_193.75">286.8576dp</dimen>
 	<dimen name="dp_jy_194">287.2278dp</dimen>
 	<dimen name="dp_jy_195">288.7083dp</dimen>
 	<dimen name="dp_jy_196">290.1889dp</dimen>
@@ -303,7 +307,15 @@
 	<dimen name="dp_jy_298">441.2056dp</dimen>
 	<dimen name="dp_jy_299">442.6861dp</dimen>
 	<dimen name="dp_jy_300">444.1667dp</dimen>
+	<dimen name="dp_jy_380">562.6111dp</dimen>
+	<dimen name="dp_jy_400">592.2222dp</dimen>
+	<dimen name="dp_jy_445">658.8472dp</dimen>
+	<dimen name="dp_jy_460">681.0556dp</dimen>
+	<dimen name="dp_jy_470">695.8611dp</dimen>
+	<dimen name="dp_jy_475">703.2639dp</dimen>
+	<dimen name="dp_jy_479">709.1861dp</dimen>
 	<dimen name="dp_jy_480">710.6667dp</dimen>
+	<dimen name="dp_jy_490">725.4722dp</dimen>
 	<dimen name="sp_5">7.4028sp</dimen>
 	<dimen name="sp_6">8.8833sp</dimen>
 	<dimen name="sp_7">10.3639sp</dimen>
@@ -330,6 +342,8 @@
 	<dimen name="sp_28">41.4556sp</dimen>
 	<dimen name="sp_29">42.9361sp</dimen>
 	<dimen name="sp_30">44.4167sp</dimen>
+	<dimen name="sp_35">51.8194sp</dimen>
+	<dimen name="sp_40">59.2222sp</dimen>
 	<dimen name="slv_item_height">97.7167dp</dimen>
 	<dimen name="slv_item_height2">177.6667dp</dimen>
 	<dimen name="slv_item_bg_btn_width">71.0667dp</dimen>
@@ -338,4 +352,5 @@
 	<dimen name="def_wheel_width">47.3778dp</dimen>
 	<dimen name="def_shadow_radius">2.9611dp</dimen>
 	<dimen name="def_shadow_offset">2.9611dp</dimen>
+	<dimen name="fab_margin">23.6889dp</dimen>
 </resources>

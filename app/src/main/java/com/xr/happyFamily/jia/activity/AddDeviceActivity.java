@@ -343,11 +343,11 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 bt_add_finish.setEnabled(false);
                 if (!TextUtils.isEmpty(ssid)) {
                     popupmenuWindow3();
-//                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
-                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
-                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-                mac="5asdfghi69hd";
+//                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
+//                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+//                mac="5asdfghi69hd";
                 break;
         }
     }

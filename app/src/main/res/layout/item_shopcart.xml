@@ -42,7 +42,6 @@
                     android:layout_marginLeft="@dimen/dp_jy_17"
                     android:layout_alignTop="@+id/img_shop_pic"
                     android:layout_toRightOf="@+id/img_shop_pic"
-                    android:text="电暖气  银色"
                     android:textColor="@color/shop_context"
                     android:textSize="@dimen/sp_14" />
 
@@ -55,7 +54,6 @@
                     android:layout_marginTop="@dimen/dp_jy_1"
                     android:layout_toRightOf="@+id/img_shop_pic"
                     android:paddingRight="@dimen/dp_jy_12"
-                    android:text="对流式加热，通电即热，无感静音，双重安装保护33333333333"
                     android:textColor="@color/shop_type"
                     android:textSize="@dimen/sp_12" />
 

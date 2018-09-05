@@ -241,7 +241,7 @@
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_12"
                 android:paddingTop="@dimen/dp_jy_12"
-                android:text="退款原因：我不想要了"/>
+                android:text="退款原因:"/>
 
             <TextView
                 android:id="@+id/tv_price"
@@ -253,7 +253,7 @@
                 android:background="@color/white"
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_12"
-                android:text="退款金额：2500"/>
+                android:text="退款金额："/>
 
             <TextView
                 android:id="@+id/tv_time_tuikuan"
@@ -265,7 +265,7 @@
                 android:background="@color/white"
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_12"
-                android:text="申请时间：2018-5-3  15：30"/>
+                android:text="申请时间："/>
 
             <TextView
                 android:id="@+id/tv_bianhao"
@@ -277,7 +277,7 @@
                 android:background="@color/white"
                 android:textColor="@color/shop_context"
                 android:textSize="@dimen/sp_12"
-                android:text="退货编号：92544555666"/>
+                android:text="退货编号："/>
 
         </LinearLayout>
     </ScrollView>

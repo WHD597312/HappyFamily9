@@ -44,6 +44,9 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.model.GlideUrl;
 import com.bumptech.glide.load.model.LazyHeaders;
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
@@ -125,9 +128,55 @@ public class PersonInfoActivity extends AppCompatActivity {
                         }
                         break;
                     case 8:
-                        if (popupWindow==null || !popupWindow.isShowing()){
-                            popupWindow2();
+
+//                        if (popupWindow==null || !popupWindow.isShowing()){
+//                            popupWindow2();
+//                        }
+
+                        try {
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                            Date date=format.parse("1970-1-1");
+                            long minDay=date.getTime();
+                            String birthday2=preferences.getString("birthday","");
+                            Date date2=new Date(Long.parseLong(birthday2));
+                            Calendar calendar=Calendar.getInstance();
+                            calendar.setTime(date2);
+                            long current=calendar.getTimeInMillis();
+                            TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
+                                    .setType(Type.YEAR_MONTH_DAY)
+                                    .setTitleStringId("修改生日")
+                                    .setMinMillseconds(minDay)
+                                    .setCurrentMillseconds(current)
+                                    .setMaxMillseconds(System.currentTimeMillis())
+                                    .setCallBack(new OnDateSetListener() {
+                                        @Override
+                                        public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+                                            Map<String, Object> params = new HashMap<>();
+                                            String userId = preferences.getString("userId", "");
+                                            boolean sex2 = preferences.getBoolean("sex", false);
+                                            Date date=new Date(millseconds);
+                                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                                            birthday=format.format(date);
+                                            int flag = 0;
+                                            if (sex2) {
+                                                flag = 1;
+                                            } else {
+                                                flag = 0;
+                                            }
+                                            sex=-1;
+                                            params.put("userId", userId);
+                                            params.put("sex", flag);
+                                            params.put("username", username);
+                                            params.put("birthday", birthday);
+                                            new UpdatePersonAsync().execute(params);
+                                        }
+                                    })
+                                    .build();
+                            dialogYearMonthDay.show(getSupportFragmentManager(), "YEAR_MONTH_DAY");
+                        } catch (Exception e) {
+                            // TODO: handle exception
                         }
+
                         break;
                 }
             }
@@ -760,7 +809,6 @@ public class PersonInfoActivity extends AppCompatActivity {
             super.onPostExecute(code);
             switch (code){
                 case 100:
-
                     Toast.makeText(PersonInfoActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
                     adapter.notifyDataSetChanged();
                     break;
@@ -769,6 +817,7 @@ public class PersonInfoActivity extends AppCompatActivity {
             }
         }
     }
+
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {

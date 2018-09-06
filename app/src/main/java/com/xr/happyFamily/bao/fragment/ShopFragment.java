@@ -41,16 +41,22 @@ import com.xr.happyFamily.bao.view.FlowTagView;
 import com.xr.happyFamily.bao.view.MyHeadRefreshView;
 import com.xr.happyFamily.bao.view.MyLoadMoreView;
 import com.xr.happyFamily.bean.PostFreeBean;
+import com.xr.happyFamily.bao.view.ShopBanner;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
 
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -88,8 +94,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     TextView tvWeight;
     @BindView(R.id.tv_xinghao)
     TextView tvXinghao;
-    @BindView(R.id.img_pic)
-    ImageView imgPic;
+
     String goodsId;
     int priceId = 0;
     String receiveId = "0";
@@ -108,6 +113,12 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     View viewBottom;
     @BindView(R.id.scrollView)
     ScrollView scrollView;
+    @BindView(R.id.banner)
+    ShopBanner banner;
+    @BindView(R.id.img_address)
+    ImageView imgAddress;
+
+
 
 
     @Nullable
@@ -134,7 +145,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 shopXQActivity.gotoXiangQing();
             }
         });
-
+        banner.setBannerStyle(BannerConfig.NUM_INDICATOR);
 //        int mDay = c.get(Calendar.DAY_OF_MONTH);// 获取当日期
 //
 //        Calendar  calendar =Calendar. getInstance();
@@ -173,7 +184,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
     }
 
 
-    @OnClick({ R.id.tv_xinghao, R.id.tv_address})
+    @OnClick({R.id.tv_xinghao, R.id.tv_address})
     public void onViewClicked(View view) {
         switch (view.getId()) {
 
@@ -223,7 +234,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         String power = preferences.getString("jyShopPower", "");
         if (!Utils.isEmpty(power)) {
             if (!"0".equals(power)) {
-                Log.e("qqqqqqqqqPPPP",power);
+                Log.e("qqqqqqqqqPPPP", power);
                 tvXinghao.setText("" + power);
                 if (!Utils.isEmpty(price))
                     tvPrice.setText("¥" + price);
@@ -337,7 +348,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                     params.put("quantity", num);
                     new addShopAsync().execute(params);
                 } else {
-                    ToastUtil.showShortToast( "请选择商品规格");
+                    ToastUtil.showShortToast("请选择商品规格");
                 }
 
             }
@@ -364,8 +375,8 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             }
         });
         try {
-            if (jsonObject!=null)
-            tv_name.setText(jsonObject.getString("goodsName"));
+            if (jsonObject != null)
+                tv_name.setText(jsonObject.getString("goodsName"));
         } catch (JSONException e) {
             e.printStackTrace();
         }
@@ -469,7 +480,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                             //通过反射 得到UserBean.class
                             GoodsPrice userList = gson.fromJson(user, GoodsPrice.class);
                             list_price.add(userList);
-                            img = returnData.getString("image");
+                            img = returnData.getString("headerImg");
                             name = returnData.getString("goodsName");
                             type = returnData.getString("simpleDescribe");
                             weight = returnData.getDouble("weight");
@@ -494,10 +505,21 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
                 if (tvType != null)
                     tvType.setText(type);
 
-                if (imgPic != null) {
-                    Glide.with(mContext)
-                            .load(img)
-                            .into(imgPic);//此种策略并不会压缩图片
+                Log.e("qqqqqqqPPPP", img + "?");
+                String imgStr[]=img.split(",");
+                List<String> stringB = Arrays.asList(imgStr);
+                if (banner != null) {
+                    //设置图片加载器，图片加载器在下方
+                    banner.setImageLoader(new MyLoader());
+                    //设置图片网址或地址的集合
+                    banner.setImages(stringB);
+                    banner.isAutoPlay(false);
+                    //设置指示器的位置，小点点，左中右。
+                    banner.setIndicatorGravity(BannerConfig.CENTER)
+                            //以上内容都可写成链式布局，这是轮播图的监听。比较重要。方法在下面。
+//                            .setOnBannerListener(this)
+                            //必须最后调用的方法，启动轮播图。
+                            .start();
                 }
             } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
@@ -514,6 +536,11 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             if (isAddress)
                 getTime();
         }
+        //轮播图的监听方法
+//        @Override
+//        public void OnBannerClick(int position) {
+//            Log.i("tag", "你点了第"+position+"张轮播图");
+//        }
     }
 
 
@@ -596,7 +623,7 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                ToastUtil.showShortToast( "已加入购物车");
+                ToastUtil.showShortToast("已加入购物车");
                 mPopWindow.dismiss();
             } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getActivity(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
@@ -610,6 +637,17 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
             }
         }
     }
+
+
+
+    //自定义的图片加载器
+    private class MyLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            Glide.with(context).load((String) path).into(imageView);
+        }
+    }
+
 
     Bundle bundle;
     String userId;
@@ -657,10 +695,9 @@ public class ShopFragment extends BaseFragment implements View.OnClickListener {
         sign = s;
         sign_1 = price;
         sign_2 = power;
-        sign_type=type;
+        sign_type = type;
 
         Log.e("QqqqqqqTTTT", type + "????");
-
 
 
     }

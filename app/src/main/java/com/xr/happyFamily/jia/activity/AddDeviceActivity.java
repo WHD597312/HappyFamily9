@@ -705,8 +705,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                         String onlineTopicName = "";
                         String offlineTopicName="";
                         if (2 == deviceType) {
-                            onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                            offlineTopicName="p99/warmer/"+macAddress+"/lwt";
+                            onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                            offlineTopicName="p99/warmer1/"+macAddress+"/lwt";
                         }else if (3==deviceType){
                             onlineTopicName="p99/sensor1/"+macAddress+"/transfer";
                             offlineTopicName="p99/sensor1/"+macAddress+"/lwt";

@@ -138,41 +138,86 @@ public class PersonInfoActivity extends AppCompatActivity {
                             Date date=format.parse("1970-1-1");
                             long minDay=date.getTime();
                             String birthday2=preferences.getString("birthday","");
-                            Date date2=new Date(Long.parseLong(birthday2));
-                            Calendar calendar=Calendar.getInstance();
-                            calendar.setTime(date2);
-                            long current=calendar.getTimeInMillis();
-                            TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
-                                    .setType(Type.YEAR_MONTH_DAY)
-                                    .setTitleStringId("修改生日")
-                                    .setMinMillseconds(minDay)
-                                    .setCurrentMillseconds(current)
-                                    .setMaxMillseconds(System.currentTimeMillis())
-                                    .setCallBack(new OnDateSetListener() {
-                                        @Override
-                                        public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
-                                            Map<String, Object> params = new HashMap<>();
-                                            String userId = preferences.getString("userId", "");
-                                            boolean sex2 = preferences.getBoolean("sex", false);
-                                            Date date=new Date(millseconds);
-                                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-                                            birthday=format.format(date);
-                                            int flag = 0;
-                                            if (sex2) {
-                                                flag = 1;
-                                            } else {
-                                                flag = 0;
+                            if (!TextUtils.isEmpty(birthday2)){
+                                Date date2=new Date(Long.parseLong(birthday2));
+                                Calendar calendar=Calendar.getInstance();
+                                int year=calendar.get(Calendar.YEAR);
+                                calendar.setTime(date2);
+                                long current=calendar.getTimeInMillis();
+                                Date date3=format.parse(year+"-12-31");
+                                long maxTime=date3.getTime();
+                                TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
+                                        .setType(Type.YEAR_MONTH_DAY)
+                                        .setTitleStringId("修改生日")
+                                        .setMinMillseconds(minDay)
+                                        .setCurrentMillseconds(current)
+                                        .setMaxMillseconds(maxTime)
+                                        .setCallBack(new OnDateSetListener() {
+                                            @Override
+                                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+                                                Map<String, Object> params = new HashMap<>();
+                                                String userId = preferences.getString("userId", "");
+                                                boolean sex2 = preferences.getBoolean("sex", false);
+                                                Date date=new Date(millseconds);
+                                                SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                                                birthday=format.format(date);
+                                                int flag = 0;
+                                                if (sex2) {
+                                                    flag = 1;
+                                                } else {
+                                                    flag = 0;
+                                                }
+                                                sex=-1;
+                                                params.put("userId", userId);
+                                                params.put("sex", flag);
+                                                params.put("username", username);
+                                                params.put("birthday", birthday);
+                                                new UpdatePersonAsync().execute(params);
                                             }
-                                            sex=-1;
-                                            params.put("userId", userId);
-                                            params.put("sex", flag);
-                                            params.put("username", username);
-                                            params.put("birthday", birthday);
-                                            new UpdatePersonAsync().execute(params);
-                                        }
-                                    })
-                                    .build();
-                            dialogYearMonthDay.show(getSupportFragmentManager(), "YEAR_MONTH_DAY");
+                                        })
+                                        .build();
+                                dialogYearMonthDay.show(getSupportFragmentManager(), "YEAR_MONTH_DAY");
+                            }else {
+                                Date date2=new Date();
+                                Calendar calendar=Calendar.getInstance();
+                                int year=calendar.get(Calendar.YEAR);
+                                calendar.setTime(date2);
+                                long current=calendar.getTimeInMillis();
+                                Date date3=format.parse(year+"-12-31");
+                                long maxTime=date3.getTime();
+                                TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
+                                        .setType(Type.YEAR_MONTH_DAY)
+                                        .setTitleStringId("修改生日")
+                                        .setMinMillseconds(minDay)
+                                        .setCurrentMillseconds(current)
+                                        .setMaxMillseconds(maxTime)
+                                        .setCallBack(new OnDateSetListener() {
+                                            @Override
+                                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+                                                Map<String, Object> params = new HashMap<>();
+                                                String userId = preferences.getString("userId", "");
+                                                boolean sex2 = preferences.getBoolean("sex", false);
+                                                Date date=new Date(millseconds);
+                                                SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                                                birthday=format.format(date);
+                                                int flag = 0;
+                                                if (sex2) {
+                                                    flag = 1;
+                                                } else {
+                                                    flag = 0;
+                                                }
+                                                sex=-1;
+                                                params.put("userId", userId);
+                                                params.put("sex", flag);
+                                                params.put("username", username);
+                                                params.put("birthday", birthday);
+                                                new UpdatePersonAsync().execute(params);
+                                            }
+                                        })
+                                        .build();
+                                dialogYearMonthDay.show(getSupportFragmentManager(), "YEAR_MONTH_DAY");
+                            }
+
                         } catch (Exception e) {
                             // TODO: handle exception
                         }
@@ -451,9 +496,10 @@ public class PersonInfoActivity extends AppCompatActivity {
                         //设置转化格式
                         String time=sdf.format(date);//将Date对象转化为yyyy-MM-dd形式的字符串
                         viewHolder4.tv_birthday.setText(time);
+                    }else {
+                        viewHolder4.tv_birthday.setText("");
+                        viewHolder4.tv_birthday.setHint("请完善你的生日信息");
                     }
-
-
                     break;
             }
             return convertView;

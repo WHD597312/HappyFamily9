@@ -31,6 +31,7 @@ public class DeviceChild implements Serializable{
     int warmerCurRunRoatePower=0;/**取暖器当前运行功率*/
     int warmerRunState=0;/**机器当前运行状态*/
     int deviceState=0;/**开关机状态 0表示关机，1表示开机*/
+    int warmerFall;/**机器倾斜*/
     String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
     int lockState=0;/** 屏幕是否锁定 1：锁定 0：未锁定*/
     int screenState=0;/**屏保是否开启 1：开启 0：未开启 */
@@ -751,6 +752,12 @@ public class DeviceChild implements Serializable{
     public void setId(Long id) {
         this.id = id;
     }
+    public int getWarmerFall() {
+        return this.warmerFall;
+    }
+    public void setWarmerFall(int warmerFall) {
+        this.warmerFall = warmerFall;
+    }
 
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.houseId = houseId;
@@ -762,13 +769,13 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
     }
 
-    @Generated(hash = 2141731801)
+    @Generated(hash = 1746486105)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
-            int warmerCurRunRoatePower, int warmerRunState, int deviceState, String rateState, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour,
-            int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp,
-            int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp, int socketState,
-            int socketTimer, int socketTimerOpenHour, int socketTimerOpenMin, int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent, int socketVal,
+            int warmerCurRunRoatePower, int warmerRunState, int deviceState, int warmerFall, String rateState, int lockState, int screenState, int curRunState2, int curRunState3,
+            int timerHour, int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState,
+            int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp,
+            int socketState, int socketTimer, int socketTimerOpenHour, int socketTimerOpenMin, int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent, int socketVal,
             int socketPowerConsume, int timerSwitch, int waterLevel, String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow, int equipCurdPowerHigh, int equipCurdPowerLow,
             int faultCode, String purifierState, int dehumSetTemp, int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp, int dehumSleep, int dehumAnion, int dehumDrying,
             int dehumDefrost, String aCondState, int aCondSetTemp1, int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1, int aCondSimpleTemp2, int aCondInnerTemp,
@@ -798,6 +805,7 @@ public class DeviceChild implements Serializable{
         this.warmerCurRunRoatePower = warmerCurRunRoatePower;
         this.warmerRunState = warmerRunState;
         this.deviceState = deviceState;
+        this.warmerFall = warmerFall;
         this.rateState = rateState;
         this.lockState = lockState;
         this.screenState = screenState;

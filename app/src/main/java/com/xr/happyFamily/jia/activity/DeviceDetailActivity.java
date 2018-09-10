@@ -158,12 +158,20 @@ public class DeviceDetailActivity extends AppCompatActivity {
         if (deviceChild!=null){
             boolean online=deviceChild.getOnline();
             if (online){
-                relative.setVisibility(View.VISIBLE);
-                tv_offline.setVisibility(View.GONE);
-                setMode(deviceChild);
+                if (deviceChild.getWarmerFall()==1){
+                    relative.setVisibility(View.GONE);
+                    tv_offline.setVisibility(View.VISIBLE);
+                    tv_offline.setText("设备倾斜");
+                }else {
+                    relative.setVisibility(View.VISIBLE);
+                    tv_offline.setVisibility(View.GONE);
+                    tv_offline.setText("离线");
+                    setMode(deviceChild);
+                }
             }else {
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
+                tv_offline.setText("离线");
             }
         }else {
             Intent intent=new Intent();
@@ -592,9 +600,15 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         deviceChild=deviceChild2;
                         boolean online=deviceChild.getOnline();
                         if (online){
-                            relative.setVisibility(View.VISIBLE);
-                            tv_offline.setVisibility(View.GONE);
-                            setMode(deviceChild);
+                            if(deviceChild.getWarmerFall()==1){
+                                relative.setVisibility(View.GONE);
+                                tv_offline.setVisibility(View.VISIBLE);
+                                tv_offline.setText("设备倾斜");
+                            }else {
+                                relative.setVisibility(View.VISIBLE);
+                                tv_offline.setVisibility(View.GONE);
+                                setMode(deviceChild);
+                            }
                         }else {
                             relative.setVisibility(View.GONE);
                             tv_offline.setVisibility(View.VISIBLE);
@@ -749,7 +763,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             jsonObject.put("Warmer",jsonArray);
 
             if (isBound){
-                String topicName="p99/warmer/"+deviceChild.getMacAddress()+"/set";
+                String topicName="p99/warmer1/"+deviceChild.getMacAddress()+"/set";
                 String s=jsonObject.toString();
                 boolean success=mqService.publish(topicName,1,s);
                 if (success){

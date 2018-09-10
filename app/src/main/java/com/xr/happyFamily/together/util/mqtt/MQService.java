@@ -295,8 +295,8 @@ public class MQService extends Service {
             Log.i("phone67890", "-->" + phone);
             if (topicName.startsWith("p99/" + phone)) {
 
-            } else if (topicName.startsWith("p99/warmer")) {
-                macAddress = topicName.substring(11, topicName.lastIndexOf("/"));
+            } else if (topicName.startsWith("p99/warmer1")) {
+                macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/sensor1")) {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/socket1")) {
@@ -345,6 +345,7 @@ public class MQService extends Service {
             int endCode = -1;/**结束码*/
             String message = strings[1];/**收到的消息*/
             long sharedId = -1;/**分享的设备*/
+            int warmerFall=-1;/**电暖器倾斜*/
 
             Log.i("mmm", "-->" + message);
 
@@ -369,6 +370,10 @@ public class MQService extends Service {
                     if (!TextUtils.isEmpty(uuid) && uuid.equals(uuid2)) {
                         return null;
                     } else {
+                        SharedPreferences.Editor editor = preferences.edit();
+                        if (preferences.contains("password")) {
+                            editor.remove("password").commit();
+                        }
                         Message msg = handler.obtainMessage();
                         msg.what = 2;
                         handler.sendMessage(msg);
@@ -468,6 +473,7 @@ public class MQService extends Service {
                                 rateState = x[6] + "" + x[5];
                                 lockState = x[4];
                                 screenState = x[3];
+                                warmerFall=x[2];
 
                                 waramerSetTemp = messageJsonArray.getInt(10);
                                 warmerCurTemp = messageJsonArray.getInt(11);
@@ -545,6 +551,10 @@ public class MQService extends Service {
                             if (endCode != -1) {
                                 deviceChild.setEndCode(endCode);
                             }
+                            if (warmerFall!=-1){
+                                deviceChild.setWarmerFall(warmerFall);
+                            }
+//                            deviceChild.setWarmerFall(wa);
                             int ss = deviceChild.getDeviceId();
                             int deviceUsedCount = deviceChild.getDeviceUsedCount();
                             deviceChild.setDeviceUsedCount(deviceUsedCount + 1);
@@ -1473,8 +1483,8 @@ public class MQService extends Service {
             String offlineTopicName = "";
             switch (type) {
                 case 2:
-                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                    onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                    offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;
@@ -1641,10 +1651,6 @@ public class MQService extends Service {
                     }
                     if (!LoginActivity.running){
                         Intent notifyIntent = new Intent(MQService.this, LoginActivity.class);
-                        SharedPreferences.Editor editor = preferences.edit();
-                        if (preferences.contains("password")) {
-                            editor.remove("password").commit();
-                        }
                         Toast.makeText(MQService.this,"该账号已在其他设备上登录",Toast.LENGTH_SHORT).show();
                         startActivity(notifyIntent);
                     }

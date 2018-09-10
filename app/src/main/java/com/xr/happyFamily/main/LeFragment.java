@@ -34,6 +34,7 @@ import com.squareup.picasso.Picasso;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.BDmapActivity;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.adapter.HappyFootAdapter;
 import com.xr.happyFamily.le.adapter.HappyViewPagerAdapter;
@@ -264,7 +265,7 @@ public class LeFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.ll_xuyuan, R.id.ll_clock})
+    @OnClick({R.id.ll_xuyuan, R.id.ll_clock,R.id.li_yougui})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_clock:
@@ -278,6 +279,9 @@ public class LeFragment extends Fragment {
                     intent.putExtra("type", "asd");
                     startActivity(intent);
                 }
+                break;
+            case R.id.li_yougui:
+                startActivity(new Intent(getActivity(), BDmapActivity.class));
                 break;
         }
     }

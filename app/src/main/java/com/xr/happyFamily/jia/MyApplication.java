@@ -2,11 +2,17 @@ package com.xr.happyFamily.jia;
 
 import android.app.Activity;
 import android.app.Application;
+import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v4.app.Fragment;
+import android.support.v7.app.AlertDialog;
+import android.widget.Toast;
 
+import com.baidu.mapapi.SDKInitializer;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
 
@@ -88,7 +94,10 @@ public class MyApplication extends Application {
             public void onActivityDestroyed(Activity activity) {
             }
         });
+
     }
+
+
 
     public void addActivity(Activity activity){
         if (!activities.contains(activity)){

@@ -237,13 +237,19 @@ public class qdActivity extends Activity {
                             editor.putString("headImgUrl",headImgUrl);
                         }
                         String birthday=returnData.getString("birthday");
-                        SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
-                        Date date=format.parse(birthday);
-                        long ts = date.getTime();
-                        String res = String.valueOf(ts);
-                        editor.putBoolean("sex",sex);
-                        editor.putString("birthday",res);
-                        editor.commit();
+                        if (!TextUtils.isEmpty(birthday)) {
+                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
+                            Date date = format.parse(birthday);
+                            long ts = date.getTime();
+                            String res = String.valueOf(ts);
+                            editor.putBoolean("sex", sex);
+                            editor.putString("birthday", res);
+                            editor.commit();
+                        }else {
+
+                            editor.putString("birthday","");
+                            editor.commit();
+                        }
                         JSONArray houseDevices = returnData.getJSONArray("houseDevices");
                         for (int i = 0; i < houseDevices.length(); i++) {
                             JSONObject houseObject = houseDevices.getJSONObject(i);

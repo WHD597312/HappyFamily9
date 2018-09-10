@@ -16,7 +16,7 @@ greendao {
 android {
     signingConfigs {
         release {
-            storeFile file('D:/android/HappyFamily/p99.jks')
+            storeFile file('F:/android/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'

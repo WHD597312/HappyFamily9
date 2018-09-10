@@ -124,10 +124,6 @@
             android:name=".le.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity
-            android:name=".le.StaticDemo"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".login.login.LoginActivity" />
         <activity
             android:name=".zhen.AboutActivity"

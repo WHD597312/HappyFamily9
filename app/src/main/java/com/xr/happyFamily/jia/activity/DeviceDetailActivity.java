@@ -113,6 +113,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     private MyApplication application;
     private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
 
+    long deviceId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -139,7 +140,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         Intent intent=getIntent();
         String deviceName=intent.getStringExtra("deviceName");
         tv_title.setText(deviceName);
-        long deviceId=intent.getLongExtra("deviceId",0);
+        deviceId=intent.getLongExtra("deviceId",0);
         deviceChild=deviceChildDao.findById(deviceId);
         houseId=intent.getLongExtra("houseId",0);
         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
@@ -156,6 +157,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         running=true;
+        deviceChild=deviceChildDao.findById(deviceId);
         if (deviceChild!=null){
             boolean online=deviceChild.getOnline();
             if (online){
@@ -638,6 +640,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.arg1=0;
             msg.what=0;
             handler.sendMessage(msg);
+
         }else if (deviceState==1){
             image_switch.setImageResource(R.mipmap.image_open);
             image_rate.setImageResource(R.mipmap.rate_open);
@@ -645,10 +648,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.arg1=0;
             msg.what=1;
             handler.sendMessage(msg);
+
         }
         if (timerHour==0){
             Log.i("timer","-->"+"timer");
             image_timer.setImageResource(R.mipmap.timer_task);
+            tv_timer.setText("定时");
         }else if (timerHour!=0){
             if (deviceState==1){
                 image_timer.setImageResource(R.mipmap.timer_open);
@@ -787,8 +792,10 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     int flag=msg.what;
                     if (flag==1){
                         wheelBar.setCanTouch(true);
+                        wheelBar.setDeviceState(1);
                     }else if (flag==0){
                         wheelBar.setCanTouch(false);
+                        wheelBar.setDeviceState(0);
                     }
                     wheelBar.invalidate();
                     break;

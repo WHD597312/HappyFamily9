@@ -84,7 +84,8 @@
     </declare-styleable>
     <declare-styleable name="SmartWheelBar">
         <attr name="mStartAngle" format="float"/>
-        <attr name="isCanTouch" format="boolean"/>
+        <attr name="isCanTouch" format="boolean" />
+        <attr name="deviceState" format="integer"/>
     </declare-styleable>
     <declare-styleable name="RaidoTextView">
     <attr name="radioTitleText" format="string" />

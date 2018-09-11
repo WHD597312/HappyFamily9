@@ -292,7 +292,7 @@ public class MQService extends Service {
             String topicName = strings[0];/**收到的主题*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
-            Log.i("phone67890", "-->" + phone);
+
             if (topicName.startsWith("p99/" + phone)) {
 
             } else if (topicName.startsWith("p99/warmer1")) {

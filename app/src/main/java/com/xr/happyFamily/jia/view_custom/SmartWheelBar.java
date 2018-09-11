@@ -13,8 +13,10 @@ import android.text.TextUtils;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.Gravity;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Toast;
 
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.SmartWheelInfo;
@@ -52,6 +54,8 @@ public class SmartWheelBar extends View {
      * 500毫秒内的点击被认为是点击事件
      **/
     private long timeClick = 500;
+
+    int deviceState=0;
 
     /**
      * 保存点击的时间
@@ -184,6 +188,7 @@ public class SmartWheelBar extends View {
         TypedArray a = getContext().obtainStyledAttributes(attrs, R.styleable.SmartWheelBar, defStyle, 0);
         mStartAngle = a.getFloat(R.styleable.SmartWheelBar_mStartAngle, 0);
         isCanTouch=a.getBoolean(R.styleable.SmartWheelBar_isCanTouch,true);
+        deviceState=a.getInt(R.styleable.SmartWheelBar_deviceState,0);
         a.recycle();
     }
 
@@ -450,6 +455,7 @@ public class SmartWheelBar extends View {
     }
 
 
+
     @Override
     public boolean onTouchEvent(MotionEvent event) {
         //判断按点是否在圆内
@@ -476,18 +482,24 @@ public class SmartWheelBar extends View {
 //        }
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
+                if (isCanTouch==false && deviceState==0){
+                    Toast toast= Toast.makeText(getContext(),"设备已关机",Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    break;
+                }
                 if (isCanTouch){
                     touchX = event.getX();
                     touchY = event.getY();
-                    if (isInCiecle(touchX, touchY)) {
-                        //按下时的时间
-                        nowClick = System.currentTimeMillis();
-                    }
+//                    if (isInCiecle(touchX, touchY)) {
+//                        //按下时的时间
+//                        nowClick = System.currentTimeMillis();
+//                    }
                 }
 
                 break;
             case MotionEvent.ACTION_MOVE:
-                if (isCanTouch){
+                if (isCanTouch && deviceState==1){
                     float moveX = event.getX();
                     float moveY = event.getY();
                     //得到旋转的角度
@@ -644,6 +656,14 @@ public class SmartWheelBar extends View {
      */
     public final int dip2px(float dpValue) {
         return (int) TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_DIP, dpValue, getContext().getResources().getDisplayMetrics());
+    }
+
+    public void setDeviceState(int deviceState) {
+        this.deviceState = deviceState;
+    }
+
+    public int getDeviceState() {
+        return deviceState;
     }
 
     /**

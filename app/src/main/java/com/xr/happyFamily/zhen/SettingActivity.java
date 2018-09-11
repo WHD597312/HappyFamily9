@@ -2,17 +2,20 @@ package com.xr.happyFamily.zhen;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.app.DownloadManager;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
 import android.net.Uri;
 import android.os.Environment;
 import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -52,9 +55,12 @@ import com.zhy.http.okhttp.callback.FileCallBack;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.math.BigDecimal;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -71,6 +77,11 @@ public class SettingActivity extends AppCompatActivity{
     private MyApplication application;
     SharedPreferences preferences;
     private RoomDaoImpl roomDao;
+    private DownloadManager downloadManager;
+    private DownloadManager.Request request;
+    public static String downloadUrl = "http://app-global.pgyer.com/9b71c76cdd061313f38e223ac82c916e.apk?attname=app-release.apk&sign=a82d21a2bc09ca8585390478d1031413&t=5b9791ce";
+    Timer timer;
+    long id;
 
     /**
      * 房间数据库
@@ -146,27 +157,81 @@ public class SettingActivity extends AppCompatActivity{
         });
     }
 
-
-    private String appUrl="http://app-global.pgyer.com/79778d2ebb78ca21ca945bf69f52f8cd.apk?attname=app-release.apk&sign=6f09f4445a10b256c1a61b1a2483df5e&t=5b976ab4";
+    TextView tv_device_ensure;
+    Dialog dialog;
+    private String appUrl="http://app-global.pgyer.com/9b71c76cdd061313f38e223ac82c916e.apk?attname=app-release.apk&sign=7e283b839e245d613383763013a87bff&t=5b9790f4";
     ProgressBar progressBar;
     private void downLoadApp(){
         View view = View.inflate(this, R.layout.download_layout, null);
-        final Dialog dialog = new AlertDialog.Builder(this).create();
+        dialog = new AlertDialog.Builder(this).create();
         dialog.show();
         dialog.setContentView(view);
 
         progressBar= (ProgressBar) view.findViewById(R.id.progress);
         TextView tv_device_cancel= (TextView) view.findViewById(R.id.tv_device_cancel);
-        TextView tv_device_ensure= (TextView) view.findViewById(R.id.tv_device_ensure);
+        tv_device_ensure= (TextView) view.findViewById(R.id.tv_device_ensure);
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        request = new DownloadManager.Request(Uri.parse(downloadUrl));
+
+        request.setTitle("P99");
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI| DownloadManager.Request.NETWORK_MOBILE);
+        request.setAllowedOverRoaming(false);
+        request.setMimeType("application/vnd.android.package-archive");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        //创建目录
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir() ;
+        //设置文件存放路径
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS  , "app-release.apk" ) ;
+        final  DownloadManager.Query query = new DownloadManager.Query();
+
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                Cursor cursor = downloadManager.query(query.setFilterById(id));
+                if (cursor != null && cursor.moveToFirst()) {
+                    if (cursor.getInt(
+                            cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                        progressBar.setProgress(100);
+                        install(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/app-release.apk" );
+                        task.cancel();
+                    }
+                    String title = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE));
+                    String address = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                    int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                    Log.i("bytes_downloaded","-->"+bytes_downloaded);
+                    Log.i("bytes_total","-->"+bytes_total);
+                    float x=bytes_downloaded;
+                    float ss=(x/bytes_total)*100;
+                    BigDecimal bigDecimal=new BigDecimal(ss);
+                    BigDecimal bigDecimal2= bigDecimal.setScale(0,BigDecimal.ROUND_DOWN);
+                    int pro=Integer.parseInt(bigDecimal2+"");
+                    Log.i("prossssssssssssss","-->"+(bytes_downloaded) / bytes_total);
+                    Message msg =Message.obtain();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("pro",pro);
+                    bundle.putString("name",title);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                }
+                cursor.close();
+            }
+        };
+        timer.schedule(task, 0,1000);
         tv_device_cancel.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 dialog.dismiss();
             }
         });
+
         tv_device_ensure.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                id = downloadManager.enqueue(request);
+                task.run();
+                tv_device_ensure.setClickable(false);
 //                OkHttpUtils.get()
 //                        .url(appUrl)
 //                        .build()
@@ -200,94 +265,25 @@ public class SettingActivity extends AppCompatActivity{
         });
 
     }
-
-    Thread downLoadThread;
-    /**
-     * 从服务器下载APK安装包
-     */
-    private void downloadApk() {
-        downLoadThread = new Thread(mdownApkRunnable);
-        downLoadThread.start();
-    }
-    boolean intercept=false;
-    int progress=0;
-
-    private Runnable mdownApkRunnable = new Runnable() {
-
+    TimerTask task;
+    Handler handler =new Handler(){
         @Override
-        public void run() {
-            URL url;
-            try {
-                url = new URL(appUrl);
-                HttpURLConnection conn = (HttpURLConnection) url
-                        .openConnection();
-                conn.connect();
-                int length = conn.getContentLength();
-                InputStream ins = conn.getInputStream();
-                File file = new File(Environment.getExternalStorageDirectory().getAbsolutePath());
-                if (!file.exists()) {
-                    file.mkdir();
-                }
-                File apkFile = new File(Environment.getExternalStorageDirectory().getAbsolutePath(),"p99.apk");
-                FileOutputStream fos = new FileOutputStream(apkFile);
-                int count = 0;
-                byte[] buf = new byte[1024];
-                while (!intercept) {
-                    int numread = ins.read(buf);
-                    count += numread;
-                    progress = (int) (((float) count / length) * 100);
-
-                    // 下载进度
-                    mHandler.sendEmptyMessage(DOWN_UPDATE);
-                    if (numread <= 0) {
-                        // 下载完成通知安装
-                        mHandler.sendEmptyMessage(DOWN_OVER);
-                        break;
-                    }
-                    fos.write(buf, 0, numread);
-                }
-                fos.close();
-                ins.close();
-
-            } catch (Exception e) {
-                e.printStackTrace();
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            int pro = bundle.getInt("pro");
+            progressBar.setProgress(pro);
+            if (pro==100 && dialog!=null){
+                dialog.dismiss();
             }
         }
     };
-
-    /**
-     * 安装APK内容
-     */
-    private void installAPK() {
-        File apkFile = new File(Environment.getExternalStorageDirectory(),"P99.apk");
-        if (!apkFile.exists()) {
-            return;
-        }
+    private void install(String path) {
         Intent intent = new Intent(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse("file://" + apkFile.toString()),
-                "application/vnd.android.package-archive");
+        intent.setDataAndType(Uri.parse("file://" + path), "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//4.0以上系统弹出安装成功打开界面
         startActivity(intent);
-    };
-
-    private static final int DOWN_UPDATE = 1;
-    private static final int DOWN_OVER = 2;
-    private Handler mHandler = new Handler() {
-        public void handleMessage(android.os.Message msg) {
-            switch (msg.what) {
-                case DOWN_UPDATE:
-                    progressBar.setProgress(progress);
-                    break;
-                case DOWN_OVER:
-
-                    installAPK();
-                    break;
-
-                default:
-                    break;
-            }
-        }
-
-    };
+    }
 
     @OnClick({R.id.back, R.id.btn_exit})
     public void onClick(View view) {

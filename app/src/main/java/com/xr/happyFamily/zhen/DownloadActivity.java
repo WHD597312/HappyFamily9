@@ -34,7 +34,7 @@ public class DownloadActivity extends CheckPermissionsActivity implements View.O
     private ProgressBar pb_update;
     private DownloadManager downloadManager;
     private DownloadManager.Request request;
-    public static String downloadUrl = "http://app-global.pgyer.com/9b71c76cdd061313f38e223ac82c916e.apk?attname=app-release.apk&sign=d4e86da5ba4f7e8dbff9ffa003422a8b&t=5b9785e8";
+    public static String downloadUrl = "http://app-global.pgyer.com/9b71c76cdd061313f38e223ac82c916e.apk?attname=app-release.apk&sign=a82d21a2bc09ca8585390478d1031413&t=5b9791ce";
     Timer timer;
     long id;
     int sum=0;

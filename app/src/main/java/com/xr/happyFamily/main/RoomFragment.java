@@ -714,8 +714,8 @@ public class RoomFragment extends Fragment {
                             String offlineTopicName = "";
                             switch (type) {
                                 case 2:
-                                    onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                    offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                    onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
                                     break;
                                 case 3:
                                     onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
@@ -833,7 +833,7 @@ public class RoomFragment extends Fragment {
                     if (mac.equals(macAddress) && deviceChild2 == null) {
                         mGridData.remove(deviceChild);
                         mGridViewAdapter.notifyDataSetChanged();
-                        Toast.makeText(getActivity(), "该设备已重置", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), macAddress+"设备已重置", Toast.LENGTH_SHORT).show();
 //                        Intent intent2=new Intent(getActivity(),MainActivity.class);
 //                        intent2.putExtra("houseId",houseId);
 //                        intent2.putExtra("refersh","refersh");

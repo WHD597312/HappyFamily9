@@ -37,6 +37,7 @@ import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
@@ -47,6 +48,7 @@ import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+import com.xr.happyFamily.together.util.mqtt.VibratorUtil;
 import com.xr.happyFamily.together.util.receiver.MQTTMessageReveiver;
 
 import org.json.JSONArray;
@@ -521,6 +523,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             }
             first++;
             if (first==2){
+                VibratorUtil.StopVibrate(MainActivity.this);
                 application.removeAllActivity();
                 family = "";
                 return true;

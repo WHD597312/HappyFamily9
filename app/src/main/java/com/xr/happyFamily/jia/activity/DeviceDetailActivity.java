@@ -54,6 +54,7 @@ import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+import com.xr.happyFamily.together.util.mqtt.VibratorUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -161,7 +162,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 if (deviceChild.getWarmerFall()==1){
                     relative.setVisibility(View.GONE);
                     tv_offline.setVisibility(View.VISIBLE);
-                    tv_offline.setText("设备倾斜");
+                    tv_offline.setText("设备倾倒");
                 }else {
                     relative.setVisibility(View.VISIBLE);
                     tv_offline.setVisibility(View.GONE);
@@ -300,12 +301,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         tv_timer.setOnClickListener(listener);
     }
 
-
-
-
-
-
-
     int deviceState;
     @OnClick({R.id.image_more,R.id.image_back,R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
     public void onClick(View view){
@@ -314,6 +309,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 popupmenuWindow();
                 break;
             case R.id.image_back:
+                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                 Intent intent=new Intent();
                 intent.putExtra("houseId",houseId);
                 setResult(6000,intent);
@@ -401,10 +397,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 backgroundAlpha(1f);
                 return false;
             }
+            VibratorUtil.StopVibrate(DeviceDetailActivity.this);
             Intent intent=new Intent();
             intent.putExtra("houseId",houseId);
             setResult(6000,intent);
             finish();
+
             return true;
         }
 
@@ -601,10 +599,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         boolean online=deviceChild.getOnline();
                         if (online){
                             if(deviceChild.getWarmerFall()==1){
+                                VibratorUtil.Vibrate(DeviceDetailActivity.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
                                 relative.setVisibility(View.GONE);
                                 tv_offline.setVisibility(View.VISIBLE);
-                                tv_offline.setText("设备倾斜");
+                                tv_offline.setText("设备倾倒");
                             }else {
+                                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                                 relative.setVisibility(View.VISIBLE);
                                 tv_offline.setVisibility(View.GONE);
                                 setMode(deviceChild);

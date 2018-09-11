@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_160"
+    android:background="@drawable/bg_shape"
+    android:id="@+id/rl_homed_del"
+    >
+    <TextView
+        android:id="@+id/tv_device_del"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="更新版本"
+        android:textColor="@color/color_gray4"
+        android:textSize="16sp"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_jy_45"
+        />
+    <ProgressBar
+        android:id="@+id/progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_device_del"
+        android:progressDrawable="@drawable/progress_bar_layer_list"
+        />
+
+    <LinearLayout
+        android:layout_below="@+id/progress"
+        android:layout_marginTop="@dimen/dp_jy_31"
+        android:layout_marginLeft="@dimen/dp_jy_20"
+        android:layout_marginRight="@dimen/dp_jy_20"
+        android:orientation="horizontal"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+        <Button
+            android:id="@+id/tv_device_cancel"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:background="@drawable/bg_shape_anniugray"
+            android:text="取消"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:layout_weight="1"
+            />
+
+        <Button
+            android:id="@+id/tv_device_ensure"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_35"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:background="@drawable/shape_detail_back"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:textColor="@color/white"
+            android:text="确定"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+</RelativeLayout>

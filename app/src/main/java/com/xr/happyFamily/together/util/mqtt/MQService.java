@@ -554,6 +554,29 @@ public class MQService extends Service {
                             if (warmerFall!=-1){
                                 deviceChild.setWarmerFall(warmerFall);
                             }
+                            if (warmerFall==1){
+                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+                                Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
+                                long houseId=deviceChild.getHouseId();
+                                notifyIntent.putExtra("houseId", houseId);
+
+                                notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+
+                                PendingIntent notifyPendingIntent =
+                                        PendingIntent.getActivity(getApplicationContext(), 0, notifyIntent,
+                                                PendingIntent.FLAG_UPDATE_CURRENT);
+
+                                builder.setContentText(deviceChild.getName() + "已倾倒")
+                                        .setSmallIcon(R.mipmap.ic_launcher)
+                                        .setDefaults(Notification.DEFAULT_ALL)
+                                        .setAutoCancel(true);
+                                builder.setContentIntent(notifyPendingIntent);
+
+                                NotificationManager mNotificationManager =
+                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+                                mNotificationManager.notify(0, builder.build());
+                            }
 //                            deviceChild.setWarmerFall(wa);
                             int ss = deviceChild.getDeviceId();
                             int deviceUsedCount = deviceChild.getDeviceUsedCount();
@@ -1134,8 +1157,7 @@ public class MQService extends Service {
                     }
                 }
 
-                Log.e("qqqqqqqqqqWWW", macAddress + "," + topicName);
-                Log.e("qqqqqqqqqqWWW", message);
+
 
                 if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
                     SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);

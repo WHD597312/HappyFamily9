@@ -236,20 +236,25 @@ public class qdActivity extends Activity {
                             String headImgUrl=returnData.getString("headImgUrl");
                             editor.putString("headImgUrl",headImgUrl);
                         }
+                        String userId3=returnData.getString("userId");
+                        String username=returnData.getString("userName");
+                        String phone=returnData.getString("phone").trim();
+                        Log.i("phone222","-->"+phone);
                         String birthday=returnData.getString("birthday");
-                        if (!TextUtils.isEmpty(birthday)) {
-                            SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd");
-                            Date date = format.parse(birthday);
+                        editor.putString("username",username);
+                        editor.putString("userId",userId3);
+                        editor.putString("phone",phone);
+                        if (!TextUtils.isEmpty(birthday)){
+                            SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                            Date date=format.parse(birthday);
                             long ts = date.getTime();
                             String res = String.valueOf(ts);
-                            editor.putBoolean("sex", sex);
-                            editor.putString("birthday", res);
-                            editor.commit();
+                            editor.putString("birthday",res);
                         }else {
-
                             editor.putString("birthday","");
-                            editor.commit();
                         }
+                        editor.putBoolean("sex",sex);
+                        editor.commit();
                         JSONArray houseDevices = returnData.getJSONArray("houseDevices");
                         for (int i = 0; i < houseDevices.length(); i++) {
                             JSONObject houseObject = houseDevices.getJSONObject(i);
@@ -265,9 +270,9 @@ public class qdActivity extends Activity {
 //                                hourse.setUserId(userId);
 //                                hourseDao.update(hourse);
 //                            } else {
-                               Hourse hourse = new Hourse((long) id, houseName, houseAddress, userId);
-                                hourseDao.insert(hourse);
-                                Log.i("dddddd1", "doInBackground:---> " + hourse);
+                            Hourse hourse = new Hourse((long) id, houseName, houseAddress, userId);
+                            hourseDao.insert(hourse);
+                            Log.i("dddddd1", "doInBackground:---> " + hourse);
 //                            }
                             JSONArray roomDevices = houseObject.getJSONArray("roomDevices");
                             Log.i("dddddd11qqq1", "doInBackground:---> " + roomDevices.length());
@@ -356,16 +361,16 @@ public class qdActivity extends Activity {
                                     deviceChildDao.update(deviceChild2);
                                 }else if (deviceChild2==null){
 
-                                        deviceChild2=new DeviceChild();
-                                        deviceChild2.setUserId(userId);
-                                        deviceChild2.setShareId(Long.MAX_VALUE);
-                                        deviceChild2.setName(deviceName);
-                                        deviceChild2.setDeviceId(deviceId);
-                                        deviceChild2.setMacAddress(deviceMacAddress);
-                                        deviceChild2.setType(deviceType);
-                                        deviceChild2.setRoomId(roomId);
-                                        deviceChild2.setShare("share");
-                                        deviceChildDao.insert(deviceChild2);
+                                    deviceChild2=new DeviceChild();
+                                    deviceChild2.setUserId(userId);
+                                    deviceChild2.setShareId(Long.MAX_VALUE);
+                                    deviceChild2.setName(deviceName);
+                                    deviceChild2.setDeviceId(deviceId);
+                                    deviceChild2.setMacAddress(deviceMacAddress);
+                                    deviceChild2.setType(deviceType);
+                                    deviceChild2.setRoomId(roomId);
+                                    deviceChild2.setShare("share");
+                                    deviceChildDao.insert(deviceChild2);
                                 }
 
                             }

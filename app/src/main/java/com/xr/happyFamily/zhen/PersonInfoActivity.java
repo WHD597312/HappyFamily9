@@ -141,10 +141,9 @@ public class PersonInfoActivity extends AppCompatActivity {
                             if (!TextUtils.isEmpty(birthday2)){
                                 Date date2=new Date(Long.parseLong(birthday2));
                                 Calendar calendar=Calendar.getInstance();
-                                int year=calendar.get(Calendar.YEAR);
                                 calendar.setTime(date2);
                                 long current=calendar.getTimeInMillis();
-                                Date date3=format.parse(year+"-12-31");
+                                Date date3=new Date();
                                 long maxTime=date3.getTime();
                                 TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
                                         .setType(Type.YEAR_MONTH_DAY)
@@ -180,11 +179,13 @@ public class PersonInfoActivity extends AppCompatActivity {
                             }else {
                                 Date date2=new Date();
                                 Calendar calendar=Calendar.getInstance();
-                                int year=calendar.get(Calendar.YEAR);
-                                calendar.setTime(date2);
+//                                int year=calendar.get(Calendar.YEAR);
+//                                int month=calendar.get(Calendar.DAY_OF_MONTH);
+//                                int day=calendar.get(Calendar.DAY_OF_MONTH);
+//                                calendar.setTime(date2);
                                 long current=calendar.getTimeInMillis();
-                                Date date3=format.parse(year+"-12-31");
-                                long maxTime=date3.getTime();
+//                                Date date3=format.parse(year+"-"+month+"-31");
+                                long maxTime=date2.getTime();
                                 TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
                                         .setType(Type.YEAR_MONTH_DAY)
                                         .setTitleStringId("修改生日")

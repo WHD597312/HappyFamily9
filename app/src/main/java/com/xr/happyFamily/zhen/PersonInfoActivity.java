@@ -133,7 +133,6 @@ public class PersonInfoActivity extends AppCompatActivity {
 //                        if (popupWindow==null || !popupWindow.isShowing()){
 //                            popupWindow2();
 //                        }
-
                         try {
                             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
                             Date date=format.parse("1970-1-1");

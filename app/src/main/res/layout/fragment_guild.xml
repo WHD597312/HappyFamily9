@@ -6,7 +6,49 @@
     android:orientation="vertical"
     android:id="@+id/layout"
     >
+    <TextView
+        android:id="@+id/tv_yd_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="智能家居"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_jy_22"
+        android:textSize="@dimen/sp_18"
+        android:textColor="#3e3e3e"
+        />
+    <TextView
+        android:id="@+id/tv_yd_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="一键远程控制 尽享智能生活"
+        android:layout_centerHorizontal="true"
+        android:layout_below="@+id/tv_yd_title"
+        android:textSize="@dimen/sp_14"
+        android:textColor="#8c8c8c"
+        android:layout_marginTop="@dimen/dp_jy_15"
+        />
 
+
+    <ImageView
+        android:id="@+id/tv_yd_bj"
+        android:layout_above="@+id/li_dian"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:scaleType="centerInside"
+        android:src="@mipmap/g1_xqbj"
+        android:layout_marginBottom="@dimen/dp_jy_29"
+        />
+    <ImageView
+        android:id="@+id/tv_yd_img"
+        android:layout_alignBottom="@+id/tv_yd_bj"
+        android:layout_marginBottom="@dimen/dp_jy_39"
+        android:layout_marginTop="@dimen/dp_jy_45"
+        android:layout_centerHorizontal="true"
+        android:layout_width="wrap_content"
+        android:layout_height="320dp"
+        android:scaleType="centerInside"
+        android:src="@mipmap/g1_xq"
+        />
     <TextView
         android:visibility="gone"
         android:id="@+id/tv_guild"
@@ -20,5 +62,37 @@
         android:textSize="@dimen/sp_15"
         android:layout_centerHorizontal="true"
         android:layout_marginBottom="@dimen/dp_jy_37"/>
+    <LinearLayout
+        android:id="@+id/li_dian"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/dp_jy_44"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_centerHorizontal="true"
+        >
+
+        <ImageView
+            android:id="@+id/iv_yd_d1"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/g_gd"
+            />
+        <ImageView
+            android:id="@+id/iv_yd_d2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/g_hd"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            />
+        <ImageView
+            android:id="@+id/iv_yd_d3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/g_hd"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            />
+
+    </LinearLayout>
 
 </RelativeLayout>

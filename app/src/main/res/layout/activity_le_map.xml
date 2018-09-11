@@ -52,7 +52,7 @@
                 android:id="@+id/iv_map_rj1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/map_rj"
+                android:src="@mipmap/map_wz"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_jy_12"
                 />

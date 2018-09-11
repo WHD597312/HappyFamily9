@@ -1,5 +1,6 @@
 package com.xr.happyFamily.le;
 
+import android.annotation.SuppressLint;
 import android.app.usage.UsageStats;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -36,6 +37,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -44,6 +46,7 @@ import com.baidu.mapapi.map.MarkerOptions;
 import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
+import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.CoordUtil;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.model.inner.Point;
@@ -248,6 +251,8 @@ public class MapActivity extends AppCompatActivity {
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setMyLocationEnabled(true);
+
+
     }
 
 
@@ -270,6 +275,8 @@ public class MapActivity extends AppCompatActivity {
         mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         mOption.setOpenGps(true);//可选，默认false，设置是否开启Gps定位
         mOption.setIsNeedAltitude(false);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
+
+
         client = new LocationClient(this);
         client.setLocOption(mOption);
         client.registerLocationListener(BDAblistener);
@@ -300,17 +307,22 @@ public class MapActivity extends AppCompatActivity {
         }
     };
 
-
+    LatLng p2;
+    LatLng LocationPoint;
     /**
      * 处理连续定位的地图UI变化
      */
+    @SuppressLint("HandlerLeak")
     private Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             BDLocation location = (BDLocation) msg.obj;
 
-            LatLng LocationPoint = new LatLng(latt, lngg);
+             LocationPoint = new LatLng(latt, lngg);
+            double latline=latt+0.008263;
+            double lngline=lngg+0.009914;
+             p2 = new LatLng(latline, lngline);
 //            LatLng LocationPoint = new LatLng(location.getLatitude(), location.getLongitude());
             Log.i("loc", "handleMessage:--> " + location.getLatitude());
             Log.i("loc", "handleMessage:--> " + location.getLongitude());
@@ -333,8 +345,8 @@ public class MapActivity extends AppCompatActivity {
                 @Override
                 public boolean onMarkerClick(Marker arg0) {
                     // TODO Auto-generated method stub
-//                Toast.makeText(MapActivity.this, address1,
-//                        Toast.LENGTH_SHORT).show();
+                Toast.makeText(MapActivity.this, "07:00",
+                        Toast.LENGTH_SHORT).show();
                     return true;
                 }
             });
@@ -344,91 +356,76 @@ public class MapActivity extends AppCompatActivity {
 //            mDestinationPoint = new LatLng(location1.getLatitude() /** 1.0001*/, location1.getLongitude()/* * 1.0001*/);//假设公司坐标
 
             //缩放地图
-            setMapZoomScale(LocationPoint);
+            mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(19.0f));
+//            setMapZoomScale(LocationPoint);
+            BitmapDescriptor bitmap1 = BitmapDescriptorFactory
+                    .fromResource(R.mipmap.map_last);
+            // 构建MarkerOption，用于在地图上添加Marker
+            OverlayOptions option1 = new MarkerOptions().position(p2)
+                    .icon(bitmap1).zIndex(8).draggable(true);
+            mBaiduMap.animateMapStatus(u);
+            // 在地图上添加Marker，并显示
+            mBaiduMap.addOverlay(option1);
+            //点击Marker弹出地址名称
+            mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+
+                @Override
+                public boolean onMarkerClick(Marker arg0) {
+                    // TODO Auto-generated method stub
+                Toast.makeText(MapActivity.this, "10:00",
+                        Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+            DrawLines();
+
         }
     };
 
-
-    //改变地图缩放
-    private void setMapZoomScale(LatLng ll) {
-        if (mDestinationPoint == null) {
-            mZoomScale = getZoomScale(ll);
-            mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(ll, mZoomScale));//缩放
-        } else {
-            mZoomScale = getZoomScale(ll);
-            mBaiduMap.animateMapStatus(MapStatusUpdateFactory.newLatLngZoom(mCenterPos, mZoomScale));//缩放
-        }
-    }
-
     /**
-     * 获取地图的中心点和缩放比例
-     *
-     * @return float
-     */
-    private float getZoomScale(LatLng LocationPoint) {
-        double maxLong;    //最大经度
-        double minLong;    //最小经度
-        double maxLat;     //最大纬度
-        double minLat;     //最小纬度
-        List<Double> longItems = new ArrayList<Double>();    //经度集合
-        List<Double> latItems = new ArrayList<Double>();     //纬度集合
+     * 计算两点间的距离
+     * */
+    public Double Distance(double lat1, double lng1,double lat2, double lng2) {
 
-        if (null != LocationPoint) {
-            longItems.add(LocationPoint.longitude);
-            latItems.add(LocationPoint.latitude);
-        }
-        if (null != mDestinationPoint) {
-            longItems.add(mDestinationPoint.longitude);
-            latItems.add(mDestinationPoint.latitude);
-        }
 
-        maxLong = longItems.get(0);    //最大经度
-        minLong = longItems.get(0);    //最小经度
-        maxLat = latItems.get(0);     //最大纬度
-        minLat = latItems.get(0);     //最小纬度
+        Double R=6370996.81;  //地球的半径
 
-        for (int i = 0; i < longItems.size(); i++) {
-            maxLong = Math.max(maxLong, longItems.get(i));   //获取集合中的最大经度
-            minLong = Math.min(minLong, longItems.get(i));   //获取集合中的最小经度
-        }
+        /*
+         * 获取两点间x,y轴之间的距离
+         */
+        Double x = (lng2 - lng1)*Math.PI*R*Math.cos(((lat1+lat2)/2)*Math.PI/180)/180;
+        Double y = (lat2 - lat1)*Math.PI*R/180;
 
-        for (int i = 0; i < latItems.size(); i++) {
-            maxLat = Math.max(maxLat, latItems.get(i));   //获取集合中的最大纬度
-            minLat = Math.min(minLat, latItems.get(i));   //获取集合中的最小纬度
-        }
-        double latCenter = (maxLat + minLat) / 2;
-        double longCenter = (maxLong + minLong) / 2;
-        int jl = (int) getDistance(new LatLng(maxLat, maxLong), new LatLng(minLat, minLong));//缩放比例参数
-        mCenterPos = new LatLng(latCenter, longCenter);   //获取中心点经纬度
-        int zoomLevel[] = {2500000, 2000000, 1000000, 500000, 200000, 100000,
-                50000, 25000, 20000, 10000, 5000, 2000, 1000, 500, 100, 50, 20, 0};
-        int i;
-        for (i = 0; i < 18; i++) {
-            if (zoomLevel[i] < jl) {
-                break;
-            }
-        }
-        float zoom = i + 4;
-        return zoom;
+
+        Double distance = Math.hypot(x, y);   //得到两点之间的直线距离
+
+        return   distance;
+
     }
 
-    /**
-     * 缩放比例参数
-     *
-     * @param var0
-     * @param var1
-     * @return
-     */
-    public double getDistance(LatLng var0, LatLng var1) {
-        if (var0 != null && var1 != null) {
-            Point var2 = CoordUtil.ll2point(var0);
-            Point var3 = CoordUtil.ll2point(var1);
-            return var2 != null && var3 != null ? CoordUtil.getDistance(var2, var3) : -1.0D;
-        } else {
-            return -1.0D;
-        }
-    }
+    public void  DrawLines(){
 
+
+        double latline=latt+0.008263;
+        double lngline=lngg+0.009914;
+
+
+        List<LatLng> points = new ArrayList<LatLng>();
+        points.add(LocationPoint);
+        points.add(p2);
+        OverlayOptions ooPolyline = new PolylineOptions().width(10).color(0xAAFF0000).points(points);
+        mBaiduMap.addOverlay(ooPolyline);
+        /*
+         * 调用Distance方法获取两点间x,y轴之间的距离
+         */
+        double cc= Distance(latt,  lngg,latline,lngline);
+
+        int length=(int)cc;
+
+        Toast.makeText(this, "您与终端距离"+length+"米", Toast.LENGTH_SHORT).show();
+
+
+    }
 
     @Override
     protected void onResume() {

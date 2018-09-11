@@ -52,7 +52,7 @@
                 android:id="@+id/iv_bdmap_rj1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:src="@mipmap/map_rj"
+                android:src="@mipmap/map_wz"
                 android:layout_centerVertical="true"
                 android:layout_marginLeft="@dimen/dp_jy_12"
                 />
@@ -160,12 +160,7 @@
                 android:text="切换"
                 android:layout_below="@+id/tv_map_3"
                 />
-            <TextView
-                android:id="@+id/textView1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_map_3"
-                android:text=" "/>
+
         </RelativeLayout>
 
     </RelativeLayout>

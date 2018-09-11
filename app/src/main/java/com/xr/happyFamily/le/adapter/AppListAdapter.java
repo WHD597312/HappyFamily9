@@ -82,8 +82,9 @@ public class AppListAdapter extends BaseAdapter {
 			timeInDate = new Date(mLastTime);
 			String lastTime = sdf.format(timeInDate);
 
-			tvPackage.setText(startTime + " / " + lastTime);
-			tvTime.setText((usageStat.getTotalTimeInForeground() / 1000) + " Sec");
+//			tvPackage.setText(startTime + " / " + lastTime);
+			tvPackage.setText("最近使用时间："  + lastTime);
+			tvTime.setText("持续使用时间："+(usageStat.getTotalTimeInForeground() / 1000) + " 秒");
 		} catch (Exception e) {
 			Log.e(TAG, "getView Exception - " + e.getMessage());
 		}

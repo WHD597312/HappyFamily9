@@ -134,7 +134,7 @@
                         android:layout_height="@dimen/dp_jy_60"
                         android:background="@mipmap/yougui" />
 
-                    
+
                     <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"

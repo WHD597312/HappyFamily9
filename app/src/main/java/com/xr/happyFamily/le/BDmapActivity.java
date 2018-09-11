@@ -98,7 +98,7 @@ public class BDmapActivity extends AppCompatActivity {
 
     private void initView() {
 
-        locationResult = (TextView) findViewById(R.id.textView1);
+//        locationResult = (TextView) findViewById(R.id.textView1);
         Button bt_qh = (Button)findViewById(R.id.bt_qh);
         bt_qh.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -211,7 +211,7 @@ public class BDmapActivity extends AppCompatActivity {
 
     Handler handler = new Handler() {
         public void handleMessage(Message msg) {
-            locationResult.setText((String) msg.obj);
+//            locationResult.setText((String) msg.obj);
         };
     };
 
@@ -331,7 +331,7 @@ public class BDmapActivity extends AppCompatActivity {
                 sb.append("\ndescribe : ");
                 sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
             }
-            logMsg(sb.toString());
+//            logMsg(sb.toString());
             Log.e("sbtostring", "onReceiveLocation: "+sb.toString() );
         }
 

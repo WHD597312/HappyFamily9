@@ -55,6 +55,7 @@ import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.mqtt.VibratorUtil;
+import com.xr.happyFamily.zhen.SettingActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -153,102 +154,103 @@ public class DeviceDetailActivity extends AppCompatActivity {
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
     }
+
     @Override
     protected void onStart() {
         super.onStart();
         running=true;
-        deviceChild=deviceChildDao.findById(deviceId);
-        if (deviceChild!=null){
-            boolean online=deviceChild.getOnline();
-            if (online){
-                if (deviceChild.getWarmerFall()==1){
+        if (result==0){
+            deviceChild=deviceChildDao.findById(deviceId);
+            if (deviceChild!=null){
+                boolean online=deviceChild.getOnline();
+                if (online){
+                    if (deviceChild.getWarmerFall()==1){
+                        relative.setVisibility(View.GONE);
+                        tv_offline.setVisibility(View.VISIBLE);
+                        tv_offline.setText("设备倾倒");
+                    }else {
+                        relative.setVisibility(View.VISIBLE);
+                        tv_offline.setVisibility(View.GONE);
+                        setMode(deviceChild);
+                    }
+                }else {
                     relative.setVisibility(View.GONE);
                     tv_offline.setVisibility(View.VISIBLE);
-                    tv_offline.setText("设备倾倒");
-                }else {
-                    relative.setVisibility(View.VISIBLE);
-                    tv_offline.setVisibility(View.GONE);
                     tv_offline.setText("离线");
-                    setMode(deviceChild);
                 }
             }else {
-                relative.setVisibility(View.GONE);
-                tv_offline.setVisibility(View.VISIBLE);
-                tv_offline.setText("离线");
+                Intent intent=new Intent();
+                intent.putExtra("houseId",houseId);
+                setResult(6000,intent);
+                finish();
             }
-        }else {
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
-            finish();
-        }
-        curAngle=wheelBar.getmStartAngle();
-        if (curAngle>0){/**顺时钟转*/
-            int temp2=0;
+            curAngle=wheelBar.getmStartAngle();
+            if (curAngle>0){/**顺时钟转*/
+                int temp2=0;
 //                    float tempSet=(curAngle2/4.5f * 0.5f);
-            if (curAngle % 4.5f != 0){
-                int t = (int) (curAngle / 4.5f);
-                curAngle = t * 4.5f;
-            }
-            float temp=45-curAngle/4.5f * 0.5f;
-            Log.i("cur","-->"+temp);
-            temp2=(int)temp;
-            if (temp2>=42){
-                temp2=42;
-            }
-            tv_set_temp.setText(temp2+"");
-        }else if (curAngle<=0){/**逆时针转*/
-            if (curAngle % 4.5f != 0){
-                int t = (int) (curAngle / 4.5f);
-                curAngle = t * 4.5f;
-            }
-            float tempSet= (-curAngle/4.5f) * 0.5f+5;
-            int temp=(int) tempSet;
-            Log.i("cur2","-->"+temp);
-            if (temp>=42){
-                temp=42;
-            }
-            tv_set_temp.setText(temp+"");
-        }
-        wheelBar.setOnWheelCheckListener(new SmartWheelBar.OnWheelCheckListener() {
-            @Override
-            public void onChanged(SmartWheelBar wheelBar, float curAngle) {
-                Log.i("SmartWheelBar","-->"+curAngle);
-                int warmerTempSet=0;
-                if (curAngle>0){/**顺时钟转*/
-                    int temp2=0;
-//                    float tempSet=(curAngle2/4.5f * 0.5f);
-                    if (curAngle % 4.5f != 0){
-                        int t = (int) (curAngle / 4.5f);
-                        curAngle = t * 4.5f;
-                    }
-                    float temp=45-curAngle/4.5f * 0.5f;
-                    Log.i("cur","-->"+temp);
-                    temp2=(int)temp;
-                    if (temp2>=42){
-                        temp2=42;
-                    }
-                    warmerTempSet=temp2;
-                    tv_set_temp.setText(temp2+"");
-                }else if (curAngle<=0){/**逆时针转*/
-                    if (curAngle % 4.5f != 0){
-                        int t = (int) (curAngle / 4.5f);
-                        curAngle = t * 4.5f;
-                    }
-                    float tempSet= (-curAngle/4.5f) * 0.5f+5;
-                    int temp=(int) tempSet;
-                    Log.i("cur2","-->"+temp);
-                    if (temp>=42){
-                        temp=42;
-                    }
-                    warmerTempSet=temp;
-                    tv_set_temp.setText(temp+"");
+                if (curAngle % 4.5f != 0){
+                    int t = (int) (curAngle / 4.5f);
+                    curAngle = t * 4.5f;
                 }
-
-                deviceChild.setWaramerSetTemp(warmerTempSet);
-                send(deviceChild);
+                float temp=45-curAngle/4.5f * 0.5f;
+                Log.i("cur","-->"+temp);
+                temp2=(int)temp;
+                if (temp2>=42){
+                    temp2=42;
+                }
+                tv_set_temp.setText(temp2+"");
+            }else if (curAngle<=0){/**逆时针转*/
+                if (curAngle % 4.5f != 0){
+                    int t = (int) (curAngle / 4.5f);
+                    curAngle = t * 4.5f;
+                }
+                float tempSet= (-curAngle/4.5f) * 0.5f+5;
+                int temp=(int) tempSet;
+                Log.i("cur2","-->"+temp);
+                if (temp>=42){
+                    temp=42;
+                }
+                tv_set_temp.setText(temp+"");
             }
-        });
+            wheelBar.setOnWheelCheckListener(new SmartWheelBar.OnWheelCheckListener() {
+                @Override
+                public void onChanged(SmartWheelBar wheelBar, float curAngle) {
+                    Log.i("SmartWheelBar","-->"+curAngle);
+                    int warmerTempSet=0;
+                    if (curAngle>0){/**顺时钟转*/
+                        int temp2=0;
+//                    float tempSet=(curAngle2/4.5f * 0.5f);
+                        if (curAngle % 4.5f != 0){
+                            int t = (int) (curAngle / 4.5f);
+                            curAngle = t * 4.5f;
+                        }
+                        float temp=45-curAngle/4.5f * 0.5f;
+                        Log.i("cur","-->"+temp);
+                        temp2=(int)temp;
+                        if (temp2>=42){
+                            temp2=42;
+                        }
+                        warmerTempSet=temp2;
+                        tv_set_temp.setText(temp2+"");
+                    }else if (curAngle<=0){/**逆时针转*/
+                        if (curAngle % 4.5f != 0){
+                            int t = (int) (curAngle / 4.5f);
+                            curAngle = t * 4.5f;
+                        }
+                        float tempSet= (-curAngle/4.5f) * 0.5f+5;
+                        int temp=(int) tempSet;
+                        Log.i("cur2","-->"+temp);
+                        if (temp>=42){
+                            temp=42;
+                        }
+                        warmerTempSet=temp;
+                        tv_set_temp.setText(temp+"");
+                    }
+                    deviceChild.setWaramerSetTemp(warmerTempSet);
+                    send(deviceChild);
+                }
+            });
+        }
     }
 
     private PopupWindow popupWindow1;
@@ -289,11 +291,11 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         popupWindow1.dismiss();
                         break;
                     case R.id.rl_room_del:
+                        popupWindow1.dismiss();
                         Intent intent=new Intent(DeviceDetailActivity.this,ShareDeviceActivity.class);
                         long id=deviceChild.getId();
                         intent.putExtra("deviceId",id);
-                        startActivity(intent);
-                        popupWindow1.dismiss();
+                        startActivityForResult(intent,8000);
                         break;
                 }
             }
@@ -301,6 +303,40 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         rl_room_rename.setOnClickListener(listener);
         tv_timer.setOnClickListener(listener);
+    }
+
+    int result=0;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode==8000){
+            result=1;
+            DeviceChild deviceChild2= (DeviceChild) data.getSerializableExtra("deviceChild");
+            deviceChild=deviceChild2;
+            if (deviceChild!=null){
+                boolean online=deviceChild.getOnline();
+                if (online){
+                    if (deviceChild.getWarmerFall()==1){
+                        relative.setVisibility(View.GONE);
+                        tv_offline.setVisibility(View.VISIBLE);
+                        tv_offline.setText("设备倾倒");
+                    }else {
+                        relative.setVisibility(View.VISIBLE);
+                        tv_offline.setVisibility(View.GONE);
+                        setMode(deviceChild);
+                    }
+                }else {
+                    relative.setVisibility(View.GONE);
+                    tv_offline.setVisibility(View.VISIBLE);
+                    tv_offline.setText("离线");
+                }
+            }else {
+                Intent intent=new Intent();
+                intent.putExtra("houseId",houseId);
+                setResult(6000,intent);
+                finish();
+            }
+        }
     }
 
     int deviceState;
@@ -492,11 +528,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
     }
 
 
-
-
-
-
-
     //设置蒙版
     private void backgroundAlpha(float f) {
         WindowManager.LayoutParams lp =getWindow().getAttributes();
@@ -611,17 +642,41 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         boolean online=deviceChild.getOnline();
                         if (online){
                             if(deviceChild.getWarmerFall()==1){
+                                if (popupWindow1!=null && popupWindow1.isShowing()){
+                                    popupWindow1.dismiss();
+                                    backgroundAlpha(1.0f);
+                                }
+                                if (popupWindow!=null && popupWindow.isShowing()){
+                                    popupWindow.dismiss();
+                                    backgroundAlpha(1.0f);
+                                }
                                 VibratorUtil.Vibrate(DeviceDetailActivity.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
                                 relative.setVisibility(View.GONE);
                                 tv_offline.setVisibility(View.VISIBLE);
                                 tv_offline.setText("设备倾倒");
                             }else {
+                                if (popupWindow1!=null && popupWindow1.isShowing()){
+                                    popupWindow1.dismiss();
+                                    backgroundAlpha(1.0f);
+                                }
+                                if (popupWindow!=null && popupWindow.isShowing()){
+                                    popupWindow.dismiss();
+                                    backgroundAlpha(1.0f);
+                                }
                                 VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                                 relative.setVisibility(View.VISIBLE);
                                 tv_offline.setVisibility(View.GONE);
                                 setMode(deviceChild);
                             }
                         }else {
+                            if (popupWindow1!=null && popupWindow1.isShowing()){
+                                popupWindow1.dismiss();
+                                backgroundAlpha(1.0f);
+                            }
+                            if (popupWindow!=null && popupWindow.isShowing()){
+                                popupWindow.dismiss();
+                                backgroundAlpha(1.0f);
+                            }
                             relative.setVisibility(View.GONE);
                             tv_offline.setVisibility(View.VISIBLE);
                         }
@@ -905,6 +960,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     protected void onStop() {
         super.onStop();
         running=false;
+        result=0;
     }
 
     @Override

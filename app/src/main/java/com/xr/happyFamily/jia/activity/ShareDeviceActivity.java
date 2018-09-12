@@ -133,6 +133,9 @@ public class ShareDeviceActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.back:
+                Intent intent=new Intent();
+                intent.putExtra("deviceChild",deviceChild);
+                setResult(8000,intent);
                 finish();
                 break;
             case R.id.image_more:
@@ -147,6 +150,17 @@ public class ShareDeviceActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
         Log.i("share","-->onResume");
+    }
+
+    @Override
+    protected void onPause() {
+        Log.i("share","-->onPause");
+        super.onPause();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
         running=true;
         deviceChild = deviceChildDao.findById(id);
         if (deviceChild==null){
@@ -156,15 +170,6 @@ public class ShareDeviceActivity extends AppCompatActivity {
             startActivity(data);
         }
     }
-
-    @Override
-    protected void onPause() {
-        Log.i("share","-->onPause");
-        super.onPause();
-    }
-
-
-
 
     private PopupWindow popupWindow;
 
@@ -228,7 +233,10 @@ public class ShareDeviceActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeActivity(this);
+            Intent intent=new Intent();
+            intent.putExtra("deviceChild",deviceChild);
+            setResult(8000,intent);
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);

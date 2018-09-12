@@ -67,7 +67,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:gravity="center"
-                android:text="19"
+                android:text="6"
                 android:textColor="@color/color_orange"
                 android:textSize="@dimen/sp_30"
                 android:layout_marginLeft="@dimen/dp_jy_25"
@@ -87,8 +87,9 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_cur_temp"
                 android:text="当前温度"
-                android:layout_alignLeft="@id/tv_cur_temp"
+                android:layout_alignParentLeft="true"
                 android:layout_marginTop="@dimen/dp_jy_5"
+                android:layout_marginLeft="@dimen/dp_jy_20"
                 android:textSize="@dimen/sp_15"
                 />
 
@@ -108,7 +109,7 @@
                 android:layout_height="wrap_content"
                 android:layout_toLeftOf="@id/tv_temp2"
                 android:gravity="center"
-                android:text="19"
+                android:text="6"
                 android:textColor="@color/color_orange"
                 android:textSize="@dimen/sp_35"
                 />
@@ -118,7 +119,8 @@
                 android:layout_height="wrap_content"
                 android:layout_below="@id/tv_set_temp"
                 android:text="设定温度"
-                android:layout_alignLeft="@id/tv_set_temp"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_20"
                 android:layout_alignBottom="@id/tv_cur_desc"
                 android:textSize="@dimen/sp_15"
                 />

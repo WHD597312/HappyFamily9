@@ -151,6 +151,7 @@ public class FamilyFragmentManager extends Fragment {
         protected String doInBackground(Void... voids) {
             String temperature = null;
             try {
+                Log.i("city","-->"+city);
                 String url = "http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "UTF-8");
                 String result = HttpUtils.getOkHpptRequest(url);
                 Log.i("result", "-->" + result);

@@ -187,6 +187,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                                         .setThemeColor(Color.parseColor("#4fc586"))
                                         .setTitleStringId("修改生日")
                                         .setMinMillseconds(minDay)
+                                        .setThemeColor(Color.parseColor("#4fc586"))
                                         .setCurrentMillseconds(current)
                                         .setMaxMillseconds(maxTime)
                                         .setCallBack(new OnDateSetListener() {

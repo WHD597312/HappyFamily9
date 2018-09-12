@@ -50,10 +50,10 @@
     <!-- 用于提高GPS定位速度 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
+
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
@@ -98,14 +98,14 @@
                 <action android:name="android.net.conn.CONNECTIVITY_CHANGE" />
             </intent-filter>
         </receiver>
+
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="kjgCMxtnMYdDenel3guWudC3zwThNsPR" />
+
         <activity
             android:name=".login.login.qdActivity"
-            android:screenOrientation="portrait"
-
-            >
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -460,8 +460,7 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.PurifierActivity"
-            android:screenOrientation="portrait"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.UseWaterRecordActivity"
             android:screenOrientation="portrait" />

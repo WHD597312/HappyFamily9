@@ -195,6 +195,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
         if (isBound){
             unbindService(connection);
         }
+        handler.removeCallbacksAndMessages(null);
     }
 
     /**
@@ -402,6 +403,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
         return handler;
     }
 
+
     public void drawViewfinder() {
         viewfinderView.drawViewfinder();
 
@@ -451,4 +453,5 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             mediaPlayer.seekTo(0);
         }
     };
+
 }

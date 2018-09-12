@@ -54,6 +54,7 @@ import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+import com.xr.happyFamily.together.util.mqtt.VibratorUtil;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -112,6 +113,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     private MyApplication application;
     private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
 
+    long deviceId;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,7 +140,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         Intent intent=getIntent();
         String deviceName=intent.getStringExtra("deviceName");
         tv_title.setText(deviceName);
-        long deviceId=intent.getLongExtra("deviceId",0);
+        deviceId=intent.getLongExtra("deviceId",0);
         deviceChild=deviceChildDao.findById(deviceId);
         houseId=intent.getLongExtra("houseId",0);
         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
@@ -155,13 +157,14 @@ public class DeviceDetailActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         running=true;
+        deviceChild=deviceChildDao.findById(deviceId);
         if (deviceChild!=null){
             boolean online=deviceChild.getOnline();
             if (online){
                 if (deviceChild.getWarmerFall()==1){
                     relative.setVisibility(View.GONE);
                     tv_offline.setVisibility(View.VISIBLE);
-                    tv_offline.setText("设备倾斜");
+                    tv_offline.setText("设备倾倒");
                 }else {
                     relative.setVisibility(View.VISIBLE);
                     tv_offline.setVisibility(View.GONE);
@@ -300,12 +303,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
         tv_timer.setOnClickListener(listener);
     }
 
-
-
-
-
-
-
     int deviceState;
     @OnClick({R.id.image_more,R.id.image_back,R.id.image_switch,R.id.image_timer,R.id.image_rate,R.id.image_lock,R.id.image_screen})
     public void onClick(View view){
@@ -314,6 +311,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 popupmenuWindow();
                 break;
             case R.id.image_back:
+                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                 Intent intent=new Intent();
                 intent.putExtra("houseId",houseId);
                 setResult(6000,intent);
@@ -329,6 +327,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }
                     setMode(deviceChild);
                     send(deviceChild);
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
 
                 break;
@@ -340,6 +340,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }else if (deviceState==1){
                         popupTimerWindow();
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
 
                 break;
@@ -351,6 +353,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }else if (deviceState==1){
                         popupRateView();
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
                 break;
             case R.id.image_lock:
@@ -368,6 +372,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         setMode(deviceChild);
                         send(deviceChild);
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
 
                 break;
@@ -386,6 +392,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         setMode(deviceChild);
                         send(deviceChild);
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
                 break;
         }
@@ -401,10 +409,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 backgroundAlpha(1f);
                 return false;
             }
+            VibratorUtil.StopVibrate(DeviceDetailActivity.this);
             Intent intent=new Intent();
             intent.putExtra("houseId",houseId);
             setResult(6000,intent);
             finish();
+
             return true;
         }
 
@@ -601,10 +611,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         boolean online=deviceChild.getOnline();
                         if (online){
                             if(deviceChild.getWarmerFall()==1){
+                                VibratorUtil.Vibrate(DeviceDetailActivity.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
                                 relative.setVisibility(View.GONE);
                                 tv_offline.setVisibility(View.VISIBLE);
-                                tv_offline.setText("设备倾斜");
+                                tv_offline.setText("设备倾倒");
                             }else {
+                                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                                 relative.setVisibility(View.VISIBLE);
                                 tv_offline.setVisibility(View.GONE);
                                 setMode(deviceChild);
@@ -638,6 +650,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.arg1=0;
             msg.what=0;
             handler.sendMessage(msg);
+
         }else if (deviceState==1){
             image_switch.setImageResource(R.mipmap.image_open);
             image_rate.setImageResource(R.mipmap.rate_open);
@@ -645,10 +658,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.arg1=0;
             msg.what=1;
             handler.sendMessage(msg);
+
         }
         if (timerHour==0){
             Log.i("timer","-->"+"timer");
             image_timer.setImageResource(R.mipmap.timer_task);
+            tv_timer.setText("定时");
         }else if (timerHour!=0){
             if (deviceState==1){
                 image_timer.setImageResource(R.mipmap.timer_open);
@@ -787,8 +802,10 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     int flag=msg.what;
                     if (flag==1){
                         wheelBar.setCanTouch(true);
+                        wheelBar.setDeviceState(1);
                     }else if (flag==0){
                         wheelBar.setCanTouch(false);
+                        wheelBar.setDeviceState(0);
                     }
                     wheelBar.invalidate();
                     break;
@@ -902,6 +919,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         if (isBound && connection!=null){
             unbindService(connection);
         }
+        handler.removeCallbacksAndMessages(null);
 
     }
 

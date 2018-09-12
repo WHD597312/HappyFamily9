@@ -728,7 +728,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                             onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
                             offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                         }
-                        if (!TextUtils.isEmpty(onlineTopicName)){
+                        if (!TextUtils.isEmpty(onlineTopicName) && !TextUtils.isEmpty(offlineTopicName)){
                             boolean success = mqService.subscribe(onlineTopicName, 1);
                             boolean success2=mqService.subscribe(offlineTopicName,1);
                             if (!success) {

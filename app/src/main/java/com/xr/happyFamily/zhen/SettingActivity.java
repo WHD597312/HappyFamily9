@@ -1,21 +1,32 @@
 package com.xr.happyFamily.zhen;
 
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.app.DownloadManager;
 import android.content.ComponentName;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.database.Cursor;
 import android.graphics.Color;
+import android.net.Uri;
+import android.os.Environment;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 import android.widget.ListView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -36,16 +47,28 @@ import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.NoFastClickUtils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
+import com.xr.happyFamily.together.util.reloadapp.UpdateManager;
+import com.xuexiang.xupdate.XUpdate;
+import com.zhy.http.okhttp.OkHttpUtils;
+import com.zhy.http.okhttp.callback.FileCallBack;
 
 import java.io.File;
+import java.io.FileOutputStream;
+import java.io.InputStream;
+import java.math.BigDecimal;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import okhttp3.Request;
 
-public class SettingActivity extends AppCompatActivity {
+public class SettingActivity extends AppCompatActivity{
 
     private SettingAdatper adatper;
     @BindView(R.id.list_set)
@@ -54,6 +77,12 @@ public class SettingActivity extends AppCompatActivity {
     private MyApplication application;
     SharedPreferences preferences;
     private RoomDaoImpl roomDao;
+    private DownloadManager downloadManager;
+    private DownloadManager.Request request;
+    public static String downloadUrl = "http://app-global.pgyer.com/9b71c76cdd061313f38e223ac82c916e.apk?attname=app-release.apk&sign=a82d21a2bc09ca8585390478d1031413&t=5b9791ce";
+    Timer timer;
+    long id;
+
     /**
      * 房间数据库
      */
@@ -118,6 +147,7 @@ public class SettingActivity extends AppCompatActivity {
                 switch (position) {
                     case 0:
                         Toast.makeText(SettingActivity.this, "已是最新版本", Toast.LENGTH_SHORT).show();
+//                        downLoadApp();
                         break;
                     case 2:
                         Toast.makeText(SettingActivity.this, "缓存已清理", Toast.LENGTH_SHORT).show();
@@ -125,6 +155,134 @@ public class SettingActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+
+    TextView tv_device_ensure;
+    Dialog dialog;
+    private String appUrl="http://app-global.pgyer.com/9b71c76cdd061313f38e223ac82c916e.apk?attname=app-release.apk&sign=7e283b839e245d613383763013a87bff&t=5b9790f4";
+    ProgressBar progressBar;
+    private void downLoadApp(){
+        View view = View.inflate(this, R.layout.download_layout, null);
+        dialog = new AlertDialog.Builder(this).create();
+        dialog.show();
+        dialog.setContentView(view);
+
+        progressBar= (ProgressBar) view.findViewById(R.id.progress);
+        TextView tv_device_cancel= (TextView) view.findViewById(R.id.tv_device_cancel);
+        tv_device_ensure= (TextView) view.findViewById(R.id.tv_device_ensure);
+        downloadManager = (DownloadManager) getSystemService(DOWNLOAD_SERVICE);
+        request = new DownloadManager.Request(Uri.parse(downloadUrl));
+
+        request.setTitle("P99");
+        request.setAllowedNetworkTypes(DownloadManager.Request.NETWORK_WIFI| DownloadManager.Request.NETWORK_MOBILE);
+        request.setAllowedOverRoaming(false);
+        request.setMimeType("application/vnd.android.package-archive");
+        request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+        //创建目录
+        Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS).mkdir() ;
+        //设置文件存放路径
+        request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS  , "app-release.apk" ) ;
+        final  DownloadManager.Query query = new DownloadManager.Query();
+
+        timer = new Timer();
+        task = new TimerTask() {
+            @Override
+            public void run() {
+                Cursor cursor = downloadManager.query(query.setFilterById(id));
+                if (cursor != null && cursor.moveToFirst()) {
+                    if (cursor.getInt(
+                            cursor.getColumnIndex(DownloadManager.COLUMN_STATUS)) == DownloadManager.STATUS_SUCCESSFUL) {
+                        progressBar.setProgress(100);
+                        install(Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS) + "/app-release.apk" );
+                        task.cancel();
+                    }
+                    String title = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_TITLE));
+                    String address = cursor.getString(cursor.getColumnIndex(DownloadManager.COLUMN_LOCAL_URI));
+                    int bytes_downloaded = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_BYTES_DOWNLOADED_SO_FAR));
+                    int bytes_total = cursor.getInt(cursor.getColumnIndex(DownloadManager.COLUMN_TOTAL_SIZE_BYTES));
+                    Log.i("bytes_downloaded","-->"+bytes_downloaded);
+                    Log.i("bytes_total","-->"+bytes_total);
+                    float x=bytes_downloaded;
+                    float ss=(x/bytes_total)*100;
+                    BigDecimal bigDecimal=new BigDecimal(ss);
+                    BigDecimal bigDecimal2= bigDecimal.setScale(0,BigDecimal.ROUND_DOWN);
+                    int pro=Integer.parseInt(bigDecimal2+"");
+                    Log.i("prossssssssssssss","-->"+(bytes_downloaded) / bytes_total);
+                    Message msg =Message.obtain();
+                    Bundle bundle = new Bundle();
+                    bundle.putInt("pro",pro);
+                    bundle.putString("name",title);
+                    msg.setData(bundle);
+                    handler.sendMessage(msg);
+                }
+                cursor.close();
+            }
+        };
+        timer.schedule(task, 0,1000);
+        tv_device_cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+
+        tv_device_ensure.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                id = downloadManager.enqueue(request);
+                task.run();
+                tv_device_ensure.setClickable(false);
+//                OkHttpUtils.get()
+//                        .url(appUrl)
+//                        .build()
+//                        .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(),"p99.apk") {
+//                            @Override
+//                            public void inProgress(float progress) {
+//                                Log.i("progress","-->"+progress);
+//                                progressBar.setProgress((int) progress*10);
+//                            }
+//
+//                            @Override
+//                            public void onError(com.squareup.okhttp.Request request, Exception e) {
+//
+//                                Toast.makeText(SettingActivity.this,"下载失败",Toast.LENGTH_SHORT).show();
+//                                dialog.dismiss();
+//                            }
+//
+//                            @Override
+//                            public void onResponse(File file) {
+//                                Toast.makeText(SettingActivity.this, "下载完成",Toast.LENGTH_SHORT).show();
+//                                Log.e("apkpath",file.getAbsolutePath());
+//                                Intent intent = new Intent(Intent.ACTION_VIEW);
+//                                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+//                                startActivity(intent);
+//                            }
+//                        });
+
+
+
+            }
+        });
+
+    }
+    TimerTask task;
+    Handler handler =new Handler(){
+        @Override
+        public void handleMessage(Message msg) {
+            super.handleMessage(msg);
+            Bundle bundle = msg.getData();
+            int pro = bundle.getInt("pro");
+            progressBar.setProgress(pro);
+            if (pro==100 && dialog!=null){
+                dialog.dismiss();
+            }
+        }
+    };
+    private void install(String path) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse("file://" + path), "application/vnd.android.package-archive");
+        intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);//4.0以上系统弹出安装成功打开界面
+        startActivity(intent);
     }
 
     @OnClick({R.id.back, R.id.btn_exit})
@@ -202,6 +360,7 @@ public class SettingActivity extends AppCompatActivity {
         if (isBound && connection != null) {
             unbindService(connection);
         }
+        handler.removeCallbacksAndMessages(null);
     }
 
     class SettingAdatper extends BaseAdapter {

@@ -663,7 +663,7 @@ public class FamilyFragment extends Fragment {
                             DeviceChild deviceChild = shareDevices.get(i);
                             String mac = deviceChild.getMacAddress();
                             if (mac.equals(macAddress) && deviceChild2 == null) {
-                                Toast.makeText(getActivity(), "该设备已重置", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(getActivity(), macAddress+"设备已重置", Toast.LENGTH_SHORT).show();
                                 List<DeviceChild> deviceChildren= deviceChildDao.findHouseCommonDevices(houseId);
                                 List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
                                 if (deviceChildren.isEmpty() && shareDevices2.isEmpty()){

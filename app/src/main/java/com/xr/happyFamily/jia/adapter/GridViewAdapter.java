@@ -15,6 +15,7 @@ import android.widget.TextView;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.together.util.mqtt.VibratorUtil;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,12 +72,20 @@ public class GridViewAdapter extends ArrayAdapter {
                     item.setImg(img[0]);
 
                     if (online){
-                        if (deviceState==1){
-                            holder.tv_device_switch.setText("电源开");
-                            holder.view.setVisibility(View.VISIBLE);
-                        }else if (deviceState==0){
-                            holder.tv_device_switch.setText("电源关");
+                        if (item.getWarmerFall()==1){
+                            holder.tv_device_switch.setText("设备倾倒");
                             holder.view.setVisibility(View.GONE);
+                            VibratorUtil.Vibrate(mContext, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
+                        }else {
+                            VibratorUtil.StopVibrate(mContext);
+                            if (deviceState==1){
+                                holder.tv_device_switch.setText("电源开");
+                                holder.view.setVisibility(View.VISIBLE);
+                            }else if (deviceState==0){
+                                holder.tv_device_switch.setText("电源关");
+                                holder.view.setVisibility(View.GONE);
+                            }
+
                         }
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                     }else if (online==false){

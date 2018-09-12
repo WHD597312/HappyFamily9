@@ -10,6 +10,7 @@ import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.net.Uri;
 import android.os.AsyncTask;
@@ -132,7 +133,6 @@ public class PersonInfoActivity extends AppCompatActivity {
 //                        if (popupWindow==null || !popupWindow.isShowing()){
 //                            popupWindow2();
 //                        }
-
                         try {
                             SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
                             Date date=format.parse("1970-1-1");
@@ -147,6 +147,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                                 long maxTime=date3.getTime();
                                 TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
                                         .setType(Type.YEAR_MONTH_DAY)
+                                        .setThemeColor(Color.parseColor("#4fc586"))
                                         .setTitleStringId("修改生日")
                                         .setMinMillseconds(minDay)
                                         .setCurrentMillseconds(current)

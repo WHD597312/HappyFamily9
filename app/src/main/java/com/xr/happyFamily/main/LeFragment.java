@@ -281,7 +281,7 @@ public class LeFragment extends Fragment {
                 }
                 break;
             case R.id.li_yougui:
-                startActivity(new Intent(getActivity(), BDmapActivity.class));
+//                startActivity(new Intent(getActivity(), BDmapActivity.class));
                 break;
         }
     }

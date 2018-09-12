@@ -3,6 +3,7 @@ package com.xr.happyFamily.le.adapter;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
+import android.support.v7.widget.LinearLayoutCompat;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -81,6 +82,7 @@ public class ChooseRingAdapter extends RecyclerView.Adapter<ChooseRingAdapter.My
         MyViewHolder holder = new MyViewHolder(LayoutInflater.from(
                 context).inflate(R.layout.fragment_le_clockring_item, parent,
                 false));
+
         return holder;
     }
 

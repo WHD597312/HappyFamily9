@@ -5,6 +5,7 @@ import android.app.Dialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -25,6 +26,9 @@ import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.jzxiang.pickerview.TimePickerDialog;
+import com.jzxiang.pickerview.data.Type;
+import com.jzxiang.pickerview.listener.OnDateSetListener;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.UserBean;
 import com.xr.happyFamily.jia.MyApplication;
@@ -32,9 +36,11 @@ import com.xr.happyFamily.jia.xnty.SmartSocket;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.zhen.PersonInfoActivity;
 
 import org.json.JSONObject;
 
+import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -51,8 +57,7 @@ public class RegistFinishActivity extends AppCompatActivity {
     Unbinder unbinder;
     Dialog dia ;
     private String url = "http://47.98.131.11:8084/user/register";
-    @BindView(R.id.register_date)
-    DatePicker datePicker;
+
     @BindView(R.id.iv_registerf_tb)
     ImageView imageView6;
     @BindView(R.id.et_fphone)
@@ -91,51 +96,17 @@ public class RegistFinishActivity extends AppCompatActivity {
         LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
         rotate.setInterpolator(lin);
         imageView6.startAnimation(rotate);
-        initbirthday();
+
         initsex();
         calendar = Calendar.getInstance();
         Log.i("aaaaa1", "----> "+temp);
         Bundle bundle=getIntent().getExtras();
         phone=bundle.getString("phone");
         password=bundle.getString("password");
-
         Log.e("asd", "onCreate: "+phone );
     }
-    private void initbirthday(){
-        textViewb.setOnTouchListener(new View.OnTouchListener() {
-
-            public boolean onTouch(View v, MotionEvent event) {
-                if (event.getAction() == MotionEvent.ACTION_DOWN) {
-                    showDatePickDlg();
-                    return true;
-                }
-                return false;
-            }
-        });
-        textViewb.setOnFocusChangeListener(new View.OnFocusChangeListener() {
-
-            @Override
-            public void onFocusChange(View v, boolean hasFocus) {
-                if (hasFocus) {
-                    showDatePickDlg();
-                }
-            }
-        });
-    }
-    protected void showDatePickDlg() {
-
-        DatePickerDialog datePickerDialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
 
 
-            public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-               textViewb.setText(year + "年" + monthOfYear + "月" + dayOfMonth+ "日");
-               birthday=year+"-"+monthOfYear+"-"+dayOfMonth;
-            }
-        }, calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
-
-        datePickerDialog.show();
-
-    }
     private void initsex() {
         this.radioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
 
@@ -160,7 +131,38 @@ public class RegistFinishActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_birthday:
-                datePicker.setVisibility(View.VISIBLE);
+                try {
+                    SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                    Date date=format.parse("1970-1-1");
+                    long minDay=date.getTime();
+                Date date2=new Date();
+                Calendar calendar=Calendar.getInstance();
+                long current=calendar.getTimeInMillis();
+                long maxTime=date2.getTime();
+                TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
+                        .setType(Type.YEAR_MONTH_DAY)
+                        .setThemeColor(Color.parseColor("#4fc586"))
+                        .setTitleStringId("修改生日")
+                        .setMinMillseconds(minDay)
+                        .setCurrentMillseconds(current)
+                        .setMaxMillseconds(maxTime)
+                        .setCallBack(new OnDateSetListener() {
+                            @Override
+                            public void onDateSet(TimePickerDialog timePickerView, long millseconds) {
+                                Date date=new Date(millseconds);
+                                SimpleDateFormat format=new SimpleDateFormat("yyyy-MM-dd");
+                                birthday=format.format(date);
+                                textViewb.setText(birthday);
+
+                            }
+                        })
+                        .build();
+                dialogYearMonthDay.show(getSupportFragmentManager(), "YEAR_MONTH_DAY");
+
+
+    } catch (Exception e) {
+        // TODO: handle exception
+    }
                 break;
             case R.id.btn_ffinish:
 
@@ -184,6 +186,7 @@ public class RegistFinishActivity extends AppCompatActivity {
                     params.put("birthday",birthday);
                     params.put("phone",phone);
                     params.put("password",password);
+                    Log.e("ttttt", "onClick: "+birthday );
                     new RegistAsyncTask().execute(params);
 
 

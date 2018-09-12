@@ -56,7 +56,6 @@ public class GuideActivity extends AppCompatActivity {
         FragmentPagerAdapter adapter = new TabFragmentPagerAdapter(getSupportFragmentManager(), guildList);
         viewPager.setAdapter(adapter);
         viewPager.setCurrentItem(0);
-
         viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {

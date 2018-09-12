@@ -147,14 +147,7 @@
             android:layout_centerHorizontal="true"
             android:text="        年            月            日       " />
 
-        <DatePicker
-            android:id="@+id/register_date"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/image_fphone"
-            android:calendarViewShown="false"
-            android:datePickerMode="spinner"
-            android:visibility="gone" />
+
 
         <ImageView
             android:id="@+id/image_fpwd"

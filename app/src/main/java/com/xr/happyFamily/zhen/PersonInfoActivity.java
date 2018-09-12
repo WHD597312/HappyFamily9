@@ -180,15 +180,11 @@ public class PersonInfoActivity extends AppCompatActivity {
                             }else {
                                 Date date2=new Date();
                                 Calendar calendar=Calendar.getInstance();
-//                                int year=calendar.get(Calendar.YEAR);
-//                                int month=calendar.get(Calendar.DAY_OF_MONTH);
-//                                int day=calendar.get(Calendar.DAY_OF_MONTH);
-//                                calendar.setTime(date2);
                                 long current=calendar.getTimeInMillis();
-//                                Date date3=format.parse(year+"-"+month+"-31");
                                 long maxTime=date2.getTime();
                                 TimePickerDialog dialogYearMonthDay = new TimePickerDialog.Builder()
                                         .setType(Type.YEAR_MONTH_DAY)
+                                        .setThemeColor(Color.parseColor("#4fc586"))
                                         .setTitleStringId("修改生日")
                                         .setMinMillseconds(minDay)
                                         .setCurrentMillseconds(current)

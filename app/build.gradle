@@ -16,7 +16,7 @@ greendao {
 android {
     signingConfigs {
         release {
-            storeFile file('D:/android/HappyFamily/p99.jks')
+            storeFile file('F:/android/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
@@ -114,5 +114,4 @@ dependencies {
 
     implementation 'com.youth.banner:banner:1.4.9'
     implementation 'com.jzxiang.pickerview:TimePickerDialog:1.0.1'
-    implementation 'com.github.xuexiangjys:XUpdate:1.0.0'
 }

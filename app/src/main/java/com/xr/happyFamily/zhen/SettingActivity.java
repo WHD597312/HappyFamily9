@@ -48,7 +48,6 @@ import com.xr.happyFamily.together.http.NoFastClickUtils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.reloadapp.UpdateManager;
-import com.xuexiang.xupdate.XUpdate;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.callback.FileCallBack;
 

@@ -360,6 +360,7 @@ public class SettingActivity extends AppCompatActivity{
         if (isBound && connection != null) {
             unbindService(connection);
         }
+        handler.removeCallbacksAndMessages(null);
     }
 
     class SettingAdatper extends BaseAdapter {

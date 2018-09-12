@@ -327,6 +327,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }
                     setMode(deviceChild);
                     send(deviceChild);
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
 
                 break;
@@ -338,6 +340,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }else if (deviceState==1){
                         popupTimerWindow();
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
 
                 break;
@@ -349,6 +353,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                     }else if (deviceState==1){
                         popupRateView();
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
                 break;
             case R.id.image_lock:
@@ -366,6 +372,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         setMode(deviceChild);
                         send(deviceChild);
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
 
                 break;
@@ -384,6 +392,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
                         setMode(deviceChild);
                         send(deviceChild);
                     }
+                }else {
+                    Utils.showToast(this,"主人请对我温柔点！");
                 }
                 break;
         }
@@ -909,6 +919,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         if (isBound && connection!=null){
             unbindService(connection);
         }
+        handler.removeCallbacksAndMessages(null);
 
     }
 

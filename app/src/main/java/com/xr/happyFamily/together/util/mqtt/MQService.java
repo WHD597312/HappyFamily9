@@ -82,6 +82,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Text;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -374,6 +375,14 @@ public class MQService extends Service {
                         if (preferences.contains("password")) {
                             editor.remove("password").commit();
                         }
+                        if (preferences.contains("image")) {
+                            String image = preferences.getString("image", "");
+                            preferences.edit().remove("image").commit();
+                            File file = new File(image);
+                            if (file.exists()) {
+                                file.delete();
+                            }
+                        }
                         Message msg = handler.obtainMessage();
                         msg.what = 2;
                         handler.sendMessage(msg);
@@ -605,7 +614,7 @@ public class MQService extends Service {
                                 int mWifiVersion = messageJsonArray.getInt(5);
                                 wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
                                 int sensorState = messageJsonArray.getInt(7);
-                                sensorSimpleTemp = messageJsonArray.getInt(8);
+                                sensorSimpleTemp = messageJsonArray.getInt(8)-128;
                                 sensorSimpleHum = messageJsonArray.getInt(9) - 128;
                                 sorsorPm = messageJsonArray.getInt(10) - 128;
                                 sensorOx = messageJsonArray.getInt(11) - 128;
@@ -1198,15 +1207,16 @@ public class MQService extends Service {
                     }
                     for (int j = 0; j < clocks.length; j++) {
                         if (map.get(clocks[j]) == null) {
-                            String str = "p99/" + clocks[j] + "/clockuniversal";
-
-                            unsubscribe(str);
-                            List<ClockBean> findClock = clockBeanDao.findClockByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
-                            if (findClock.size() > 0)
-                                clockBeanDao.delete(findClock.get(0));
-                            List<UserInfo> findUser = userInfosDao.findUserInfoByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
-                            for (int i = 0; i < findUser.size(); i++) {
-                                userInfosDao.delete(findUser.get(i));
+                            if(clocks[j].length()>0) {
+                                String str = "p99/" + clocks[j] + "/clockuniversal";
+                                unsubscribe(str);
+                                List<ClockBean> findClock = clockBeanDao.findClockByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
+                                if (findClock.size() > 0)
+                                    clockBeanDao.delete(findClock.get(0));
+                                List<UserInfo> findUser = userInfosDao.findUserInfoByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
+                                for (int i = 0; i < findUser.size(); i++) {
+                                    userInfosDao.delete(findUser.get(i));
+                                }
                             }
                         }
                     }
@@ -1497,6 +1507,9 @@ public class MQService extends Service {
         String clockTopic = "p99/clockuniversal/userId_" + userId;
         Log.e("qqqqqCCC", friendTopic);
         list.add("p99/" + phone + "/login");
+        list.add(friendTopic);
+        list.add(clockTopic);
+        list.add(friendReplayTopic);
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
         for (DeviceChild deviceChild : deviceChildren) {
             String macAddress = deviceChild.getMacAddress();
@@ -1546,9 +1559,7 @@ public class MQService extends Service {
                     break;
             }
 
-            list.add(friendTopic);
-            list.add(clockTopic);
-            list.add(friendReplayTopic);
+
         }
         return list;
     }

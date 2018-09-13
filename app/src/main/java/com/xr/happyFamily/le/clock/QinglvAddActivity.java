@@ -205,7 +205,6 @@ public class QinglvAddActivity extends AppCompatActivity {
                 Log.e("qqqqqqqMMMM", member);
                 map.put("clockCreater", userId);
                 map.put("clockType", 3);
-                dialog = MyDialog.showDialog(this);
                 dialog.show();
                 new addClock().execute(map);
                 break;

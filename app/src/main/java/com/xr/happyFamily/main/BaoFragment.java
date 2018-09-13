@@ -805,6 +805,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     }
 
     public void upData(int i) {
+        if(i==0)
+            llTuijian.setVisibility(View.VISIBLE);
+        else
+            llTuijian.setVisibility(View.GONE);
         list_shop.clear();
         JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
         JsonArray list = content.getAsJsonArray("list");

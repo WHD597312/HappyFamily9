@@ -107,9 +107,8 @@ public class NoRoomFragment extends Fragment {
             case R.id.ib_croom:
                 List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
                 if (rooms==null || rooms.isEmpty()){
-                    Toast.makeText(getActivity(),"这个家还没有房间!",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(getActivity(),"您还没有创建房间!",Toast.LENGTH_SHORT).show();
                 }else {
-
                     popupmenuWindow();
                 }
 

@@ -87,8 +87,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
     private PinglunAdapter pinglunAdapter;
     List<String> list = new ArrayList();
     ImageView[] imgs;
-
-
     String[] tag={"全部","美观","性价比高","包装好","做工精细","使用舒服"};
 
     @Nullable
@@ -242,7 +240,6 @@ public class PingJiaFragment extends BaseFragment implements View.OnClickListene
                         code = "100";
                         JSONObject jsonObject = new JSONObject(result);
                         JSONObject returnData = jsonObject.getJSONObject("returnData");
-
                         average = returnData.getString("average");
                         Log.i("average2", "-->" + average);
                         total = returnData.getString("total");

@@ -105,6 +105,7 @@ public class FriendAddActivity extends AppCompatActivity {
 
             case R.id.title_rightText:
                 dialog = MyDialog.showDialog(this);
+                dialog.show();
                 if ((clickFriendBean.getUserId() + "").equals(userId))
                     ToastUtil.showShortToast("无法添加自己为好友");
                 else

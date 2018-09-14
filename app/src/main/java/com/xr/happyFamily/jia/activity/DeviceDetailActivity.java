@@ -112,6 +112,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     TextView tv_screen;
     private long houseId;
     private MyApplication application;
+    private String macAddress;
     private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
 
     long deviceId;
@@ -143,6 +144,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
         tv_title.setText(deviceName);
         deviceId=intent.getLongExtra("deviceId",0);
         deviceChild=deviceChildDao.findById(deviceId);
+        macAddress=deviceChild.getMacAddress();
         houseId=intent.getLongExtra("houseId",0);
         List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
         Log.i("deviceChildren","-->"+deviceChildren.size());

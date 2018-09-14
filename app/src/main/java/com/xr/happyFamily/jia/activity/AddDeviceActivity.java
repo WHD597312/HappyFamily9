@@ -287,7 +287,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             et_wifi.setText("");
         }
 
-
         String userId = my.getString("userId", "");
         Log.i("userId", "-->" + userId);
     }
@@ -343,11 +342,14 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 bt_add_finish.setEnabled(false);
                 if (!TextUtils.isEmpty(ssid)) {
                     popupmenuWindow3();
+                    if (isBound) {
+                        unbindService(connection);
+                    }
                     new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                 }
 //                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
 //                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-//                mac="5asdfghi69hd";
+//                mac="5asdfghi69ht";
                 break;
         }
     }

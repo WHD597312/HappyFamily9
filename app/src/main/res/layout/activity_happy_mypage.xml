@@ -122,7 +122,6 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:background="@mipmap/bg_xuyuanxq"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/dp_jy_18"
                     android:paddingLeft="@dimen/dp_jy_14"
@@ -132,7 +131,7 @@
                     <ImageView
                         android:layout_width="@dimen/dp_jy_60"
                         android:layout_height="@dimen/dp_jy_60"
-                        android:background="@mipmap/yougui" />
+                         />
 
 
                     <LinearLayout
@@ -145,7 +144,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="有“轨”"
+                            android:text=""
                             android:textColor="@color/happy_green"
                             android:textSize="@dimen/sp_14" />
 
@@ -153,7 +152,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_jy_5"
-                            android:text="2.325人在用"
+                            android:text=""
                             android:textColor="@color/happy_gray"
                             android:textSize="@dimen/sp_12" />
                     </LinearLayout>

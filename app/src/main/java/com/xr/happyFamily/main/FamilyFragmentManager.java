@@ -205,8 +205,7 @@ public class FamilyFragmentManager extends Fragment {
         }
     };
 
-    class
-    LoadDevicesAsync extends AsyncTask<List<DeviceChild>, Void, Void> {
+    class LoadDevicesAsync extends AsyncTask<List<DeviceChild>, Void, Void> {
 
         @Override
         protected Void doInBackground(List<DeviceChild>... lists) {
@@ -218,8 +217,8 @@ public class FamilyFragmentManager extends Fragment {
                 String offlineTopicName = "";
                 switch (type) {
                     case 2:
-                        onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                        offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                        onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
                         break;
                     case 3:
                         onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";

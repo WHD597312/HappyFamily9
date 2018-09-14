@@ -159,11 +159,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         load = intent.getStringExtra("load");
         String login = intent.getStringExtra("login");
          share = intent.getStringExtra("share");
-//        if (TextUtils.isEmpty(share)) {
-//            Intent service = new Intent(this, MQService.class);
-//            startService(service);
-//        }
-
 
         houseId = intent.getLongExtra("houseId", 0);
         if (houseId == 0 && hourses.size() > 0) {
@@ -178,42 +173,24 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         String refersh=intent.getStringExtra("refersh");
         if ("PaySuccess".equals(sign)) {
-            id_bto_jia_img.setImageResource(R.mipmap.jia);
-            id_bto_bao_img.setImageResource(R.mipmap.bao1);
             FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
             baoTransaction.replace(R.id.layout_body, baoFragment);
             baoTransaction.commit();
             if (mPositionPreferences.contains("position")) {
                 mPositionPreferences.edit().clear().commit();
             }
+            id_bto_jia_img.setImageResource(R.mipmap.jia);
+            id_bto_bao_img.setImageResource(R.mipmap.bao1);
+            id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+            idBtoLeImg.setImageResource(R.mipmap.le);
+            family = "";
+            zhen="";
+            click=0;
+            click2=1;
+            click3=0;
+            click4=0;
         } else {
-//            if (NetWorkUtil.isConn(this)) {
-//                Hourse hourse = hourseDao.findById(houseId);
-//                if (hourse != null) {
-//                    city = hourse.getHouseAddress();
-//                    if (!TextUtils.isEmpty(city)) {
-//                        if (city.contains("市")){
-//                            city = city.substring(0, city.length() - 1);
-//                        }
-//                        new WeatherAsync().execute();
-//                    }
-//                }
-//            } else {
-                FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                Bundle bundle = new Bundle();
-                bundle.putString("load", "load");
-                bundle.putLong("houseId", houseId);
-                bundle.putString("temperature", "");
-                familyFragmentManager.setArguments(bundle);
-                fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
-                fragmentTransaction.commit();
-                id_bto_jia_img.setImageResource(R.mipmap.jia1);
-                id_bto_bao_img.setImageResource(R.mipmap.bao);
-                id_bto_zhen_img.setImageResource(R.mipmap.zhen);
-                idBtoLeImg.setImageResource(R.mipmap.le);
-
-//            }
-
+            family="family";
         }
         if (!preferences.contains("image")) {
             if (preferences.contains("headImgUrl")) {
@@ -280,6 +257,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 id_bto_bao_img.setImageResource(R.mipmap.bao);
                 id_bto_zhen_img.setImageResource(R.mipmap.zhen);
                 idBtoLeImg.setImageResource(R.mipmap.le);
+                family="family";
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -348,7 +326,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     protected void onStart() {
 
         super.onStart();
-        if (!TextUtils.isEmpty(family)) {
+        if (!TextUtils.isEmpty(family) && result==0) {
             FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
             familyFragmentManager = new FamilyFragmentManager();
             Bundle bundle = new Bundle();
@@ -358,7 +336,15 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             familyFragmentManager.setArguments(bundle);
             fragmentTransaction.replace(R.id.layout_body, familyFragmentManager);
             fragmentTransaction.commit();
+            id_bto_jia_img.setImageResource(R.mipmap.jia1);
+            id_bto_bao_img.setImageResource(R.mipmap.bao);
+            id_bto_zhen_img.setImageResource(R.mipmap.zhen);
+            idBtoLeImg.setImageResource(R.mipmap.le);
             family = "family";
+            click=1;
+            click2=0;
+            click3=0;
+            click4=0;
         }else if (!TextUtils.isEmpty(zhen)){
             id_bto_jia_img.setImageResource(R.mipmap.jia);
             id_bto_bao_img.setImageResource(R.mipmap.bao);
@@ -562,6 +548,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         }
     }
 
+    int result=0;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -580,6 +567,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             click2=0;
             click3=0;
             click4=0;
+            family="family";
+            result=1;
         }
     }
 
@@ -595,6 +584,12 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             layout_bottom.setVisibility(View.VISIBLE);
         }
 
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        result=0;
     }
 
     class LoadUserImageAsync extends AsyncTask<Void, Void, Void> {

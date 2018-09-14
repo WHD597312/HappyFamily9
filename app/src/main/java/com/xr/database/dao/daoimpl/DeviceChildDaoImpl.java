@@ -63,8 +63,8 @@ public class DeviceChildDaoImpl {
      * @param id
      * @return
      */
-    public DeviceChild findById(long id){
-        return deviceChildDao.load(id);
+    public DeviceChild findById(Long id){
+        return deviceChildDao.queryBuilder().where(DeviceChildDao.Properties.Id.eq(id)).unique();
     }
 
     /**

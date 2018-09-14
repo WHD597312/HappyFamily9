@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.graphics.BitmapFactory;
+import android.graphics.Paint;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.os.IBinder;
@@ -50,6 +51,7 @@ import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -146,14 +148,15 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     private String updateDeviceNameUrl = HttpUtils.ipAddress + "/family/device/changeDeviceName";
     MessageReceiver receiver;
     public static boolean running = false;
-    private List<DeviceChild> linkList = new ArrayList<>();
+    private List<DeviceChild> linkList = new LinkedList<>();
     int sensorId;
     long houseId;
     long roomId;
     private ProgressDialog progressDialog;
     List<DeviceChild> warmers = new ArrayList<>();
     private Map<String, DeviceChild> linkDeviceChildMap = new LinkedHashMap<>();
-
+    long id;
+    private String macAddress;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -171,9 +174,10 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
 
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         Intent intent = getIntent();
-        long id = intent.getLongExtra("deviceId", 0);
+        id = intent.getLongExtra("deviceId", 0);
         houseId = intent.getLongExtra("houseId", 0);
         deviceChild = deviceChildDao.findById(id);
+        macAddress=deviceChild.getMacAddress();
         sensorId = deviceChild.getDeviceId();
         roomId = deviceChild.getRoomId();
 //        warmers=deviceChildDao.findDeviceByType(houseId,roomId,2,true);
@@ -187,6 +191,20 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         getBitWheelInfos();
 //        smartTerminalCircle.setBitInfos(list);
         image_switch.setTag("close");
+
+        Intent service = new Intent(SmartTerminalActivity.this, MQService.class);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+
+        IntentFilter intentFilter = new IntentFilter("SmartTerminalActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
+
+        tempCurProgress = smartTerminalBar.getCurProcess();
+        humCurProgress = smartTerminalHumBar.getCurProcess();
+        smart_temp_decrease.setOnTouchListener(this);
+        smart_temp_add.setOnTouchListener(this);
+        smart_hum_decrease.setOnTouchListener(this);
+        smart_hum_add.setOnTouchListener(this);
     }
 
     public void getBitWheelInfos() {
@@ -205,27 +223,49 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
      */
     private boolean isBound = false;
 
+    int result=0;
     @Override
     protected void onStart() {
         super.onStart();
         running = true;
-        Intent service = new Intent(SmartTerminalActivity.this, MQService.class);
-        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
 
-        IntentFilter intentFilter = new IntentFilter("SmartTerminalActivity");
-        receiver = new MessageReceiver();
-        registerReceiver(receiver, intentFilter);
-
-        tempCurProgress = smartTerminalBar.getCurProcess();
-        humCurProgress = smartTerminalHumBar.getCurProcess();
-        smart_temp_decrease.setOnTouchListener(this);
-        smart_temp_add.setOnTouchListener(this);
-        smart_hum_decrease.setOnTouchListener(this);
-        smart_hum_add.setOnTouchListener(this);
-        if (deviceChild != null) {
+        result=0;
+        deviceChild=deviceChildDao.findDeviceByMacAddress2(macAddress);
+        if (deviceChild != null && result==0) {
             String name = deviceChild.getName();
             tv_title.setText(name);
             setMode(deviceChild);
+
+            List<DeviceChild> revomeList=new ArrayList<>();
+            for(DeviceChild deviceChild2:linkList){
+                DeviceChild deviceChild3=deviceChildDao.findDeviceByMacAddress2(deviceChild2.getMacAddress());
+                if (deviceChild3==null){
+                    revomeList.add(deviceChild2);
+                }
+            }
+            if (!revomeList.isEmpty()){
+                list.clear();
+                getBitWheelInfos();
+                linkList.removeAll(revomeList);
+                List<SmartTerminalInfo> infoList = new ArrayList<>();
+                for (int i = 0; i < linkList.size(); i++) {
+                    DeviceChild deviceChild=linkList.get(i);
+                    int linked=deviceChild.getLinked();
+                    if (linked==1){
+                        SmartTerminalInfo terminalInfo = list.get(i);
+                        infoList.add(terminalInfo);
+                    }
+                }
+                if (smartTerminalCircle != null) {
+                    smartTerminalCircle.setBitInfos(infoList);
+                }
+            }
+
+        }else {
+            Intent intent=new Intent();
+            intent.putExtra("houseId",houseId);
+            setResult(6000,intent);
+            finish();
         }
     }
 
@@ -234,7 +274,12 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
         int sensorSimpleHum = deviceChild.getSensorSimpleHum();
         int sorsorPm = deviceChild.getSorsorPm();
-        tv_temp_value.setText(sensorSimpleTemp + "");
+        if (sensorSimpleTemp>=0){
+            tv_temp_value.setText(sensorSimpleTemp + "");
+        }else {
+            tv_temp_value.setText("--");
+        }
+
         tv_hum_value.setText(sensorSimpleHum + "");
         tv_air_value.setText(sorsorPm + "");
         if (sorsorPm > 0 && sensorSimpleHum <= 35) {
@@ -553,6 +598,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (resultCode == 100) {
+            result=1;
             linkList.clear();
             list.clear();
             getBitWheelInfos();
@@ -668,6 +714,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             if (progressDialog != null) {
                 progressDialog.dismiss();
             }
+            result=1;
             switch (code) {
 
                 case 100:
@@ -752,25 +799,25 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                         DeviceChild deviceChild4 = null;
                         for (int i = 0; i < linkList.size(); i++) {
                             DeviceChild deviceChild5 = linkList.get(i);
-                            String mac = deviceChild5.getMacAddress();
                             String macAddress2 = deviceChild5.getMacAddress();
-                            if (macAddress2.equals(mac)) {
+                            if (macAddress2.equals(macAddress)) {
                                 deviceChild4 = deviceChild5;
                                 break;
                             }
                         }
                         if (deviceChild4 != null) {
-                            list.clear();
-                            getBitWheelInfos();
                             String name = deviceChild4.getName();
                             linkList.remove(deviceChild4);
+                            linkDeviceChildMap.remove(deviceChild4.getMacAddress());
+                            list.clear();
+                            getBitWheelInfos();
                             Toast.makeText(SmartTerminalActivity.this, name + "设备已重置", Toast.LENGTH_SHORT).show();
                         }
                         List<SmartTerminalInfo> infoList = new ArrayList<>();
                         for (int i = 0; i < linkList.size(); i++) {
-                            DeviceChild deviceChild = linkList.get(i);
-                            int linked = deviceChild.getLinked();
-                            if (linked == 1) {
+                            DeviceChild deviceChild=linkList.get(i);
+                            int linked=deviceChild.getLinked();
+                            if (linked==1){
                                 SmartTerminalInfo terminalInfo = list.get(i);
                                 infoList.add(terminalInfo);
                             }
@@ -779,6 +826,43 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                             smartTerminalCircle.setBitInfos(infoList);
                         }
                     }
+//                    if (macAddress.equals(deviceChild.getMacAddress())) {
+//                        Toast.makeText(SmartTerminalActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+//                        Intent intent2 = new Intent();
+//                        intent2.putExtra("houseId", houseId);
+//                        SmartTerminalActivity.this.setResult(6000, intent2);
+//                        SmartTerminalActivity.this.finish();
+//                    } else {
+//                        DeviceChild deviceChild4 = null;
+//                        for (int i = 0; i < linkList.size(); i++) {
+//                            DeviceChild deviceChild5 = linkList.get(i);
+//                            String mac = deviceChild5.getMacAddress();
+//                            String macAddress2 = deviceChild5.getMacAddress();
+//                            if (macAddress2.equals(mac)) {
+//                                deviceChild4 = deviceChild5;
+//                                break;
+//                            }
+//                        }
+//                        if (deviceChild4 != null) {
+//                            list.clear();
+//                            getBitWheelInfos();
+//                            String name = deviceChild4.getName();
+//                            linkList.remove(deviceChild4);
+//                            Toast.makeText(SmartTerminalActivity.this, name + "设备已重置", Toast.LENGTH_SHORT).show();
+//                        }
+//                        List<SmartTerminalInfo> infoList = new ArrayList<>();
+//                        for (int i = 0; i < linkList.size(); i++) {
+//                            DeviceChild deviceChild = linkList.get(i);
+//                            int linked = deviceChild.getLinked();
+//                            if (linked == 1) {
+//                                SmartTerminalInfo terminalInfo = list.get(i);
+//                                infoList.add(terminalInfo);
+//                            }
+//                        }
+//                        if (smartTerminalCircle != null) {
+//                            smartTerminalCircle.setBitInfos(infoList);
+//                        }
+//                    }
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -789,12 +873,8 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     @Override
     protected void onStop() {
         super.onStop();
-        if (isBound) {
-            unbindService(connection);
-        }
-        if (receiver != null) {
-            unregisterReceiver(receiver);
-        }
+        running=false;
+        result=0;
     }
 
     @Override
@@ -802,6 +882,12 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         super.onDestroy();
         if (unbinder != null) {
             unbinder.unbind();
+        }
+        if (isBound) {
+            unbindService(connection);
+        }
+        if (receiver != null) {
+            unregisterReceiver(receiver);
         }
         running = false;
         handler.removeCallbacksAndMessages(null);

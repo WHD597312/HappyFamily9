@@ -165,6 +165,22 @@ public class DeviceChildDaoImpl {
     }
 
     /**
+     * 获取在线的外置传感器
+     * @param houseId
+     * @param roomId
+     * @return
+     */
+    public DeviceChild findOnlineEstDevice(long houseId,long roomId){
+        DeviceChild deviceChild=null;
+        WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.Type.eq(3),DeviceChildDao.Properties.Online.eq(true));
+        List<DeviceChild> deviceChildren=deviceChildDao.queryBuilder().where(whereCondition).list();
+        if (deviceChildren!=null && !deviceChildren.isEmpty()){
+            deviceChild=deviceChildren.get(0);
+        }
+        return deviceChild;
+    }
+
+    /**
      * 查询家庭里房间中的设备类型是否在线
      * @param houseId
      * @param roomId

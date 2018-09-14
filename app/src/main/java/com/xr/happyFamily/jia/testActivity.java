@@ -17,6 +17,5 @@ public class testActivity extends AppCompatActivity {
         ImageView imageView = (ImageView) findViewById(R.id.iv_test_test);
         String imageUrl = "http://p9zaf8j1m.bkt.clouddn.com/detailDescribe/%E5%8F%96%E6%9A%96%E5%99%A8_02.png";
         Glide.with(this).load(imageUrl).into(imageView);
-
     }
 }

@@ -169,17 +169,27 @@ public class RoomFragment extends Fragment {
                 tv_balcony_c.setVisibility(View.GONE);
                 tv1.setVisibility(View.GONE);
             } else {
-                DeviceChild deviceChild = deviceChildren.get(0);
-                int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
-                int sensorSimpleHum = deviceChild.getSensorSimpleHum();
-                tv_balcony_wd.setVisibility(View.VISIBLE);
-                tv_balcony_23.setVisibility(View.VISIBLE);
-                tv_balcony_shi.setVisibility(View.VISIBLE);
-                tv_balcony_sd.setVisibility(View.VISIBLE);
-                tv_balcony_c.setVisibility(View.VISIBLE);
-                tv1.setVisibility(View.VISIBLE);
-                tv_balcony_23.setText(sensorSimpleTemp + "");
-                tv_balcony_sd.setText(sensorSimpleHum + "");
+                DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId,roomId);
+                if (deviceChild!=null){
+                    int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
+                    int sensorSimpleHum = deviceChild.getSensorSimpleHum();
+                    tv_balcony_wd.setVisibility(View.VISIBLE);
+                    tv_balcony_23.setVisibility(View.VISIBLE);
+                    tv_balcony_shi.setVisibility(View.VISIBLE);
+                    tv_balcony_sd.setVisibility(View.VISIBLE);
+                    tv_balcony_c.setVisibility(View.VISIBLE);
+                    tv1.setVisibility(View.VISIBLE);
+                    tv_balcony_23.setText(sensorSimpleTemp + "");
+                    tv_balcony_sd.setText(sensorSimpleHum + "");
+                }else {
+                    tv_balcony_wd.setVisibility(View.GONE);
+                    tv_balcony_23.setVisibility(View.GONE);
+                    tv_balcony_shi.setVisibility(View.GONE);
+                    tv_balcony_sd.setVisibility(View.GONE);
+                    tv_balcony_c.setVisibility(View.GONE);
+                    tv1.setVisibility(View.GONE);
+                }
+
             }
             int size = mGridData.size();
             Log.i("size", "size:" + size);
@@ -309,6 +319,7 @@ public class RoomFragment extends Fragment {
 
     MessageReceiver receiver;
     private boolean isBound;
+
 
     @Override
     public void onStart() {

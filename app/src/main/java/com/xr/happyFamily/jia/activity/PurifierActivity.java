@@ -126,7 +126,7 @@ public class PurifierActivity extends AppCompatActivity {
     MessageReceiver receiver;
     boolean isBound = false;
     public static boolean running = false;
-
+    long id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -141,7 +141,7 @@ public class PurifierActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         Intent intent = getIntent();
-        long id = intent.getLongExtra("deviceId", 0);
+        id = intent.getLongExtra("deviceId", 0);
         houseId = intent.getLongExtra("houseId", 0);
         deviceChild = deviceChildDao.findById(id);
         if (deviceChild != null) {
@@ -161,6 +161,7 @@ public class PurifierActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         running = true;
+        deviceChild = deviceChildDao.findById(id);
         if (deviceChild != null) {
             boolean online = deviceChild.getOnline();
             if (online) {

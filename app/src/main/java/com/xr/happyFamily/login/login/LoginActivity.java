@@ -56,6 +56,7 @@ import com.xr.happyFamily.together.util.mqtt.UUID;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -543,6 +544,14 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         }
                         editor.putBoolean("sex",sex);
                         editor.commit();
+                        if (preferences.contains("image")) {
+                            String image = preferences.getString("image", "");
+                            preferences.edit().remove("image").commit();
+                            File file = new File(image);
+                            if (file.exists()) {
+                                file.delete();
+                            }
+                        }
                         String uuid=UUID.getUUID(LoginActivity.this);
                         if (!TextUtils.isEmpty(uuid)){
                             JSONObject login=new JSONObject();

@@ -185,7 +185,7 @@ public class addTimeActivity extends AppCompatActivity {
         if (resultCode == 111) {
 
             int pos = data.getIntExtra("pos", 0);
-            List<String> mData = new ArrayList<String>(Arrays.asList("学猫叫", "芙蓉雨", "浪人琵琶", "阿里郎", "that girl", "expression","梦醒时分","甜甜女生","38列车搞笑","小娘子"));
+            List<String> mData = new ArrayList<String>(Arrays.asList("阿里郎", "浪人琵琶", "学猫叫", "芙蓉雨", "七月上", "佛系少女", "离人愁", "不仅仅是喜欢", "纸短情长", "远走高飞"));
             if (pos != -1) {
                 String text = mData.get(pos);
                 tv_bjclock_ring.setText(text);

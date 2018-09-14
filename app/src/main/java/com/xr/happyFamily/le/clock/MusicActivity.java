@@ -11,6 +11,8 @@ import android.preference.Preference;
 import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
@@ -57,7 +59,17 @@ public class MusicActivity extends Activity {
 
 
 
-
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            int pos = adapter.getLastPos();
+            Intent intent = new Intent();
+            intent.putExtra("pos",pos);
+            setResult(111,intent);
+            finish();
+        }
+        return true;
+    }
 
 
 

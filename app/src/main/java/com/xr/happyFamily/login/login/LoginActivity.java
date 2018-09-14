@@ -408,12 +408,17 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
         progressDialog.show();
-    }
 
+    }
+    LoginAsyncTask loginAsyncTask;
     //隐藏dialog
     public void hideProgressDialog() {
         if (progressDialog != null)
             progressDialog.dismiss();
+//        if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+//            loginAsyncTask.cancel(true);
+//            Toast.makeText(LoginActivity.this,"登录失败，请重新登录",Toast.LENGTH_SHORT).show();
+//        }
     }
 
 

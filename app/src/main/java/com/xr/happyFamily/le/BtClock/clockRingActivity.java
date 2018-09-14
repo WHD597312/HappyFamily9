@@ -15,6 +15,7 @@ import android.preference.PreferenceManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
 import com.xr.happyFamily.R;
@@ -60,11 +61,25 @@ public class clockRingActivity extends Activity {
         recyclerView.setAdapter(adapter);
     }
 
+    @Override
+    public boolean onKeyDown(int keyCode, KeyEvent event) {
+        if (keyCode==KeyEvent.KEYCODE_BACK){
+            int pos = adapter.getLastPos();
+            Log.e("pos", "onClick: "+pos );
+            if (pos==-1){
+                Intent intent = new Intent();
+                intent.putExtra("pos",0);
+                setResult(111,intent);
+            }else {
+                Intent intent = new Intent();
+                intent.putExtra("pos",pos);
+                setResult(111,intent);
+            }
 
-
-
-
-
+            finish();
+        }
+        return true;
+    }
 
     @OnClick({R.id.iv_ring_fh, R.id.rl_clock_xt})
     public void onClick(View view) {

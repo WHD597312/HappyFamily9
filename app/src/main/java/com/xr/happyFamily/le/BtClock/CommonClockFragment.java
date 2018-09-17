@@ -105,7 +105,7 @@ public class CommonClockFragment extends BaseFragment {
         if (times.size()>0){
             timeDao= new TimeDaoImpl(getActivity());
             times = timeDao.findByAllTime();
-            Log.e("qqqqqqqqqNNN",times.get(0).getHour()+"");
+
             adapter = new ChooseTimeAdapter(getActivity(),times);
 
             recyclerView.setAdapter(adapter);

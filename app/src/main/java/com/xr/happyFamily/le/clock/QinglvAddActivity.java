@@ -304,6 +304,7 @@ public class QinglvAddActivity extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
+                MyDialog.closeDialog(dialog);
                 ToastUtil.showShortToast("添加闹钟成功");
                 finish();
             }else if (!Utils.isEmpty(s) && "401".equals(s)) {

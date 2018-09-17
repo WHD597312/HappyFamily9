@@ -281,8 +281,8 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         });
         rl_sheng.setOnClickListener(this);
         rl_shi.setOnClickListener(this);
-        rl_qu.setOnClickListener(this);
-
+//        rl_qu.setOnClickListener(this);
+        rl_qu.setVisibility(View.GONE);
         cityAdapter = new CityAdapter(data, this);
         listCity.setAdapter(cityAdapter);
         listCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -300,15 +300,19 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                         receiveCity = data.get(position);
                         tv_shi.setText(receiveCity);
                         sign_city = position;
-                        upData(2);
-                        break;
-                    case 2:
-                        receiveCounty = data.get(position);
-                        tv_qu.setText(receiveCounty);
                         houseAddress=String.valueOf(tv_shi.getText()) ;
                         textViewa.setText(tv_shi.getText());
+                        upData(2);
                         new ChangeAddressAsync().execute();
                         mPopWindow.dismiss();
+                        break;
+                    case 2:
+//                        receiveCounty = data.get(position);
+//                        tv_qu.setText(receiveCounty);
+//                        houseAddress=String.valueOf(tv_shi.getText()) ;
+//                        textViewa.setText(tv_shi.getText());
+//                        new ChangeAddressAsync().execute();
+//                        mPopWindow.dismiss();
 
                         break;
 

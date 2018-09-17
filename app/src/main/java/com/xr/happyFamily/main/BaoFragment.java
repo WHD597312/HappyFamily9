@@ -813,6 +813,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
         JsonArray list = content.getAsJsonArray("list");
         Gson gson = new Gson();
+        if(list!=null)
         for (JsonElement user : list) {
             //通过反射 得到UserBean.class
             ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);

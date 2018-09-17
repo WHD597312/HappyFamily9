@@ -213,8 +213,8 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
         });
         rl_sheng.setOnClickListener(this);
         rl_shi.setOnClickListener(this);
-        rl_qu.setOnClickListener(this);
-
+//        rl_qu.setOnClickListener(this);
+        rl_qu.setVisibility(View.GONE);
         cityAdapter = new CityAdapter(data, this);
         listCity.setAdapter(cityAdapter);
         listCity.setOnItemClickListener(new AdapterView.OnItemClickListener() {
@@ -232,14 +232,16 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
                         receiveCity = data.get(position);
                         tv_shi.setText(receiveCity);
                         sign_city = position;
+                        tv_house_position.setText(tv_shi.getText());
                         upData(2);
+                        mPopWindow.dismiss();
                         break;
                     case 2:
-                        receiveCounty = data.get(position);
-                        tv_qu.setText(receiveCounty);
-                        tv_house_position.setText(tv_shi.getText());
-                        Log.e("name", "onItemClick: -->"+tv_shi );
-                        mPopWindow.dismiss();
+//                        receiveCounty = data.get(position);
+//                        tv_qu.setText(receiveCounty);
+//                        tv_house_position.setText(tv_shi.getText());
+//                        Log.e("name", "onItemClick: -->"+tv_shi );
+//                        mPopWindow.dismiss();
 
                         break;
 
@@ -368,19 +370,19 @@ public class AddhourseActivity extends AppCompatActivity implements View.OnClick
                         if ("cn".equals(tag)) {
                             city.setName(parser.nextText());
                         }
-                        if ("d".equals(tag)) {
-                            district = new District();
-                            int n = parser.getAttributeCount();
-                            for (int i = 0; i < n; i++) {
-                                String name = parser.getAttributeName(i);
-                                String value = parser.getAttributeValue(i);
-                                if ("d_id".equals(name)) {
-                                    district.setId(value);
-                                }
-                            }
-                            district.setName(parser.nextText());
-                            districts.add(district);
-                        }
+//                        if ("d".equals(tag)) {
+//                            district = new District();
+//                            int n = parser.getAttributeCount();
+//                            for (int i = 0; i < n; i++) {
+//                                String name = parser.getAttributeName(i);
+//                                String value = parser.getAttributeValue(i);
+//                                if ("d_id".equals(name)) {
+//                                    district.setId(value);
+//                                }
+//                            }
+//                            district.setName(parser.nextText());
+//                            districts.add(district);
+//                        }
                         break;
                     case XmlResourceParser.END_TAG:
                         if ("c".equals(tag)) {

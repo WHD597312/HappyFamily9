@@ -667,41 +667,43 @@
                 android:text="滤芯还剩90%"
                 android:textColor="@color/white"
                 android:textSize="14sp" />
-
-            <ImageView
-                android:id="@+id/iv_kqjh_y1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignRight="@id/iv_kqjh_jq"
+            <LinearLayout
                 android:layout_alignTop="@+id/iv_kqjh_jq"
-                android:layout_marginRight="@dimen/dp_jy_74"
-                android:layout_marginTop="@dimen/dp_jy_23"
-                android:src="@mipmap/kqjh_ly"
-
-                />
-
-            <ImageView
-                android:id="@+id/iv_kqjh_y2"
-                android:layout_width="wrap_content"
+                android:layout_alignRight="@id/iv_kqjh_jq"
+                android:layout_marginRight="@dimen/dp_jy_38"
+                android:layout_marginTop="@dimen/dp_jy_24"
+                android:layout_width="@dimen/dp_jy_48"
                 android:layout_height="wrap_content"
-                android:layout_marginRight="-18dp"
-                android:layout_alignTop="@id/iv_kqjh_y1"
-                android:layout_alignRight="@+id/iv_kqjh_y1"
-                android:src="@mipmap/kqjh_hy"
+                android:orientation="horizontal"
+                >
+                <ImageView
+                    android:id="@+id/iv_kqjh_y1"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/kqjh_ly"
 
-                />
+                    />
 
-            <ImageView
-                android:id="@+id/iv_kqjh_y3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginRight="-18dp"
-                android:layout_alignTop="@id/iv_kqjh_y2"
-                android:layout_alignRight="@+id/iv_kqjh_y2"
-                android:src="@mipmap/kqjh_hy"
+                <ImageView
+                    android:id="@+id/iv_kqjh_y2"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:src="@mipmap/kqjh_hy"
 
-                />
+                    />
 
+                <ImageView
+                    android:id="@+id/iv_kqjh_y3"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/kqjh_hy"
+                    android:layout_weight="1"
+                    />
+
+
+            </LinearLayout>
 
         </RelativeLayout>
 

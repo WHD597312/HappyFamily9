@@ -103,7 +103,7 @@ public class QunzuAddActivity extends AppCompatActivity {
     ClockDaoImpl clockDao;
 
     public static boolean running = false;
-
+    MessageReceiver receiver;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -147,7 +147,7 @@ public class QunzuAddActivity extends AppCompatActivity {
         recyclerView.setAdapter(qunzuAdapter);
 
            IntentFilter intentFilter = new IntentFilter("QunzuAddActivity");
-        MessageReceiver receiver = new MessageReceiver();
+         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
     }
 
@@ -177,6 +177,7 @@ public class QunzuAddActivity extends AppCompatActivity {
         if (isBound) {
             unbindService(clockConnection);
         }
+        unregisterReceiver(receiver);
     }
 
     @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq, R.id.rl_music})

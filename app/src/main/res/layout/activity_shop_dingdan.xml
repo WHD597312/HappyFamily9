@@ -177,18 +177,36 @@
         android:layout_height="@dimen/dp_jy_3"
         android:layout_width="match_parent"/>
 
-    <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
-        android:id="@+id/swipe_content"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/rv_title">
-        <android.support.v7.widget.RecyclerView
-            android:id="@+id/recyclerview"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@color/color_gray"
-            android:layout_height="wrap_content"></android.support.v7.widget.RecyclerView>
+            android:layout_height="match_parent">
+            <com.jwenfeng.library.pulltorefresh.PullToRefreshLayout
+                android:id="@+id/swipe_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@id/rv_title">
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recyclerview"
+                android:layout_width="match_parent"
+                android:background="@color/color_gray"
+                android:overScrollMode="never"
+                android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
+
     </com.jwenfeng.library.pulltorefresh.PullToRefreshLayout>
 
+            <TextView
+                android:id="@+id/tv_nodata"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:layout_centerInParent="true"
+                android:textColor="@color/color_blank3"
+                android:text="您还没有相关的订单"
+                android:textSize="@dimen/sp_20"/>
+
+        </RelativeLayout>
 
 
 </LinearLayout>

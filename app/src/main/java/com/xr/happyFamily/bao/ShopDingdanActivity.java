@@ -94,6 +94,8 @@ public class ShopDingdanActivity extends AppCompatActivity {
     List<OrderListBean.myList> orderBeans = new ArrayList<>();
     @BindView(R.id.swipe_content)
     PullToRefreshLayout swipeContent;
+    @BindView(R.id.tv_nodata)
+    TextView tvNodata;
     private MyDialog dialog;
     int page = 1, lastSign = 0;
     boolean isLoading = false, isRefresh = false;
@@ -138,7 +140,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
 
             @Override
             public void loadMore() {
-                page++;
+
                 isLoading = true;
                 countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
@@ -219,7 +221,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     dingDanAsync dingDanAsync;
 
     public void getDingDan(int state, int page) {
-        if (!isRefresh&&!isLoading) {
+        if (!isRefresh && !isLoading) {
             dialog = MyDialog.showDialog(mContext);
 
             dialog.show();
@@ -316,9 +318,17 @@ public class ShopDingdanActivity extends AppCompatActivity {
                 if (orderBeans.size() == 0) {
                     MyDialog.closeDialog(dialog);
                     dingdanAdapter.notifyDataSetChanged();
-                    if (page > 1)
+                    if (page > 1) {
                         page--;
-                    ToastUtil.showShortToast("无更多订单");
+                        recyclerview.setVisibility(View.VISIBLE);
+                        tvNodata.setVisibility(View.GONE);
+                        ToastUtil.showShortToast("无更多订单");
+                    } else {
+                        recyclerview.setVisibility(View.GONE);
+                        tvNodata.setVisibility(View.VISIBLE);
+                    }
+
+
                     if (isLoading) {
                         isLoading = false;
                         swipeContent.finishLoadMore();
@@ -327,6 +337,10 @@ public class ShopDingdanActivity extends AppCompatActivity {
                         isRefresh = false;
                         swipeContent.finishRefresh();
                     }
+                }
+                else {
+                    recyclerview.setVisibility(View.VISIBLE);
+                    tvNodata.setVisibility(View.GONE);
                 }
             } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
@@ -463,6 +477,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
     }
 
     private static CountTimer countTimer;
+
     class CountTimer extends CountDownTimer {
         public CountTimer(long millisInFuture, long countDownInterval) {
             super(millisInFuture, countDownInterval);

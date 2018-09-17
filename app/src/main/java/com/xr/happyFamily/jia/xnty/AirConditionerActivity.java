@@ -133,14 +133,6 @@ public class AirConditionerActivity extends AppCompatActivity implements View.On
         imageViewzd.setTag("close");
         imageViewsm.setTag("close");
         imageViewsf.setTag("close");
-//        fallingView.post(new Runnable() {
-//            @Override
-//            public void run() {
-//
-//                int width = imageViewct.getWidth();
-//            }
-//        });
-
         initTimer();
         initview();
         anim3 = AnimationUtils.loadAnimation(this, R.anim.animdong);
@@ -540,7 +532,12 @@ public class AirConditionerActivity extends AppCompatActivity implements View.On
             case R.id.iv_kt_zr://制热设备
                 if ("open".equals(imageViewkg.getTag())) {
                 if (NoFastClickUtils.isFastClick()) {
-
+                    if (task != null) {
+                        task.cancel();
+                    }
+                    if (task1 != null) {
+                        task1.cancel();
+                    }
                         imageViewzr.setTag("open");
                         imageViewzl.setTag("close");
                         flag = 1;
@@ -561,9 +558,7 @@ public class AirConditionerActivity extends AppCompatActivity implements View.On
                         textView23.setText("25℃");
                         recLen1 = 10;
                         x = 0;
-                        if ("open".equals(imageViewzl.getTag())) {
-                            task.cancel();
-                        }
+
                         if ((x + 5) < 25) {
                             b = 24;
                             initstar1();
@@ -580,16 +575,18 @@ public class AirConditionerActivity extends AppCompatActivity implements View.On
                         fallingView.removAll();
                         initview();
 
-                    } else {
-                        Toast.makeText(this, "请等待3秒", Toast.LENGTH_SHORT).show();
                     }
                 }
                 break;
             case R.id.iv_kt_zl://开启制冷设备
                 if ("open".equals(imageViewkg.getTag())) {
                 if (NoFastClickUtils.isFastClick()) {
-                    if ("open".equals(imageViewzr.getTag())) {
-                        task1.cancel();//增加温度关闭
+//
+                    if (task != null) {
+                        task.cancel();
+                    }
+                    if (task1 != null) {
+                        task1.cancel();
                     }
                         imageViewzl.setTag("open");
                         imageViewzr.setImageResource(R.mipmap.kt_zrg);
@@ -629,8 +626,6 @@ public class AirConditionerActivity extends AppCompatActivity implements View.On
                         initview();
 
 
-                    } else {
-                        Toast.makeText(this, "请等待3秒", Toast.LENGTH_SHORT).show();
                     }
                 }
 

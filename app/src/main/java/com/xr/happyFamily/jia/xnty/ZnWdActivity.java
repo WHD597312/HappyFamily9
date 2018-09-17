@@ -9,8 +9,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.titleview.TitleView;
+import com.xr.happyFamily.main.MainActivity;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -65,6 +68,7 @@ public class ZnWdActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+
         try {//加载动画
 
             gifDrawable1=new GifDrawable(getResources(),R.mipmap.wd_fs);
@@ -110,6 +114,9 @@ public class ZnWdActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.bt_wd_sd:
+                gifDrawable1.stop();
+                gifDrawable2.stop();
+                gifDrawable3.stop();
                 imageViewd.setImageResource(R.mipmap.sd_sd);
                 textViewname.setText("智能加湿");
                 imageViewdh.setImageResource(R.mipmap.sd_kqjhq);
@@ -136,15 +143,19 @@ public class ZnWdActivity extends AppCompatActivity {
                 if (gifDrawable1!=null && gifDrawable2!=null&&gifDrawable3!=null){
                     gifDrawable1.start();
                     gifDrawable2.start();
-                    gifDrawable3.setSpeed(5.0f);
+//                    gifDrawable3.setSpeed(5.0f);
                     gifDrawable3.start();
                     imageViewd.setImageDrawable(gifDrawable1);
                     image.setImageDrawable(gifDrawable2);
                     imageViewdh.setImageDrawable(gifDrawable3);
                 }
+
                 change =1;
                 break;
             case R.id.bt_wd_pm25:
+                gifDrawable1.stop();
+                gifDrawable2.stop();
+                gifDrawable3.stop();
                 imageViewd.setImageResource(R.mipmap.pm25_pm25);
                 textViewname.setText("简化版净化空气");
                 imageViewdh.setImageResource(R.mipmap.pm25_kqjh);
@@ -171,15 +182,19 @@ public class ZnWdActivity extends AppCompatActivity {
                 if (gifDrawable1!=null && gifDrawable2!=null&&gifDrawable3!=null){
                     gifDrawable1.start();
                     gifDrawable2.start();
-                    gifDrawable3.setSpeed(5.0f);
+//                    gifDrawable3.setSpeed(5.0f);
                     gifDrawable3.start();
                     imageViewd.setImageDrawable(gifDrawable1);
                     image.setImageDrawable(gifDrawable2);
                     imageViewdh.setImageDrawable(gifDrawable3);
                 }
+
                 change=2;
                 break;
             case R.id.bt_wd_wd:
+                gifDrawable1.stop();
+                gifDrawable2.stop();
+                gifDrawable3.stop();
                 imageViewd.setImageResource(R.mipmap.wd_fs);
                 textViewname.setText("智能制冷");
                 imageViewdh.setImageResource(R.mipmap.wd_kt);
@@ -207,12 +222,12 @@ public class ZnWdActivity extends AppCompatActivity {
                 if (gifDrawable1!=null && gifDrawable2!=null&&gifDrawable3!=null){
                     gifDrawable1.start();
                     gifDrawable2.start();
-
                     gifDrawable3.start();
                     imageViewd.setImageDrawable(gifDrawable1);
                     image.setImageDrawable(gifDrawable2);
                     imageViewdh.setImageDrawable(gifDrawable3);
                 }
+
                 change=0;
                 break;
         }
@@ -229,6 +244,11 @@ public class ZnWdActivity extends AppCompatActivity {
         super.onDestroy();
         if (unbinder!=null){
             unbinder.unbind();
+        }
+        if (gifDrawable1!=null && gifDrawable2!=null&&gifDrawable3!=null){
+            gifDrawable1.stop();
+            gifDrawable2.stop();
+            gifDrawable3.stop();
         }
     }
 }

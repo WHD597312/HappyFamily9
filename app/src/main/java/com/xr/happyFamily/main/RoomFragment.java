@@ -126,6 +126,7 @@ public class RoomFragment extends Fragment {
     DeviceChild mdeledeviceChild;
     SharedPreferences my;
     public static boolean running = false;
+    DeviceChild estDeviceChild;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -169,7 +170,7 @@ public class RoomFragment extends Fragment {
                 tv_balcony_c.setVisibility(View.GONE);
                 tv1.setVisibility(View.GONE);
             } else {
-                DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId,roomId);
+               DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId,roomId);
                 if (deviceChild!=null){
                     int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
                     int sensorSimpleHum = deviceChild.getSensorSimpleHum();
@@ -181,15 +182,7 @@ public class RoomFragment extends Fragment {
                     tv1.setVisibility(View.VISIBLE);
                     tv_balcony_23.setText(sensorSimpleTemp + "");
                     tv_balcony_sd.setText(sensorSimpleHum + "");
-                }else {
-                    tv_balcony_wd.setVisibility(View.GONE);
-                    tv_balcony_23.setVisibility(View.GONE);
-                    tv_balcony_shi.setVisibility(View.GONE);
-                    tv_balcony_sd.setVisibility(View.GONE);
-                    tv_balcony_c.setVisibility(View.GONE);
-                    tv1.setVisibility(View.GONE);
                 }
-
             }
             int size = mGridData.size();
             Log.i("size", "size:" + size);
@@ -319,8 +312,6 @@ public class RoomFragment extends Fragment {
 
     MessageReceiver receiver;
     private boolean isBound;
-
-
     @Override
     public void onStart() {
         super.onStart();
@@ -501,6 +492,24 @@ public class RoomFragment extends Fragment {
 //        popupMenu.show();
 //    }
 
+    private int temp;
+    private int hum;
+
+    public void setHum(int hum) {
+        this.hum = hum;
+    }
+
+    public void setTemp(int temp) {
+        this.temp = temp;
+    }
+
+    public int getTemp() {
+        return temp;
+    }
+
+    public int getHum() {
+        return hum;
+    }
 
     private PopupWindow popupWindow;
 
@@ -642,8 +651,8 @@ public class RoomFragment extends Fragment {
                             String offlineTopicName = "";
 
                             if (2 == type) {
-                                onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                                onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
                             } else if (3 == type) {
                                 onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
                                 offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
@@ -808,6 +817,7 @@ public class RoomFragment extends Fragment {
         }
     }
 
+
     MQService mqService;
     boolean bound;
     ServiceConnection connection = new ServiceConnection() {
@@ -853,6 +863,21 @@ public class RoomFragment extends Fragment {
                         break;
                     } else if (mac.equals(macAddress) && deviceChild2 != null) {
                         mGridData.set(i, deviceChild2);
+                        if (deviceChild2.getType()==3){
+                            if (estDeviceChild==null){
+                                estDeviceChild=deviceChild2;
+                                int sensorSimpleTemp = estDeviceChild.getSensorSimpleTemp();
+                                int sensorSimpleHum = estDeviceChild.getSensorSimpleHum();
+                                tv_balcony_wd.setVisibility(View.VISIBLE);
+                                tv_balcony_23.setVisibility(View.VISIBLE);
+                                tv_balcony_shi.setVisibility(View.VISIBLE);
+                                tv_balcony_sd.setVisibility(View.VISIBLE);
+                                tv_balcony_c.setVisibility(View.VISIBLE);
+                                tv1.setVisibility(View.VISIBLE);
+                                tv_balcony_23.setText(sensorSimpleTemp + "");
+                                tv_balcony_sd.setText(sensorSimpleHum + "");
+                            }
+                        }
                         mGridViewAdapter.notifyDataSetChanged();
                         break;
                     }

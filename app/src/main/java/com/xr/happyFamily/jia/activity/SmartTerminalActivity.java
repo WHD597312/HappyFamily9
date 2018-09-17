@@ -296,86 +296,82 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
      *
      * @param deviceChild
      */
-    public void send(DeviceChild deviceChild) {
+    public void send(DeviceChild deviceChild){
         try {
-            int sum = 0;
-            JSONObject jsonObject = new JSONObject();
-            JSONArray jsonArray = new JSONArray();
-            int headCode = 144;
-            jsonArray.put(0, headCode);/**头码*/
-            sum = sum + headCode;
-            int type = deviceChild.getType();
-            int typeHigh = type / 256;
-            sum = sum + typeHigh;
-            int typeLow = type % 256;
-            sum = sum + typeLow;
-            int dataLength = 6;
-            sum = sum + dataLength;
+            int sum=0;
+            JSONObject jsonObject=new JSONObject();
+            JSONArray jsonArray=new JSONArray();
+            int headCode=144;
+            jsonArray.put(0,headCode);/**头码*/
+            sum=sum+headCode;
+            int type=deviceChild.getType();
+            int typeHigh=type/256;
+            sum=sum+typeHigh;
+            int typeLow=type%256;
+            sum=sum+typeLow;
+            int dataLength=6;
+            sum=sum+dataLength;
 
-            int busMode = deviceChild.getBusModel();
-            sum = sum + busMode;
-            jsonArray.put(1, typeHigh);/**类型 高位*/
-            jsonArray.put(2, typeLow);/**类型 低位*/
-            jsonArray.put(3, busMode);/**商业模式*/
-            jsonArray.put(4, dataLength);/**数据长度*/
-            int deviceState = deviceChild.getDeviceState();
-            String rateStateStr = deviceChild.getRateState();
-            if (rateStateStr == null || rateStateStr.isEmpty() || rateStateStr.length() <= 2) {
-                rateStateStr = "01";
-            }
-            int rateStateHigh = Integer.parseInt(rateStateStr.substring(0, 1));
-            int rateStateLow = Integer.parseInt(rateStateStr.substring(1));
-            int lockState = deviceChild.getLockState();
-            int screenState = deviceChild.getScreenState();
-            int[] x = new int[8];
-            x[0] = deviceState;
-            x[1] = rateStateHigh;
-            x[2] = rateStateLow;
-            x[3] = lockState;
-            x[4] = screenState;
-            x[5] = 0;
-            x[6] = 0;
-            x[7] = 0;
+            int busMode=deviceChild.getBusModel();
+            sum=sum+busMode;
+            jsonArray.put(1,typeHigh);/**类型 高位*/
+            jsonArray.put(2,typeLow);/**类型 低位*/
+            jsonArray.put(3,busMode);/**商业模式*/
+            jsonArray.put(4,dataLength);/**数据长度*/
+            int deviceState=deviceChild.getDeviceState();
+            String rateStateStr=deviceChild.getRateState();
+            int rateStateHigh=Integer.parseInt(rateStateStr.substring(0,1));
+            int rateStateLow=Integer.parseInt(rateStateStr.substring(1));
+            int lockState=deviceChild.getLockState();
+            int screenState=deviceChild.getScreenState();
+            int []x=new int[8];
+            x[0]=deviceState;
+            x[1]=rateStateHigh;
+            x[2]=rateStateLow;
+            x[3]=lockState;
+            x[4]=screenState;
+            x[5]=0;
+            x[6]=0;
+            x[7]=0;
 
+            int dataContent=TenTwoUtil.changeToTen(x);
+            sum=sum+dataContent;
+            jsonArray.put(5,dataContent);/**数据内容 开关，功率状态，屏幕状态，屏保状态*/
+            int runState2=0;
+            sum=sum+runState2;
+            jsonArray.put(6,runState2);/**机器当前运行状态2  (保留*/
+            int runState3=0;
+            sum=sum+runState3;
+            jsonArray.put(7,runState3);/**机器当前运行状态3  (保留*/
 
-            int dataContent = TenTwoUtil.changeToTen(x);
-            sum = sum + dataContent;
-            jsonArray.put(5, dataContent);/**数据内容 开关，功率状态，屏幕状态，屏保状态*/
-            int runState2 = 0;
-            sum = sum + runState2;
-            jsonArray.put(6, runState2);/**机器当前运行状态2  (保留*/
-            int runState3 = 0;
-            sum = sum + runState3;
-            jsonArray.put(7, runState3);/**机器当前运行状态3  (保留*/
-
-            int timeHour = deviceChild.getTimerHour();
-            sum = sum + timeHour;
-            jsonArray.put(8, timeHour);/**定时时间 小时*/
-            int timeMin = deviceChild.getTimerMin();
+            int timeHour=deviceChild.getTimerHour();
+            sum=sum+timeHour;
+            jsonArray.put(8,timeHour);/**定时时间 小时*/
+            int timeMin=deviceChild.getTimerMin();
 //            sum=sum+timeMin;
-            jsonArray.put(9, 0);/**定时时间 分*/
-            int waramerSetTemp = deviceChild.getWaramerSetTemp();
-            sum = sum + waramerSetTemp;
+            jsonArray.put(9,0);/**定时时间 分*/
+            int waramerSetTemp=deviceChild.getWaramerSetTemp();
+            sum=sum+waramerSetTemp;
 
-            int checkCode = sum % 256;
-            jsonArray.put(10, (waramerSetTemp));/**设定温度*/
-            jsonArray.put(11, checkCode);/**校验码*/
+            int checkCode=sum%256;
+            jsonArray.put(10,(waramerSetTemp));/**设定温度*/
+            jsonArray.put(11,checkCode);/**校验码*/
 
-            jsonArray.put(12, 9);/**结束码*/
-            jsonObject.put("Warmer", jsonArray);
+            jsonArray.put(12,9);/**结束码*/
+            jsonObject.put("Warmer",jsonArray);
 
-            if (isBound) {
-                String topicName = "p99/warmer/" + deviceChild.getMacAddress() + "/set";
-                String s = jsonObject.toString();
-                boolean success = mqService.publish(topicName, 1, s);
-                if (success) {
-                    Log.i("success", "-->" + success);
-                    int deviceState2 = deviceChild.getDeviceState();
-                    Log.i("deviceState2", "-->" + deviceState2);
+            if (isBound){
+                String topicName="p99/warmer1/"+deviceChild.getMacAddress()+"/set";
+                String s=jsonObject.toString();
+                boolean success=mqService.publish(topicName,1,s);
+                if (success){
+                    Log.i("success","-->"+success);
+                    int deviceState2=deviceChild.getDeviceState();
+                    Log.i("deviceState2","-->"+deviceState2);
                     deviceChildDao.update(deviceChild);
                 }
             }
-        } catch (Exception e) {
+        }catch (Exception e){
             e.printStackTrace();
         }
     }
@@ -463,7 +459,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     for (Map.Entry<String, DeviceChild> entry : linkDeviceChildMap.entrySet()) {
                         DeviceChild deviceChild3 = entry.getValue();
                         boolean online = deviceChild3.getOnline();
-                        if (online) {
+                        if (online && deviceChild3.getType()==2) {
                             deviceChild3.setDeviceState(1);
                             send(deviceChild3);
                         }

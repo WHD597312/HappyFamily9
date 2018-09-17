@@ -123,7 +123,7 @@
                     android:layout_marginBottom="-7dp"
                     android:layout_marginLeft="@dimen/dp_jy_5"
                     android:layout_toRightOf="@+id/tv_balcony_wd"
-                    android:text="23"
+                    android:text="0"
                     android:textColor="@color/color_white"
                     android:textSize="27sp"
 
@@ -162,7 +162,7 @@
                     android:layout_alignTop="@id/tv_balcony_23"
                     android:layout_marginLeft="@dimen/dp_jy_5"
                     android:layout_toRightOf="@id/tv_balcony_shi"
-                    android:text="30"
+                    android:text="0"
                     android:textColor="@color/color_white"
                     android:textSize="28sp" />
 

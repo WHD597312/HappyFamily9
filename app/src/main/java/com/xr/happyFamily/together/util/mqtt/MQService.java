@@ -1413,7 +1413,6 @@ public class MQService extends Service {
                     if (!userId.equals(jsonObject.getString("clockCreater"))) {
                         List<MsgData> msgDataList2 = msgDao.findMsgByTime(msgData.getCreateTime());
                         if (msgDataList2.size() == 0) {
-
                             msgDao.insert(msgData);
                         }
                         SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
@@ -1508,9 +1507,6 @@ public class MQService extends Service {
         String clockTopic = "p99/clockuniversal/userId_" + userId;
         Log.e("qqqqqCCC", friendTopic);
         list.add("p99/" + phone + "/login");
-        list.add(friendTopic);
-        list.add(clockTopic);
-        list.add(friendReplayTopic);
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
         for (DeviceChild deviceChild : deviceChildren) {
             String macAddress = deviceChild.getMacAddress();
@@ -1560,6 +1556,9 @@ public class MQService extends Service {
                     break;
             }
         }
+        list.add(friendTopic);
+        list.add(clockTopic);
+        list.add(friendReplayTopic);
         return list;
     }
 

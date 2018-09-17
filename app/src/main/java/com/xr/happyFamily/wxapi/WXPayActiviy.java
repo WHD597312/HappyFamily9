@@ -82,7 +82,7 @@ public class WXPayActiviy  extends AppCompatActivity {
 
 
                     request = new PayReq();
-                    request.appId = returnData.getString("appid");
+                    request.appId = appid;
                     request.partnerId = returnData.getString("partnerid");
                     request.prepayId = returnData.getString("prepayid");
                     request.packageValue=returnData.getString("package");

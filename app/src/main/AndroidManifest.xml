@@ -476,6 +476,9 @@
         <activity
             android:name=".jia.activity.AConfStateActivity"
             android:screenOrientation="portrait" />
+        <activity
+            android:name=".jia.activity.DehumidifierActivity"
+            android:screenOrientation="portrait" />
     </application>
 
 </manifest>

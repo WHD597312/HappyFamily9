@@ -216,7 +216,7 @@ public class FamilyFragmentManager extends Fragment {
                 String onlineTopicName = "";
                 String offlineTopicName = "";
                 switch (type) {
-                    
+
                     case 2:
                         onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";

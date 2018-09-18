@@ -16,6 +16,7 @@ import android.widget.Toast;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopXQActivity;
+import com.xr.happyFamily.bao.ShopXQActivity3;
 import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopPageBean;
@@ -139,7 +140,7 @@ public class ViewPagerAdapter extends PagerAdapter {
         public void onClick(View v) {
             for(int i=0;i<imgae_ids.length;i++){
                 if (v.getId()==imgae_ids[i]){
-                    Intent intent  = new Intent(v.getContext(),ShopXQActivity.class);
+                    Intent intent  = new Intent(v.getContext(),ShopXQActivity3.class);
                     intent.putExtra("goodsId",shopBannerBeans.get(i).getGoodsId()+"");
 
                     Log.e("qqqqqqqqqqIIII",shopBannerBeans.get(i).getGoodsId()+"????");

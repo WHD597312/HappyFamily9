@@ -15,6 +15,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.FuWuActivity;
 import com.xr.happyFamily.bao.PingLunActivity;
 import com.xr.happyFamily.bao.ShopXQActivity;
+import com.xr.happyFamily.bao.ShopXQActivity3;
 import com.xr.happyFamily.bao.TuiKuanActivity;
 import com.xr.happyFamily.bean.OrderBean;
 import com.xr.happyFamily.bean.ShopCartBean;
@@ -87,7 +88,7 @@ public class DingDanXQAdapter extends RecyclerView.Adapter<DingDanXQAdapter.MyVi
         holder.rl_dingdan.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent  = new Intent(v.getContext(),ShopXQActivity.class);
+                Intent intent  = new Intent(v.getContext(),ShopXQActivity3.class);
                 intent.putExtra("goodsId",data.get(position).getGoodsId());
 //                intent.putExtra("argName",tag.argName);
 //                intent.putExtra("argValue",tag.argValue);

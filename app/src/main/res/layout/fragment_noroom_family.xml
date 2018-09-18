@@ -90,7 +90,6 @@
 
             <ImageView
                 android:id="@+id/iv_my1"
-
                 android:layout_width="350dp"
                 android:layout_height="200dp"
                 android:layout_centerHorizontal="true"
@@ -120,7 +119,8 @@
             <ImageView
                 android:id="@+id/iv_mypage"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_jy_166"
+                android:layout_height="@dimen/dp_jy_160"
+                android:scaleType="centerInside"
                 android:layout_alignLeft="@id/tv_xnty_my1"
                 android:layout_alignTop="@+id/tv_xnty_my1"
                 android:layout_marginLeft="@dimen/dp_jy_110"
@@ -142,10 +142,10 @@
             android:id="@+id/btn_add_room"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/rl_page"
+            android:layout_alignParentBottom="true"
             android:layout_marginLeft="@dimen/dp_jy_12"
             android:layout_marginRight="@dimen/dp_jy_12"
-            android:layout_marginTop="@dimen/dp_jy_20"
+            android:layout_marginBottom="@dimen/dp_jy_30"
             android:background="@mipmap/button"
             android:text="+ 添加房间"
             android:textColor="@color/white" />

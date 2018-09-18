@@ -43,6 +43,7 @@ import com.xr.happyFamily.bao.ShopDingdanActivity;
 import com.xr.happyFamily.bao.ShopSearchActivity;
 import com.xr.happyFamily.bao.ShopShangchengActivity;
 import com.xr.happyFamily.bao.ShopXQActivity;
+import com.xr.happyFamily.bao.ShopXQActivity3;
 import com.xr.happyFamily.bao.adapter.MainTitleAdapter;
 import com.xr.happyFamily.bao.adapter.ViewPagerAdapter;
 import com.xr.happyFamily.bao.adapter.WaterFallAdapter;
@@ -224,7 +225,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         shopAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(mContext, ShopXQActivity.class);
+                Intent intent = new Intent(mContext, ShopXQActivity3.class);
                 intent.putExtra("goodsId", list_shop.get(position).getGoodsId() + "");
                 startActivityForResult(intent, MAIN_CODE);
             }
@@ -810,15 +811,20 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         else
             llTuijian.setVisibility(View.GONE);
         list_shop.clear();
-        JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
-        JsonArray list = content.getAsJsonArray("list");
-        Gson gson = new Gson();
-        if(list!=null)
-        for (JsonElement user : list) {
-            //通过反射 得到UserBean.class
-            ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
-            list_shop.add(userList);
+        try {
+            JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
+            JsonArray list = content.getAsJsonArray("list");
+            Gson gson = new Gson();
+            if(list!=null)
+                for (JsonElement user : list) {
+                    //通过反射 得到UserBean.class
+                    ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
+                    list_shop.add(userList);
+                }
+            shopAdapter.notifyDataSetChanged();
+        }catch (Exception e){
+            e.printStackTrace();
         }
-        shopAdapter.notifyDataSetChanged();
+
     }
 }

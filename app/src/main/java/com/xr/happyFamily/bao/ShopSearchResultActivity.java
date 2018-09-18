@@ -164,7 +164,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         shopAdapter.setItemClickListener(new WaterFallAdapter.MyItemClickListener() {
             @Override
             public void onItemClick(View view, int position) {
-                Intent intent = new Intent(ShopSearchResultActivity.this, ShopXQActivity.class);
+                Intent intent = new Intent(ShopSearchResultActivity.this, ShopXQActivity3.class);
                 intent.putExtra("goodsId", list_shop.get(position).getGoodsId() + "");
                 startActivity(intent);
             }

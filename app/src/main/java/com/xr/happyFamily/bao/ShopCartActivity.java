@@ -179,7 +179,7 @@ public class ShopCartActivity extends AppCompatActivity {
     ShopCartAdapter.OnItemOnClickListener onItemOnClickListener = new ShopCartAdapter.OnItemOnClickListener() {
         @Override
         public void onItemOnClick(View view, int pos) {
-            Intent intent = new Intent(ShopCartActivity.this, ShopXQActivity.class);
+            Intent intent = new Intent(ShopCartActivity.this, ShopXQActivity3.class);
             intent.putExtra("goodsId", mAllOrderList.get(pos).getGoods().getGoodsId() + "");
             startActivity(intent);
         }

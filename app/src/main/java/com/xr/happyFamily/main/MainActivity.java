@@ -511,18 +511,31 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                     return false;
                 }
             }
-            first++;
-            if (first==2){
+            if ((System.currentTimeMillis() - exitTime) > 2000) {
+                Toast.makeText(getApplicationContext(), "再按一次退出P99",
+                        Toast.LENGTH_SHORT).show();
+                exitTime = System.currentTimeMillis();
+                return false;
+            } else {
                 VibratorUtil.StopVibrate(MainActivity.this);
                 application.removeAllActivity();
                 family = "";
                 return true;
-            }else if (first<2){
-                Toast.makeText(MainActivity.this,"请再按一次退出p99",Toast.LENGTH_SHORT).show();
-                return false;
             }
+
         }
         return super.onKeyDown(keyCode, event);
+    }
+    private long exitTime = 0;
+    public void exit() {
+        if ((System.currentTimeMillis() - exitTime) > 2000) {
+            Toast.makeText(getApplicationContext(), "再按一次退出程序",
+                    Toast.LENGTH_SHORT).show();
+            exitTime = System.currentTimeMillis();
+        } else {
+            finish();
+
+        }
     }
 
     @Override

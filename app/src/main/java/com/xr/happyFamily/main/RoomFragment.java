@@ -161,8 +161,8 @@ public class RoomFragment extends Fragment {
             deviceChildren = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
             Log.i("deviceSize", "-->" + deviceChildren.size());
             mGridData = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
-            List<DeviceChild> deviceChildren = deviceChildDao.findDeviceType(houseId, roomId, 3);
-            if (deviceChildren == null || deviceChildren.isEmpty()) {
+            DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId, roomId);
+            if (deviceChild == null) {
                 tv_balcony_wd.setVisibility(View.GONE);
                 tv_balcony_23.setVisibility(View.GONE);
                 tv_balcony_shi.setVisibility(View.GONE);
@@ -170,19 +170,16 @@ public class RoomFragment extends Fragment {
                 tv_balcony_c.setVisibility(View.GONE);
                 tv1.setVisibility(View.GONE);
             } else {
-               DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId,roomId);
-                if (deviceChild!=null){
-                    int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
-                    int sensorSimpleHum = deviceChild.getSensorSimpleHum();
-                    tv_balcony_wd.setVisibility(View.VISIBLE);
-                    tv_balcony_23.setVisibility(View.VISIBLE);
-                    tv_balcony_shi.setVisibility(View.VISIBLE);
-                    tv_balcony_sd.setVisibility(View.VISIBLE);
-                    tv_balcony_c.setVisibility(View.VISIBLE);
-                    tv1.setVisibility(View.VISIBLE);
-                    tv_balcony_23.setText(sensorSimpleTemp + "");
-                    tv_balcony_sd.setText(sensorSimpleHum + "");
-                }
+                int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
+                int sensorSimpleHum = deviceChild.getSensorSimpleHum();
+                tv_balcony_wd.setVisibility(View.VISIBLE);
+                tv_balcony_23.setVisibility(View.VISIBLE);
+                tv_balcony_shi.setVisibility(View.VISIBLE);
+                tv_balcony_sd.setVisibility(View.VISIBLE);
+                tv_balcony_c.setVisibility(View.VISIBLE);
+                tv1.setVisibility(View.VISIBLE);
+                tv_balcony_23.setText(sensorSimpleTemp + "");
+                tv_balcony_sd.setText(sensorSimpleHum + "");
             }
             int size = mGridData.size();
             Log.i("size", "size:" + size);
@@ -312,6 +309,7 @@ public class RoomFragment extends Fragment {
 
     MessageReceiver receiver;
     private boolean isBound;
+
     @Override
     public void onStart() {
         super.onStart();
@@ -854,7 +852,7 @@ public class RoomFragment extends Fragment {
                     if (mac.equals(macAddress) && deviceChild2 == null) {
                         mGridData.remove(deviceChild);
                         mGridViewAdapter.notifyDataSetChanged();
-                        Toast.makeText(getActivity(), macAddress+"设备已重置", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(getActivity(), macAddress + "设备已重置", Toast.LENGTH_SHORT).show();
 //                        Intent intent2=new Intent(getActivity(),MainActivity.class);
 //                        intent2.putExtra("houseId",houseId);
 //                        intent2.putExtra("refersh","refersh");
@@ -863,9 +861,9 @@ public class RoomFragment extends Fragment {
                         break;
                     } else if (mac.equals(macAddress) && deviceChild2 != null) {
                         mGridData.set(i, deviceChild2);
-                        if (deviceChild2.getType()==3){
-                            if (estDeviceChild==null){
-                                estDeviceChild=deviceChild2;
+                        if (deviceChild2.getType() == 3) {
+                            if (estDeviceChild == null) {
+                                estDeviceChild = deviceChild2;
                                 int sensorSimpleTemp = estDeviceChild.getSensorSimpleTemp();
                                 int sensorSimpleHum = estDeviceChild.getSensorSimpleHum();
                                 tv_balcony_wd.setVisibility(View.VISIBLE);

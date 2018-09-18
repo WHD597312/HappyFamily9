@@ -112,7 +112,6 @@
                     android:text="室温"
                     android:textColor="@color/color_white"
                     android:textSize="10sp"
-
                     />
 
                 <TextView

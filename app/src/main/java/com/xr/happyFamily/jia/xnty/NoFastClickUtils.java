@@ -23,4 +23,5 @@ public class NoFastClickUtils  {
         lastClickTime = curClickTime;
         return flag;
     }
+
 }

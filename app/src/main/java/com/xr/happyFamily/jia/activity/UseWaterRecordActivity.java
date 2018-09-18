@@ -302,30 +302,31 @@ public class UseWaterRecordActivity extends AppCompatActivity {
                         double twentyTwo=deviceData.getDouble("twentyTwo");
                         double twentyThree=deviceData.getDouble("twentyThree");
 
-                        yValuesDays.add((float)zero);
-                        yValuesDays.add((float)one);
-                        yValuesDays.add((float)two);
+
+//                        yValuesDays.add((float)one);
+//                        yValuesDays.add((float)two);
                         yValuesDays.add((float)three);
-                        yValuesDays.add((float)four);
-                        yValuesDays.add((float)five);
+//                        yValuesDays.add((float)four);
+//                        yValuesDays.add((float)five);
                         yValuesDays.add((float)six);
-                        yValuesDays.add((float)seven);
-                        yValuesDays.add((float)eight);
+//                        yValuesDays.add((float)seven);
+//                        yValuesDays.add((float)eight);
                         yValuesDays.add((float)nine);
-                        yValuesDays.add((float)ten);
-                        yValuesDays.add((float)eleven);
+//                        yValuesDays.add((float)ten);
+//                        yValuesDays.add((float)eleven);
                         yValuesDays.add((float)twelve);
-                        yValuesDays.add((float)thirteen);
-                        yValuesDays.add((float)fourteen);
+//                        yValuesDays.add((float)thirteen);
+//                        yValuesDays.add((float)fourteen);
                         yValuesDays.add((float)fifteen);
-                        yValuesDays.add((float)sixteen);
-                        yValuesDays.add((float)seventeen);
+//                        yValuesDays.add((float)sixteen);
+//                        yValuesDays.add((float)seventeen);
                         yValuesDays.add((float)eighteen);
-                        yValuesDays.add((float)nineteen);
-                        yValuesDays.add((float)twenty);
+//                        yValuesDays.add((float)nineteen);
+//                        yValuesDays.add((float)twenty);
                         yValuesDays.add((float)twentyOne);
-                        yValuesDays.add((float)twentyTwo);
-                        yValuesDays.add((float)twentyThree);
+//                        yValuesDays.add((float)twentyTwo);
+//                        yValuesDays.add((float)twentyThree);
+                        yValuesDays.add((float)zero);
 
                         JSONObject deviceWeekData=returnData.getJSONObject("deviceWeekData");
                         double sunday=deviceWeekData.getDouble("sunday");
@@ -390,8 +391,8 @@ public class UseWaterRecordActivity extends AppCompatActivity {
                 colours.add(Color.RED);
                 colours.add(Color.CYAN);
 
-                for (int i = 1; i <= 24; i++) {
-                    xValuesDay.add(i+"");
+                for (int i = 1; i <= 8; i++) {
+                    xValuesDay.add((i*3)+"");
 //                    yValueDay.add((float) (Math.random() * 80));
                 }
                 yValueDay.addAll(lists.get(0));

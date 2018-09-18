@@ -227,7 +227,26 @@ public class FamilyFragmentManager extends Fragment {
                     case 4:
                         onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+
                         break;
+
+                    case 5:
+                        onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                       break;
+                    case 6:
+                        onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                       break;
+                    case 7:
+                        onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+
+                        break;
+                    case 8:
+                        onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+
                 }
                 try {
                     if (bound) {
@@ -384,6 +403,8 @@ public class FamilyFragmentManager extends Fragment {
                 editor.commit();
                 if (position==0){
                     adapter.notifyDataSetChanged();
+                }else if (position>0){
+                    viewPager.setCurrentItem(position);
                 }
             } catch (Exception e) {
                 e.printStackTrace();

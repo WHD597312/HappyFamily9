@@ -90,8 +90,8 @@
 
             <ImageView
                 android:id="@+id/iv_my1"
-                android:layout_width="350dp"
-                android:layout_height="200dp"
+                android:layout_width="@dimen/x320"
+                android:layout_height="@dimen/y130"
                 android:layout_centerHorizontal="true"
                 android:layout_marginLeft="@dimen/dp_jy_12"
                 android:layout_marginRight="@dimen/dp_jy_12"
@@ -119,7 +119,7 @@
             <ImageView
                 android:id="@+id/iv_mypage"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/dp_jy_160"
+                android:layout_height="@dimen/y100"
                 android:scaleType="centerInside"
                 android:layout_alignLeft="@id/tv_xnty_my1"
                 android:layout_alignTop="@+id/tv_xnty_my1"

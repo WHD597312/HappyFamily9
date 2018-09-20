@@ -237,20 +237,22 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             setMode(deviceChild);
 
             List<DeviceChild> revomeList=new ArrayList<>();
-            for(DeviceChild deviceChild2:linkList){
+            int first=linkList.size();
+            for(int i=0;i<linkList.size();i++){
+                DeviceChild deviceChild2=linkList.get(i);
                 DeviceChild deviceChild3=deviceChildDao.findDeviceByMacAddress2(deviceChild2.getMacAddress());
                 if (deviceChild3==null){
                     String macAddress=deviceChild2.getMacAddress();
+                    linkList.remove(i);
                     if (linkDeviceChildMap.containsKey(macAddress)){
                         linkDeviceChildMap.remove(deviceChild2);
                     }
-                    revomeList.add(deviceChild2);
                 }
             }
-            if (!revomeList.isEmpty()){
+            int second=linkList.size();
+            if (first!=second){
                 list.clear();
                 getBitWheelInfos();
-                linkList.removeAll(revomeList);
                 List<SmartTerminalInfo> infoList = new ArrayList<>();
                 for (int i = 0; i < linkList.size(); i++) {
                     DeviceChild deviceChild=linkList.get(i);

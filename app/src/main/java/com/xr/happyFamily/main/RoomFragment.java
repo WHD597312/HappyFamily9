@@ -161,7 +161,7 @@ public class RoomFragment extends Fragment {
             deviceChildren = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
             Log.i("deviceSize", "-->" + deviceChildren.size());
             mGridData = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
-            DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId, roomId);
+            final DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId, roomId);
             if (deviceChild == null) {
                 tv_balcony_wd.setVisibility(View.GONE);
                 tv_balcony_23.setVisibility(View.GONE);
@@ -190,89 +190,96 @@ public class RoomFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     DeviceChild deviceChild = mGridData.get(position);
-                    int type = deviceChild.getType();
-                    boolean online = deviceChild.getOnline();
-                    if (type == 2) {
-                        if (online) {
+                    DeviceChild deviceChild2=deviceChildDao.findById(deviceChild.getId());
+                    if (deviceChild2==null){
+                        mGridData.remove(position);
+                        mGridViewAdapter.notifyDataSetChanged();
+                    }else {
+                        int type = deviceChild.getType();
+                        boolean online = deviceChild.getOnline();
+                        if (type == 2) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 3) {
+                            Intent intent = new Intent(getActivity(), SmartTerminalActivity.class);
                             String deviceName = deviceChild.getName();
                             long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), DeviceDetailActivity.class);
                             intent.putExtra("deviceName", deviceName);
                             intent.putExtra("deviceId", deviceId);
                             intent.putExtra("houseId", houseId);
                             startActivityForResult(intent, 6000);
-                        } else {
-                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (type == 3) {
-                        Intent intent = new Intent(getActivity(), SmartTerminalActivity.class);
-                        String deviceName = deviceChild.getName();
-                        long deviceId = deviceChild.getId();
-                        intent.putExtra("deviceName", deviceName);
-                        intent.putExtra("deviceId", deviceId);
-                        intent.putExtra("houseId", houseId);
-                        startActivityForResult(intent, 6000);
-                    } else if (type == 4) {
-                        if (online) {
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), SocketActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId", houseId);
-                            startActivityForResult(intent, 6000);
-                        } else {
-                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (type == 5) {
-                        if (online) {
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), DehumidifierActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId", houseId);
-                            startActivityForResult(intent, 6000);
-                        } else {
-                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (type == 6) {
-                        if (online) {
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), AConfActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId", houseId);
-                            startActivityForResult(intent, 6000);
-                        } else {
-                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (type == 7) {
-                        if (online) {
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), APurifierActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId", houseId);
-                            startActivityForResult(intent, 6000);
-                        } else {
-                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
-                        }
-                    } else if (type == 8) {
-                        if (online) {
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), PurifierActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId", houseId);
-                            startActivityForResult(intent, 6000);
-                        } else {
-                            Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                        } else if (type == 4) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), SocketActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 5) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), DehumidifierActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 6) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), AConfActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 7) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), APurifierActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 8) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
+
                 }
             });
             mGridView.setOnItemLongClickListener(new AdapterView.OnItemLongClickListener() {
@@ -281,7 +288,14 @@ public class RoomFragment extends Fragment {
                     mPosition = position;
                     mdeledeviceChild = mGridData.get(position);
                     Log.i("mdeledeviceChild", "-->" + mdeledeviceChild.getDeviceId());
-                    deleteDeviceDialog();
+                    DeviceChild deviceChild2=deviceChildDao.findById(mdeledeviceChild.getId());
+                    if (deviceChild2==null){
+                        mGridData.remove(position);
+                        mGridViewAdapter.notifyDataSetChanged();
+                    }else {
+                        deleteDeviceDialog();
+                    }
+
                     return true;
                 }
             });

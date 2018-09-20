@@ -55,6 +55,7 @@ import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.jia.view_custom.DeleteDeviceDialog;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONObject;
@@ -391,6 +392,7 @@ public class FamilyFragment extends Fragment {
                     DeviceChild deviceChild = commonDevices.get(position);
                     DeviceChild deviceChild2 = deviceChildDao.findById(deviceChild.getId());
                     if (deviceChild2 == null) {
+                        Utils.showToast(getActivity(),"该设备已重置");
                         commonDevices.remove(position);
                         mGridViewAdapter.notifyDataSetChanged();
                     } else {
@@ -495,6 +497,7 @@ public class FamilyFragment extends Fragment {
                     mdeledeviceChild = shareDevices.get(position);
                     DeviceChild deviceChild=deviceChildDao.findById(mdeledeviceChild.getId());
                     if (deviceChild==null){
+                        Utils.showToast(getActivity(),"该设备已重置");
                         shareDevices.remove(position);
                         shareViewAdapter.notifyDataSetChanged();
                     }else {
@@ -511,6 +514,7 @@ public class FamilyFragment extends Fragment {
                     DeviceChild deviceChild = shareDevices.get(position);
                     DeviceChild deviceChild2 = deviceChildDao.findById(deviceChild.getId());
                     if (deviceChild2 == null) {
+                        Utils.showToast(getActivity(),"该设备已重置");
                         shareDevices.remove(position);
                         shareViewAdapter.notifyDataSetChanged();
                     } else {

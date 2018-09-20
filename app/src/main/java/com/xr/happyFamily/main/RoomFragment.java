@@ -192,6 +192,7 @@ public class RoomFragment extends Fragment {
                     DeviceChild deviceChild = mGridData.get(position);
                     DeviceChild deviceChild2=deviceChildDao.findById(deviceChild.getId());
                     if (deviceChild2==null){
+                        Utils.showToast(getActivity(),"该设备已重置");
                         mGridData.remove(position);
                         mGridViewAdapter.notifyDataSetChanged();
                     }else {
@@ -290,6 +291,7 @@ public class RoomFragment extends Fragment {
                     Log.i("mdeledeviceChild", "-->" + mdeledeviceChild.getDeviceId());
                     DeviceChild deviceChild2=deviceChildDao.findById(mdeledeviceChild.getId());
                     if (deviceChild2==null){
+                        Utils.showToast(getActivity(),"该设备已重置");
                         mGridData.remove(position);
                         mGridViewAdapter.notifyDataSetChanged();
                     }else {

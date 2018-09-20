@@ -236,7 +236,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             tv_title.setText(name);
             setMode(deviceChild);
 
-            List<DeviceChild> revomeList=new ArrayList<>();
             int first=linkList.size();
             for(int i=0;i<linkList.size();i++){
                 DeviceChild deviceChild2=linkList.get(i);

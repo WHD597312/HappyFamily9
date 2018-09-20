@@ -129,14 +129,15 @@ public class SmartLinkedActivity extends AppCompatActivity {
             if (!list.isEmpty()) {
 
                 int first = list.size();
-                for (DeviceChild deviceChild2 : list) {
+                for (int i=0;i<list.size();i++) {
+                    DeviceChild deviceChild2=list.get(i);
                     DeviceChild deviceChild3 = deviceChildDao.findDeviceByMacAddress2(deviceChild2.getMacAddress());
                     if (deviceChild3 == null) {
                         String macAddress = deviceChild2.getMacAddress();
+                        list.remove(i);
                         if (linkedMap.containsKey(macAddress)) {
                             linkedMap.remove(deviceChild2);
                         }
-
                     }
                 }
                 int second = list.size();

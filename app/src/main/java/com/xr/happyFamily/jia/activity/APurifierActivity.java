@@ -617,9 +617,10 @@ public class APurifierActivity extends AppCompatActivity {
         deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild==null){
             Toast.makeText(APurifierActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            Intent data = new Intent(APurifierActivity.this, MainActivity.class);
-            data.putExtra("houseId", houseId);
-            startActivity(data);
+            Intent intent=new Intent();
+            intent.putExtra("houseId",houseId);
+            setResult(6000,intent);
+            finish();
         }else   {
             boolean online = deviceChild.getOnline();
             if (online) {

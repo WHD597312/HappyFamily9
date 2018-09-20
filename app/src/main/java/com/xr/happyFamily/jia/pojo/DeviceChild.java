@@ -60,10 +60,8 @@ public class DeviceChild implements Serializable{
     int socketTemp;/**插座温度*/
     int socketState;/**插座当前状态*/
     int socketTimer;/**插座定时模式*/
-    int socketTimerOpenHour;/**插座定时模式开的 时*/
-    int socketTimerOpenMin;/**插座定时模式开的 分*/
-    int socketTimerCloseHour;/**插座定时模式关的 时*/
-    int socketTimerCloseMin;/**插座定时模式关的 分*/
+    int socketTimerHour;/**插座定时模式的时*/
+    int socketTimerMin;/**插座定时模式的分*/
     int socketCurrent;/**插座当前电流值*/
     int socketVal;/**插座当前电压值*/
     int socketPowerConsume;/**插座当前耗电量总度数*/
@@ -434,30 +432,6 @@ public class DeviceChild implements Serializable{
     public void setSocketCurrent(int socketCurrent) {
         this.socketCurrent = socketCurrent;
     }
-    public int getSocketTimerCloseMin() {
-        return this.socketTimerCloseMin;
-    }
-    public void setSocketTimerCloseMin(int socketTimerCloseMin) {
-        this.socketTimerCloseMin = socketTimerCloseMin;
-    }
-    public int getSocketTimerCloseHour() {
-        return this.socketTimerCloseHour;
-    }
-    public void setSocketTimerCloseHour(int socketTimerCloseHour) {
-        this.socketTimerCloseHour = socketTimerCloseHour;
-    }
-    public int getSocketTimerOpenMin() {
-        return this.socketTimerOpenMin;
-    }
-    public void setSocketTimerOpenMin(int socketTimerOpenMin) {
-        this.socketTimerOpenMin = socketTimerOpenMin;
-    }
-    public int getSocketTimerOpenHour() {
-        return this.socketTimerOpenHour;
-    }
-    public void setSocketTimerOpenHour(int socketTimerOpenHour) {
-        this.socketTimerOpenHour = socketTimerOpenHour;
-    }
     public int getSocketTimer() {
         return this.socketTimer;
     }
@@ -758,6 +732,18 @@ public class DeviceChild implements Serializable{
     public void setWarmerFall(int warmerFall) {
         this.warmerFall = warmerFall;
     }
+    public int getSocketTimerMin() {
+        return this.socketTimerMin;
+    }
+    public void setSocketTimerMin(int socketTimerMin) {
+        this.socketTimerMin = socketTimerMin;
+    }
+    public int getSocketTimerHour() {
+        return this.socketTimerHour;
+    }
+    public void setSocketTimerHour(int socketTimerHour) {
+        this.socketTimerHour = socketTimerHour;
+    }
 
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.houseId = houseId;
@@ -769,20 +755,24 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
     }
 
-    @Generated(hash = 1746486105)
+
+    @Generated(hash = 1973447423)
+    public DeviceChild() {
+    }
+    @Generated(hash = 1328755286)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
             int warmerCurRunRoatePower, int warmerRunState, int deviceState, int warmerFall, String rateState, int lockState, int screenState, int curRunState2, int curRunState3,
             int timerHour, int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState,
             int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp,
-            int socketState, int socketTimer, int socketTimerOpenHour, int socketTimerOpenMin, int socketTimerCloseHour, int socketTimerCloseMin, int socketCurrent, int socketVal,
-            int socketPowerConsume, int timerSwitch, int waterLevel, String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow, int equipCurdPowerHigh, int equipCurdPowerLow,
-            int faultCode, String purifierState, int dehumSetTemp, int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp, int dehumSleep, int dehumAnion, int dehumDrying,
-            int dehumDefrost, String aCondState, int aCondSetTemp1, int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1, int aCondSimpleTemp2, int aCondInnerTemp,
-            int aCondOuterTemp, int aCondSleep, int aCondSUpDown, int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear,
-            int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity,
-            int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7,
-            int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10) {
+            int socketState, int socketTimer, int socketTimerHour, int socketTimerMin, int socketCurrent, int socketVal, int socketPowerConsume, int timerSwitch, int waterLevel,
+            String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow, int equipCurdPowerHigh, int equipCurdPowerLow, int faultCode, String purifierState, int dehumSetTemp,
+            int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp, int dehumSleep, int dehumAnion, int dehumDrying, int dehumDefrost, String aCondState, int aCondSetTemp1,
+            int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1, int aCondSimpleTemp2, int aCondInnerTemp, int aCondOuterTemp, int aCondSleep, int aCondSUpDown,
+            int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay,
+            String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2,
+            int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9,
+            int wPurifierfilter10) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -833,10 +823,8 @@ public class DeviceChild implements Serializable{
         this.socketTemp = socketTemp;
         this.socketState = socketState;
         this.socketTimer = socketTimer;
-        this.socketTimerOpenHour = socketTimerOpenHour;
-        this.socketTimerOpenMin = socketTimerOpenMin;
-        this.socketTimerCloseHour = socketTimerCloseHour;
-        this.socketTimerCloseMin = socketTimerCloseMin;
+        this.socketTimerHour = socketTimerHour;
+        this.socketTimerMin = socketTimerMin;
         this.socketCurrent = socketCurrent;
         this.socketVal = socketVal;
         this.socketPowerConsume = socketPowerConsume;
@@ -889,9 +877,6 @@ public class DeviceChild implements Serializable{
         this.wPurifierfilter8 = wPurifierfilter8;
         this.wPurifierfilter9 = wPurifierfilter9;
         this.wPurifierfilter10 = wPurifierfilter10;
-    }
-    @Generated(hash = 1973447423)
-    public DeviceChild() {
     }
    
 

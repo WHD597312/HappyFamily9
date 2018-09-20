@@ -48,6 +48,7 @@ import com.xr.happyFamily.jia.activity.DehumidifierActivity;
 import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.ShareDeviceActivity;
+import com.xr.happyFamily.jia.activity.SmartLinkedActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.activity.TempChatActivity;
@@ -283,6 +284,7 @@ public class MQService extends Service {
         }
     }
 
+    private int falling=-1;
     /**
      * 加载MQTT返回的消息
      */
@@ -294,7 +296,6 @@ public class MQService extends Service {
             String topicName = strings[0];/**收到的主题*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
-
             if (topicName.startsWith("p99/" + phone)) {
 
             } else if (topicName.startsWith("p99/warmer1")) {
@@ -357,12 +358,12 @@ public class MQService extends Service {
             JSONObject messageJsonObject = null;
             String productType = null;
             JSONArray messageJsonArray = null;
-            if (AddDeviceActivity.running) {
+            if (!TextUtils.isEmpty(macAddress)) {
+                deviceChild = deviceChildDao.findDeviceByMacAddress2(macAddress);
+            }
 
-            } else {
-                if (!TextUtils.isEmpty(macAddress)) {
-                    deviceChild = deviceChildDao.findDeviceByMacAddress2(macAddress);
-                }
+            if (AddDeviceActivity.running && !"reSet".equals(message)) {
+
             }
             try {
                 if (topicName.equals("p99/" + phone + "/login")) {
@@ -418,7 +419,8 @@ public class MQService extends Service {
                         deviceChild.setOnline(false);
                         deviceChildDao.update(deviceChild);
                     }
-                } else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
+                }
+                else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
 
                 } else if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
 
@@ -565,6 +567,7 @@ public class MQService extends Service {
                                 deviceChild.setWarmerFall(warmerFall);
                             }
                             if (warmerFall==1){
+                                falling=1;
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
                                 Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
                                 long houseId=deviceChild.getHouseId();
@@ -586,6 +589,8 @@ public class MQService extends Service {
                                 NotificationManager mNotificationManager =
                                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                 mNotificationManager.notify(0, builder.build());
+                            }else {
+                                falling=0;
                             }
 //                            deviceChild.setWarmerFall(wa);
                             int ss = deviceChild.getDeviceId();
@@ -601,7 +606,6 @@ public class MQService extends Service {
                         }
                         break;
                     case 3:
-
                             if (messageJsonArray != null) {
                                 int sensorSimpleTemp;/**传感器采样温度*/
                                 int sensorSimpleHum;/**传感器采样湿度*/
@@ -638,16 +642,13 @@ public class MQService extends Service {
 
                         break;
                     case 4:
-
                             if (messageJsonArray != null) {
                                 int socketPower;/**插座功率*/
                                 int socketTemp;/**插座温度*/
                                 int socketState;/**插座当前状态*/
                                 int socketTimer=0;/**插座定时模式*/
-                                int socketTimerOpenHour;/**插座定时模式开的 时*/
-                                int socketTimerOpenMin;/**插座定时模式开的 分*/
-                                int socketTimerCloseHour;/**插座定时模式关的 时*/
-                                int socketTimerCloseMin;/**插座定时模式关的 分*/
+                                int socketTimerHour;/**定时模式的时*/
+                                int socketTimerMin;/**定时模式的分*/
                                 int socketCurrent;/**插座当前电流值*/
                                 int socketVal;/**插座当前电压值*/
                                 int socketPowerConsume;/**插座当前耗电量总度数*/
@@ -669,40 +670,21 @@ public class MQService extends Service {
                                 isSocketTimerMode=x[6];
 
 
-                                socketTimerOpenHour = messageJsonArray.getInt(11);
-                                socketTimerOpenMin = messageJsonArray.getInt(12);
+                                socketTimer = messageJsonArray.getInt(11);
+                                socketTimerHour=messageJsonArray.getInt(12);
+                                socketTimerMin=messageJsonArray.getInt(13);
 
-
-                                socketTimerCloseHour=messageJsonArray.getInt(13);
-                                socketTimerCloseMin=messageJsonArray.getInt(14);
-                                if (isSocketTimerMode==1){
-                                    if (socketTimerOpenHour==0 && socketTimerOpenMin==0) {
-                                        socketTimer = 2;
-                                    }else {
-                                        socketTimer=1;
-                                    }
-                                }
-                                if (isSocketTimerMode==1){
-                                    if (socketTimerCloseHour==0 && socketTimerCloseMin==0){
-                                        if (socketTimer==1){
-                                        }else {
-                                            socketTimer=2;
-                                        }
-                                    }else {
-                                        socketTimer=0;
-                                    }
-                                }
-                                int highCurrent = messageJsonArray.getInt(15);
-                                int lowCurrent=messageJsonArray.getInt(16);
-                                String socketCurrent2=""+highCurrent/25+lowCurrent%256;
+                                int highCurrent = messageJsonArray.getInt(14);
+                                int lowCurrent=messageJsonArray.getInt(15);
+                                String socketCurrent2=""+highCurrent/256+lowCurrent%256;
                                 socketCurrent=Integer.parseInt(socketCurrent2);
-                                int highVal = messageJsonArray.getInt(17);
-                                int lowVal=messageJsonArray.getInt(18);
+                                int highVal = messageJsonArray.getInt(16);
+                                int lowVal=messageJsonArray.getInt(17);
                                 String socketVal2=""+highVal/256 +lowVal%256;
                                 socketVal=Integer.parseInt(socketVal2);
 
-                                int highPowerConsume = messageJsonArray.getInt(19);
-                                int lowPowerConsume=messageJsonArray.getInt(20);
+                                int highPowerConsume = messageJsonArray.getInt(18);
+                                int lowPowerConsume=messageJsonArray.getInt(19);
                                 String powerConsume2=""+highPowerConsume/256 +lowPowerConsume%256;
                                 socketPowerConsume=Integer.parseInt(powerConsume2);
                                 if (deviceChild != null) {
@@ -713,13 +695,11 @@ public class MQService extends Service {
                                     deviceChild.setSocketTemp(socketTemp);
                                     deviceChild.setSocketState(socketState);
                                     deviceChild.setIsSocketTimerMode(isSocketTimerMode);
-                                    deviceChild.setSocketTimerOpenHour(socketTimerOpenHour);
-                                    deviceChild.setSocketTimerOpenMin(socketTimerOpenMin);
-                                    deviceChild.setSocketTimerCloseHour(socketTimerCloseHour);
-                                    deviceChild.setSocketTimerCloseMin(socketTimerCloseMin);
+                                    deviceChild.setSocketTimer(socketTimer);
+                                    deviceChild.setSocketTimerHour(socketTimerHour);
+                                    deviceChild.setSocketTimerMin(socketTimerMin);
                                     deviceChild.setSocketCurrent(socketCurrent);
                                     deviceChild.setSocketVal(socketVal);
-                                    deviceChild.setSocketTimer(socketTimer);
                                     deviceChild.setSocketPowerConsume(socketPowerConsume);
                                     deviceChild.setOnline(true);
                                     deviceChildDao.update(deviceChild);
@@ -1048,6 +1028,16 @@ public class MQService extends Service {
                         }
                         break;
                 }
+
+                if (AddDeviceActivity.running || DeviceDetailActivity.running || MsgActivity.running
+                        ||SmartTerminalActivity.running||SocketActivity.running|| PurifierActivity.running
+                        ||ShareDeviceActivity.running||LiveActivity.running
+                        ||TempChatActivity.running||APurifierActivity.running
+                        || AConfActivity.running ||DehumidifierActivity.running
+                        ||SmartLinkedActivity.running||QingLvFragment.running
+                        ||QunzuAddActivity.running ||QunZuFragment.running){
+                    falling=-1;
+                }
                 Log.i("FamilyFragmentManager", "-->" + FamilyFragmentManager.running);
                 if (AddDeviceActivity.running) {
                     if (type != -1) {
@@ -1056,16 +1046,16 @@ public class MQService extends Service {
                         mqttIntent.putExtra("macAddress", macAddress);
                         sendBroadcast(mqttIntent);
                     }
-                } else if (DeviceDetailActivity.running) {
-                    Intent mqttIntent = new Intent("DeviceDetailActivity");
-                    mqttIntent.putExtra("deviceChild", deviceChild);
-                    mqttIntent.putExtra("macAddress", macAddress);
-                    sendBroadcast(mqttIntent);
-                } else if (FamilyFragmentManager.running) {
+                }else if (FamilyFragmentManager.running|| falling==1 || falling==0) {
                     Intent mqttIntent = new Intent("RoomFragment");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     mqttIntent.putExtra("sharedId", sharedId);
+                    sendBroadcast(mqttIntent);
+                }  else if (DeviceDetailActivity.running ) {
+                    Intent mqttIntent = new Intent("DeviceDetailActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
                 } else if (MsgActivity.running) {
                     Intent mqttIntent = new Intent("Friend");
@@ -1116,6 +1106,11 @@ public class MQService extends Service {
                 }
                 else if (DehumidifierActivity.running){
                     Intent mqttIntent = new Intent("DehumidifierActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
+                }else if (SmartLinkedActivity.running){
+                    Intent mqttIntent = new Intent("SmartLinkedActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
@@ -1316,9 +1311,7 @@ public class MQService extends Service {
                                 msg.what = 1;   //标志消息的标志
                                 handler.sendMessage(msg);
                             }
-
                         }
-
                     } else if (state == 3) {
                         if (userList.getClockType() == 3)
                             msgData.setState(3);
@@ -1503,9 +1496,6 @@ public class MQService extends Service {
         String userName = preferences.getString("username", "");
         String friendTopic = "p99/+/acceptorId_" + userId + "/friend";
         phone = preferences.getString("phone", "");
-        String friendReplayTopic = "p99/+/acceptorId_" + userId + "/friendReplay";
-        String clockTopic = "p99/clockuniversal/userId_" + userId;
-        Log.e("qqqqqCCC", friendTopic);
         list.add("p99/" + phone + "/login");
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
         for (DeviceChild deviceChild : deviceChildren) {
@@ -1556,9 +1546,14 @@ public class MQService extends Service {
                     break;
             }
         }
-        list.add(friendTopic);
-        list.add(clockTopic);
-        list.add(friendReplayTopic);
+        if (!LoginActivity.running){
+            String friendReplayTopic = "p99/+/acceptorId_" + userId + "/friendReplay";
+            String clockTopic = "p99/clockuniversal/userId_" + userId;
+            list.add(friendTopic);
+            list.add(clockTopic);
+            list.add(friendReplayTopic);
+            Log.e("qqqqqCCC", friendTopic);
+        }
         return list;
     }
 

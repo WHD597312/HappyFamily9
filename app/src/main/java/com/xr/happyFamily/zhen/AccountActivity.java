@@ -127,7 +127,7 @@ public class AccountActivity extends AppCompatActivity {
             }
             if (position==0){
                 viewHolder.tv_head.setText(strs[0]);
-                viewHolder.tv_account.setText(username);
+                viewHolder.tv_account.setText(phone+"");
                 viewHolder.tv_account.setVisibility(View.VISIBLE);
             }else if (position==1){
                 viewHolder.tv_account.setVisibility(View.GONE);

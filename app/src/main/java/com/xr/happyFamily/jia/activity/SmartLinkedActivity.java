@@ -1,7 +1,9 @@
 package com.xr.happyFamily.jia.activity;
 
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -20,8 +22,11 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.MessageEvent;
 import com.xr.happyFamily.together.http.NetWorkUtil;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -53,6 +58,9 @@ public class SmartLinkedActivity extends AppCompatActivity {
     long roomId;
     int linkedSensorId;
     DeviceChild sensorChild;
+    MessageReceiver receiver;
+    public static boolean running=false;
+    private long Id;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -69,25 +77,68 @@ public class SmartLinkedActivity extends AppCompatActivity {
 //        list=deviceChildDao.findLinkDevice(3);
         Intent intent=getIntent();
         sensorId=intent.getIntExtra("sensorId",0);
-        long id= intent.getLongExtra("Id",0);
-        sensorChild=deviceChildDao.findById(id);
+        Id= intent.getLongExtra("Id",0);
+        sensorChild=deviceChildDao.findById(Id);
         linkedSensorId=sensorChild.getDeviceId();
         houseId=sensorChild.getHouseId();
         roomId=sensorChild.getRoomId();
         list= (List<DeviceChild>) intent.getSerializableExtra("deviceList");
-        for (DeviceChild deviceChild:list){
-            int deviceId=deviceChild.getDeviceId();
-            linkedMap.put(deviceId,deviceChild);
-        }
         adapter=new LinkdAdapter(this,list);
         list_linked.setAdapter(adapter);
         if (NetWorkUtil.isConn(SmartLinkedActivity.this)){
             new GetLinkedAsync().execute();
+        }else {
+            Utils.showToast(SmartLinkedActivity.this,"请检查网络");
         }
+        IntentFilter intentFilter = new IntentFilter("SmartLinkedActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
     }
     @Override
     public void onBackPressed() {
         finish();
+    }
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        running=true;
+        sensorChild = deviceChildDao.findById(Id);
+        if (sensorChild==null){
+            Toast.makeText(SmartLinkedActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+            Intent data = new Intent(SmartLinkedActivity.this, MainActivity.class);
+            data.putExtra("houseId", houseId);
+            startActivity(data);
+        }else {
+            if (!list.isEmpty()){
+                List<DeviceChild> removeList=new ArrayList<>();
+                for (DeviceChild deviceChild2:list){
+                    DeviceChild deviceChild3=deviceChildDao.findDeviceByMacAddress2(deviceChild2.getMacAddress());
+                    if (deviceChild3==null){
+                        String macAddress=deviceChild2.getMacAddress();
+                        if (linkedMap.containsKey(macAddress)){
+                            linkedMap.remove(deviceChild2);
+                        }
+                        removeList.add(deviceChild2);
+                    }
+                }
+                list.removeAll(removeList);
+                if (list.isEmpty()){
+                    Intent intent=new Intent();
+                    intent.putExtra("list",(Serializable) list);
+                    setResult(100,intent);
+                    finish();
+                }else {
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
     }
 
     @OnClick({R.id.image_back,R.id.btn_ensure})
@@ -128,6 +179,9 @@ public class SmartLinkedActivity extends AppCompatActivity {
         super.onDestroy();
         if (unbinder!=null){
             unbinder.unbind();
+        }
+        if (receiver!=null){
+            unregisterReceiver(receiver);
         }
     }
 
@@ -226,6 +280,9 @@ public class SmartLinkedActivity extends AppCompatActivity {
                     if ("100".equals(returnCode)) {
                         JSONArray returnData = jsonObject.getJSONArray("returnData");
                         for (int i = 0; i < returnData.length(); i++) {
+                            if (list.size()>8){
+                                break;
+                            }
                             JSONObject device = returnData.getJSONObject(i);
                             int deviceId = device.getInt("deviceId");
                             int isLinked = device.getInt("isLinked");
@@ -234,7 +291,9 @@ public class SmartLinkedActivity extends AppCompatActivity {
                             deviceChild.setLinkedSensorId(sensorId);
                             linkedMap.put(deviceId,deviceChild);
                             deviceChildDao.update(deviceChild);
-                            list.add(deviceChild);
+                            if (!list.contains(deviceChild)){
+                                list.add(deviceChild);
+                            }
                         }
                     }
                 }
@@ -297,6 +356,44 @@ public class SmartLinkedActivity extends AppCompatActivity {
                 finish();
             }else {
                 Toast.makeText(SmartLinkedActivity.this,"设置失败",Toast.LENGTH_SHORT).show();
+            }
+        }
+    }
+    class MessageReceiver extends BroadcastReceiver{
+
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String macAddress=intent.getStringExtra("macAddress");
+            DeviceChild deviceChild= (DeviceChild) intent.getSerializableExtra("deviceChild");
+            if (deviceChild==null && macAddress.equals(sensorChild.getMacAddress())){
+                Toast.makeText(SmartLinkedActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+                Intent data = new Intent(SmartLinkedActivity.this, MainActivity.class);
+                data.putExtra("houseId", houseId);
+                startActivity(data);
+            }else if (deviceChild==null&&(!macAddress.equals(sensorChild.getMacAddress()))){
+                DeviceChild deviceChild3=null;
+                for(DeviceChild deviceChild2:list){
+                    if (macAddress.equals(deviceChild2.getMacAddress())){
+                        deviceChild3=deviceChild2;
+                        break;
+                    }
+                }
+                if (deviceChild3!=null){
+                    String name=deviceChild3.getName();
+                    Utils.showToast(SmartLinkedActivity.this,name+"设备已重置");
+                    list.remove(deviceChild3);
+                    if (linkedMap.containsKey(macAddress)){
+                        linkedMap.remove(deviceChild3);
+                    }
+                    if (!list.isEmpty()){
+                        adapter.notifyDataSetChanged();
+                    }else {
+                        Intent intent2=new Intent();
+                        intent2.putExtra("list",(Serializable) list);
+                        SmartLinkedActivity.this.setResult(100,intent2);
+                        finish();
+                    }
+                }
             }
         }
     }

@@ -519,6 +519,7 @@ public class AConfActivity extends AppCompatActivity {
                 intent.putExtra("ratedPower",ratedPower);
                 intent.putExtra("curdPower",curdPower);
                 intent.putExtra("deviceId",  deviceChild.getDeviceId());
+                intent.putExtra("Id",deviceChild.getId());
                 intent.putExtra("dataType",7);
                 startActivity(intent);
                 break;
@@ -1024,9 +1025,10 @@ public class AConfActivity extends AppCompatActivity {
         running = true;
         if (deviceChild == null) {
             Toast.makeText(AConfActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            Intent data = new Intent(AConfActivity.this, MainActivity.class);
-            data.putExtra("houseId", houseId);
-            startActivity(data);
+            Intent intent=new Intent();
+            intent.putExtra("houseId",houseId);
+            setResult(6000,intent);
+            finish();
         } else {
             boolean online = deviceChild.getOnline();
             if (online) {

@@ -25,7 +25,7 @@ public class GridViewAdapter extends ArrayAdapter {
     private int layoutResourceId;
     private List<DeviceChild> mGridData;
 
-    int img[]={R.mipmap.sb_dnq,R.mipmap.sb_znzd,R.mipmap.image_socket};
+    int img[]={R.mipmap.qunuanqi2,R.mipmap.zhinengzhongduan2,R.mipmap.zhinengchazuo2,R.mipmap.chushiqi2,R.mipmap.yidongkongtiao2,R.mipmap.kongqijinghuaqi2,R.mipmap.jingshuiqi2};
     public GridViewAdapter(Context context, int resource, List<DeviceChild> objects) {
         super(context, resource, objects);
         this.mContext = context;
@@ -167,7 +167,7 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[2]);
+                    item.setImg(img[3]);
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -197,7 +197,7 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[2]);
+                    item.setImg(img[4]);
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -227,7 +227,7 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[2]);
+                    item.setImg(img[5]);
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -243,7 +243,7 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
                 }else if (type==8){
-                    item.setImg(img[1]);
+                    item.setImg(img[6]);
                     boolean online=item.getOnline();
                     Log.i("common","-->"+common);
                     if (TextUtils.isEmpty(common)){

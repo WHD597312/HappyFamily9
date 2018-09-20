@@ -296,6 +296,7 @@ public class FamilyFragmentManager extends Fragment {
         if (isBound) {
             getActivity().unbindService(connection);
         }
+        handler.removeCallbacksAndMessages(null);
         running = false;
     }
 

@@ -113,7 +113,7 @@ public class MQService extends Service {
     private MsgDaoImpl msgDao;
 
     private Context mContext = this;
-//    CountTimer countTimer;
+    CountTimer countTimer;
 //    boolean isNew = false;
     /***
      * 模块类型
@@ -168,8 +168,8 @@ public class MQService extends Service {
         connect();
         Log.i("clientId", "-->" + clientId);
         isFinish = false;
-//        countTimer = new CountTimer(5000, 1000);
-//        countTimer.start();
+        countTimer = new CountTimer(5000, 1000);
+        countTimer.start();
         SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
         String[] clocks = clockData.split(",");
@@ -1726,33 +1726,33 @@ public class MQService extends Service {
     }
 
 
-//    class CountTimer extends CountDownTimer {
-//        public CountTimer(long millisInFuture, long countDownInterval) {
-//            super(millisInFuture, countDownInterval);
-//        }
-//
-//        /**
-//         * 倒计时过程中调用
-//         *
-//         * @param millisUntilFinished
-//         */
-//        @Override
-//        public void onTick(long millisUntilFinished) {
-//
-//            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
-//        }
-//
-//        /**
-//         * 倒计时完成后调用
-//         */
-//
-//        @Override
-//        public void onFinish() {
-//            Log.e("Tag", "倒计时完成");
-//            isFinish = true;
-//
-//
-//        }
-//    }
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+
+        @Override
+        public void onFinish() {
+            Log.e("Tag", "倒计时完成");
+            isFinish = true;
+
+
+        }
+    }
 
 }

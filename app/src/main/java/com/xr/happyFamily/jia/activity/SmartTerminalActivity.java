@@ -183,7 +183,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
 //        warmers=deviceChildDao.findDeviceByType(houseId,roomId,2,true);
 //        linkList=deviceChildDao.findLinkDevice(houseId,roomId,3);
         boolean isConn = NetWorkUtil.isConn(this);
+
         if (isConn) {
+            result=1;
             new GetLinkedAsync().execute();
         } else {
             Toast.makeText(this, "请检查网络", Toast.LENGTH_SHORT).show();
@@ -228,30 +230,34 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     protected void onStart() {
         super.onStart();
         running = true;
-
-        result=0;
         deviceChild=deviceChildDao.findDeviceByMacAddress2(macAddress);
         if (deviceChild != null && result==0) {
             String name = deviceChild.getName();
             tv_title.setText(name);
             setMode(deviceChild);
 
-            List<DeviceChild> revomeList=new ArrayList<>();
-            for(DeviceChild deviceChild2:linkList){
+            int first=linkList.size();
+            for(int i=0;i<linkList.size();i++){
+                DeviceChild deviceChild2=linkList.get(i);
                 DeviceChild deviceChild3=deviceChildDao.findDeviceByMacAddress2(deviceChild2.getMacAddress());
                 if (deviceChild3==null){
-                    revomeList.add(deviceChild2);
+                    String macAddress=deviceChild2.getMacAddress();
+                    linkList.remove(i);
+                    if (linkDeviceChildMap.containsKey(macAddress)){
+                        linkDeviceChildMap.remove(deviceChild2);
+                    }
                 }
             }
-            if (!revomeList.isEmpty()){
+            int second=linkList.size();
+            if (first!=second){
                 list.clear();
                 getBitWheelInfos();
-                linkList.removeAll(revomeList);
                 List<SmartTerminalInfo> infoList = new ArrayList<>();
                 for (int i = 0; i < linkList.size(); i++) {
                     DeviceChild deviceChild=linkList.get(i);
                     int linked=deviceChild.getLinked();
                     if (linked==1){
+                        linkDeviceChildMap.put(deviceChild.getMacAddress(),deviceChild);
                         SmartTerminalInfo terminalInfo = list.get(i);
                         infoList.add(terminalInfo);
                     }
@@ -262,12 +268,15 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             }
 
         }else {
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
-            finish();
+            if (deviceChild==null && result==0){
+                Intent intent=new Intent();
+                intent.putExtra("houseId",houseId);
+                setResult(6000,intent);
+                finish();
+            }
         }
     }
+
 
     private void setMode(DeviceChild deviceChild) {
         boolean online = deviceChild.getOnline();
@@ -296,7 +305,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
      *
      * @param deviceChild
      */
-    public void send(DeviceChild deviceChild){
+    public void sendWarmer(DeviceChild deviceChild){
         try {
             int sum=0;
             JSONObject jsonObject=new JSONObject();
@@ -372,6 +381,78 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 }
             }
         }catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * 向智能插座发送数据
+     * @param deviceChild
+     */
+    private void sendSocket(DeviceChild deviceChild) {
+        try {
+            int sum = 0;
+            JSONObject jsonObject = new JSONObject();
+            JSONArray jsonArray = new JSONArray();
+            int headCode = 144;
+            sum = sum + headCode;
+            int type = deviceChild.getType();
+            int typeHigh = type / 256;
+            sum = sum + typeHigh;
+            int typeLow = type % 256;
+            sum = sum + typeLow;
+            int busMode = deviceChild.getBusModel();
+            sum = sum + busMode;
+            int dataLength = 7;
+            sum = sum + dataLength;
+            int socketPower = deviceChild.getSocketPower();
+            int socketPowerHigh = socketPower / 256;
+            sum = sum + socketPowerHigh;
+            int socketPowerLow = socketPower % 256;
+            sum = sum + socketPowerLow;
+            int socketTemp = deviceChild.getSocketTemp();/**温度*/
+            sum = sum + 0;
+            int socketState = deviceChild.getSocketState();
+            int isSocketTimerMode = deviceChild.getIsSocketTimerMode();
+            int[] x = new int[8];
+            x[0] = socketState;
+            x[1] = isSocketTimerMode;
+            int dataContent = TenTwoUtil.changeToTen(x);
+            sum = sum + dataContent;
+            int socketTimer = deviceChild.getSocketTimer();
+            sum = sum + socketTimer;
+            int socketTimerHour = deviceChild.getSocketTimerHour();
+            sum = sum + socketTimerHour;
+            int socketTimerMin = deviceChild.getSocketTimerMin();
+            sum = sum + socketTimerMin;
+
+            int checkCode = sum % 256;
+            jsonArray.put(0, headCode);/**头码*/
+            jsonArray.put(1, typeHigh);/**类型 高位*/
+            jsonArray.put(2, typeLow);/**类型 低位*/
+            jsonArray.put(3, busMode);/**商业模式*/
+            jsonArray.put(4, dataLength);/**数据长度*/
+            jsonArray.put(5, socketPowerHigh);
+            jsonArray.put(6, socketPowerLow);
+            jsonArray.put(7, 0);
+            jsonArray.put(8, dataContent);
+            jsonArray.put(9,socketTimer);
+            jsonArray.put(10, socketTimerHour);
+            jsonArray.put(11, socketTimerMin);
+            jsonArray.put(12, checkCode);/**校验码*/
+            jsonArray.put(13, 9);/**结束码*/
+            jsonObject.put("Socket", jsonArray);
+
+            if (isBound) {
+                String macAddress=deviceChild.getMacAddress();
+                String topicName = "p99/socket1/" + macAddress + "/set";
+                String s = jsonObject.toString();
+                boolean success = mqService.publish(topicName, 1, s);
+                if (success) {
+                    deviceChildDao.update(deviceChild);
+                }
+            }
+        } catch (Exception e) {
             e.printStackTrace();
         }
     }
@@ -461,7 +542,10 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                         boolean online = deviceChild3.getOnline();
                         if (online && deviceChild3.getType()==2) {
                             deviceChild3.setDeviceState(1);
-                            send(deviceChild3);
+                            sendLindedDevice(deviceChild3);
+                        }else if (online && deviceChild3.getType()==4){
+                            deviceChild3.setSocketState(1);
+                            sendLindedDevice(deviceChild3);
                         }
                     }
                     image_switch.setTag("open");
@@ -470,9 +554,12 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     for (Map.Entry<String, DeviceChild> entry : linkDeviceChildMap.entrySet()) {
                         DeviceChild deviceChild3 = entry.getValue();
                         boolean online = deviceChild3.getOnline();
-                        if (online) {
+                        if (online && deviceChild3.getType()==2){
+                          deviceChild3.setDeviceState(0);
+                          sendLindedDevice(deviceChild3);
+                        } else if (online && deviceChild3.getType()==4) {
                             deviceChild3.setDeviceState(0);
-                            send(deviceChild3);
+                            sendLindedDevice(deviceChild3);
                         }
                     }
                     image_switch.setTag("close");
@@ -615,8 +702,8 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                 String offlineTopicName = "";
                 switch (type) {
                     case 2:
-                        onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                        offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                        onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
                         mqService.subscribe(onlineTopicName, 1);
                         mqService.subscribe(offlineTopicName, 2);
                         break;
@@ -676,6 +763,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             long roomId = deviceChild.getRoomId();
             String url = linkedUrl + "?deviceId=" + Id + "&deviceType=" + type + "&roomId=" + roomId;
             String result = HttpUtils.getOkHpptRequest(url);
+            SmartTerminalActivity.this.result=1;
             Log.i("GetLinkedAsync", "-->" + result);
             try {
                 if (!TextUtils.isEmpty(result)) {
@@ -685,6 +773,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     if ("100".equals(returnCode)) {
                         JSONArray returnData = jsonObject.getJSONArray("returnData");
                         for (int i = 0; i < returnData.length(); i++) {
+                            if (linkList.size()>8){
+                                break;
+                            }
                             JSONObject device = returnData.getJSONObject(i);
                             int deviceId = device.getInt("deviceId");
                             int isLinked = device.getInt("isLinked");
@@ -692,7 +783,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                             deviceChild.setLinked(isLinked);
                             deviceChild.setLinkedSensorId(sensorId);
                             deviceChildDao.update(deviceChild);
-                            if (linkList != null) {
+                            if (!linkList.contains(deviceChild)) {
                                 linkList.add(deviceChild);
                             }
                         }
@@ -712,14 +803,17 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
             }
             result=1;
             switch (code) {
-
                 case 100:
-                    List<DeviceChild> list2 = deviceChildDao.findLinkedDevices(houseId, roomId, 2, sensorId, 1);
+//                    List<DeviceChild> list2 = deviceChildDao.findLinkedDevices(houseId, roomId, 2, sensorId, 1);
                     List<SmartTerminalInfo> infoList = new ArrayList<>();
-                    for (int i = 0; i < list2.size(); i++) {
-                        DeviceChild deviceChild = list2.get(i);
+                    for (int i = 0; i < linkList.size(); i++) {
+                        DeviceChild deviceChild = linkList.get(i);
                         String macAddress = deviceChild.getMacAddress();
-                        linkDeviceChildMap.put(macAddress, deviceChild);
+                        if (deviceChild.getLinked()==1){
+                            linkDeviceChildMap.put(macAddress, deviceChild);
+                            SmartTerminalInfo terminalInfo = list.get(i);
+                            infoList.add(terminalInfo);
+                        }
                         int type = deviceChild.getType();
                         String onlineTopicName = "";
                         String offlineTopicName = "";
@@ -737,8 +831,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                                 mqService.subscribe(offlineTopicName, 2);
                                 break;
                         }
-                        SmartTerminalInfo terminalInfo = list.get(i);
-                        infoList.add(terminalInfo);
+
                     }
                     if (smartTerminalCircle != null) {
                         smartTerminalCircle.setBitInfos(infoList);
@@ -771,6 +864,18 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
 
         }
     };
+    private void sendLindedDevice(DeviceChild deviceChild){
+        int type=deviceChild.getType();
+        switch (type){
+            case 2:
+                sendWarmer(deviceChild);
+                break;
+            case 4:
+                sendSocket(deviceChild);
+                break;
+        }
+    }
+
 
     class MessageReceiver extends BroadcastReceiver {
 
@@ -930,9 +1035,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     for (Map.Entry<String, DeviceChild> entry : linkDeviceChildMap.entrySet()) {
                         DeviceChild deviceChild3 = entry.getValue();
                         boolean online = deviceChild3.getOnline();
-                        if (online) {
+                        if (online && deviceChild3.getType()==2){
                             deviceChild3.setWaramerSetTemp(temp);
-                            send(deviceChild3);
+                            sendLindedDevice(deviceChild3);
                         }
                     }
                     tv_smart_temp.setText(temp + "℃");
@@ -973,9 +1078,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     for (Map.Entry<String, DeviceChild> entry : linkDeviceChildMap.entrySet()) {
                         DeviceChild deviceChild3 = entry.getValue();
                         boolean online = deviceChild3.getOnline();
-                        if (online) {
+                        if (online && deviceChild3.getType()==2){
                             deviceChild3.setWaramerSetTemp(temp);
-                            send(deviceChild3);
+                            sendLindedDevice(deviceChild3);
                         }
                     }
                     tv_smart_temp.setText(temp + "℃");

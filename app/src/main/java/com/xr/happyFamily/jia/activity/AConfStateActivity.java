@@ -10,6 +10,7 @@ import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.mikephil.charting.charts.LineChart;
 import com.github.mikephil.charting.components.AxisBase;
@@ -25,8 +26,11 @@ import com.github.mikephil.charting.formatter.IAxisValueFormatter;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bean.AConfDataBean;
+import com.xr.happyFamily.jia.pojo.DeviceChild;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -71,8 +75,12 @@ public class AConfStateActivity extends AppCompatActivity {
     TextView tvGuige;
     @BindView(R.id.ll)
     LinearLayout ll;
-
+    private long Id;
+    private long houseId;
     int[] datas=new int[13];
+
+    private DeviceChildDaoImpl deviceChildDao;
+    DeviceChild deviceChild;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -82,6 +90,7 @@ public class AConfStateActivity extends AppCompatActivity {
         }
         setContentView(R.layout.activity_air_state);
         unbinder = ButterKnife.bind(this);
+        deviceChildDao=new DeviceChildDaoImpl(getApplicationContext());
         Intent intent = getIntent();
         ratedPower = intent.getIntExtra("ratedPower", 0);
         curdPower = intent.getIntExtra("curdPower", 0);
@@ -89,16 +98,28 @@ public class AConfStateActivity extends AppCompatActivity {
         dataType = intent.getIntExtra("dataType", 0);
         tvGuige.setText("额外功率："+ratedPower+"W");
         tvPower.setText("功率："+curdPower+"W");
-
+        Id=intent.getLongExtra("Id",0);
+        deviceChild=deviceChildDao.findById(Id);
+        houseId=deviceChild.getHouseId();
         initChart(lineChart);
     }
-
 
     private void findView() {
 
 
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+        deviceChild=deviceChildDao.findById(Id);
+        if (deviceChild==null){
+            Toast.makeText(AConfStateActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+            Intent data = new Intent(AConfStateActivity.this, MainActivity.class);
+            data.putExtra("houseId", houseId);
+            startActivity(data);
+        }
+    }
 
     private XAxis xAxis;                //X轴
     private YAxis leftYAxis;            //左侧Y轴

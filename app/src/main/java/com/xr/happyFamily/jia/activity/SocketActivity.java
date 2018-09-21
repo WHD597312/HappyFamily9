@@ -52,6 +52,9 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
 
+/***
+ * 设定温度与功率暂时未定
+ */
 public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekBarChangeListener {
 
     Unbinder unbinder;
@@ -125,6 +128,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
     protected void onStart() {
         super.onStart();
         running = true;
+        deviceChild=deviceChildDao.findById(deviceId);
         if (deviceChild != null) {
             boolean online = deviceChild.getOnline();
             if (online) {
@@ -135,8 +139,8 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             }
-        }else {
-            running=false;
+        } else {
+            running = false;
             Intent intent = new Intent();
             intent.putExtra("houseId", houseId);
             setResult(6000, intent);
@@ -159,21 +163,12 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             case R.id.image_switch2:
                 if (NoFastClickUtils.isFastClick()) {
                     int socketState = deviceChild.getSocketState();
-                    int isSocketTimerMode=deviceChild.getIsSocketTimerMode();
                     if (socketState == 0) {
-                        if (isSocketTimerMode==1){
-                            deviceChild.setSocketTimer(1);
-                        }
                         deviceChild.setSocketState(1);
-                        deviceChild.setSocketTimerCloseHour(0);
-                        deviceChild.setSocketTimerCloseMin(0);
+                        deviceChild.setIsSocketTimerMode(0);
                     } else if (socketState == 1) {
-                        if (isSocketTimerMode==1){
-                            deviceChild.setSocketTimer(1);
-                        }
-                        deviceChild.setSocketTimerOpenHour(0);
-                        deviceChild.setSocketTimerOpenMin(0);
                         deviceChild.setSocketState(0);
+                        deviceChild.setIsSocketTimerMode(0);
                     }
                     setMode(deviceChild);
                     send(deviceChild);
@@ -274,6 +269,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         popupWindow.setFocusable(true);
         popupWindow.setOutsideTouchable(true);
         MySeekBar beautySeekBar1 = (MySeekBar) view.findViewById(R.id.beautySeekBar1);
+        beautySeekBar1.setOnSeekBarChangeListener(this);
         Button btn_ensure = (Button) view.findViewById(R.id.btn_ensure);
 
         //添加弹出、弹入的动画
@@ -283,10 +279,12 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         popupWindow.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         //添加按键事件监听
 
+
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.btn_ensure:
+                        send(deviceChild);
                         popupWindow.dismiss();
                         backgroundAlpha(1.0f);
                         break;
@@ -330,7 +328,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-
+        Log.i("SeekBar","-->"+progress);
     }
 
     @Override
@@ -402,75 +400,21 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             @Override
             public void onClick(View v) {
                 int[] timeData = timePickViewPopup.getData();
-                int time=timeData[1];
-                int time2=timeData[2];
                 if (timeData[0] == 0) {
-                    int socketState=deviceChild.getSocketState();
-                    if (socketState==0){
-                        deviceChild.setSocketTimerCloseHour(timeData[1]);
-                        deviceChild.setSocketTimerCloseMin(timeData[2]);
-                        deviceChild.setSocketTimerCloseHour(0);
-                        deviceChild.setSocketTimerCloseHour(0);
-
-                        if (time==0 && time2==0){
-                            deviceChild.setSocketTimer(2);
-                            deviceChild.setIsSocketTimerMode(0);
-                        }else {
-                            deviceChild.setSocketTimer(0);
-                            deviceChild.setIsSocketTimerMode(1);
-                        }
-
-                    }else if (socketState==1){
-                        deviceChild.setSocketTimerCloseHour(timeData[1]);
-                        deviceChild.setSocketTimerCloseMin(timeData[2]);
-                        deviceChild.setSocketTimerOpenHour(0);
-                        deviceChild.setSocketTimerOpenMin(0);
-                        deviceChild.setSocketTimer(0);
-                        if (time==0 && time2==0){
-                            deviceChild.setSocketTimer(2);
-                            deviceChild.setIsSocketTimerMode(0);
-                        }else {
-                            deviceChild.setSocketTimer(0);
-                            deviceChild.setIsSocketTimerMode(1);
-                        }
-                    }
+                    deviceChild.setSocketTimer(1);
+                    deviceChild.setSocketTimerHour(timeData[1]);
+                    deviceChild.setSocketTimerMin(timeData[2]);
+                    deviceChild.setIsSocketTimerMode(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 } else if (timeData[0] == 1) {
-                    int socketState=deviceChild.getSocketState();
-                    if (socketState==0){
-                        deviceChild.setSocketTimerOpenHour(timeData[1]);
-                        deviceChild.setSocketTimerOpenMin(timeData[2]);
-                        deviceChild.setSocketTimerCloseHour(0);
-                        deviceChild.setSocketTimerCloseHour(0);
-                        if (time==0 && time2==0){
-                            deviceChild.setSocketTimer(2);
-                            deviceChild.setIsSocketTimerMode(0);
-                        }else {
-                            deviceChild.setSocketTimer(1);
-                            deviceChild.setIsSocketTimerMode(1);
-                        }
-                    }else if (socketState==1){
-                        deviceChild.setSocketTimerCloseHour(timeData[1]);
-                        deviceChild.setSocketTimerCloseMin(timeData[2]);
-                        deviceChild.setSocketTimerOpenHour(0);
-                        deviceChild.setSocketTimerOpenMin(0);
-                        if (time==0 && time2==0){
-                            deviceChild.setSocketTimer(2);
-                            deviceChild.setIsSocketTimerMode(0);
-                        }else {
-                            deviceChild.setSocketTimer(1);
-                            deviceChild.setIsSocketTimerMode(1);
-                        }
-                    }
+                    deviceChild.setSocketTimer(2);
+                    deviceChild.setSocketTimerHour(timeData[1]);
+                    deviceChild.setSocketTimerMin(timeData[2]);
+                    deviceChild.setIsSocketTimerMode(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 } else if (timeData[0] == 2) {
-                    deviceChild.setSocketTimerOpenHour(0);
-                    deviceChild.setSocketTimerOpenMin(0);
-                    deviceChild.setSocketTimerCloseHour(0);
-                    deviceChild.setSocketTimerCloseHour(0);
-                    deviceChild.setSocketTimer(2);
                     deviceChild.setIsSocketTimerMode(0);
                     setMode(deviceChild);
                     send(deviceChild);
@@ -557,6 +501,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             mqService = binder.getService();
             bound = true;
         }
+
         @Override
         public void onServiceDisconnected(ComponentName name) {
             bound = false;
@@ -564,41 +509,31 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
     };
 
     private void setMode(DeviceChild deviceChild) {
-        int socketState = deviceChild.getSocketState();/**插座开关状态*/int socketTimer = deviceChild.getSocketTimer();/**插座定时状态*/
-        int socketTimerOpenHour = deviceChild.getSocketTimerOpenHour();/**插座定时模式开的 时*/
-        int socketTimerOpenMin = deviceChild.getSocketTimerOpenMin();/**插座定时模式开的 分*/
-        int socketTimerCloseHour = deviceChild.getSocketTimerCloseHour();/**插座定时模式关的 时*/
-        int socketTimerCloseMin = deviceChild.getSocketTimerCloseMin();/**插座定时模式关的 分*/
+        int socketState = deviceChild.getSocketState();/**插座开关状态*/
+        int socketTimerHour = deviceChild.getSocketTimerHour();/**插座定时模式开的 时*/
+        int socketTimerMin = deviceChild.getSocketTimerMin();/**插座定时模式开的 分*/
         int isSocketTimerMode = deviceChild.getIsSocketTimerMode();
         if (socketState == 1) {/**插座当前状态开*/
             tv_switch_state.setText("插座电源已开启");
             socket_switch.setImageResource(R.mipmap.socket_switch);
             if (isSocketTimerMode == 1) {
-                if (socketTimerCloseHour == 0 && socketTimerCloseMin == 0) {
-                    tv_timer.setText("定时");
-                    tv_close_socket.setVisibility(View.GONE);
-                    isSocketTimerMode=0;
-                } else {
-                    tv_close_socket.setVisibility(View.VISIBLE);
-                    tv_close_socket.setText(socketTimerCloseHour + ":" + socketTimerCloseMin + "关闭插座");
-                    tv_timer.setText(socketTimerCloseHour + ":" + socketTimerCloseMin);
-                }
+                tv_close_socket.setVisibility(View.VISIBLE);
+                tv_close_socket.setText(socketTimerHour + ":" + socketTimerMin + "关闭插座");
+                tv_timer.setText(socketTimerHour + ":" + socketTimerMin);
             } else if (isSocketTimerMode == 0) {
                 tv_timer.setText("定时");
                 tv_close_socket.setVisibility(View.GONE);
-                isSocketTimerMode=0;
             }
         } else if (socketState == 0) {/**插座当前状态关*/
             socket_switch.setImageResource(R.mipmap.socket_switch_close);
             tv_switch_state.setText("插座电源已关闭");
-            if (socketTimerOpenHour == 0 && socketTimerOpenMin == 0) {
+            if (isSocketTimerMode == 1) {
+                tv_close_socket.setVisibility(View.VISIBLE);
+                tv_close_socket.setText(socketTimerHour + ":" + socketTimerMin + "开启插座");
+                tv_timer.setText(socketTimerHour + ":" + socketTimerMin);
+            } else {
                 tv_timer.setText("定时");
                 tv_close_socket.setVisibility(View.GONE);
-                isSocketTimerMode=0;
-            } else {
-                tv_close_socket.setVisibility(View.VISIBLE);
-                tv_close_socket.setText(socketTimerOpenHour + ":" + socketTimerOpenMin + "开启插座");
-                tv_timer.setText(socketTimerOpenHour + ":" + socketTimerOpenMin);
             }
         }
         if (isSocketTimerMode == 0) {
@@ -620,15 +555,17 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             sum = sum + typeHigh;
             int typeLow = type % 256;
             sum = sum + typeLow;
-            int dataLength = 7;
-            sum = sum + dataLength;
             int busMode = deviceChild.getBusModel();
             sum = sum + busMode;
-            int socketPower=deviceChild.getSocketPower();
-            int socketPowerHigh=socketPower/256;
-            int socketPowerLow=socketPower%256;
+            int dataLength = 7;
+            sum = sum + dataLength;
+            int socketPower = deviceChild.getSocketPower();
+            int socketPowerHigh = socketPower / 256;
+            sum = sum + socketPowerHigh;
+            int socketPowerLow = socketPower % 256;
+            sum = sum + socketPowerLow;
             int socketTemp = deviceChild.getSocketTemp();/**温度*/
-            sum = sum + socketTemp;
+            sum = sum + 0;
             int socketState = deviceChild.getSocketState();
             int isSocketTimerMode = deviceChild.getIsSocketTimerMode();
             int[] x = new int[8];
@@ -636,48 +573,33 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             x[1] = isSocketTimerMode;
             int dataContent = TenTwoUtil.changeToTen(x);
             sum = sum + dataContent;
-            int socketTimer=deviceChild.getSocketTimer();
-            int socketTimerHour=0;
-            int socketTimerMin=0;
-            if (socketTimer==2){
-                deviceChild.setSocketTimerOpenHour(0);
-                deviceChild.setSocketTimerOpenMin(0);
-                deviceChild.setSocketTimerCloseHour(0);
-                deviceChild.setSocketTimerCloseMin(0);
-                socketTimerHour=0;
-                socketTimerMin=0;
-            }else if (socketTimer==1){
-                socketTimerHour=deviceChild.getSocketTimerOpenHour();
-                socketTimerMin=deviceChild.getSocketTimerOpenMin();
-                deviceChild.setSocketTimerCloseHour(0);
-                deviceChild.setSocketTimerCloseMin(0);
-
-            }else if (socketTimer==0){
-                socketTimerHour=deviceChild.getSocketTimerCloseHour();
-                socketTimerMin=deviceChild.getSocketTimerCloseMin();
-                deviceChild.setSocketTimerOpenHour(0);
-                deviceChild.setSocketTimerOpenMin(0);
-            }
+            int socketTimer = deviceChild.getSocketTimer();
+            sum = sum + socketTimer;
+            int socketTimerHour = deviceChild.getSocketTimerHour();
             sum = sum + socketTimerHour;
+            int socketTimerMin = deviceChild.getSocketTimerMin();
             sum = sum + socketTimerMin;
+
             int checkCode = sum % 256;
             jsonArray.put(0, headCode);/**头码*/
             jsonArray.put(1, typeHigh);/**类型 高位*/
             jsonArray.put(2, typeLow);/**类型 低位*/
             jsonArray.put(3, busMode);/**商业模式*/
             jsonArray.put(4, dataLength);/**数据长度*/
-            jsonArray.put(5,socketPowerHigh);
-            jsonArray.put(6,socketPowerLow);
-            jsonArray.put(7, socketTemp);
+            jsonArray.put(5, socketPowerHigh);
+            jsonArray.put(6, socketPowerLow);
+            jsonArray.put(7, 0);
             jsonArray.put(8, dataContent);
-            jsonArray.put(9, socketTimerHour);
-            jsonArray.put(10, socketTimerMin);
-            jsonArray.put(11, checkCode);/**校验码*/
-            jsonArray.put(12, 9);/**结束码*/
+            jsonArray.put(9,socketTimer);
+            jsonArray.put(10, socketTimerHour);
+            jsonArray.put(11, socketTimerMin);
+            jsonArray.put(12, checkCode);/**校验码*/
+            jsonArray.put(13, 9);/**结束码*/
             jsonObject.put("Socket", jsonArray);
 
             if (isBound) {
-                String topicName = "p99/socket1/" + deviceChild.getMacAddress() + "/set";
+                String macAddress=deviceChild.getMacAddress();
+                String topicName = "p99/socket1/" + macAddress + "/set";
                 String s = jsonObject.toString();
                 boolean success = mqService.publish(topicName, 1, s);
                 if (success) {
@@ -699,9 +621,9 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
+            Intent intent = new Intent();
+            intent.putExtra("houseId", houseId);
+            setResult(6000, intent);
             finish();
             return true;
         }
@@ -711,7 +633,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
     @Override
     protected void onStop() {
         super.onStop();
-        running=false;
+        running = false;
     }
 
     @Override

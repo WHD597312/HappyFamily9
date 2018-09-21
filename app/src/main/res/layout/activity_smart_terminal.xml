@@ -176,7 +176,7 @@
             android:layout_below="@+id/tv_temp"
             android:layout_centerVertical="true"
             android:gravity="center_vertical"
-            android:text="36.2"
+            android:text="0"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_25" />
 
@@ -208,7 +208,7 @@
             android:layout_height="wrap_content"
             android:layout_toRightOf="@id/smart_hum_white"
             android:gravity="center_vertical"
-            android:text="36.2"
+            android:text="0"
             android:layout_below="@+id/tv_hum"
             android:textColor="@color/white"
             android:textSize="@dimen/sp_25"
@@ -322,7 +322,7 @@
             android:layout_alignParentRight="true"
             android:layout_alignRight="@+id/image_air"
             android:gravity="center"
-            android:text="10"
+            android:text="0"
             android:textColor="@color/white"
             android:layout_alignTop="@+id/image_air"
             android:layout_alignBottom="@+id/image_air"

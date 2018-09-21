@@ -103,7 +103,6 @@ public class LiveActivity extends AppCompatActivity {
         deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild==null){
             Toast.makeText(LiveActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            long houseId = deviceChild.getHouseId();
             Intent data = new Intent(LiveActivity.this, MainActivity.class);
             data.putExtra("houseId", houseId);
             startActivity(data);

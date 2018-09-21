@@ -86,15 +86,22 @@ public class TempChatActivity extends AppCompatActivity {
         int day=calendar.get(Calendar.DAY_OF_MONTH);
         String s=year+"-"+month+"-"+day;
         tv_time.setText(s);
-        int socketPower=deviceChild.getSocketPower()/10;
-        int socketVal=deviceChild.getSocketVal()/10;
-        int socketCurrent=deviceChild.getSocketCurrent();
-        float socketCurrent2=Float.parseFloat(socketCurrent+"");
-        float socketCurrent3=socketCurrent2/1000;
-        BigDecimal decimal=new BigDecimal(socketCurrent3);
-        BigDecimal decimalScale=decimal.setScale(2,BigDecimal.ROUND_HALF_DOWN);
-        tv_power.setText("功率："+socketPower+"W");
-        tv_val.setText("电压："+socketVal+"V");
+        int  powerValue=deviceChild.getSocketPower()/10;
+        float voltageValue2=deviceChild.getSocketVal();
+        BigDecimal decimal2=new BigDecimal(voltageValue2);
+        BigDecimal decimalScale2=decimal2.setScale(2,BigDecimal.ROUND_HALF_UP);
+        float voltageValue3=Float.parseFloat(decimalScale2+"");
+        int voltageValue= (int) voltageValue3;
+        int currentValue=deviceChild.getSocketCurrent();
+        float currentValue2=Float.parseFloat(currentValue+"");
+        float currentValue3=currentValue2/1000;
+        BigDecimal decimal=new BigDecimal(currentValue3);
+        BigDecimal decimalScale=decimal.setScale(2,BigDecimal.ROUND_HALF_UP);
+        String ss=decimalScale+"";
+
+        powerValue=(int) (voltageValue*Float.parseFloat(ss));
+        tv_power.setText("功率："+powerValue+"W");
+        tv_val.setText("电压："+voltageValue+"V");
         tv_current.setText("电流："+decimalScale+"A");
         IntentFilter intentFilter = new IntentFilter("TempChatActivity");
         receiver = new MessageReceiver();
@@ -118,7 +125,6 @@ public class TempChatActivity extends AppCompatActivity {
         deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild==null){
             Toast.makeText(TempChatActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            long houseId = deviceChild.getHouseId();
             Intent data = new Intent(TempChatActivity.this, MainActivity.class);
             data.putExtra("houseId", houseId);
             startActivity(data);
@@ -270,15 +276,22 @@ public class TempChatActivity extends AppCompatActivity {
                 }else if (!Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild.getMacAddress().equals(macAddress)){
                     deviceChild=deviceChild2;
                     deviceChildDao.update(deviceChild);
-                    int socketPower=deviceChild.getSocketPower()/10;
-                    int socketVal=deviceChild.getSocketVal()/10;
-                    int socketCurrent=deviceChild.getSocketCurrent();
-                    float socketCurrent2=Float.parseFloat(socketCurrent+"");
-                    float socketCurrent3=socketCurrent2/1000;
-                    BigDecimal decimal=new BigDecimal(socketCurrent3);
-                    BigDecimal decimalScale=decimal.setScale(2,BigDecimal.ROUND_HALF_DOWN);
-                    tv_power.setText("功率："+socketPower+"W");
-                    tv_val.setText("电压："+socketVal+"V");
+                    int  powerValue=deviceChild.getSocketPower()/10;
+                    float voltageValue2=deviceChild.getSocketVal();
+                    BigDecimal decimal2=new BigDecimal(voltageValue2);
+                    BigDecimal decimalScale2=decimal2.setScale(2,BigDecimal.ROUND_HALF_UP);
+                    float voltageValue3=Float.parseFloat(decimalScale2+"");
+                    int voltageValue= (int) voltageValue3;
+                    int currentValue=deviceChild.getSocketCurrent();
+                    float currentValue2=Float.parseFloat(currentValue+"");
+                    float currentValue3=currentValue2/1000;
+                    BigDecimal decimal=new BigDecimal(currentValue3);
+                    BigDecimal decimalScale=decimal.setScale(2,BigDecimal.ROUND_HALF_UP);
+                    String ss=decimalScale+"";
+
+                    powerValue=(int) (voltageValue*Float.parseFloat(ss));
+                    tv_power.setText("功率："+powerValue+"W");
+                    tv_val.setText("电压："+voltageValue+"V");
                     tv_current.setText("电流："+decimalScale+"A");
 //                    tv_version.setText(deviceChild.getWifiVersion()+","+deviceChild.getMcuVersion());
                 }

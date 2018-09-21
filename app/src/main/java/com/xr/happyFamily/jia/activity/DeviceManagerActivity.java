@@ -75,6 +75,7 @@ public class DeviceManagerActivity extends AppCompatActivity {
     }
 
 
+
     @Override
     protected void onStart() {
         super.onStart();

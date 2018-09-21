@@ -707,7 +707,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.arg1=0;
             msg.what=0;
             handler.sendMessage(msg);
-
         }else if (deviceState==1){
             image_switch.setImageResource(R.mipmap.image_open);
             image_rate.setImageResource(R.mipmap.rate_open);
@@ -715,7 +714,6 @@ public class DeviceDetailActivity extends AppCompatActivity {
             msg.arg1=0;
             msg.what=1;
             handler.sendMessage(msg);
-
         }
         if (timerHour==0){
             Log.i("timer","-->"+"timer");

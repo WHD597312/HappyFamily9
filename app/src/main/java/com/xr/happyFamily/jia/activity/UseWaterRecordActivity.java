@@ -237,7 +237,6 @@ public class UseWaterRecordActivity extends AppCompatActivity {
         deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild==null){
             Toast.makeText(UseWaterRecordActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            long houseId = deviceChild.getHouseId();
             Intent data = new Intent(UseWaterRecordActivity.this, MainActivity.class);
             data.putExtra("houseId", houseId);
             startActivity(data);

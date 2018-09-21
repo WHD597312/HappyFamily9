@@ -116,7 +116,7 @@ public class MQService extends Service {
     private MsgDaoImpl msgDao;
 
     private Context mContext = this;
-//    CountTimer countTimer;
+    CountTimer countTimer;
 //    boolean isNew = false;
     /***
      * 模块类型

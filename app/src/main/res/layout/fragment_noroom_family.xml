@@ -18,7 +18,7 @@
 
         <ImageView
             android:layout_width="match_parent"
-            android:layout_height="315dp"
+            android:layout_height="300dp"
             android:layout_alignParentTop="true"
             android:scaleType="centerCrop"
             android:src="@mipmap/mypage" />
@@ -84,25 +84,23 @@
 
         <RelativeLayout
             android:id="@+id/rl_page"
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_below="@+id/tv_wd_my1">
+            android:layout_below="@+id/tv_wd_my1"
+            android:background="@mipmap/bj_mypage"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            android:padding="@dimen/dp_jy_15"
+            >
 
-            <ImageView
-                android:id="@+id/iv_my1"
-                android:layout_width="@dimen/x320"
-                android:layout_height="@dimen/y130"
-                android:layout_centerHorizontal="true"
-                android:layout_marginLeft="@dimen/dp_jy_12"
-                android:layout_marginRight="@dimen/dp_jy_12"
-                android:src="@mipmap/bj_mypage" />
+
 
             <TextView
                 android:id="@+id/tv_xnty_my1"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_jy_53"
-                android:layout_marginTop="@dimen/dp_jy_17"
+                android:layout_marginLeft="@dimen/dp_jy_21"
+                android:paddingTop="@dimen/dp_jy_17"
                 android:text="虚拟体验"
                 android:textColor="@color/black"
                 android:textSize="20sp" />
@@ -119,21 +117,22 @@
             <ImageView
                 android:id="@+id/iv_mypage"
                 android:layout_width="wrap_content"
-                android:layout_height="@dimen/y100"
+                android:layout_height="wrap_content"
                 android:scaleType="centerInside"
-                android:layout_alignLeft="@id/tv_xnty_my1"
-                android:layout_alignTop="@+id/tv_xnty_my1"
-                android:layout_marginLeft="@dimen/dp_jy_110"
+                android:layout_centerVertical="true"
+                android:layout_alignParentRight="true"
+                android:layout_marginRight="@dimen/dp_jy_5"
                 android:src="@mipmap/mypage_xnty" />
 
             <TextView
 
-                android:layout_width="@dimen/dp_jy_105"
+                android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-
                 android:layout_alignLeft="@id/tv_xnty_my1"
                 android:layout_below="@+id/tv_xntye_my1"
                 android:layout_marginTop="@dimen/dp_jy_23"
+                android:layout_toLeftOf="@id/iv_mypage"
+                android:layout_marginRight="@dimen/dp_jy_5"
                 android:text="八大系列，超凡体验一秒玩转您的宝贝"
                 android:textSize="11sp" />
         </RelativeLayout>

@@ -37,7 +37,11 @@
             android:paddingLeft="@dimen/dp_jy_60" />
 
     </LinearLayout>
-
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_1"
+        android:background="#f5f5f5" />
     <com.xr.happyFamily.le.view.TimeClock
         android:id="@+id/clock_time"
         android:layout_width="wrap_content"

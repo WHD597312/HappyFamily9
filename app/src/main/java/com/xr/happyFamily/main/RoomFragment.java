@@ -381,7 +381,7 @@ public class RoomFragment extends Fragment {
         rooms = roomDao.findAllRoomInHouse(houseId);
         adapter = new RoomAdapter(getActivity(), R.layout.activity_home_change_item, rooms);
 //        ListView listView = (ListView) findViewById(R.id.change_list);
-
+        change_list.setVerticalScrollBarEnabled(false);
         change_list.setAdapter(adapter);
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {

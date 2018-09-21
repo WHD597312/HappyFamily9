@@ -12,11 +12,12 @@ import java.util.List;
 public class WXUtil {
 
     private static IWXAPI api;
+    static String appid="wx44acbeed9571e8cf";
 
     public static boolean isWeChatAppInstalled(Context context) {
 
 
-        api = WXAPIFactory.createWXAPI(context, "Your WeChat AppId");
+        api = WXAPIFactory.createWXAPI(context, appid);
         if (api.isWXAppInstalled() ) {
             return true;
         } else {

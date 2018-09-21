@@ -74,8 +74,6 @@ public class QinglvEditActivity extends AppCompatActivity {
     QinglvTimepicker timeLe2;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.img_add)
-    ImageView imgAdd;
     @BindView(R.id.sdclock_layout_mian)
     LinearLayout sdclockLayoutMian;
     @BindView(R.id.tv_tag)
@@ -182,12 +180,10 @@ public class QinglvEditActivity extends AppCompatActivity {
 
     String macAddress;
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq,R.id.rl_music})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq,R.id.rl_music})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_add:
-                startActivity(new Intent(QinglvEditActivity.this, FriendFindActivity.class));
-                break;
+
             case R.id.tv_lrsd_qx:
                 finish();
                 break;
@@ -200,10 +196,7 @@ public class QinglvEditActivity extends AppCompatActivity {
                 startActivityForResult(intent2, 666);
                 break;
             case R.id.tv_lrsd_qd:
-                if ("请填写标签".equals(tvTag.getText().toString())) {
-                    ToastUtil.showShortToast("请添加标签");
-                    break;
-                }
+
                 hour = timeLe1.getValue();
                 minutes = timeLe2.getValue();
                 String member = qinglvAdapter.getMember();
@@ -236,6 +229,10 @@ public class QinglvEditActivity extends AppCompatActivity {
                 map.put("clockHour", hour);
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
+                if ("请填写标签".equals(tvTag.getText().toString())) {
+                    map.put("flag","情侣闹钟");
+                    break;
+                }else
                 map.put("flag", tvTag.getText().toString());
                 map.put("music",tvMusic.getText().toString());
                 map.put("switchs", clockBean.getSwitchs());

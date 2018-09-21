@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.PopupWindow;
 import android.widget.RadioButton;
 import android.widget.RelativeLayout;
@@ -303,7 +304,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
 
         ImageView img_btn;
         TextView tv_time, tv_context, tv_name;
-        RelativeLayout rl_item;
+        LinearLayout rl_item;
 
         public MyViewHolder(View view) {
             super(view);
@@ -312,7 +313,7 @@ public class ClockQinglvAdapter extends RecyclerView.Adapter<ClockQinglvAdapter.
             tv_time = (TextView) view.findViewById(R.id.tv_time);
             tv_context = (TextView) view.findViewById(R.id.tv_context);
             tv_name = (TextView) view.findViewById(R.id.tv_name);
-            rl_item = (RelativeLayout) view.findViewById(R.id.rl_item);
+            rl_item = (LinearLayout) view.findViewById(R.id.rl_item);
 
         }
 

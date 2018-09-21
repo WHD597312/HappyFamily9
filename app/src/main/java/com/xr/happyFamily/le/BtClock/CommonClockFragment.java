@@ -13,6 +13,7 @@ import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.TypedArray;
 import android.graphics.Canvas;
+import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.drawable.Drawable;
 import android.os.Build;
@@ -176,11 +177,13 @@ private Drawable mDivider;
 
         private int mOrientation;
 
+        Paint paint ;
         public DividerItemDecoration(Context context, int orientation) {
             final TypedArray a = context.obtainStyledAttributes(ATTRS);
             mDivider = a.getDrawable(0);
             a.recycle();
             setOrientation(orientation);
+
         }
 
         public void setOrientation(int orientation) {
@@ -214,8 +217,11 @@ private Drawable mDivider;
                         .getLayoutParams();
                 final int top = child.getBottom() + params.bottomMargin;
                 final int bottom = top + mDivider.getIntrinsicHeight();
-                mDivider.setBounds(left, top, right, bottom);
-                mDivider.draw(c);
+
+                    mDivider.setBounds(left, top, right, bottom);
+                    mDivider.draw(c);
+
+
             }
         }
 
@@ -237,8 +243,14 @@ private Drawable mDivider;
 
         @Override
         public void getItemOffsets(Rect outRect, int itemPosition, RecyclerView parent) {
+            int itemCount = parent.getLayoutManager().getItemCount();
             if (mOrientation == VERTICAL_LIST) {
-                outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+
+                if (itemPosition==itemCount-1){
+                    outRect.set(0, 0, 0, 240);
+                }else {
+                    outRect.set(0, 0, 0, mDivider.getIntrinsicHeight());
+                }
             } else {
                 outRect.set(0, 0, mDivider.getIntrinsicWidth(), 0);
             }

@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_centerInParent="true"
         app:tabTextAppearance="@style/MyTabLayoutTextAppearance"
-        android:layout_height="45dp"
+        android:layout_height="@dimen/dp_jy_50"
         android:background="@color/white"
         app:tabMaxWidth="0dp"
         app:tabGravity="fill"

@@ -196,6 +196,7 @@
         <activity
             android:name=".main.MainActivity"
             android:hardwareAccelerated="true"
+            android:theme="@style/AppTheme.NoActionBar"
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.ShareDeviceActivity"

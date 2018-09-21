@@ -32,7 +32,7 @@ import butterknife.Unbinder;
 
 public class ChangeEquipmentActivity extends AppCompatActivity {
 
-    private List<String> mData = new ArrayList<String>(Arrays.asList("智能终端升级版", "户外空调", "智能插座基础版", "空气净化器","除湿机","取暖器","净水器","户外监测仪"));
+    private List<String> mData = new ArrayList<String>(Arrays.asList("智能终端升级版", "户外空调", "智能插座基础版", "空气净化器","除湿机","取暖器","净水器"));
     private Context context;
     Unbinder unbinder ;
     private MyApplication application;
@@ -51,6 +51,7 @@ public class ChangeEquipmentActivity extends AppCompatActivity {
         unbinder = ButterKnife.bind(this);
         ListView listView = (ListView) findViewById(R.id.xnsb_list);
         MyAdapter mAdapter = new MyAdapter(context, mData);
+        listView.setVerticalScrollBarEnabled(false);
         listView.setAdapter(mAdapter);
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {

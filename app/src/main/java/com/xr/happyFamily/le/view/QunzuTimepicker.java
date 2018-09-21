@@ -116,7 +116,7 @@ public class QunzuTimepicker extends NumberPicker {
             if (pf.getName().equals("mSelectionDivider")) {
                 pf.setAccessible(true);
                 try {
-                  pf.set(picker, new ColorDrawable(this.getResources().getColor(R.color.white)));
+                  pf.set(picker, new ColorDrawable(0x00ffffff));
                 } catch (IllegalArgumentException e) {
                     e.printStackTrace();
                 } catch (Resources.NotFoundException e) {

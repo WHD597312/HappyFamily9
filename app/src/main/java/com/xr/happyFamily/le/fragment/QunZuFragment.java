@@ -17,6 +17,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 
@@ -72,6 +73,10 @@ public class QunZuFragment extends BaseFragment {
     TextView tvNum;
     @BindView(R.id.tv_flag)
     TextView tvFlag;
+    @BindView(R.id.title)
+    RelativeLayout title;
+    @BindView(R.id.tv_add_qz)
+    TextView tvAddQz;
 
     private TimeBar timeBar;
     private ClockQunzuAdapter qunzuAdapter;
@@ -189,8 +194,8 @@ public class QunZuFragment extends BaseFragment {
             time[i][1] = clockBeanList.get(i).getClockMinute();
         }
         timeBar.setTime(time, 2);
-        if (clockBeanList.size()>0)
-        tvFlag.setText(clockBeanList.get(0).getFlag());
+        if (clockBeanList.size() > 0)
+            tvFlag.setText(clockBeanList.get(0).getFlag());
         qunzuAdapter = new ClockQunzuAdapter((ClockActivity) getActivity(), clockBeanList, userId, mqService, clockService);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
@@ -203,6 +208,11 @@ public class QunZuFragment extends BaseFragment {
             tvNum.setVisibility(View.GONE);
         } else
             tvNum.setText(msgNum + "");
+
+        if (clockBeanList.size() == 0)
+            tvAddQz.setVisibility(View.VISIBLE);
+        else
+            tvAddQz.setVisibility(View.GONE);
     }
 
 

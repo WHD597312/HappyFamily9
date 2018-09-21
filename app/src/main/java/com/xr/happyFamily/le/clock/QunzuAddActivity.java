@@ -71,8 +71,6 @@ public class QunzuAddActivity extends AppCompatActivity {
     @BindView(R.id.time_le2)
     QunzuTimepicker timeLe2;
 
-    @BindView(R.id.img_add)
-    ImageView imgAdd;
     @BindView(R.id.sdclock_layout_mian)
     LinearLayout sdclockLayoutMian;
     @BindView(R.id.recyclerView)
@@ -147,7 +145,7 @@ public class QunzuAddActivity extends AppCompatActivity {
         recyclerView.setAdapter(qunzuAdapter);
 
            IntentFilter intentFilter = new IntentFilter("QunzuAddActivity");
-         receiver = new MessageReceiver();
+           receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
     }
 
@@ -180,12 +178,9 @@ public class QunzuAddActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq, R.id.rl_music})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq, R.id.rl_music})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_add:
-                startActivity(new Intent(mContext, FriendFindActivity.class));
-                break;
             case R.id.tv_lrsd_qx:
                 finish();
                 break;
@@ -206,8 +201,7 @@ public class QunzuAddActivity extends AppCompatActivity {
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
                 if ("请填写标签".equals(tvTag.getText().toString())) {
-                    ToastUtil.showShortToast("请添加标签");
-                    break;
+                    map.put("flag", "群组闹钟");
                 } else
                     map.put("flag", tvTag.getText().toString());
                 map.put("music", tvMusic.getText().toString());

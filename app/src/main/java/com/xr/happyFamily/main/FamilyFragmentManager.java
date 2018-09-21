@@ -20,6 +20,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.WindowManager;
 
 import com.github.mikephil.charting.formatter.IFillFormatter;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
@@ -69,6 +70,7 @@ public class FamilyFragmentManager extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         Log.i("FamilyFragmentManager", "-->onCreateView");
+
         if (view == null) {
             view = inflater.inflate(R.layout.fragment_family_manager, container, false);
             viewPager = (ViewPager) view.findViewById(R.id.viewPager);

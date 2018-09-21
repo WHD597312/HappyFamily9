@@ -2,6 +2,8 @@ package com.xr.happyFamily.main;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
@@ -11,6 +13,8 @@ import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -31,6 +35,7 @@ import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 
+import java.lang.reflect.Field;
 import java.util.List;
 
 import butterknife.BindView;
@@ -55,6 +60,7 @@ public class NoRoomFragment extends Fragment {
     TextView textViewhousename;
     @BindView(R.id.tv_bz1)
     TextView tv_bz1;
+
     private String temperature;
     SharedPreferences mPositionPreferences;
     private RoomDaoImpl roomDao;
@@ -62,6 +68,7 @@ public class NoRoomFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
+
         view=inflater.inflate(R.layout.fragment_noroom_family,container,false);
         unbinder=ButterKnife.bind(this,view);
         hourseDao=new HourseDaoImpl(getActivity());
@@ -77,8 +84,10 @@ public class NoRoomFragment extends Fragment {
             String address=hourse.getHouseAddress();
             textViewhousename.setText(hourseName+"·"+address);
         }
+
         return view;
     }
+
 
     @Override
     public void onStart() {
@@ -133,7 +142,6 @@ public class NoRoomFragment extends Fragment {
             return;
         }
 
-
         View view = View.inflate(getActivity(), R.layout.activity_home_change, null);
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
@@ -155,7 +163,8 @@ public class NoRoomFragment extends Fragment {
         rooms = roomDao.findAllRoomInHouse(houseId);
         adapter = new RoomAdapter(getActivity(), R.layout.activity_home_change_item, rooms);
 //        ListView listView = (ListView) findViewById(R.id.change_list);
-
+        change_list.setVerticalScrollBarEnabled(false);
+        change_list.setFastScrollEnabled(false);
         change_list.setAdapter(adapter);
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {

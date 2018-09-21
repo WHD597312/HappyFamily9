@@ -59,8 +59,9 @@ public class ChangeRoomActivity extends AppCompatActivity {
         adapter = new RoomAdapter(ChangeRoomActivity.this, R.layout.activity_home_change_item, rooms);
         textView = (TextView) findViewById(R.id.tv_change_1);
 //        ListView listView = (ListView) findViewById(R.id.change_list);
-
+        change_list.setVerticalScrollBarEnabled(false);
         change_list.setAdapter(adapter);
+
         change_list.setOnItemClickListener(new OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Log.i("onItemClick","-->"+position);

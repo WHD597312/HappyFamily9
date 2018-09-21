@@ -11,7 +11,7 @@
         android:layout_height="wrap_content"
         android:text="智能终端升级版"
         android:textColor="@color/black"
-        android:textSize="15sp"
+        android:textSize="16sp"
         android:layout_marginTop="@dimen/dp_jy_16"
         android:layout_marginLeft="@dimen/dp_jy_11"
         />

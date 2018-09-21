@@ -1,6 +1,7 @@
 package com.xr.happyFamily.le.clock;
 
 import android.app.AlarmManager;
+import android.app.Dialog;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.ComponentName;
@@ -74,8 +75,6 @@ public class QinglvAddActivity extends AppCompatActivity {
     QinglvTimepicker timeLe2;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
-    @BindView(R.id.img_add)
-    ImageView imgAdd;
     @BindView(R.id.sdclock_layout_mian)
     LinearLayout sdclockLayoutMian;
     @BindView(R.id.tv_tag)
@@ -164,12 +163,10 @@ public class QinglvAddActivity extends AppCompatActivity {
 //        }
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq, R.id.rl_music})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq, R.id.rl_music})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_add:
-                startActivity(new Intent(QinglvAddActivity.this, FriendFindActivity.class));
-                break;
+
             case R.id.tv_lrsd_qx:
                 finish();
                 break;
@@ -189,24 +186,25 @@ public class QinglvAddActivity extends AppCompatActivity {
                 map.put("clockMinute", minutes);
                 map.put("clockDay", "0");
                 if ("请填写标签".equals(tvTag.getText().toString())) {
-                    ToastUtil.showShortToast("请添加标签");
-                    break;
+                    map.put("flag", "情侣闹钟");
                 } else
                     map.put("flag", tvTag.getText().toString());
                 map.put("music", tvMusic.getText().toString());
                 map.put("switchs", 1);
                 String member = qinglvAdapter.getMember();
                 if ("0".equals(member)) {
-                    ToastUtil.showShortToast( "请选择添加成员");
+                    ToastUtil.showShortToast("请选择添加成员");
                     break;
-                } else
+                } else {
 
                     map.put("clockMember", userId + "," + member);
-                Log.e("qqqqqqqMMMM", member);
-                map.put("clockCreater", userId);
-                map.put("clockType", 3);
-                dialog.show();
-                new addClock().execute(map);
+                    Log.e("qqqqqqqMMMM", member);
+                    map.put("clockCreater", userId);
+                    map.put("clockType", 3);
+                    dialog = MyDialog.showDialog(this);
+                    dialog.show();
+                    new addClock().execute(map);
+                }
                 break;
         }
     }
@@ -257,7 +255,7 @@ public class QinglvAddActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 qinglvAdapter.notifyDataSetChanged();
 
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -307,7 +305,7 @@ public class QinglvAddActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 ToastUtil.showShortToast("添加闹钟成功");
                 finish();
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -337,7 +335,6 @@ public class QinglvAddActivity extends AppCompatActivity {
 //            time.setRingName(text);
         }
     }
-
 
 
 //

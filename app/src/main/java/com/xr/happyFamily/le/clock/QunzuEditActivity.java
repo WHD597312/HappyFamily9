@@ -71,9 +71,6 @@ public class QunzuEditActivity extends AppCompatActivity {
     QunzuTimepicker timeLe1;
     @BindView(R.id.time_le2)
     QunzuTimepicker timeLe2;
-
-    @BindView(R.id.img_add)
-    ImageView imgAdd;
     @BindView(R.id.sdclock_layout_mian)
     LinearLayout sdclockLayoutMian;
     @BindView(R.id.recyclerView)
@@ -183,12 +180,9 @@ public class QunzuEditActivity extends AppCompatActivity {
     }
 
     ClockBean editClock;
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.img_add, R.id.rl_bjtime_bq,R.id.rl_music})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq,R.id.rl_music})
     public void onClick(View view) {
         switch (view.getId()) {
-            case R.id.img_add:
-                startActivity(new Intent(mContext, FriendFindActivity.class));
-                break;
             case R.id.tv_lrsd_qx:
                 finish();
                 break;
@@ -201,10 +195,7 @@ public class QunzuEditActivity extends AppCompatActivity {
                 startActivityForResult(intent3, 111);
                 break;
             case R.id.tv_lrsd_qd:
-                if ("请填写标签".equals(tvTag.getText().toString())) {
-                    ToastUtil.showShortToast("请添加标签");
-                    break;
-                }
+
                 member = qunzuAdapter.getMember();
                 if ("0".equals(member)) {
                     ToastUtil.showShortToast("请添加闹钟成员");
@@ -224,11 +215,12 @@ public class QunzuEditActivity extends AppCompatActivity {
                     map.put("clockHour", hour);
                     map.put("clockMinute", minutes);
                     map.put("clockDay", "0");
-                    map.put("flag", tvTag.getText().toString());
+                    if ("请填写标签".equals(tvTag.getText().toString())) {
+                        map.put("flag","群组闹钟");
+                    }else
+                        map.put("flag", tvTag.getText().toString());
                     map.put("music", tvMusic.getText().toString());
                     map.put("switchs", clockBean.getSwitchs());
-
-
                     List<ClockBean> findLish = clockBeanDao.findClockByClockId(Integer.parseInt(clockId));
                     editClock=findLish.get(0);
                     editClock.setClockHour(hour);
@@ -236,11 +228,7 @@ public class QunzuEditActivity extends AppCompatActivity {
                     editClock.setFlag(tvTag.getText().toString());
                     editClock.setClockDay("0");
                     editClock.setMusic(tvMusic.getText().toString());
-
-
-
                     List<ClickFriendBean> userInfos = new ArrayList<>();
-
                     String image = preferences.getString("headImgUrl", "");
                     Log.e("qqqqIIImg",image);
                     String username = preferences.getString("username", "");

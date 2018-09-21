@@ -18,6 +18,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.RelativeLayout;
 import android.widget.TextClock;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -77,6 +78,10 @@ public class QingLvFragment extends BaseFragment {
     TextView tvNum;
     @BindView(R.id.tv_flag)
     TextView tvFlag;
+    @BindView(R.id.title)
+    RelativeLayout title;
+    @BindView(R.id.tv_add_ql)
+    TextView tvAddQl;
 
     private boolean isBound = false;
     MessageReceiver receiver;
@@ -208,6 +213,11 @@ public class QingLvFragment extends BaseFragment {
             tvNum.setVisibility(View.GONE);
         } else
             tvNum.setText(msgNum + "");
+
+        if (clockBeanList.size()==0)
+            tvAddQl.setVisibility(View.VISIBLE);
+        else
+            tvAddQl.setVisibility(View.GONE);
     }
 
     @Override

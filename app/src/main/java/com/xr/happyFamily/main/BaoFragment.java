@@ -187,6 +187,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         //广告
         shopBannerBeans = new ArrayList<>();
         new getAdByPageAsync().execute();
+//        getActivity().getWindow().setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         return view;
     }
 

@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
+
 
     >
     <LinearLayout
+        android:id="@+id/li_d1"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_45"
         android:orientation="horizontal"
@@ -25,29 +26,74 @@
             android:layout_height="@dimen/dp_jy_35"
             android:text="制懒闹钟"
             android:textSize="20sp"
-            android:textColor="@color/black"
+            android:textColor="@color/color_black3"
             android:layout_gravity="center"
             android:layout_weight="1"
             android:gravity="center"
             />
         <ImageView
-            android:id="@+id/iv_le_clock_add"
+
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_20"
             android:paddingLeft="@dimen/dp_jy_60"
             android:layout_gravity="center"
-            android:src="@mipmap/clock_add"
             android:layout_weight="1"
             />
 
     </LinearLayout>
-    <android.support.v7.widget.RecyclerView
+
+    <View
+        android:id="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_1"
+        android:background="#f5f5f5"
+        android:layout_below="@id/li_d1"/>
+
+    <RelativeLayout
+        android:id="@+id/rl_d1"
+        android:layout_below="@+id/view1"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentBottom="true"
+        >
+        <RelativeLayout
+            android:id="@+id/rl_d2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+      <android.support.v7.widget.RecyclerView
         android:id="@+id/commonclock_recyc"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:layout_marginTop="@dimen/dp_jy_12"
+          android:overScrollMode="never"
+          android:scrollbars="none"
         />
 
+        </RelativeLayout>
 
 
-</LinearLayout>
+        <RelativeLayout
+            android:layout_below="@+id/rl_d2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:layout_alignParentBottom="true"
+
+            >
+
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <ImageView
+        android:id="@+id/iv_le_clock_add"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/zl_add"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="@dimen/dp_jy_20"
+        />
+</RelativeLayout>

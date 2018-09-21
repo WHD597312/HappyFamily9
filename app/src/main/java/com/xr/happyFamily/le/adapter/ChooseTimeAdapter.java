@@ -128,7 +128,19 @@ public class ChooseTimeAdapter extends RecyclerView.Adapter<ChooseTimeAdapter.My
         final Time time=data.get(position);
 //        List<Time> times = timeDao.findByAllTime();
 //        final Time ti =  times.get(position);
-        holder.tv_time.setText(data.get(position).getHour()+":"+data.get(position).getMinutes());
+        String H;
+        String M;
+        if (data.get(position).getHour()<10){
+            H = "0"+data.get(position).getHour();
+        }else {
+            H = ""+data.get(position).getHour();
+        }
+        if (data.get(position).getMinutes()<10){
+            M = "0"+data.get(position).getMinutes();
+        }else{
+            M = ""+data.get(position).getMinutes();
+        }
+        holder.tv_time.setText(H+":"+M);
         holder.tv_day1.setText(data.get(position).getDay());
         Log.i("day", "onBindViewHolder:--> "+data.get(position).getDay());
         final boolean[] open = {time.getOpen()};

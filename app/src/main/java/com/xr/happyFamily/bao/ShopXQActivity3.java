@@ -233,6 +233,8 @@ public class ShopXQActivity3 extends AppCompatActivity {
     List<String> pjList = new ArrayList();
     String[] tag={"全部","美观","性价比高","包装好","做工精细","使用舒服"};
 
+    boolean isTitleMove=false;
+
     @RequiresApi(api = Build.VERSION_CODES.M)
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -322,29 +324,31 @@ public class ShopXQActivity3 extends AppCompatActivity {
         scrollView.setOnScrollChangeListener(new View.OnScrollChangeListener() {
             @Override
             public void onScrollChange(View v, int scrollX, int scrollY, int oldScrollX, int oldScrollY) {
-                if (scrollY>web.getTop()){
-                    if(scrollTitle!=2) {
-                        Log.e("qqqqqqqqqqqqSS0000000", scrollX + "," + scrollY + "," + oldScrollX + "," + oldScrollY);
-                        scrollTitle = 2;
-                        initTitle();
-                        tvTitleXq.setTextColor(Color.parseColor("#65CB90"));
-                        viewTitleXq.setVisibility(View.VISIBLE);
-                    }
-                }else if(scrollY>clPinglun.getTop()){
-                    if(scrollTitle!=1) {
-                        Log.e("qqqqqqqqqqqqSS1111", scrollX + "," + scrollY + "," + oldScrollX + "," + oldScrollY);
-                        initTitle();
-                        scrollTitle = 1;
-                        tvTitlePingjia.setTextColor(Color.parseColor("#65CB90"));
-                        viewTitlePingjia.setVisibility(View.VISIBLE);
-                    }
-                }else{
-                    if(scrollTitle!=0) {
-                        Log.e("qqqqqqqqqqqqSS22222", scrollX + "," + scrollY + "," + oldScrollX + "," + oldScrollY);
-                        scrollTitle = 0;
-                        initTitle();
-                        tvTitleShop.setTextColor(Color.parseColor("#65CB90"));
-                        viewTitleShop.setVisibility(View.VISIBLE);
+                if(!isTitleMove) {
+                    if (scrollY > web.getTop()) {
+                        if (scrollTitle != 2) {
+                            Log.e("qqqqqqqqqqqqSS0000000", scrollX + "," + scrollY + "," + oldScrollX + "," + oldScrollY);
+                            scrollTitle = 2;
+                            initTitle();
+                            tvTitleXq.setTextColor(Color.parseColor("#65CB90"));
+                            viewTitleXq.setVisibility(View.VISIBLE);
+                        }
+                    } else if (scrollY > clPinglun.getTop()) {
+                        if (scrollTitle != 1) {
+                            Log.e("qqqqqqqqqqqqSS1111", scrollX + "," + scrollY + "," + oldScrollX + "," + oldScrollY);
+                            initTitle();
+                            scrollTitle = 1;
+                            tvTitlePingjia.setTextColor(Color.parseColor("#65CB90"));
+                            viewTitlePingjia.setVisibility(View.VISIBLE);
+                        }
+                    } else {
+                        if (scrollTitle != 0) {
+                            Log.e("qqqqqqqqqqqqSS22222", scrollX + "," + scrollY + "," + oldScrollX + "," + oldScrollY);
+                            scrollTitle = 0;
+                            initTitle();
+                            tvTitleShop.setTextColor(Color.parseColor("#65CB90"));
+                            viewTitleShop.setVisibility(View.VISIBLE);
+                        }
                     }
                 }
             }
@@ -393,7 +397,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
 //                showPopup();
                 Intent fenxiang = new Intent(Intent.ACTION_SEND);
                 fenxiang.setType("text/plain");
-                fenxiang.putExtra(Intent.EXTRA_TEXT, headerImg);
+                fenxiang.putExtra(Intent.EXTRA_TEXT, "http://47.98.131.11:8084/admin/goods/detail/show?goodsId=" + goodsId);
                 startActivity(Intent.createChooser(fenxiang, "P99"));
                 break;
             case R.id.tv_shopcart:
@@ -431,22 +435,30 @@ public class ShopXQActivity3 extends AppCompatActivity {
                 break;
 
             case R.id.rl_title_shop:
-                initTitle();
-                tvTitleShop.setTextColor(Color.parseColor("#65CB90"));
-                viewTitleShop.setVisibility(View.VISIBLE);
-                scrollView.smoothScrollTo(0, banner.getTop());
+//                isTitleMove=true;
+//                scrollTitle=0;
+//                initTitle();
+//                tvTitleShop.setTextColor(Color.parseColor("#65CB90"));
+//                viewTitleShop.setVisibility(View.VISIBLE);
+                scrollView.smoothScrollTo(0, banner.getTop()+1);
+
                 break;
             case R.id.rl_title_pingjia:
-                initTitle();
-                tvTitlePingjia.setTextColor(Color.parseColor("#65CB90"));
-                viewTitlePingjia.setVisibility(View.VISIBLE);
-                scrollView.smoothScrollTo(0, clPinglun.getTop());
+//                isTitleMove=true;
+//                scrollTitle=1;
+//                initTitle();
+//                tvTitlePingjia.setTextColor(Color.parseColor("#65CB90"));
+//                viewTitlePingjia.setVisibility(View.VISIBLE);
+                scrollView.smoothScrollTo(0, clPinglun.getTop()+1);
+
                 break;
             case R.id.rl_title_xiangqing:
-                initTitle();
-                tvTitleXq.setTextColor(Color.parseColor("#65CB90"));
-                viewTitleXq.setVisibility(View.VISIBLE);
-                scrollView.smoothScrollTo(0, web.getTop());
+//                isTitleMove=true;
+//                scrollTitle=2;
+//                initTitle();
+//                tvTitleXq.setTextColor(Color.parseColor("#65CB90"));
+//                viewTitleXq.setVisibility(View.VISIBLE);
+                scrollView.smoothScrollTo(0, web.getTop()+1);
                 break;
 
             case R.id.img_more:

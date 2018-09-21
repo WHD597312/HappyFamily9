@@ -11,6 +11,7 @@ import android.graphics.Bitmap;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.IBinder;
 import android.os.PowerManager;
 import android.support.v4.app.FragmentManager;
@@ -18,10 +19,13 @@ import android.support.v4.app.FragmentTransaction;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.Toast;
@@ -122,9 +126,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
+
         setContentView(R.layout.activity_main_activity);
         unbinder = ButterKnife.bind(this);
         if (application == null) {
@@ -134,10 +139,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
-
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
-
         SharedPreferences.Editor editor2 = preferences.edit();
         editor2.putString("clockNew", "old");
         editor2.commit();
@@ -145,10 +148,8 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         filter.addAction("mqttmessage2");
         myReceiver = new MQTTMessageReveiver();
         this.registerReceiver(myReceiver, filter);
-
         fragmentManager = getSupportFragmentManager();
         hourseDao = new HourseDaoImpl(getApplicationContext());
-
         familyFragmentManager=new FamilyFragmentManager();
         leFragment = new LeFragment();
         baoFragment = new BaoFragment();

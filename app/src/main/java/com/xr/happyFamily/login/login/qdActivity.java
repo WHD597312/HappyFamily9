@@ -398,22 +398,12 @@ public class qdActivity extends Activity {
                     startActivity(intent);
                     break;
                 case -2000:
-                    Intent intent2 = new Intent(qdActivity.this, MainActivity.class);
-                    mPositionPreferences.edit().clear().commit();
-
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                    intent2.putExtra("load","load");
-                    intent2.putExtra("login","login");
+                    Intent intent2=new Intent(qdActivity.this, LoginActivity.class);
                     startActivity(intent2);
 
                     break;
                     default:
-                        Intent intent3 = new Intent(qdActivity.this, MainActivity.class);
-                        mPositionPreferences.edit().clear().commit();
-
-//                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
-                        intent3.putExtra("load","load");
-                        intent3.putExtra("login","login");
+                        Intent intent3=new Intent(qdActivity.this, LoginActivity.class);
                         startActivity(intent3);
                         break;
             }

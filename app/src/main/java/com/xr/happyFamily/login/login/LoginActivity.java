@@ -122,7 +122,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             application = (MyApplication) getApplication();
         }
         mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
-
+        progressDialog = new ProgressDialog(this);
         application.addActivity(this);
         et_name.setText(preferences.getString("phone", ""));
         et_pswd.setText(preferences.getString("password", ""));
@@ -194,11 +194,21 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         @Override
         public void onFinish() {
             Log.e("Tag", "倒计时完成");
+            if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+                loginAsyncTask.cancel(true);
+                Toast.makeText(LoginActivity.this,"网络崩溃啦，请重新登录",Toast.LENGTH_SHORT).show();
+            }
+            if (hourseAsyncTask!=null && hourseAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+                hourseAsyncTask.cancel(true);
+                Toast.makeText(LoginActivity.this,"网络崩溃啦，请重新登录",Toast.LENGTH_SHORT).show();
+            }
             hideProgressDialog();
+
         }
     }
     String phone;
     String password;
+
     @OnClick({R.id.btn_login, R.id.tv_register, R.id.tv_forget_pswd, R.id.image_seepwd, R.id.image_wx})
     public void onClick(View view) {
         switch (view.getId()) {
@@ -222,12 +232,12 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
                 if (isConn){
                     showProgressDialog("正在登录，请稍后...");
-                    CountTimer countTimer = new CountTimer(6000, 1000);
-                    countTimer.start();
                     Map<String, Object> params = new HashMap<>();
                     params.put("phone", phone);
                     params.put("password", password);
                     new LoginAsyncTask().execute(params);
+                    CountTimer countTimer = new CountTimer(6000, 1000);
+                    countTimer.start();
                 }else {
                     Utils.showToast(this, "无网络可用，请检查网络");
                 }
@@ -399,13 +409,19 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                        new hourseAsyncTask().execute();
                    }
                     break;
+                   default:
+                       if (progressDialog != null){
+                           progressDialog.dismiss();
+                       }
+                       Utils.showToast(LoginActivity.this, "网络崩溃啦，请重新登录");
+                       break;
             }
         }
     }
 
     //显示dialog
     public void showProgressDialog(String message) {
-        progressDialog = new ProgressDialog(this);
+
         progressDialog.setMessage(message);
         progressDialog.setCancelable(false);
         progressDialog.show();
@@ -414,14 +430,17 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     LoginAsyncTask loginAsyncTask;
     //隐藏dialog
     public void hideProgressDialog() {
-        if (progressDialog != null)
+        if (progressDialog != null){
             progressDialog.dismiss();
-//        if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
-//            loginAsyncTask.cancel(true);
-//            Toast.makeText(LoginActivity.this,"登录失败，请重新登录",Toast.LENGTH_SHORT).show();
-//        }
+        }
     }
+    public void hideProgressDialog1() {
+        if (progressDialog != null){
+            progressDialog.dismiss();
 
+        }
+
+    }
 
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
@@ -489,17 +508,18 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     hideProgressDialog();
                     break;
                 case 100:
-                    hideProgressDialog();
+                    Log.e("ggggggggggg", "onPostExecute: -->" );
+
                     break;
                     default:
-                        hideProgressDialog();
+                    hideProgressDialog1();
                         break;
             }
         }
     }
     long Id = -1;
     int img[] = {R.mipmap.t};
-
+    hourseAsyncTask hourseAsyncTask;
     class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -697,7 +717,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             super.onPostExecute(code);
             switch (code) {
                 case 1005:
-                    Utils.showToast(LoginActivity.this, "查询失败");
+
                     break;
                 case 100:
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
@@ -713,7 +733,11 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     intent.putExtra("load","load");
                     intent.putExtra("login","login");
                     startActivity(intent);
+                    hideProgressDialog();
                     break;
+                    default:
+                        Utils.showToast(LoginActivity.this, "网络崩溃啦，请重新登录");
+                        break;
             }
         }
     }
@@ -733,6 +757,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         }
         if (isBound==true &&connection!=null){
             unbindService(connection);
+        }
+        if (progressDialog != null){
+            progressDialog.dismiss();
         }
     }
 

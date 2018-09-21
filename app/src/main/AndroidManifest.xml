@@ -57,7 +57,8 @@
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
-        android:hardwareAccelerated="true"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:icon="@mipmap/app"
         android:label="P99"
         android:roundIcon="@mipmap/app"
@@ -104,6 +105,7 @@
             android:value="kjgCMxtnMYdDenel3guWudC3zwThNsPR" />
 
         <activity
+            android:hardwareAccelerated="false"
             android:name=".login.login.qdActivity"
             android:screenOrientation="portrait">
             <intent-filter>
@@ -117,6 +119,7 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".login.login.GuideActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -126,6 +129,7 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity android:name=".login.login.LoginActivity" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".zhen.AboutActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -195,10 +199,11 @@
 
         <activity
             android:name=".main.MainActivity"
-            android:hardwareAccelerated="true"
             android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.ShareDeviceActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -209,12 +214,13 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.DeviceDetailActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".login.rigest.ForgetPswdActivity"
-            android:hardwareAccelerated="true"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.xnty.AircleanerActivity"
@@ -223,7 +229,9 @@
         <activity
             android:name=".jia.xnty.Smartsj"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="false"
+            />
         <activity
             android:name=".jia.xnty.AirConditionerActivity"
             android:screenOrientation="portrait"
@@ -240,12 +248,18 @@
         <activity
             android:name=".jia.HourseActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="false"
+            />
         <activity
             android:name=".login.rigest.RegistFinishActivity"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".jia.ChangeRoomActivity" />
+            android:theme="@style/AppTheme.NoActionBar"
+            android:hardwareAccelerated="false"
+            />
+        <activity android:name=".jia.ChangeRoomActivity"
+            android:hardwareAccelerated="false"
+            />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -266,6 +280,7 @@
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.QRScannerActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
@@ -420,30 +435,39 @@
             android:name=".le.clock.MsgActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".zhen.SettingActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".zhen.PersonInfoActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="true"
             android:name=".jia.activity.SmartTerminalActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.SmartLinkedActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".le.clock.FriendFindActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".le.clock.FriendAddActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".zhen.AccountActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".zhen.ReSetpswdActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".zhen.HelpActivity"
             android:screenOrientation="portrait" />
         <activity
@@ -454,20 +478,26 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.TempChatActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.SocketActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.PurifierActivity"
             android:screenOrientation="portrait" />
         <activity
+            android:hardwareAccelerated="false"
             android:name=".jia.activity.UseWaterRecordActivity"
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.LiveActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"
+            />
         <activity
             android:name=".jia.activity.APurifierActivity"
             android:screenOrientation="portrait" />
@@ -479,7 +509,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.DehumidifierActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:hardwareAccelerated="false"/>
     </application>
 
 </manifest>

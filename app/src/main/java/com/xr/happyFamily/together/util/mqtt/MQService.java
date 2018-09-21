@@ -10,6 +10,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.CountDownTimer;
@@ -21,6 +22,7 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Toast;
 
@@ -71,6 +73,7 @@ import com.xr.happyFamily.main.FamilyFragmentManager;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.util.TenTwoUtil;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -137,6 +140,7 @@ public class MQService extends Service {
     @Override
     public void onCreate() {
         super.onCreate();
+
         clientId = UUID.getUUID(this);
         hourseDao = new HourseDaoImpl(this);
         deviceChildDao = new DeviceChildDaoImpl(this);
@@ -163,13 +167,14 @@ public class MQService extends Service {
         }
     }
 
+    CountTimer countTimer;
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         connect();
         Log.i("clientId", "-->" + clientId);
         isFinish = false;
-//        countTimer = new CountTimer(5000, 1000);
-//        countTimer.start();
+        countTimer = new CountTimer(5000, 1000);
+        countTimer.start();
         SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
         String[] clocks = clockData.split(",");
@@ -285,6 +290,7 @@ public class MQService extends Service {
     }
 
     private int falling=-1;
+    private String mac;
     /**
      * 加载MQTT返回的消息
      */
@@ -360,6 +366,13 @@ public class MQService extends Service {
             JSONArray messageJsonArray = null;
             if (!TextUtils.isEmpty(macAddress)) {
                 deviceChild = deviceChildDao.findDeviceByMacAddress2(macAddress);
+                if (deviceChild!=null){
+                    String share=deviceChild.getShare();
+                    if (!Utils.isEmpty(share)){
+                        sharedId=Long.MAX_VALUE;
+                    }
+                }
+
             }
 
             if (AddDeviceActivity.running && !"reSet".equals(message)) {
@@ -409,6 +422,12 @@ public class MQService extends Service {
                         deviceChildDao.delete(deviceChild);
                         unsubscribe(topicName);
                         deviceChild = null;
+                        Message msg=handler.obtainMessage();
+                        msg.what=6;
+                        mac=macAddress;
+                        msg.obj=macAddress;
+                        handler.sendMessage(msg);
+                        falling=0;
                     }
                 } else if ("offline".equals(message)) {
                     if (deviceChild != null) {
@@ -418,6 +437,11 @@ public class MQService extends Service {
                         }
                         deviceChild.setOnline(false);
                         deviceChildDao.update(deviceChild);
+                        Message msg=handler.obtainMessage();
+                        msg.what=6;
+                        mac=macAddress;
+                        msg.obj=macAddress;
+                        handler.sendMessage(msg);
                     }
                 }
                 else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
@@ -589,7 +613,17 @@ public class MQService extends Service {
                                 NotificationManager mNotificationManager =
                                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                 mNotificationManager.notify(0, builder.build());
+                                Message msg=handler.obtainMessage();
+                                msg.what=5;
+                                msg.obj=macAddress;
+                                mac=null;
+                                handler.sendMessage(msg);
                             }else {
+                                Message msg=handler.obtainMessage();
+                                msg.what=6;
+                                msg.obj=macAddress;
+                                mac=macAddress;
+                                handler.sendMessage(msg);
                                 falling=0;
                             }
 //                            deviceChild.setWarmerFall(wa);
@@ -1681,6 +1715,16 @@ public class MQService extends Service {
                         startActivity(notifyIntent);
                     }
                     break;
+                case 5:
+                    VibratorUtil.Vibrate(MQService.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
+                    break;
+                case 6:
+                    String madAddress= (String) msg.obj;
+                    if (madAddress!=null && mac!=null && madAddress.equals(mac)){
+                        VibratorUtil.StopVibrate(MQService.this);
+                    }
+                    break;
+
             }
         }
     };
@@ -1726,33 +1770,33 @@ public class MQService extends Service {
     }
 
 
-//    class CountTimer extends CountDownTimer {
-//        public CountTimer(long millisInFuture, long countDownInterval) {
-//            super(millisInFuture, countDownInterval);
-//        }
-//
-//        /**
-//         * 倒计时过程中调用
-//         *
-//         * @param millisUntilFinished
-//         */
-//        @Override
-//        public void onTick(long millisUntilFinished) {
-//
-//            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
-//        }
-//
-//        /**
-//         * 倒计时完成后调用
-//         */
-//
-//        @Override
-//        public void onFinish() {
-//            Log.e("Tag", "倒计时完成");
-//            isFinish = true;
-//
-//
-//        }
-//    }
+    class CountTimer extends CountDownTimer {
+        public CountTimer(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+
+        @Override
+        public void onFinish() {
+            Log.e("Tag", "倒计时完成");
+            isFinish = true;
+
+
+        }
+    }
 
 }

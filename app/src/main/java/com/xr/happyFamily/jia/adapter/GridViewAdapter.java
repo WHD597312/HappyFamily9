@@ -75,9 +75,9 @@ public class GridViewAdapter extends ArrayAdapter {
                         if (item.getWarmerFall()==1){
                             holder.tv_device_switch.setText("设备倾倒");
                             holder.view.setVisibility(View.GONE);
-                            VibratorUtil.Vibrate(mContext, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
+//                            VibratorUtil.Vibrate(mContext, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
                         }else {
-                            VibratorUtil.StopVibrate(mContext);
+//                            VibratorUtil.StopVibrate(mContext);
                             if (deviceState==1){
                                 holder.tv_device_switch.setText("电源开");
                                 holder.view.setVisibility(View.VISIBLE);

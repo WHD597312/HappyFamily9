@@ -5,7 +5,9 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bj_home"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:layerType="hardware"
+    >
 
 
     <com.xr.happyFamily.jia.Myscrollview

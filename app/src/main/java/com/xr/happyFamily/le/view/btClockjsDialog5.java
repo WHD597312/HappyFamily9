@@ -12,6 +12,8 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.support.annotation.NonNull;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.TextView;
 
 import com.xr.database.dao.daoimpl.TimeDaoImpl;
@@ -29,7 +31,7 @@ import static android.content.Context.MODE_PRIVATE;
 
 
 /**
- * 制懒闹钟计算关闭
+ * 情侣/群组闹钟提示弹窗
  */
 public class btClockjsDialog5 extends Dialog {
 

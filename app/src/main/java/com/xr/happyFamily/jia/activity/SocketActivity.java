@@ -130,6 +130,8 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         running = true;
         deviceChild=deviceChildDao.findById(deviceId);
         if (deviceChild != null) {
+            String name=deviceChild.getName();
+            tv_title.setText(""+name);
             boolean online = deviceChild.getOnline();
             if (online) {
                 relative.setVisibility(View.VISIBLE);

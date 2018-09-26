@@ -163,7 +163,7 @@ public class QinglvAddActivity extends AppCompatActivity {
 //        }
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq, R.id.rl_music})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq, R.id.rl_music,R.id.img_add})
     public void onClick(View view) {
         switch (view.getId()) {
 
@@ -206,6 +206,8 @@ public class QinglvAddActivity extends AppCompatActivity {
                     new addClock().execute(map);
                 }
                 break;
+            case R.id.img_add:
+                startActivity(new Intent(this,FriendFindActivity.class));
         }
     }
 

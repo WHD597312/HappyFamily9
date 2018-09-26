@@ -184,6 +184,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
 //        linkList=deviceChildDao.findLinkDevice(houseId,roomId,3);
         boolean isConn = NetWorkUtil.isConn(this);
 
+        String name = deviceChild.getName();
+        tv_title.setText(name);
+        setMode(deviceChild);
         if (isConn) {
             result=1;
             new GetLinkedAsync().execute();
@@ -288,9 +291,19 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         }else {
             tv_temp_value.setText("--");
         }
+        if (sensorSimpleHum>=0){
+            tv_hum_value.setText(sensorSimpleHum + "");
+        }else {
+            tv_hum_value.setText("--");
+        }
+        if (sorsorPm>=0){
+            tv_air_value.setText(sorsorPm + "");
+        }else {
+            tv_air_value.setText("0");
+        }
 
-        tv_hum_value.setText(sensorSimpleHum + "");
-        tv_air_value.setText(sorsorPm + "");
+
+
         if (sorsorPm > 0 && sensorSimpleHum <= 35) {
             tv_air_state.setText("优");
         } else if (sorsorPm > 35 && sorsorPm <= 75) {

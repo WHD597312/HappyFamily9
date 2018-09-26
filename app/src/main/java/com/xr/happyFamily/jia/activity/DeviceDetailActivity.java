@@ -349,7 +349,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 popupmenuWindow();
                 break;
             case R.id.image_back:
-                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
+//                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                 Intent intent=new Intent();
                 intent.putExtra("houseId",houseId);
                 setResult(6000,intent);
@@ -447,7 +447,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 backgroundAlpha(1f);
                 return false;
             }
-            VibratorUtil.StopVibrate(DeviceDetailActivity.this);
+//            VibratorUtil.StopVibrate(DeviceDetailActivity.this);
             Intent intent=new Intent();
             intent.putExtra("houseId",houseId);
             setResult(6000,intent);
@@ -652,7 +652,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                                     popupWindow.dismiss();
                                     backgroundAlpha(1.0f);
                                 }
-                                VibratorUtil.Vibrate(DeviceDetailActivity.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
+//                                VibratorUtil.Vibrate(DeviceDetailActivity.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
                                 relative.setVisibility(View.GONE);
                                 tv_offline.setVisibility(View.VISIBLE);
                                 tv_offline.setText("设备倾倒");
@@ -665,7 +665,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                                     popupWindow.dismiss();
                                     backgroundAlpha(1.0f);
                                 }
-                                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
+//                                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                                 relative.setVisibility(View.VISIBLE);
                                 tv_offline.setVisibility(View.GONE);
                                 setMode(deviceChild);

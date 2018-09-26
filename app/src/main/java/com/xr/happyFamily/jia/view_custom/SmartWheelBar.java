@@ -278,39 +278,44 @@ public class SmartWheelBar extends View {
      * 对每个选项进行绘制
      **/
     private Bitmap getDrawItemBitmap(float tmpAngle, float sweepAngle, int position) {
-        //是否需要重新绘制
-        boolean needToNew = false;
-        //根据状态判断是否需要重新绘制
-        if (checkPosition == position && bitInfos.get(position).info.bitmapType == TYPE_UNCHECKED) {//这次选中，上次没选中的要更新
-            needToNew = true;
-            bitInfos.get(position).info.bitmapType = TYPE_CHECKED;
-        } else if (checkPosition != position && bitInfos.get(position).info.bitmapType == TYPE_CHECKED) {//这次没选中，上次选中的要更新
-            needToNew = true;
-            bitInfos.get(position).info.bitmapType = TYPE_UNCHECKED;
-        }
-        if (bitInfos.get(position).info.itemBitmap == null || needToNew) {
-            //选择背景颜色
-            if (checkPosition == position) {
-                mArcPaint.setColor(mColors[1]);
-            } else {
-                mArcPaint.setColor(mColors[0]);
+        try {
+            //是否需要重新绘制
+            boolean needToNew = false;
+            //根据状态判断是否需要重新绘制
+            if (checkPosition == position && bitInfos.get(position).info.bitmapType == TYPE_UNCHECKED) {//这次选中，上次没选中的要更新
+                needToNew = true;
+                bitInfos.get(position).info.bitmapType = TYPE_CHECKED;
+            } else if (checkPosition != position && bitInfos.get(position).info.bitmapType == TYPE_CHECKED) {//这次没选中，上次选中的要更新
+                needToNew = true;
+                bitInfos.get(position).info.bitmapType = TYPE_UNCHECKED;
             }
-            //绘制每一个小块
-            bitInfos.get(position).info.itemBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
-            Canvas itemCanvas = new Canvas(bitInfos.get(position).info.itemBitmap);
-            //根据角度进行同步旋转
-            itemCanvas.rotate(tmpAngle, mCenter, mCenter);
-            //绘制背景颜色,从最上边开始画
-            itemCanvas.drawArc(mRange, -sweepAngle / 2 - 90, sweepAngle, true, mArcPaint);
-            //绘制小图片和文本，因为一起画好画点
-            drawIconAndText(position, itemCanvas);
-            //绘制分割线，这里保证没一个小块都有一条分割线，分割线的位置是在最右侧
+            if (bitInfos.get(position).info.itemBitmap == null || needToNew) {
+                //选择背景颜色
+                if (checkPosition == position) {
+                    mArcPaint.setColor(mColors[1]);
+                } else {
+                    mArcPaint.setColor(mColors[0]);
+                }
+                //绘制每一个小块
+                bitInfos.get(position).info.itemBitmap = Bitmap.createBitmap(getWidth(), getHeight(), Bitmap.Config.ARGB_8888);
+                Canvas itemCanvas = new Canvas(bitInfos.get(position).info.itemBitmap);
+                //根据角度进行同步旋转
+                itemCanvas.rotate(tmpAngle, mCenter, mCenter);
+                //绘制背景颜色,从最上边开始画
+                itemCanvas.drawArc(mRange, -sweepAngle / 2 - 90, sweepAngle, true, mArcPaint);
+                //绘制小图片和文本，因为一起画好画点
+                drawIconAndText(position, itemCanvas);
+                //绘制分割线，这里保证没一个小块都有一条分割线，分割线的位置是在最右侧
 //            drawCanvasLine(itemCanvas);
-        } else {
-            Canvas itemCanvas = new Canvas(bitInfos.get(position).info.itemBitmap);
-            //根据角度进行同步旋转
-            itemCanvas.rotate(tmpAngle, mCenter, mCenter);
+            } else {
+                Canvas itemCanvas = new Canvas(bitInfos.get(position).info.itemBitmap);
+                //根据角度进行同步旋转
+                itemCanvas.rotate(tmpAngle, mCenter, mCenter);
+            }
+        }catch (Exception e){
+            e.printStackTrace();
         }
+
         return bitInfos.get(position).info.itemBitmap;
     }
 

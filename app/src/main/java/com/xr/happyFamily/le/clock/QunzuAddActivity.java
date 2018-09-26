@@ -178,7 +178,7 @@ public class QunzuAddActivity extends AppCompatActivity {
         unregisterReceiver(receiver);
     }
 
-    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq, R.id.rl_music})
+    @OnClick({R.id.tv_lrsd_qx, R.id.tv_lrsd_qd, R.id.rl_bjtime_bq, R.id.rl_music,R.id.img_add})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.tv_lrsd_qx:
@@ -220,6 +220,8 @@ public class QunzuAddActivity extends AppCompatActivity {
                 dialog.show();
                 new addClock().execute(map);
                 break;
+            case R.id.img_add:
+                startActivity(new Intent(this,FriendFindActivity.class));
         }
     }
 

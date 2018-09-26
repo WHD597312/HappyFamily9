@@ -527,6 +527,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 // executing before receiving enough results
                 if (firstResult.isSuc()) {
                     StringBuilder sb = new StringBuilder();
+                    Log.i("IEsptouchResult","-->"+result.size());
                     for (IEsptouchResult resultInList : result) {
                         //                String ssid=et_ssid.getText().toString();
                         String ssid = resultInList.getBssid();
@@ -536,6 +537,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                             Intent service = new Intent(AddDeviceActivity.this, MQService.class);
                             isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
                             mac = ssid;
+                            break;
                         }
 
                         count++;

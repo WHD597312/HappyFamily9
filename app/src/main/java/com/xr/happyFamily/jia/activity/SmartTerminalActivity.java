@@ -135,6 +135,8 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
      */
     @BindView(R.id.image_more)
     ImageView image_more;
+    @BindView(R.id.tv_temp_state) TextView tv_temp_state;/**温度状态*/
+    @BindView(R.id.tv_hum_state) TextView tv_hum_state;/**湿度状态*/
     /**
      * 修改设备名称
      */
@@ -299,9 +301,24 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         if (sorsorPm>=0){
             tv_air_value.setText(sorsorPm + "");
         }else {
-            tv_air_value.setText("0");
+            tv_air_value.setText("__");
         }
 
+        if (sensorSimpleTemp<18){
+            tv_temp_state.setText("较低");
+        }else if (sensorSimpleTemp>=18 && sensorSimpleTemp<26){
+            tv_temp_state.setText("舒适");
+        }else if (sensorSimpleTemp>=26){
+            tv_temp_state.setText("较高");
+        }
+
+        if (sensorSimpleHum<30){
+            tv_hum_state.setText("干燥");
+        }else  if (sensorSimpleHum>=30 && sensorSimpleHum<60){
+            tv_hum_state.setText("舒适");
+        }else if (sensorSimpleHum>=60){
+            tv_hum_state.setText("潮湿");
+        }
 
 
         if (sorsorPm > 0 && sensorSimpleHum <= 35) {

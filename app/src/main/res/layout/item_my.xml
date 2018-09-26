@@ -8,11 +8,12 @@
 
     <ImageView
         android:id="@+id/image_icon"
-        android:layout_width="@dimen/dp_jy_20"
-        android:layout_height="@dimen/dp_jy_20"
+        android:layout_width="@dimen/dp_jy_23"
+        android:layout_height="@dimen/dp_jy_23"
         android:layout_centerVertical="true"
         android:src="@mipmap/optimal"
         android:layout_margin="@dimen/dp_jy_10"
+        android:background="@null"
         />
 
     <TextView

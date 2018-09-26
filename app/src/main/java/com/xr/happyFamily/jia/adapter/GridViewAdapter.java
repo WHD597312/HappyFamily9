@@ -12,6 +12,7 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
@@ -59,6 +60,7 @@ public class GridViewAdapter extends ArrayAdapter {
                 int type=item.getType();
                 String common=item.getCommon();
                 if (type==2){
+                    item.setImg(img[0]);
                     if (TextUtils.isEmpty(common)){
                         holder.tv_device_name.setText(item.getName());
                         holder.tv_device_type.setText("取暖器");
@@ -69,7 +71,7 @@ public class GridViewAdapter extends ArrayAdapter {
                     }
                     boolean online=item.getOnline();
                     int deviceState=item.getDeviceState();
-                    item.setImg(img[0]);
+
 
                     if (online){
                         if (item.getWarmerFall()==1){
@@ -94,6 +96,7 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.view.setVisibility(View.GONE);
                     }
                 }else if (type==3){
+                    item.setImg(img[img.length-6]);
                     if (TextUtils.isEmpty(common)){
                         holder.tv_device_name.setText(item.getName());
                         holder.tv_device_type.setText("智能终端");
@@ -106,7 +109,7 @@ public class GridViewAdapter extends ArrayAdapter {
                     Log.i("online","-->"+online);
                     int sensorState=item.getSensorState();
                     Log.i("online","-->"+sensorState);
-                    item.setImg(img[1]);
+
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -125,6 +128,7 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
                 }else if (type==4){
+                    item.setImg(img[img.length-5]);
                     if (TextUtils.isEmpty(common)){
                         holder.tv_device_name.setText(item.getName());
                         holder.tv_device_type.setText("智能插座");
@@ -138,7 +142,6 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[2]);
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -167,7 +170,7 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[3]);
+                    item.setImg(img[img.length-4]);
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -184,6 +187,7 @@ public class GridViewAdapter extends ArrayAdapter {
                     }
                 }
                 else if (type==6){
+                    item.setImg(img[img.length-3]);
                     if (TextUtils.isEmpty(common)){
                         holder.tv_device_name.setText(item.getName());
                         holder.tv_device_type.setText("空调");
@@ -197,7 +201,7 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[4]);
+
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -214,6 +218,7 @@ public class GridViewAdapter extends ArrayAdapter {
                     }
                 }
                 else if (type==7){
+                    item.setImg(img[img.length-2]);
                     if (TextUtils.isEmpty(common)){
                         holder.tv_device_name.setText(item.getName());
                         holder.tv_device_type.setText("空气净化器");
@@ -227,7 +232,7 @@ public class GridViewAdapter extends ArrayAdapter {
 //                    int sensorState=item.getSensorState();
                     int socketState=item.getSocketState();
                     Log.i("online","-->"+socketState);
-                    item.setImg(img[5]);
+
                     if (online){
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                         holder.view.setVisibility(View.VISIBLE);
@@ -242,8 +247,9 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setText("离线");
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
+
                 }else if (type==8){
-                    item.setImg(img[6]);
+                    item.setImg(img[img.length-1]);
                     boolean online=item.getOnline();
                     Log.i("common","-->"+common);
                     if (TextUtils.isEmpty(common)){

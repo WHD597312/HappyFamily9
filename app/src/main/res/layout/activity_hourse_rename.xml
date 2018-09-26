@@ -87,7 +87,6 @@
         android:layout_width="match_parent"
         android:layout_height="1dp"
         android:layout_below="@+id/et_phone"
-        android:layout_marginTop="@dimen/dp_jy_1"
         android:background="#f5f5f5" />
     <RelativeLayout
         android:id="@+id/rl_rename_it2"

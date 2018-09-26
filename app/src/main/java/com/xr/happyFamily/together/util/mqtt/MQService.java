@@ -167,7 +167,7 @@ public class MQService extends Service {
         }
     }
 
-    CountTimer countTimer;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
         connect();
@@ -1199,11 +1199,11 @@ public class MQService extends Service {
 
 
                 if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
-//                    SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
-//                    String clockData = preferences.getString("clockData", "");
+                    SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
+                    String clockData = preferences.getString("clockData", "");
 //                    String[] clocks = clockData.split(",");
-//                    SharedPreferences.Editor editor = preferences.edit();
-//                    editor.putString("clockData", message);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    editor.putString("clockData", message);
 //                    Log.e("qqqqqHHHHH", message + "------" + clockData);
 //                    if (!message.equals(clockData)) {
 //                        SharedPreferences.Editor editor2 = preferences.edit();
@@ -1212,8 +1212,10 @@ public class MQService extends Service {
 //                    }
 //                    editor.commit();
 //                    String[] newClocks = message.split(",");
-                    ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
-                    UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
+//                    ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
+//                    UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
+//                    clockBeanDao.deleteAll();
+//                    userInfosDao.deleteAll();
 //                    //判断新数据中有没有旧数据中不存在的，如果有则添加新订阅
 //                    Map<String, Integer> newMap = new HashMap<>();
 //                    for (int i = 0; i < clocks.length; i++) {
@@ -1531,6 +1533,10 @@ public class MQService extends Service {
 
     public List<String> getTopicNames() {
         List<String> list = new ArrayList<>();
+        ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
+        UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
+        clockBeanDao.deleteAll();
+        userInfosDao.deleteAll();
         preferences = getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");

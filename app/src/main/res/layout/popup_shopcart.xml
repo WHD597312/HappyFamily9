@@ -2,57 +2,45 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:gravity="center">
+    android:gravity="center"
+    android:orientation="vertical">
+
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_pop_up"
+        android:layout_marginLeft="@dimen/dp_jy_35"/>
 
     <LinearLayout
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:gravity="center"
         android:orientation="vertical"
-        android:background="@mipmap/bg_pop_shopcart">
-        <View
-            android:layout_width="@dimen/dp_jy_1"
-            android:layout_height="@dimen/dp_jy_10"/>
-
-
-        <TextView
-            android:id="@+id/tv_shopcart"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
-            android:textColor="@color/white"
-            android:gravity="center_vertical"
-            android:paddingLeft="@dimen/dp_jy_11"
-            android:drawableLeft="@mipmap/ic_pop_gouwu"
-            android:textSize="@dimen/sp_12"
-            android:drawablePadding="@dimen/dp_jy_18"
-            android:text="购物车"/>
+        android:background="@drawable/bg_shoppage_more">
 
         <TextView
             android:id="@+id/tv_dingdan"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_width="@dimen/dp_jy_115"
+            android:layout_height="@dimen/dp_jy_45"
             android:textColor="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp_jy_18"
             android:drawableLeft="@mipmap/ic_pop_dingdan"
             android:textSize="@dimen/sp_12"
-            android:drawablePadding="@dimen/dp_jy_18"
+            android:drawablePadding="@dimen/dp_jy_10"
             android:text="我的订单"/>
 
         <TextView
             android:id="@+id/tv_shangcheng"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_width="@dimen/dp_jy_115"
+            android:layout_height="@dimen/dp_jy_45"
             android:textColor="@color/white"
             android:gravity="center_vertical"
             android:paddingLeft="@dimen/dp_jy_18"
             android:drawableLeft="@mipmap/ic_pop_shangcheng"
             android:textSize="@dimen/sp_12"
-            android:drawablePadding="@dimen/dp_jy_18"
-            android:text="商城中心"/>
+            android:drawablePadding="@dimen/dp_jy_10"
+            android:text="商城中心" />
 
 
 

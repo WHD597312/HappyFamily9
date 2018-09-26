@@ -55,7 +55,8 @@ import com.xr.happyFamily.bao.view.MyScrollview;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopBean;
 import com.xr.happyFamily.bean.ShopPageBean;
-import com.xr.happyFamily.jia.xnty.CsjActivity;
+import com.xr.happyFamily.jia.activity.AConfActivity;
+import com.xr.happyFamily.jia.activity.APurifierActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
@@ -187,7 +188,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         //广告
         shopBannerBeans = new ArrayList<>();
         new getAdByPageAsync().execute();
-//        getActivity().getWindow().setStatusBarColor(getActivity().getResources().getColor(R.color.white));
         return view;
     }
 
@@ -250,16 +250,13 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
             @Override
             public void loadMore() {
-                if(!isLoading) {
-                    page++;
-                    Log.e("qqqqPage", page + "");
-                    isLoading = true;
-                    if (countTimer != null)
-                        countTimer.cancel();
-                    countTimer = new CountTimer(5000, 1000);
-                    countTimer.start();
-                    getShopData(lastVisibleItem, page);
-                }
+                page++;
+                isLoading = true;
+                if (countTimer != null)
+                    countTimer.cancel();
+                countTimer = new CountTimer(5000, 1000);
+                countTimer.start();
+                getShopData(lastVisibleItem, page);
             }
         });
 
@@ -299,7 +296,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
 
         ((ImageView) view.findViewById(imgae_dots[lastBanner])).setImageResource(R.mipmap.ic_shop_banner);
-
+        ;
 
     }
 
@@ -396,7 +393,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     }
 
 
-    @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe})
+    @OnClick({R.id.tv_search, R.id.image_more, R.id.img_more, R.id.img_shang, R.id.view_zhe,R.id.image_shopcart})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.tv_search:
@@ -416,7 +413,9 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 rvTitle.setVisibility(View.VISIBLE);
                 llYinying.setVisibility(View.VISIBLE);
                 break;
-
+            case R.id.image_shopcart:
+                startActivityForResult(new Intent(mContext, ShopCartActivity.class), MAIN_CODE);
+                break;
 
         }
     }
@@ -424,10 +423,8 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
     private void showPopup() {
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shopcart, null);
-        tv_shopcart = (TextView) contentViewSign.findViewById(R.id.tv_shopcart);
         tv_dingdan = (TextView) contentViewSign.findViewById(R.id.tv_dingdan);
         tv_shangcheng = (TextView) contentViewSign.findViewById(R.id.tv_shangcheng);
-        tv_shopcart.setOnClickListener(this);
         tv_dingdan.setOnClickListener(this);
         tv_shangcheng.setOnClickListener(this);
         mPopWindow = new PopupWindow(contentViewSign);
@@ -459,17 +456,12 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         switch (v.getId()) {
-            case R.id.tv_shopcart:
-                startActivityForResult(new Intent(mContext, ShopCartActivity.class), MAIN_CODE);
-                mPopWindow.dismiss();
-                break;
             case R.id.tv_dingdan:
                 startActivityForResult(new Intent(mContext, ShopDingdanActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
             case R.id.tv_shangcheng:
-//                startActivityForResult(new Intent(mContext, CsjActivity.class), MAIN_CODE);
-
+//                startActivityForResult(new Intent(mContext, APurifierActivity.class), MAIN_CODE);
                 startActivityForResult(new Intent(mContext, ShopShangchengActivity.class), MAIN_CODE);
                 mPopWindow.dismiss();
                 break;
@@ -563,6 +555,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                                     list_shop.add(userList);
                                 }
                             } else {
+                                page--;
                                 isData = false;
                             }
 
@@ -603,10 +596,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 if (isLoading) {
                     swipeContent.finishLoadMore();
                     shopAdapter.notifyDataSetChanged();
-
-                }
-                isLoading = false;
-
+                }isLoading = false;
                 if (!isData) {
                     ToastUtil.showShortToast("无更多商品");
                     page--;
@@ -768,7 +758,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
             if (isLoading) {
                 swipeContent.finishLoadMore();
                 Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
-                page--;
             }
         }
     }
@@ -812,20 +801,14 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         else
             llTuijian.setVisibility(View.GONE);
         list_shop.clear();
-        try {
-            JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
-            JsonArray list = content.getAsJsonArray("list");
-            Gson gson = new Gson();
-            if(list!=null)
-                for (JsonElement user : list) {
-                    //通过反射 得到UserBean.class
-                    ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
-                    list_shop.add(userList);
-                }
-            shopAdapter.notifyDataSetChanged();
-        }catch (Exception e){
-            e.printStackTrace();
+        JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
+        JsonArray list = content.getAsJsonArray("list");
+        Gson gson = new Gson();
+        for (JsonElement user : list) {
+            //通过反射 得到UserBean.class
+            ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
+            list_shop.add(userList);
         }
-
+        shopAdapter.notifyDataSetChanged();
     }
 }

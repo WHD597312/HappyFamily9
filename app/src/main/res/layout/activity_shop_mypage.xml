@@ -16,8 +16,8 @@
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_jy_28"
             android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_jy_55"
-            android:layout_marginRight="@dimen/dp_jy_55"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_marginRight="@dimen/dp_jy_100"
             android:background="@drawable/bg_shape_hui">
 
             <ImageView
@@ -46,7 +46,16 @@
             android:layout_alignParentRight="true"
             android:layout_centerVertical="true"
             android:padding="@dimen/dp_jy_12"
-            android:src="@mipmap/gengduo2x" />
+            android:src="@mipmap/ic_shoppage_more" />
+
+        <ImageView
+            android:id="@+id/image_shopcart"
+            android:layout_width="@dimen/dp_jy_46"
+            android:layout_height="@dimen/dp_jy_46"
+            android:layout_toLeftOf="@id/image_more"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_shoppage_shopcart"
+            android:padding="@dimen/dp_jy_12"/>
 
     </RelativeLayout>
 
@@ -163,11 +172,10 @@
             android:gravity="center"
 
             android:orientation="horizontal">
-
             <View
-                android:layout_width="43dp"
+                android:layout_width="@dimen/dp_jy_40"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_shape_touming_jianbain" />
+                android:background="@drawable/bg_shape_touming_jianbain"/>
             <ImageView
                 android:layout_width="@dimen/dp_jy_25"
                 android:layout_height="match_parent"

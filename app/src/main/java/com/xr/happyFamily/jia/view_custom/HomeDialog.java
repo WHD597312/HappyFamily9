@@ -56,9 +56,9 @@ public class HomeDialog extends Dialog {
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 int len=s.length();
-                if (len>8){
-                    Toast.makeText(context,"最多可以输入8个字",Toast.LENGTH_SHORT).show();
-                    et_name.setText(s.subSequence(0,8));
+                if (len>6){
+                    Toast.makeText(context,"最多可以输入6个字",Toast.LENGTH_SHORT).show();
+                    et_name.setText(s.subSequence(0,6));
                 }
             }
 

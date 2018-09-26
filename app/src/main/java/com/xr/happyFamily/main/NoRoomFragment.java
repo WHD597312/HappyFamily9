@@ -97,7 +97,7 @@ public class NoRoomFragment extends Fragment {
         }
     }
 
-    @OnClick({R.id.rl_page,R.id.btn_add_room,R.id.tv_noroom_hoursename,R.id.ib_croom})
+    @OnClick({R.id.rl_page,R.id.btn_add_room,R.id.tv_noroom_hoursename,R.id.rl_pic_1})
     public void onClick(View view){
         switch (view.getId()){
             case R.id.rl_page:
@@ -113,7 +113,7 @@ public class NoRoomFragment extends Fragment {
                 Intent intent2=new Intent(getActivity(), ChooseHourseActivity.class);
                 startActivity(intent2);
                 break;
-            case R.id.ib_croom:
+            case R.id.rl_pic_1:
                 List<Room> rooms=roomDao.findAllRoomInHouse(houseId);
                 if (rooms==null || rooms.isEmpty()){
                     Toast.makeText(getActivity(),"您还没有创建房间!",Toast.LENGTH_SHORT).show();

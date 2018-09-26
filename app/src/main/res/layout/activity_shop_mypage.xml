@@ -163,16 +163,17 @@
             android:gravity="center"
 
             android:orientation="horizontal">
+
             <View
-                android:layout_width="@dimen/dp_jy_40"
+                android:layout_width="43dp"
                 android:layout_height="match_parent"
-                android:background="@drawable/bg_shape_touming_jianbain"/>
+                android:background="@drawable/bg_shape_touming_jianbain" />
             <ImageView
                 android:layout_width="@dimen/dp_jy_25"
                 android:layout_height="match_parent"
                 android:id="@id/img_more"
                 android:padding="@dimen/dp_jy_5"
-                android:src="@mipmap/xiala2x"
+                android:src="@mipmap/ic_shoppage_down"
                 android:background="@color/white"
                 android:layout_centerVertical="true"/>
             <View
@@ -212,10 +213,9 @@
                     android:layout_width="@dimen/dp_jy_25"
                     android:layout_height="@dimen/dp_jy_20"
                     android:layout_alignParentRight="true"
-                    android:rotation="180"
                     android:padding="@dimen/dp_jy_5"
                     android:layout_centerVertical="true"
-                    android:src="@mipmap/xiala2x" />
+                    android:src="@mipmap/ic_shoppage_up" />
             </RelativeLayout>
 
             <GridView

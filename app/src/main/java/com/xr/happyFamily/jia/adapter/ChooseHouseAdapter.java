@@ -90,10 +90,13 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
 //        holder.tv_shop_type.setText(data.get(position).getGoods().getSimpleDescribe());
         holder.tv_name.setText(data.get(position).getHouseName());
         holder.tv_address.setText(data.get(position).getHouseAddress());
+        holder.tv_address1.setText(data.get(position).getHouseAddress());
         if (clicked == -1) {
-            holder.img_change.setVisibility(View.GONE);
+            holder.rl_d2.setVisibility(View.GONE);
+            holder.rl_d3.setVisibility(View.VISIBLE);
         } else if (clicked == 1) {
-            holder.img_change.setVisibility(View.VISIBLE);
+            holder.rl_d3.setVisibility(View.GONE);
+            holder.rl_d2.setVisibility(View.VISIBLE);
         }
         if (position == data.size()) {
             holder.view1.setVisibility(View.GONE);
@@ -161,9 +164,9 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
 
         ImageView img_change;
         View view1;
-        TextView tv_address, tv_name;
+        TextView tv_address, tv_name ,tv_address1;
         RelativeLayout rl_d1;
-        RelativeLayout rl_d2;
+        RelativeLayout rl_d2 , rl_d3;
 
         public MyViewHolder(View view) {
             super(view);
@@ -171,10 +174,12 @@ public class ChooseHouseAdapter extends RecyclerView.Adapter<ChooseHouseAdapter.
 
             tv_name = (TextView) view.findViewById(R.id.tv_hourse_choosen);
             tv_address = (TextView) view.findViewById(R.id.tv_hourse_choosep);
+            tv_address1 = (TextView) view.findViewById(R.id.tv_hourse_choosep1);
             img_change = (ImageView) view.findViewById(R.id.iv_hourse_c);
             view1 = view.findViewById(R.id.house_view);
             rl_d1 = (RelativeLayout) view.findViewById(R.id.rl_house_it1);
-//            rl_d1= (RelativeLayout) view.findViewById(R.id.rl_house_it2);
+            rl_d2= (RelativeLayout) view.findViewById(R.id.rl_bz_1);
+            rl_d3= (RelativeLayout) view.findViewById(R.id.rl_bz_2);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {

@@ -501,7 +501,9 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                 houseName = dialog.getName();
                 if (Utils.isEmpty(houseName)) {
                     Utils.showToast(RenameHourseActivity.this, "住所名称不能为空");
-                } else {
+                }
+
+                else {
 
                             new RenameHourseActivity.ChangeHouseNameAsyncTask().execute();
 

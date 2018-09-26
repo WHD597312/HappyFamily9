@@ -1165,56 +1165,62 @@ public class MQService extends Service {
 
 
                 if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
-                    SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
-                    String clockData = preferences.getString("clockData", "");
-                    String[] clocks = clockData.split(",");
-                    SharedPreferences.Editor editor = preferences.edit();
-                    editor.putString("clockData", message);
-                    Log.e("qqqqqHHHHH", message + "------" + clockData);
-                    if (!message.equals(clockData)) {
-                        SharedPreferences.Editor editor2 = preferences.edit();
-                        editor2.putString("clockNew", "new");
-                        editor2.commit();
-                    }
-                    editor.commit();
-                    String[] newClocks = message.split(",");
+//                    SharedPreferences preferences = getSharedPreferences("password", MODE_PRIVATE);
+//                    String clockData = preferences.getString("clockData", "");
+//                    String[] clocks = clockData.split(",");
+//                    SharedPreferences.Editor editor = preferences.edit();
+//                    editor.putString("clockData", message);
+//                    Log.e("qqqqqHHHHH", message + "------" + clockData);
+//                    if (!message.equals(clockData)) {
+//                        SharedPreferences.Editor editor2 = preferences.edit();
+//                        editor2.putString("clockNew", "new");
+//                        editor2.commit();
+//                    }
+//                    editor.commit();
+//                    String[] newClocks = message.split(",");
                     ClockDaoImpl clockBeanDao = new ClockDaoImpl(getApplicationContext());
                     UserInfosDaoImpl userInfosDao = new UserInfosDaoImpl(getApplicationContext());
-                    //判断新数据中有没有旧数据中不存在的，如果有则添加新订阅
-                    Map<String, Integer> newMap = new HashMap<>();
-                    for (int i = 0; i < clocks.length; i++) {
-                        newMap.put(clocks[i], 1);
-                    }
-//                    isNew = false;
-                    for (int j = 0; j < newClocks.length; j++) {
-                        if (newMap.get(newClocks[j]) == null) {
-                            String str = "p99/" + newClocks[j] + "/clockuniversal";
-                            boolean success = subscribe(str, 1);
-//                            isNew = true;
+//                    //判断新数据中有没有旧数据中不存在的，如果有则添加新订阅
+//                    Map<String, Integer> newMap = new HashMap<>();
+//                    for (int i = 0; i < clocks.length; i++) {
+//                        newMap.put(clocks[i], 1);
+//                    }
+////                    isNew = false;
+//                    for (int j = 0; j < newClocks.length; j++) {
+//                        if (newMap.get(newClocks[j]) == null) {
+//                            String str = "p99/" + newClocks[j] + "/clockuniversal";
+//                            boolean success = subscribe(str, 1);
+////                            isNew = true;
+//
+//                        }
+//
+//                    }
+//
+//                    //判断旧的数据中有没有新数据中不存在的，如果有，取消订阅并删除数据
+//                    Map<String, Integer> map = new HashMap();
+//                    for (int i = 0; i < newClocks.length; i++) {
+//                        map.put(newClocks[i], 1);
+//                    }
+//                    for (int j = 0; j < clocks.length; j++) {
+//                        if (map.get(clocks[j]) == null) {
+//                            if(clocks[j].length()>0) {
+//                                String str = "p99/" + clocks[j] + "/clockuniversal";
+//                                unsubscribe(str);
+//                                List<ClockBean> findClock = clockBeanDao.findClockByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
+//                                if (findClock.size() > 0)
+//                                    clockBeanDao.delete(findClock.get(0));
+//                                List<UserInfo> findUser = userInfosDao.findUserInfoByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
+//                                for (int i = 0; i < findUser.size(); i++) {
+//                                    userInfosDao.delete(findUser.get(i));
+//                                }
+//                            }
+//                        }
+//                    }
 
-                        }
-
-                    }
-
-                    //判断旧的数据中有没有新数据中不存在的，如果有，取消订阅并删除数据
-                    Map<String, Integer> map = new HashMap();
-                    for (int i = 0; i < newClocks.length; i++) {
-                        map.put(newClocks[i], 1);
-                    }
-                    for (int j = 0; j < clocks.length; j++) {
-                        if (map.get(clocks[j]) == null) {
-                            if(clocks[j].length()>0) {
-                                String str = "p99/" + clocks[j] + "/clockuniversal";
-                                unsubscribe(str);
-                                List<ClockBean> findClock = clockBeanDao.findClockByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
-                                if (findClock.size() > 0)
-                                    clockBeanDao.delete(findClock.get(0));
-                                List<UserInfo> findUser = userInfosDao.findUserInfoByClockId(Integer.parseInt(clocks[j].substring(2, clocks[j].length())));
-                                for (int i = 0; i < findUser.size(); i++) {
-                                    userInfosDao.delete(findUser.get(i));
-                                }
-                            }
-                        }
+                    String[] newClocks = message.split(",");
+                    for(int i=0;i<newClocks.length;i++){
+                        String str = "p99/" + newClocks[i] + "/clockuniversal";
+                        boolean success = subscribe(str, 1);
                     }
 
                     if (QingLvFragment.running) {
@@ -1660,7 +1666,10 @@ public class MQService extends Service {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    if(dialog4==null)
                     showDialog();
+                    else if(!dialog4.isShowing())
+                        showDialog();
                     break;
                 case 2:
                     // 获取电源管理器对象

@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#3b3b40"
+    android:background="#28282f"
     android:orientation="vertical"
     tools:context=".jia.activity.TempChatActivity"
     >
@@ -60,7 +60,7 @@
     <com.github.mikephil.charting.charts.LineChart
         android:id="@+id/line_chart"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_250"
+        android:layout_height="@dimen/dp_jy_270"
         android:layout_below="@+id/tv_du" />
     <RelativeLayout
         android:id="@+id/layout_state"
@@ -134,6 +134,7 @@
         android:layout_marginLeft="@dimen/dp_jy_15"
         android:layout_marginRight="@dimen/dp_jy_15"
         android:background="@drawable/shape_chart_back"
+        android:visibility="gone"
         >
         <TextView
             android:id="@+id/tv_spec"

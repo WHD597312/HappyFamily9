@@ -356,6 +356,12 @@ public class ShareDeviceActivity extends AppCompatActivity {
                         JSONArray returnData=jsonObject.getJSONArray("returnData");
                         String wifiVersion2=returnData.getString(0);
                         String mcuVersion2=returnData.getString(1);
+                        if ("null".equals(wifiVersion2)){
+                            wifiVersion2=deviceChild.getWifiVersion();
+                        }
+                        if ("null".equals(mcuVersion2)){
+                            mcuVersion2=deviceChild.getMcuVersion();
+                        }
                         s=wifiVersion2+","+mcuVersion2;
                     }
                 }

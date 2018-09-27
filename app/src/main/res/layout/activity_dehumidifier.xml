@@ -85,7 +85,7 @@
                             android:id="@+id/tv_now"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="30"
+                            android:text="——"
                             android:textColor="#0DCEFE"
                             android:textSize="@dimen/sp_24" />
 
@@ -135,7 +135,7 @@
                             android:id="@+id/tv_set"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="30"
+                            android:text="——"
                             android:textColor="#0DCEFE"
                             android:textSize="@dimen/sp_24" />
 
@@ -207,7 +207,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_centerInParent="true"
-                        android:text="30"
+                        android:text="——"
                         android:textColor="#2fb3ff"
                         android:textSize="60sp" />
 

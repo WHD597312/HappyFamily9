@@ -1,98 +1,62 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_gravity="bottom"
     android:gravity="bottom"
-    android:background="@color/white"
     android:orientation="vertical"
+    android:background="@color/white"
     >
-    <!--android:background="@drawable/shape_timer_task"-->
-    <RelativeLayout
+
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/dp_jy_10"
-        android:layout_marginRight="@dimen/dp_jy_10"
-        >
-        <ImageView
-            android:layout_marginTop="@dimen/dp_jy_20"
-            android:id="@+id/image_cancle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/image_cancle"
-            android:layout_centerVertical="true"
-            android:layout_marginLeft="@dimen/dp_jy_20"
-            />
-        <TextView
-            android:id="@+id/tv_timer"
+        android:orientation="vertical"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_fill_faf7f710">
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="定时关任务"
-            android:gravity="center"
-            android:layout_centerVertical="true"
-            android:layout_alignTop="@id/image_cancle"
-            android:layout_alignBottom="@id/image_cancle"/>
-        <ImageView
-            android:id="@+id/image_ensure"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            app:srcCompat="@mipmap/image_ensure"
-            android:layout_alignParentRight="true"
-            android:layout_centerVertical="true"
-            android:layout_marginRight="@dimen/dp_jy_20"
-            />
-    </RelativeLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_jy_170"
-        >
+            android:layout_marginLeft="@dimen/dp_jy_10"
+            android:layout_marginRight="@dimen/dp_jy_10"
 
-
-       <LinearLayout
-           android:layout_width="match_parent"
-           android:layout_height="wrap_content"
-           android:orientation="horizontal"
-           android:layout_centerInParent="true"
-           android:layout_marginLeft="@dimen/dp_jy_12"
-           android:gravity="center"
-           >
-
-
-        <com.xr.happyFamily.jia.view_custom.Timepicker3
-            android:descendantFocusability="blocksDescendants"
-            android:background="@color/white"
+            >
+            <ImageView
+                android:layout_marginTop="@dimen/dp_jy_20"
+                android:id="@+id/image_cancle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/image_cancle"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_jy_20"
+                />
+            <TextView
+                android:id="@+id/tv_timer"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="定时关任务"
+                android:gravity="center"
+                android:layout_centerVertical="true"
+                android:layout_alignTop="@id/image_cancle"
+                android:layout_alignBottom="@id/image_cancle"/>
+            <ImageView
+                android:id="@+id/image_ensure"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:srcCompat="@mipmap/image_ensure"
+                android:layout_alignParentRight="true"
+                android:layout_centerVertical="true"
+                android:layout_marginRight="@dimen/dp_jy_20"
+                />
+        </RelativeLayout>
+        <com.weigan.loopview.LoopView
             android:id="@+id/tv_hour"
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_jy_170"
             />
-           <com.xr.happyFamily.jia.view_custom.Timepicker3
-               android:descendantFocusability="blocksDescendants"
-               android:background="@color/white"
-               android:id="@+id/tv_min"
-               android:layout_width="wrap_content"
-               android:layout_height="@dimen/dp_jy_170"
-               android:visibility="gone"
-               />
-       </LinearLayout>
-        <View
-            android:id="@+id/view_hour1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_1"
-            android:layout_marginLeft="@dimen/dp_jy_29"
-            android:layout_marginRight="@dimen/dp_jy_29"
-            android:layout_marginTop="@dimen/dp_jy_59"
-            android:background="@color/color_gray2" />
-        <View
-            android:id="@+id/view_hour2"
-            android:layout_below="@+id/view_hour1"
-            android:layout_width="match_parent"
-            android:layout_height="@dimen/dp_jy_1"
-            android:layout_marginLeft="@dimen/dp_jy_29"
-            android:layout_marginRight="@dimen/dp_jy_29"
-            android:layout_marginTop="@dimen/dp_jy_48"
-            android:background="@color/color_gray2" />
-    </RelativeLayout>
-
+    </LinearLayout>
 </LinearLayout>
+
+

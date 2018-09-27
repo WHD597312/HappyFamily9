@@ -6,7 +6,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.support.v7.app.AppCompatActivity;
@@ -33,18 +32,12 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.view_custom.FengSuViewPopup;
-import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.TimePickViewPopup;
-import com.xr.happyFamily.main.MainActivity;
-import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
-import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -146,7 +139,7 @@ public class APurifierActivity extends AppCompatActivity {
         houseId = intent.getLongExtra("houseId", 0);
         Intent service = new Intent(this, MQService.class);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-        IntentFilter intentFilter = new IntentFilter("APurifierActivity");
+        IntentFilter intentFilter = new IntentFilter("DehumidifierActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
         Animation circle_anim = AnimationUtils.loadAnimation(this, R.anim.anim_atm);
@@ -168,13 +161,10 @@ public class APurifierActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_back:
-                Intent intent2=new Intent();
-                intent2.putExtra("houseId",houseId);
-                setResult(6000,intent2);
-                finish();
+
                 break;
             case R.id.image_more:
-                popupmenuWindow();
+
                 break;
             case R.id.ll_kai:
                 if (deviceChild.getDeviceState() == 1) {
@@ -277,57 +267,7 @@ public class APurifierActivity extends AppCompatActivity {
 
 
 
-    private PopupWindow popupWindow1;
-    public void popupmenuWindow() {
-        if (popupWindow1 != null && popupWindow1.isShowing()) {
-            return;
-        }
 
-        View view = View.inflate(this, R.layout.popview_room_homemanerge, null);
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        RelativeLayout rl_room_rename = (RelativeLayout) view.findViewById(R.id.rl_room_rename);
-        RelativeLayout tv_timer = (RelativeLayout) view.findViewById(R.id.rl_room_del);
-        TextView tv_rname_r1 = (TextView) view.findViewById(R.id.tv_rname_r1);
-        TextView tv_del_r1 = (TextView) view.findViewById(R.id.tv_del_r1);
-        ImageView iv_del_r1 = (ImageView) view.findViewById(R.id.iv_del_r1);
-        tv_rname_r1.setText("修改名称");
-        tv_del_r1.setText("分享设备");
-        iv_del_r1.setImageResource(R.mipmap.pop_share);
-        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        //点击空白处时，隐藏掉pop窗口
-        popupWindow1.setFocusable(true);
-        popupWindow1.setOutsideTouchable(true);
-        //添加弹出、弹入的动画
-        popupWindow1.setAnimationStyle(R.style.Popupwindow);
-
-//        ColorDrawable dw = new ColorDrawable(0x30000000);
-//        popupWindow.setBackgroundDrawable(dw);
-        popupWindow1.showAsDropDown(imageMore, 0, -20);
-//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
-        //添加按键事件监听
-
-        View.OnClickListener listener = new View.OnClickListener() {
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.rl_room_rename:
-                        buildUpdateDeviceDialog();
-                        popupWindow1.dismiss();
-                        break;
-                    case R.id.rl_room_del:
-                        Intent intent = new Intent(APurifierActivity.this, ShareDeviceActivity.class);
-                        long id = deviceChild.getId();
-                        intent.putExtra("deviceId", id);
-                        startActivity(intent);
-                        popupWindow1.dismiss();
-                        break;
-                }
-            }
-        };
-
-        rl_room_rename.setOnClickListener(listener);
-        tv_timer.setOnClickListener(listener);
-    }
 
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -335,73 +275,7 @@ public class APurifierActivity extends AppCompatActivity {
         getWindow().setAttributes(lp); //添加pop窗口关闭事件
     }
 
-    String deviceName;
-    private void buildUpdateDeviceDialog() {
-        final HomeDialog dialog = new HomeDialog(this);
-        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
-            @Override
-            public void onNegativeClick() {
-                dialog.dismiss();
-            }
-        });
-        dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
-            @Override
-            public void onPositiveClick() {
-                deviceName = dialog.getName();
-                if (TextUtils.isEmpty(deviceName)) {
-                    Utils.showToast(APurifierActivity.this, "设备名称不能为空");
-                } else {
-                    new UpdateDeviceAsync().execute();
-                    dialog.dismiss();
-                }
-            }
-        });
-        dialog.show();
-    }
 
-    private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
-    class UpdateDeviceAsync extends AsyncTask<Void,Void,Integer> {
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            int code=0;
-            try {
-                int deviceId=deviceChild.getDeviceId();
-                String url=updateDeviceNameUrl+"?deviceName="+ URLEncoder.encode(deviceName,"utf-8")+"&deviceId="+deviceId;
-                String result= HttpUtils.getOkHpptRequest(url);
-                JSONObject jsonObject=new JSONObject(result);
-                String returnCode=jsonObject.getString("returnCode");
-                if ("100".equals(returnCode)){
-                    code=100;
-                    deviceChild.setName(deviceName);
-                    deviceChildDao.update(deviceChild);
-                }
-                Log.i("result","-->"+result);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(Integer code) {
-            super.onPostExecute(code);
-            try {
-                switch (code){
-                    case 100:
-                        Utils.showToast(APurifierActivity.this, "修改成功");
-                        tvTitle.setText(deviceName);
-                        break;
-                    default:
-                        Utils.showToast(APurifierActivity.this, "修改失败");
-                        break;
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-    }
     class poponDismissListener implements PopupWindow.OnDismissListener {
         @Override
         public void onDismiss() {
@@ -506,15 +380,24 @@ public class APurifierActivity extends AppCompatActivity {
         if (sorsorPm > 99)
             tvPm1.setText(sorsorPm / 100 + "");
         else
-            tvPm1.setText("0");
+            tvPm1.setText("--");
         int pm2 = sorsorPm % 100;
         if (pm2 > 10)
             tvPm2.setText(pm2 + "");
         else
             tvPm2.setText("0" + pm2);
+        if (sensorSimpleHum>0)
         tvShidu.setText(sensorSimpleHum + "");
+        else
+        tvShidu.setText( "--");
+        if (sensorSimpleTemp>0)
         tvWendu.setText(sensorSimpleTemp + "");
+        else
+        tvWendu.setText( "--");
+        if(sensorHcho>0)
         tvJiaquan.setText(sensorHcho + "");
+        else
+        tvJiaquan.setText("--");
 
     }
 
@@ -601,10 +484,7 @@ public class APurifierActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
-            finish();
+            application.removeActivity(this);
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -614,14 +494,7 @@ public class APurifierActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         running = true;
-        deviceChild = deviceChildDao.findById(deviceId);
-        if (deviceChild==null){
-            Toast.makeText(APurifierActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
-            finish();
-        }else   {
+        if (deviceChild != null) {
             boolean online = deviceChild.getOnline();
             if (online) {
                 relative.setVisibility(View.VISIBLE);
@@ -632,12 +505,6 @@ public class APurifierActivity extends AppCompatActivity {
                 tvOffline.setVisibility(View.VISIBLE);
             }
         }
-    }
-
-    @Override
-    protected void onStop() {
-        super.onStop();
-        running=false;
     }
 
     @Override

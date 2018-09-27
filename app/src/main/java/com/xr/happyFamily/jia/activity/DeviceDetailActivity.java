@@ -36,6 +36,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
@@ -96,9 +98,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @BindView(R.id.image_more) ImageView image_more;/**修改设备名称 分享设备*/
     @BindView(R.id.relative) RelativeLayout relative;/**设备详情*/
     @BindView(R.id.tv_offline) TextView tv_offline;/**设备离线*/
-    private List<String> list=new ArrayList<>();
     Unbinder unbinder;
-    Timepicker3 tv_timer_hour;
     private DeviceChildDaoImpl deviceChildDao;
     MessageReceiver receiver;
     MQService mqService;
@@ -155,6 +155,9 @@ public class DeviceDetailActivity extends AppCompatActivity {
         IntentFilter intentFilter = new IntentFilter("DeviceDetailActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
+        for (int i=0;i<=24;i++){
+            hours.add(i+"");
+        }
     }
 
     @Override
@@ -272,7 +275,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
         tv_rname_r1.setText("修改名称");
         tv_del_r1.setText("分享设备");
         iv_del_r1.setImageResource(R.mipmap.pop_share);
-        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        if (popupWindow1==null)
+            popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
         popupWindow1.setFocusable(true);
         popupWindow1.setOutsideTouchable(true);
@@ -349,6 +353,23 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 popupmenuWindow();
                 break;
             case R.id.image_back:
+                if (popupWindow1!=null && popupWindow1.isShowing()){
+                    popupWindow1.dismiss();
+                    backgroundAlpha(1.0f);
+                }
+                if (popupWindow2!=null && popupWindow2.isShowing()){
+                    popupWindow2.dismiss();
+                    backgroundAlpha(1.0f);
+                }
+                if (popupWindow3!=null && popupWindow3.isShowing()){
+                    popupWindow3.dismiss();
+                    backgroundAlpha(1.0f);
+                }
+                if (popupWindow1!=null && popupWindow1.isShowing()){
+                    backgroundAlpha(1f);
+                    popupWindow1.dismiss();
+                    break;
+                }
 //                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                 Intent intent=new Intent();
                 intent.putExtra("houseId",houseId);
@@ -439,13 +460,17 @@ public class DeviceDetailActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            if (popupWindow!=null && popupWindow.isShowing()){
-                backgroundAlpha(1f);
-                return false;
-            }
             if (popupWindow1!=null && popupWindow1.isShowing()){
-                backgroundAlpha(1f);
-                return false;
+                popupWindow1.dismiss();
+                backgroundAlpha(1.0f);
+            }
+            if (popupWindow2!=null && popupWindow2.isShowing()){
+                popupWindow2.dismiss();
+                backgroundAlpha(1.0f);
+            }
+            if (popupWindow3!=null && popupWindow3.isShowing()){
+                popupWindow3.dismiss();
+                backgroundAlpha(1.0f);
             }
 //            VibratorUtil.StopVibrate(DeviceDetailActivity.this);
             Intent intent=new Intent();
@@ -458,16 +483,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
 
         return super.onKeyDown(keyCode, event);
     }
-    private void initTimer(){//设置定时时间
-        tv_timer_hour.setMaxValue(24);
-        tv_timer_hour.setMinValue(00);
-        //timepicker1.setBackgroundColor(Color.LTGRAY);
-        tv_timer_hour.setNumberPickerDividerColor(tv_timer_hour);
-    }
 
-    private PopupWindow popupWindow;
+
+    List<String> hours=new ArrayList<>();
+    private PopupWindow popupWindow2;
     public void popupTimerWindow() {
-        if (popupWindow != null && popupWindow.isShowing()) {
+        if (popupWindow2 != null && popupWindow2.isShowing()) {
             return;
         }
 
@@ -475,50 +496,65 @@ public class DeviceDetailActivity extends AppCompatActivity {
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
         ImageView image_cancle= (ImageView) view.findViewById(R.id.image_cancle);
-        TextView tv_timer= (TextView) view.findViewById(R.id.tv_timer);
         ImageView image_ensure= (ImageView) view.findViewById(R.id.image_ensure);
-       tv_timer_hour= (Timepicker3) view.findViewById(R.id.tv_hour);
+        LoopView tv_hour= (LoopView) view.findViewById(R.id.tv_hour);
+        tv_hour.setItems(hours);
+        tv_hour.setCenterTextColor(0xff37d39e);
+        tv_hour.setTextSize(20);
 
 
-        initTimer();
+        tv_hour.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                String hour=hours.get(index);
+                int timerHour=Integer.parseInt(hour);
+                deviceChild.setTimerHour(timerHour);
+            }
+        });
         Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        tv_timer_hour.setValue(hour);
-
-        int hour2=tv_timer_hour.getValue();
-        Log.i("hour2", "popupWindow: "+hour2);
-
-
+        String hour = ""+calendar.get(Calendar.HOUR_OF_DAY);
+        if (hours.contains(""+hour)){
+            int index=hours.indexOf(hour);
+            tv_hour.setCurrentPosition(index);
+        }
         int min=0;
         Log.i("min", "popupWindow: "+min);
-
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        if (popupWindow2==null)
+            popupWindow2 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
-        popupWindow.setFocusable(false);
-        popupWindow.setOutsideTouchable(false);
+        popupWindow2.setFocusable(true);
+        popupWindow2.setOutsideTouchable(true);
+
 
         //添加弹出、弹入的动画
-        popupWindow.setAnimationStyle(R.style.Popupwindow);
-        backgroundAlpha(0.4f);
+        popupWindow2.setAnimationStyle(R.style.Popupwindow);
+
         ColorDrawable dw = new ColorDrawable(0x30000000);
-        popupWindow.setBackgroundDrawable(dw);
-        popupWindow.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        popupWindow2.setBackgroundDrawable(dw);
+//        popupWindow.showAsDropDown(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        popupWindow2.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         //添加按键事件监听
 
+        backgroundAlpha(0.4f);
+
+        popupWindow2.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1.0f);
+            }
+        });
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.image_cancle:
-                        popupWindow.dismiss();
+                        popupWindow2.dismiss();
                         backgroundAlpha(1f);
                         break;
                     case R.id.image_ensure:
-                        int sh= tv_timer_hour.getValue();
-                        deviceChild.setTimerHour(sh);
                         deviceChild.setTimerMin(0);
                         setMode(deviceChild);
                         send(deviceChild);
-                        popupWindow.dismiss();
+                        popupWindow2.dismiss();
                         backgroundAlpha(1f);
                         break;
                 }
@@ -543,8 +579,9 @@ public class DeviceDetailActivity extends AppCompatActivity {
     ImageView image_low_rate;
     ImageView image_middle_rate;
     ImageView image_high_rate;
+    public PopupWindow popupWindow3;
     public void popupRateView(){
-        if (popupWindow != null && popupWindow.isShowing()) {
+        if (popupWindow3 != null && popupWindow3.isShowing()) {
             return;
         }
 
@@ -567,28 +604,36 @@ public class DeviceDetailActivity extends AppCompatActivity {
             image_high_rate.setImageResource(R.mipmap.rate_open);
         }
 
-        popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        if (popupWindow3==null)
+            popupWindow3 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
-        popupWindow.setFocusable(true);
-        popupWindow.setOutsideTouchable(true);
+        popupWindow3.setFocusable(true);
+        popupWindow3.setOutsideTouchable(true);
         //添加弹出、弹入的动画
-        popupWindow.setAnimationStyle(R.style.Popupwindow);
+        popupWindow3.setAnimationStyle(R.style.Popupwindow);
 
         ColorDrawable dw = new ColorDrawable(0x30000000);
-        popupWindow.setBackgroundDrawable(dw);
-        popupWindow.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+        popupWindow3.setBackgroundDrawable(dw);
+        popupWindow3.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         //添加按键事件监听
 
+        popupWindow3.setOnDismissListener(new PopupWindow.OnDismissListener() {
+            @Override
+            public void onDismiss() {
+                backgroundAlpha(1.0f);
+            }
+        });
+        backgroundAlpha(0.4f);
         View.OnClickListener listener = new View.OnClickListener() {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.image_cancle:
-                        popupWindow.dismiss();
+                        popupWindow3.dismiss();
                         break;
                     case R.id.image_ensure:
                         setMode(deviceChild);
                         send(deviceChild);
-                        popupWindow.dismiss();
+                        popupWindow3.dismiss();
                         break;
                     case R.id.image_low_rate:
                         deviceChild.setRateState("01");
@@ -627,12 +672,37 @@ public class DeviceDetailActivity extends AppCompatActivity {
             Log.i("macAddress","-->"+macAddress);
             DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
             String noNet=intent.getStringExtra("noNet");
+
             if (!TextUtils.isEmpty(noNet)){
+                if (popupWindow1!=null && popupWindow1.isShowing()){
+                    popupWindow1.dismiss();
+                    backgroundAlpha(1.0f);
+                }
+                if (popupWindow2!=null && popupWindow2.isShowing()){
+                    popupWindow2.dismiss();
+                    backgroundAlpha(1.0f);
+                }
+                if (popupWindow3!=null && popupWindow3.isShowing()){
+                    popupWindow3.dismiss();
+                    backgroundAlpha(1.0f);
+                }
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             }else {
                 if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
                     if (deviceChild2==null){
+                        if (popupWindow1!=null && popupWindow1.isShowing()){
+                            popupWindow1.dismiss();
+                            backgroundAlpha(1.0f);
+                        }
+                        if (popupWindow2!=null && popupWindow2.isShowing()){
+                            popupWindow2.dismiss();
+                            backgroundAlpha(1.0f);
+                        }
+                        if (popupWindow3!=null && popupWindow3.isShowing()){
+                            popupWindow3.dismiss();
+                            backgroundAlpha(1.0f);
+                        }
                         Toast.makeText(DeviceDetailActivity.this,"该设备已重置",Toast.LENGTH_SHORT).show();
                         long houseId=deviceChild.getHouseId();
                         Intent data=new Intent();
@@ -648,8 +718,12 @@ public class DeviceDetailActivity extends AppCompatActivity {
                                     popupWindow1.dismiss();
                                     backgroundAlpha(1.0f);
                                 }
-                                if (popupWindow!=null && popupWindow.isShowing()){
-                                    popupWindow.dismiss();
+                                if (popupWindow2!=null && popupWindow2.isShowing()){
+                                    popupWindow2.dismiss();
+                                    backgroundAlpha(1.0f);
+                                }
+                                if (popupWindow3!=null && popupWindow3.isShowing()){
+                                    popupWindow3.dismiss();
                                     backgroundAlpha(1.0f);
                                 }
 //                                VibratorUtil.Vibrate(DeviceDetailActivity.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
@@ -657,14 +731,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                                 tv_offline.setVisibility(View.VISIBLE);
                                 tv_offline.setText("设备倾倒");
                             }else {
-                                if (popupWindow1!=null && popupWindow1.isShowing()){
-                                    popupWindow1.dismiss();
-                                    backgroundAlpha(1.0f);
-                                }
-                                if (popupWindow!=null && popupWindow.isShowing()){
-                                    popupWindow.dismiss();
-                                    backgroundAlpha(1.0f);
-                                }
+
 //                                VibratorUtil.StopVibrate(DeviceDetailActivity.this);
                                 relative.setVisibility(View.VISIBLE);
                                 tv_offline.setVisibility(View.GONE);
@@ -675,12 +742,17 @@ public class DeviceDetailActivity extends AppCompatActivity {
                                 popupWindow1.dismiss();
                                 backgroundAlpha(1.0f);
                             }
-                            if (popupWindow!=null && popupWindow.isShowing()){
-                                popupWindow.dismiss();
+                            if (popupWindow2!=null && popupWindow2.isShowing()){
+                                popupWindow2.dismiss();
+                                backgroundAlpha(1.0f);
+                            }
+                            if (popupWindow3!=null && popupWindow3.isShowing()){
+                                popupWindow3.dismiss();
                                 backgroundAlpha(1.0f);
                             }
                             relative.setVisibility(View.GONE);
                             tv_offline.setVisibility(View.VISIBLE);
+                            tv_offline.setText("离线");
                         }
                     }
                 }

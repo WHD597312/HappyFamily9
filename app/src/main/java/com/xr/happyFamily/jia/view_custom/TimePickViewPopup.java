@@ -129,7 +129,6 @@ public class TimePickViewPopup extends PopupWindow {
         loop_min.setCenterTextColor(0xff37d39e);
         //设置字体大小
         loop_min.setTextSize(18);
-
         loop_hour.setInitPosition(0);
         loop_min.setInitPosition(0);
         loop_state.setInitPosition(state);
@@ -159,6 +158,4 @@ public class TimePickViewPopup extends PopupWindow {
         Log.e("qqqqDDD",data[2]+"?");
         return data;
     }
-
-
 }

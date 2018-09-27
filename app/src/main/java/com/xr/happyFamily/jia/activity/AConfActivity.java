@@ -7,7 +7,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
-import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -20,7 +19,6 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
@@ -38,18 +36,12 @@ import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.view_custom.AirProgress;
 import com.xr.happyFamily.jia.view_custom.FengSuViewPopup;
-import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.TimePickViewPopup;
-import com.xr.happyFamily.main.MainActivity;
-import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
-import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-
-import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -167,8 +159,6 @@ public class AConfActivity extends AppCompatActivity {
     TextView tvOffline;
     @BindView(R.id.ll)
     RelativeLayout ll;
-    @BindView(R.id.ll_btn2)
-    LinearLayout llBtn2;
 
 
     private boolean isBound;
@@ -184,11 +174,7 @@ public class AConfActivity extends AppCompatActivity {
     private TimePickViewPopup customViewPopipup;
     private FengSuViewPopup fengSuViewPopup;
 
-    boolean isProFinish=false;
-    boolean isBtnMoreFinish=false;
-    boolean isArcFinish=true;
-    float x;
-    float y;
+
     @SuppressLint("ClickableViewAccessibility")
     @RequiresApi(api = Build.VERSION_CODES.LOLLIPOP)
     @Override
@@ -198,13 +184,12 @@ public class AConfActivity extends AppCompatActivity {
             getSupportActionBar().hide();
         }
         setContentView(R.layout.activity_air);
-        unbinder = ButterKnife.bind(this);
         application = (MyApplication) getApplicationContext();
         if (application != null) {
             application = (MyApplication) getApplication();
             application.addActivity(this);
         }
-
+        unbinder = ButterKnife.bind(this);
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         Intent intent = getIntent();
         deviceId = intent.getLongExtra("deviceId", 0);
@@ -217,7 +202,7 @@ public class AConfActivity extends AppCompatActivity {
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
 //        scrollView.requestDisallowInterceptTouchEvent(true);
-
+        arcprogressBar = (AirProgress) findViewById(R.id.arcprogressBar);
         arcprogressBar.setOnSeekBarChangeListener(new AirProgress.OnSeekBarChangeListener() {
             @Override
             public void onChanged(AirProgress seekbar, int curValue) {
@@ -234,49 +219,6 @@ public class AConfActivity extends AppCompatActivity {
         });
 
 
-
-        rlPro.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // TODO Auto-generated method stub
-                x=rlPro.getY();
-                isProFinish=true;
-                if(isBtnMoreFinish&&isArcFinish){
-                    arcprogressBar.setHeight((int)(y-x));
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) arcprogressBar.getLayoutParams();
-                    params.height = (int)(y-x);
-                    arcprogressBar.setLayoutParams(params);
-                    isArcFinish=false;
-
-                }
-
-                Log.e("qqqqXY",x+"????"+y+","+isBtnMoreFinish+","+isArcFinish);
-            }
-        });
-
-        llBtn2.getViewTreeObserver().addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-            @Override
-            public void onGlobalLayout() {
-                // TODO Auto-generated method stub
-                y=llBtn2.getY();
-                isBtnMoreFinish=true;
-                Log.e("qqqqXY2222",x+"????"+y+","+isProFinish+","+isArcFinish);
-                if(isProFinish&&isArcFinish)
-                {
-                    isArcFinish=false;
-                    arcprogressBar.setHeight((int)(y-x));
-                    RelativeLayout.LayoutParams params = (RelativeLayout.LayoutParams) arcprogressBar.getLayoutParams();
-                    params.height = (int)(y-x);
-                    arcprogressBar.setLayoutParams(params);
-
-                }
-
-            }
-        });
-
-
-
-//        arcprogressBar.setHeight((int)(1081-265));
         circle_anim = AnimationUtils.loadAnimation(this, R.anim.anim_90);
         LinearInterpolator interpolator = new LinearInterpolator();  //设置匀速旋转，在xml文件中设置会出现卡顿
         circle_anim.setInterpolator(interpolator);
@@ -312,6 +254,8 @@ public class AConfActivity extends AppCompatActivity {
     }
 
 
+
+
     boolean isShui = false;
     int[] y1 = new int[2];
     int[] y2 = new int[2];
@@ -322,13 +266,10 @@ public class AConfActivity extends AppCompatActivity {
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.image_back:
-                Intent intent2=new Intent();
-                intent2.putExtra("houseId",houseId);
-                setResult(6000,intent2);
-                finish();
+
                 break;
             case R.id.image_more:
-                popupmenuWindow();
+
                 break;
 
             case R.id.img_more:
@@ -336,11 +277,11 @@ public class AConfActivity extends AppCompatActivity {
                 imgMore.startAnimation(circle_anim);
                 dex = rlPro.getMeasuredHeight() - arcprogressBar.getMeasuredHeight();
 
-                Log.e("qqqqqqDDDDD",dex+"?"+hei);
                 if (dex > hei) {
                     llContext.scrollTo(0, hei / 2);
                 } else {
-                    llContext.scrollTo(0, hei - dex / 2);
+                    llContext.scrollTo(0, hei - dex * 2);
+
                 }
                 llMore.setVisibility(View.VISIBLE);
 
@@ -519,7 +460,6 @@ public class AConfActivity extends AppCompatActivity {
                 intent.putExtra("ratedPower",ratedPower);
                 intent.putExtra("curdPower",curdPower);
                 intent.putExtra("deviceId",  deviceChild.getDeviceId());
-                intent.putExtra("Id",deviceChild.getId());
                 intent.putExtra("dataType",7);
                 startActivity(intent);
                 break;
@@ -567,21 +507,21 @@ public class AConfActivity extends AppCompatActivity {
         String str_err="";
         int[] x = TenTwoUtil.changeToTwo(faultCode);
         if(x[7]==1)
-            str_err=str_err+"缺氟，请检查"+"\n";
+            str_err=str_err+"缺氟，请检查"+"，";
         if(x[6]==1)
-            str_err=str_err+"湿敏传感器故障，请检查"+"\n";
+            str_err=str_err+"湿敏传感器故障，请检查"+"，";
         if(x[5]==1)
-            str_err=str_err+"室内温度传感器故障，请检查"+"\n";
+            str_err=str_err+"室内温度传感器故障，请检查"+"，";
         if(x[4]==1)
-            str_err=str_err+"室内盘管故障，请检查"+"\n";
+            str_err=str_err+"室内盘管故障，请检查"+"，";
         if(x[3]==1)
-            str_err=str_err+"室外盘管故障，请检查"+"\n";
+            str_err=str_err+"室外盘管故障，请检查"+"，";
         if(x[2]==1)
-            str_err=str_err+"水满故障，请检查"+"\n";
+            str_err=str_err+"水满故障，请检查"+"，";
         if(x[1]==1)
-            str_err=str_err+"过热故障，请检查"+"\n";
+            str_err=str_err+"过热故障，请检查"+"，";
         if(x[0]==1)
-            str_err=str_err+"设备倾斜，请检查"+"\n";
+            str_err=str_err+"设备倾斜，请检查"+"，";
         tv_error.setText(str_err.substring(0,str_err.length()-1));
 
         img_close.setOnClickListener(new View.OnClickListener() {
@@ -591,8 +531,8 @@ public class AConfActivity extends AppCompatActivity {
             }
         });
         mPopWindow = new PopupWindow(contentViewSign);
-        mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
-        mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
+        mPopWindow.setHeight(ViewGroup.LayoutParams.MATCH_PARENT);
         //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
         mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
         mPopWindow.setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_ADJUST_RESIZE);
@@ -603,7 +543,7 @@ public class AConfActivity extends AppCompatActivity {
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
         mPopWindow.setOnDismissListener(new poponDismissListener());
-        mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        mPopWindow.showAtLocation(getWindow().getDecorView(), Gravity.CENTER, 0, 0);
     }
 
     public void backgroundAlpha(float bgAlpha) {
@@ -612,125 +552,7 @@ public class AConfActivity extends AppCompatActivity {
         getWindow().setAttributes(lp); //添加pop窗口关闭事件
     }
 
-    private PopupWindow popupWindow1;
-    public void popupmenuWindow() {
-        if (popupWindow1 != null && popupWindow1.isShowing()) {
-            return;
-        }
 
-        View view = View.inflate(this, R.layout.popview_room_homemanerge, null);
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-        RelativeLayout rl_room_rename = (RelativeLayout) view.findViewById(R.id.rl_room_rename);
-        RelativeLayout tv_timer = (RelativeLayout) view.findViewById(R.id.rl_room_del);
-        TextView tv_rname_r1 = (TextView) view.findViewById(R.id.tv_rname_r1);
-        TextView tv_del_r1 = (TextView) view.findViewById(R.id.tv_del_r1);
-        ImageView iv_del_r1 = (ImageView) view.findViewById(R.id.iv_del_r1);
-        tv_rname_r1.setText("修改名称");
-        tv_del_r1.setText("分享设备");
-        iv_del_r1.setImageResource(R.mipmap.pop_share);
-        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-        //点击空白处时，隐藏掉pop窗口
-        popupWindow1.setFocusable(true);
-        popupWindow1.setOutsideTouchable(true);
-        //添加弹出、弹入的动画
-        popupWindow1.setAnimationStyle(R.style.Popupwindow);
-
-//        ColorDrawable dw = new ColorDrawable(0x30000000);
-//        popupWindow.setBackgroundDrawable(dw);
-        popupWindow1.showAsDropDown(imgMore, 0, -20);
-//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
-        //添加按键事件监听
-
-        View.OnClickListener listener = new View.OnClickListener() {
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.rl_room_rename:
-                        buildUpdateDeviceDialog();
-                        popupWindow1.dismiss();
-                        break;
-                    case R.id.rl_room_del:
-                        Intent intent = new Intent(AConfActivity.this, ShareDeviceActivity.class);
-                        long id = deviceChild.getId();
-                        intent.putExtra("deviceId", id);
-                        startActivity(intent);
-                        popupWindow1.dismiss();
-                        break;
-                }
-            }
-        };
-
-        rl_room_rename.setOnClickListener(listener);
-        tv_timer.setOnClickListener(listener);
-    }
-
-    String deviceName;
-    private void buildUpdateDeviceDialog() {
-        final HomeDialog dialog = new HomeDialog(this);
-        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
-            @Override
-            public void onNegativeClick() {
-                dialog.dismiss();
-            }
-        });
-        dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
-            @Override
-            public void onPositiveClick() {
-                deviceName = dialog.getName();
-                if (TextUtils.isEmpty(deviceName)) {
-                    Utils.showToast(AConfActivity.this, "设备名称不能为空");
-                } else {
-                    new UpdateDeviceAsync().execute();
-                    dialog.dismiss();
-                }
-            }
-        });
-        dialog.show();
-    }
-
-    private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
-    class UpdateDeviceAsync extends AsyncTask<Void,Void,Integer> {
-
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            int code=0;
-            try {
-                int deviceId=deviceChild.getDeviceId();
-                String url=updateDeviceNameUrl+"?deviceName="+ URLEncoder.encode(deviceName,"utf-8")+"&deviceId="+deviceId;
-                String result= HttpUtils.getOkHpptRequest(url);
-                JSONObject jsonObject=new JSONObject(result);
-                String returnCode=jsonObject.getString("returnCode");
-                if ("100".equals(returnCode)){
-                    code=100;
-                    deviceChild.setName(deviceName);
-                    deviceChildDao.update(deviceChild);
-                }
-                Log.i("result","-->"+result);
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(Integer code) {
-            super.onPostExecute(code);
-            try {
-                switch (code){
-                    case 100:
-                        Utils.showToast(AConfActivity.this, "修改成功");
-                        tvTitle.setText(deviceName);
-                        break;
-                    default:
-                        Utils.showToast(AConfActivity.this, "修改失败");
-                        break;
-                }
-            }catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-    }
     class poponDismissListener implements PopupWindow.OnDismissListener {
         @Override
         public void onDismiss() {
@@ -830,7 +652,6 @@ public class AConfActivity extends AppCompatActivity {
         equipCurdPowerLow = deviceChild.getEquipCurdPowerLow();/**设备当前低功率参数*/
          faultCode = deviceChild.getFaultCode();/**空调故障代码*/
 
-
         if (socketState == 1) {/**当前状态开*/
             imgOpen.setImageResource(R.mipmap.ic_air_kai1);
             llState.setVisibility(View.VISIBLE);
@@ -884,7 +705,10 @@ public class AConfActivity extends AppCompatActivity {
                 imgZuo.setImageResource(R.mipmap.ic_air_zuo1);
             else
                 imgZuo.setImageResource(R.mipmap.ic_air_zuo);
+            if (aCondSimpleTemp1>0)
             tvShiwen.setText(aCondSimpleTemp1 + "℃");
+            else
+            tvShiwen.setText("——℃");
         } else if (socketState == 0) {/**插座当前状态关*/
             initState();
             initBai();
@@ -902,6 +726,7 @@ public class AConfActivity extends AppCompatActivity {
                 if (mPopWindow.isShowing())
                     mPopWindow.dismiss();
             }
+            else
             showPopup();
         }
     }
@@ -1010,42 +835,43 @@ public class AConfActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
-            finish();
+            application.removeActivity(this);
             return true;
         }
         return super.onKeyDown(keyCode, event);
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus)
+        {
+            if (deviceChild != null) {
+                boolean online = deviceChild.getOnline();
+                if (online) {
+                    relative.setVisibility(View.VISIBLE);
+                    tvOffline.setVisibility(View.GONE);
+                    setMode(deviceChild);
+                } else {
+                    relative.setVisibility(View.GONE);
+                    tvOffline.setVisibility(View.VISIBLE);
+                }
+            }
+        }
+
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         running = true;
-        if (deviceChild == null) {
-            Toast.makeText(AConfActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-            Intent intent=new Intent();
-            intent.putExtra("houseId",houseId);
-            setResult(6000,intent);
-            finish();
-        } else {
-            boolean online = deviceChild.getOnline();
-            if (online) {
-                relative.setVisibility(View.VISIBLE);
-                tvOffline.setVisibility(View.GONE);
-                setMode(deviceChild);
-            } else {
-                relative.setVisibility(View.GONE);
-                tvOffline.setVisibility(View.VISIBLE);
-            }
-        }
+
     }
 
     @Override
-    protected void onStop() {
-        super.onStop();
-        running=false;
+    protected void onResume() {
+        super.onResume();
     }
 
     @Override

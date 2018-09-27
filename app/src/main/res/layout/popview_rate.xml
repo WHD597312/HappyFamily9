@@ -15,6 +15,7 @@
         android:layout_height="wrap_content"
         android:layout_marginLeft="@dimen/dp_jy_10"
         android:layout_marginRight="@dimen/dp_jy_10"
+
         >
         <ImageView
             android:layout_marginTop="@dimen/dp_jy_20"

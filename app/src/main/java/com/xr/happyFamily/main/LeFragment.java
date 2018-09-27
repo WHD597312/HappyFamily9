@@ -1,16 +1,10 @@
 package com.xr.happyFamily.main;
 
-import android.annotation.TargetApi;
-import android.app.AppOpsManager;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
-import android.os.Binder;
-import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
@@ -22,25 +16,23 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
-import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
-import com.xr.database.dao.daoimpl.ClockDaoImpl;
-import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
+import com.xr.database.dao.daoimpl.MsgDaoImpl;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.le.BDmapActivity;
 import com.xr.happyFamily.le.ClockActivity;
+import com.xr.happyFamily.le.FriendActivity;
 import com.xr.happyFamily.le.adapter.HappyFootAdapter;
 import com.xr.happyFamily.le.adapter.HappyViewPagerAdapter;
 import com.xr.happyFamily.le.bean.HappyBannerBean;
-import com.xr.happyFamily.le.pojo.ClockBean;
-import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.le.clock.MsgActivity;
 import com.xr.happyFamily.le.view.noBirthdayDialog;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
@@ -50,7 +42,6 @@ import com.xr.happyFamily.zhen.PersonInfoActivity;
 
 import org.json.JSONObject;
 
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -98,6 +89,12 @@ public class LeFragment extends Fragment {
     public static final int MAIN_CODE = 1000;
     @BindView(R.id.recyclerView)
     RecyclerView recyclerView;
+    @BindView(R.id.img_friend)
+    ImageView imgFriend;
+    @BindView(R.id.img_msg)
+    ImageView imgMsg;
+    @BindView(R.id.tv_num)
+    TextView tvNum;
     private List<ImageView> mImageList;//轮播的图片集合
     private boolean isStop = false;//线程是否停止
     private static int PAGER_TIOME = 2500;//间隔时间
@@ -132,6 +129,10 @@ public class LeFragment extends Fragment {
         recyclerView.setAdapter(happyFootAdapter);
         isFinish = false;
         page = 1;
+        preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
+        long msgTime = preferences.getLong("msgTime", 0);
+
+
         getBanner("head", page);
         getBanner("foot", 1);
 
@@ -147,6 +148,13 @@ public class LeFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         birthday = preferences.getString("birthday", "");
         userId = preferences.getString("userId", "");
+        long msgTime = preferences.getLong("msgTime", 0);
+        MsgDaoImpl msgDao = new MsgDaoImpl(getActivity());
+        int msgNum = msgDao.findNumbByTime(msgTime);
+        if (msgNum == 0) {
+            tvNum.setVisibility(View.GONE);
+        } else
+            tvNum.setText(msgNum + "");
 //        new getClocksByUserId().execute();
     }
 
@@ -265,7 +273,7 @@ public class LeFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.ll_xuyuan, R.id.ll_clock,R.id.li_yougui})
+    @OnClick({R.id.ll_xuyuan, R.id.ll_clock,R.id.img_msg,R.id.img_friend})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_clock:
@@ -280,8 +288,13 @@ public class LeFragment extends Fragment {
                     startActivity(intent);
                 }
                 break;
-            case R.id.li_yougui:
-//                startActivity(new Intent(getActivity(), BDmapActivity.class));
+            case R.id.img_msg:
+                getActivity().startActivity(new Intent(getActivity(), MsgActivity.class));
+                break;
+            case R.id.img_friend:
+                Intent intent=new Intent(getActivity(),FriendActivity.class);
+                intent.putExtra("type",1000);
+                getActivity().startActivity(intent);
                 break;
         }
     }
@@ -430,4 +443,6 @@ public class LeFragment extends Fragment {
         params.put("page", page);
         new getAdByPageAsync().execute(params);
     }
+
+
 }

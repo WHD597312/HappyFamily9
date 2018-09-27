@@ -66,7 +66,7 @@
       android:layout_alignParentRight="true"
       android:layout_marginRight="@dimen/dp_jy_4"
       android:layout_marginTop="@dimen/dp_jy_10"
-      android:background="@drawable/bg_pop_clock_qz25"
+      android:background="@drawable/bg_pop_clock_ql25"
       android:gravity="center"
       android:textColor="@color/white"
       android:textSize="@dimen/sp_12" />
@@ -92,9 +92,6 @@
  <RelativeLayout
      android:layout_width="match_parent"
      android:layout_height="wrap_content">
-
-
-  
 
 
   <com.xr.happyFamily.le.view.TimeBar

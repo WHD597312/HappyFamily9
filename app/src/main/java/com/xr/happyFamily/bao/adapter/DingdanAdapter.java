@@ -325,9 +325,12 @@ public class DingdanAdapter extends RecyclerView.Adapter<DingdanAdapter.MyViewHo
                 holder.ll3.setVisibility(View.GONE);
             } else {
                 holder.rl_sign.setVisibility(View.VISIBLE);
-                holder.ll2.setVisibility(View.VISIBLE);
                 holder.view2.setVisibility(View.VISIBLE);
                 holder.ll3.setVisibility(View.VISIBLE);
+                if (type==6)
+                    holder.ll2.setVisibility(View.GONE);
+                else
+                    holder.ll2.setVisibility(View.VISIBLE);
             }
 
             if (list.get(position).getIsRate() == 1) {

@@ -4,6 +4,48 @@
     android:layout_height="match_parent"
     android:orientation="vertical">
 
+    <RelativeLayout
+        android:background="@color/white"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_39"
+        android:paddingRight="@dimen/dp_jy_2">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/sp_18"
+            android:textColor="#242424"
+            android:text="乐"/>
+        <ImageView
+            android:id="@+id/img_friend"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@mipmap/ic_le_friend"
+            android:padding="@dimen/dp_jy_10"
+            android:layout_centerVertical="true"/>
+
+        <ImageView
+            android:id="@+id/img_msg"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_40"
+            android:padding="@dimen/dp_jy_10"
+            android:layout_centerVertical="true"
+            android:layout_toLeftOf="@id/img_friend"
+            android:src="@mipmap/ic_le_msg"/>
+
+        <TextView
+            android:id="@+id/tv_num"
+            android:layout_width="@dimen/dp_jy_15"
+            android:layout_height="@dimen/dp_jy_15"
+            android:layout_toLeftOf="@id/img_friend"
+            android:background="@drawable/bg_pop_clock_ql25"
+            android:layout_marginTop="@dimen/dp_jy_6"
+            android:layout_marginRight="@dimen/dp_jy_4"
+            android:textSize="@dimen/sp_12"
+            android:textColor="@color/white"
+            android:gravity="center"/>
+    </RelativeLayout>
 
     <com.xr.happyFamily.bao.view.MyScrollview
         android:layout_width="match_parent"
@@ -118,21 +160,19 @@
                 </LinearLayout>
 
                 <LinearLayout
-                    android:id="@+id/li_yougui"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/dp_jy_18"
                     android:paddingLeft="@dimen/dp_jy_14"
-                    android:paddingTop="@dimen/dp_jy_12"
-                  >
+                    android:paddingTop="@dimen/dp_jy_12">
 
                     <ImageView
                         android:layout_width="@dimen/dp_jy_60"
                         android:layout_height="@dimen/dp_jy_60"
-                         />
-
+                        />
 
                     <LinearLayout
                         android:layout_width="wrap_content"
@@ -144,7 +184,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text=""
+
                             android:textColor="@color/happy_green"
                             android:textSize="@dimen/sp_14" />
 
@@ -152,7 +192,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_jy_5"
-                            android:text=""
+
                             android:textColor="@color/happy_gray"
                             android:textSize="@dimen/sp_12" />
                     </LinearLayout>

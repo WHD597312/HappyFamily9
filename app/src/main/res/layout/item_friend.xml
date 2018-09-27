@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:id="@+id/rl_item"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingTop="@dimen/dp_jy_4"
+        android:paddingBottom="@dimen/dp_jy_4"
+        android:paddingLeft="@dimen/dp_jy_12"
+        android:paddingRight="@dimen/dp_jy_12">
+        <ImageView
+            android:id="@+id/img_touxiang"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_40"
+            android:src="@mipmap/ic_touxiang_moren"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_45"
+            android:id="@+id/tv_name"
+            android:text="昵称"
+            android:textColor="#494949"
+            android:textSize="@dimen/sp_14" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dp_jy_45"
+            android:id="@+id/tv_tel"
+            android:text=""
+            android:textColor="#A1A1A1"
+            android:textSize="@dimen/sp_12"
+            android:layout_alignBottom="@id/img_touxiang"/>
+        <ImageView
+            android:id="@+id/img_choose"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:src="@mipmap/ic_friend_false"/>
+
+    </RelativeLayout>
+
+    <include
+        layout="@layout/cutline"/>
+</LinearLayout>

@@ -14,8 +14,10 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_alignParentTop="true"
+        android:overScrollMode="never"
+        android:scrollbars="none"
         android:orientation="vertical"
-        app:layout_heightPercent="86%"
+        app:layout_heightPercent="100%"
         app:layout_widthPercent="100%">
 
         <RelativeLayout
@@ -205,7 +207,9 @@
                     android:gravity="center"
                     android:horizontalSpacing="@dimen/dp_jy_12"
                     android:numColumns="2"
-                    android:verticalSpacing="@dimen/dp_jy_12">
+                    android:verticalSpacing="@dimen/dp_jy_12"
+                    android:paddingBottom="@dimen/dp_jy_80"
+                    >
 
                 </com.xr.happyFamily.jia.MyGridview>
 

@@ -64,7 +64,7 @@ public class TimeClock extends View {
         paintNum.setColor(Color.BLACK);
         paintNum.setAntiAlias(true);
         paintNum.setTextSize(45);
-        paintNum.setStyle(Paint.Style.STROKE);
+        paintNum.setStyle(Paint.Style.FILL);
         paintNum.setTextAlign(Paint.Align.CENTER);
 
         paintSecond = new Paint();

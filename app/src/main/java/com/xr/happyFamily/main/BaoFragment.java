@@ -179,7 +179,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         view = inflater.inflate(R.layout.activity_shop_mypage, container, false);
         unbinder = ButterKnife.bind(this, view);
         mContext = getContext();
-
         isStop = false;
         isShopData = false;
         init();
@@ -209,8 +208,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         list_shop = new ArrayList<>();
         list_more = new ArrayList<>();
         mainTitleAdapter = new MainTitleAdapter(mContext, list_title);
-
-
         titleLayoutManager = new LinearLayoutManager(mContext);
         titleLayoutManager.setOrientation(LinearLayoutManager.HORIZONTAL);
         rvTitle.setLayoutManager(titleLayoutManager);

@@ -7,6 +7,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
+import android.os.AsyncTask;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -38,13 +39,18 @@ import com.xr.happyFamily.bao.view.TouchScrollView;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.view_custom.FengSuViewPopup;
+import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.HumSeekBar;
 import com.xr.happyFamily.jia.view_custom.TimePickViewPopup;
+import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
+import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+
+import java.net.URLEncoder;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -179,7 +185,6 @@ public class DehumidifierActivity extends AppCompatActivity {
         registerReceiver(receiver, intentFilter);
 
 
-
         circle_anim = AnimationUtils.loadAnimation(DehumidifierActivity.this, R.anim.anim_90);
         LinearInterpolator interpolator = new LinearInterpolator();  //设置匀速旋转，在xml文件中设置会出现卡顿
         circle_anim.setInterpolator(interpolator);
@@ -221,24 +226,158 @@ public class DehumidifierActivity extends AppCompatActivity {
 
     }
 
+    private PopupWindow popupWindow1;
+
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.popview_room_homemanerge, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+        RelativeLayout rl_room_rename = (RelativeLayout) view.findViewById(R.id.rl_room_rename);
+        RelativeLayout tv_timer = (RelativeLayout) view.findViewById(R.id.rl_room_del);
+        TextView tv_rname_r1 = (TextView) view.findViewById(R.id.tv_rname_r1);
+        TextView tv_del_r1 = (TextView) view.findViewById(R.id.tv_del_r1);
+        ImageView iv_del_r1 = (ImageView) view.findViewById(R.id.iv_del_r1);
+        tv_rname_r1.setText("修改名称");
+        tv_del_r1.setText("分享设备");
+        iv_del_r1.setImageResource(R.mipmap.pop_share);
+        if (popupWindow1 == null)
+            popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.Popupwindow);
+
+//        ColorDrawable dw = new ColorDrawable(0x30000000);
+//        popupWindow.setBackgroundDrawable(dw);
+        popupWindow1.showAsDropDown(imageMore, 0, -20);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.rl_room_rename:
+                        buildUpdateDeviceDialog();
+                        popupWindow1.dismiss();
+                        break;
+                    case R.id.rl_room_del:
+                        popupWindow1.dismiss();
+                        Intent intent = new Intent(DehumidifierActivity.this, ShareDeviceActivity.class);
+                        long id = deviceChild.getId();
+                        intent.putExtra("deviceId", id);
+                        startActivityForResult(intent, 8000);
+                        break;
+                }
+            }
+        };
+
+        rl_room_rename.setOnClickListener(listener);
+        tv_timer.setOnClickListener(listener);
+    }
+
+    String deviceName;
+
+    private void buildUpdateDeviceDialog() {
+        final HomeDialog dialog = new HomeDialog(this);
+        dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new HomeDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                deviceName = dialog.getName();
+                if (TextUtils.isEmpty(deviceName)) {
+                    Utils.showToast(DehumidifierActivity.this, "设备名称不能为空");
+                } else {
+                    new UpdateDeviceAsync().execute();
+                    dialog.dismiss();
+                }
+            }
+        });
+        dialog.show();
+    }
+
+    private String updateDeviceNameUrl = HttpUtils.ipAddress + "/family/device/changeDeviceName";
+
+    class UpdateDeviceAsync extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0;
+            try {
+                int deviceId = deviceChild.getDeviceId();
+                String url = updateDeviceNameUrl + "?deviceName=" + URLEncoder.encode(deviceName, "utf-8") + "&deviceId=" + deviceId;
+                String result = HttpUtils.getOkHpptRequest(url);
+                JSONObject jsonObject = new JSONObject(result);
+                String returnCode = jsonObject.getString("returnCode");
+                if ("100".equals(returnCode)) {
+                    code = 100;
+                    deviceChild.setName(deviceName);
+                    deviceChildDao.update(deviceChild);
+                }
+                Log.i("result", "-->" + result);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            try {
+                switch (code) {
+                    case 100:
+                        Utils.showToast(DehumidifierActivity.this, "修改成功");
+                        tvTitle.setText(deviceName);
+                        break;
+                    default:
+                        Utils.showToast(DehumidifierActivity.this, "修改失败");
+                        break;
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+        }
+    }
+
     @Override
     protected void onStart() {
         super.onStart();
         running = true;
-        scrollView.post(new Runnable() {
-            @Override
-            public void run() {
-                scrollView.fullScroll(View.FOCUS_DOWN);
-            }
-        });
+        deviceChild = deviceChildDao.findById(deviceId);
+        if (deviceChild == null) {
+            Utils.showToast(this, "该设备已重置");
+            Intent intent2 = new Intent();
+            intent2.putExtra("houseId", houseId);
+            setResult(6000, intent2);
+            finish();
+        } else {
+            scrollView.post(new Runnable() {
+                @Override
+                public void run() {
+                    scrollView.fullScroll(View.FOCUS_DOWN);
+                }
+            });
+
+
+        }
     }
 
 
     @Override
     public void onWindowFocusChanged(boolean hasFocus) {
         super.onWindowFocusChanged(hasFocus);
-        if (hasFocus)
-        {
+        if (hasFocus) {
             if (deviceChild != null) {
                 boolean online = deviceChild.getOnline();
                 if (online) {
@@ -251,7 +390,6 @@ public class DehumidifierActivity extends AppCompatActivity {
                 }
             }
         }
-
     }
 
     @Override
@@ -278,10 +416,13 @@ public class DehumidifierActivity extends AppCompatActivity {
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.image_back:
+                Intent intent2 = new Intent();
+                intent2.putExtra("houseId", houseId);
+                setResult(6000, intent2);
                 finish();
                 break;
             case R.id.image_more:
-
+                popupmenuWindow();
                 break;
             case R.id.img_more:
                 isMore = true;
@@ -534,7 +675,7 @@ public class DehumidifierActivity extends AppCompatActivity {
         int equipRatedPowerLow = deviceChild.getEquipRatedPowerLow();/**除湿机额定低功率参数*/
         int equipCurdPowerHigh = deviceChild.getEquipCurdPowerHigh();/**除湿机当前高功率参数*/
         int equipCurdPowerLow = deviceChild.getEquipCurdPowerLow();/**除湿机当前低功率参数*/
-         faultCode = deviceChild.getFaultCode();/**除湿机故障代码*/
+        faultCode = deviceChild.getFaultCode();/**除湿机故障代码*/
         int dehumSleep = deviceChild.getDehumSleep();//除湿机睡眠模式 0关闭 1开启
         int dehumAnion = deviceChild.getDehumAnion();//除湿机负离子模式 0关闭 1开启
         int dehumDrying = deviceChild.getDehumDrying();//除湿机干衣模式 0关闭 1开启
@@ -576,25 +717,24 @@ public class DehumidifierActivity extends AppCompatActivity {
             imageTimer.setImageResource(R.mipmap.ic_csj_time1);
         else
             imageTimer.setImageResource(R.mipmap.ic_csj_time);
-        if(sensorSimpleTemp>0)
+        if (sensorSimpleTemp > 0)
             tvNow.setText(sensorSimpleTemp + "");
         else
             tvNow.setText("——");
         tvSet.setText(dehumSetHum + "");
-        if(waterLevel>0) {
+        if (waterLevel > 0) {
             tvWater.setText(waterLevel + "");
             doubleWaveView.setProHeight(waterLevel);
-        }
-        else {
+        } else {
             tvWater.setText("0");
             doubleWaveView.setProHeight(0);
         }
-        if(faultCode!=0){
-            if(mPopWindow!=null) {
+        if (faultCode != 0) {
+            if (mPopWindow != null) {
                 if (mPopWindow.isShowing())
                     mPopWindow.dismiss();
-            }else
-            showErrorPopup();
+            } else
+                showErrorPopup();
         }
 //        if (socketTimer == 0) {
 //            image_timer.setImageResource(R.mipmap.socket_timer_close);
@@ -704,7 +844,10 @@ public class DehumidifierActivity extends AppCompatActivity {
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
-            application.removeActivity(this);
+            Intent intent2 = new Intent();
+            intent2.putExtra("houseId", houseId);
+            setResult(6000, intent2);
+            finish();
             return true;
         }
         return super.onKeyDown(keyCode, event);
@@ -749,33 +892,32 @@ public class DehumidifierActivity extends AppCompatActivity {
     }
 
 
-
     private ImageView img_close;
     private TextView tv_error;
 
     private void showErrorPopup() {
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_dehum_error, null);
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
-        tv_error= (TextView) contentViewSign.findViewById(R.id.tv_error);
-        String str_err="故障原因：";
+        tv_error = (TextView) contentViewSign.findViewById(R.id.tv_error);
+        String str_err = "故障原因：";
         int[] x = TenTwoUtil.changeToTwo(faultCode);
-        if(x[7]==1)
-            str_err=str_err+"除湿机缺氟"+"，";
-        if(x[6]==1)
-            str_err=str_err+"湿敏传感器故障"+"，";
-        if(x[5]==1)
-            str_err=str_err+"室内温度传感器故障"+"，";
-        if(x[4]==1)
-            str_err=str_err+"室内盘管故障"+"，";
-        if(x[3]==1)
-            str_err=str_err+"室外盘管故障"+"，";
-        if(x[2]==1)
-            str_err=str_err+"水满故障"+"，";
-        if(x[1]==1)
-            str_err=str_err+"过热故障"+"，";
-        if(x[0]==1)
-            str_err=str_err+"设备倾斜"+"，";
-        tv_error.setText(str_err.substring(0,str_err.length()-1));
+        if (x[7] == 1)
+            str_err = str_err + "除湿机缺氟" + "，";
+        if (x[6] == 1)
+            str_err = str_err + "湿敏传感器故障" + "，";
+        if (x[5] == 1)
+            str_err = str_err + "室内温度传感器故障" + "，";
+        if (x[4] == 1)
+            str_err = str_err + "室内盘管故障" + "，";
+        if (x[3] == 1)
+            str_err = str_err + "室外盘管故障" + "，";
+        if (x[2] == 1)
+            str_err = str_err + "水满故障" + "，";
+        if (x[1] == 1)
+            str_err = str_err + "过热故障" + "，";
+        if (x[0] == 1)
+            str_err = str_err + "设备倾斜" + "，";
+        tv_error.setText(str_err.substring(0, str_err.length() - 1));
 
         img_close.setOnClickListener(new View.OnClickListener() {
             @Override

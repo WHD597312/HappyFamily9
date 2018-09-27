@@ -110,6 +110,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
     TextView tv_lock;
     @BindView(R.id.tv_screen)
     TextView tv_screen;
+
+
     private long houseId;
     private MyApplication application;
     private String macAddress;

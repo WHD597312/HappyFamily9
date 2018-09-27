@@ -837,6 +837,9 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
 //                    List<DeviceChild> list2 = deviceChildDao.findLinkedDevices(houseId, roomId, 2, sensorId, 1);
                     List<SmartTerminalInfo> infoList = new ArrayList<>();
                     for (int i = 0; i < linkList.size(); i++) {
+                        if (infoList.size()>8){
+                            break;
+                        }
                         DeviceChild deviceChild = linkList.get(i);
                         String macAddress = deviceChild.getMacAddress();
                         if (deviceChild.getLinked()==1){

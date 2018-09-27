@@ -521,6 +521,9 @@
             android:name=".jia.activity.DehumidifierActivity"
             android:screenOrientation="portrait"
             android:hardwareAccelerated="false"/>
+        <activity android:name=".le.FriendActivity"
+            android:screenOrientation="portrait"
+            />
 
     </application>
 

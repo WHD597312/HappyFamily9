@@ -307,10 +307,11 @@
 
             <ImageView
                 android:id="@+id/image_wt_record"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_jy_50"
-                android:scaleType="centerCrop"
+                android:layout_width="@dimen/dp_jy_45"
+                android:layout_height="@dimen/dp_jy_45"
+                android:scaleType="centerInside"
+                android:layout_alignLeft="@+id/tv_wt_record"
+                android:layout_alignRight="@+id/tv_wt_record"
                 android:src="@mipmap/water_recode" />
 
             <TextView
@@ -353,10 +354,11 @@
 
             <ImageView
                 android:id="@+id/image_living"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/dp_jy_8"
-                android:scaleType="centerCrop"
+                android:layout_width="@dimen/dp_jy_45"
+                android:layout_height="@dimen/dp_jy_45"
+                android:scaleType="centerInside"
+                android:layout_alignLeft="@+id/tv_living"
+                android:layout_alignRight="@+id/tv_living"
                 android:src="@mipmap/living" />
 
             <TextView

@@ -1,6 +1,9 @@
 package com.xr.happyFamily.jia.activity;
 
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
@@ -81,6 +84,7 @@ public class AConfStateActivity extends AppCompatActivity {
 
     private DeviceChildDaoImpl deviceChildDao;
     DeviceChild deviceChild;
+    public static boolean running=false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,6 +106,10 @@ public class AConfStateActivity extends AppCompatActivity {
         deviceChild=deviceChildDao.findById(Id);
         houseId=deviceChild.getHouseId();
         initChart(lineChart);
+
+        IntentFilter intentFilter = new IntentFilter("AConfStateActivity");
+        receiver = new MessageReceiver();
+        registerReceiver(receiver, intentFilter);
     }
 
     private void findView() {
@@ -112,12 +120,27 @@ public class AConfStateActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
+        running=true;
         deviceChild=deviceChildDao.findById(Id);
         if (deviceChild==null){
             Toast.makeText(AConfStateActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
             Intent data = new Intent(AConfStateActivity.this, MainActivity.class);
             data.putExtra("houseId", houseId);
             startActivity(data);
+        }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running=false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (receiver!=null){
+            unregisterReceiver(receiver);
         }
     }
 
@@ -386,8 +409,22 @@ public class AConfStateActivity extends AppCompatActivity {
             }
         }
     }
+    MessageReceiver receiver;
+    class MessageReceiver extends BroadcastReceiver{
 
-
-
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String macAddress=intent.getStringExtra("macAddress");
+            DeviceChild deviceChild2= (DeviceChild) intent.getSerializableExtra("deviceChild");
+            if (!Utils.isEmpty(macAddress)){
+                if (deviceChild2==null && deviceChild!=null&& macAddress.equals(deviceChild.getMacAddress())){
+                    Toast.makeText(AConfStateActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
+                    Intent data = new Intent(AConfStateActivity.this, MainActivity.class);
+                    data.putExtra("houseId", houseId);
+                    startActivity(data);
+                }
+            }
+        }
+    }
 }
 

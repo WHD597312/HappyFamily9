@@ -214,17 +214,22 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             String content = resultString;
             if (!Utils.isEmpty(content)) {
                 content = new String(Base64.decode(content, Base64.DEFAULT));
+
 //                Toast.makeText(QRScannerActivity.this, content, Toast.LENGTH_SHORT).show();
                 if (!Utils.isEmpty(content)) {
-                    shareContent = content;
-                    String[] ss = content.split("&");
-                    String s0 = ss[0];
-                    String deviceId = s0.substring(s0.indexOf("'") + 1);
+                    if (!content.contains("macAddress") && !content.contains("deviceId")){
+                        Toast.makeText(QRScannerActivity.this, "扫描内容不符合!", Toast.LENGTH_SHORT).show();
+                    }else {
+                        shareContent = content;
+                        String[] ss = content.split("&");
+                        String s0 = ss[0];
+                        String deviceId = s0.substring(s0.indexOf("'") + 1);
 
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("deviceId", deviceId);
-                    params.put("userId", userId);
-                    new QrCodeAsync().execute(params);
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("deviceId", deviceId);
+                        params.put("userId", userId);
+                        new QrCodeAsync().execute(params);
+                    }
                 }
             }
         }

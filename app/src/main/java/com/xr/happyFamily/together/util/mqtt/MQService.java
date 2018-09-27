@@ -44,6 +44,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.LiveActivity;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.activity.AConfActivity;
+import com.xr.happyFamily.jia.activity.AConfStateActivity;
 import com.xr.happyFamily.jia.activity.APurifierActivity;
 import com.xr.happyFamily.jia.activity.AddDeviceActivity;
 import com.xr.happyFamily.jia.activity.DehumidifierActivity;
@@ -1147,6 +1148,11 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
+                }else if (AConfStateActivity.running){
+                    Intent mqttIntent = new Intent("SmartLinkedActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
                 }
                 NotificationManager manager = (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
                 //创建通知建设类
@@ -1762,8 +1768,6 @@ public class MQService extends Service {
             dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
             dialog4.show();
         }
-
-
     }
 
 

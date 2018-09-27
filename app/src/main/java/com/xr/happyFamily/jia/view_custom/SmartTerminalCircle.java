@@ -400,8 +400,8 @@ public class SmartTerminalCircle extends View {
         //这边让图片从四分之一出开始画
         int y = (int) (mCenter - mRadius / 2 + (float) mRadius / 2 * 1 / 4f);
         //确定小图片的区域
-        Rect rect = new Rect(x - imgWidth / 2, y - imgWidth / 2, x + imgWidth
-                / 2, y + imgWidth / 2);
+        Rect rect = new Rect(x - (int) (imgWidth / 1.5), (int) (y - imgWidth / 1.5), (int)( x + imgWidth
+                / 1.5), (int)(y + imgWidth / 1.5));
         //将图片画上去
         canvas.drawBitmap(bitInfos.get(i).bitmap, null, rect, null);
         //绘制文本

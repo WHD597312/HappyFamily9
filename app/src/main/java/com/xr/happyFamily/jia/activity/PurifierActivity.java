@@ -256,7 +256,8 @@ public class PurifierActivity extends AppCompatActivity {
         tv_rname_r1.setText("修改名称");
         tv_del_r1.setText("分享设备");
         iv_del_r1.setImageResource(R.mipmap.pop_share);
-        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        if (popupWindow1==null)
+            popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
         popupWindow1.setFocusable(true);
         popupWindow1.setOutsideTouchable(true);

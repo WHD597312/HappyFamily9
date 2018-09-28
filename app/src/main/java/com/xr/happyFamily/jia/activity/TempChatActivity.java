@@ -33,6 +33,7 @@ import org.json.JSONObject;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.List;
 
 import butterknife.BindView;
@@ -199,7 +200,9 @@ public class TempChatActivity extends AppCompatActivity {
                         xValues.add("周"+s1);
                     }
                 }
-
+                int max=Collections.max(list);
+                max=max+1;
+                Log.i("max","-->"+max);
 
 
                 //颜色集合
@@ -215,8 +218,8 @@ public class TempChatActivity extends AppCompatActivity {
                 //创建多条折线的图表
                 lineChartManager1.showLineChart(TempChatActivity.this,xValues, list, names.get(0), colours.get(0));
                 lineChartManager1.setDescription("");
-                lineChartManager1.setYAxis(60, 0, 7);
-                lineChartManager1.setHightLimitLine(60,"度",0);
+                lineChartManager1.setYAxis(max, 0, 7);
+                lineChartManager1.setHightLimitLine(max,"度",0);
 //                //创建多条折线的图表
 //                lineChartManager1.showLineChart(TempChatActivity.this,xValues, yValues.get(0), names.get(0), colours.get(0));
 //                lineChartManager1.setDescription("");

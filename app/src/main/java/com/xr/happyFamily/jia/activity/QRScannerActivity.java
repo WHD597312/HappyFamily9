@@ -230,6 +230,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                         params.put("userId", userId);
                         new QrCodeAsync().execute(params);
                     }
+
                 }
             }
         }

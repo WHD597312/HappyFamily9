@@ -173,10 +173,14 @@ public class MQService extends Service {
         connect();
         Log.i("clientId", "-->" + clientId);
         isFinish = false;
-        countTimer = new CountTimer(5000, 1000);
+        countTimer = new CountTimer(10000, 1000);
         countTimer.start();
+        String isClockFinish=intent.getStringExtra("isClockFinish");
+        Log.i("iiiiiiiii","-->"+isClockFinish);
         SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
+
+
         String[] clocks = clockData.split(",");
         for (int i = 0; i < clocks.length; i++) {
             new getClockAsync().execute(clocks[i]);
@@ -389,28 +393,27 @@ public class MQService extends Service {
                         SharedPreferences.Editor editor = preferences.edit();
                         if (preferences.contains("password")) {
                             editor.remove("password").commit();
-                        }
-                        if (preferences.contains("image")) {
-                            String image = preferences.getString("image", "");
-                            preferences.edit().remove("image").commit();
-                            File file = new File(image);
-                            if (file.exists()) {
-                                file.delete();
+                            if (preferences.contains("image")) {
+                                String image = preferences.getString("image", "");
+                                preferences.edit().remove("image").commit();
+                                File file = new File(image);
+                                if (file.exists()) {
+                                    file.delete();
+                                }
                             }
+                            Message msg = handler.obtainMessage();
+                            msg.what = 2;
+                            handler.sendMessage(msg);
+                            hourseDao.deleteAll();
+                            roomDao.deleteAll();
+                            deviceChildDao.deleteAll();
+                            clockDao.deleteAll();
+                            timeDao.deleteAll();
+                            userInfosDao.deleteAll();
+                            friendDataDao.deleteAll();
+                            msgDao.deleteAll();
+                            cancelAllsubscibe();
                         }
-                        Message msg = handler.obtainMessage();
-                        msg.what = 2;
-                        handler.sendMessage(msg);
-                        hourseDao.deleteAll();
-                        roomDao.deleteAll();
-                        deviceChildDao.deleteAll();
-                        clockDao.deleteAll();
-                        timeDao.deleteAll();
-                        userInfosDao.deleteAll();
-                        friendDataDao.deleteAll();
-                        msgDao.deleteAll();
-                        cancelAllsubscibe();
-
                     }
                 }
                 if ("reSet".equals(message)) {
@@ -1612,6 +1615,9 @@ public class MQService extends Service {
             @Override
             public void run() {
                 if (!client.isConnected()) {
+                    isFinish = false;
+                    countTimer = new CountTimer(10000, 1000);
+                    countTimer.start();
                     connect();
                 }
             }
@@ -1705,6 +1711,7 @@ public class MQService extends Service {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
+                    Log.e("qqqqqqFFFF",isFinish+"?");
                     if(dialog4==null)
                     showDialog();
                     else if(!dialog4.isShowing())
@@ -1795,7 +1802,7 @@ public class MQService extends Service {
         @Override
         public void onTick(long millisUntilFinished) {
 
-            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+            Log.e("qqqTag", "倒计时=" + (millisUntilFinished / 1000));
         }
 
         /**
@@ -1804,7 +1811,7 @@ public class MQService extends Service {
 
         @Override
         public void onFinish() {
-            Log.e("Tag", "倒计时完成");
+            Log.e("qqqTag", "倒计时完成");
             isFinish = true;
 
 

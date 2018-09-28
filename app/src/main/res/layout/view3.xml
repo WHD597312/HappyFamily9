@@ -10,5 +10,7 @@
         android:layout_height="@dimen/dp_jy_1"
         style="@style/horizontal_line_style"
         android:background="#f5f5f5"
+        android:layout_marginLeft="@dimen/dp_jy_10"
+        android:layout_marginRight="@dimen/dp_jy_10"
         />
 </LinearLayout>

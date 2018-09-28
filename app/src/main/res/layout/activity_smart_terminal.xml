@@ -310,6 +310,7 @@
             android:scaleType="centerInside"
             android:layout_alignParentRight="true"
             android:layout_marginTop="@dimen/dp_jy_16"
+            android:layout_marginRight="@dimen/dp_jy_5"
             />
         <TextView
             android:id="@+id/tv_air_value"
@@ -318,6 +319,7 @@
             android:layout_alignLeft="@id/image_air"
             android:layout_alignParentRight="true"
             android:layout_alignRight="@+id/image_air"
+            android:layout_marginRight="@dimen/dp_jy_5"
             android:gravity="center"
             android:text="0"
             android:textColor="@color/white"

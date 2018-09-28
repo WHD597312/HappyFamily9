@@ -9,7 +9,6 @@
     android:background="@color/white"
     >
 
-
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -54,7 +53,7 @@
         <com.weigan.loopview.LoopView
             android:id="@+id/tv_hour"
             android:layout_width="wrap_content"
-            android:layout_height="@dimen/dp_jy_170"
+            android:layout_height="@dimen/dp_jy_180"
             />
     </LinearLayout>
 </LinearLayout>

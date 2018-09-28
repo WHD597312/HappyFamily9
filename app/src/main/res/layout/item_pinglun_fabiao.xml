@@ -14,7 +14,7 @@
             android:id="@+id/img_pl"
             android:layout_width="@dimen/dp_jy_50"
             android:layout_height="@dimen/dp_jy_50"
-            android:src="@mipmap/chanpin2"/>
+            />
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"

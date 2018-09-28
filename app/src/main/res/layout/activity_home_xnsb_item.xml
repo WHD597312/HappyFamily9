@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:background="@drawable/bg_shape"
     android:minHeight="@dimen/dp_jy_129"
-    android:layout_height="match_parent">
+    android:layout_height="wrap_content">
 
     <TextView
         android:id="@+id/tv_xnsb_1"
@@ -37,7 +37,7 @@
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/dp_jy_16"
-        android:layout_marginLeft="@dimen/dp_jy_11"
+        android:layout_marginLeft="@dimen/dp_jy_9"
         />
     <TextView
         android:id="@+id/tv_xnsb_4"
@@ -49,7 +49,7 @@
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/dp_jy_16"
-        android:layout_marginLeft="@dimen/dp_jy_11"
+        android:layout_marginLeft="@dimen/dp_jy_9"
         />
     <TextView
         android:id="@+id/tv_xnsb_5"
@@ -61,7 +61,7 @@
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/dp_jy_16"
-        android:layout_marginLeft="@dimen/dp_jy_11"
+        android:layout_marginLeft="@dimen/dp_jy_9"
         />
     <TextView
         android:id="@+id/tv_xnsb_6"
@@ -73,7 +73,7 @@
         android:textColor="@color/color_gray2"
         android:textSize="15sp"
         android:layout_marginTop="@dimen/dp_jy_16"
-        android:layout_marginLeft="@dimen/dp_jy_11"
+        android:layout_marginLeft="@dimen/dp_jy_9"
         />
     <TextView
         android:id="@+id/tv_xnsb_7"
@@ -86,23 +86,25 @@
         android:layout_marginTop="@dimen/dp_jy_13"
         android:layout_marginLeft="@dimen/dp_jy_11"
         />
+
+
+    <ImageView
+        android:id="@+id/iv_xnsb"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:src="@mipmap/zhinengchazuo2"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        />
+
     <ImageView
         android:layout_alignBottom="@id/tv_xnsb_1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@mipmap/xnsb_yj"
-        android:layout_toRightOf="@id/tv_xnsb_6"
+        android:layout_toLeftOf="@+id/iv_xnsb"
+        android:layout_marginRight="-5dp"
         android:id="@+id/iv_xnsb_yj"
         />
-
-    <ImageView
-        android:id="@+id/iv_xnsb"
-        android:layout_width="wrap_content"
-        android:layout_height="102dp"
-        android:layout_marginLeft="@dimen/dp_jy_5"
-        android:layout_marginTop="@dimen/dp_jy_14"
-        android:layout_toRightOf="@+id/iv_xnsb_yj"
-        android:src="@mipmap/t" />
-
-
 </RelativeLayout>

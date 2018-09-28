@@ -196,13 +196,13 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             Log.e("Tag", "倒计时完成");
             if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
                 loginAsyncTask.cancel(true);
-                Toast.makeText(LoginActivity.this,"网络崩溃啦，请重新登录",Toast.LENGTH_SHORT).show();
+
             }
             if (hourseAsyncTask!=null && hourseAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
                 hourseAsyncTask.cancel(true);
-                Toast.makeText(LoginActivity.this,"网络崩溃啦，请重新登录",Toast.LENGTH_SHORT).show();
+
             }
-            hideProgressDialog();
+            hideProgressDialog1();
 
         }
     }
@@ -436,6 +436,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     }
     public void hideProgressDialog1() {
         if (progressDialog != null){
+            if (progressDialog.isShowing()){
+                Utils.showToast(LoginActivity.this, "网络崩溃啦，请重新登录");
+            }
             progressDialog.dismiss();
 
         }

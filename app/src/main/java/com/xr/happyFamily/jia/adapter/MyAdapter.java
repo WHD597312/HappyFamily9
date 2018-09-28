@@ -14,6 +14,7 @@ public class MyAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context mContext ;
     private List<String> mList;
+    private int [] img = new int[]{R.mipmap.zhinengzhongduan,R.mipmap.yidongkongtiao2,R.mipmap.zhinengchazuo2,R.mipmap.kongqijinghuaqi2,R.mipmap.chushiqi2,R.mipmap.qunuanqi2,R.mipmap.jingshuiqi2};
     public MyAdapter( Context mContext , List<String> mList){
        mInflater = LayoutInflater.from(mContext);
        this.mContext = mContext;
@@ -42,6 +43,7 @@ public class MyAdapter extends BaseAdapter {
             holder = (ViewHolder)contentView.getTag();
         }
         holder.tv_title.setText(mList.get(position));
+        holder.imageView.setImageResource(img[position]);
        // ListView.LayoutParams params = new ListView.LayoutParams(ListView.LayoutParams.MATCH_PARENT,70);//设置宽度和高度
         //contentView.setLayoutParams(params);
         return contentView;

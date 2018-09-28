@@ -525,6 +525,10 @@
             android:screenOrientation="portrait"
             />
 
+        <activity android:name=".le.FriendActivity"
+            android:screenOrientation="portrait"
+            />
+
     </application>
 
 </manifest>

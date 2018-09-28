@@ -32,7 +32,7 @@
                     android:layout_width="@dimen/dp_jy_88"
                     android:layout_height="@dimen/dp_jy_88"
                    android:layout_centerVertical="true"
-                    android:src="@mipmap/chanpin2"
+                    android:src="@mipmap/ic_air_error"
                     android:layout_toRightOf="@+id/radio_shop" />
 
                 <TextView

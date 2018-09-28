@@ -29,7 +29,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/ic_zzpipei_touxiang"/>
+            android:src="@mipmap/ic_air_error"/>
     </RelativeLayout>
 
     <RelativeLayout
@@ -67,7 +67,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/ic_zzpipei_touxiang"/>
+            android:src="@mipmap/ic_air_error"/>
         <TextView
             android:id="@+id/tv_to"
             android:layout_width="wrap_content"
@@ -102,7 +102,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_centerInParent="true"
-            android:src="@mipmap/ic_zzpipei_touxiang"/>
+            android:src="@mipmap/ic_air_error"/>
         <TextView
             android:id="@+id/tv_from"
             android:layout_width="wrap_content"

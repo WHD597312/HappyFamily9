@@ -22,7 +22,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:adjustViewBounds="true"
-            android:src="@mipmap/img_yixiang1"/>
+            android:src="@mipmap/ic_air_error"/>
         <View
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_jy_30"

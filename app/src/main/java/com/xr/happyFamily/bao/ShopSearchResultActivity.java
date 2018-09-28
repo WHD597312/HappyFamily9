@@ -193,7 +193,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
 
     private List<PersonCard> buildData(String name) {
         String[] names = {name + "1", name + "2", name + "3", name + "4"};
-        int[] imgUrs = {R.mipmap.chanpin1, R.mipmap.chanpin2, R.mipmap.chanpin3, R.mipmap.chanpin4
+        int[] imgUrs = {R.mipmap.ic_air_error, R.mipmap.ic_air_error, R.mipmap.ic_air_error,R.mipmap.ic_air_error
         };
 
         List<PersonCard> list = new ArrayList<>();

@@ -25,7 +25,7 @@
             android:layout_height="@dimen/dp_jy_88"
             android:layout_centerVertical="true"
             android:layout_toRightOf="@+id/radio_shop"
-            android:src="@mipmap/chanpin2" />
+            />
 
         <TextView
             android:id="@+id/tv_shop_name"

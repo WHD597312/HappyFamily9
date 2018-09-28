@@ -16,7 +16,7 @@
             android:layout_centerVertical="true"
 
             android:layout_toRightOf="@+id/radio_shop"
-            android:src="@mipmap/chanpin2" />
+            android:src="@mipmap/ic_air_error" />
 
         <LinearLayout
             android:layout_width="match_parent"

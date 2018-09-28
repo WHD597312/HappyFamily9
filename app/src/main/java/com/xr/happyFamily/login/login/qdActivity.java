@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.annotation.Nullable;
 import android.text.TextUtils;
@@ -48,6 +49,8 @@ public class qdActivity extends Activity {
     String ip = "http://47.98.131.11:8084";
     SharedPreferences mPositionPreferences;
     private MyApplication application;
+    CountDownTimer countDownTimer;
+    private boolean running ;
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,8 +64,8 @@ public class qdActivity extends Activity {
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
-
-        Integer time = 2000;  //设置等待时间，单位为毫秒
+        running=true;
+        final Integer time = 2000;  //设置等待时间，单位为毫秒
         mPositionPreferences=getSharedPreferences("position", Context.MODE_PRIVATE);
         if(str.equals("")){
             startActivity(new Intent(qdActivity.this, GuideActivity.class));
@@ -124,6 +127,32 @@ public class qdActivity extends Activity {
 
             }
         }, time);*/
+
+         countDownTimer = new CountDownTimer(7 * 1000, 1000) {
+            @Override
+            public void onTick(long millisUntilFinished) {
+                Log.e("counttimer", "倒计时=" + (millisUntilFinished / 1000));
+            }
+
+            @Override
+            public void onFinish() {
+                if (running){
+                Utils.showToast(qdActivity.this,"登录超时请重新登录");
+                    if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+                        loginAsyncTask.cancel(true);
+
+                    }
+                    if (hourseAsyncTask!=null && hourseAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+                        hourseAsyncTask.cancel(true);
+
+                    }
+                    if(preferences.contains("password")){
+                        preferences.edit().remove("password").commit();
+                    }
+                startActivity(new Intent(qdActivity.this,LoginActivity.class));}
+            }
+        };
+        countDownTimer.start();
     }
 
 
@@ -135,6 +164,7 @@ public class qdActivity extends Activity {
         }
         return super.onKeyDown(keyCode, event);
     }
+    LoginAsyncTask loginAsyncTask;
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
@@ -182,6 +212,7 @@ public class qdActivity extends Activity {
                     Utils.showToast(qdActivity.this, "手机号码未注册");
                     Intent intent=new Intent(qdActivity.this, LoginActivity.class);
                     startActivity(intent);
+
                     break;
                 case 10004:
                     if(preferences.contains("password")){
@@ -190,16 +221,18 @@ public class qdActivity extends Activity {
                     Utils.showToast(qdActivity.this, "用户名或密码错误");
                     Intent intent2=new Intent(qdActivity.this, LoginActivity.class);
                     startActivity(intent2);
+
                     break;
                 case 100:
 
                     break;
                 default:
-                    if(preferences.contains("password")){
-                        preferences.edit().remove("password").commit();
-                    }
-                    Intent intent3=new Intent(qdActivity.this, LoginActivity.class);
-                    startActivity(intent3);
+//                    if(preferences.contains("password")){
+//                        preferences.edit().remove("password").commit();
+//                    }
+//                    Intent intent3=new Intent(qdActivity.this, LoginActivity.class);
+//                    startActivity(intent3);
+
                     break;
             }
         }
@@ -207,6 +240,7 @@ public class qdActivity extends Activity {
     long Id = -1;
     int img[] = {R.mipmap.t};
 
+    hourseAsyncTask hourseAsyncTask;
     class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
@@ -403,8 +437,8 @@ public class qdActivity extends Activity {
 
                     break;
                     default:
-                        Intent intent3=new Intent(qdActivity.this, LoginActivity.class);
-                        startActivity(intent3);
+//                        Intent intent3=new Intent(qdActivity.this, LoginActivity.class);
+//                        startActivity(intent3);
                         break;
             }
         }
@@ -433,4 +467,27 @@ public class qdActivity extends Activity {
         return str;
     }
 
+    @Override
+    protected void onPause() {
+        super.onPause();
+        running=false;
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (countDownTimer!=null){
+            countDownTimer.cancel();
+        }
+        running=false;
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if (countDownTimer!=null){
+            countDownTimer.cancel();
+        }
+        running=false;
+    }
 }

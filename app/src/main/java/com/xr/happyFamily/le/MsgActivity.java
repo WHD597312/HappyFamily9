@@ -56,8 +56,8 @@ public class MsgActivity extends AppCompatActivity {
 
     boolean isMsg=true;
 
-    private int[] images = {R.mipmap.img_yixiang1,R.mipmap.img_yixiang2,R.mipmap.img_yixiang3,R.mipmap.img_yixiang2,
-            R.mipmap.img_yixiang3,R.mipmap.img_yixiang2,R.mipmap.img_yixiang1};
+    private int[] images = {R.mipmap.ic_air_error,R.mipmap.ic_air_error,R.mipmap.ic_air_error,R.mipmap.ic_air_error,
+            R.mipmap.ic_air_error,R.mipmap.ic_air_error,R.mipmap.ic_air_error};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

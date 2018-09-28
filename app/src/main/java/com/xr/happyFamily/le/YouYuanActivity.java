@@ -108,7 +108,7 @@ public class YouYuanActivity extends AppCompatActivity {
         }
     }
 
-    int[] touxiang={R.mipmap.ic_shop_pinglun_touxiang,R.mipmap.ic_pipei_touxiang,R.mipmap.ic_fabu_touxiang,R.mipmap.ic_zzpipei_touxiang};
+    int[] touxiang={R.mipmap.ic_shop_pinglun_touxiang,R.mipmap.ic_air_error,R.mipmap.ic_fabu_touxiang,R.mipmap.ic_air_error};
     public void  initData(String name) {
         Map<String, Object> map = null;
         for (int i = 0; i < 4; i++) {

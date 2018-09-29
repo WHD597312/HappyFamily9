@@ -810,11 +810,13 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                             int deviceId = device.getInt("deviceId");
                             int isLinked = device.getInt("isLinked");
                             DeviceChild deviceChild = deviceChildDao.findDeviceByDeviceId(houseId, roomId, deviceId);
-                            deviceChild.setLinked(isLinked);
-                            deviceChild.setLinkedSensorId(sensorId);
-                            deviceChildDao.update(deviceChild);
-                            if (!linkList.contains(deviceChild)) {
-                                linkList.add(deviceChild);
+                            if (deviceChild!=null){
+                                deviceChild.setLinked(isLinked);
+                                deviceChild.setLinkedSensorId(sensorId);
+                                deviceChildDao.update(deviceChild);
+                                if (!linkList.contains(deviceChild)) {
+                                    linkList.add(deviceChild);
+                                }
                             }
                         }
                     }

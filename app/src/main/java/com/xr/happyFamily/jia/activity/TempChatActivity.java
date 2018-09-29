@@ -271,12 +271,12 @@ public class TempChatActivity extends AppCompatActivity {
             if (!Utils.isEmpty(noNet)){
                 Utils.showToast(TempChatActivity.this,"网络已断开，请设置网络");
             }else {
-                if (!Utils.isEmpty(macAddress) && deviceChild2==null && deviceChild.getMacAddress().equals(macAddress)){
+                if (!Utils.isEmpty(macAddress) && deviceChild2==null  && deviceChild!=null && deviceChild.getMacAddress().equals(macAddress)){
                     Utils.showToast(TempChatActivity.this,"该设备已被重置");
                     Intent intent2=new Intent(TempChatActivity.this,MainActivity.class);
                     intent2.putExtra("houseId",houseId);
                     startActivity(intent2);
-                }else if (!Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild.getMacAddress().equals(macAddress)){
+                }else if (!Utils.isEmpty(macAddress) && deviceChild2!=null && deviceChild!=null && deviceChild.getMacAddress().equals(macAddress)){
                     deviceChild=deviceChild2;
                     deviceChildDao.update(deviceChild);
                     int  powerValue=deviceChild.getSocketPower()/10;

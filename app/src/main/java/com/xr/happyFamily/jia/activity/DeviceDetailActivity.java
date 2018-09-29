@@ -692,7 +692,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             }else {
-                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
+                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())){
                     if (deviceChild2==null){
                         if (popupWindow1!=null && popupWindow1.isShowing()){
                             popupWindow1.dismiss();

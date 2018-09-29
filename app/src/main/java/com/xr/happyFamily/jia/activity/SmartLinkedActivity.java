@@ -317,12 +317,14 @@ public class SmartLinkedActivity extends AppCompatActivity {
                             int deviceId = device.getInt("deviceId");
                             int isLinked = device.getInt("isLinked");
                             DeviceChild deviceChild = deviceChildDao.findDeviceByDeviceId(houseId, roomId, deviceId);
-                            deviceChild.setLinked(isLinked);
-                            deviceChild.setLinkedSensorId(sensorId);
-                            linkedMap.put(deviceId, deviceChild);
-                            deviceChildDao.update(deviceChild);
-                            if (!list.contains(deviceChild)) {
-                                list.add(deviceChild);
+                            if (deviceChild!=null){
+                                deviceChild.setLinked(isLinked);
+                                deviceChild.setLinkedSensorId(sensorId);
+                                linkedMap.put(deviceId, deviceChild);
+                                deviceChildDao.update(deviceChild);
+                                if (!list.contains(deviceChild)) {
+                                    list.add(deviceChild);
+                                }
                             }
                         }
                     }

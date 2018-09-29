@@ -474,7 +474,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             } else {
-                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
                         if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
                             timePickViewPopup.dismiss();
@@ -484,7 +484,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                         Intent data = new Intent(SocketActivity.this, MainActivity.class);
                         data.putExtra("houseId", houseId);
                         startActivity(data);
-                    } else {
+                    } else{
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();
                         if (online) {

@@ -145,7 +145,7 @@ public class LiveActivity extends AppCompatActivity {
             if (!TextUtils.isEmpty(noNet)) {
 
             } else {
-                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
                         Toast.makeText(LiveActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();

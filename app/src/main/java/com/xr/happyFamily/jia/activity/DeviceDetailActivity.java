@@ -501,7 +501,8 @@ public class DeviceDetailActivity extends AppCompatActivity {
         ImageView image_ensure= (ImageView) view.findViewById(R.id.image_ensure);
         LoopView tv_hour= (LoopView) view.findViewById(R.id.tv_hour);
         tv_hour.setItems(hours);
-        tv_hour.setCenterTextColor(0xff37d39e);
+        tv_hour.setCenterTextColor(Color.parseColor("#101010"));
+        tv_hour.setOuterTextColor(Color.parseColor("#bbbbbb"));
         tv_hour.setTextSize(20);
 
 
@@ -691,7 +692,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             }else {
-                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())){
+                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())){
                     if (deviceChild2==null){
                         if (popupWindow1!=null && popupWindow1.isShowing()){
                             popupWindow1.dismiss();

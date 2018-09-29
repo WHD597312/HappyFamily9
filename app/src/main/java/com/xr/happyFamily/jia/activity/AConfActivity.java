@@ -702,7 +702,7 @@ public class AConfActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tvOffline.setVisibility(View.VISIBLE);
             } else {
-                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
                         Toast.makeText(AConfActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();

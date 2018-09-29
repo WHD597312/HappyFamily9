@@ -225,4 +225,5 @@ public class DeviceChildDaoImpl {
         WhereCondition whereCondition=deviceChildDao.queryBuilder().and(DeviceChildDao.Properties.HouseId.eq(houseId),DeviceChildDao.Properties.RoomId.eq(roomId), DeviceChildDao.Properties.DeviceId.eq(deviceId));
         return deviceChildDao.queryBuilder().where(whereCondition).unique();
     }
+
 }

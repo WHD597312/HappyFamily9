@@ -5,13 +5,13 @@
     <corners  android:radius="4dp"/>
 
     <solid  android:color="#ffffff"/>
-    <gradient
+    <!--<gradient-->
 
-        android:centerColor="@color/white"
-        android:endColor="@color/white"
-        android:startColor="@color/white"
-        android:angle="90"
+        <!--android:centerColor="@color/white"-->
+        <!--android:endColor="@color/white"-->
+        <!--android:startColor="@color/white"-->
+        <!--android:angle="90"-->
 
-        />
+        <!--/>-->
 
 </shape>

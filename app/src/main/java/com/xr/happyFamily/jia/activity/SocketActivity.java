@@ -395,7 +395,8 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         Calendar calendar = Calendar.getInstance();
         int hour = calendar.get(Calendar.HOUR_OF_DAY);
         int min = calendar.get(Calendar.MINUTE);
-        timePickViewPopup = new TimePickViewPopup(SocketActivity.this, 1, hour, min);
+        if (timePickViewPopup==null)
+            timePickViewPopup = new TimePickViewPopup(SocketActivity.this, 1, hour, min);
         timePickViewPopup.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
         TextView tv_ensure = timePickViewPopup.getPublishView();
         tv_ensure.setOnClickListener(new View.OnClickListener() {
@@ -467,17 +468,23 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             DeviceChild deviceChild2 = (DeviceChild) intent.getSerializableExtra("deviceChild");
             String noNet = intent.getStringExtra("noNet");
             if (!TextUtils.isEmpty(noNet)) {
+                if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
+                    timePickViewPopup.dismiss();
+                }
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             } else {
-                if (!TextUtils.isEmpty(macAddress) && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
+                        if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
+                            timePickViewPopup.dismiss();
+                        }
                         Toast.makeText(SocketActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();
                         Intent data = new Intent(SocketActivity.this, MainActivity.class);
                         data.putExtra("houseId", houseId);
                         startActivity(data);
-                    } else {
+                    } else{
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();
                         if (online) {
@@ -485,6 +492,9 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                             tv_offline.setVisibility(View.GONE);
                             setMode(deviceChild);
                         } else {
+                            if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
+                                timePickViewPopup.dismiss();
+                            }
                             relative.setVisibility(View.GONE);
                             tv_offline.setVisibility(View.VISIBLE);
                         }

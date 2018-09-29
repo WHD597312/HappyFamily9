@@ -1,14 +1,17 @@
 package com.xr.happyFamily.jia;
 
 import android.app.Dialog;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.SharedPreferences;
 import android.content.res.XmlResourceParser;
 import android.graphics.Color;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
+import android.os.IBinder;
 import android.os.Message;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -31,6 +34,7 @@ import android.widget.Toast;
 
 import com.bigkoo.pickerview.OptionsPickerView;
 import com.google.gson.Gson;
+import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.adapter.CityAdapter;
@@ -51,6 +55,7 @@ import com.xr.happyFamily.main.RoomFragment;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.JsonFileReader;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.mqtt.MQService;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -93,7 +98,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
     @BindView(R.id.iv_rename_back)
     ImageView imageViewb;
 
-    private MyApplication  application;
+    private MyApplication application;
     private View contentViewSign;
     private PopupWindow mPopWindow;
     private Context mContext;
@@ -111,32 +116,37 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
     String userId;
     int sign_sheng = 0, sign_city = 0, isDefault = 1, receiveId = 0;
     String receiveProvince, receiveCity, receiveCounty, receiveAddress;
+    private DeviceChildDaoImpl deviceChildDao;
+    private boolean isBound;
 
     protected void onCreate(Bundle savadInstanceState) {
         super.onCreate(savadInstanceState);
 
         setContentView(R.layout.activity_hourse_rename);
         unbinder = ButterKnife.bind(this);
-        mContext=RenameHourseActivity.this;
-        hourseDao= new HourseDaoImpl(getApplicationContext());
-
-        if (application==null){
-            application= (MyApplication) getApplication();
+        mContext = RenameHourseActivity.this;
+        hourseDao = new HourseDaoImpl(getApplicationContext());
+        deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
+        if (application == null) {
+            application = (MyApplication) getApplication();
             application.addActivity(this);
         }
         Intent intent = getIntent();
-          String houseName=  intent.getStringExtra("houseName");
-        String houseAddress =  intent.getStringExtra("houseAddress");
-        houseId= intent.getLongExtra("houseId",0);
+        String houseName = intent.getStringExtra("houseName");
+        String houseAddress = intent.getStringExtra("houseAddress");
+        houseId = intent.getLongExtra("houseId", 0);
         hourse = hourseDao.findById(houseId);
-        if (!Utils.isEmpty(houseName) &&!Utils.isEmpty(houseAddress)){
+        if (!Utils.isEmpty(houseName) && !Utils.isEmpty(houseAddress)) {
             textViewn.setText(houseName);
             textViewa.setText(houseAddress);
         }
-        preferences=getSharedPreferences("my",MODE_PRIVATE);
-        userId = preferences.getString("userId","");
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        userId = preferences.getString("userId", "");
+        Intent service = new Intent(this, MQService.class);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
 
     }
+
     @Override
     public boolean onKeyDown(int keyCode, KeyEvent event) {
         if (keyCode == KeyEvent.KEYCODE_BACK) {
@@ -157,14 +167,14 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         super.onRestart();
     }
 
-    @OnClick({R.id.rl_rename_it1,R.id.rl_rename_it2,R.id.iv_rename_back,R.id.tv_rename_del})
+    @OnClick({R.id.rl_rename_it1, R.id.rl_rename_it2, R.id.iv_rename_back, R.id.tv_rename_del})
     public void onClick(View view) {
         switch (view.getId()) {
             case R.id.rl_rename_it1:
                 buildUpdateHomeDialog();//修改名称
                 break;
             case R.id.rl_rename_it2:
-                 showPopup();//三级联动城市
+                showPopup();//三级联动城市
                 break;
             case R.id.iv_rename_back:
                 Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
@@ -176,8 +186,6 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                 break;
         }
     }
-
-
 
 
     private void deleteHourseDialog() {
@@ -204,7 +212,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected Integer doInBackground(Void... voids) {
             int code = 0;
-            String url = ip+"/family/house/deleteHouse" + "?houseId=" + houseId + "&userId=" + userId;
+            String url = ip + "/family/house/deleteHouse" + "?houseId=" + houseId + "&userId=" + userId;
             String result = HttpUtils.getOkHpptRequest(url);
             Log.i("result", "-->" + result);
             try {
@@ -213,8 +221,49 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                     String returnCode = jsonObject.getString("returnCode");
                     if ("100".equals(returnCode)) {
                         code = 100;
-                       Hourse hourse= hourseDao.findById(houseId);
-                       hourseDao.delete(hourse);
+                        Hourse hourse = hourseDao.findById(houseId);
+                        List<DeviceChild> deviceChildren = deviceChildDao.findHouseDevices(houseId);
+                        for (DeviceChild deviceChild : deviceChildren) {
+                            String macAddress = deviceChild.getMacAddress();
+                            int type = deviceChild.getType();
+                            String onlineTopicName = "";
+                            String offlineTopicName = "";
+
+                            if (2 == type) {
+                                onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
+                            } else if (3 == type) {
+                                onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                            } else if (4 == type) {
+                                onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                            } else if (5 == type) {
+                                onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                            } else if (6 == type) {
+                                onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                            } else if (7 == type) {
+                                onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                            } else if (8 == type) {
+                                onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                            }
+
+                            String reSet = "reSet";
+                            if (!TextUtils.isEmpty(onlineTopicName))
+                                mqService.publish(onlineTopicName, 1, reSet);
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(onlineTopicName);
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(offlineTopicName);
+                            }
+                        }
+                        deviceChildDao.deleteDevices(deviceChildren);
+                        hourseDao.delete(hourse);
                     }
                 }
             } catch (Exception e) {
@@ -229,7 +278,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
             switch (code) {
                 case 100:
                     Toast.makeText(mContext, "删除成功", Toast.LENGTH_SHORT).show();
-                    Intent intent = new Intent(RenameHourseActivity.this,ChooseHourseActivity.class);
+                    Intent intent = new Intent(RenameHourseActivity.this, ChooseHourseActivity.class);
                     startActivity(intent);
                     break;
                 default:
@@ -239,11 +288,24 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         }
     }
 
+    MQService mqService;
+    boolean bound;
+    ServiceConnection connection = new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            MQService.LocalBinder binder = (MQService.LocalBinder) service;
+            mqService = binder.getService();
+            bound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+
+        }
+    };
 
 
-
-
-        //三级联动
+    //三级联动
     private ImageView img_close;
     private View view_dis;
     private ListView listCity;
@@ -258,7 +320,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
 
     private void showPopup() {
         parser();
-        Log.e("qqqqqqqqqQQQ","????");
+        Log.e("qqqqqqqqqQQQ", "????");
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_shop_city, null);
         img_close = (ImageView) contentViewSign.findViewById(R.id.img_close);
         listCity = (ListView) contentViewSign.findViewById(R.id.list_city);
@@ -300,7 +362,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                         receiveCity = data.get(position);
                         tv_shi.setText(receiveCity);
                         sign_city = position;
-                        houseAddress=String.valueOf(tv_shi.getText()) ;
+                        houseAddress = String.valueOf(tv_shi.getText());
                         textViewa.setText(tv_shi.getText());
                         upData(2);
                         new ChangeAddressAsync().execute();
@@ -339,6 +401,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         mPopWindow.setOnDismissListener(new RenameHourseActivity.poponDismissListener());
         mPopWindow.showAsDropDown(findViewById(R.id.iv_rename_back));
     }
+
     public void backgroundAlpha(float bgAlpha) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = bgAlpha; //0.0-1.0
@@ -354,6 +417,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         }
 
     }
+
     private void upData(int i) {
 
         img_city[sing_city].setVisibility(View.INVISIBLE);
@@ -388,14 +452,6 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
 
         cityAdapter.notifyDataSetChanged();
     }
-    Handler handler = new Handler() {
-        @Override
-        public void handleMessage(Message msg) {
-            if (msg.what == 3) {
-                showPopup();
-            }
-        }
-    };
 
 
     public List<Province> parser() {
@@ -487,6 +543,7 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         }
         return list;
     }
+
     private void buildUpdateHomeDialog() {
         final HomeDialog dialog = new HomeDialog(this);
         dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
@@ -501,13 +558,11 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
                 houseName = dialog.getName();
                 if (Utils.isEmpty(houseName)) {
                     Utils.showToast(RenameHourseActivity.this, "住所名称不能为空");
-                }
+                } else {
 
-                else {
+                    new RenameHourseActivity.ChangeHouseNameAsyncTask().execute();
 
-                            new RenameHourseActivity.ChangeHouseNameAsyncTask().execute();
-
-                            dialog.dismiss();
+                    dialog.dismiss();
 
 
                 }
@@ -515,21 +570,22 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         });
         dialog.show();
     }
+
     class ChangeHouseNameAsyncTask extends AsyncTask<Void, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Void... voids) {
             int code = 0;
-            String url = ip+"/family/house/changeName?houseId="+houseId +"&houseName="+ houseName;
+            String url = ip + "/family/house/changeName?houseId=" + houseId + "&houseName=" + houseName;
             String result = HttpUtils.getOkHpptRequest(url);
-            Log.i("result2","-->"+result);
+            Log.i("result2", "-->" + result);
             try {
                 if (!TextUtils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
-                    String returnCode=jsonObject.getString("returnCode");
-                    if ("100".equals(returnCode)){
-                        code=100;
-                        if (hourse!=null){
+                    String returnCode = jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)) {
+                        code = 100;
+                        if (hourse != null) {
                             hourse.setHouseName(houseName);
 
                             hourseDao.update(hourse);
@@ -546,42 +602,42 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
-            switch (code){
+            switch (code) {
                 case 100:
-                    Toast.makeText(RenameHourseActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RenameHourseActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                     textViewn.setText(houseName);
 //                    startActivity(new Intent(RenameHourseActivity.this,ChooseHourseActivity.class));
                     break;
                 default:
-                    Toast.makeText(RenameHourseActivity.this,"修改失败",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RenameHourseActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     }
 
-    class ChangeAddressAsync extends AsyncTask<Map<String,Object>,Void,Integer>{
+    class ChangeAddressAsync extends AsyncTask<Map<String, Object>, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
-            int code=0;
-            String url = ip+"/family/house/changeAddress?houseId="+houseId +"&houseAddress="+houseAddress;
+            int code = 0;
+            String url = ip + "/family/house/changeAddress?houseId=" + houseId + "&houseAddress=" + houseAddress;
             String result = HttpUtils.getOkHpptRequest(url);
-            if (!TextUtils.isEmpty(result)){
-                Log.i("result","-->"+result);
+            if (!TextUtils.isEmpty(result)) {
+                Log.i("result", "-->" + result);
                 try {
                     if (!TextUtils.isEmpty(result)) {
                         JSONObject jsonObject = new JSONObject(result);
-                        String returnCode=jsonObject.getString("returnCode");
-                        if ("100".equals(returnCode)){
-                            code=100;
-                            if (hourse!=null){
+                        String returnCode = jsonObject.getString("returnCode");
+                        if ("100".equals(returnCode)) {
+                            code = 100;
+                            if (hourse != null) {
                                 hourse.setHouseAddress(houseAddress);
                                 hourseDao.update(hourse);
-                                Log.e("hourse", "doInBackground:---> "+hourse.getHouseId()+"..."+hourse.getHouseAddress() );
+                                Log.e("hourse", "doInBackground:---> " + hourse.getHouseId() + "..." + hourse.getHouseAddress());
                             }
                         }
                     }
-                }catch (Exception e){
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
@@ -592,23 +648,27 @@ public class RenameHourseActivity extends AppCompatActivity implements View.OnCl
         @Override
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
-            switch (code){
+            switch (code) {
                 case 100:
-                    Toast.makeText(RenameHourseActivity.this,"修改成功",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RenameHourseActivity.this, "修改成功", Toast.LENGTH_SHORT).show();
                     textViewa.setText(tv_shi.getText());
 //                    startActivity(new Intent(RenameHourseActivity.this,ChooseHourseActivity.class));
                     break;
                 default:
-                    Toast.makeText(RenameHourseActivity.this,"修改失败",Toast.LENGTH_SHORT).show();
+                    Toast.makeText(RenameHourseActivity.this, "修改失败", Toast.LENGTH_SHORT).show();
                     break;
             }
         }
     }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
         if (unbinder != null) {
             unbinder.unbind();
+        }
+        if (isBound) {
+            unbindService(connection);
         }
     }
 }

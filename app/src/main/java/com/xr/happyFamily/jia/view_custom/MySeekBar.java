@@ -143,7 +143,6 @@ public class MySeekBar extends AppCompatSeekBar {
         //绘制文字和背景
         canvas.drawBitmap(mBackgroundBitmap, bgX, bgY, mPaint);
         canvas.drawText(mText, textX, textY, mPaint);
-
         BitmapFactory.decodeResource(getResources(), bgResId);
     }
 

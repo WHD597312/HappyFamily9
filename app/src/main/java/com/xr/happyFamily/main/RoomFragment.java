@@ -687,7 +687,9 @@ public class RoomFragment extends Fragment {
                                 offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                             }
 
-
+                            String reSet="reSet";
+                            if (!TextUtils.isEmpty(onlineTopicName))
+                                mqService.publish(onlineTopicName,1,reSet);
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);
                             }
@@ -754,7 +756,31 @@ public class RoomFragment extends Fragment {
                                 case 3:
                                     onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
                                     offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                                    break;
+                                case 4:
+                                    onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                                    break;
+                                case 5:
+                                    onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                                    break;
+                                case 6:
+                                    onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                                    break;
+                                case 7:
+                                    onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                                    break;
+                                case 8:
+                                    onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                    offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                               break;
                             }
+                            String reSet="reSet";
+                            if (!TextUtils.isEmpty(onlineTopicName))
+                                mqService.publish(onlineTopicName,1,reSet);
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);
                             }

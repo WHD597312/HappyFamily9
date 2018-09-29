@@ -141,218 +141,7 @@ public class FamilyFragment extends Fragment {
         roomDao = new RoomDaoImpl(getActivity());
         deviceChildDao = new DeviceChildDaoImpl(getActivity());
         hourseDao = new HourseDaoImpl(getActivity());
-        return view;
-    }
 
-
-    private void deleteDeviceDialog() {
-        final DeleteDeviceDialog dialog = new DeleteDeviceDialog(getActivity());
-        dialog.setOnNegativeClickListener(new DeleteDeviceDialog.OnNegativeClickListener() {
-            @Override
-            public void onNegativeClick() {
-                dialog.dismiss();
-            }
-        });
-        dialog.setOnPositiveClickListener(new DeleteDeviceDialog.OnPositiveClickListener() {
-            @Override
-            public void onPositiveClick() {
-                new DeleteDeviceAsync().execute();
-                dialog.dismiss();
-            }
-        });
-        dialog.show();
-    }
-
-    class DeleteDeviceAsync extends AsyncTask<Void, Void, Integer> {
-        @Override
-        protected Integer doInBackground(Void... voids) {
-            int code = 0;
-            long deviceId = 0;
-            long roomId = 0;
-            String userId = preferences.getString("userId", "");
-            if (mdeledeviceChild != null) {
-                deviceId = mdeledeviceChild.getDeviceId();
-                roomId = mdeledeviceChild.getRoomId();
-            }
-            String url = deleteDeviceUrl + "?userId=" + userId + "&roomId=" + roomId + "&deviceId=" + deviceId;
-            String result = HttpUtils.getOkHpptRequest(url);
-            Log.i("result", "-->" + result);
-            try {
-                if (!TextUtils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String returnCode = jsonObject.getString("returnCode");
-                    if ("100".equals(returnCode) || "400".equals(returnCode)) {
-                        code = 100;
-                        if (mdeledeviceChild != null) {
-                            String macAddress = mdeledeviceChild.getMacAddress();
-                            int type = mdeledeviceChild.getType();
-                            String onlineTopicName = "";
-                            String offlineTopicName = "";
-                            if (2 == type) {
-                                onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
-                            } else if (3 == type) {
-                                onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
-                            } else if (4 == type) {
-                                onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
-                            } else if (5 == type) {
-                                onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
-                            } else if (6 == type) {
-                                onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
-                            } else if (7 == type) {
-                                onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
-                            } else if (8 == type) {
-                                onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
-                                offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
-                            }
-                            if (!TextUtils.isEmpty(onlineTopicName)) {
-                                mqService.unsubscribe(onlineTopicName);
-                            }
-                            if (!TextUtils.isEmpty(onlineTopicName)) {
-                                mqService.unsubscribe(offlineTopicName);
-                            }
-                            deviceChildDao.delete(mdeledeviceChild);
-                        }
-                    }
-                }
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            return code;
-        }
-
-        @Override
-        protected void onPostExecute(Integer code) {
-            super.onPostExecute(code);
-            switch (code) {
-                case 100:
-                    Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
-//                    shareDevices.remove(mdeledeviceChild);
-//                    shareViewAdapter.notifyDataSetChanged();
-                    List<DeviceChild> deviceChildren = deviceChildDao.findHouseCommonDevices(houseId);
-                    List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
-                    if (deviceChildren.isEmpty() && shareDevices2.isEmpty()) {
-                        Intent intent2 = new Intent(getActivity(), MainActivity.class);
-                        intent2.putExtra("refersh", "refresh");
-                        intent2.putExtra("houseId", houseId);
-                        startActivity(intent2);
-                    } else {
-                        shareViewAdapter.remove(mdeledeviceChild);
-                        shareViewAdapter.notifyDataSetChanged();
-                    }
-                    break;
-                default:
-                    Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();
-                    break;
-            }
-        }
-    }
-
-    @OnClick({R.id.rl_home_xnty, R.id.tv_my_hourse, R.id.btn_add_room, R.id.image_change})
-    public void onClick(View view) {
-        switch (view.getId()) {
-            case R.id.rl_home_xnty:
-                Intent intent4 = new Intent(getActivity(), ChangeEquipmentActivity.class);
-                startActivity(intent4);
-                break;
-            case R.id.tv_my_hourse:
-                Intent intent2 = new Intent(getActivity(), ChooseHourseActivity.class);
-                startActivity(intent2);
-                break;
-            case R.id.btn_add_room:
-                Intent intent = new Intent(getActivity(), ManagementActivity.class);
-                intent.putExtra("houseId", houseId);
-                startActivityForResult(intent, MREQUEST_CODE);
-                break;
-            case R.id.image_change:
-//                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
-//                intent3.putExtra("houseId", houseId);
-//                startActivityForResult(intent3, MREQUEST_CODE);
-//                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
-                popupmenuWindow();
-                break;
-        }
-    }
-
-
-    RoomDaoImpl roomDao;
-    Room room;
-    List<Room> rooms;
-    RoomAdapter adapter;
-    private PopupWindow popupWindow1;
-
-    public void popupmenuWindow() {
-        if (popupWindow1 != null && popupWindow1.isShowing()) {
-            return;
-        }
-
-
-        View view = View.inflate(getActivity(), R.layout.activity_home_change, null);
-        int width = getResources().getDisplayMetrics().widthPixels;
-        int height = getResources().getDisplayMetrics().heightPixels;
-
-        ListView change_list = (ListView) view.findViewById(R.id.change_list);
-        RelativeLayout li_change = (RelativeLayout) view.findViewById(R.id.li_change);
-        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
-        //点击空白处时，隐藏掉pop窗口
-        popupWindow1.setFocusable(true);
-        popupWindow1.setOutsideTouchable(true);
-        //添加弹出、弹入的动画
-        popupWindow1.setAnimationStyle(R.style.ChangroomPopupwindow);
-//        ColorDrawable dw = new ColorDrawable(getActivity().getResources().getColor(R.color.white));
-//        popupWindow1.setBackgroundDrawable(dw);
-        popupWindow1.showAsDropDown(rl_roomf_rl, 0, 0);
-//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
-        //添加按键事件监听
-
-        rooms = roomDao.findAllRoomInHouse(houseId);
-        adapter = new RoomAdapter(getActivity(), R.layout.activity_home_change_item, rooms);
-//        ListView listView = (ListView) findViewById(R.id.change_list);
-        change_list.setVerticalScrollBarEnabled(false);
-        change_list.setAdapter(adapter);
-        View.OnClickListener listener = new View.OnClickListener() {
-            public void onClick(View v) {
-                switch (v.getId()) {
-                    case R.id.li_change:
-                        popupWindow1.dismiss();
-
-                        break;
-                }
-            }
-        };
-
-        change_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Log.i("onItemClick", "-->" + position);
-                Intent intent = new Intent(getActivity(), MainActivity.class);
-                intent.putExtra("houseId", houseId);
-                SharedPreferences.Editor editor = mPositionPreferences.edit();
-                editor.putInt("position", position + 1);
-                editor.commit();
-                popupWindow1.dismiss();
-                startActivity(intent);
-            }
-        });
-        li_change.setOnClickListener(listener);
-    }
-
-
-    public void setHouseId(long houseId) {
-        this.houseId = houseId;
-    }
-
-    MessageReceiver receiver;
-    private boolean isBound;
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        running = true;
         IntentFilter intentFilter = new IntentFilter("RoomFragment");
         receiver = new MessageReceiver();
         getActivity().registerReceiver(receiver, intentFilter);
@@ -604,6 +393,221 @@ public class FamilyFragment extends Fragment {
                 }
             });
         }
+        return view;
+    }
+
+
+    private void deleteDeviceDialog() {
+        final DeleteDeviceDialog dialog = new DeleteDeviceDialog(getActivity());
+        dialog.setOnNegativeClickListener(new DeleteDeviceDialog.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
+                dialog.dismiss();
+            }
+        });
+        dialog.setOnPositiveClickListener(new DeleteDeviceDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+                new DeleteDeviceAsync().execute();
+                dialog.dismiss();
+            }
+        });
+        dialog.show();
+    }
+
+    class DeleteDeviceAsync extends AsyncTask<Void, Void, Integer> {
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0;
+            long deviceId = 0;
+            long roomId = 0;
+            String userId = preferences.getString("userId", "");
+            if (mdeledeviceChild != null) {
+                deviceId = mdeledeviceChild.getDeviceId();
+                roomId = mdeledeviceChild.getRoomId();
+            }
+            String url = deleteDeviceUrl + "?userId=" + userId + "&roomId=" + roomId + "&deviceId=" + deviceId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.i("result", "-->" + result);
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode = jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode) || "400".equals(returnCode)) {
+                        code = 100;
+                        if (mdeledeviceChild != null) {
+                            String macAddress = mdeledeviceChild.getMacAddress();
+                            int type = mdeledeviceChild.getType();
+                            String onlineTopicName = "";
+                            String offlineTopicName = "";
+                            if (2 == type) {
+                                onlineTopicName = "p99/warmer/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/warmer/" + macAddress + "/lwt";
+                            } else if (3 == type) {
+                                onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                            } else if (4 == type) {
+                                onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                            } else if (5 == type) {
+                                onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                            } else if (6 == type) {
+                                onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                            } else if (7 == type) {
+                                onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                            } else if (8 == type) {
+                                onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                                offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                            }
+                            String reSet="reSet";
+                            if (!TextUtils.isEmpty(onlineTopicName))
+                                mqService.publish(onlineTopicName,1,reSet);
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(onlineTopicName);
+                            }
+                            if (!TextUtils.isEmpty(onlineTopicName)) {
+                                mqService.unsubscribe(offlineTopicName);
+                            }
+                            deviceChildDao.delete(mdeledeviceChild);
+                        }
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 100:
+                    Toast.makeText(getActivity(), "删除成功", Toast.LENGTH_SHORT).show();
+//                    shareDevices.remove(mdeledeviceChild);
+//                    shareViewAdapter.notifyDataSetChanged();
+                    List<DeviceChild> deviceChildren = deviceChildDao.findHouseCommonDevices(houseId);
+                    List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
+                    if (deviceChildren.isEmpty() && shareDevices2.isEmpty()) {
+                        Intent intent2 = new Intent(getActivity(), MainActivity.class);
+                        intent2.putExtra("refersh", "refresh");
+                        intent2.putExtra("houseId", houseId);
+                        startActivity(intent2);
+                    } else {
+                        shareViewAdapter.remove(mdeledeviceChild);
+                        shareViewAdapter.notifyDataSetChanged();
+                    }
+                    break;
+                default:
+                    Toast.makeText(getActivity(), "删除失败", Toast.LENGTH_SHORT).show();
+                    break;
+            }
+        }
+    }
+
+    @OnClick({R.id.rl_home_xnty, R.id.tv_my_hourse, R.id.btn_add_room, R.id.image_change})
+    public void onClick(View view) {
+        switch (view.getId()) {
+            case R.id.rl_home_xnty:
+                Intent intent4 = new Intent(getActivity(), ChangeEquipmentActivity.class);
+                startActivity(intent4);
+                break;
+            case R.id.tv_my_hourse:
+                Intent intent2 = new Intent(getActivity(), ChooseHourseActivity.class);
+                startActivity(intent2);
+                break;
+            case R.id.btn_add_room:
+                Intent intent = new Intent(getActivity(), ManagementActivity.class);
+                intent.putExtra("houseId", houseId);
+                startActivityForResult(intent, MREQUEST_CODE);
+                break;
+            case R.id.image_change:
+//                Intent intent3 = new Intent(getActivity(), ChangeRoomActivity.class);
+//                intent3.putExtra("houseId", houseId);
+//                startActivityForResult(intent3, MREQUEST_CODE);
+//                getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
+                popupmenuWindow();
+                break;
+        }
+    }
+
+
+    RoomDaoImpl roomDao;
+    Room room;
+    List<Room> rooms;
+    RoomAdapter adapter;
+    private PopupWindow popupWindow1;
+
+    public void popupmenuWindow() {
+        if (popupWindow1 != null && popupWindow1.isShowing()) {
+            return;
+        }
+
+
+        View view = View.inflate(getActivity(), R.layout.activity_home_change, null);
+        int width = getResources().getDisplayMetrics().widthPixels;
+        int height = getResources().getDisplayMetrics().heightPixels;
+
+        ListView change_list = (ListView) view.findViewById(R.id.change_list);
+        RelativeLayout li_change = (RelativeLayout) view.findViewById(R.id.li_change);
+        popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupWindow1.setFocusable(true);
+        popupWindow1.setOutsideTouchable(true);
+        //添加弹出、弹入的动画
+        popupWindow1.setAnimationStyle(R.style.ChangroomPopupwindow);
+//        ColorDrawable dw = new ColorDrawable(getActivity().getResources().getColor(R.color.white));
+//        popupWindow1.setBackgroundDrawable(dw);
+        popupWindow1.showAsDropDown(rl_roomf_rl, 0, 0);
+//        popupWindow.showAtLocation(tv_home_manager, Gravity.RIGHT, 0, 0);
+        //添加按键事件监听
+
+        rooms = roomDao.findAllRoomInHouse(houseId);
+        adapter = new RoomAdapter(getActivity(), R.layout.activity_home_change_item, rooms);
+//        ListView listView = (ListView) findViewById(R.id.change_list);
+        change_list.setVerticalScrollBarEnabled(false);
+        change_list.setAdapter(adapter);
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.li_change:
+                        popupWindow1.dismiss();
+
+                        break;
+                }
+            }
+        };
+
+        change_list.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                Log.i("onItemClick", "-->" + position);
+                Intent intent = new Intent(getActivity(), MainActivity.class);
+                intent.putExtra("houseId", houseId);
+                SharedPreferences.Editor editor = mPositionPreferences.edit();
+                editor.putInt("position", position + 1);
+                editor.commit();
+                popupWindow1.dismiss();
+                startActivity(intent);
+            }
+        });
+        li_change.setOnClickListener(listener);
+    }
+
+
+    public void setHouseId(long houseId) {
+        this.houseId = houseId;
+    }
+
+    MessageReceiver receiver;
+    private boolean isBound;
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        running = true;
     }
 
     public String getTemperature() {
@@ -622,10 +626,7 @@ public class FamilyFragment extends Fragment {
     @Override
     public void onStop() {
         super.onStop();
-        if (receiver != null) {
-            Log.i("RoomFragment", "onStop");
-            getActivity().unregisterReceiver(receiver);
-        }
+
     }
 
     @Override
@@ -633,6 +634,10 @@ public class FamilyFragment extends Fragment {
         super.onDestroyView();
         if (unbinder != null) {
             unbinder.unbind();
+        }
+        if (receiver != null) {
+            Log.i("RoomFragment", "onStop");
+            getActivity().unregisterReceiver(receiver);
         }
         if (isBound) {
             getActivity().unbindService(connection);

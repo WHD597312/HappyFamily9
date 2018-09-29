@@ -1,18 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-
-
 <android.support.percent.PercentRelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/pr_view"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@mipmap/bj_home"
+    android:layerType="software"
     android:orientation="vertical">
+
     <TextView
         android:id="@+id/tv_bz2"
         android:layout_width="0dp"
-        android:layout_height="0dp"
-        />
+        android:layout_height="0dp" />
 
     <ScrollView
         android:layout_width="0dp"
@@ -65,9 +64,9 @@
                         android:textSize="@dimen/sp_18" />
 
                     <ImageView
-                        android:layout_marginLeft="@dimen/dp_jy_5"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_marginLeft="@dimen/dp_jy_5"
                         android:paddingTop="@dimen/dp_jy_3"
                         android:src="@mipmap/xiala3x" />
                 </LinearLayout>
@@ -111,8 +110,7 @@
                     android:layout_toRightOf="@id/tv_balcony_wd1"
                     android:text="室温"
                     android:textColor="@color/color_white"
-                    android:textSize="10sp"
-                    />
+                    android:textSize="10sp" />
 
                 <TextView
                     android:id="@+id/tv_balcony_23"
@@ -136,8 +134,8 @@
                     android:layout_marginBottom="5dp"
                     android:layout_toRightOf="@+id/tv_balcony_23"
                     android:text="℃"
-                    android:textSize="@dimen/sp_12"
                     android:textColor="@color/color_white"
+                    android:textSize="@dimen/sp_12"
 
                     />
 
@@ -172,8 +170,8 @@
                     android:layout_alignTop="@id/tv_balcony_c"
                     android:layout_toRightOf="@id/tv_balcony_sd"
                     android:text="％"
-                    android:textSize="@dimen/sp_12"
                     android:textColor="@color/color_white"
+                    android:textSize="@dimen/sp_12"
 
                     />
 
@@ -225,7 +223,6 @@
         </RelativeLayout>
 
     </ScrollView>
-
 
 
     <Button

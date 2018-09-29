@@ -20,6 +20,7 @@
             android:src="@mipmap/fanhui"
             android:padding="10dp"
             android:layout_centerVertical="true"
+
             />
         <TextView
             android:layout_width="match_parent"
@@ -37,6 +38,7 @@
         android:layout_gravity="center"
         android:layout_marginTop="@dimen/dp_jy_20"
         android:src="@mipmap/zhen_about"
+
         android:scaleType="centerInside"
         />
 

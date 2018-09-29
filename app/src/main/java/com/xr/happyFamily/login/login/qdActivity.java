@@ -128,7 +128,7 @@ public class qdActivity extends Activity {
             }
         }, time);*/
 
-         countDownTimer = new CountDownTimer(7 * 1000, 1000) {
+         countDownTimer = new CountDownTimer(6 * 1000, 1000) {
             @Override
             public void onTick(long millisUntilFinished) {
                 Log.e("counttimer", "倒计时=" + (millisUntilFinished / 1000));

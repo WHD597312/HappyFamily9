@@ -6,12 +6,14 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.res.ColorStateList;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.IBinder;
 import android.os.Message;
 import android.os.PowerManager;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.text.method.HideReturnsTransformationMethod;
@@ -113,6 +115,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         setContentView(R.layout.activity_login);
         unbinder = ButterKnife.bind(this);
         imageView.setImageResource(R.mipmap.yanjing13x);
+//        imageView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.green5)));
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
@@ -130,8 +133,6 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 
-
-        running=true;
         Intent service = new Intent(LoginActivity.this, MQService.class);
         startService(service);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
@@ -142,6 +143,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     @Override
     protected void onStart() {
         super.onStart();
+        running=true;
         if (preferences.contains("phone") && !preferences.contains("password")) {
             String phone = preferences.getString("phone", "");
             et_name.setText(phone);
@@ -196,11 +198,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             Log.e("Tag", "倒计时完成");
             if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
                 loginAsyncTask.cancel(true);
-
             }
             if (hourseAsyncTask!=null && hourseAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
                 hourseAsyncTask.cancel(true);
-
             }
             hideProgressDialog1();
 
@@ -275,6 +275,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                 break;
         }
     }
+
 
     private static final int MSG_ACTION_CCALLBACK = 0;
     private ProgressDialog progressDialog;

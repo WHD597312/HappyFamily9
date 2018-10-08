@@ -1,8 +1,11 @@
 package com.xr.happyFamily.jia.xnty;
 
+import android.content.Context;
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
@@ -178,6 +181,8 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
     Animation animairleft;
     Animation animairright;
     Animation animairmiddle;
+    @BindView(R.id.iv_kqjh_fh)
+    ImageView iv_kqjh_fh;
     @BindView(R.id.iv_b_1)
     ImageView imageb1;
     @BindView(R.id.iv_b_2)
@@ -194,7 +199,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
     ImageView imageViewsm;
     private BottomSheetBehavior bottomSheetBehavior;
     private BottomSheetBehavior bottomSheetBehavior2;
-
+    Context mContext ;
 
     @Override
 
@@ -202,7 +207,11 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_xnty_kqjhq);
         unbinder = ButterKnife.bind(this);
+        mContext=AircleanerActivity.this;
         imageViewsm.setTag("close");
+        imageViewkg.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_green5)));
+        imgefs.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_green5)));
+        iv_kqjh_fh.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.white)));
          initTimer();//定时设置
          initViews();//上拉列表
 
@@ -320,11 +329,13 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
             @Override
             public void onClick(View v) {
                 if (flag==0){
-                    imageViewkg.setImageResource(R.mipmap.kqjh_kgg);
-                    imgefs.setImageResource(R.mipmap.kqjh_fsg);
+                    imageViewkg.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_kqh)));
+                    imgefs.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_kqh)));
                     imgefs.clearAnimation();
                     imgefs.setClickable(false);
                     textViewkg.setText("关机状态");
+                    textViewkg.setTextColor(getResources().getColor(R.color.color_kqh));
+                    textViewfs.setTextColor(getResources().getColor(R.color.color_kqh));
                     image1.clearAnimation();
                     image6.clearAnimation();
                     image3.clearAnimation();
@@ -336,7 +347,6 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     imageairl.clearAnimation();
                     imageairm.clearAnimation();
                     imageairr.clearAnimation();
-
                     image8.clearAnimation();
                     image10.clearAnimation();
 
@@ -413,11 +423,13 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
 
                     flag=1;
                 }else {
-                    imageViewkg.setImageResource(R.mipmap.kqjh_kg);
-                    imgefs.setImageResource(R.mipmap.kqjh_fs);
+                    imageViewkg.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_green5)));
+                    imgefs.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_green5)));
                     imgefs.startAnimation(rotate);
                     imgefs.setClickable(true);
                     textViewkg.setText("开机状态");
+                    textViewkg.setTextColor(getResources().getColor(R.color.green5));
+                    textViewfs.setTextColor(getResources().getColor(R.color.green5));
                     image1.startAnimation(anim);
                     image6.startAnimation(anim);
                     image3.startAnimation(anim);
@@ -595,7 +607,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
 
             case R.id.iv_kqjh_sm://叫出风速页面
                if ("close".equals(imageViewsm.getTag())){
-                   imageViewsm.setImageResource(R.mipmap.kqjh_sm);
+                   imageViewsm.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_green5)));
                    anim.setDuration(2800);
                    anim1.setDuration(1900);
                    anim2.setDuration(1400);
@@ -701,7 +713,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                    imageViewsm.setTag("open");
                    textViewsm.setTextColor(getResources().getColor(R.color.color_green5));
                }else if ("open".equals(imageViewsm.getTag())){
-                   imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                   imageViewsm.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_kqh)));
                    imageViewsm.setTag("close");
                    textViewsm.setTextColor(getResources().getColor(R.color.color_gray2));
                }
@@ -884,7 +896,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     image27r.startAnimation(anim3r);
                     image28r.startAnimation(anim3r);
                     textViewfs.setText("风速1级");
-                    imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                    imageViewsm.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_kqh)));
                     imageViewsm.setTag("close");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }else if (position==1){
@@ -1000,7 +1012,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     rotate.setDuration(1000);//设置动画持续周期
                     rotate.setRepeatCount(-1);//设置重复次数
                     textViewfs.setText("风速2级");
-                    imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                    imageViewsm.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_kqh)));
                     imageViewsm.setTag("close");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                     }else{
@@ -1105,7 +1117,7 @@ public class AircleanerActivity extends AppCompatActivity implements View.OnClic
                     rotate.setDuration(500);//设置动画持续周期
                     rotate.setRepeatCount(-1);//设置重复次数
                     textViewfs.setText("风速3级");
-                    imageViewsm.setImageResource(R.mipmap.kqjh_smg);
+                    imageViewsm.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(mContext,R.color.color_kqh)));
                     imageViewsm.setTag("close");
                     bottomSheetBehavior.setState(BottomSheetBehavior.STATE_HIDDEN);
                 }

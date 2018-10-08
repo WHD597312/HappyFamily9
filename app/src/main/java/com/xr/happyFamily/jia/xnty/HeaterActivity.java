@@ -1,8 +1,10 @@
 package com.xr.happyFamily.jia.xnty;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -53,6 +55,8 @@ public class HeaterActivity extends AppCompatActivity implements View.OnClickLis
     ImageView imageView9;
     @BindView(R.id.iv_qnq_pb)
     ImageView imageViewpb;
+    @BindView(R.id.iv_qnq_fh)
+    ImageView iv_qnq_fh;
     @BindView(R.id.iv_qnq_gl)
     ImageView imageViewgl;
     @BindView(R.id.iv_qnq_js)
@@ -90,6 +94,8 @@ public class HeaterActivity extends AppCompatActivity implements View.OnClickLis
         mSeekBar1 = (MySeekBarwd) findViewById(R.id.beautySeekBar1);
         mSeekBar1.setOnSeekBarChangeListener(this);
         mSeekBar1.setProgressDrawable(getResources().getDrawable(R.drawable.bg_seekbar_progress_drawable1));
+        iv_qnq_fh .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_kqh)));
+
         initanim();
         timerun();
         initTimer();
@@ -113,7 +119,7 @@ public class HeaterActivity extends AppCompatActivity implements View.OnClickLis
             @Override
             public void onClick(View v) {
                 if (flag==0){
-                    imageViewkg.setImageResource(R.mipmap.qnq_kgg);
+                    imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_kqh)));
                     imageViewfs.clearAnimation();
                     imageView1.clearAnimation();
                     imageView2.clearAnimation();
@@ -125,7 +131,8 @@ public class HeaterActivity extends AppCompatActivity implements View.OnClickLis
                     handler.removeCallbacks(runnable);
                     flag=1;
                 }else {
-                    imageViewkg.setImageResource(R.mipmap.qnq_kgk);
+
+                    imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_qnq)));
                     imageView1.startAnimation(anim1);
                     imageView2.startAnimation(anim1);
                     imageView3.startAnimation(anim1);
@@ -223,19 +230,19 @@ public class HeaterActivity extends AppCompatActivity implements View.OnClickLis
                 break;
             case R.id.iv_qnq_gl :
                 if ("open".equals(imageViewgl.getTag())){
-                    imageViewgl.setImageResource(R.mipmap.qnq_gl);
+                    imageViewgl .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_kqh)));
                     imageViewgl.setTag("close");
                 }else if ("close".equals(imageViewpb.getTag())){
-                    imageViewgl.setImageResource(R.mipmap.qnq_glk);
+                    imageViewgl .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_qnq)));
                     imageViewgl.setTag("open");
                 }
                 break;
             case R.id.iv_qnq_js :
                 if ("open".equals(imageViewjs.getTag())){
-                    imageViewjs.setImageResource(R.mipmap.qnq_sd);
+                    imageViewjs .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_kqh)));
                     imageViewjs.setTag("close");
                 }else if ("close".equals(imageViewjs.getTag())){
-                    imageViewjs.setImageResource(R.mipmap.qnq_sdk);
+                    imageViewjs .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(HeaterActivity.this,R.color.color_qnq)));
                     imageViewjs.setTag("open");
                 }
                 break;

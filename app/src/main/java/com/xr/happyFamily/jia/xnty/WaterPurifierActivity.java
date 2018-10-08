@@ -1,9 +1,11 @@
 
 package com.xr.happyFamily.jia.xnty;
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.os.CountDownTimer;
 import android.os.Handler;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
 import android.view.animation.Animation;
@@ -51,6 +53,8 @@ public class WaterPurifierActivity extends AppCompatActivity{
     ImageView imager6;
     @BindView(R.id.iv_jsq_kg)
     ImageView imageViewkg;
+    @BindView(R.id.iv_jsq_fh)
+    ImageView iv_jsq_fh;
     @BindView(R.id.tv_jsq_ql)
     TextView textViewql;
     @BindView(R.id.rl_jsq_r1)
@@ -81,14 +85,13 @@ public class WaterPurifierActivity extends AppCompatActivity{
         anim = AnimationUtils.loadAnimation(this, R.anim.rotate_jsqqp1);
         anim2 = AnimationUtils.loadAnimation(this, R.anim.rotate_jsqqp2);
         anim3 = AnimationUtils.loadAnimation(this, R.anim.rotate_jsqsd);
+        iv_jsq_fh .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.white)));
+
         initanim();
         imageViewsd1.setTag("close");
         startTimer();
         timerunner();
         inswitch ();
-
-
-
 
 
 
@@ -147,10 +150,10 @@ public class WaterPurifierActivity extends AppCompatActivity{
         runnable=new Runnable(){
             public void run() {
                 relativeLayout.setBackgroundColor(getResources().getColor(R.color.color_light_blue1));
-                imageViewjsq.setImageResource(R.mipmap.jsq_jsq2);
+                imageViewjsq .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_light_blue1)));
                 textViewql.setText("水质良好");
-                imageViewsd.setImageResource(R.mipmap.jsq_sd2);
-                imageViewkg.setImageResource(R.mipmap.jsq_kgk2);
+                imageViewsd .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_light_blue1)));
+                imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_light_blue1)));
                 imageViewsd1.setImageResource(R.mipmap.shudi12);
                 change=1;
                 mDiffuseView.start();
@@ -182,7 +185,7 @@ public class WaterPurifierActivity extends AppCompatActivity{
             public void onClick(View v) {
                 if (change==0){
                     if (flag==0){
-                        imageViewkg.setImageResource(R.mipmap.jsq_kgg);
+                        imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_kqh)));
                         mDiffuseView.stop();// 停止扩散
                         image1.clearAnimation();
                         image6.clearAnimation();
@@ -202,7 +205,8 @@ public class WaterPurifierActivity extends AppCompatActivity{
                         flag=1;
 
                     }else {
-                        imageViewkg.setImageResource(R.mipmap.jsq_kgk1);
+                        imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_qnq)));
+
                         mDiffuseView.start();
                         image1.startAnimation(anim);
                         image6.startAnimation(anim);
@@ -224,7 +228,7 @@ public class WaterPurifierActivity extends AppCompatActivity{
                     }
                 }else if (change==1){
                     if (flag==0){
-                        imageViewkg.setImageResource(R.mipmap.jsq_kgg);
+                        imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_kqh)));
                         mDiffuseView.stop();// 停止扩散
                         image1.clearAnimation();
                         image6.clearAnimation();
@@ -242,7 +246,7 @@ public class WaterPurifierActivity extends AppCompatActivity{
                         handler.removeCallbacks(runnable);
                         flag=1;
                     }else {
-                        imageViewkg.setImageResource(R.mipmap.jsq_kgk2);
+                        imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(WaterPurifierActivity.this,R.color.color_light_blue1)));
                         mDiffuseView.start();
                         image1.startAnimation(anim);
                         image6.startAnimation(anim);

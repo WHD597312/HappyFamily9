@@ -33,11 +33,11 @@
                 <ImageView
                     android:id="@+id/iv_qnq_fh"
                     android:layout_width="0dp"
-                    android:layout_height="@dimen/dp_jy_25"
+                    android:layout_height="wrap_content"
                     android:layout_weight="1"
                     android:paddingRight="@dimen/dp_jy_70"
                     android:scaleType="fitCenter"
-                    android:src="@mipmap/fanhui" />
+                    android:src="@mipmap/fanhui_ty" />
 
                 <TextView
                     android:layout_width="0dp"

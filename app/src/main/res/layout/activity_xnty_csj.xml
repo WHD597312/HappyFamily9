@@ -37,7 +37,7 @@
         android:paddingRight="@dimen/dp_jy_29"
         android:layout_weight="1"
         android:layout_height="@dimen/dp_jy_30"
-        android:src="@mipmap/jsq_fh"
+        android:src="@mipmap/fanhui_ty"
         android:background="@null"
 
         />

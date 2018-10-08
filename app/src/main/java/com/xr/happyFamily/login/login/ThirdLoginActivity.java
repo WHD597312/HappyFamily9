@@ -11,6 +11,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.LinearInterpolator;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -64,7 +67,6 @@ public class ThirdLoginActivity extends AppCompatActivity {
     SharedPreferences preferences;
     @BindView(R.id.iv_third_tb)
     ImageView imageView6;
-    GifDrawable gifDrawable;
     Context mContext;
     int firstClick = 1;
     String ip = "http://47.98.131.11:8084";
@@ -72,6 +74,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
     private HourseDaoImpl hourseDao;
     private RoomDaoImpl roomDao;
     SharedPreferences mPositionPreferences;
+     Animation rotate;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -88,16 +91,12 @@ public class ThirdLoginActivity extends AppCompatActivity {
         deviceChildDao= new DeviceChildDaoImpl(getApplicationContext());
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
-        //图标动画
-        try {
-            gifDrawable=new GifDrawable(getResources(),R.mipmap.dtubiao);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        if (gifDrawable!=null){
-            gifDrawable.start();
-            imageView6.setImageDrawable(gifDrawable);
-        }
+        rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
+        /*imagefs.setAnimation(rotate);
+        imagefs.startAnimation(rotate);*/
+        LinearInterpolator lin = new LinearInterpolator();//设置动画匀速运动
+        rotate.setInterpolator(lin);
+        imageView6.startAnimation(rotate);
         Intent intent= getIntent();
          userId =  intent.getIntExtra("userId",0);
     }

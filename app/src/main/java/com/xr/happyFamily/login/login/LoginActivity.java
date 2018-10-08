@@ -414,7 +414,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                        if (progressDialog != null){
                            progressDialog.dismiss();
                        }
-                       Utils.showToast(LoginActivity.this, "网络崩溃啦，请重新登录");
+                       Utils.showToast(LoginActivity.this, "登录失败，请重新登录");
                        break;
             }
         }

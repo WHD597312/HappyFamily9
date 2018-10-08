@@ -28,7 +28,7 @@
                 android:layout_weight="1"
                 android:paddingRight="@dimen/dp_jy_20"
                 android:scaleType="centerInside"
-                android:src="@mipmap/jsq_fh" />
+                android:src="@mipmap/fanhui_ty" />
 
             <TextView
                 android:layout_width="wrap_content"

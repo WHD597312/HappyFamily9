@@ -14,7 +14,7 @@ public class MyAdapter extends BaseAdapter {
     private LayoutInflater mInflater;
     private Context mContext ;
     private List<String> mList;
-    private int [] img = new int[]{R.mipmap.zhinengzhongduan,R.mipmap.yidongkongtiao2,R.mipmap.zhinengchazuo2,R.mipmap.kongqijinghuaqi2,R.mipmap.chushiqi2,R.mipmap.qunuanqi2,R.mipmap.jingshuiqi2};
+    private int [] img = new int[]{R.mipmap.zhinengzhongduan2,R.mipmap.yidongkongtiao2,R.mipmap.zhinengchazuo2,R.mipmap.kongqijinghuaqi2,R.mipmap.chushiqi2,R.mipmap.qunuanqi2,R.mipmap.jingshuiqi2};
     public MyAdapter( Context mContext , List<String> mList){
        mInflater = LayoutInflater.from(mContext);
        this.mContext = mContext;

@@ -2,11 +2,14 @@ package com.xr.happyFamily.jia.xnty;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.res.ColorStateList;
 import android.content.res.TypedArray;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.Display;
@@ -219,6 +222,7 @@ public class AirConditionerActivity extends AppCompatActivity implements View.On
                         imageViewkg.setImageResource(R.mipmap.kt_kgl);
                     } else {
                         imageViewkg.setImageResource(R.mipmap.kt_kgn);
+//                        imageViewkg.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(AirConditionerActivity. this,R.color.color_yellown)));
                     }
                     imageViewct.startAnimation(anim3);
                     initview();

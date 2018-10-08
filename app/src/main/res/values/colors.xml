@@ -38,7 +38,6 @@
     <color name="black">#000000</color>
     <color name="top_title_background">#d9d9d9</color>
     <color name="Line">#BBBBBB</color>
-
     <color name="color_black3">#312728</color>
     <color name="custom_house_background">#33302B</color>
     <color name="customroom_clicked_background">#FF7640</color>
@@ -77,11 +76,14 @@
     <color name="shop_type">#99767676</color>
     <color name="shop_price">#EE7B2E</color>
     <color name="shop_tuikuan_context">#b4b4b4</color>
-
     <color name="happy_green">#65CB90</color>
     <color name="happy_gray">#d7d7d7</color>
     <color name="color_gray4">#7f7f7f</color>
-
     <color name="color_gray_clock">#e7e7e7</color>
     <color name="blue">#33b5e5</color>
+    <color name="color_yellown">#F38E34</color>
+    <color name="color_kqh">#CDCDCD</color>
+    <color name="color_csjg">#84E8AB</color>
+    <color name="color_qnq">#FC9226</color>
+
 </resources>

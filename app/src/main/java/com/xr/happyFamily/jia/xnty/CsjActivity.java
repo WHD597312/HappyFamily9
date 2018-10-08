@@ -2,14 +2,17 @@ package com.xr.happyFamily.jia.xnty;
 
 
 
+import android.content.res.ColorStateList;
 import android.os.Bundle;
 import android.support.design.widget.BottomSheetBehavior;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LinearInterpolator;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.SeekBar;
 import android.widget.TextView;
@@ -44,6 +47,8 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
     ImageView image2;
     @BindView(R.id.iv_b_3)
     ImageView image3;
+    @BindView(R.id.ib_csj_fh)
+    ImageButton ib_csj_fh;
     @BindView(R.id.tm_ks1)
     Timepicker timepicker1;
     @BindView(R.id.tm_ks2)
@@ -93,6 +98,7 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
         initViews();
         initListeners();
         initTimer();
+        ib_csj_fh .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(CsjActivity.this,R.color.white)));
         mSeekBar2 = (MySeekBarsd) findViewById(R.id.beautySeekBar2);
         mSeekBar2.setOnSeekBarChangeListener(this);
          rotate = AnimationUtils.loadAnimation(this, R.anim.rotate_anim);
@@ -106,16 +112,18 @@ public class CsjActivity extends AppCompatActivity implements View.OnClickListen
             @Override
             public void onClick(View v) {
                 if (flag==0){
-                    imageViewkg.setImageResource(R.mipmap.csj_kgk);
-                    imagefs.setImageResource(R.mipmap.csj_fs);
+
+
+                    imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(CsjActivity.this,R.color.color_csjg)));
+                    imagefs .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(CsjActivity.this,R.color.color_csjg)));
                     imagefs.clearAnimation();
                     imagefs.setClickable(false);
                     timer.cancel();
                     textViewkq.setText("关机状态");
                     flag=1;
                 }else {
-                    imageViewkg.setImageResource(R.mipmap.csj_kgg);
-                    imagefs.setImageResource(R.mipmap.csj_fsg);
+                    imageViewkg .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(CsjActivity.this,R.color.white)));
+                    imagefs .setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(CsjActivity.this,R.color.white)));
                     imagefs.startAnimation(rotate);
                     imagefs.setClickable(true);
                     initstar();

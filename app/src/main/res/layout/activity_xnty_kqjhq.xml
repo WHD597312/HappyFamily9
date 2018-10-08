@@ -578,7 +578,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginLeft="@dimen/dp_jy_15"
                 android:layout_marginTop="@dimen/dp_jy_15"
-                android:src="@mipmap/kqjih_fh" />
+                android:src="@mipmap/fanhui_ty" />
 
             <TextView
                 android:id="@+id/tv_kqjh_ty"
@@ -721,7 +721,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
-                android:src="@mipmap/kqjh_kg" />
+                android:src="@mipmap/kqjh_kgg" />
 
             <ImageView
                 android:id="@+id/iv_kqjh_fs"
@@ -730,7 +730,7 @@
                 android:layout_gravity="center"
                 android:layout_weight="1"
                 android:scaleType="centerInside"
-                android:src="@mipmap/kqjh_fs" />
+                android:src="@mipmap/kqjh_fsg" />
 
             <ImageView
                 android:id="@+id/iv_kqjh_sm"

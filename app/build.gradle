@@ -9,14 +9,14 @@ repositories {
 }
 
 greendao {
-    schemaVersion 33
+    schemaVersion 34
     daoPackage 'com.xr.database.dao'
     targetGenDir 'src/main/java'
 }
 android {
     signingConfigs {
         release {
-            storeFile file('D:/android/HappyFamily/p99.jks')
+            storeFile file('F:/android/p99.jks')
             storePassword '123456'
             keyAlias 'key0'
             keyPassword '123456'
@@ -33,8 +33,8 @@ android {
         applicationId "com.xr.happyFamily"
         minSdkVersion 21
         targetSdkVersion 25
-        versionCode 2
-        versionName "2.0"
+        versionCode 1
+        versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
         multiDexEnabled true
         renderscriptTargetApi 25    //添加

@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+
+    >
+
+    <TextView
+        android:layout_marginTop="@dimen/dp_jy_20"
+        android:id="@+id/tv_bz2"
+        android:layout_below="@+id/tv_bz1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="@dimen/sp_15"
+        android:textColor="#333333"
+        android:textStyle="bold"
+        android:text="1.家功能的介绍"
+        />
+    <TextView
+        android:id="@+id/tv_bz3"
+        android:layout_below="@+id/tv_bz2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:textSize="@dimen/sp_15"
+        android:text="可添加新家创建房间，WiFi连接设备即可手机APP远程控制设备"
+        android:textColor="#666666"
+        />
+    <TextView
+        android:id="@+id/tv_bz4"
+        android:layout_below="@+id/tv_bz3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#666666"
+        android:textSize="@dimen/sp_15"
+        android:text="虚拟体验，无需购买设备即可体验控制设备功能，更能快速体验理解"
+        />
+    <ImageView
+        android:id="@+id/iv_vers_pic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/vers_1"
+        android:layout_below="@id/tv_bz4"
+        android:layout_marginTop="@dimen/dp_jy_20"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="@dimen/dp_jy_10"
+        />
+</RelativeLayout>

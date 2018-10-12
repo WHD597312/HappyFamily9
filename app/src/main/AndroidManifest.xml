@@ -524,6 +524,9 @@
         <activity android:name=".le.FriendActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".zhen.VersionActivity"
+            android:screenOrientation="portrait"
+            />
 
     </application>
 

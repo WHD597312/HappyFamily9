@@ -53,6 +53,7 @@
         android:textSize="@dimen/sp_15" />
 
     <RelativeLayout
+        android:id="@+id/rl_about_mes"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_45"
         android:background="@color/white">
@@ -84,6 +85,7 @@
         android:layout_height="1dp" />
 
     <RelativeLayout
+        android:id="@+id/rl_about_pf"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_45"
         android:background="@color/white">

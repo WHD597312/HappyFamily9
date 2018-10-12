@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:id="@+id/li_ver_bt"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_50"
+        android:orientation="horizontal"
+        android:background="@color/white"
+        >
+        <ImageView
+            android:id="@+id/iv_vers_back"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerInside"
+            android:paddingRight="@dimen/dp_jy_60"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:src="@mipmap/fanhui_ty"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            android:textSize="@dimen/sp_20"
+            android:textStyle="bold"
+            android:text="版本说明"
+            android:textColor="#333333"
+            android:layout_gravity="center"
+            android:gravity="center"
+            />
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:layout_weight="1"
+            />
+
+    </LinearLayout>
+
+
+    <TextView
+        android:layout_below="@+id/li_ver_bt"
+        android:id="@+id/tv_bz1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="1.0版本介绍"
+        android:textSize="@dimen/sp_20"
+        android:textStyle="bold"
+        android:layout_marginTop="@dimen/dp_jy_15"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:textColor="#333333"
+
+        />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/rl_vers_1"
+            android:layout_below="@+id/tv_bz1"
+            android:layout_marginTop="@dimen/dp_jy_20"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:paddingBottom="@dimen/dp_jy_2"
+            android:overScrollMode="never"
+            >
+
+
+</android.support.v7.widget.RecyclerView>
+
+
+</RelativeLayout>

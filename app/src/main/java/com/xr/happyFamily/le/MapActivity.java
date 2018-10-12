@@ -275,8 +275,6 @@ public class MapActivity extends AppCompatActivity {
         mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
         mOption.setOpenGps(true);//可选，默认false，设置是否开启Gps定位
         mOption.setIsNeedAltitude(false);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
-
-
         client = new LocationClient(this);
         client.setLocOption(mOption);
         client.registerLocationListener(BDAblistener);
@@ -395,10 +393,7 @@ public class MapActivity extends AppCompatActivity {
          */
         Double x = (lng2 - lng1)*Math.PI*R*Math.cos(((lat1+lat2)/2)*Math.PI/180)/180;
         Double y = (lat2 - lat1)*Math.PI*R/180;
-
-
         Double distance = Math.hypot(x, y);   //得到两点之间的直线距离
-
         return   distance;
 
     }

@@ -15,21 +15,20 @@
         android:layout_height="wrap_content"
         android:background="@color/white"
         android:orientation="horizontal">
-        <LinearLayout
+        <RelativeLayout
             android:id="@+id/ll_msg"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_45"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_msg"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="系统提示"
-                android:gravity="center"
-                android:textColor="#3393ED"
+                android:layout_centerInParent="true"
+                android:textColor="@color/color_msg"
                 android:drawablePadding="@dimen/dp_jy_5"
                 android:drawableLeft="@mipmap/ic_clock_msg_clock1"
                 />
@@ -37,29 +36,65 @@
                 android:id="@+id/view_msg"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_jy_1"
-                android:background="#3393ED"/>
-        </LinearLayout>
+                android:background="@color/color_msg"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@id/tv_msg"
+                android:layout_alignRight="@id/tv_msg"/>
+        </RelativeLayout>
         <View
             android:layout_width="@dimen/dp_jy_1"
             android:layout_height="match_parent"
             android:layout_marginTop="@dimen/dp_jy_16"
             android:layout_marginBottom="@dimen/dp_jy_16"
             android:background="#bbbbbb"/>
-        <LinearLayout
+        <RelativeLayout
+            android:id="@+id/ll_bangding"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/dp_jy_45"
+            android:layout_weight="1"
+            android:orientation="vertical">
+            <TextView
+                android:id="@+id/tv_bangding"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="绑定"
+                android:textColor="#9e9e9e"
+                android:layout_centerInParent="true"
+                android:drawablePadding="@dimen/dp_jy_5"
+                android:drawableLeft="@mipmap/ic_clock_msg_bangding"
+                />
+            <View
+                android:visibility="gone"
+                android:id="@+id/view_bangding"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_1"
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@id/tv_bangding"
+                android:layout_alignRight="@id/tv_bangding"
+                android:background="@color/color_msg"/>
+        </RelativeLayout>
+
+        <View
+            android:layout_width="@dimen/dp_jy_1"
+            android:layout_height="match_parent"
+            android:layout_marginTop="@dimen/dp_jy_16"
+            android:layout_marginBottom="@dimen/dp_jy_16"
+            android:background="#bbbbbb"/>
+        <RelativeLayout
             android:id="@+id/ll_friend"
             android:layout_width="0dp"
             android:layout_height="@dimen/dp_jy_45"
             android:layout_weight="1"
-            android:gravity="center"
             android:orientation="vertical">
             <TextView
                 android:id="@+id/tv_friend"
                 android:layout_width="wrap_content"
-                android:layout_height="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="好友申请"
                 android:textColor="#9e9e9e"
-                android:gravity="center"
+                android:layout_centerInParent="true"
                 android:drawablePadding="@dimen/dp_jy_5"
                 android:drawableLeft="@mipmap/ic_clock_msg_friend"
                 />
@@ -68,8 +103,11 @@
                 android:id="@+id/view_friend"
                 android:layout_width="match_parent"
                 android:layout_height="@dimen/dp_jy_1"
-                android:background="#3393ED"/>
-        </LinearLayout>
+                android:layout_alignParentBottom="true"
+                android:layout_alignLeft="@id/tv_friend"
+                android:layout_alignRight="@id/tv_friend"
+                android:background="@color/color_msg"/>
+        </RelativeLayout>
     </LinearLayout>
 
     <RelativeLayout
@@ -83,6 +121,11 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:id="@+id/rv_friend"
+            android:visibility="gone"></android.support.v7.widget.RecyclerView>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/rv_bangding"
             android:visibility="gone"></android.support.v7.widget.RecyclerView>
     </RelativeLayout>
 

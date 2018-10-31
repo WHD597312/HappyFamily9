@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@drawable/bg_shape"
+    android:id="@+id/rl_homed_del"
+    >
+
+    <TextView
+        android:id="@+id/tv_pp_1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="你需要开启读取权限"
+        android:textSize="@dimen/sp_18"
+        android:textColor="#444444"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_jy_50"
+        />
+    <TextView
+        android:layout_below="@+id/tv_pp_1"
+        android:id="@+id/tv_pp_2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="请选择P99开启"
+        android:textColor="#9A9A9A"
+        android:textSize="15sp"
+        android:layout_centerHorizontal="true"
+      android:layout_marginTop="@dimen/dp_jy_15"
+        />
+
+
+
+
+        <Button
+            android:id="@+id/bt_yougui_ensure"
+            android:layout_width="@dimen/dp_jy_120"
+            android:layout_height="@dimen/dp_jy_35"
+            android:layout_marginTop="@dimen/dp_jy_36"
+            android:layout_below="@+id/tv_pp_2"
+            android:layout_centerHorizontal="true"
+            android:layout_marginBottom="@dimen/dp_jy_15"
+            android:background="@drawable/shape_detail_back"
+            android:textColor="@color/white"
+            android:text="去开启"
+            />
+
+
+</RelativeLayout>

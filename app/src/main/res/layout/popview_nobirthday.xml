@@ -5,6 +5,7 @@
     android:background="@drawable/bg_shape"
     android:id="@+id/rl_homed_del"
     >
+
     <TextView
         android:id="@+id/tv_pp_1"
         android:layout_width="wrap_content"

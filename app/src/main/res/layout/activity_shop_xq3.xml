@@ -238,19 +238,13 @@
                     android:layout_marginLeft="@dimen/dp_jy_12"
                     android:layout_toRightOf="@id/tv1"
                     android:drawableLeft="@mipmap/ic_shop_address_green"
+                    android:maxLines="1"
+                    android:ellipsize="end"
                     android:drawablePadding="@dimen/dp_jy_8"
                     android:text=""
                     android:textColor="@color/green3" />
 
-                <ImageView
-                    android:id="@+id/img_address"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:paddingBottom="@dimen/dp_jy_10"
-                    android:paddingLeft="@dimen/dp_jy_20"
-                    android:paddingTop="@dimen/dp_jy_10"
-                    android:src="@mipmap/gengduo2x" />
+
 
                 <TextView
                     android:id="@+id/tv2"

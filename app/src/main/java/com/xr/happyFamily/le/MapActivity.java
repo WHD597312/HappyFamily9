@@ -2,28 +2,24 @@ package com.xr.happyFamily.le;
 
 import android.annotation.SuppressLint;
 import android.app.usage.UsageStats;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
-import android.net.Uri;
-import android.os.Build;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
-import android.provider.Settings;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
-import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -32,27 +28,32 @@ import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.LocationClient;
 import com.baidu.location.LocationClientOption;
-import com.baidu.mapapi.SDKInitializer;
 import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
-import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
 import com.baidu.mapapi.map.Marker;
 import com.baidu.mapapi.map.MarkerOptions;
-import com.baidu.mapapi.map.MyLocationConfiguration;
 import com.baidu.mapapi.map.MyLocationData;
 import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
-import com.baidu.mapapi.model.CoordUtil;
 import com.baidu.mapapi.model.LatLng;
-import com.baidu.mapapi.model.inner.Point;
+import com.baidu.mapapi.utils.CoordinateConverter;
 import com.xr.happyFamily.R;
-import com.xr.happyFamily.le.adapter.AppListAdapter;
-import com.xr.happyFamily.main.MainActivity;
+import com.xr.happyFamily.le.Yougui.UsageContract;
+import com.xr.happyFamily.le.Yougui.UsageStatAdapter;
+import com.xr.happyFamily.le.Yougui.UsageStatsWrapper;
+
+import com.xr.happyFamily.le.pojo.AppUsing;
+import com.xr.happyFamily.le.pojo.MapAdress;
+import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
+
+import org.json.JSONArray;
+import org.json.JSONObject;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -67,7 +68,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import crossoverone.statuslib.StatusUtil;
 
-public class MapActivity extends AppCompatActivity {
+public class MapActivity extends AppCompatActivity  {
     private SensorManager mSensorManager;//方向传感器
     private LatLng mDestinationPoint;//目的地坐标点
     private LocationClient client;//定位监听
@@ -81,9 +82,6 @@ public class MapActivity extends AppCompatActivity {
     private LatLng mCenterPos;
     private BaiduMap mBaiduMap;
     private MapView mMapView;
-    private List<UsageStats> usageStats;
-    private List<UsageStats> usageStats1;
-    private List<UsageStats> usageStats2;
     @BindView(R.id.bt_map_add)
     Button bt_map_add;
     @BindView(R.id.rl_map_bd)
@@ -104,10 +102,22 @@ public class MapActivity extends AppCompatActivity {
     TextView tv_map_mes;
     @BindView(R.id.tv_mao_rj)
     TextView tv_mao_rj;
-    @BindView(R.id.lvAppTime)
-    ListView lvAppTime;
+    String ip = "http://47.98.131.11:8084";
+    /*  @BindView(R.id.lvAppTime)
+      ListView lvAppTime;*/
     double latt;
     double lngg;
+    UsageStatAdapter adapter;
+    //    UsagePresenter presenter;
+    RecyclerView recyclerView;
+    String derailId;
+    SharedPreferences preferences;
+    List<AppUsing> appUsings;
+    List<MapAdress> mapAdresses;
+    List<MapAdress> mStation;
+    List<LatLng> points;
+    List<OverlayOptions> options;
+    private MyDialog dialog;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -115,24 +125,21 @@ public class MapActivity extends AppCompatActivity {
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
-        if (UStats.getUsageStatsList(this).isEmpty()) {
-
-            Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
-            startActivity(intent);
-
-
-        }
-
         setContentView(R.layout.activity_le_map);
-        Intent intent = this.getIntent();
-        latt = intent.getDoubleExtra("mLatitude", 0);//纬度
-        lngg = intent.getDoubleExtra("mLongitude", 0);//经度
+        dialog = MyDialog.showDialog(this);
+        dialog.show();
+        preferences = getSharedPreferences("my", MODE_PRIVATE);
+        derailId = preferences.getString("derailId", "");
         ButterKnife.bind(this);//绑定framgent
         StatusUtil.setUseStatusBarColor(this, Color.TRANSPARENT, Color.parseColor("#33000000"));
         StatusUtil.setSystemStatus(this, false, true);
         initBaiduMap();
-        getLocationClientOption();//2、定位开启
-
+//        getLocationClientOption();//2、定位开启
+        appUsings = new ArrayList<>();
+        mapAdresses = new ArrayList<>();
+        mStation = new ArrayList<>();
+        points = new ArrayList<LatLng>();
+        options = new ArrayList<>();
         // 构建Marker图标
 
 
@@ -155,11 +162,10 @@ public class MapActivity extends AppCompatActivity {
                 tv_mao_rj.setTextColor(getResources().getColor(R.color.white));
                 rl_map_wz.setBackground(getResources().getDrawable(R.drawable.bg_shape3));
                 rl_map_rj.setBackground(getResources().getDrawable(R.drawable.bg_le_map));
-                usageStats = UStats.getUsageStatsList(MapActivity.this);
-                usageStats1 = new ArrayList<>();
-                usageStats2 = new ArrayList<>();
-                sortUsageStats();
+                recyclerView = (RecyclerView) findViewById(R.id.recyclerview);
                 showAppTimeList();
+
+
             }
         });
         rl_map_wz.setOnClickListener(new View.OnClickListener() {
@@ -177,7 +183,191 @@ public class MapActivity extends AppCompatActivity {
 
             }
         });
+        new getSiteData().execute();
+        new getAppAsyn().execute();
+
     }
+
+
+
+    /**
+     * 获取使用的app
+     */
+    class getAppAsyn extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0;
+            String url = ip + "/happy/derailed/getAppUsingList?derailId=" + derailId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.e("ressssssss", "doInBackground: -->"+result );
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    JSONArray jsonArray = jsonObject.getJSONArray("returnData");
+                    for (int i=0;i<jsonArray.length();i++){
+                        JSONObject jsonObject1 =jsonArray.getJSONObject(i);
+                        String appPicUrl = jsonObject1.getString("appPicUrl");
+                        String appName = jsonObject1.getString("appName");
+                        String appUseLastTime = jsonObject1.getString("appUseLastTime");
+                        String appUseTime = jsonObject1.getString("appUseTime");
+                        AppUsing appUsing = new AppUsing();
+                        appUsing.setAppName(appName);
+                        appUsing.setIconAdress(appPicUrl);
+                        appUsing.setAppUseLastTime(appUseLastTime);
+                        appUsing.setUseTime(appUseTime);
+                        appUsings.add(appUsing);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            switch (integer) {
+                case 100:
+
+                    break;
+                default:
+                    break;
+            }
+        }
+
+    }
+
+    /**
+     * 获取经纬度
+     */
+    class getSiteData extends AsyncTask<Void, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0;
+            String url = ip + "/happy/derailed/getSiteData?derailId=" + derailId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.e("ressssssss11", "doInBackground: -->"+result );
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    JSONArray jsonArray = jsonObject.getJSONArray("returnData");
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
+                        int dsId = jsonObject1.getInt("dsId");
+                        String dsLongitude = jsonObject1.getString("dsLongitude");
+                        String dsLatitude = jsonObject1.getString("dsLatitude");
+                        long dsTime = jsonObject1.getLong("dsTime");
+                        MapAdress mapAdress = new MapAdress();
+                        mapAdress.setDsId(dsId);
+                        mapAdress.setDsLatitude(dsLatitude);
+                        mapAdress.setDsLongitude(dsLongitude);
+                        mapAdress.setDsTime(dsTime);
+                        mapAdresses.add(mapAdress);
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            switch (integer) {
+                case 100:
+                    getStation();
+                    break;
+                default:
+                    break;
+            }
+        }
+    }
+
+    MapAdress mapAdress1, mapAdress2;
+
+    public void getStation() {
+        mStation.add(mapAdresses.get(0));
+        mapAdress1 = mapAdresses.get(0);
+        latt = Double.valueOf(mapAdress1.getDsLatitude());
+        lngg = Double.valueOf(mapAdress1.getDsLongitude());
+        for (int i = 1; i < mapAdresses.size(); i++) {
+            mapAdress2 = mapAdresses.get(i);
+            long lastTime = mapAdress2.getDsTime();
+            double dsLongitude1 = Double.valueOf(mapAdress1.getDsLongitude());
+            double dsLatitude1 = Double.valueOf(mapAdress1.getDsLatitude());
+            double dsLongitude2 = Double.valueOf(mapAdress2.getDsLongitude());
+            double dsLatitude2 = Double.valueOf(mapAdress2.getDsLatitude());
+            double distance = Distance(dsLatitude1, dsLongitude1, dsLatitude2, dsLongitude2);
+            if (distance > 50) {
+                mStation.add(mapAdresses.get(i));
+                mStation.get(mStation.size()-2).setLastTime(mStation.get(mStation.size()-1).getDsTime()+"");
+                mapAdress1 = mapAdresses.get(i);
+            }else {
+               mStation.get(mStation.size()-1).setLastTime(mapAdresses.get(i).getDsTime()+"");
+            }
+        }
+
+        if (mStation.size()>1){
+            mStation.get(mStation.size()-1).setLastTime(mStation.get(mStation.size()-1).getDsTime()+"");
+        }
+
+        Log.e("ddddddGGGGGG222", "getStation: -->" + mapAdresses.size());
+        Log.e("ddddddGGGGGG", "getStation: -->" + mStation.size());
+        for (int j = 0; j < mStation.size(); j++) {
+            MapAdress mapAdress3 = mStation.get(j);
+            Log.e("ddddddGGGGGG4444", "getStation: -->" + mStation.get(j).getLastTime() + "..." + mStation.get(j).getDsTime());
+            double lat = Double.valueOf(mapAdress3.getDsLatitude());
+            double lng = Double.valueOf(mapAdress3.getDsLongitude());
+            BDLocation bdLocation = new BDLocation();
+            bdLocation.setLongitude(lng);
+            bdLocation.setLatitude(lat);
+            Message message = new Message();
+            message.obj = bdLocation;
+            mHandler.sendMessage(message);
+        }
+    }
+
+
+    /*
+     * 显示经纬度的位置
+     * */
+    private void showMap(double latitude, double longtitude, String address) {
+        List<LatLng> points = new ArrayList<LatLng>();
+        List<Integer> colors = new ArrayList<>();
+//        if (points.isEmpty()){
+//            latitude0=latitude;
+//            longtitude0=longtitude;
+//        }else {
+//            latitude0=latitude0+0.001;
+//            longtitude0=longtitude0+0.001;
+//        }
+        points.add(new LatLng(latitude, longtitude));
+        colors.add(Integer.valueOf(Color.RED));
+
+        Log.i("points", "-->" + points.size());
+        if (points.size() >= 2) {
+            OverlayOptions ooPolyline = new PolylineOptions().width(10)
+                    .colorsValues(colors).points(points);
+            mBaiduMap.addOverlay(ooPolyline);
+        }
+        if (!points.isEmpty()) {
+            CoordinateConverter converter = new CoordinateConverter();
+            converter.coord(points.get(points.size() - 1));
+            converter.from(CoordinateConverter.CoordType.COMMON);
+            LatLng convertLatLng = converter.convert();
+
+            MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(convertLatLng, 16.0f);
+            mBaiduMap.animateMapStatus(u);
+            MyDialog.closeDialog(dialog);
+        }
+    }
+
 
     @Override
     protected void onStart() {
@@ -195,51 +385,16 @@ public class MapActivity extends AppCompatActivity {
     }
 
 
-    private void sortUsageStats() {
-        SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-        Calendar calendar = Calendar.getInstance();
-        Date date = new Date();
-        String nowday = sdf.format(date.getTime());
-        Log.e("now", "sortUsageStats: " + nowday);
-        Log.e("size", "sortUsageStats" + usageStats.size());
-        // 필요없는 데이타는 삭제.
-        for (int i = 0; i < usageStats.size(); i++) {
-
-            if (usageStats.get(i).getTotalTimeInForeground() > 1000) {
-//				usageStats.remove(i);
-                usageStats1.add(usageStats.get(i));
-
-            }
-
-        }
-        for (int i = 0; i < usageStats1.size(); i++) {
-
-            long mLastTime = usageStats1.get(i).getFirstTimeStamp();
-            Date timeInDate = new Date(mLastTime);
-            String lastTime = sdf.format(timeInDate);
-            Log.e("now", "sortUsageStats:-- ----" + lastTime);
-
-            if (nowday.equals(lastTime)) {
-                usageStats2.add(usageStats1.get(i));
-
-            }
-        }
-
-        // DESC 내림차순
-        Collections.sort(usageStats2, new Comparator<UsageStats>() {
-            public int compare(UsageStats obj1, UsageStats obj2) {
-                // TODO Auto-generated method stub
-                return (obj1.getLastTimeUsed() > obj2.getLastTimeUsed()) ? -1 : (obj1.getLastTimeUsed() < obj2.getLastTimeUsed()) ? 1 : 0;
-//				return (obj1.getTotalTimeInForeground() > obj2.getTotalTimeInForeground()) ? -1
-//						: (obj1.getTotalTimeInForeground() < obj2.getTotalTimeInForeground()) ? 1 : 0;
-            }
-        });
-    }
 
     private void showAppTimeList() {
-        AppListAdapter adapter = new AppListAdapter(this, R.layout.activity_map_item, usageStats2);
-        lvAppTime.setAdapter(adapter);
+//        AppListAdapter adapter = new AppListAdapter(this, R.layout.activity_map_item, usageStats2);
+//        lvAppTime.setAdapter(adapter);
+
+        recyclerView.setLayoutManager(new LinearLayoutManager(this));
+        adapter = new UsageStatAdapter(this,appUsings);
+        recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
+
     }
 
     /**
@@ -264,7 +419,7 @@ public class MapActivity extends AppCompatActivity {
         mOption = new LocationClientOption();
         mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
         mOption.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
-        mOption.setScanSpan(2000);//可选，默认0，即仅定位一次，设置发起连续定位请求的间隔需要大于等于1000ms才是有效的
+        mOption.setScanSpan(0);//可选，默认0，即仅定位一次，设置发起连续定位请求的间隔需要大于等于1000ms才是有效的
         mOption.setIsNeedLocationDescribe(true);//可选，设置是否需要地址描述
         mOption.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
         mOption.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
@@ -276,7 +431,6 @@ public class MapActivity extends AppCompatActivity {
         mOption.setOpenGps(true);//可选，默认false，设置是否开启Gps定位
         mOption.setIsNeedAltitude(false);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
         client = new LocationClient(this);
-        client.setLocOption(mOption);
         client.registerLocationListener(BDAblistener);
         client.start();
     }
@@ -287,18 +441,7 @@ public class MapActivity extends AppCompatActivity {
     private BDAbstractLocationListener BDAblistener = new BDAbstractLocationListener() {
         @Override
         public void onReceiveLocation(BDLocation location) {
-            //定位方向
-//            mCurrentLat = location.getLatitude();
-//            mCurrentLon = location.getLongitude();
-//            //骑手定位
-//            locData = new MyLocationData.Builder()
-//                    .direction(mCurrentDirection).latitude(location.getLatitude())
-//                    .longitude(location.getLongitude()).build();
-//
-//            mBaiduMap.setMyLocationData(locData);
-//            mBaiduMap.setMyLocationConfiguration(new MyLocationConfiguration(
-//                    MyLocationConfiguration.LocationMode.NORMAL, true, null));
-            //更改UI
+
             Message message = new Message();
             message.obj = location;
             mHandler.sendMessage(message);
@@ -306,45 +449,60 @@ public class MapActivity extends AppCompatActivity {
     };
 
     LatLng p2;
-    LatLng LocationPoint;
+    int Cs = 0;
     /**
      * 处理连续定位的地图UI变化
      */
     @SuppressLint("HandlerLeak")
-    private Handler mHandler = new Handler() {
+    private final Handler mHandler = new Handler() {
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
             BDLocation location = (BDLocation) msg.obj;
+            LatLng LocationPoint = new LatLng(location.getLatitude(), location.getLongitude());
+//            LatLng LocationPoint = pianyi(location.getLatitude(), location.getLongitude());
+            points.add(LocationPoint);
 
-             LocationPoint = new LatLng(latt, lngg);
-            double latline=latt+0.008263;
-            double lngline=lngg+0.009914;
-             p2 = new LatLng(latline, lngline);
-//            LatLng LocationPoint = new LatLng(location.getLatitude(), location.getLongitude());
-            Log.i("loc", "handleMessage:--> " + location.getLatitude());
-            Log.i("loc", "handleMessage:--> " + location.getLongitude());
-            Log.i("loc", "handleMessage:--> " + location.getAddrStr());
+            BitmapDescriptor bitmap;
+            if (Cs == mStation.size() - 1) {
+                Bundle mBundle = new Bundle();
+                mBundle.putInt("id", Cs);
+                bitmap = BitmapDescriptorFactory
+                        .fromResource(R.mipmap.map_last);
+                // 构建MarkerOption，用于在地图上添加Marker
+                OverlayOptions option = new MarkerOptions().position(LocationPoint)
+                        .icon(bitmap).zIndex(8).draggable(true).extraInfo(mBundle);
+                options.add(option);
 
-            BitmapDescriptor bitmap = BitmapDescriptorFactory
-                    .fromResource(R.mipmap.map_first);
-            // 构建MarkerOption，用于在地图上添加Marker
-            OverlayOptions option = new MarkerOptions().position(LocationPoint)
-                    .icon(bitmap).zIndex(8).draggable(true);
-            float f = mBaiduMap.getMaxZoomLevel();// 19.0 最小比例尺
+            } else {
+                Bundle mBundle = new Bundle();
+                mBundle.putInt("id", Cs);
+//                bitmap = BitmapDescriptorFactory
+//                        .fromResource(R.mipmap.map_first);
+                bitmap = getBitmapDescriptor();
+                // 构建MarkerOption，用于在地图上添加Marker
+                OverlayOptions option = new MarkerOptions().position(LocationPoint)
+                        .icon(bitmap).zIndex(8).draggable(true).extraInfo(mBundle);
+                options.add(option);
+            }
+
+            final float f = mBaiduMap.getMaxZoomLevel();// 19.0 最小比例尺
             // 设置当前位置显示在地图中心
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(LocationPoint, f - 5);// 设置缩放比例
             mBaiduMap.animateMapStatus(u);
             // 在地图上添加Marker，并显示
-            mBaiduMap.addOverlay(option);
+            mBaiduMap.addOverlays(options);
             //点击Marker弹出地址名称
             mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
 
                 @Override
                 public boolean onMarkerClick(Marker arg0) {
                     // TODO Auto-generated method stub
-                Toast.makeText(MapActivity.this, "07:00",
-                        Toast.LENGTH_SHORT).show();
+                    int id = arg0.getExtraInfo().getInt("id");
+                    String last = stampToDate(Long.valueOf(mStation.get(id).getLastTime()));
+                    String first = stampToDate(mStation.get(id).getDsTime());
+                    Toast.makeText(MapActivity.this, first + "--" + last, Toast.LENGTH_SHORT).show();
+                    Log.e("TTTTTTFFF", "onMarkerClick: -->" + mStation.get(id).getLastTime() + "..." + id);
                     return true;
                 }
             });
@@ -356,69 +514,103 @@ public class MapActivity extends AppCompatActivity {
             //缩放地图
             mBaiduMap.setMapStatus(MapStatusUpdateFactory.zoomTo(19.0f));
 //            setMapZoomScale(LocationPoint);
-            BitmapDescriptor bitmap1 = BitmapDescriptorFactory
-                    .fromResource(R.mipmap.map_last);
-            // 构建MarkerOption，用于在地图上添加Marker
-            OverlayOptions option1 = new MarkerOptions().position(p2)
-                    .icon(bitmap1).zIndex(8).draggable(true);
-            mBaiduMap.animateMapStatus(u);
-            // 在地图上添加Marker，并显示
-            mBaiduMap.addOverlay(option1);
-            //点击Marker弹出地址名称
-            mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
-
-                @Override
-                public boolean onMarkerClick(Marker arg0) {
-                    // TODO Auto-generated method stub
-                Toast.makeText(MapActivity.this, "10:00",
-                        Toast.LENGTH_SHORT).show();
-                    return true;
-                }
-            });
-            DrawLines();
+//            BitmapDescriptor bitmap1 = BitmapDescriptorFactory
+//                    .fromResource(R.mipmap.map_last);
+//            // 构建MarkerOption，用于在地图上添加Marker
+//            OverlayOptions option1 = new MarkerOptions().position(p2)
+//                    .icon(bitmap1).zIndex(8).draggable(true);
+//            mBaiduMap.animateMapStatus(u);
+//            // 在地图上添加Marker，并显示
+//            mBaiduMap.addOverlay(option1);
+//            //点击Marker弹出地址名称
+//            mBaiduMap.setOnMarkerClickListener(new BaiduMap.OnMarkerClickListener() {
+//
+//                @Override
+//                public boolean onMarkerClick(Marker arg0) {
+//                    // TODO Auto-generated method stub
+//                    Toast.makeText(MapActivity.this, "10:00",
+//                            Toast.LENGTH_SHORT).show();
+//                    return true;
+//                }
+//            });
+            Cs++;
+            if (Cs == mStation.size()) {//画线
+//                DrawLines();
+                MyDialog.closeDialog(dialog);
+            }
 
         }
     };
+    int i = 0;
+    public BitmapDescriptor getBitmapDescriptor() {
+
+        i++;
+        BitmapDescriptor bttmap = null;
+        View item_view = LayoutInflater.from(this).inflate(R.layout.activity_yougui_marker, null);
+        TextView tv_storeName = (TextView) item_view.findViewById(R.id.tv_yg_mark);
+        ImageView imageView = (ImageView) item_view.findViewById(R.id.iv_yg_mark);
+
+// 设置布局中文字
+        tv_storeName.setText(i+"");
+
+// 设置图标
+        imageView.setImageResource(R.mipmap.map_first);
+        bttmap = BitmapDescriptorFactory.fromView(item_view);
+        return bttmap;
+
+    }
+
+
+    /**
+     * 将时间戳转换为时间
+     */
+    public String stampToDate(long timeMillis) {
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("HH:mm");
+        Date date = new Date(timeMillis);
+        return simpleDateFormat.format(date);
+    }
+
 
     /**
      * 计算两点间的距离
-     * */
-    public Double Distance(double lat1, double lng1,double lat2, double lng2) {
+     */
+    public Double Distance(double lat1, double lng1, double lat2, double lng2) {
 
 
-        Double R=6370996.81;  //地球的半径
+        Double R = 6370996.81;  //地球的半径
 
         /*
          * 获取两点间x,y轴之间的距离
          */
-        Double x = (lng2 - lng1)*Math.PI*R*Math.cos(((lat1+lat2)/2)*Math.PI/180)/180;
-        Double y = (lat2 - lat1)*Math.PI*R/180;
+        Double x = (lng2 - lng1) * Math.PI * R * Math.cos(((lat1 + lat2) / 2) * Math.PI / 180) / 180;
+        Double y = (lat2 - lat1) * Math.PI * R / 180;
         Double distance = Math.hypot(x, y);   //得到两点之间的直线距离
-        return   distance;
+        return distance;
 
     }
 
-    public void  DrawLines(){
-
-
-        double latline=latt+0.008263;
-        double lngline=lngg+0.009914;
-
-
-        List<LatLng> points = new ArrayList<LatLng>();
-        points.add(LocationPoint);
-        points.add(p2);
-        OverlayOptions ooPolyline = new PolylineOptions().width(10).color(0xAAFF0000).points(points);
-        mBaiduMap.addOverlay(ooPolyline);
+    public void DrawLines() {
+        int size = points.size();
+        if (size > 1) {
+            for (int i = 1; i < size; i++) {
+                List<LatLng> point = new ArrayList<>();
+                LatLng p1 = points.get(i - 1);
+                LatLng p2 = points.get(i);
+                point.add(p1);
+                point.add(p2);
+                OverlayOptions ooPolyline = new PolylineOptions().width(10).color(0xAAFF0000).points(point);
+                mBaiduMap.addOverlay(ooPolyline);
+            }
+        }
+        MyDialog.closeDialog(dialog);
         /*
          * 调用Distance方法获取两点间x,y轴之间的距离
          */
-        double cc= Distance(latt,  lngg,latline,lngline);
-
-        int length=(int)cc;
-
-        Toast.makeText(this, "您与终端距离"+length+"米", Toast.LENGTH_SHORT).show();
-
+//        double cc = Distance(latt, lngg, latline, lngline);
+//
+//        int length = (int) cc;
+//
+//        Toast.makeText(this, "您与终端距离" + length + "米", Toast.LENGTH_SHORT).show();
 
     }
 
@@ -436,4 +628,8 @@ public class MapActivity extends AppCompatActivity {
         super.onDestroy();
         ButterKnife.bind(this).unbind();//解绑
     }
+
+
+
+
 }

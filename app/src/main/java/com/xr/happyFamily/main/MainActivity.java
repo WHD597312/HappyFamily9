@@ -40,8 +40,11 @@ import com.xr.database.dao.daoimpl.ClockDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
+import com.xr.database.dao.daoimpl.LeImageDaoImpl;
 import com.xr.database.dao.daoimpl.MsgDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
+import com.xr.database.dao.daoimpl.ShopBannerDaoImpl;
+import com.xr.database.dao.daoimpl.ShopListDaoImpl;
 import com.xr.database.dao.daoimpl.UserInfosDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
@@ -281,6 +284,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             clcokservice.acquireWakeLock(MainActivity.this);
             boundclock = true;
             clcokservice.startClock();
+            clcokservice.getDerail();
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -522,6 +526,9 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 exitTime = System.currentTimeMillis();
                 return false;
             } else {
+                new LeImageDaoImpl(MainActivity.this).deleteAll();
+                new ShopListDaoImpl(MainActivity.this).deleteAll();
+                new ShopBannerDaoImpl(MainActivity.this).deleteAll();
                 VibratorUtil.StopVibrate(MainActivity.this);
                 application.removeAllActivity();
                 family = "";

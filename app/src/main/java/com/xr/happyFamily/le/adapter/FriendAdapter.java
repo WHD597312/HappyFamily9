@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.Gravity;
@@ -19,17 +20,21 @@ import android.widget.TextView;
 import com.bumptech.glide.Glide;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.PingLunActivity;
+import com.xr.happyFamily.le.FriendActivity;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
 import com.xr.happyFamily.le.pojo.UserInfo;
+import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.Utils;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 //快递列表适配器
 
 public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHolder> implements View.OnClickListener {
-    private Context context;
+    private FriendActivity context;
     private List<ClickFriendBean> data;
     private ButtonInterface buttonInterface;
     private int selPosition = -1;
@@ -37,11 +42,13 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
     private OnItemListener onItemListener;
     private int type = 0;
     boolean isFirst = true;
+    private String userId;
 
-    public FriendAdapter(Context context, List<ClickFriendBean> list,int type) {
+    public FriendAdapter(FriendActivity context, List<ClickFriendBean> list,int type,String userId) {
         this.context = context;
         this.data = list;
         this.type=type;
+        this.userId=userId;
     }
 
     public void setOnItemListener(OnItemListener onItemListener) {
@@ -131,14 +138,17 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         holder.rl_item.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setSelection(position);
-                if (sign[0] == 1) {
-                    sign[0] = 0;
-                    holder.img_choose.setImageResource(R.mipmap.ic_friend_false);
-                } else {
-                    sign[0] = 1;
-                    holder.img_choose.setImageResource(R.mipmap.ic_friend_true);
+                if(type==1001) {
+                    setSelection(position);
+                    if (sign[0] == 1) {
+                        sign[0] = 0;
+                        holder.img_choose.setImageResource(R.mipmap.ic_friend_false);
+                    } else {
+                        sign[0] = 1;
+                        holder.img_choose.setImageResource(R.mipmap.ic_friend_true);
+                    }
                 }
+
             }
         });
 
@@ -276,5 +286,8 @@ public class FriendAdapter extends RecyclerView.Adapter<FriendAdapter.MyViewHold
         }
 
     }
+
+
+
 
 }

@@ -1,15 +1,18 @@
 package com.xr.happyFamily.main;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -19,27 +22,41 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.bumptech.glide.Glide;
 import com.google.gson.Gson;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.squareup.picasso.Picasso;
+import com.xr.database.dao.daoimpl.LeImageDaoImpl;
 import com.xr.database.dao.daoimpl.MsgDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.pojo.LeImage;
+import com.xr.happyFamily.le.BDmapActivity;
 import com.xr.happyFamily.le.ClockActivity;
 import com.xr.happyFamily.le.FriendActivity;
+import com.xr.happyFamily.le.MapActivity;
+import com.xr.happyFamily.le.UStats;
+import com.xr.happyFamily.le.YouGuiActivity;
 import com.xr.happyFamily.le.adapter.HappyFootAdapter;
 import com.xr.happyFamily.le.adapter.HappyViewPagerAdapter;
 import com.xr.happyFamily.le.bean.HappyBannerBean;
 import com.xr.happyFamily.le.clock.MsgActivity;
+import com.xr.happyFamily.le.view.YouguiDialog;
 import com.xr.happyFamily.le.view.noBirthdayDialog;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.zhen.PersonInfoActivity;
+import com.youth.banner.Banner;
+import com.youth.banner.BannerConfig;
+import com.youth.banner.Transformer;
+import com.youth.banner.listener.OnBannerListener;
+import com.youth.banner.loader.ImageLoader;
 
+import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -57,8 +74,7 @@ import static android.content.Context.MODE_PRIVATE;
 public class LeFragment extends Fragment {
 
     int lastBanner = 0;
-    @BindView(R.id.viewPager)
-    ViewPager viewPager;
+
     @BindView(R.id.img1)
     ImageView img1;
     @BindView(R.id.img2)
@@ -95,6 +111,8 @@ public class LeFragment extends Fragment {
     ImageView imgMsg;
     @BindView(R.id.tv_num)
     TextView tvNum;
+    @BindView(R.id.banner)
+    Banner banner;
     private List<ImageView> mImageList;//轮播的图片集合
     private boolean isStop = false;//线程是否停止
     private static int PAGER_TIOME = 2500;//间隔时间
@@ -103,13 +121,15 @@ public class LeFragment extends Fragment {
     private int[] imgae_dots = new int[]{R.id.img1, R.id.img2, R.id.img3, R.id.img4, R.id.img5, R.id.img6, R.id.img7, R.id.img8, R.id.img9, R.id.img10};
     View view;
     Unbinder unbinder;
-    private MyDialog dialog;
+    //    private MyDialog dialog;
     SharedPreferences preferences;
     String userId;
 
 
     int page = 1;
     HappyFootAdapter happyFootAdapter;
+    LeImageDaoImpl leImageDao;
+    int derailPo = -1;
 
     @Nullable
     @Override
@@ -121,8 +141,7 @@ public class LeFragment extends Fragment {
         happyBannerBeans = new ArrayList<>();
         footBean = new ArrayList<>();
         isStop = false;
-        dialog = MyDialog.showDialog(getActivity());
-        dialog.show();
+        running = true;
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getActivity());
         recyclerView.setLayoutManager(linearLayoutManager);
         happyFootAdapter = new HappyFootAdapter(getActivity(), footBean);
@@ -131,20 +150,66 @@ public class LeFragment extends Fragment {
         page = 1;
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         long msgTime = preferences.getLong("msgTime", 0);
-
-
-        getBanner("head", page);
-        getBanner("foot", 1);
-
-
+        derailPo = preferences.getInt("derailPo", -1);
+        Log.e("youguires111", "onViewClicked: -->" + derailPo);
+        banner.setBannerStyle(BannerConfig.NOT_INDICATOR);
+        getDataBase();
+        Log.e("qqqqqqIIIII2222", "??????");
         return view;
     }
 
     String birthday;
 
+    boolean running = false;
+
+    private void getDataBase() {
+
+        leImageDao = new LeImageDaoImpl(getActivity());
+        List<LeImage> leImageList = leImageDao.findAll();
+        if (leImageList.size() > 0) {
+            try {
+                for (int i = 0; i < leImageList.size(); i++) {
+                    Log.e("qqqqqqAAA111111", leImageList.get(i).getData());
+                    JSONObject jsonObject = new JSONObject(leImageList.get(i).getData());
+                    JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
+                    if (jsonObject.get("returnCode").toString() != "null") {
+                        JsonArray list = content.getAsJsonArray("returnData");
+                        Gson gson = new Gson();
+                        for (int j = 0; j < list.size(); j++) {
+////                        //通过反射 得到UserBean.class
+                            JsonElement user = list.get(j);
+                            HappyBannerBean userList = gson.fromJson(user, HappyBannerBean.class);
+                            if (userList.getSite().equals("head"))
+                                happyBannerBeans.add(userList);
+                            else
+                                footBean.add(userList);
+                        }
+                    }
+                }
+            } catch (JSONException e) {
+                e.printStackTrace();
+
+            }
+
+            happyFootAdapter.notifyDataSetChanged();
+            List<String> imgList = new ArrayList<>();
+            for (int i = 0; i < happyBannerBeans.size(); i++)
+                imgList.add(happyBannerBeans.get(i).getPicUrl());
+            setBanner(imgList);
+
+
+        } else {
+            resultList = new ArrayList<>();
+            getBanner("head", page);
+            getBanner("foot", 1);
+        }
+    }
+
     @Override
     public void onStart() {
         super.onStart();
+        running = true;
+        banner.startAutoPlay();
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         birthday = preferences.getString("birthday", "");
         userId = preferences.getString("userId", "");
@@ -158,92 +223,93 @@ public class LeFragment extends Fragment {
 //        new getClocksByUserId().execute();
     }
 
-    public void initData() {
-        //初始化和图片
-
-        //添加图片到图片列表里
-        mImageList = new ArrayList<>();
-        if (happyBannerBeans.size() == 1) {
-            isStop = true;
-        }
-        ImageView iv;
-        for (int i = 0; i < happyBannerBeans.size(); i++) {
-            iv = new ImageView(getActivity());
-//            iv.setBackgroundResource(imageRess[i]);//设置图片
-            Picasso.with(getActivity()).load(happyBannerBeans.get(i).getPicUrl()).into(iv);
-//            iv.setId(imgae_ids[i]);//顺便给图片设置id
-            mImageList.add(iv);
+    @Override
+    public void onPause() {
+        super.onPause();
+        running = false;
+        banner.stopAutoPlay();
+        if (getAdByPageAsync != null && !getAdByPageAsync.isCancelled() && getAdByPageAsync.getStatus() == AsyncTask.Status.RUNNING) {
+            getAdByPageAsync.cancel(true);
+            getAdByPageAsync = null;
         }
     }
 
-
-    /**
-     * 第三步、给PagerViw设置适配器，并实现自动轮播功能
-     */
-    public void initView() {
-        Log.e("qqqqqqqSSSS", happyBannerBeans.size() + "??");
-        for (int i = 0; i < happyBannerBeans.size(); i++) {
-            view.findViewById(imgae_dots[i]).setVisibility(View.VISIBLE);
-        }
-        HappyViewPagerAdapter viewPagerAdapter = new HappyViewPagerAdapter(getActivity(), mImageList, viewPager, happyBannerBeans);
-        viewPager.setAdapter(viewPagerAdapter);
-        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
-            @Override
-            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
-
+    private void setBanner(final List<String> imageList) {
+        if (banner != null) {
+            for (int i = 0; i < imageList.size(); i++) {
+                view.findViewById(imgae_dots[i]).setVisibility(View.VISIBLE);
             }
+            //设置图片加载器，图片加载器在下方
+            banner.setImageLoader(new MyLoader());
+            banner.setBannerAnimation(Transformer.Default);
+            banner.setDelayTime(2500);
+            //设置图片网址或地址的集合
+            banner.setImages(imageList);
+            banner.isAutoPlay(true);
+            //设置指示器的位置，小点点，左中右。
+            banner.setIndicatorGravity(BannerConfig.CENTER);
 
-            @Override
-            public void onPageSelected(int position) {
-//伪无限循环，滑到最后一张图片又从新进入第一张图片
-                int newPosition = position % mImageList.size();
-                ImageView img_new = (ImageView) view.findViewById(imgae_dots[newPosition]);
-                for (int i = 0; i < happyBannerBeans.size(); i++) {
-                    if (i == newPosition) {
-                        img_new.setImageResource(R.mipmap.ic_shop_banner);
-                    } else {
-                        ImageView img_old = (ImageView) view.findViewById(imgae_dots[i]);
-                        img_old.setImageResource(R.mipmap.ic_shop_banner_wei);
+            banner.setOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+                @Override
+                public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+                }
+
+                @Override
+                public void onPageSelected(int position) {
+                    for (int i = 0; i < imageList.size(); i++) {
+                        if (position == i + 1) {
+                            ((ImageView) view.findViewById(imgae_dots[i])).setImageResource(R.mipmap.ic_shop_banner);
+                        } else {
+                            ((ImageView) view.findViewById(imgae_dots[i])).setImageResource(R.mipmap.ic_shop_banner_wei);
+                        }
+                        if (position > imageList.size()) {
+                            ((ImageView) view.findViewById(imgae_dots[0])).setImageResource(R.mipmap.ic_shop_banner);
+                        }
+                        if (position == 0) {
+                            ((ImageView) view.findViewById(imgae_dots[imageList.size() - 1])).setImageResource(R.mipmap.ic_shop_banner);
+                        }
                     }
                 }
-                lastBanner = position % happyBannerBeans.size();
-            }
 
-            @Override
-            public void onPageScrollStateChanged(int state) {
-
-            }
-        });
-    }
-
-    Thread thread;
-
-
-    /**
-     * 第五步: 设置自动播放,每隔PAGER_TIOME秒换一张图片
-     */
-    private void autoPlayView() {
-        //自动播放图片
-        if (thread == null) {
-            thread = new Thread(new Runnable() {
                 @Override
-                public void run() {
-                    while (!isStop) {
-                        if (getActivity() != null) {
-                            getActivity().runOnUiThread(new Runnable() {
-                                @Override
-                                public void run() {
-                                    viewPager.setCurrentItem(viewPager.getCurrentItem() + 1);
-                                }
-                            });
-                            SystemClock.sleep(PAGER_TIOME);
-                        }
+                public void onPageScrollStateChanged(int state) {
 
-                    }
                 }
             });
-            thread.start();
+            banner.start();
         }
+    }
+
+    //自定义的图片加载器
+    private class MyLoader extends ImageLoader {
+        @Override
+        public void displayImage(Context context, Object path, ImageView imageView) {
+            if (running)
+                Glide.with(context).load((String) path).into(imageView);
+        }
+    }
+
+    YouguiDialog youguiDialog;
+
+    private void clolkDialog2() {
+        youguiDialog = new YouguiDialog(getActivity());
+
+
+        youguiDialog.setOnPositiveClickListener(new YouguiDialog.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
+
+                Intent intent = new Intent(Settings.ACTION_USAGE_ACCESS_SETTINGS);
+                startActivity(intent);
+
+                youguiDialog.dismiss();
+            }
+        });
+
+        youguiDialog.setCanceledOnTouchOutside(false);
+
+        youguiDialog.show();
+
     }
 
     noBirthdayDialog birthdaydialog;
@@ -273,7 +339,7 @@ public class LeFragment extends Fragment {
 
     }
 
-    @OnClick({R.id.ll_xuyuan, R.id.ll_clock,R.id.img_msg,R.id.img_friend})
+    @OnClick({R.id.ll_yougui, R.id.ll_clock, R.id.img_msg, R.id.img_friend})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.ll_clock:
@@ -288,12 +354,29 @@ public class LeFragment extends Fragment {
                     startActivity(intent);
                 }
                 break;
+            case R.id.ll_yougui:
+//                startActivity(new Intent(getActivity(), BDmapActivity.class));
+                Log.e("youguires", "onViewClicked: -->" + derailPo);
+                if (UStats.getUsageStatsList(getActivity()).isEmpty()) {
+                    clolkDialog2();
+
+                } else {
+
+                    if (derailPo == 0) {
+                        startActivity(new Intent(getActivity(), YouGuiActivity.class));
+                    } else if (derailPo == 1) {
+                        startActivity(new Intent(getActivity(), BDmapActivity.class));
+                    } else if (derailPo == 2) {
+                        startActivity(new Intent(getActivity(), MapActivity.class));
+                    }
+                }
+                break;
             case R.id.img_msg:
                 getActivity().startActivity(new Intent(getActivity(), MsgActivity.class));
                 break;
             case R.id.img_friend:
-                Intent intent=new Intent(getActivity(),FriendActivity.class);
-                intent.putExtra("type",1000);
+                Intent intent = new Intent(getActivity(), FriendActivity.class);
+                intent.putExtra("type", 1000);
                 getActivity().startActivity(intent);
                 break;
         }
@@ -306,14 +389,19 @@ public class LeFragment extends Fragment {
     @Override
     public void onDestroyView() {
         super.onDestroyView();
+
     }
 
     boolean isFinish = false;
+    boolean isFootFish = false;
+    List<String> resultList;
 
     class getAdByPageAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
         protected String doInBackground(Map<String, Object>... maps) {
-
+            if (isCancelled()) {
+                return null;
+            }
             Map<String, Object> params = maps[0];
             String url = "/happy/happy/getHappy";
             String site = params.get("site").toString();
@@ -322,30 +410,39 @@ public class LeFragment extends Fragment {
             String result = HttpUtils.doGet(getActivity(), url);
             String code = "";
             Log.e("qqqqqqqqMMM", url);
-
+            if (page.equals("1") && site.equals("head"))
+                happyBannerBeans.clear();
+            if (page.equals("1") && site.equals("foot")) {
+                footBean.clear();
+                isFootFish = true;
+            }
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
                         code = result;
-                    }
-                    Log.e("qqqqqqqqMMM22", result);
-                    JSONObject jsonObject = new JSONObject(result);
-                    code = jsonObject.getString("returnCode");
-                    JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
-                    if (jsonObject.get("returnCode").toString() != "null") {
-                        JsonArray list = content.getAsJsonArray("returnData");
-                        Gson gson = new Gson();
-                        if (list.size() == 0)
-                            isFinish = true;
-                        Log.e("qqqqqTTTT", list.size() + "?" + isFinish);
-                        for (int i = 0; i < list.size(); i++) {
+                    } else {
+                        LeImage leImage = new LeImage();
+                        leImage.setData(result);
+                        resultList.add(result);
+                        Log.e("qqqqqqqqMMM22", result);
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("returnCode");
+                        JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
+                        if (jsonObject.get("returnCode").toString() != "null") {
+                            JsonArray list = content.getAsJsonArray("returnData");
+                            Gson gson = new Gson();
+                            if (list.size() == 0)
+                                isFinish = true;
+                            Log.e("qqqqqTTTT", list.size() + "?" + isFinish);
+                            for (int i = 0; i < list.size(); i++) {
 ////                        //通过反射 得到UserBean.class
-                            JsonElement user = list.get(i);
-                            HappyBannerBean userList = gson.fromJson(user, HappyBannerBean.class);
-                            if (userList.getSite().equals("head"))
-                                happyBannerBeans.add(userList);
-                            else
-                                footBean.add(userList);
+                                JsonElement user = list.get(i);
+                                HappyBannerBean userList = gson.fromJson(user, HappyBannerBean.class);
+                                if (userList.getSite().equals("head"))
+                                    happyBannerBeans.add(userList);
+                                else
+                                    footBean.add(userList);
+                            }
                         }
                     }
                 }
@@ -359,19 +456,29 @@ public class LeFragment extends Fragment {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            if (isCancelled()) {
+                return;
+            }
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                if (isFinish) {
-                    MyDialog.closeDialog(dialog);
-                    happyFootAdapter.notifyDataSetChanged();
-                    if (happyBannerBeans.size() > 0) {
-                        try {
-                            initData();//初始化数据
-                            initView();//初始化View，设置适配器
-                            autoPlayView();//开启线程，自动播放
-                        } catch (Exception e) {
-                            e.printStackTrace();
+                if (isFinish && running) {
+//                    if (dialog.isShowing())
+//                    MyDialog.closeDialog(dialog);
+                    if (isFootFish) {
+                        leImageDao.deleteAll();
+                        for (int i = 0; i < resultList.size(); i++) {
+                            if (resultList.get(i).contains("picUrl")) {
+                                LeImage leImage = new LeImage();
+                                leImage.setData(resultList.get(i));
+                                leImageDao.insert(leImage);
+                            }
                         }
                     }
+                    happyFootAdapter.notifyDataSetChanged();
+                    List<String> imgList = new ArrayList<>();
+                    for (int i = 0; i < happyBannerBeans.size(); i++)
+                        imgList.add(happyBannerBeans.get(i).getPicUrl());
+                    setBanner(imgList);
+
                 } else {
                     page++;
                     getBanner("head", page);
@@ -437,11 +544,14 @@ public class LeFragment extends Fragment {
 //        }
 //    }
 
+    getAdByPageAsync getAdByPageAsync;
+
     public void getBanner(String site, int page) {
         Map<String, Object> params = new HashMap<>();
         params.put("site", site);
         params.put("page", page);
-        new getAdByPageAsync().execute(params);
+        getAdByPageAsync = new getAdByPageAsync();
+        getAdByPageAsync.execute(params);
     }
 
 

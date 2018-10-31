@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:layerType="software"
+
     >
 
     <RelativeLayout
@@ -51,7 +51,8 @@
 
     <com.xr.happyFamily.bao.view.MyScrollview
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:overScrollMode="never">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,7 +60,94 @@
             android:orientation="vertical">
 
 
-            <include layout="@layout/happy_banner" />
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_170"></com.youth.banner.Banner>
+
+            <LinearLayout
+                android:id="@+id/lineLayout_dot"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_jy_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/img1"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"/>
+
+                <ImageView
+                    android:id="@+id/img2"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+                <ImageView
+                    android:id="@+id/img3"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+
+                <ImageView
+                    android:id="@+id/img4"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+                <ImageView
+                    android:id="@+id/img5"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img6"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+
+                    android:id="@+id/img7"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img8"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img9"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img10"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+            </LinearLayout>
 
             <ImageView
                 android:layout_width="wrap_content"
@@ -124,7 +212,7 @@
                     android:id="@+id/ll_clock"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/dp_jy_8"
+                    android:layout_marginLeft="@dimen/dp_jy_5"
                     android:layout_weight="1"
                     android:background="@mipmap/bg_xuyuanxq"
                     android:orientation="horizontal"
@@ -133,8 +221,8 @@
                     android:paddingTop="@dimen/dp_jy_12">
 
                     <ImageView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
+                        android:layout_width="@dimen/dp_jy_60"
+                        android:layout_height="@dimen/dp_jy_60"
                         android:src="@mipmap/ic_le_clock" />
 
                     <LinearLayout
@@ -162,10 +250,11 @@
                 </LinearLayout>
 
                 <LinearLayout
+                    android:id="@+id/ll_yougui"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-
+                    android:background="@mipmap/bg_xuyuanxq"
                     android:orientation="horizontal"
                     android:paddingBottom="@dimen/dp_jy_18"
                     android:paddingLeft="@dimen/dp_jy_14"
@@ -174,6 +263,7 @@
                     <ImageView
                         android:layout_width="@dimen/dp_jy_60"
                         android:layout_height="@dimen/dp_jy_60"
+                        android:src="@mipmap/yougui"
                         />
 
                     <LinearLayout
@@ -186,7 +276,7 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-
+                            android:text="有轨"
                             android:textColor="@color/happy_green"
                             android:textSize="@dimen/sp_14" />
 
@@ -194,7 +284,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginTop="@dimen/dp_jy_5"
-
+                            android:text="1.2万人在玩"
                             android:textColor="@color/happy_gray"
                             android:textSize="@dimen/sp_12" />
                     </LinearLayout>

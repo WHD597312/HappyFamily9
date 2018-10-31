@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+    <RelativeLayout
+        android:id="@+id/rl_yougui_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_50"
+        android:background="@color/color_white"
+        >
+        <ImageView
+            android:id="@+id/iv_yougui_back"
+            android:layout_width="@dimen/dp_jy_15"
+            android:layout_height="@dimen/dp_jy_23"
+            android:src="@mipmap/map_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有“轨”"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/sp_19"
+            android:textColor="@color/black"
+            />
+        <ImageView
+            android:id="@+id/iv_yougui_photo"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_marginRight="@dimen/dp_jy_12"
+            />
+    </RelativeLayout>
+    <RelativeLayout
+        android:id="@+id/rl_yougui_mes"
+        android:layout_below="@+id/rl_yougui_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_47"
+        android:background="@color/color_white"
+        >
+        <RelativeLayout
+            android:id="@+id/rl_yougui_wz"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_jy_33"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_20"
+            android:background="@drawable/bg_le_map"
+            >
+            <ImageView
+                android:id="@+id/iv_yougui_rj1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/map_wz"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_jy_12"
+                />
+            <TextView
+                android:id="@+id/tv_yougui_mes"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_toRightOf="@+id/iv_yougui_rj1"
+                android:layout_marginRight="@dimen/dp_jy_13"
+                android:layout_marginLeft="@dimen/dp_jy_5"
+                android:text="位置信息"
+                android:textSize="@dimen/sp_15"
+                android:textColor="@color/white"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/rl_yougui_rj"
+            android:layout_width="@dimen/dp_jy_105"
+            android:layout_height="@dimen/dp_jy_33"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/rl_yougui_wz"
+            android:layout_marginLeft="@dimen/dp_jy_18"
+
+            >
+            <ImageView
+                android:id="@+id/iv_bdmap_rj"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/map_rj"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_jy_12"
+                android:visibility="gone"
+                />
+            <TextView
+                android:id="@+id/tv_bdmao_rj"
+                android:layout_toRightOf="@+id/iv_bdmap_rj"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="@dimen/dp_jy_3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="软件记录"
+                android:textSize="@dimen/sp_15"
+                android:textColor="@color/color_black3"
+                />
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:id="@+id/rl_bdmap_map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentTop="true">
+
+        <RelativeLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true">
+
+
+            <TextView
+                android:id="@+id/tv_map_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerHorizontal="true"
+                android:text="绑定成功后"
+                android:textColor="#999999"
+                android:textSize="@dimen/sp_18" />
+
+            <TextView
+                android:id="@+id/tv_map_1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_map_name"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"
+                android:text="可查看好友位置信息"
+                android:textColor="#999999"
+                android:textSize="@dimen/sp_18" />
+
+            <TextView
+                android:id="@+id/tv_map_2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_map_1"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_jy_8"
+                android:text="使用软甲记录"
+                android:textColor="#999999"
+                android:textSize="@dimen/sp_18" />
+
+            <Button
+                android:id="@+id/bt_bdfriend"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/tv_map_2"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="@dimen/dp_jy_30"
+                android:background="@mipmap/yougui_friend"
+                android:paddingBottom="@dimen/dp_jy_7"
+                android:text="绑定好友"
+                android:textColor="@color/white" />
+
+        </RelativeLayout>
+
+    </RelativeLayout>
+
+
+
+</RelativeLayout>

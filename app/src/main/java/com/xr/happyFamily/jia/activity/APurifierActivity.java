@@ -44,6 +44,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.Calendar;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -145,7 +146,7 @@ public class APurifierActivity extends AppCompatActivity {
         houseId = intent.getLongExtra("houseId", 0);
         Intent service = new Intent(this, MQService.class);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-        IntentFilter intentFilter = new IntentFilter("DehumidifierActivity");
+        IntentFilter intentFilter = new IntentFilter("APurifierActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
         Animation circle_anim = AnimationUtils.loadAnimation(this, R.anim.anim_atm);
@@ -207,8 +208,12 @@ public class APurifierActivity extends AppCompatActivity {
             case R.id.ll_time:
                 int state;
                 Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
-                if (timerSwitch == 0)
-                    state = 2;
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else
+                        state = 3;
+                }
                 else {
                     if (timerMoudle == 1)
                         state = 0;
@@ -230,6 +235,10 @@ public class APurifierActivity extends AppCompatActivity {
                     public void onClick(View v) {
                         timeData = customViewPopipup.getData();
                         customViewPopipup.dismiss();
+                        int hour = timeData[1];
+                        int minuter = timeData[2];
+
+
                         if (timeData[0] == 0) {
                             deviceChild.setTimerSwitch(1);
                             deviceChild.setTimerMoudle(1);
@@ -239,43 +248,47 @@ public class APurifierActivity extends AppCompatActivity {
                         } else if (timeData[0] == 2) {
                             deviceChild.setTimerSwitch(0);
                         }
-                        deviceChild.setTimerHour(timeData[1]);
-                        deviceChild.setTimerMin(timeData[2]);
+
+                        Log.e("qqqqqTime2222", hour + "," + minuter);
+                        deviceChild.setTimerHour(hour);
+                        deviceChild.setTimerMin(minuter);
                         send(deviceChild);
                         setMode(deviceChild);
                     }
                 });
                 break;
             case R.id.ll_feng:
-                if (deviceChild.getDeviceState() == 1) {
-                    Log.e("qqqqqFFFF", rateState);
-                    fengSuViewPopup = new FengSuViewPopup(this, rateState);
-                    if (fengSuViewPopup.isShowing()) {
-                        fengSuViewPopup.dismiss();
-                    } else {
-                        backgroundAlpha(0.5f);
-                        //添加pop窗口关闭事件
-                        fengSuViewPopup.setOnDismissListener(new poponDismissListener());
-                        //设置我们弹出的PopupWindow的位置，基于某个视图之下
-                        fengSuViewPopup.showAtLocation(this.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
-                    }
-                    fengSuViewPopup.setOnPublishListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            deviceChild.setRateState(fengSuViewPopup.getData());
-                            fengSuViewPopup.dismiss();
-                            send(deviceChild);
-                            setMode(deviceChild);
-                        }
-                    });
-                }
+                setWindPop();
                 break;
 
         }
     }
 
 
-
+    public void setWindPop() {
+        if (deviceChild.getDeviceState() == 1) {
+            Log.e("qqqqqFFFF", rateState);
+            fengSuViewPopup = new FengSuViewPopup(this, rateState);
+            if (fengSuViewPopup.isShowing()) {
+                fengSuViewPopup.dismiss();
+            } else {
+                backgroundAlpha(0.5f);
+                //添加pop窗口关闭事件
+                fengSuViewPopup.setOnDismissListener(new poponDismissListener());
+                //设置我们弹出的PopupWindow的位置，基于某个视图之下
+                fengSuViewPopup.showAtLocation(this.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
+            }
+            fengSuViewPopup.setOnPublishListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    deviceChild.setRateState(fengSuViewPopup.getData());
+                    fengSuViewPopup.dismiss();
+                    send(deviceChild);
+                    setMode(deviceChild);
+                }
+            });
+        }
+    }
 
 
     public void backgroundAlpha(float bgAlpha) {
@@ -306,7 +319,7 @@ public class APurifierActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tvOffline.setVisibility(View.VISIBLE);
             } else {
-                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild != null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
                         Toast.makeText(APurifierActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();
@@ -363,6 +376,8 @@ public class APurifierActivity extends AppCompatActivity {
         int sensorSimpleTemp = deviceChild.getSensorSimpleTemp();
         int sensorSimpleHum = deviceChild.getSensorSimpleHum();
         int sensorHcho = deviceChild.getSensorHcho();
+
+        Log.e("qqqqqMsg33333", sensorSimpleTemp + ",,,," + sensorSimpleHum);
         if (socketState == 1) {/**当前状态开*/
             isOpen = true;
             imgKai.setImageResource(R.mipmap.ic_atm_kai1);
@@ -389,25 +404,48 @@ public class APurifierActivity extends AppCompatActivity {
         if (sorsorPm > 99)
             tvPm1.setText(sorsorPm / 100 + "");
         else
-            tvPm1.setText("--");
+            tvPm1.setVisibility(View.GONE);
         int pm2 = sorsorPm % 100;
         if (pm2 > 10)
             tvPm2.setText(pm2 + "");
         else
             tvPm2.setText("0" + pm2);
-        if (sensorSimpleHum>0)
-        tvShidu.setText(sensorSimpleHum + "");
+        if (sensorSimpleHum > 0)
+            tvShidu.setText(sensorSimpleHum + "");
         else
-        tvShidu.setText( "--");
-        if (sensorSimpleTemp>0)
-        tvWendu.setText(sensorSimpleTemp + "");
+            tvShidu.setText("--");
+        if (sensorSimpleTemp > 0)
+            tvWendu.setText(sensorSimpleTemp + "");
         else
-        tvWendu.setText( "--");
-        if(sensorHcho>0)
-        tvJiaquan.setText(sensorHcho + "");
+            tvWendu.setText("--");
+        if (!(sensorHcho < 0))
+            tvJiaquan.setText(sensorHcho + "");
         else
-        tvJiaquan.setText("--");
+            tvJiaquan.setText("--");
 
+        if (fengSuViewPopup != null) {
+            if (fengSuViewPopup.isShowing()) {
+                fengSuViewPopup.setWind(rateState);
+            }
+        }
+        if (customViewPopipup != null) {
+            if (customViewPopipup.isShowing()) {
+                int state;
+                Log.e("qqqqqMTimeNNNN", timerSwitch + "," + timerMoudle+","+timerHour+","+timerMin);
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else
+                        state = 3;
+                } else {
+                    if (timerMoudle == 1)
+                        state = 0;
+                    else
+                        state = 1;
+                }
+                customViewPopipup.setData(state, timerHour, timerMin);
+            }
+        }
     }
 
     private void send(DeviceChild deviceChild) {
@@ -478,6 +516,8 @@ public class APurifierActivity extends AppCompatActivity {
                 }
                 Log.e("qqqqqSSS", success + "," + topicName);
             }
+
+
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -506,7 +546,7 @@ public class APurifierActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         running = true;
-        deviceChild=deviceChildDao.findById(deviceId);
+        deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild != null) {
             boolean online = deviceChild.getOnline();
             if (online) {
@@ -517,8 +557,8 @@ public class APurifierActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tvOffline.setVisibility(View.VISIBLE);
             }
-        }else {
-            Utils.showToast(this,"该设备已重置");
+        } else {
+            Utils.showToast(this, "该设备已重置");
             Intent intent2 = new Intent();
             intent2.putExtra("houseId", houseId);
             setResult(6000, intent2);
@@ -527,6 +567,7 @@ public class APurifierActivity extends AppCompatActivity {
     }
 
     private PopupWindow popupWindow1;
+
     public void popupmenuWindow() {
         if (popupWindow1 != null && popupWindow1.isShowing()) {
             return;
@@ -543,7 +584,7 @@ public class APurifierActivity extends AppCompatActivity {
         tv_rname_r1.setText("修改名称");
         tv_del_r1.setText("分享设备");
         iv_del_r1.setImageResource(R.mipmap.pop_share);
-        if (popupWindow1==null)
+        if (popupWindow1 == null)
             popupWindow1 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
         popupWindow1.setFocusable(true);
@@ -566,10 +607,10 @@ public class APurifierActivity extends AppCompatActivity {
                         break;
                     case R.id.rl_room_del:
                         popupWindow1.dismiss();
-                        Intent intent=new Intent(APurifierActivity.this,ShareDeviceActivity.class);
-                        long id=deviceChild.getId();
-                        intent.putExtra("deviceId",id);
-                        startActivityForResult(intent,8000);
+                        Intent intent = new Intent(APurifierActivity.this, ShareDeviceActivity.class);
+                        long id = deviceChild.getId();
+                        intent.putExtra("deviceId", id);
+                        startActivityForResult(intent, 8000);
                         break;
                 }
             }
@@ -580,6 +621,7 @@ public class APurifierActivity extends AppCompatActivity {
     }
 
     String deviceName;
+
     private void buildUpdateDeviceDialog() {
         final HomeDialog dialog = new HomeDialog(this);
         dialog.setOnNegativeClickListener(new HomeDialog.OnNegativeClickListener() {
@@ -602,25 +644,27 @@ public class APurifierActivity extends AppCompatActivity {
         });
         dialog.show();
     }
-    private String updateDeviceNameUrl= HttpUtils.ipAddress+"/family/device/changeDeviceName";
-    class UpdateDeviceAsync extends AsyncTask<Void,Void,Integer> {
+
+    private String updateDeviceNameUrl = HttpUtils.ipAddress + "/family/device/changeDeviceName";
+
+    class UpdateDeviceAsync extends AsyncTask<Void, Void, Integer> {
 
         @Override
         protected Integer doInBackground(Void... voids) {
-            int code=0;
+            int code = 0;
             try {
-                int deviceId=deviceChild.getDeviceId();
-                String url=updateDeviceNameUrl+"?deviceName="+ URLEncoder.encode(deviceName,"utf-8")+"&deviceId="+deviceId;
-                String result= HttpUtils.getOkHpptRequest(url);
-                JSONObject jsonObject=new JSONObject(result);
-                String returnCode=jsonObject.getString("returnCode");
-                if ("100".equals(returnCode)){
-                    code=100;
+                int deviceId = deviceChild.getDeviceId();
+                String url = updateDeviceNameUrl + "?deviceName=" + URLEncoder.encode(deviceName, "utf-8") + "&deviceId=" + deviceId;
+                String result = HttpUtils.getOkHpptRequest(url);
+                JSONObject jsonObject = new JSONObject(result);
+                String returnCode = jsonObject.getString("returnCode");
+                if ("100".equals(returnCode)) {
+                    code = 100;
                     deviceChild.setName(deviceName);
                     deviceChildDao.update(deviceChild);
                 }
-                Log.i("result","-->"+result);
-            }catch (Exception e){
+                Log.i("result", "-->" + result);
+            } catch (Exception e) {
                 e.printStackTrace();
             }
             return code;
@@ -630,7 +674,7 @@ public class APurifierActivity extends AppCompatActivity {
         protected void onPostExecute(Integer code) {
             super.onPostExecute(code);
             try {
-                switch (code){
+                switch (code) {
                     case 100:
                         Utils.showToast(APurifierActivity.this, "修改成功");
                         tvTitle.setText(deviceName);
@@ -639,7 +683,7 @@ public class APurifierActivity extends AppCompatActivity {
                         Utils.showToast(APurifierActivity.this, "修改失败");
                         break;
                 }
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
 

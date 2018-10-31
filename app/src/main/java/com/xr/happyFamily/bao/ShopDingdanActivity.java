@@ -141,6 +141,7 @@ public class ShopDingdanActivity extends AppCompatActivity {
             @Override
             public void loadMore() {
 
+                page++;
                 isLoading = true;
                 countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
@@ -223,7 +224,6 @@ public class ShopDingdanActivity extends AppCompatActivity {
     public void getDingDan(int state, int page) {
         if (!isRefresh && !isLoading) {
             dialog = MyDialog.showDialog(mContext);
-
             dialog.show();
         }
         Map<String, Object> params = new HashMap<>();

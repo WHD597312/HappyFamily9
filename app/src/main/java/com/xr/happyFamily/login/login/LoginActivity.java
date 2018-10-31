@@ -1,5 +1,6 @@
 package com.xr.happyFamily.login.login;
 
+import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
 import android.content.ComponentName;
 import android.content.Context;
@@ -366,6 +367,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         return false;
     }
 
+    /***
+     * 微信登录
+     * ***/
 
     int isFirst=-1;
     int ThirduserId;
@@ -407,7 +411,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                        startActivity(intent);
                    }else {
                        userId= String.valueOf(ThirduserId);
+                       new YouguiAsync().execute();
                        new hourseAsyncTask().execute();
+
                    }
                     break;
                    default:
@@ -489,6 +495,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         boolean success=editor.commit();
                         if (success){
                             new hourseAsyncTask().execute();
+                            new YouguiAsync().execute();
                         }
                     }
                 }
@@ -524,10 +531,10 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     long Id = -1;
     int img[] = {R.mipmap.t};
     hourseAsyncTask hourseAsyncTask;
-    class hourseAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
+    class hourseAsyncTask extends AsyncTask<Void, Void, Integer> {
 
         @Override
-        protected Integer doInBackground(Map<String, Object>... maps) {
+        protected Integer doInBackground(Void ...voids) {
             int code = 0;
 //            Map<String, Object> params = maps[0];
             String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
@@ -744,6 +751,77 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         break;
             }
         }
+    }
+
+    /*****
+     *  有轨 查询用户身份
+     * ****/
+
+
+   class YouguiAsync extends AsyncTask<Void,Void,Integer>{
+
+        @Override
+        protected Integer doInBackground(Void... voids) {
+            int code = 0 ;
+            String url = ip+"/happy/derailed/getDerailStatus?adminId="+userId;
+            String result = HttpUtils.getOkHpptRequest(url);
+            Log.e("yougui", "doInBackground: -->"+result );
+            try {
+                if (!TextUtils.isEmpty(result)){
+                    JSONObject jsonObject = new JSONObject(result);
+                    code = jsonObject.getInt("returnCode");
+                    String derailPos = jsonObject.getString("returnData");
+                    int derailPo = Integer.valueOf(derailPos.substring(0,1));
+                    SimpleDateFormat formatter = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+                    Date curDate = new Date(System.currentTimeMillis());//获取当前时间
+                    String str = formatter.format(curDate);
+                    String timee = getTime(str);
+                    SharedPreferences.Editor editor = preferences.edit();
+                    if (derailPo!=0) {
+                        String derailId = derailPos.substring(derailPos.indexOf("_") + 1);
+                        editor.putInt("derailPo", derailPo);
+                        editor.putString("timee", timee);
+                        editor.putString("derailId", derailId);
+                        editor.commit();
+
+                    }else {
+                        editor.putInt("derailPo", derailPo);
+                        editor.putString("timee", timee);
+                        editor.commit();
+                    }
+                    Log.e("youguires122", "onViewClicked: -->" + derailPo + ".." + timee);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer integer) {
+            super.onPostExecute(integer);
+            switch (integer){
+                case 100:
+
+                    break;
+            }
+        }
+    }
+
+
+    //字符串转时间戳
+    public  String getTime(String timeString){
+        String timeStamp = null;
+        SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月dd日 HH:mm:ss");
+        Date d;
+        try{
+            d = sdf.parse(timeString);
+            long l = d.getTime()/1000;
+            timeStamp = String.valueOf(l);
+        } catch(Exception e){
+            e.printStackTrace();
+        }
+        return timeStamp;
     }
 
     @Override

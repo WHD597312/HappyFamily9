@@ -8,7 +8,8 @@
     <string name="login_with_wechat">用微信登录</string>
     <string name="login_with_qzone">用QQ空间登录</string>
     <string name="login_with_other_plat">其他帐号登录</string>
-
+    <string name="last_time_used_never">Last time used: never</string>
+    <string name="last_time_used">Last time used: %1$s</string>
     <string name="userid_found">用户信息已存在，正在跳转登录操作…</string>
     <string name="logining">使用%s帐号登录中…</string>
     <string name="auth_cancel">授权操作已取消</string>

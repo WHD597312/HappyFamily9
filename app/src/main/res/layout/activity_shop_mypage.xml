@@ -4,7 +4,6 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:background="@color/color_gray"
-    android:layerType="software"
     >
 
     <RelativeLayout
@@ -108,7 +107,96 @@
                     android:text="222222222222"/>
             </LinearLayout>
 
-            <include layout="@layout/shop_banner" />
+
+            <com.youth.banner.Banner
+                android:id="@+id/banner"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_125"
+                android:layout_marginTop="@dimen/dp_jy_12"></com.youth.banner.Banner>
+
+            <LinearLayout
+                android:id="@+id/lineLayout_dot"
+                android:gravity="center"
+                android:orientation="horizontal"
+                android:layout_marginTop="@dimen/dp_jy_10"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+                <ImageView
+                    android:id="@+id/img1"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"/>
+
+                <ImageView
+                    android:id="@+id/img2"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+                <ImageView
+                    android:id="@+id/img3"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+
+                <ImageView
+                    android:id="@+id/img4"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+
+                <ImageView
+                    android:id="@+id/img5"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img6"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+
+                    android:id="@+id/img7"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img8"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img9"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+                <ImageView
+                    android:id="@+id/img10"
+                    android:visibility="gone"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:src="@mipmap/ic_shop_banner_wei"
+                    android:layout_marginLeft="@dimen/dp_jy_15"/>
+            </LinearLayout>
 
             <LinearLayout
                 android:id="@+id/ll_tuijian"

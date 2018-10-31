@@ -118,8 +118,6 @@ public class ShopXQActivity3 extends AppCompatActivity {
     TextView tv1;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-    @BindView(R.id.img_address)
-    ImageView imgAddress;
     @BindView(R.id.tv2)
     TextView tv2;
     @BindView(R.id.tv_time)
@@ -257,9 +255,17 @@ public class ShopXQActivity3 extends AppCompatActivity {
         setmTitle();
     }
 
+    boolean running=false;
     @Override
     protected void onStart() {
         super.onStart();
+        running=true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        running=false;
     }
 
     @Override
@@ -917,6 +923,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
     private class MyLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
+            if (running)
             Glide.with(context).load((String) path).into(imageView);
         }
     }

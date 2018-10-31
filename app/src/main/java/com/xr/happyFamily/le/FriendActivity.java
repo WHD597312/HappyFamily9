@@ -21,11 +21,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.le.adapter.FriendAdapter;
 import com.xr.happyFamily.le.bean.ClickFriendBean;
-import com.xr.happyFamily.le.clock.FriendAddActivity;
 import com.xr.happyFamily.le.clock.FriendFindActivity;
-import com.xr.happyFamily.le.clock.QinglvAddActivity;
 import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
@@ -34,6 +33,7 @@ import com.xr.happyFamily.together.util.Utils;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -64,6 +64,9 @@ public class FriendActivity extends AppCompatActivity {
     FriendAdapter friendAdapter;
     List<ClickFriendBean> list_friend = new ArrayList<>();
     MyDialog dialog;
+    @BindView(R.id.tv_queding)
+    TextView tvQueding;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,7 +79,7 @@ public class FriendActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         type = intent.getIntExtra("type", 0);
-        Log.e("qqqqTTT",type+"?");
+        Log.e("qqqqTTT", type + "?");
         preferences = this.getSharedPreferences("my", MODE_PRIVATE);
         userId = preferences.getString("userId", "");
 
@@ -95,7 +98,9 @@ public class FriendActivity extends AppCompatActivity {
         titleText.setTextColor(Color.parseColor("#242424"));
         titleText.setText("好友列表");
         imgRight.setImageResource(R.mipmap.ic_friend_add);
-        friendAdapter = new FriendAdapter(this, list_friend,type);
+        if (type == 1000)
+            tvQueding.setVisibility(View.GONE);
+        friendAdapter = new FriendAdapter(this, list_friend, type, userId);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
         recyclerView.setAdapter(friendAdapter);
@@ -108,7 +113,7 @@ public class FriendActivity extends AppCompatActivity {
 
     }
 
-    @OnClick({R.id.back, R.id.img_right})
+    @OnClick({R.id.back, R.id.img_right, R.id.tv_queding})
     public void onViewClicked(View view) {
         switch (view.getId()) {
             case R.id.back:
@@ -118,6 +123,12 @@ public class FriendActivity extends AppCompatActivity {
             case R.id.img_right:
                 startActivity(new Intent(FriendActivity.this, FriendFindActivity.class));
                 break;
+
+            case R.id.tv_queding:
+                String acceptorId = friendAdapter.getMember();
+                Map<String, Object> params = new HashMap<>();
+                params.put("acceptorId", acceptorId);
+                new beDerailedAsync().execute(params);
 
         }
     }
@@ -166,7 +177,7 @@ public class FriendActivity extends AppCompatActivity {
                 MyDialog.closeDialog(dialog);
                 friendAdapter.notifyDataSetChanged();
 
-            }else if (!Utils.isEmpty(s) && "401".equals(s)) {
+            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
                 Toast.makeText(getApplicationContext(), "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                 SharedPreferences preferences;
                 preferences = getSharedPreferences("my", MODE_PRIVATE);
@@ -178,4 +189,59 @@ public class FriendActivity extends AppCompatActivity {
             }
         }
     }
+
+
+    String returnMsg="";
+    class beDerailedAsync extends AsyncTask<Map<String, Object>, Void, String> {
+        @Override
+        protected String doInBackground(Map<String, Object>... maps) {
+            String url = "/happy/derailed/beDerailed?";
+            Map<String, Object> params = maps[0];
+            String acceptorId = params.get("acceptorId").toString();
+            url = url + "senderId=" + userId + "&acceptorId=" + acceptorId;
+
+            Log.e("qqqqqRRR",url);
+            String result = HttpUtils.doGet(mContext, url);
+            Log.e("qqqqqRRR222",result);
+
+            String code = "";
+            try {
+                if (!Utils.isEmpty(result)) {
+                    if (result.length() < 6) {
+                        code = result;
+                    }else {
+
+                        JSONObject jsonObject = new JSONObject(result);
+                        code = jsonObject.getString("returnCode");
+                        returnMsg=jsonObject.getString("returnMsg");
+
+                    }
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+
+            }
+//
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(String s) {
+            super.onPostExecute(s);
+            if (!Utils.isEmpty(s) && "100".equals(s)) {
+                ToastUtil.showShortToast("发送成功，请等待对方同意");
+            }else
+                ToastUtil.showShortToast(returnMsg);
+        }
+    }
+
+    public void setBangDing(int acceptorId) {
+        Intent intent = new Intent();
+        intent.putExtra("acceptorId", acceptorId);
+        setResult(111, intent);
+        finish();//结束当前activity
+
+    }
+
+
 }

@@ -79,6 +79,7 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
     @Override
     public void onBindViewHolder(final MyViewHolder holder, final int position) {
 
+
         Log.e("qqqqqLLLLaaa", data.get(position).getState() + "???");
 
         long lcc = data.get(position).getCreateTime();
@@ -143,6 +144,12 @@ public class MsgClockAdapter extends RecyclerView.Adapter<MsgClockAdapter.MyView
                 break;
             case 6:
                 cont = "拒绝了您的好友请求";
+                break;
+            case 7:
+                cont="拒绝了您的有轨请求";
+                break;
+            case 8:
+                cont="同意了您的有轨请求";
                 break;
             default:
                 holder.ll_data.setVisibility(View.GONE);

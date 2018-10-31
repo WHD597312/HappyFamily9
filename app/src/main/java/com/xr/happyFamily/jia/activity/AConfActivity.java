@@ -423,9 +423,12 @@ public class AConfActivity extends AppCompatActivity {
             case R.id.view_left:
                 int state;
                 Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
-                if (timerSwitch == 0)
-                    state = 2;
-                else {
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else
+                        state = 3;
+                } else {
                     if (timerMoudle == 1)
                         state = 0;
                     else
@@ -855,6 +858,30 @@ public class AConfActivity extends AppCompatActivity {
             }
             else
             showPopup();
+        }
+
+
+        if (fengSuViewPopup != null) {
+            if (fengSuViewPopup.isShowing()) {
+                fengSuViewPopup.setWind(rateState);
+            }
+        }
+        if (customViewPopipup != null) {
+            if (customViewPopipup.isShowing()) {
+                int state;
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else
+                        state = 3;
+                } else {
+                    if (timerMoudle == 1)
+                        state = 0;
+                    else
+                        state = 1;
+                }
+                customViewPopipup.setData(state, timerHour, timerMin);
+            }
         }
     }
 

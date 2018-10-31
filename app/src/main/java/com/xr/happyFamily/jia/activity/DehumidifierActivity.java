@@ -463,9 +463,12 @@ public class DehumidifierActivity extends AppCompatActivity {
             case R.id.ll_time:
                 int state;
                 Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
-                if (timerSwitch == 0)
-                    state = 2;
-                else {
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else
+                        state = 3;
+                } else {
                     if (timerMoudle == 1)
                         state = 0;
                     else
@@ -741,6 +744,28 @@ public class DehumidifierActivity extends AppCompatActivity {
 //        } else if (socketTimer == 1) {
 //            image_timer.setImageResource(R.mipmap.socket_timer);
 //        }
+        if (fengSuViewPopup != null) {
+            if (fengSuViewPopup.isShowing()) {
+                fengSuViewPopup.setWind(windLevel);
+            }
+        }
+        if (customViewPopipup != null) {
+            if (customViewPopipup.isShowing()) {
+                int state;
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else
+                        state = 3;
+                } else {
+                    if (timerMoudle == 1)
+                        state = 0;
+                    else
+                        state = 1;
+                }
+                customViewPopipup.setData(state, timerHour, timerMin);
+            }
+        }
     }
 
     private void send(DeviceChild deviceChild) {

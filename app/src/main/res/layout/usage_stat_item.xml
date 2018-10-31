@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_70">
+
+    <RelativeLayout
+        android:id="@+id/rl_ddddd"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_centerVertical="true"
+        >
+
+        <ImageView
+            android:id="@+id/icon"
+            android:layout_width="64dp"
+            android:layout_height="64dp"
+            android:layout_alignParentLeft="true"
+            android:layout_alignParentStart="true"
+            android:paddingLeft="@dimen/dp_jy_5"
+            tools:src="@mipmap/ic_launcher" />
+
+        <TextView
+            android:id="@+id/title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_toEndOf="@id/icon"
+            android:layout_toRightOf="@+id/icon"
+            android:layout_marginLeft="@dimen/dp_jy_25"
+            android:lines="1"
+            android:maxLines="1"
+            android:text="P99"
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_15" />
+
+        <TextView
+            android:id="@+id/last_used"
+            android:layout_width="@dimen/dp_jy_85"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/title"
+            android:layout_marginTop="@dimen/dp_jy_5"
+            android:layout_marginLeft="@dimen/dp_jy_20"
+            android:layout_toEndOf="@id/icon"
+            android:layout_toRightOf="@+id/icon"
+            android:text="最后使用时间："
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_zjtime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/last_used"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_toRightOf="@+id/last_used"
+            android:text="10-30 15:45"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_csTime"
+            android:layout_width="@dimen/dp_jy_85"
+            android:layout_height="wrap_content"
+            android:layout_below="@id/last_used"
+            android:layout_marginTop="@dimen/dp_jy_5"
+            android:layout_toEndOf="@id/icon"
+            android:layout_toRightOf="@+id/icon"
+            android:layout_marginLeft="@dimen/dp_jy_20"
+            android:text="持续使用时间："
+            android:textColor="@color/black"
+            android:textSize="@dimen/sp_12" />
+
+        <TextView
+            android:id="@+id/tv_cstime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignTop="@+id/tv_csTime"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_toRightOf="@+id/last_used"
+            android:text="3000秒"
+            android:textSize="@dimen/sp_12" />
+    </RelativeLayout>
+    <View
+        android:id="@+id/app_db"
+        android:layout_below="@+id/rl_ddddd"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#f5f5f5" />
+</RelativeLayout>

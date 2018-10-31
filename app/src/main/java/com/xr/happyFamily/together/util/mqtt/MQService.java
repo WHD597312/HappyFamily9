@@ -33,6 +33,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.DerailBeanDaoImpl;
+import com.xr.database.dao.daoimpl.DerailResultDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
@@ -64,6 +66,8 @@ import com.xr.happyFamily.le.clock.QunzuAddActivity;
 import com.xr.happyFamily.le.fragment.QingLvFragment;
 import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
+import com.xr.happyFamily.le.pojo.DerailBean;
+import com.xr.happyFamily.le.pojo.DerailResult;
 import com.xr.happyFamily.le.pojo.FriendData;
 import com.xr.happyFamily.le.pojo.MsgData;
 import com.xr.happyFamily.le.pojo.UserInfo;
@@ -115,6 +119,8 @@ public class MQService extends Service {
     private DeviceChildDaoImpl deviceChildDao;
     private FriendDataDaoImpl friendDataDao;
     private MsgDaoImpl msgDao;
+    private DerailBeanDaoImpl derailBeanDao;
+    private DerailResultDaoImpl derailResultDao;
 
     private Context mContext = this;
     CountTimer countTimer;
@@ -146,6 +152,9 @@ public class MQService extends Service {
         hourseDao = new HourseDaoImpl(this);
         deviceChildDao = new DeviceChildDaoImpl(this);
         friendDataDao = new FriendDataDaoImpl(this);
+        derailBeanDao = new DerailBeanDaoImpl(this);
+        derailResultDao=new DerailResultDaoImpl(this);
+
         msgDao = new MsgDaoImpl(this);
         roomDao = new RoomDaoImpl(this);
         timeDao = new TimeDaoImpl(this);
@@ -412,6 +421,8 @@ public class MQService extends Service {
                             userInfosDao.deleteAll();
                             friendDataDao.deleteAll();
                             msgDao.deleteAll();
+                            derailResultDao.deleteAll();
+                            derailBeanDao.deleteAll();
                             cancelAllsubscibe();
                         }
                     }
@@ -1186,6 +1197,80 @@ public class MQService extends Service {
                         manager.notify(0, notification);
                     }
                 }
+                if (topicName.contains("derail") && message.contains("向您发送了有轨请求")) {
+                    String[] s = message.split(",");
+                    DerailBean derailBean = new DerailBean();
+                    derailBean.setDerailName(s[0]);
+                    derailBean.setCreateTime(Long.parseLong(s[2]));
+                    derailBean.setDerailId(Integer.parseInt(s[4]));
+                    derailBeanDao.deleteAll();
+                    derailBeanDao.insert(derailBean);
+                    //设置跳转的页面
+                    PendingIntent intent = PendingIntent.getActivity(getApplicationContext(),
+                            100, new Intent(getApplicationContext(), MsgActivity.class),
+                            PendingIntent.FLAG_CANCEL_CURRENT);
+                    //设置跳转
+                    builder.setContentIntent(intent);
+                    //设置通知栏标题
+                    builder.setContentTitle("新的有轨请求");
+                    //设置通知栏内容
+                    builder.setContentText(derailBean.getDerailName() + "向您申请有轨绑定");
+                    //设置
+                    builder.setDefaults(Notification.DEFAULT_ALL);
+                    //创建通知类
+                    Notification notification = builder.build();
+                    notification.flags = Notification.FLAG_AUTO_CANCEL;
+                    //显示在通知栏
+                    manager.notify(0, notification);
+
+                }
+                Log.e("qqqqqqMSG111", topicName);
+                Log.e("qqqqqqMSG222", message);
+//                Log.e("qqqqqqMSG222", message);
+                if(topicName.contains("derailReplay")&&message.contains("有轨请求")){
+
+                    String[] s=message.split(",");
+                    DerailResult derailResult=new DerailResult();
+                    derailResult.setDerailName(s[0]);
+                    derailResult.setCreateTime(Long.parseLong(s[2]));
+                    derailResult.setDerailId(Integer.parseInt(topicName.substring(topicName.indexOf("senderId_")+9,topicName.indexOf("/acceptorId_"))));
+                    String timee = preferences.getString("timee","");
+                    if(message.contains("拒绝")){
+                        derailResult.setDerailResult(0);
+                        if (Long.parseLong(timee)<Long.parseLong(s[2])){
+                        SharedPreferences.Editor editor = preferences.edit();
+                        editor.putInt("derailPo", 0);
+                        editor.commit();
+                        }
+                        Log.e("youguires322", "onViewClicked: -->"+"........" + timee+"........." +s[1]);
+                       }
+                    else
+                    {
+                        derailResult.setDerailResult(1);
+                        if (Long.parseLong(timee)<Long.parseLong(s[2])){
+                            SharedPreferences.Editor editor = preferences.edit();
+                            editor.putInt("derailPo", 2);
+                            editor.commit();
+                        }
+                        Log.e("youguires3333", "onViewClicked: -->"+"........" + timee+"........." +s[1]);
+                       }
+                    derailResultDao.insert(derailResult);
+
+                    MsgData msgData=new MsgData();
+                    msgData.setUserName(s[0]);
+                    msgData.setCreateTime(Long.parseLong(s[2]));
+                    if(message.contains("拒绝"))
+                        msgData.setState(7);
+                    else
+                        msgData.setState(8);
+
+                    List<MsgData> msgDataList = msgDao.findMsgByTime(Long.parseLong(s[2]));
+                    if (msgDataList.size() == 0)
+                    msgDao.insert(msgData);
+
+                    int derailPo1= preferences.getInt("derailPo",-1);
+                    Log.e("youguires12233333", "onViewClicked: -->"+derailPo1 );
+                }
                 if (message.contains("您的好友请求")) {
                     if (message.contains(",")) {
                         String str[] = message.split(",");
@@ -1543,6 +1628,8 @@ public class MQService extends Service {
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
         String friendTopic = "p99/+/acceptorId_" + userId + "/friend";
+        String derailTopic = "p99/+/acceptorId_" + userId + "/derail";
+        String derailReplayTopic = "p99/+/acceptorId_" + userId + "/derailReplay";
         phone = preferences.getString("phone", "");
         list.add("p99/" + phone + "/login");
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
@@ -1600,7 +1687,8 @@ public class MQService extends Service {
             list.add(friendTopic);
             list.add(clockTopic);
             list.add(friendReplayTopic);
-            Log.e("qqqqqCCC", friendTopic);
+            list.add(derailTopic);
+            list.add(derailReplayTopic);
         }
         return list;
     }

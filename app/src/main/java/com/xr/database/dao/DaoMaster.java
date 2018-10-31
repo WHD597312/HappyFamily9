@@ -30,6 +30,12 @@ public class DaoMaster extends AbstractDaoMaster {
         MsgDataDao.createTable(db, ifNotExists);
         TimeDao.createTable(db, ifNotExists);
         UserInfoDao.createTable(db, ifNotExists);
+        LeImageDao.createTable(db, ifNotExists);
+        ShopBannerDao.createTable(db, ifNotExists);
+        ShopListDao.createTable(db, ifNotExists);
+        DerailBeanDao.createTable(db, ifNotExists);
+        DerailResultDao.createTable(db, ifNotExists);
+        AppUsingDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
@@ -43,6 +49,12 @@ public class DaoMaster extends AbstractDaoMaster {
         MsgDataDao.dropTable(db, ifExists);
         TimeDao.dropTable(db, ifExists);
         UserInfoDao.dropTable(db, ifExists);
+        LeImageDao.dropTable(db, ifExists);
+        ShopBannerDao.dropTable(db, ifExists);
+        ShopListDao.dropTable(db, ifExists);
+        DerailBeanDao.dropTable(db, ifExists);
+        DerailResultDao.dropTable(db, ifExists);
+        AppUsingDao.dropTable(db, ifExists);
     }
 
     /**
@@ -70,6 +82,12 @@ public class DaoMaster extends AbstractDaoMaster {
         registerDaoClass(MsgDataDao.class);
         registerDaoClass(TimeDao.class);
         registerDaoClass(UserInfoDao.class);
+        registerDaoClass(LeImageDao.class);
+        registerDaoClass(ShopBannerDao.class);
+        registerDaoClass(ShopListDao.class);
+        registerDaoClass(DerailBeanDao.class);
+        registerDaoClass(DerailResultDao.class);
+        registerDaoClass(AppUsingDao.class);
     }
 
     public DaoSession newSession() {

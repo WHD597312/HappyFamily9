@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.baidu.mapapi.SDKInitializer;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xr.happyFamily.le.BDmapActivity;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -37,6 +38,7 @@ public class MyApplication extends Application {
     private List<Activity> activities;
     private List<Fragment> fragments;
     private static Context mContext;
+    private static MyApplication app;
     public static Context getContext(){
         return mContext;
 
@@ -44,7 +46,7 @@ public class MyApplication extends Application {
     @Override
     public void onCreate() {
         super.onCreate();
-
+        app = this;
 
 
         fragments=new ArrayList<>();
@@ -63,7 +65,8 @@ public class MyApplication extends Application {
            ShareSDK.initSDK(this);
             SMSSDK.initSDK(this,"257a640199764","125aced6309709d59520e466e078ba15");
 
-
+        SDKInitializer.initialize(getApplicationContext());//百度地图
+        RegisterBroadcast();
         activities=new ArrayList<>();
         fragments=new ArrayList<>();
         registerActivityLifecycleCallbacks(new ActivityLifecycleCallbacks() {
@@ -102,8 +105,53 @@ public class MyApplication extends Application {
         });
 
     }
+    public static MyApplication getApp(){
+        return app;
+    }
 
+    /**
+     * 构造广播监听类，监听 SDK key 验证以及网络异常广播
+     */
+    private SDKReceiver mReceiver;
+    public class SDKReceiver extends BroadcastReceiver {
 
+        public void onReceive(Context context, Intent intent) {
+            String s = intent.getAction();
+            String tx = "";
+
+            if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR)) {
+
+                tx = "key 验证出错! 错误码 :" + intent.getIntExtra
+                        (SDKInitializer.SDK_BROADTCAST_INTENT_EXTRA_INFO_KEY_ERROR_CODE, 0)
+                        +  " ; 请在 AndroidManifest.xml 文件中检查 key 设置";
+            } else if (s.equals(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK)) {
+                tx ="key 验证成功! 功能可以正常使用";
+            } else if (s.equals(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR)) {
+                tx = "网络出错";
+            }
+            if (tx.contains("错")){
+                AlertDialog.Builder normalDialog =
+                        new AlertDialog.Builder(context);
+                normalDialog.setTitle("提示");
+                normalDialog.setMessage(tx);
+                normalDialog.setPositiveButton("确定", null);
+                normalDialog.setNegativeButton("关闭", null);
+                // 显示
+                normalDialog.show();
+            }else {
+                Toast.makeText(context,tx,Toast.LENGTH_SHORT).show();
+            }
+
+        }
+    }
+    protected void RegisterBroadcast(){
+        IntentFilter iFilter = new IntentFilter();
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_OK);
+        iFilter.addAction(SDKInitializer.SDK_BROADTCAST_ACTION_STRING_PERMISSION_CHECK_ERROR);
+        iFilter.addAction(SDKInitializer.SDK_BROADCAST_ACTION_STRING_NETWORK_ERROR);
+        mReceiver = new SDKReceiver();
+        registerReceiver(mReceiver, iFilter);
+    }
 
     public void addActivity(Activity activity){
         if (!activities.contains(activity)){

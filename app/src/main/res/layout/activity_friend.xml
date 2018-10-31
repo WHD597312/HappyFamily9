@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -14,5 +14,19 @@
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/dp_jy_10"/>
-</LinearLayout>
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:layout_below="@id/title"
+        android:layout_marginBottom="@dimen/dp_jy_60"/>
+
+    <TextView
+        android:id="@+id/tv_queding"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_40"
+        android:layout_margin="@dimen/dp_jy_12"
+        android:layout_alignParentBottom="true"
+        android:background="@drawable/bg_yougui_queding"
+        android:text="确定"
+        android:textColor="@color/white"
+        android:gravity="center"
+        android:textSize="@dimen/sp_14"/>
+</RelativeLayout>

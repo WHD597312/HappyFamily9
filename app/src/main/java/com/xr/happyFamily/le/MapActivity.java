@@ -292,6 +292,7 @@ public class MapActivity extends AppCompatActivity  {
     MapAdress mapAdress1, mapAdress2;
 
     public void getStation() {
+        Log.e("TTTTTTTTTS", "getStation: -->"+mapAdresses.size() );
         mStation.add(mapAdresses.get(0));
         mapAdress1 = mapAdresses.get(0);
         latt = Double.valueOf(mapAdress1.getDsLatitude());

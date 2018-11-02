@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     private  boolean clockisBound;
     String load;
     Intent intent;
-    AlarmManager alarmManager;
     boolean isFirst=true;
     private String family;
     private String city;
     private String temperature;
+    int derailPo;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -141,14 +141,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             application = (MyApplication) getApplication();
             application.addActivity(this);
         }
-
-
-
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         preferences = getSharedPreferences("my", MODE_PRIVATE);
-        alarmManager = (AlarmManager) getSystemService(Context.ALARM_SERVICE);
         SharedPreferences.Editor editor2 = preferences.edit();
+        derailPo= preferences.getInt("derailPo",-1);
         editor2.putString("clockNew", "old");
         editor2.commit();
         IntentFilter filter = new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION);
@@ -166,7 +163,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         Intent intent = getIntent();
         load = intent.getStringExtra("load");
         String login = intent.getStringExtra("login");
-         share = intent.getStringExtra("share");
+        share = intent.getStringExtra("share");
 
         houseId = intent.getLongExtra("houseId", 0);
         if (houseId == 0 && hourses.size() > 0) {
@@ -177,8 +174,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         mPositionPreferences = getSharedPreferences("position", Context.MODE_PRIVATE);
         sign = intent.getStringExtra("sign");
         //从支付成功跳回主界面时，打开商城fragment
-
-
         String refersh=intent.getStringExtra("refersh");
         if ("PaySuccess".equals(sign)) {
             FragmentTransaction baoTransaction = fragmentManager.beginTransaction();
@@ -217,9 +212,11 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             clockintent = new Intent(MainActivity.this, ClockService.class);
             startService(clockintent);
             clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
+
 //        }
 
     }
+
 
     class WeatherAsync extends AsyncTask<Void, Void, String> {
 
@@ -283,8 +280,10 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
             clcokservice = binder.getService();
             clcokservice.acquireWakeLock(MainActivity.this);
             boundclock = true;
+            clcokservice.setDerailPo(derailPo);
             clcokservice.startClock();
             clcokservice.getDerail();
+            Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->" );
         }
         @Override
         public void onServiceDisconnected(ComponentName name) {
@@ -322,14 +321,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 //            bound = false;
 //        }
 //    };
-    class LoadAync extends AsyncTask<Void, Void, Void> {
-
-        @Override
-        protected Void doInBackground(Void... voids) {
-
-            return null;
-        }
-    }
 
     @Override
     protected void onStart() {
@@ -384,6 +375,16 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
                 new LoadUserImageAsync().execute();
             }
         }
+//        boolean running = clcokservice.getisYgRunning();
+//        derailPo= preferences.getInt("derailPo",-1);
+//        Log.e("RRRRRRRRR2222", "onStart: -->"+running );
+//        if (running){
+//            clcokservice.setDerailPo(derailPo);
+//        }else {
+//            if (derailPo==1)
+//            clcokservice.getDerail();
+//        }
+
 
     }
 

@@ -13,10 +13,14 @@ import android.support.v4.view.ViewPager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
+import android.util.DisplayMetrics;
 import android.util.Log;
+import android.view.Display;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -309,6 +313,15 @@ public class LeFragment extends Fragment {
         youguiDialog.setCanceledOnTouchOutside(false);
 
         youguiDialog.show();
+        Window window = youguiDialog.getWindow() ;
+        WindowManager m = getActivity().getWindowManager();
+        DisplayMetrics dm = new DisplayMetrics();// 获取屏幕宽、高用
+        getActivity().getWindowManager().getDefaultDisplay().getMetrics(dm);
+        WindowManager.LayoutParams p = window.getAttributes(); // 获取对话框当前的参数值
+        p.height = (int) (dm.heightPixels * 0.4); // 改变的是dialog框在屏幕中的位置而不是大小
+        p.width = (int) (dm.widthPixels* 0.85); // 宽度设置为屏幕的0.65
+        window.setAttributes(p);
+
 
     }
 

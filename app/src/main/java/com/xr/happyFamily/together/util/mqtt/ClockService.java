@@ -29,6 +29,7 @@ import android.support.annotation.RequiresApi;
 import android.util.ArraySet;
 import android.util.Log;
 import android.view.WindowManager;
+
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -51,6 +52,7 @@ import com.xr.happyFamily.le.view.btClockjsDialog4;
 import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.Utils;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -97,9 +99,8 @@ public class ClockService extends Service {
 
     JSONArray jsonArray;
     String derailId;
-
     int derailPo;
-
+     boolean YgRunning ;
 
     /**
      * 服务启动之后就初始化MQTT,连接MQTT
@@ -118,62 +119,97 @@ public class ClockService extends Service {
         Log.e("DDDDDDDDDfffff", "run: -->" + derailPo);
         packageManager = getPackageManager();
         usageStatsManager = (UsageStatsManager) getSystemService("usagestats");
+        YgRunning =false;
+    }
+
+    public void setDerailPo(int id) {
+        derailPo=id;
+    }
+
+
+    class YouguiCount extends CountDownTimer {
+        public YouguiCount(long millisInFuture, long countDownInterval) {
+            super(millisInFuture, countDownInterval);
+        }
+
+        /**
+         * 倒计时过程中调用
+         *
+         * @param millisUntilFinished
+         */
+        @Override
+        public void onTick(long millisUntilFinished) {
+
+            Log.e("yougui", "倒计时=" + (millisUntilFinished / 1000));
+        }
+
+        /**
+         * 倒计时完成后调用
+         */
+
+        @Override
+        public void onFinish() {
+            Log.e("yougui", "倒计时完成");
+            if (derailPo == 1) {
+                if (t != null)
+                    t = null;
+                t = new DownloadThread();
+                t.start();
+                YouguiCount youguiCount = new YouguiCount(15 * 60 * 1000, 1000);
+                youguiCount.start();
+            }else {
+                YgRunning= false;
+            }
+        }
+    }
+
+    public  boolean getisYgRunning(){
+        return YgRunning;
     }
 
     public void getDerail() {
-       if (derailPo==1) {
-           jsonArray = new JSONArray();
-           mLocationClient = new LocationClient(this);
-           mLocationClient.setLocOption(getDefaultLocationClientOption());
-           mLocationClient.registerLocationListener(mListener);
-           mLocationClient.start();
-           t = new DownloadThread();
-           isStop = false;
-           t.setPriority(Thread.MAX_PRIORITY);
-           t.setDaemon(true);
-           t.start();
-       }
+
+        if (derailPo == 1) {
+            jsonArray = new JSONArray();
+            mLocationClient = new LocationClient(this);
+            mLocationClient.setLocOption(getDefaultLocationClientOption());
+            mLocationClient.registerLocationListener(mListener);
+            mLocationClient.start();
+            YouguiCount youguiCount = new YouguiCount(15 * 60 * 1000, 1000);
+            youguiCount.start();
+            YgRunning = true;
+
+        }
     }
 
     DownloadThread t;
-    int yCounts = 0;
+    int yCounts = 4;
 
-    boolean isStop;
     class DownloadThread extends Thread {
-
-
         @Override
         public void run() {
             super.run();
             Log.e("DDDDDDtttttt1111", "run: --->");
-            while (!isStop) {
-//               这里是读文件流 和写文件流的操作
-                try {
-                    Log.e("DDDDDDtttttt", "run: --->");
-                    Thread.sleep(15*60*1000);
-                    String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress+"/happy/derailed/updateSiteData?derailId="+derailId+"&longitude="+mLongitude+"&latitude="+mLatitude);
-                    Log.e("DDDDDDDDDfffffzzz", "run: -->"+result );
-                    yCounts++;
-                    if (yCounts == 4) {
-                        retrieveUsageStats();
-                        yCounts = 0;
-                    }
 
-                } catch (Exception e) {
-                    e.printStackTrace();
+//               这里是读文件流 和写文件流的操作
+            try {
+                Log.e("youguitttttt", "run: --->");
+                String result = HttpUtils.getOkHpptRequest(HttpUtils.ipAddress + "/happy/derailed/updateSiteData?derailId=" + derailId + "&longitude=" + mLongitude + "&latitude=" + mLatitude);
+                Log.e("youguifffffzzz", "run: -->" + result);
+
+                Log.e("DDDDDDtttttt1111", "run: --->"+yCounts);
+                if (yCounts == 4) {
+                    retrieveUsageStats();
+                    yCounts = 0;
                 }
+                yCounts++;
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
-
-        public void stopDownload() {
-            isStop = true;
-
-        }
     }
 
-    public void Stopt(){
-        t.stopDownload();
-    }
+
     //获取软件使用详情
     private void sortUsageStats(List<UsageStatsWrapper> finalList) {
         SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
@@ -203,7 +239,7 @@ public class ClockService extends Service {
             }
         }
 
-            Log.e("now111", "sortUsageStats:-- ----" + usageStats1.size());
+        Log.e("now111", "sortUsageStats:-- ----" + usageStats1.size());
 
         //判断使用时间大于1s的
         for (int i = 0; i < usageStats1.size(); i++) {
@@ -223,10 +259,10 @@ public class ClockService extends Service {
                 String appName = usageStats2.get(i).getAppName();
                 String appUseLastTime = usageStats2.get(i).lastTime();
                 String appUseTime = usageStats2.get(i).TotleTime();
-                Log.e("Apppppppppppp", "sortUsageStats: -->" + appName + "......"+appUseLastTime );
+                Log.e("Apppppppppppp", "sortUsageStats: -->" + appName + "......" + appUseLastTime);
                 Map<String, Object> params = new HashMap<>();
                 params.put("appName", appName);
-                params.put("appUseLastTime",appUseLastTime );
+                params.put("appUseLastTime", appUseLastTime);
                 params.put("appUseTime", appUseTime);
                 params.put("appDerailId", derailId);
                 JSONObject jsonObject = new JSONObject(params);
@@ -240,32 +276,32 @@ public class ClockService extends Service {
         try {
             JSONObject jsonObjectt = new JSONObject();
             Map<String, Object> fileMap = new HashMap<>();
-            Log.e("TTTTTTSSS", "sortUsageStats: -->"+jsonArray1.length() );
+            Log.e("TTTTTTSSS", "sortUsageStats: -->" + jsonArray1.length());
             jsonObjectt.put("appUsingList", jsonArray1);
             String url = HttpUtils.ipAddress + "/happy/derailed/updateAppUsingList";
             String result = HttpUtils.postOkHpptRequest3(url, jsonObjectt);
-            Log.e("DDDDDDDDDfffff222", "run: -->"+result );
+            Log.e("youguifffff222", "run: -->" + result);
             if (!Utils.isEmpty(result)) {
                 Log.e("result", "doInBackground: -->" + result);
                 JSONObject jsonObject1 = new JSONObject(result);
                 JSONArray name = jsonObject1.getJSONArray("returnData");
-                if (name.length()>0) {
+                if (name.length() > 0) {
                     Log.e("namae", "doInBackground: " + name.toString());
                     for (int i = 0; i < name.length(); i++) {
                         for (int j = 0; j < usageStats2.size(); j++) {
                             if (name.get(i).equals(usageStats2.get(j).getAppName())) {
                                 Drawable drawable = usageStats2.get(j).getAppIcon();
-                                Log.i("resultTTTTTTTTTTdd", "doInBackground: " + drawable );
+                                Log.i("youguiTTTTTTddff", "doInBackground: " + drawable);
                                 Bitmap bitmap = drawableToBitmap(drawable);
                                 Thread.sleep(1000);
                                 File appFile = BitmapCompressUtils.compressImage(bitmap);
                                 fileMap.put(usageStats2.get(j).getAppName(), appFile);
-                                Log.i("resultTTTTTTTTTT111", "doInBackground: " + fileMap.size() +usageStats2.get(j).getAppName() );
+                                Log.i("youguiTTTTTTTTTT111", "doInBackground: " + fileMap.size() + usageStats2.get(j).getAppName());
                             }
                         }
                     }
                     String result1 = HttpUtils.upFileAndDesc1("http://47.98.131.11:8084/happy/derailed/updateAppUsingPics", fileMap);
-                    Log.i("resultTTTTTTTTTT222", "-->" + result1);
+                    Log.i("youguiTTTTTTTTTT222", "-->" + result1);
                 }
             }
 
@@ -301,7 +337,7 @@ public class ClockService extends Service {
         List<UsageStats> stats = new ArrayList<>();
         stats.addAll(usageStats.values());
         List<UsageStatsWrapper> finalList = buildUsageStatsWrapper(installedApps, stats);
-        sortUsageStats(finalList );
+        sortUsageStats(finalList);
         Log.e("GGGetlist", "retrieveUsageStats: -->" + finalList.size());
     }
 
@@ -462,7 +498,7 @@ public class ClockService extends Service {
 //                sb.append("无法获取有效定位依据导致定位失败，一般是由于手机的原因，处于飞行模式下一般会造成这种结果，可以试着重启手机");
 //            }
 ////            logMsg(sb.toString());
-            Log.e("sbtostring", "onReceiveLocation: " +"lng"+ mLongitude+"..."+"lat"+mLatitude);
+            Log.e("sbtostring", "onReceiveLocation: " + "lng" + mLongitude + "..." + "lat" + mLatitude);
         }
 
     };
@@ -494,7 +530,7 @@ public class ClockService extends Service {
              * 这里需要注意的是：如果是室外gps定位，不用访问服务器，设置的间隔是1秒，那么就是1秒返回一次位置
              如果是WiFi基站定位，需要访问服务器，这个时候每次网络请求时间差异很大，设置的间隔是3秒，只能大概保证3秒左右会返回就一次位置，有时某次定位可能会5秒返回
              */
-            mOption.setScanSpan(14 * 60 * 1000);
+            mOption.setScanSpan(14*60 * 1000);
 
             /**
              * 默认false，设置是否需要地址信息
@@ -558,7 +594,6 @@ public class ClockService extends Service {
         notification.contentIntent = pintent;
         startForeground(0, notification);
         return binder;
-
     }
 
 

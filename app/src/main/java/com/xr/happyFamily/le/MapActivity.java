@@ -20,6 +20,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,7 +69,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 import crossoverone.statuslib.StatusUtil;
 
-public class MapActivity extends AppCompatActivity  {
+public class MapActivity extends AppCompatActivity {
     private SensorManager mSensorManager;//方向传感器
     private LatLng mDestinationPoint;//目的地坐标点
     private LocationClient client;//定位监听
@@ -82,10 +83,6 @@ public class MapActivity extends AppCompatActivity  {
     private LatLng mCenterPos;
     private BaiduMap mBaiduMap;
     private MapView mMapView;
-    @BindView(R.id.bt_map_add)
-    Button bt_map_add;
-    @BindView(R.id.rl_map_bd)
-    RelativeLayout rl_map_bd;
     @BindView(R.id.rl_map_map)
     RelativeLayout rl_map_map;
     @BindView(R.id.rl_map_wz)
@@ -143,13 +140,6 @@ public class MapActivity extends AppCompatActivity  {
         // 构建Marker图标
 
 
-        bt_map_add.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                rl_map_bd.setVisibility(View.GONE);
-                rl_map_map.setVisibility(View.VISIBLE);
-            }
-        });
         rl_map_rj.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -157,7 +147,6 @@ public class MapActivity extends AppCompatActivity  {
                 iv_map_rj1.setVisibility(View.GONE);
                 rl_map_rjxq.setVisibility(View.VISIBLE);
                 rl_map_map.setVisibility(View.GONE);
-                rl_map_bd.setVisibility(View.GONE);
                 tv_map_mes.setTextColor(getResources().getColor(R.color.color_black3));
                 tv_mao_rj.setTextColor(getResources().getColor(R.color.white));
                 rl_map_wz.setBackground(getResources().getDrawable(R.drawable.bg_shape3));
@@ -175,7 +164,6 @@ public class MapActivity extends AppCompatActivity  {
                 iv_map_rj1.setVisibility(View.VISIBLE);
                 rl_map_map.setVisibility(View.VISIBLE);
                 rl_map_rjxq.setVisibility(View.GONE);
-                rl_map_bd.setVisibility(View.GONE);
                 tv_map_mes.setTextColor(getResources().getColor(R.color.white));
                 tv_mao_rj.setTextColor(getResources().getColor(R.color.color_black3));
                 rl_map_wz.setBackground(getResources().getDrawable(R.drawable.bg_le_map));
@@ -189,7 +177,6 @@ public class MapActivity extends AppCompatActivity  {
     }
 
 
-
     /**
      * 获取使用的app
      */
@@ -200,14 +187,14 @@ public class MapActivity extends AppCompatActivity  {
             int code = 0;
             String url = ip + "/happy/derailed/getAppUsingList?derailId=" + derailId;
             String result = HttpUtils.getOkHpptRequest(url);
-            Log.e("ressssssss", "doInBackground: -->"+result );
+            Log.e("ressssssss", "doInBackground: -->" + result);
             try {
                 if (!TextUtils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
                     JSONArray jsonArray = jsonObject.getJSONArray("returnData");
-                    for (int i=0;i<jsonArray.length();i++){
-                        JSONObject jsonObject1 =jsonArray.getJSONObject(i);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject jsonObject1 = jsonArray.getJSONObject(i);
                         String appPicUrl = jsonObject1.getString("appPicUrl");
                         String appName = jsonObject1.getString("appName");
                         String appUseLastTime = jsonObject1.getString("appUseLastTime");
@@ -250,7 +237,7 @@ public class MapActivity extends AppCompatActivity  {
             int code = 0;
             String url = ip + "/happy/derailed/getSiteData?derailId=" + derailId;
             String result = HttpUtils.getOkHpptRequest(url);
-            Log.e("ressssssss11", "doInBackground: -->"+result );
+            Log.e("ressssssss11", "doInBackground: -->" + result);
             try {
                 if (!TextUtils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -292,30 +279,30 @@ public class MapActivity extends AppCompatActivity  {
     MapAdress mapAdress1, mapAdress2;
 
     public void getStation() {
-        Log.e("TTTTTTTTTS", "getStation: -->"+mapAdresses.size() );
+        Log.e("TTTTTTTTTS", "getStation: -->" + mapAdresses.size());
         mStation.add(mapAdresses.get(0));
         mapAdress1 = mapAdresses.get(0);
-        latt = Double.valueOf(mapAdress1.getDsLatitude());
-        lngg = Double.valueOf(mapAdress1.getDsLongitude());
-        for (int i = 1; i < mapAdresses.size(); i++) {
-            mapAdress2 = mapAdresses.get(i);
-            long lastTime = mapAdress2.getDsTime();
-            double dsLongitude1 = Double.valueOf(mapAdress1.getDsLongitude());
-            double dsLatitude1 = Double.valueOf(mapAdress1.getDsLatitude());
-            double dsLongitude2 = Double.valueOf(mapAdress2.getDsLongitude());
-            double dsLatitude2 = Double.valueOf(mapAdress2.getDsLatitude());
-            double distance = Distance(dsLatitude1, dsLongitude1, dsLatitude2, dsLongitude2);
-            if (distance > 50) {
-                mStation.add(mapAdresses.get(i));
-                mStation.get(mStation.size()-2).setLastTime(mStation.get(mStation.size()-1).getDsTime()+"");
-                mapAdress1 = mapAdresses.get(i);
-            }else {
-               mStation.get(mStation.size()-1).setLastTime(mapAdresses.get(i).getDsTime()+"");
+        if (mapAdresses.size() > 1) {
+            for (int i = 1; i < mapAdresses.size(); i++) {
+                mapAdress2 = mapAdresses.get(i);
+                long lastTime = mapAdress2.getDsTime();
+                double dsLongitude1 = Double.valueOf(mapAdress1.getDsLongitude());
+                double dsLatitude1 = Double.valueOf(mapAdress1.getDsLatitude());
+                double dsLongitude2 = Double.valueOf(mapAdress2.getDsLongitude());
+                double dsLatitude2 = Double.valueOf(mapAdress2.getDsLatitude());
+                double distance = Distance(dsLatitude1, dsLongitude1, dsLatitude2, dsLongitude2);
+                if (distance > 50) {
+                    mStation.add(mapAdresses.get(i));
+                    mStation.get(mStation.size() - 2).setLastTime(mStation.get(mStation.size() - 1).getDsTime() + "");
+                    mapAdress1 = mapAdresses.get(i);
+                    Log.e("ddddddGGGGGG333", "getStation: -->" + i);
+                } else {
+                    mStation.get(mStation.size() - 1).setLastTime(mapAdresses.get(i).getDsTime() + "");
+                    Log.e("ddddddGGGGGG444", "getStation: -->" + i);
+                }
             }
-        }
-
-        if (mStation.size()>1){
-            mStation.get(mStation.size()-1).setLastTime(mStation.get(mStation.size()-1).getDsTime()+"");
+        }else {
+            mStation.get(0).setLastTime(mStation.get(0).getDsTime() + "");
         }
 
         Log.e("ddddddGGGGGG222", "getStation: -->" + mapAdresses.size());
@@ -325,6 +312,7 @@ public class MapActivity extends AppCompatActivity  {
             Log.e("ddddddGGGGGG4444", "getStation: -->" + mStation.get(j).getLastTime() + "..." + mStation.get(j).getDsTime());
             double lat = Double.valueOf(mapAdress3.getDsLatitude());
             double lng = Double.valueOf(mapAdress3.getDsLongitude());
+            Log.e("ddddddGGGGGG4444", "getStation: -->" +  lat+ "..." +lng);
             BDLocation bdLocation = new BDLocation();
             bdLocation.setLongitude(lng);
             bdLocation.setLatitude(lat);
@@ -341,13 +329,8 @@ public class MapActivity extends AppCompatActivity  {
     private void showMap(double latitude, double longtitude, String address) {
         List<LatLng> points = new ArrayList<LatLng>();
         List<Integer> colors = new ArrayList<>();
-//        if (points.isEmpty()){
-//            latitude0=latitude;
-//            longtitude0=longtitude;
-//        }else {
-//            latitude0=latitude0+0.001;
-//            longtitude0=longtitude0+0.001;
-//        }
+
+
         points.add(new LatLng(latitude, longtitude));
         colors.add(Integer.valueOf(Color.RED));
 
@@ -362,7 +345,6 @@ public class MapActivity extends AppCompatActivity  {
             converter.coord(points.get(points.size() - 1));
             converter.from(CoordinateConverter.CoordType.COMMON);
             LatLng convertLatLng = converter.convert();
-
             MapStatusUpdate u = MapStatusUpdateFactory.newLatLngZoom(convertLatLng, 16.0f);
             mBaiduMap.animateMapStatus(u);
             MyDialog.closeDialog(dialog);
@@ -376,26 +358,24 @@ public class MapActivity extends AppCompatActivity  {
 
     }
 
-    @OnClick({R.id.iv_map_back})
+    @OnClick({R.id.iv_map_back, R.id.rl_yg_dw})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_map_back:
                 finish();
                 break;
+            case R.id.rl_yg_dw:
+   
+                break;
         }
     }
 
 
-
     private void showAppTimeList() {
-//        AppListAdapter adapter = new AppListAdapter(this, R.layout.activity_map_item, usageStats2);
-//        lvAppTime.setAdapter(adapter);
-
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new UsageStatAdapter(this,appUsings);
+        adapter = new UsageStatAdapter(this, appUsings);
         recyclerView.setAdapter(adapter);
         adapter.notifyDataSetChanged();
-
     }
 
     /**
@@ -407,47 +387,7 @@ public class MapActivity extends AppCompatActivity  {
         mBaiduMap = mMapView.getMap();
         mBaiduMap.setMapType(BaiduMap.MAP_TYPE_NORMAL);
         mBaiduMap.setMyLocationEnabled(true);
-
-
     }
-
-
-    /***
-     * 定位选项设置
-     * @return
-     */
-    public void getLocationClientOption() {
-        mOption = new LocationClientOption();
-        mOption.setLocationMode(LocationClientOption.LocationMode.Hight_Accuracy);//可选，默认高精度，设置定位模式，高精度，低功耗，仅设备
-        mOption.setCoorType("bd09ll");//可选，默认gcj02，设置返回的定位结果坐标系，如果配合百度地图使用，建议设置为bd09ll;
-        mOption.setScanSpan(0);//可选，默认0，即仅定位一次，设置发起连续定位请求的间隔需要大于等于1000ms才是有效的
-        mOption.setIsNeedLocationDescribe(true);//可选，设置是否需要地址描述
-        mOption.setNeedDeviceDirect(true);//可选，设置是否需要设备方向结果
-        mOption.setIsNeedAddress(true);//可选，设置是否需要地址信息，默认不需要
-        mOption.setLocationNotify(true);//可选，默认false，设置是否当gps有效时按照1S1次频率输出GPS结果
-        mOption.setIgnoreKillProcess(true);//可选，默认true，定位SDK内部是一个SERVICE，并放到了独立进程，设置是否在stop的时候杀死这个进程，默认不杀死
-        mOption.setIsNeedLocationDescribe(false);//可选，默认false，设置是否需要位置语义化结果，可以在BDLocation.getLocationDescribe里得到，结果类似于“在北京天安门附近”
-        mOption.setIsNeedLocationPoiList(false);//可选，默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
-        mOption.SetIgnoreCacheException(false);//可选，默认false，设置是否收集CRASH信息，默认收集
-        mOption.setOpenGps(true);//可选，默认false，设置是否开启Gps定位
-        mOption.setIsNeedAltitude(false);//可选，默认false，设置定位时是否需要海拔信息，默认不需要，除基础定位版本都可用
-        client = new LocationClient(this);
-        client.registerLocationListener(BDAblistener);
-        client.start();
-    }
-
-    /***
-     * 接收定位结果消息，并显示在地图上
-     */
-    private BDAbstractLocationListener BDAblistener = new BDAbstractLocationListener() {
-        @Override
-        public void onReceiveLocation(BDLocation location) {
-
-            Message message = new Message();
-            message.obj = location;
-            mHandler.sendMessage(message);
-        }
-    };
 
     LatLng p2;
     int Cs = 0;
@@ -504,6 +444,17 @@ public class MapActivity extends AppCompatActivity  {
                     String first = stampToDate(mStation.get(id).getDsTime());
                     Toast.makeText(MapActivity.this, first + "--" + last, Toast.LENGTH_SHORT).show();
                     Log.e("TTTTTTFFF", "onMarkerClick: -->" + mStation.get(id).getLastTime() + "..." + id);
+                    //创建InfoWindow展示的view
+//                    Button button = new Button(getApplicationContext());
+//                    button.setBackgroundResource(R.drawable.popup);
+////定义用于显示该InfoWindow的坐标点
+//                    LatLng pt = new LatLng(Double.valueOf(mStation.get(id).getDsLongitude()), Double.valueOf(mStation.get(id).getDsLatitude()));
+//                    button.setText(first + "--" + last);
+////创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
+//                    InfoWindow mInfoWindow = new InfoWindow(button, pt, -47);
+//
+////显示InfoWindow
+//                    mBaiduMap.showInfoWindow(mInfoWindow);
                     return true;
                 }
             });
@@ -543,6 +494,7 @@ public class MapActivity extends AppCompatActivity  {
         }
     };
     int i = 0;
+
     public BitmapDescriptor getBitmapDescriptor() {
 
         i++;
@@ -552,7 +504,7 @@ public class MapActivity extends AppCompatActivity  {
         ImageView imageView = (ImageView) item_view.findViewById(R.id.iv_yg_mark);
 
 // 设置布局中文字
-        tv_storeName.setText(i+"");
+        tv_storeName.setText(i + "");
 
 // 设置图标
         imageView.setImageResource(R.mipmap.map_first);
@@ -629,8 +581,6 @@ public class MapActivity extends AppCompatActivity  {
         super.onDestroy();
         ButterKnife.bind(this).unbind();//解绑
     }
-
-
 
 
 }

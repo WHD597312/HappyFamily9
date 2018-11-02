@@ -1,5 +1,6 @@
 package com.xr.happyFamily.zhen;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DownloadManager;
@@ -124,6 +125,7 @@ public class SettingActivity extends AppCompatActivity{
 
     private boolean isBound = false;
 
+    private     int derailPo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -151,6 +153,7 @@ public class SettingActivity extends AppCompatActivity{
         derailBeanDao= new DerailBeanDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
+        derailPo = preferences.getInt("derailPo", -1);
         unbinder = ButterKnife.bind(this);
         adatper = new SettingAdatper(this);
         roomDao = new RoomDaoImpl(this);
@@ -323,7 +326,10 @@ public class SettingActivity extends AppCompatActivity{
                     }
                     if (preferences.contains("derailPo")){
                         preferences.edit().remove("derailPo").commit();
+                        clcokservice.setDerailPo(-1);
                     }
+                    application.removeActivity(SettingActivity.this);
+                    Log.e("FFFFFFFFSSSS", "onClick: -->"+preferences.getInt("derailPo",-1) );
                     if (mqService!=null){
                         mqService.cancelAllsubscibe();
                     }
@@ -337,11 +343,18 @@ public class SettingActivity extends AppCompatActivity{
                     msgDao.deleteAll();
                     derailBeanDao.deleteAll();
                     derailResultDao.deleteAll();
-                    clcokservice.Stopt();
+
                     SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
                     mPositionPreferences.edit().clear().commit();
                     Intent exit = new Intent(this, LoginActivity.class);
                     exit.putExtra("logout","logout");
+                    List<Activity> activities=application.getActivities();
+                    for (Activity activity:activities){
+                        Log.i("activity","-->"+activity);
+                        if (!(activity instanceof SettingActivity)){
+                            activity.finish();
+                        }
+                    }
                     startActivity(exit);
                 }
                 break;

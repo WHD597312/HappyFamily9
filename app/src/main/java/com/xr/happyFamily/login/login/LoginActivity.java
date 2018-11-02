@@ -108,7 +108,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     @BindView(R.id.rl_login) RelativeLayout rl_login;
     Animation rotate;
     SharedPreferences mPositionPreferences;
-
+    Context mContext;
     public static boolean running=false;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -116,6 +116,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         setContentView(R.layout.activity_login);
         unbinder = ButterKnife.bind(this);
         imageView.setImageResource(R.mipmap.yanjing13x);
+        mContext=this;
 //        imageView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.green5)));
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();

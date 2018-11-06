@@ -33,8 +33,6 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
-import com.xr.database.dao.daoimpl.DerailBeanDaoImpl;
-import com.xr.database.dao.daoimpl.DerailResultDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
@@ -57,6 +55,7 @@ import com.xr.happyFamily.jia.activity.SmartLinkedActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
 import com.xr.happyFamily.jia.activity.TempChatActivity;
+import com.xr.happyFamily.jia.activity.UseWaterRecordActivity;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.le.BtClock.RingReceiver;
 import com.xr.happyFamily.le.ClockActivity;
@@ -66,8 +65,6 @@ import com.xr.happyFamily.le.clock.QunzuAddActivity;
 import com.xr.happyFamily.le.fragment.QingLvFragment;
 import com.xr.happyFamily.le.fragment.QunZuFragment;
 import com.xr.happyFamily.le.pojo.ClockBean;
-import com.xr.happyFamily.le.pojo.DerailBean;
-import com.xr.happyFamily.le.pojo.DerailResult;
 import com.xr.happyFamily.le.pojo.FriendData;
 import com.xr.happyFamily.le.pojo.MsgData;
 import com.xr.happyFamily.le.pojo.UserInfo;
@@ -77,6 +74,7 @@ import com.xr.happyFamily.login.login.LoginActivity;
 import com.xr.happyFamily.main.FamilyFragmentManager;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.MyDialog;
+import com.xr.happyFamily.together.http.HttpUtils;
 import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
 
@@ -92,6 +90,7 @@ import org.json.JSONObject;
 import org.w3c.dom.Text;
 
 import java.io.File;
+import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -119,11 +118,9 @@ public class MQService extends Service {
     private DeviceChildDaoImpl deviceChildDao;
     private FriendDataDaoImpl friendDataDao;
     private MsgDaoImpl msgDao;
-    private DerailBeanDaoImpl derailBeanDao;
-    private DerailResultDaoImpl derailResultDao;
 
     private Context mContext = this;
-    CountTimer countTimer;
+//    CountTimer countTimer;
 //    boolean isNew = false;
     /***
      * 模块类型
@@ -152,9 +149,6 @@ public class MQService extends Service {
         hourseDao = new HourseDaoImpl(this);
         deviceChildDao = new DeviceChildDaoImpl(this);
         friendDataDao = new FriendDataDaoImpl(this);
-        derailBeanDao = new DerailBeanDaoImpl(this);
-        derailResultDao=new DerailResultDaoImpl(this);
-
         msgDao = new MsgDaoImpl(this);
         roomDao = new RoomDaoImpl(this);
         timeDao = new TimeDaoImpl(this);
@@ -171,29 +165,32 @@ public class MQService extends Service {
 
     public class LocalBinder extends Binder {
 
+
         public MQService getService() {
             Log.i(TAG, "Binder");
             return MQService.this;
         }
     }
 
+    String[] clocks;
+
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
+        reconnect = "";
         connect();
         Log.i("clientId", "-->" + clientId);
-        isFinish = false;
-        countTimer = new CountTimer(10000, 1000);
-        countTimer.start();
-        String isClockFinish=intent.getStringExtra("isClockFinish");
-        Log.i("iiiiiiiii","-->"+isClockFinish);
+//        isFinish = false;
+//        countTimer = new CountTimer(10000, 1000);
+//        countTimer.start();
+        String isClockFinish = intent.getStringExtra("isClockFinish");
+        Log.i("iiiiiiiii", "-->" + isClockFinish);
         SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
 
 
-        String[] clocks = clockData.split(",");
-        for (int i = 0; i < clocks.length; i++) {
-            new getClockAsync().execute(clocks[i]);
-        }
+        clocks = clockData.split(",");
+        new getClockAsync().execute();
+
         return super.onStartCommand(intent, flags, startId);
     }
 
@@ -212,6 +209,8 @@ public class MQService extends Service {
         }
     }
 
+    private String reconnect;
+
     private void init() {
         try {
             //host为主机名，test为clientid即连接MQTT的客户端ID，一般以客户端唯一标识符表示，MemoryPersistence设置clientid的保存形式，默认为以内存保存
@@ -229,7 +228,7 @@ public class MQService extends Service {
             // 设置超时时间 单位为秒
             options.setConnectionTimeout(15);
             // 设置会话心跳时间 单位为秒 服务器会每隔1.5*20秒的时间向客户端发送个消息判断客户端是否在线，但这个方法并没有重连的机制
-//            options.setKeepAliveInterval(20);
+            options.setKeepAliveInterval(60);
 
 
             //设置回调
@@ -239,6 +238,7 @@ public class MQService extends Service {
                 public void connectionLost(Throwable cause) {
                     //连接丢失后，一般在这里面进行重连
                     System.out.println("connectionLost----------");
+                    reconnect = "reconnect";
                     startReconnect();
                 }
 
@@ -265,8 +265,7 @@ public class MQService extends Service {
 
     public void connect() {
         try {
-            if (client.isConnected()) {
-                client.disconnect();
+            if (client != null && client.isConnected() == false) {
                 client.connect(options);
             }
             new ConAsync().execute();
@@ -283,10 +282,11 @@ public class MQService extends Service {
         @Override
         protected Void doInBackground(Void... voids) {
             try {
-                if (!client.isConnected()) {
-                    client.connect(options);
-                }
                 List<String> topicNames = getTopicNames();
+                List<DeviceChild> list = deviceChildDao.findZerosType(0);
+                if (list != null && !list.isEmpty()) {
+                    new UpdateDeviceTypeAsync2().execute(list);
+                }
                 if (client.isConnected() && !topicNames.isEmpty()) {
                     for (String topicName : topicNames) {
                         if (!TextUtils.isEmpty(topicName)) {
@@ -302,8 +302,9 @@ public class MQService extends Service {
         }
     }
 
-    private int falling=-1;
+    private int falling = -1;
     private String mac;
+
     /**
      * 加载MQTT返回的消息
      */
@@ -323,15 +324,15 @@ public class MQService extends Service {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
             } else if (topicName.startsWith("p99/socket1")) {
                 macAddress = topicName.substring(12, topicName.lastIndexOf("/"));
-            }else if(topicName.startsWith("p99/dehumidifier1")){
+            } else if (topicName.startsWith("p99/dehumidifier1")) {
                 macAddress = topicName.substring(18, topicName.lastIndexOf("/"));
-            }else if(topicName.startsWith("p99/aConditioning1")){
+            } else if (topicName.startsWith("p99/aConditioning1")) {
                 macAddress = topicName.substring(19, topicName.lastIndexOf("/"));
-            }else if(topicName.startsWith("p99/aPurifier1")){
+            } else if (topicName.startsWith("p99/aPurifier1")) {
                 macAddress = topicName.substring(15, topicName.lastIndexOf("/"));
-            }else if (topicName.startsWith("p99/wPurifier1")){
+            } else if (topicName.startsWith("p99/wPurifier1")) {
                 macAddress = topicName.substring(15, topicName.lastIndexOf("/"));
-            }else if (topicName.startsWith("p99")) {
+            } else if (topicName.startsWith("p99")) {
                 macAddress = topicName.substring(4, topicName.lastIndexOf("/"));
             }
 
@@ -355,9 +356,9 @@ public class MQService extends Service {
             int timerHour = -1;/**定时时间 小时*/
             int timerMin = -1;/**定时时间 分*/
 
-            int timerSwitch=-1;//定时器开关
-            String windLevel=null;//风速等级
-            int waterLevel=-1;//水位量
+            int timerSwitch = -1;//定时器开关
+            String windLevel = null;//风速等级
+            int waterLevel = -1;//水位量
             int equipRatedPowerHigh;/**设备额定高功率参数*/
             int equipRatedPowerLow;/**设备额定低功率参数*/
             int equipCurdPowerHigh;/**设备当前高功率参数*/
@@ -366,31 +367,96 @@ public class MQService extends Service {
             int checkCode = -1;/**校验码*/
             int endCode = -1;/**结束码*/
             String message = strings[1];/**收到的消息*/
+            if (message != null)
+                message = message.trim();
             long sharedId = -1;/**分享的设备*/
-            int warmerFall=-1;/**电暖器倾斜*/
+            int warmerFall = -1;/**电暖器倾斜*/
 
             Log.i("mmm", "-->" + message);
-
             Log.i("mmm222", "-->" + macAddress);
-
             DeviceChild deviceChild = null;
             JSONObject messageJsonObject = null;
             String productType = null;
             JSONArray messageJsonArray = null;
             if (!TextUtils.isEmpty(macAddress)) {
                 deviceChild = deviceChildDao.findDeviceByMacAddress2(macAddress);
-                if (deviceChild!=null){
-                    String share=deviceChild.getShare();
-                    if (!Utils.isEmpty(share)){
-                        sharedId=Long.MAX_VALUE;
+                if (deviceChild != null) {
+                    String share = deviceChild.getShare();
+                    if (!Utils.isEmpty(share)) {
+                        sharedId = Long.MAX_VALUE;
                     }
                 }
-
             }
 
-            if (AddDeviceActivity.running && !"reSet".equals(message)) {
+            if (("p99/" + macAddress + "/transfer").equals(topicName) && deviceChild!=null && deviceChild.getType()==0) {
+                try {
+                    JSONObject device = new JSONObject(message);
+                    if (device.has("productType")) {
+                        productType = device.getString("productType");
+                        String onlineTopicName = "", offlineTopicName = "";
+                        int deviceId = deviceChild.getDeviceId();
+                        int deviceType = Integer.parseInt(productType);
 
+                        deviceChild.setType(deviceType);
+                        deviceChildDao.update(deviceChild);
+                        new UpdataDeviceTypeAsync().execute(deviceId, deviceType, macAddress);
+                        if (2 == deviceType) {
+                            onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
+                        } else if (3 == deviceType) {
+                            onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+                        } else if (4 == deviceType) {
+                            onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+                        } else if (5 == deviceType) {
+                            onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+                        } else if (6 == deviceType) {
+                            onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+                        } else if (7 == deviceType) {
+                            onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+                        } else if (8 == deviceType) {
+                            onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+                            offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                        }
+                        if (!TextUtils.isEmpty(onlineTopicName) && !TextUtils.isEmpty(offlineTopicName)) {
+                            boolean success = subscribe(onlineTopicName, 1);
+                            boolean success2 = subscribe(offlineTopicName, 1);
+                            if (!success) {
+                                subscribe(onlineTopicName, 1);
+                            }
+                            if (!success2) {
+                                subscribe(offlineTopicName, 1);
+                            }
+                            if (deviceType == 3) {
+                                String topicName2 = "p99/sensor1/" + macAddress + "/set";
+                                String city = deviceChild.getHouseAddress();
+                                String province = deviceChild.getProvince();
+                                if (TextUtils.isEmpty(city)) {
+                                    if (city.contains("市")) {
+                                        city = city.substring(0, city.length() - 1);
+                                    }
+                                    String info = "url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "utf-8");
+                                    publish(topicName2, 1, info);
+                                } else {
+                                    if (city.contains("市")) {
+                                        city = city.substring(0, city.length() - 1);
+                                    }
+                                    String info = "url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "utf-8") + "&province=" + URLEncoder.encode(province, "utf-8");
+                                    publish(topicName2, 1, info);
+                                }
+                            }
+                        }
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
             }
+
             try {
                 if (topicName.equals("p99/" + phone + "/login")) {
                     JSONObject login = new JSONObject(message);
@@ -410,6 +476,7 @@ public class MQService extends Service {
                                     file.delete();
                                 }
                             }
+                            cancelAllsubscibe();
                             Message msg = handler.obtainMessage();
                             msg.what = 2;
                             handler.sendMessage(msg);
@@ -421,11 +488,11 @@ public class MQService extends Service {
                             userInfosDao.deleteAll();
                             friendDataDao.deleteAll();
                             msgDao.deleteAll();
-                            derailResultDao.deleteAll();
-                            derailBeanDao.deleteAll();
-                            cancelAllsubscibe();
                         }
                     }
+                }
+                if (MainActivity.running == false) {
+                    FamilyFragmentManager.running = false;
                 }
                 if ("reSet".equals(message)) {
                     if (deviceChild != null) {
@@ -435,13 +502,16 @@ public class MQService extends Service {
                         }
                         deviceChildDao.delete(deviceChild);
                         unsubscribe(topicName);
+
+                        if (deviceChild.getType() == 2) {
+                            Message msg = handler.obtainMessage();
+                            msg.what = 6;
+                            mac = macAddress;
+                            msg.obj = macAddress;
+                            handler.sendMessage(msg);
+                        }
                         deviceChild = null;
-                        Message msg=handler.obtainMessage();
-                        msg.what=6;
-                        mac=macAddress;
-                        msg.obj=macAddress;
-                        handler.sendMessage(msg);
-                        falling=0;
+                        falling = -1;
                     }
                 } else if ("offline".equals(message)) {
                     if (deviceChild != null) {
@@ -451,14 +521,13 @@ public class MQService extends Service {
                         }
                         deviceChild.setOnline(false);
                         deviceChildDao.update(deviceChild);
-                        Message msg=handler.obtainMessage();
-                        msg.what=6;
-                        mac=macAddress;
-                        msg.obj=macAddress;
+                        Message msg = handler.obtainMessage();
+                        msg.what = 6;
+                        mac = macAddress;
+                        msg.obj = macAddress;
                         handler.sendMessage(msg);
                     }
-                }
-                else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
+                } else if (topicName.contains("acceptorId_") && topicName.contains("friend")) {
 
                 } else if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
 
@@ -468,78 +537,70 @@ public class MQService extends Service {
                     if (!TextUtils.isEmpty(message) && message.startsWith("{") && message.endsWith("}")) {
                         messageJsonObject = new JSONObject(message);
                     }
-                    if (messageJsonObject != null && messageJsonObject.has("productType")) {
-                        productType = messageJsonObject.getString("productType");
-                    }
                     if (messageJsonObject != null && messageJsonObject.has("Warmer")) {
                         messageJsonArray = messageJsonObject.getJSONArray("Warmer");
                     } else if (messageJsonObject != null && messageJsonObject.has("TempHumPM2_5")) {
                         messageJsonArray = messageJsonObject.getJSONArray("TempHumPM2_5");
                     } else if (messageJsonObject != null && messageJsonObject.has("Socket")) {
                         messageJsonArray = messageJsonObject.getJSONArray("Socket");
-                    }else if (messageJsonObject!=null && messageJsonObject.has("WPurifier")){
+                    } else if (messageJsonObject != null && messageJsonObject.has("WPurifier")) {
                         messageJsonArray = messageJsonObject.getJSONArray("WPurifier");
                     }
 
                     //jjjjjjjjjjjjjjjjjj
-                    else if (messageJsonObject!=null && messageJsonObject.has("Dehumidifier")){
+                    else if (messageJsonObject != null && messageJsonObject.has("Dehumidifier")) {
                         messageJsonArray = messageJsonObject.getJSONArray("Dehumidifier");
-                    }
-                    else if (messageJsonObject!=null && messageJsonObject.has("AConditioning")){
+                    } else if (messageJsonObject != null && messageJsonObject.has("AConditioning")) {
                         messageJsonArray = messageJsonObject.getJSONArray("AConditioning");
-                    }
-                    else if (messageJsonObject!=null && messageJsonObject.has("APurifier")){
+                    } else if (messageJsonObject != null && messageJsonObject.has("APurifier")) {
                         messageJsonArray = messageJsonObject.getJSONArray("APurifier");
                     }
-                    if (!TextUtils.isEmpty(productType)) {
-                        type = Integer.parseInt(productType);
-                    } else {
-                        if (messageJsonArray != null) {
-                            int index = messageJsonArray.getInt(1);
-                            int index2 = messageJsonArray.getInt(2);
-                            String x = "" + index + index2;
-                            type = Integer.parseInt(x);
-                        }
+
+                    if (messageJsonArray != null) {
+                        int index = messageJsonArray.getInt(1);
+                        int index2 = messageJsonArray.getInt(2);
+                        String x = "" + index + index2;
+                        type = Integer.parseInt(x);
                     }
+
                 }
                 switch (type) {
                     case 1:
                         break;
                     case 2:/**取暖器*/
 
-                            if (messageJsonArray != null) {
-                                busModel = messageJsonArray.getInt(3);
-                                int mMcuVersion = messageJsonArray.getInt(4);
-                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
-                                int mWifiVersion = messageJsonArray.getInt(5);
-                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                        if (messageJsonArray != null) {
+                            busModel = messageJsonArray.getInt(3);
+                            int mMcuVersion = messageJsonArray.getInt(4);
+                            mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                            int mWifiVersion = messageJsonArray.getInt(5);
+                            wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
 
-                                warmerRunState = messageJsonArray.getInt(7);
-                                curRunState2 = messageJsonArray.getInt(8);
-                                curRunState3 = messageJsonArray.getInt(9);
+                            warmerRunState = messageJsonArray.getInt(7);
+                            curRunState2 = messageJsonArray.getInt(8);
+                            curRunState3 = messageJsonArray.getInt(9);
 
-                                int[] x = TenTwoUtil.changeToTwo(warmerRunState);
-                                deviceState = x[7];
-                                rateState = x[6] + "" + x[5];
-                                lockState = x[4];
-                                screenState = x[3];
-                                warmerFall=x[2];
+                            int[] x = TenTwoUtil.changeToTwo(warmerRunState);
+                            deviceState = x[7];
+                            rateState = x[6] + "" + x[5];
+                            lockState = x[4];
+                            screenState = x[3];
+                            warmerFall = x[2];
 
-                                waramerSetTemp = messageJsonArray.getInt(10);
-                                warmerCurTemp = messageJsonArray.getInt(11);
+                            waramerSetTemp = messageJsonArray.getInt(10);
+                            warmerCurTemp = messageJsonArray.getInt(11);
 
-                                Log.i("warmerCurTemp", "-->" + warmerCurTemp);
+                            Log.i("warmerCurTemp", "-->" + warmerCurTemp);
 
-                                warmerSampleData = messageJsonArray.getInt(12);
-                                warmerRatePower = messageJsonArray.getInt(13);
-                                warmerCurRunRoatePower = messageJsonArray.getInt(14);
+                            warmerSampleData = messageJsonArray.getInt(12);
+                            warmerRatePower = messageJsonArray.getInt(13);
+                            warmerCurRunRoatePower = messageJsonArray.getInt(14);
 
-                                timerHour = messageJsonArray.getInt(15);
-                                timerMin = messageJsonArray.getInt(16);
-                                checkCode = messageJsonArray.getInt(17);
-                                endCode = messageJsonArray.getInt(18);
-                            }
-
+                            timerHour = messageJsonArray.getInt(15);
+                            timerMin = messageJsonArray.getInt(16);
+                            checkCode = messageJsonArray.getInt(17);
+                            endCode = messageJsonArray.getInt(18);
+                        }
                         if (deviceChild != null) {
                             if (type != -1) {
                                 deviceChild.setType(type);
@@ -601,14 +662,14 @@ public class MQService extends Service {
                             if (endCode != -1) {
                                 deviceChild.setEndCode(endCode);
                             }
-                            if (warmerFall!=-1){
+                            if (warmerFall != -1) {
                                 deviceChild.setWarmerFall(warmerFall);
                             }
-                            if (warmerFall==1){
-                                falling=1;
+                            if (warmerFall == 1) {
+                                falling = 1;
                                 NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
                                 Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                long houseId=deviceChild.getHouseId();
+                                long houseId = deviceChild.getHouseId();
                                 notifyIntent.putExtra("houseId", houseId);
 
                                 notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
@@ -627,18 +688,18 @@ public class MQService extends Service {
                                 NotificationManager mNotificationManager =
                                         (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
                                 mNotificationManager.notify(0, builder.build());
-                                Message msg=handler.obtainMessage();
-                                msg.what=5;
-                                msg.obj=macAddress;
-                                mac=null;
+                                Message msg = handler.obtainMessage();
+                                msg.what = 5;
+                                msg.obj = macAddress;
+                                mac = null;
                                 handler.sendMessage(msg);
-                            }else {
-                                Message msg=handler.obtainMessage();
-                                msg.what=6;
-                                msg.obj=macAddress;
-                                mac=macAddress;
+                            } else {
+                                Message msg = handler.obtainMessage();
+                                msg.what = 6;
+                                msg.obj = macAddress;
+                                mac = macAddress;
                                 handler.sendMessage(msg);
-                                falling=0;
+                                falling = 0;
                             }
 //                            deviceChild.setWarmerFall(wa);
                             int ss = deviceChild.getDeviceId();
@@ -654,105 +715,105 @@ public class MQService extends Service {
                         }
                         break;
                     case 3:
-                            if (messageJsonArray != null) {
-                                int sensorSimpleTemp;/**传感器采样温度*/
-                                int sensorSimpleHum;/**传感器采样湿度*/
-                                int sorsorPm;/**PM2.5粉尘传感器数据*/
-                                int sensorOx;/**氧浓度传感器数据*/
-                                int sensorHcho;/**甲醛数据*/
+                        if (messageJsonArray != null) {
+                            int sensorSimpleTemp;/**传感器采样温度*/
+                            int sensorSimpleHum;/**传感器采样湿度*/
+                            int sorsorPm;/**PM2.5粉尘传感器数据*/
+                            int sensorOx;/**氧浓度传感器数据*/
+                            int sensorHcho;/**甲醛数据*/
 
-                                busModel = messageJsonArray.getInt(3);
-                                int mMcuVersion = messageJsonArray.getInt(4);
-                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
-                                int mWifiVersion = messageJsonArray.getInt(5);
-                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
-                                int sensorState = messageJsonArray.getInt(7);
-                                sensorSimpleTemp = messageJsonArray.getInt(8)-128;
-                                sensorSimpleHum = messageJsonArray.getInt(9) - 128;
-                                sorsorPm = messageJsonArray.getInt(10) - 128;
-                                sensorOx = messageJsonArray.getInt(11) - 128;
-                                sensorHcho = messageJsonArray.getInt(12) - 128;
+                            busModel = messageJsonArray.getInt(3);
+                            int mMcuVersion = messageJsonArray.getInt(4);
+                            mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                            int mWifiVersion = messageJsonArray.getInt(5);
+                            wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                            int sensorState = messageJsonArray.getInt(7);
+                            sensorSimpleTemp = messageJsonArray.getInt(8) - 128;
+                            sensorSimpleHum = messageJsonArray.getInt(9) - 128;
+                            sorsorPm = messageJsonArray.getInt(10) - 128;
+                            sensorOx = messageJsonArray.getInt(11) - 128;
+                            sensorHcho = messageJsonArray.getInt(12) - 128;
 
-                                if (deviceChild != null) {
-                                    deviceChild.setSensorState(sensorState);
-                                    deviceChild.setBusModel(busModel);
-                                    deviceChild.setMcuVersion(mcuVersion);
-                                    deviceChild.setWifiVersion(wifiVersion);
-                                    deviceChild.setSensorSimpleTemp(sensorSimpleTemp);
-                                    deviceChild.setSensorSimpleHum(sensorSimpleHum);
-                                    deviceChild.setSorsorPm(sorsorPm);
-                                    deviceChild.setSensorOx(sensorOx);
-                                    deviceChild.setSensorHcho(sensorHcho);
-                                    deviceChild.setOnline(true);
-                                    deviceChildDao.update(deviceChild);
-                                }
+                            if (deviceChild != null) {
+                                deviceChild.setSensorState(sensorState);
+                                deviceChild.setBusModel(busModel);
+                                deviceChild.setMcuVersion(mcuVersion);
+                                deviceChild.setWifiVersion(wifiVersion);
+                                deviceChild.setSensorSimpleTemp(sensorSimpleTemp);
+                                deviceChild.setSensorSimpleHum(sensorSimpleHum);
+                                deviceChild.setSorsorPm(sorsorPm);
+                                deviceChild.setSensorOx(sensorOx);
+                                deviceChild.setSensorHcho(sensorHcho);
+                                deviceChild.setOnline(true);
+                                deviceChildDao.update(deviceChild);
                             }
+                        }
 
                         break;
                     case 4:
-                            if (messageJsonArray != null) {
-                                int socketPower;/**插座功率*/
-                                int socketTemp;/**插座温度*/
-                                int socketState;/**插座当前状态*/
-                                int socketTimer=0;/**插座定时模式*/
-                                int socketTimerHour;/**定时模式的时*/
-                                int socketTimerMin;/**定时模式的分*/
-                                int socketCurrent;/**插座当前电流值*/
-                                int socketVal;/**插座当前电压值*/
-                                int socketPowerConsume;/**插座当前耗电量总度数*/
-                                int isSocketTimerMode;/**定时模式是否开启*/
-                                busModel = messageJsonArray.getInt(3);
-                                int mMcuVersion = messageJsonArray.getInt(4);
-                                mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
-                                int mWifiVersion = messageJsonArray.getInt(5);
-                                wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
-                                int socketPowerHigh = messageJsonArray.getInt(7);
-                                int socketPowerLow = messageJsonArray.getInt(8);
+                        if (messageJsonArray != null) {
+                            int socketPower;/**插座功率*/
+                            int socketTemp;/**插座温度*/
+                            int socketState;/**插座当前状态*/
+                            int socketTimer = 0;/**插座定时模式*/
+                            int socketTimerHour;/**定时模式的时*/
+                            int socketTimerMin;/**定时模式的分*/
+                            int socketCurrent;/**插座当前电流值*/
+                            int socketVal;/**插座当前电压值*/
+                            int socketPowerConsume;/**插座当前耗电量总度数*/
+                            int isSocketTimerMode;/**定时模式是否开启*/
+                            busModel = messageJsonArray.getInt(3);
+                            int mMcuVersion = messageJsonArray.getInt(4);
+                            mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                            int mWifiVersion = messageJsonArray.getInt(5);
+                            wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                            int socketPowerHigh = messageJsonArray.getInt(7);
+                            int socketPowerLow = messageJsonArray.getInt(8);
 
-                                String power2=socketPowerHigh/256+socketPowerLow%256+"";
-                                socketPower=Integer.parseInt(power2);
-                                socketTemp = messageJsonArray.getInt(9)-128;
-                                int state = messageJsonArray.getInt(10);
-                                int x[] = TenTwoUtil.changeToTwo(state);
-                                socketState = x[7];
-                                isSocketTimerMode=x[6];
+                            String power2 = socketPowerHigh / 256 + socketPowerLow % 256 + "";
+                            socketPower = Integer.parseInt(power2);
+                            socketTemp = messageJsonArray.getInt(9) - 128;
+                            int state = messageJsonArray.getInt(10);
+                            int x[] = TenTwoUtil.changeToTwo(state);
+                            socketState = x[7];
+                            isSocketTimerMode = x[6];
 
 
-                                socketTimer = messageJsonArray.getInt(11);
-                                socketTimerHour=messageJsonArray.getInt(12);
-                                socketTimerMin=messageJsonArray.getInt(13);
+                            socketTimer = messageJsonArray.getInt(11);
+                            socketTimerHour = messageJsonArray.getInt(12);
+                            socketTimerMin = messageJsonArray.getInt(13);
 
-                                int highCurrent = messageJsonArray.getInt(14);
-                                int lowCurrent=messageJsonArray.getInt(15);
-                                String socketCurrent2=""+highCurrent/256+lowCurrent%256;
-                                socketCurrent=Integer.parseInt(socketCurrent2);
-                                int highVal = messageJsonArray.getInt(16);
-                                int lowVal=messageJsonArray.getInt(17);
-                                String socketVal2=""+highVal/256 +lowVal%256;
-                                socketVal=Integer.parseInt(socketVal2);
+                            int highCurrent = messageJsonArray.getInt(14);
+                            int lowCurrent = messageJsonArray.getInt(15);
+                            String socketCurrent2 = "" + highCurrent / 256 + lowCurrent % 256;
+                            socketCurrent = Integer.parseInt(socketCurrent2);
+                            int highVal = messageJsonArray.getInt(16);
+                            int lowVal = messageJsonArray.getInt(17);
+                            String socketVal2 = "" + highVal / 256 + lowVal % 256;
+                            socketVal = Integer.parseInt(socketVal2);
 
-                                int highPowerConsume = messageJsonArray.getInt(18);
-                                int lowPowerConsume=messageJsonArray.getInt(19);
-                                String powerConsume2=""+highPowerConsume/256 +lowPowerConsume%256;
-                                socketPowerConsume=Integer.parseInt(powerConsume2);
-                                if (deviceChild != null) {
-                                    deviceChild.setSocketPower(socketPower);
-                                    deviceChild.setBusModel(busModel);
-                                    deviceChild.setMcuVersion(mcuVersion);
-                                    deviceChild.setWifiVersion(wifiVersion);
-                                    deviceChild.setSocketTemp(socketTemp);
-                                    deviceChild.setSocketState(socketState);
-                                    deviceChild.setIsSocketTimerMode(isSocketTimerMode);
-                                    deviceChild.setSocketTimer(socketTimer);
-                                    deviceChild.setSocketTimerHour(socketTimerHour);
-                                    deviceChild.setSocketTimerMin(socketTimerMin);
-                                    deviceChild.setSocketCurrent(socketCurrent);
-                                    deviceChild.setSocketVal(socketVal);
-                                    deviceChild.setSocketPowerConsume(socketPowerConsume);
-                                    deviceChild.setOnline(true);
-                                    deviceChildDao.update(deviceChild);
-                                }
+                            int highPowerConsume = messageJsonArray.getInt(18);
+                            int lowPowerConsume = messageJsonArray.getInt(19);
+                            String powerConsume2 = "" + highPowerConsume / 256 + lowPowerConsume % 256;
+                            socketPowerConsume = Integer.parseInt(powerConsume2);
+                            if (deviceChild != null) {
+                                deviceChild.setSocketPower(socketPower);
+                                deviceChild.setBusModel(busModel);
+                                deviceChild.setMcuVersion(mcuVersion);
+                                deviceChild.setWifiVersion(wifiVersion);
+                                deviceChild.setSocketTemp(socketTemp);
+                                deviceChild.setSocketState(socketState);
+                                deviceChild.setIsSocketTimerMode(isSocketTimerMode);
+                                deviceChild.setSocketTimer(socketTimer);
+                                deviceChild.setSocketTimerHour(socketTimerHour);
+                                deviceChild.setSocketTimerMin(socketTimerMin);
+                                deviceChild.setSocketCurrent(socketCurrent);
+                                deviceChild.setSocketVal(socketVal);
+                                deviceChild.setSocketPowerConsume(socketPowerConsume);
+                                deviceChild.setOnline(true);
+                                deviceChildDao.update(deviceChild);
                             }
+                        }
 
                         break;
                     case 5:
@@ -793,19 +854,19 @@ public class MQService extends Service {
                                 dehumSetHum = messageJsonArray.getInt(10);
                                 dehumSetTemp = messageJsonArray.getInt(11);
                                 timerMoudle = messageJsonArray.getInt(12);
-                                timerHour= messageJsonArray.getInt(13);
-                                timerMin= messageJsonArray.getInt(14);
-                                sensorSimpleHum= messageJsonArray.getInt(15)-128;
-                                sensorSimpleTemp= messageJsonArray.getInt(16)-128;
-                                waterLevel=messageJsonArray.getInt(17)-128;
-                                dehumInnerTemp = messageJsonArray.getInt(18)-128;
-                                dehumOuterTemp = messageJsonArray.getInt(19)-128;
+                                timerHour = messageJsonArray.getInt(13);
+                                timerMin = messageJsonArray.getInt(14);
+                                sensorSimpleHum = messageJsonArray.getInt(15) - 128;
+                                sensorSimpleTemp = messageJsonArray.getInt(16) - 128;
+                                waterLevel = messageJsonArray.getInt(17) - 128;
+                                dehumInnerTemp = messageJsonArray.getInt(18) - 128;
+                                dehumOuterTemp = messageJsonArray.getInt(19) - 128;
                                 equipRatedPowerHigh = messageJsonArray.getInt(20);
                                 equipRatedPowerLow = messageJsonArray.getInt(21);
                                 equipCurdPowerHigh = messageJsonArray.getInt(22);
                                 equipCurdPowerLow = messageJsonArray.getInt(23);
 
-                                Log.e("qqqqPow",equipCurdPowerHigh+","+equipCurdPowerLow);
+                                Log.e("qqqqPow", equipCurdPowerHigh + "," + equipCurdPowerLow);
                                 faultCode = messageJsonArray.getInt(24);
                                 checkCode = messageJsonArray.getInt(25);
                                 endCode = messageJsonArray.getInt(26);
@@ -841,7 +902,7 @@ public class MQService extends Service {
                                     deviceChild.setEndCode(endCode);
                                     deviceChild.setOnline(true);
                                     deviceChildDao.update(deviceChild);
-                                }else {
+                                } else {
                                 }
                             }
                         }
@@ -876,29 +937,29 @@ public class MQService extends Service {
                                 curRunState3 = messageJsonArray.getInt(9);
                                 int[] x = TenTwoUtil.changeToTwo(warmerRunState);
                                 deviceState = x[7];
-                                aCondState = x[6] + "" + x[5] + "" + x[4] ;
-                                aCondSleep = x[3] ;
-                                timerSwitch=x[2];
+                                aCondState = x[6] + "" + x[5] + "" + x[4];
+                                aCondSleep = x[3];
+                                timerSwitch = x[2];
                                 int[] x2 = TenTwoUtil.changeToTwo(curRunState2);
                                 windLevel = x2[7] + "" + x2[6] + "" + x2[5];
-                                aCondSUpDown = x2[4] ;
-                                aCondSLeftRight=x2[3];
+                                aCondSUpDown = x2[4];
+                                aCondSLeftRight = x2[3];
                                 aCondSetTemp1 = messageJsonArray.getInt(10);
                                 aCondSetTemp2 = messageJsonArray.getInt(11);
                                 aCondSetData = messageJsonArray.getInt(12);
-                                timerMoudle= messageJsonArray.getInt(13);
-                                timerHour= messageJsonArray.getInt(14);
-                                timerMin= messageJsonArray.getInt(15);
-                                aCondSimpleTemp1= messageJsonArray.getInt(16)-128;
-                                aCondSimpleTemp2= messageJsonArray.getInt(17)-128;
-                                sensorSimpleHum= messageJsonArray.getInt(18)-128;
-                                aCondInnerTemp= messageJsonArray.getInt(19)-128;
-                                aCondOuterTemp= messageJsonArray.getInt(20)-128;
-                                equipRatedPowerHigh= messageJsonArray.getInt(21);
-                                equipRatedPowerLow= messageJsonArray.getInt(22);
-                                equipCurdPowerHigh= messageJsonArray.getInt(23);
-                                equipCurdPowerLow= messageJsonArray.getInt(24);
-                                faultCode= messageJsonArray.getInt(25);
+                                timerMoudle = messageJsonArray.getInt(13);
+                                timerHour = messageJsonArray.getInt(14);
+                                timerMin = messageJsonArray.getInt(15);
+                                aCondSimpleTemp1 = messageJsonArray.getInt(16) - 128;
+                                aCondSimpleTemp2 = messageJsonArray.getInt(17) - 128;
+                                sensorSimpleHum = messageJsonArray.getInt(18) - 128;
+                                aCondInnerTemp = messageJsonArray.getInt(19) - 128;
+                                aCondOuterTemp = messageJsonArray.getInt(20) - 128;
+                                equipRatedPowerHigh = messageJsonArray.getInt(21);
+                                equipRatedPowerLow = messageJsonArray.getInt(22);
+                                equipCurdPowerHigh = messageJsonArray.getInt(23);
+                                equipCurdPowerLow = messageJsonArray.getInt(24);
+                                faultCode = messageJsonArray.getInt(25);
                                 checkCode = messageJsonArray.getInt(26);
                                 endCode = messageJsonArray.getInt(27);
                                 if (deviceChild != null) {
@@ -934,7 +995,7 @@ public class MQService extends Service {
                                     deviceChild.setEndCode(endCode);
                                     deviceChild.setOnline(true);
                                     deviceChildDao.update(deviceChild);
-                                }else {
+                                } else {
 
                                 }
                             }
@@ -946,7 +1007,7 @@ public class MQService extends Service {
 
                         } else {
                             String purifierState; //空气净化器状态
-                            int sorsorPm,sensorSimpleTemp,sensorSimpleHum,sensorHcho;
+                            int sorsorPm, sensorSimpleTemp, sensorSimpleHum, sensorHcho;
                             if (messageJsonArray != null) {
                                 busModel = messageJsonArray.getInt(3);
                                 int mMcuVersion = messageJsonArray.getInt(4);
@@ -959,16 +1020,16 @@ public class MQService extends Service {
                                 curRunState3 = messageJsonArray.getInt(9);
                                 int[] x = TenTwoUtil.changeToTwo(warmerRunState);
                                 deviceState = x[7];
-                                rateState = x[6] + "" + x[5] + "" + x[4] ;
+                                rateState = x[6] + "" + x[5] + "" + x[4];
                                 purifierState = x[3] + "" + x[2];
                                 timerSwitch = x[1];
                                 timerMoudle = messageJsonArray.getInt(10);
                                 timerHour = messageJsonArray.getInt(11);
                                 timerMin = messageJsonArray.getInt(12);
-                                sorsorPm= messageJsonArray.getInt(13)-128;
-                                sensorSimpleTemp= messageJsonArray.getInt(14)-128;
-                                sensorSimpleHum= messageJsonArray.getInt(15)-128;
-                                sensorHcho= messageJsonArray.getInt(16)-128;
+                                sorsorPm = messageJsonArray.getInt(13) - 128;
+                                sensorSimpleTemp = messageJsonArray.getInt(14) - 128;
+                                sensorSimpleHum = messageJsonArray.getInt(15) - 128;
+                                sensorHcho = messageJsonArray.getInt(16) - 128;
                                 checkCode = messageJsonArray.getInt(17);
                                 endCode = messageJsonArray.getInt(18);
                                 if (deviceChild != null) {
@@ -992,14 +1053,14 @@ public class MQService extends Service {
                                     deviceChild.setEndCode(endCode);
                                     deviceChild.setOnline(true);
                                     deviceChildDao.update(deviceChild);
-                                }else {
+                                } else {
 
                                 }
                             }
                         }
                         break;
                     case 8:
-                        if (messageJsonArray!=null){
+                        if (messageJsonArray != null) {
                             int wPurifierEndYear;/**净水器截止使用年*/
                             int wPurifierEndMonth;/**净水器截止使用月*/
                             int wPurifierEndDay;/**净水器截止使用日*/
@@ -1010,44 +1071,44 @@ public class MQService extends Service {
                             int wPurifierPrimaryQuqlity;/**净水器原生水质*/
                             int wPurifierOutQuqlity;/**净水器出水水质*/
                             /**净水器滤芯寿命 1-10*/
-                            int wPurifierfilter1,wPurifierfilter2,wPurifierfilter3,wPurifierfilter4,wPurifierfilter5,wPurifierfilter6,wPurifierfilter7,wPurifierfilter8,wPurifierfilter9,wPurifierfilter10;
+                            int wPurifierfilter1, wPurifierfilter2, wPurifierfilter3, wPurifierfilter4, wPurifierfilter5, wPurifierfilter6, wPurifierfilter7, wPurifierfilter8, wPurifierfilter9, wPurifierfilter10;
                             busModel = messageJsonArray.getInt(3);
                             int mMcuVersion = messageJsonArray.getInt(4);
                             mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
                             int mWifiVersion = messageJsonArray.getInt(5);
                             wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
-                            int wPurifierEndYearHigh=messageJsonArray.getInt(7);
-                            int wPurifierEndYeadLow=messageJsonArray.getInt(8);
-                            String wPurifierEndYear2=""+wPurifierEndYearHigh/256 + wPurifierEndYeadLow%256;
-                            wPurifierEndYear=Integer.parseInt(wPurifierEndYear2);
-                            wPurifierEndMonth=messageJsonArray.getInt(9);
-                            wPurifierEndDay=messageJsonArray.getInt(10);
-                            int wPurifierEndFlowHigh=messageJsonArray.getInt(11);
-                            int wPurifierEndFlowLow=messageJsonArray.getInt(12);
-                            String wPurifierEndFlow2=""+wPurifierEndFlowHigh/256+wPurifierEndFlowLow%256;
-                            wPurifierEndFlow=Integer.parseInt(wPurifierEndFlow2);
-                            int state=messageJsonArray.getInt(13);
-                            int []x=TenTwoUtil.changeToTwo(state);
-                            wPurifierState=""+x[7]+x[6]+x[5];
-                            int wPurifierFlowDataHigh=messageJsonArray.getInt(14);
-                            int wPurifierFlowDataLow=messageJsonArray.getInt(15);
-                            String wPurifierFlowData2=""+wPurifierFlowDataHigh/256+wPurifierFlowDataLow%256;
-                            wPurifierFlowData=Integer.parseInt(wPurifierFlowData2);
-                            wPurifierCurTemp=messageJsonArray.getInt(16)-128;
-                            wPurifierPrimaryQuqlity=messageJsonArray.getInt(17);
-                            wPurifierOutQuqlity=messageJsonArray.getInt(18);
-                            wPurifierfilter1=messageJsonArray.getInt(19);
-                            wPurifierfilter2=messageJsonArray.getInt(20);
-                            wPurifierfilter3=messageJsonArray.getInt(21);
-                            wPurifierfilter4=messageJsonArray.getInt(22);
-                            wPurifierfilter5=messageJsonArray.getInt(23);
-                            wPurifierfilter6=messageJsonArray.getInt(24);
-                            wPurifierfilter7=messageJsonArray.getInt(25);
-                            wPurifierfilter8=messageJsonArray.getInt(26);
-                            wPurifierfilter9=messageJsonArray.getInt(27);
-                            wPurifierfilter10=messageJsonArray.getInt(28);
+                            int wPurifierEndYearHigh = messageJsonArray.getInt(7);
+                            int wPurifierEndYeadLow = messageJsonArray.getInt(8);
+                            String wPurifierEndYear2 = "" + wPurifierEndYearHigh / 256 + wPurifierEndYeadLow % 256;
+                            wPurifierEndYear = Integer.parseInt(wPurifierEndYear2);
+                            wPurifierEndMonth = messageJsonArray.getInt(9);
+                            wPurifierEndDay = messageJsonArray.getInt(10);
+                            int wPurifierEndFlowHigh = messageJsonArray.getInt(11);
+                            int wPurifierEndFlowLow = messageJsonArray.getInt(12);
+                            String wPurifierEndFlow2 = "" + wPurifierEndFlowHigh / 256 + wPurifierEndFlowLow % 256;
+                            wPurifierEndFlow = Integer.parseInt(wPurifierEndFlow2);
+                            int state = messageJsonArray.getInt(13);
+                            int[] x = TenTwoUtil.changeToTwo(state);
+                            wPurifierState = "" + x[7] + x[6] + x[5];
+                            int wPurifierFlowDataHigh = messageJsonArray.getInt(14);
+                            int wPurifierFlowDataLow = messageJsonArray.getInt(15);
+                            String wPurifierFlowData2 = "" + wPurifierFlowDataHigh / 256 + wPurifierFlowDataLow % 256;
+                            wPurifierFlowData = Integer.parseInt(wPurifierFlowData2);
+                            wPurifierCurTemp = messageJsonArray.getInt(16) - 128;
+                            wPurifierPrimaryQuqlity = messageJsonArray.getInt(17);
+                            wPurifierOutQuqlity = messageJsonArray.getInt(18);
+                            wPurifierfilter1 = messageJsonArray.getInt(19);
+                            wPurifierfilter2 = messageJsonArray.getInt(20);
+                            wPurifierfilter3 = messageJsonArray.getInt(21);
+                            wPurifierfilter4 = messageJsonArray.getInt(22);
+                            wPurifierfilter5 = messageJsonArray.getInt(23);
+                            wPurifierfilter6 = messageJsonArray.getInt(24);
+                            wPurifierfilter7 = messageJsonArray.getInt(25);
+                            wPurifierfilter8 = messageJsonArray.getInt(26);
+                            wPurifierfilter9 = messageJsonArray.getInt(27);
+                            wPurifierfilter10 = messageJsonArray.getInt(28);
 
-                            if (deviceChild!=null){
+                            if (deviceChild != null) {
                                 deviceChild.setBusModel(busModel);
                                 deviceChild.setWifiVersion(wifiVersion);
                                 deviceChild.setMcuVersion(mcuVersion);
@@ -1078,29 +1139,22 @@ public class MQService extends Service {
                 }
 
                 if (AddDeviceActivity.running || DeviceDetailActivity.running || MsgActivity.running
-                        ||SmartTerminalActivity.running||SocketActivity.running|| PurifierActivity.running
-                        ||ShareDeviceActivity.running||LiveActivity.running
-                        ||TempChatActivity.running||APurifierActivity.running
-                        || AConfActivity.running ||DehumidifierActivity.running
-                        ||SmartLinkedActivity.running||QingLvFragment.running
-                        ||QunzuAddActivity.running ||QunZuFragment.running){
-                    falling=-1;
+                        || SmartTerminalActivity.running || SocketActivity.running || PurifierActivity.running
+                        || ShareDeviceActivity.running || LiveActivity.running
+                        || TempChatActivity.running || APurifierActivity.running
+                        || AConfActivity.running || DehumidifierActivity.running
+                        || SmartLinkedActivity.running || QingLvFragment.running
+                        || QunzuAddActivity.running || QunZuFragment.running || UseWaterRecordActivity.running) {
+                    falling = -1;
                 }
                 Log.i("FamilyFragmentManager", "-->" + FamilyFragmentManager.running);
-                if (AddDeviceActivity.running) {
-                    if (type != -1) {
-                        Intent mqttIntent = new Intent("AddDeviceActivity");
-                        mqttIntent.putExtra("type", type);
-                        mqttIntent.putExtra("macAddress", macAddress);
-                        sendBroadcast(mqttIntent);
-                    }
-                }else if (FamilyFragmentManager.running|| falling==1 || falling==0) {
+                if (FamilyFragmentManager.running || falling == 1 || falling == 0) {
                     Intent mqttIntent = new Intent("RoomFragment");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     mqttIntent.putExtra("sharedId", sharedId);
                     sendBroadcast(mqttIntent);
-                }  else if (DeviceDetailActivity.running ) {
+                } else if (DeviceDetailActivity.running) {
                     Intent mqttIntent = new Intent("DeviceDetailActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
@@ -1119,51 +1173,53 @@ public class MQService extends Service {
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (PurifierActivity.running){
+                } else if (PurifierActivity.running) {
                     Intent mqttIntent = new Intent("PurifierActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (ShareDeviceActivity.running) {
+                } else if (ShareDeviceActivity.running) {
                     Intent mqttIntent = new Intent("ShareDeviceActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (LiveActivity.running){
+                } else if (LiveActivity.running) {
                     Intent mqttIntent = new Intent("LiveActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (TempChatActivity.running){
+                } else if (TempChatActivity.running) {
                     Intent mqttIntent = new Intent("TempChatActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }
-                else if (APurifierActivity.running){
+                } else if (APurifierActivity.running) {
                     Intent mqttIntent = new Intent("APurifierActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }
-                else if (AConfActivity.running){
+                } else if (AConfActivity.running) {
                     Intent mqttIntent = new Intent("AConfActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }
-                else if (DehumidifierActivity.running){
+                } else if (DehumidifierActivity.running) {
                     Intent mqttIntent = new Intent("DehumidifierActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (SmartLinkedActivity.running){
+                } else if (SmartLinkedActivity.running) {
                     Intent mqttIntent = new Intent("SmartLinkedActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
-                }else if (AConfStateActivity.running){
+                } else if (AConfStateActivity.running) {
                     Intent mqttIntent = new Intent("SmartLinkedActivity");
+                    mqttIntent.putExtra("deviceChild", deviceChild);
+                    mqttIntent.putExtra("macAddress", macAddress);
+                    sendBroadcast(mqttIntent);
+                } else if (UseWaterRecordActivity.running) {
+                    Intent mqttIntent = new Intent("UseWaterRecordActivity");
                     mqttIntent.putExtra("deviceChild", deviceChild);
                     mqttIntent.putExtra("macAddress", macAddress);
                     sendBroadcast(mqttIntent);
@@ -1197,80 +1253,6 @@ public class MQService extends Service {
                         manager.notify(0, notification);
                     }
                 }
-                if (topicName.contains("derail") && message.contains("向您发送了有轨请求")) {
-                    String[] s = message.split(",");
-                    DerailBean derailBean = new DerailBean();
-                    derailBean.setDerailName(s[0]);
-                    derailBean.setCreateTime(Long.parseLong(s[2]));
-                    derailBean.setDerailId(Integer.parseInt(s[4]));
-                    derailBeanDao.deleteAll();
-                    derailBeanDao.insert(derailBean);
-                    //设置跳转的页面
-                    PendingIntent intent = PendingIntent.getActivity(getApplicationContext(),
-                            100, new Intent(getApplicationContext(), MsgActivity.class),
-                            PendingIntent.FLAG_CANCEL_CURRENT);
-                    //设置跳转
-                    builder.setContentIntent(intent);
-                    //设置通知栏标题
-                    builder.setContentTitle("新的有轨请求");
-                    //设置通知栏内容
-                    builder.setContentText(derailBean.getDerailName() + "向您申请有轨绑定");
-                    //设置
-                    builder.setDefaults(Notification.DEFAULT_ALL);
-                    //创建通知类
-                    Notification notification = builder.build();
-                    notification.flags = Notification.FLAG_AUTO_CANCEL;
-                    //显示在通知栏
-                    manager.notify(0, notification);
-
-                }
-                Log.e("qqqqqqMSG111", topicName);
-                Log.e("qqqqqqMSG222", message);
-//                Log.e("qqqqqqMSG222", message);
-                if(topicName.contains("derailReplay")&&message.contains("有轨请求")){
-
-                    String[] s=message.split(",");
-                    DerailResult derailResult=new DerailResult();
-                    derailResult.setDerailName(s[0]);
-                    derailResult.setCreateTime(Long.parseLong(s[2]));
-                    derailResult.setDerailId(Integer.parseInt(topicName.substring(topicName.indexOf("senderId_")+9,topicName.indexOf("/acceptorId_"))));
-                    String timee = preferences.getString("timee","");
-                    if(message.contains("拒绝")){
-                        derailResult.setDerailResult(0);
-                        if (Long.parseLong(timee)<Long.parseLong(s[2])){
-                        SharedPreferences.Editor editor = preferences.edit();
-                        editor.putInt("derailPo", 0);
-                        editor.commit();
-                        }
-                        Log.e("youguires322", "onViewClicked: -->"+"........" + timee+"........." +s[1]);
-                       }
-                    else
-                    {
-                        derailResult.setDerailResult(1);
-                        if (Long.parseLong(timee)<Long.parseLong(s[2])){
-                            SharedPreferences.Editor editor = preferences.edit();
-                            editor.putInt("derailPo", 2);
-                            editor.commit();
-                        }
-                        Log.e("youguires3333", "onViewClicked: -->"+"........" + timee+"........." +s[1]);
-                       }
-                    derailResultDao.insert(derailResult);
-
-                    MsgData msgData=new MsgData();
-                    msgData.setUserName(s[0]);
-                    msgData.setCreateTime(Long.parseLong(s[2]));
-                    if(message.contains("拒绝"))
-                        msgData.setState(7);
-                    else
-                        msgData.setState(8);
-
-                    List<MsgData> msgDataList = msgDao.findMsgByTime(Long.parseLong(s[2]));
-                    if (msgDataList.size() == 0)
-                    msgDao.insert(msgData);
-
-                    int derailPo1= preferences.getInt("derailPo",-1);
-                    Log.e("youguires12233333", "onViewClicked: -->"+derailPo1 );
-                }
                 if (message.contains("您的好友请求")) {
                     if (message.contains(",")) {
                         String str[] = message.split(",");
@@ -1288,7 +1270,6 @@ public class MQService extends Service {
                             msgDao.insert(msgData);
                     }
                 }
-
 
 
                 if (!TextUtils.isEmpty(macAddress) && macAddress.equals("clockuniversal")) {
@@ -1345,7 +1326,7 @@ public class MQService extends Service {
 //                    }
 
                     String[] newClocks = message.split(",");
-                    for(int i=0;i<newClocks.length;i++){
+                    for (int i = 0; i < newClocks.length; i++) {
                         String str = "p99/" + newClocks[i] + "/clockuniversal";
                         boolean success = subscribe(str, 1);
                     }
@@ -1365,6 +1346,7 @@ public class MQService extends Service {
                     }
 
                 } else if (topicName.contains("clockuniversal")) {
+                    Log.e("qqqqqCCCCCC", message);
                     boolean isShow = preferences.getBoolean("isClockPopShow", false);
                     Log.e("qqqqqIsShow", isShow + "???");
                     JSONObject jsonObject = new JSONObject(message);
@@ -1387,10 +1369,20 @@ public class MQService extends Service {
                     userList.setMusic(jsonObject.getString("music"));
                     userList.setSwitchs(jsonObject.getInt("switchs"));
                     userList.setCreaterName(jsonObject.getString("createrName"));
+                    userList.setCreateTime(jsonObject.getLong("createTime"));
                     List<ClockBean> findClock = clockBeanDao.findClockByClockId(jsonObject.getInt("clockId"));
                     MsgData msgData = new MsgData();
                     msgData.setCreateTime(jsonObject.getLong("createTime"));
                     msgData.setUserName(jsonObject.getString("createrName"));
+
+
+                    boolean isTime = false;
+
+                    if (findClock.size() == 0)
+                        isTime = true;
+                    else if (userList.getCreateTime() != findClock.get(0).getCreateTime())
+                        isTime = true;
+
                     if (state == 2) {
                         if (findClock.size() == 0) {
                             if (userList.getClockType() == 3)
@@ -1416,9 +1408,12 @@ public class MQService extends Service {
                             userList2.setMusic(userList.getMusic());
                             userList2.setClockHour(userList.getClockHour());
                             userList2.setClockMinute(userList.getClockMinute());
+                            userList2.setCreateTime(userList.getCreateTime());
                             clockBeanDao.update(userList2);
                         }
-                        if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+
+                        if (!(userList.getClockCreater() + "").equals(userId) && !isShow && isTime) {
+
                             dialogSign = userList.getClockType();
                             Message msg = Message.obtain();
                             msg.what = 1;   //标志消息的标志
@@ -1438,7 +1433,8 @@ public class MQService extends Service {
                                 userInfo1.setClockId(userList.getClockId());
                                 userInfosDao.insert(userInfo1);
                             }
-                            if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                            if (!(userList.getClockCreater() + "").equals(userId) && !isShow && isTime) {
+                                Log.e("qqqqqZZZZ", userList.getCreateTime() + "" + findClock.get(0).getCreateTime());
                                 dialogSign = userList.getClockType();
                                 Message msg = Message.obtain();
                                 msg.what = 1;   //标志消息的标志
@@ -1482,7 +1478,8 @@ public class MQService extends Service {
                                     userInfo1.setClockId(userList.getClockId());
                                     userInfosDao.insert(userInfo1);
                                 }
-                                if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                                if (!(userList.getClockCreater() + "").equals(userId) && !isShow && isTime) {
+                                    Log.e("qqqqqZZZZ", userList.getCreateTime() + "" + findClock.get(0).getCreateTime());
                                     dialogSign = userList.getClockType();
                                     Message msg = Message.obtain();
                                     msg.what = 1;   //标志消息的标志
@@ -1507,7 +1504,8 @@ public class MQService extends Service {
                                     userInfo1.setClockId(userList.getClockId());
                                     userInfosDao.insert(userInfo1);
                                 }
-                                if (!(userList.getClockCreater() + "").equals(userId) && !isShow) {
+                                if (!(userList.getClockCreater() + "").equals(userId) && !isShow && isTime) {
+                                    Log.e("qqqqqZZZZ", userList.getCreateTime() + "" + findClock.get(0).getCreateTime());
                                     dialogSign = userList.getClockType();
                                     Message msg = Message.obtain();
                                     msg.what = 1;   //标志消息的标志
@@ -1628,8 +1626,6 @@ public class MQService extends Service {
         userId = preferences.getString("userId", "");
         String userName = preferences.getString("username", "");
         String friendTopic = "p99/+/acceptorId_" + userId + "/friend";
-        String derailTopic = "p99/+/acceptorId_" + userId + "/derail";
-        String derailReplayTopic = "p99/+/acceptorId_" + userId + "/derailReplay";
         phone = preferences.getString("phone", "");
         list.add("p99/" + phone + "/login");
         List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
@@ -1650,13 +1646,13 @@ public class MQService extends Service {
                     offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
+                    break;
                 case 4:
                     onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
                     offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
                     break;
-                //jjjjjjjjjjjjjjjjj
                 case 5:
                     onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
                     offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
@@ -1667,6 +1663,7 @@ public class MQService extends Service {
                     offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
                     list.add(onlineTopicName);
                     list.add(offlineTopicName);
+                    break;
                 case 7:
                     onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
                     offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
@@ -1681,14 +1678,13 @@ public class MQService extends Service {
                     break;
             }
         }
-        if (!LoginActivity.running){
+        if (!LoginActivity.running) {
             String friendReplayTopic = "p99/+/acceptorId_" + userId + "/friendReplay";
             String clockTopic = "p99/clockuniversal/userId_" + userId;
             list.add(friendTopic);
             list.add(clockTopic);
             list.add(friendReplayTopic);
-            list.add(derailTopic);
-            list.add(derailReplayTopic);
+//            Log.e("qqqqqCCC", friendTopic);
         }
         return list;
     }
@@ -1703,9 +1699,9 @@ public class MQService extends Service {
             @Override
             public void run() {
                 if (!client.isConnected()) {
-                    isFinish = false;
-                    countTimer = new CountTimer(10000, 1000);
-                    countTimer.start();
+//                    isFinish = false;
+//                    countTimer = new CountTimer(10000, 1000);
+//                    countTimer.start();
                     connect();
                 }
             }
@@ -1759,6 +1755,7 @@ public class MQService extends Service {
                 client.subscribe(topicName, qos);
                 flag = true;
             } catch (MqttException e) {
+                e.printStackTrace();
             }
         }
         return flag;
@@ -1799,10 +1796,9 @@ public class MQService extends Service {
             super.handleMessage(msg);
             switch (msg.what) {
                 case 1:
-                    Log.e("qqqqqqFFFF",isFinish+"?");
-                    if(dialog4==null)
-                    showDialog();
-                    else if(!dialog4.isShowing())
+                    if (dialog4 == null)
+                        showDialog();
+                    else if (!dialog4.isShowing())
                         showDialog();
                     break;
                 case 2:
@@ -1818,18 +1814,20 @@ public class MQService extends Service {
                         wl.acquire(10000); // 点亮屏幕
                         wl.release(); // 释放
                     }
-                    if (!LoginActivity.running){
+
+                    if (!LoginActivity.running) {
                         Intent notifyIntent = new Intent(MQService.this, LoginActivity.class);
-                        Toast.makeText(MQService.this,"该账号已在其他设备上登录",Toast.LENGTH_SHORT).show();
+                        notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(notifyIntent);
+                        Toast.makeText(MQService.this, "该账号已在其他设备上登录", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 5:
-                    VibratorUtil.Vibrate(MQService.this, new long[]{1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000,1000},false);   //震动10s  //震动10s
+                    VibratorUtil.Vibrate(MQService.this, new long[]{1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000, 1000}, false);   //震动10s  //震动10s
                     break;
                 case 6:
-                    String madAddress= (String) msg.obj;
-                    if (madAddress!=null && mac!=null && madAddress.equals(mac)){
+                    String madAddress = (String) msg.obj;
+                    if (madAddress != null && mac != null && madAddress.equals(mac)) {
                         VibratorUtil.StopVibrate(MQService.this);
                     }
                     break;
@@ -1840,70 +1838,139 @@ public class MQService extends Service {
 
     btClockjsDialog5 dialog4;
 
-    boolean isFinish = false;
+//    boolean isFinish = false;
 
     private void showDialog() {
-        if (isFinish) {
-            dialog4 = new btClockjsDialog5(MQService.this, dialogSign);
-            dialog4.setOnNegativeClickListener(new btClockjsDialog5.OnNegativeClickListener() {
-                @Override
-                public void onNegativeClick() {
+//        if (isFinish) {
+        dialog4 = new btClockjsDialog5(MQService.this, dialogSign);
+        dialog4.setOnNegativeClickListener(new btClockjsDialog5.OnNegativeClickListener() {
+            @Override
+            public void onNegativeClick() {
 //                dialog.dismiss();
-                }
-            });
-            dialog4.setOnPositiveClickListener(new btClockjsDialog5.OnPositiveClickListener() {
-                @Override
-                public void onPositiveClick() {
+            }
+        });
+        dialog4.setOnPositiveClickListener(new btClockjsDialog5.OnPositiveClickListener() {
+            @Override
+            public void onPositiveClick() {
 
-                }
-            });
+            }
+        });
 
-            dialog4.setCanceledOnTouchOutside(false);
-            dialog4.setCancelable(false);
-            dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
-            dialog4.show();
-        }
+        dialog4.setCanceledOnTouchOutside(false);
+        dialog4.setCancelable(false);
+        dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        dialog4.show();
+//        }
     }
 
 
     private class getClockAsync extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... macs) {
-            String macAddress = macs[0];
-            String topicName = "p99/" + macAddress + "/clockuniversal";
-            boolean success = subscribe(topicName, 1);
+            if (client!=null && client.isConnected()){
+                for (int i = 0; i < clocks.length; i++) {
+                    String topicName = "p99/" + clocks[i] + "/clockuniversal";
+                    try {
+                        client.subscribe(topicName, 1);
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                }
+            }
             return null;
         }
     }
 
-
-    class CountTimer extends CountDownTimer {
-        public CountTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        /**
-         * 倒计时过程中调用
-         *
-         * @param millisUntilFinished
-         */
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-            Log.e("qqqTag", "倒计时=" + (millisUntilFinished / 1000));
-        }
-
-        /**
-         * 倒计时完成后调用
-         */
+    class UpdataDeviceTypeAsync extends AsyncTask<Object, Void, Void> {
 
         @Override
-        public void onFinish() {
-            Log.e("qqqTag", "倒计时完成");
-            isFinish = true;
+        protected Void doInBackground(Object... strings) {
+            int deviceId = (int) strings[0];
+            int deviceType = (int) strings[1];
+            String macAddress = (String) strings[2];
+            String url = HttpUtils.ipAddress + "/family/device/addDeviceType?deviceId=" + deviceId + "&deviceType=" + deviceType;
 
+            String result = HttpUtils.getOkHpptRequest(url);
+            try {
+                if (!TextUtils.isEmpty(result)) {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode = jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)) {
+                        String topicName = "p99/" + macAddress + "/transfer";
+                        unsubscribe(topicName);
+                    }
+                } else {
+                    HttpUtils.getOkHpptRequest(url);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Log.i("UpdataDeviceTypeAsync", "-->" + result);
+            return null;
+        }
+    }
+
+    class UpdateDeviceTypeAsync2 extends AsyncTask<List<DeviceChild>, Void, Void> {
+
+        @Override
+        protected Void doInBackground(List<DeviceChild>... lists) {
+            List<DeviceChild> list = lists[0];
+            for (DeviceChild deviceChild : list) {
+                if (deviceChild.getType() == 0) {
+                    String macAddress = deviceChild.getMacAddress();
+                    String topicName = "p99/" + macAddress + "/transfer";
+                    try {
+                        boolean success = subscribe(topicName, 1);
+                        if (!success) {
+                            success = subscribe(topicName, 1);
+                        }
+                        if (success) {
+                            String topicName2 = "p99/" + macAddress + "/set";
+                            String payLoad = "getType";
+                            boolean step2 = publish(topicName2, 1, payLoad);
+                            Log.i("topicName2","-->"+topicName2);
+                            if (!step2) {
+                                step2 = publish(topicName2, 1, payLoad);
+                            }
+                        }
+                    } catch (Exception e) {
+                        e.printStackTrace();
+                    }
+                }
+            }
+            return null;
 
         }
     }
+
+
+//    class CountTimer extends CountDownTimer {
+//        public CountTimer(long millisInFuture, long countDownInterval) {
+//            super(millisInFuture, countDownInterval);
+//        }
+//
+//        /**
+//         * 倒计时过程中调用
+//         *
+//         * @param millisUntilFinished
+//         */
+//        @Override
+//        public void onTick(long millisUntilFinished) {
+//
+//            Log.e("qqqTag", "倒计时=" + (millisUntilFinished / 1000));
+//        }
+//
+//        /**
+//         * 倒计时完成后调用
+//         */
+//
+//        @Override
+//        public void onFinish() {
+//            Log.e("qqqTag", "倒计时完成");
+//            isFinish = true;
+//
+//
+//        }
+//    }
 
 }

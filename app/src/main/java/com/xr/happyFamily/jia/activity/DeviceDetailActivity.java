@@ -601,14 +601,20 @@ public class DeviceDetailActivity extends AppCompatActivity {
         String rateState=deviceChild.getRateState();
         if ("01".equals(rateState)){
             image_low_rate.setImageResource(R.mipmap.rate_open);
+            image_middle_rate.setImageResource(R.mipmap.rate_close);
+            image_high_rate.setImageResource(R.mipmap.rate_close);
         }else if ("10".equals(rateState)){
+            image_low_rate.setImageResource(R.mipmap.rate_close);
             image_middle_rate.setImageResource(R.mipmap.rate_open);
+            image_high_rate.setImageResource(R.mipmap.rate_close);
         }else if ("11".equals(rateState)){
+            image_low_rate.setImageResource(R.mipmap.rate_close);
+            image_middle_rate.setImageResource(R.mipmap.rate_close);
             image_high_rate.setImageResource(R.mipmap.rate_open);
+
         }
 
-        if (popupWindow3==null)
-            popupWindow3 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        popupWindow3 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
         popupWindow3.setFocusable(true);
         popupWindow3.setOutsideTouchable(true);
@@ -839,6 +845,21 @@ public class DeviceDetailActivity extends AppCompatActivity {
                 image_screen.setImageResource(R.mipmap.screen_close);
             }else if (deviceState==1){
                 image_screen.setImageResource(R.mipmap.screen_open);
+            }
+        }
+        if (popupWindow3!=null && popupWindow3.isShowing()){
+            if ("01".equals(rateState)){
+                image_low_rate.setImageResource(R.mipmap.rate_open);
+                image_middle_rate.setImageResource(R.mipmap.rate_close);
+                image_high_rate.setImageResource(R.mipmap.rate_close);
+            }else if ("10".equals(rateState)){
+                image_low_rate.setImageResource(R.mipmap.rate_close);
+                image_middle_rate.setImageResource(R.mipmap.rate_open);
+                image_high_rate.setImageResource(R.mipmap.rate_close);
+            }else if ("11".equals(rateState)){
+                image_low_rate.setImageResource(R.mipmap.rate_close);
+                image_middle_rate.setImageResource(R.mipmap.rate_close);
+                image_high_rate.setImageResource(R.mipmap.rate_open);
             }
         }
     }

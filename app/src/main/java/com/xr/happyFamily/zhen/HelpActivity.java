@@ -135,13 +135,13 @@ public class HelpActivity extends AppCompatActivity implements ImagePickerAdapte
                     paramsMap.put("userId",userId);
                     paramsMap.put("description",description);
                     Map<String,Object> fileMap=new HashMap<>();
-//                    for (int i = 0; i < selImageList.size(); i++) {
-//                        if (i>=1){
-//                            break;
-//                        }
-//                        String newPath = BitmapUtils.compressImageUpload(selImageList.get(i).path);
-//                        fileMap.put(selImageList.get(i).name+i,new File(newPath));
-//                    }
+                    for (int i = 0; i < selImageList.size(); i++) {
+                        if (i>=1){
+                            break;
+                        }
+                        String newPath = BitmapUtils.compressImageUpload(selImageList.get(i).path);
+                        fileMap.put(selImageList.get(i).name+i,new File(newPath));
+                    }
                     new UpFeedbackAsync().execute(paramsMap,fileMap);
                 }else {
                     Toast.makeText(this,"请检查网络",Toast.LENGTH_SHORT).show();

@@ -36,6 +36,7 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         public final static Property ClockCreater = new Property(9, int.class, "clockCreater", false, "CLOCK_CREATER");
         public final static Property ClockType = new Property(10, int.class, "clockType", false, "CLOCK_TYPE");
         public final static Property CreaterName = new Property(11, String.class, "createrName", false, "CREATER_NAME");
+        public final static Property CreateTime = new Property(12, long.class, "createTime", false, "CREATE_TIME");
     }
 
 
@@ -62,7 +63,8 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
                 "\"SWITCHS\" INTEGER NOT NULL ," + // 8: switchs
                 "\"CLOCK_CREATER\" INTEGER NOT NULL ," + // 9: clockCreater
                 "\"CLOCK_TYPE\" INTEGER NOT NULL ," + // 10: clockType
-                "\"CREATER_NAME\" TEXT);"); // 11: createrName
+                "\"CREATER_NAME\" TEXT," + // 11: createrName
+                "\"CREATE_TIME\" INTEGER NOT NULL );"); // 12: createTime
     }
 
     /** Drops the underlying database table. */
@@ -106,6 +108,7 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         if (createrName != null) {
             stmt.bindString(12, createrName);
         }
+        stmt.bindLong(13, entity.getCreateTime());
     }
 
     @Override
@@ -143,6 +146,7 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         if (createrName != null) {
             stmt.bindString(12, createrName);
         }
+        stmt.bindLong(13, entity.getCreateTime());
     }
 
     @Override
@@ -164,7 +168,8 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
             cursor.getInt(offset + 8), // switchs
             cursor.getInt(offset + 9), // clockCreater
             cursor.getInt(offset + 10), // clockType
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11) // createrName
+            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // createrName
+            cursor.getLong(offset + 12) // createTime
         );
         return entity;
     }
@@ -183,6 +188,7 @@ public class ClockBeanDao extends AbstractDao<ClockBean, Long> {
         entity.setClockCreater(cursor.getInt(offset + 9));
         entity.setClockType(cursor.getInt(offset + 10));
         entity.setCreaterName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
+        entity.setCreateTime(cursor.getLong(offset + 12));
      }
     
     @Override

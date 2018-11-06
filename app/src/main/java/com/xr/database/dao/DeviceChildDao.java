@@ -128,6 +128,8 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property WPurifierfilter8 = new Property(101, int.class, "wPurifierfilter8", false, "W_PURIFIERFILTER8");
         public final static Property WPurifierfilter9 = new Property(102, int.class, "wPurifierfilter9", false, "W_PURIFIERFILTER9");
         public final static Property WPurifierfilter10 = new Property(103, int.class, "wPurifierfilter10", false, "W_PURIFIERFILTER10");
+        public final static Property HouseAddress = new Property(104, String.class, "houseAddress", false, "HOUSE_ADDRESS");
+        public final static Property Province = new Property(105, String.class, "province", false, "PROVINCE");
     }
 
 
@@ -246,7 +248,9 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"W_PURIFIERFILTER7\" INTEGER NOT NULL ," + // 100: wPurifierfilter7
                 "\"W_PURIFIERFILTER8\" INTEGER NOT NULL ," + // 101: wPurifierfilter8
                 "\"W_PURIFIERFILTER9\" INTEGER NOT NULL ," + // 102: wPurifierfilter9
-                "\"W_PURIFIERFILTER10\" INTEGER NOT NULL );"); // 103: wPurifierfilter10
+                "\"W_PURIFIERFILTER10\" INTEGER NOT NULL ," + // 103: wPurifierfilter10
+                "\"HOUSE_ADDRESS\" TEXT," + // 104: houseAddress
+                "\"PROVINCE\" TEXT);"); // 105: province
     }
 
     /** Drops the underlying database table. */
@@ -414,6 +418,16 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(102, entity.getWPurifierfilter8());
         stmt.bindLong(103, entity.getWPurifierfilter9());
         stmt.bindLong(104, entity.getWPurifierfilter10());
+ 
+        String houseAddress = entity.getHouseAddress();
+        if (houseAddress != null) {
+            stmt.bindString(105, houseAddress);
+        }
+ 
+        String province = entity.getProvince();
+        if (province != null) {
+            stmt.bindString(106, province);
+        }
     }
 
     @Override
@@ -575,6 +589,16 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         stmt.bindLong(102, entity.getWPurifierfilter8());
         stmt.bindLong(103, entity.getWPurifierfilter9());
         stmt.bindLong(104, entity.getWPurifierfilter10());
+ 
+        String houseAddress = entity.getHouseAddress();
+        if (houseAddress != null) {
+            stmt.bindString(105, houseAddress);
+        }
+ 
+        String province = entity.getProvince();
+        if (province != null) {
+            stmt.bindString(106, province);
+        }
     }
 
     @Override
@@ -688,7 +712,9 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.getInt(offset + 100), // wPurifierfilter7
             cursor.getInt(offset + 101), // wPurifierfilter8
             cursor.getInt(offset + 102), // wPurifierfilter9
-            cursor.getInt(offset + 103) // wPurifierfilter10
+            cursor.getInt(offset + 103), // wPurifierfilter10
+            cursor.isNull(offset + 104) ? null : cursor.getString(offset + 104), // houseAddress
+            cursor.isNull(offset + 105) ? null : cursor.getString(offset + 105) // province
         );
         return entity;
     }
@@ -799,6 +825,8 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setWPurifierfilter8(cursor.getInt(offset + 101));
         entity.setWPurifierfilter9(cursor.getInt(offset + 102));
         entity.setWPurifierfilter10(cursor.getInt(offset + 103));
+        entity.setHouseAddress(cursor.isNull(offset + 104) ? null : cursor.getString(offset + 104));
+        entity.setProvince(cursor.isNull(offset + 105) ? null : cursor.getString(offset + 105));
      }
     
     @Override

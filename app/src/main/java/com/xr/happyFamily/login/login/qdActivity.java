@@ -383,6 +383,7 @@ public class qdActivity extends Activity {
                                 String deviceName=jsonObject2.getString("deviceName");
                                 int deviceType=jsonObject2.getInt("deviceType");
                                 int roomId=jsonObject2.getInt("roomId");
+                                int houseId=jsonObject2.getInt("houseId");
                                 String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
 //                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
@@ -399,6 +400,7 @@ public class qdActivity extends Activity {
 
                                     deviceChild2=new DeviceChild();
                                     deviceChild2.setUserId(userId);
+                                    deviceChild2.setHouseId(houseId);
                                     deviceChild2.setShareId(Long.MAX_VALUE);
                                     deviceChild2.setName(deviceName);
                                     deviceChild2.setDeviceId(deviceId);

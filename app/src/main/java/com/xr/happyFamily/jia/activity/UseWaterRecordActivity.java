@@ -59,7 +59,6 @@ public class UseWaterRecordActivity extends AppCompatActivity {
     @BindView(R.id.tv_month) TextView tv_month;/**month用水量*/
     @BindView(R.id.tv_date) TextView tv_date;
     @BindView(R.id.tv_num) TextView tv_num;
-    @BindView(R.id.tv_num2) TextView tv_num2;/**过滤后水质*/
     @BindView(R.id.textView16) TextView textView16;
     private MyApplication application;
     String tempChartLineUrl= HttpUtils.ipAddress+"/family/data/getDeviceAllData";
@@ -70,7 +69,7 @@ public class UseWaterRecordActivity extends AppCompatActivity {
     private DeviceChild deviceChild;
     private float dayUseWater;
     private float weekUseWater;
-    private float monthUseWater;
+    private float yearUserWater;
     MessageReceiver receiver;
     public static boolean running=false;
     @Override
@@ -101,7 +100,6 @@ public class UseWaterRecordActivity extends AppCompatActivity {
         time=format.format(date);
         tv_date.setText(time+"(本日用水量)");
         int wPurifierOutQuqlity=deviceChild.getWPurifierOutQuqlity();
-        tv_num2.setText(""+wPurifierOutQuqlity);
         barChartManager = new BarChartManager(barChart);
 
         IntentFilter intentFilter = new IntentFilter("UseWaterRecordActivity");
@@ -192,7 +190,7 @@ public class UseWaterRecordActivity extends AppCompatActivity {
                 week=0;
                 month=1;
                 tv_date.setText(time+"(本年用水量)");
-                tv_num.setText(""+monthUseWater);
+                tv_num.setText(""+yearUserWater);
                 textView16.setText("本年用水量(L)");
                 break;
         }
@@ -210,24 +208,31 @@ public class UseWaterRecordActivity extends AppCompatActivity {
      * 设置day用水量
      */
     private void setValueDay(){
-        barChartManager.showBarChart(xValuesDay, yValueDay, "", colours.get(0));
-        barChartManager.setDescription("时间");
+        if (!yValueDay.isEmpty()){
+            barChartManager.showBarChart(xValuesDay, yValueDay, "", colours.get(0));
+            barChartManager.setDescription("时间");
+        }
+
     }
 
     /**
      * 设置week用水量
      */
     private void setValueWeek(){
-        barChartManager.showBarChart(xValuesWeek, yValueDay, "", colours.get(0));
-        barChartManager.setDescription("星期");
+        if (!yValuesWeek.isEmpty()){
+            barChartManager.showBarChart(xValuesWeek, yValuesWeek, "", colours.get(0));
+            barChartManager.setDescription("星期");
+        }
     }
 
     /**
      * 设置month用水量
      */
     private void setValueMonth(){
-        barChartManager.showBarChart(xValuesMonth, yValuesMonth, "", colours.get(0));
-        barChartManager.setDescription("月");
+        if (!yValuesMonth.isEmpty()){
+            barChartManager.showBarChart(xValuesMonth, yValuesMonth, "", colours.get(0));
+            barChartManager.setDescription("月");
+        }
     }
 
     @Override
@@ -261,13 +266,13 @@ public class UseWaterRecordActivity extends AppCompatActivity {
         protected List<List<Float>> doInBackground(Void... voids) {
             List<List<Float>> list=new ArrayList<>();
             try {
-
                 List<Float> yValuesDays=new ArrayList<>();
                 List<Float> yValuesWeek=new ArrayList<>();
                 List<Float> yValuesMonths=new ArrayList<>();
 
                 int deviceId=deviceChild.getDeviceId();
                 String url=tempChartLineUrl+"?deviceId="+deviceId+"&dataType=8";
+                Log.i("url","-->"+url);
                 String result=HttpUtils.getOkHpptRequest(url);
                 Log.i("result","-->"+result);
                 if (!TextUtils.isEmpty(result)){
@@ -405,14 +410,14 @@ public class UseWaterRecordActivity extends AppCompatActivity {
                     }
 //                    yValuesWeek.add((float) (Math.random() * 80));
                 }
-                yValuesMonth.addAll(lists.get(1));
-                weekUseWater=getValue(yValuesMonth);
+                yValuesWeek.addAll(lists.get(1));
+                weekUseWater=getValue(yValuesWeek);
                 for (int i = 1; i <=12 ; i++) {
                     xValuesMonth.add(i+"");
 //                    yValuesMonth.add((float) (Math.random() * 80));
                 }
                 yValuesMonth.addAll(lists.get(2));
-                monthUseWater=getValue(yValuesMonth);
+                yearUserWater=getValue(yValuesMonth);
                 day=1;
                 setValueDay();
                 tv_num.setText(""+dayUseWater);
@@ -425,7 +430,7 @@ public class UseWaterRecordActivity extends AppCompatActivity {
         for (int i = 0; i <list.size() ; i++) {
             x=x+list.get(i);
         }
-        return x/1000;
+        return x;
     }
     class MessageReceiver extends BroadcastReceiver {
 
@@ -441,14 +446,12 @@ public class UseWaterRecordActivity extends AppCompatActivity {
                 if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
                         Toast.makeText(UseWaterRecordActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-                        long houseId = deviceChild.getHouseId();
                         Intent data = new Intent(UseWaterRecordActivity.this, MainActivity.class);
                         data.putExtra("houseId", houseId);
                         startActivity(data);
                     } else {
                         deviceChild = deviceChild2;
                         int wPurifierOutQuqlity=deviceChild.getWPurifierOutQuqlity();
-                        tv_num2.setText(""+wPurifierOutQuqlity);
                     }
                 }
             }

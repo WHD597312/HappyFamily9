@@ -398,7 +398,7 @@
             android:layout_alignTop="@+id/smart_hum_decrease"
             android:layout_toRightOf="@+id/smart_hum_decrease"
             android:gravity="center"
-            android:text="20%"
+            android:text="0%"
             android:textColor="@color/white" />
         <ImageView
             android:id="@+id/smart_hum_add"
@@ -480,7 +480,7 @@
             android:layout_alignTop="@+id/smart_temp_decrease"
             android:layout_toRightOf="@+id/smart_temp_decrease"
             android:gravity="center"
-            android:text="5℃"
+            android:text="0℃"
             android:textColor="@color/white" />
 
         <ImageView

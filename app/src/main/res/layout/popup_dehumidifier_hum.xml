@@ -9,7 +9,7 @@
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
         android:orientation="vertical"
-        android:background="@drawable/bg_fill_white10">
+        android:background="@drawable/bg_shape_address">
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -20,24 +20,50 @@
         <include
             layout="@layout/cutline"/>
 
-        <RelativeLayout
+        <android.support.constraint.ConstraintLayout
             android:id="@+id/ll_wind"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
             android:paddingTop="@dimen/dp_jy_12"
-            android:paddingBottom="@dimen/dp_jy_22">
+            android:paddingBottom="@dimen/dp_jy_2">
+            <RelativeLayout
+                android:id="@+id/rl_view"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
+                tc:layout_constraintTop_toTopOf="@id/humSeekBar"
+                tc:layout_constraintBottom_toBottomOf="@id/humSeekBar"
+                tc:layout_constraintLeft_toLeftOf="@id/humSeekBar"
+                tc:layout_constraintRight_toRightOf="@id/humSeekBar"
+                android:orientation="vertical">
+
+
+                    <View
+                        android:id="@+id/view"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/dp_jy_2"
+                        android:background="#bbbbbb"
+                        android:layout_marginLeft="@dimen/dp_jy_10"
+                        android:layout_marginRight="@dimen/dp_jy_10"
+                        android:layout_centerVertical="true"
+                       />
+
+            </RelativeLayout>
+
+
 
             <com.xr.happyFamily.jia.view_custom.HumSeekBar
                 android:id="@+id/humSeekBar"
                 android:layout_width="@dimen/dp_jy_250"
-                android:layout_height="@dimen/dp_jy_60"
+                android:layout_height="@dimen/dp_jy_80"
                 android:layout_below="@+id/li2_zncz_db3"
                 android:max="50"
                 android:progress="0"
                 android:progressDrawable="@drawable/bg_seekbar_progress_hum"
                 android:thumb="@null"
                 android:layout_centerInParent="true"
+                tc:layout_constraintLeft_toLeftOf="parent"
+                tc:layout_constraintRight_toRightOf="parent"
                 tc:textHumBackground="@mipmap/ic_seekbar_hum"
                 tc:textHumColor2="@color/black"
                 tc:textHumOrientation="topHum"
@@ -49,7 +75,10 @@
                 android:textColor="#0DCEFE"
                 android:text="30%"
                 android:layout_toLeftOf="@id/humSeekBar"
-                android:layout_marginTop="@dimen/dp_jy_25"/>
+                tc:layout_constraintTop_toTopOf="@id/humSeekBar"
+                tc:layout_constraintBottom_toBottomOf="@id/humSeekBar"
+                tc:layout_constraintRight_toLeftOf="@id/humSeekBar"
+                android:layout_marginRight="@dimen/dp_jy_10"/>
 
             <TextView
                 android:layout_width="wrap_content"
@@ -57,8 +86,11 @@
                 android:textColor="#0DCEFE"
                 android:text="80%"
                 android:layout_toRightOf="@id/humSeekBar"
-                android:layout_marginTop="@dimen/dp_jy_25"/>
-        </RelativeLayout>
+                tc:layout_constraintTop_toTopOf="@id/humSeekBar"
+                tc:layout_constraintBottom_toBottomOf="@id/humSeekBar"
+                tc:layout_constraintLeft_toRightOf="@id/humSeekBar"
+                android:layout_marginLeft="@dimen/dp_jy_10"/>
+        </android.support.constraint.ConstraintLayout>
 
         <LinearLayout
             android:id="@+id/ll_hum"

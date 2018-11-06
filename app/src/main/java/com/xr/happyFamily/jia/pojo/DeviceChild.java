@@ -67,6 +67,7 @@ public class DeviceChild implements Serializable{
     int socketPowerConsume;/**插座当前耗电量总度数*/
 
 
+
     //jjjjjjj
     int timerSwitch=0;/**定时器开关*/
     int waterLevel=0; //水位量
@@ -120,6 +121,9 @@ public class DeviceChild implements Serializable{
     int wPurifierOutQuqlity;/**净水器出水水质*/
     /**净水器滤芯寿命 1-10*/
     int wPurifierfilter1,wPurifierfilter2,wPurifierfilter3,wPurifierfilter4,wPurifierfilter5,wPurifierfilter6,wPurifierfilter7,wPurifierfilter8,wPurifierfilter9,wPurifierfilter10;
+
+    private String houseAddress="";/**设备家庭真实地址*/
+    private String province;/**设备所在的省份*/
     public int getWPurifierfilter10() {
         return this.wPurifierfilter10;
     }
@@ -744,6 +748,18 @@ public class DeviceChild implements Serializable{
     public void setSocketTimerHour(int socketTimerHour) {
         this.socketTimerHour = socketTimerHour;
     }
+    public String getProvince() {
+        return this.province;
+    }
+    public void setProvince(String province) {
+        this.province = province;
+    }
+    public String getHouseAddress() {
+        return this.houseAddress;
+    }
+    public void setHouseAddress(String houseAddress) {
+        this.houseAddress = houseAddress;
+    }
 
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.houseId = houseId;
@@ -759,7 +775,7 @@ public class DeviceChild implements Serializable{
     @Generated(hash = 1973447423)
     public DeviceChild() {
     }
-    @Generated(hash = 1328755286)
+    @Generated(hash = 723934043)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
             int warmerCurRunRoatePower, int warmerRunState, int deviceState, int warmerFall, String rateState, int lockState, int screenState, int curRunState2, int curRunState3,
@@ -772,7 +788,7 @@ public class DeviceChild implements Serializable{
             int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay,
             String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2,
             int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9,
-            int wPurifierfilter10) {
+            int wPurifierfilter10, String houseAddress, String province) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -877,6 +893,8 @@ public class DeviceChild implements Serializable{
         this.wPurifierfilter8 = wPurifierfilter8;
         this.wPurifierfilter9 = wPurifierfilter9;
         this.wPurifierfilter10 = wPurifierfilter10;
+        this.houseAddress = houseAddress;
+        this.province = province;
     }
    
 

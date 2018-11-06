@@ -226,4 +226,8 @@ public class DeviceChildDaoImpl {
         return deviceChildDao.queryBuilder().where(whereCondition).unique();
     }
 
+    public List<DeviceChild> findZerosType(int type){
+        List<DeviceChild> children=deviceChildDao.queryBuilder().where(DeviceChildDao.Properties.Type.eq(type)).orderAsc(DeviceChildDao.Properties.DeviceId).list();
+        return children;
+    }
 }

@@ -405,12 +405,6 @@ public class HttpUtils {
                 Log.e("qqqqqqqq???", result);
             }
 
-            String code = "0";
-            org.json.JSONObject jsonObject1 = new org.json.JSONObject(result);
-            code = jsonObject1.getString("returnCode");
-            if (!code.equals("100")) {
-                Toast.makeText(mContext, jsonObject1.getString("returnMsg"), Toast.LENGTH_SHORT).show();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -557,6 +551,7 @@ public class HttpUtils {
         }
         return result;
     }
+
 
     public static String postOkHpptRequest3(String url, org.json.JSONObject jsonObject) {
         String result = null;

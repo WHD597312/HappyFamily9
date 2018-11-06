@@ -58,6 +58,9 @@ public class GridViewAdapter extends ArrayAdapter {
             DeviceChild item = mGridData.get(position);
             if (item!=null){
                 int type=item.getType();
+                if (type==0){
+                    holder.view.setVisibility(View.GONE);
+                }
                 String common=item.getCommon();
                 if (type==2){
                     item.setImg(img[0]);
@@ -271,7 +274,9 @@ public class GridViewAdapter extends ArrayAdapter {
                         holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
                     }
                 }
-                Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
+               if (type!=0){
+                   Picasso.with(mContext).load(item.getImg()).into(holder.imageView);
+               }
             }
             return convertView;
         }

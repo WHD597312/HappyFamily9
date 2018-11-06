@@ -135,8 +135,12 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 
+        running=true;
         Intent service = new Intent(LoginActivity.this, MQService.class);
-        startService(service);
+        String phone = preferences.getString("phone", "");
+        if (TextUtils.isEmpty(phone)){
+            startService(service);
+        }
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
     }
 
@@ -641,6 +645,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                     DeviceChild deviceChild = new DeviceChild((long) houseId2, (long) roomId2, deviceUsedCount, deviceType, deviceMacAddress, deviceName, userId2);
                                     deviceChild.setDeviceId(deviceId);
                                     deviceChild.setImg(img[0]);
+                                    deviceChild.setHouseAddress(houseAddress);
                                     deviceChild.setRoomName(roomName);
                                     deviceChildDao.insert(deviceChild);
                                 }
@@ -688,6 +693,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                                 String deviceName=jsonObject2.getString("deviceName");
                                 int deviceType=jsonObject2.getInt("deviceType");
                                 int roomId=jsonObject2.getInt("roomId");
+                                int houseId=jsonObject2.getInt("houseId");
                                 String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
 //                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
@@ -704,6 +710,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
 //                                   if (deviceChild2==null){
                                        deviceChild2=new DeviceChild();
                                        deviceChild2.setUserId(userId);
+                                       deviceChild2.setHouseId(houseId);
                                        deviceChild2.setShareId(Long.MAX_VALUE);
                                        deviceChild2.setName(deviceName);
                                        deviceChild2.setDeviceId(deviceId);

@@ -108,15 +108,13 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="kjgCMxtnMYdDenel3guWudC3zwThNsPR" />
-
+            android:value="0SkWiTmS4AIg04Q56KLIzDGXR7QVCa3o" />
         <activity
             android:hardwareAccelerated="false"
             android:name=".login.login.qdActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -208,7 +206,7 @@
         <activity
             android:name=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="false"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
         <activity
             android:hardwareAccelerated="false"

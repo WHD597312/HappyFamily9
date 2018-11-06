@@ -137,6 +137,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
     ImageView image_more;
     @BindView(R.id.tv_temp_state) TextView tv_temp_state;/**温度状态*/
     @BindView(R.id.tv_hum_state) TextView tv_hum_state;/**湿度状态*/
+    @BindView(R.id.tv_smart_hum) TextView tv_smart_hum;/**设置湿度值*/
     /**
      * 修改设备名称
      */
@@ -271,7 +272,6 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     smartTerminalCircle.setBitInfos(infoList);
                 }
             }
-
         }else {
             if (deviceChild==null && result==0){
                 Intent intent=new Intent();
@@ -326,7 +326,7 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         } else if (sorsorPm > 35 && sorsorPm <= 75) {
             tv_air_state.setText("良");
         } else if (sorsorPm > 75) {
-            tv_air_value.setText("差");
+            tv_air_state.setText("差");
         }
     }
 
@@ -487,7 +487,8 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
         }
     }
 
-    int temp;
+    int temp;/**温度*/
+    int hum;/**湿度*/
 
     @OnClick({R.id.image_more, R.id.image_back, R.id.smart_temp_decrease, R.id.smart_temp_add, R.id.smart_hum_decrease, R.id.smart_hum_add, R.id.image_linkage, R.id.image_switch})
     public void onClick(View view) {
@@ -1146,6 +1147,13 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     }.start();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     onClick = false;
+                    hum = (int) humCurProgress + 15;
+                    if (hum <= 5) {
+                        hum = 5;
+                    } else if (hum >= 42) {
+                        hum = 42;
+                    }
+                    tv_smart_hum.setText(hum+"%");
                 }
                 break;
             case R.id.smart_hum_add:
@@ -1173,10 +1181,16 @@ public class SmartTerminalActivity extends AppCompatActivity implements View.OnT
                     }.start();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     onClick = false;
+                    hum = (int) humCurProgress + 15;
+                    if (hum <= 5) {
+                        hum = 5;
+                    } else if (hum >= 42) {
+                        hum = 42;
+                    }
+                    tv_smart_hum.setText(hum+"%");
                 }
                 break;
         }
         return false;
     }
-
 }

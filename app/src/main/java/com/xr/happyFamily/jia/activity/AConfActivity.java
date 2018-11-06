@@ -421,17 +421,16 @@ public class AConfActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.view_left:
-                int state;
-                Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
+                int state=4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else
+                    else if(timerMoudle==2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if(timerMoudle ==2)
                         state = 1;
                 }
                 customViewPopipup = new TimePickViewPopup(this, state, timerHour, timerMin);
@@ -473,6 +472,7 @@ public class AConfActivity extends AppCompatActivity {
                 intent.putExtra("curdPower",curdPower);
                 intent.putExtra("deviceId",  deviceChild.getDeviceId());
                 intent.putExtra("dataType",7);
+                intent.putExtra("Id",deviceChild.getId());
                 startActivity(intent);
                 break;
         }
@@ -863,21 +863,21 @@ public class AConfActivity extends AppCompatActivity {
 
         if (fengSuViewPopup != null) {
             if (fengSuViewPopup.isShowing()) {
-                fengSuViewPopup.setWind(rateState);
+                fengSuViewPopup.setWind(windLevel);
             }
         }
         if (customViewPopipup != null) {
             if (customViewPopipup.isShowing()) {
-                int state;
+                int state=4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else
+                    else if(timerMoudle==2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if(timerMoudle ==2)
                         state = 1;
                 }
                 customViewPopipup.setData(state, timerHour, timerMin);

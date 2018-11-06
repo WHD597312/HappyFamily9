@@ -64,7 +64,6 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     TextView titleText;
     @BindView(R.id.title_rightText)
     TextView titleRightText;
-
     @BindView(R.id.tv_choose)
     TextView tvChoose;
     @BindView(R.id.view_line)

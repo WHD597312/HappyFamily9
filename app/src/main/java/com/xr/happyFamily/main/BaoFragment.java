@@ -84,8 +84,6 @@ import butterknife.Unbinder;
 public class BaoFragment extends Fragment implements View.OnClickListener {
     View view;
     Unbinder unbinder;
-
-
     public static final int MAIN_CODE = 1000;
     @BindView(R.id.image_shopcart)
     ImageView imageShopcart;

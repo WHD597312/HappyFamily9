@@ -30,6 +30,7 @@ import android.util.ArraySet;
 import android.util.Log;
 import android.view.WindowManager;
 
+import com.baidu.location.BDAbstractLocationListener;
 import com.baidu.location.BDLocation;
 import com.baidu.location.BDLocationListener;
 import com.baidu.location.LocationClient;
@@ -417,10 +418,11 @@ public class ClockService extends Service {
      */
     double mLongitude;
     double mLatitude;
-    private BDLocationListener mListener = new BDLocationListener() {
+    private BDAbstractLocationListener mListener = new BDAbstractLocationListener() {
 
         @Override
         public void onReceiveLocation(BDLocation location) {
+
 
 //            StringBuffer sb = new StringBuffer(256);
 //            sb.append("Thread : " + Thread.currentThread().getName());
@@ -508,6 +510,7 @@ public class ClockService extends Service {
             mOption = new LocationClientOption();
             /**
              * 默认高精度，设置定位模式
+             * 15705851109
              * LocationMode.Hight_Accuracy 高精度定位模式：这种定位模式下，会同时使用网络定位和GPS定位，优先返回最高精度的定位结果
              * LocationMode.Battery_Saving 低功耗定位模式：这种定位模式下，不会使用GPS，只会使用网络定位（Wi-Fi和基站定位）
              * LocationMode.Device_Sensors 仅用设备定位模式：这种定位模式下，不需要连接网络，只使用GPS进行定位，这种模式下不支持室内环境的定位
@@ -574,7 +577,7 @@ public class ClockService extends Service {
              * 默认false，设置是否需要POI结果，可以在BDLocation.getPoiList里得到
              * POI就是获取到的位置附近的一些商场、饭店、银行等信息
              */
-            mOption.setIsNeedLocationPoiList(true);
+            mOption.setIsNeedLocationPoiList(false);
 
             /**
              * 默认false，设置是否收集CRASH信息，默认收集

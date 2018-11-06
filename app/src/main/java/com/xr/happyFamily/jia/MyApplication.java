@@ -47,9 +47,6 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
-
-
-        fragments=new ArrayList<>();
         OkHttpClient client = new OkHttpClient.Builder()
                 .protocols(Collections.singletonList(Protocol.HTTP_1_1))
                 .build();
@@ -130,16 +127,16 @@ public class MyApplication extends Application {
                 tx = "网络出错";
             }
             if (tx.contains("错")){
-                AlertDialog.Builder normalDialog =
-                        new AlertDialog.Builder(context);
-                normalDialog.setTitle("提示");
-                normalDialog.setMessage(tx);
-                normalDialog.setPositiveButton("确定", null);
-                normalDialog.setNegativeButton("关闭", null);
-                // 显示
-                normalDialog.show();
+//                AlertDialog.Builder normalDialog =
+//                        new AlertDialog.Builder(context);
+//                normalDialog.setTitle("提示");
+//                normalDialog.setMessage(tx);
+//                normalDialog.setPositiveButton("确定", null);
+//                normalDialog.setNegativeButton("关闭", null);
+//                // 显示
+//                normalDialog.show();
             }else {
-                Toast.makeText(context,tx,Toast.LENGTH_SHORT).show();
+//                Toast.makeText(context,tx,Toast.LENGTH_SHORT).show();
             }
 
         }

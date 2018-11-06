@@ -52,6 +52,7 @@ import com.xr.happyFamily.le.pojo.AppUsing;
 import com.xr.happyFamily.le.pojo.MapAdress;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -131,7 +132,6 @@ public class MapActivity extends AppCompatActivity {
         StatusUtil.setUseStatusBarColor(this, Color.TRANSPARENT, Color.parseColor("#33000000"));
         StatusUtil.setSystemStatus(this, false, true);
         initBaiduMap();
-//        getLocationClientOption();//2、定位开启
         appUsings = new ArrayList<>();
         mapAdresses = new ArrayList<>();
         mStation = new ArrayList<>();
@@ -271,6 +271,8 @@ public class MapActivity extends AppCompatActivity {
                     getStation();
                     break;
                 default:
+                    MyDialog.closeDialog(dialog);
+                    Utils.showToast(MapActivity.this,"暂时没有位置信息");
                     break;
             }
         }
@@ -295,6 +297,9 @@ public class MapActivity extends AppCompatActivity {
                     mStation.add(mapAdresses.get(i));
                     mStation.get(mStation.size() - 2).setLastTime(mStation.get(mStation.size() - 1).getDsTime() + "");
                     mapAdress1 = mapAdresses.get(i);
+                    if (i==mapAdresses.size()-1){
+                        mStation.get(mStation.size() - 1).setLastTime(mStation.get(mStation.size() - 1).getDsTime() + "");
+                    }
                     Log.e("ddddddGGGGGG333", "getStation: -->" + i);
                 } else {
                     mStation.get(mStation.size() - 1).setLastTime(mapAdresses.get(i).getDsTime() + "");
@@ -308,6 +313,7 @@ public class MapActivity extends AppCompatActivity {
         Log.e("ddddddGGGGGG222", "getStation: -->" + mapAdresses.size());
         Log.e("ddddddGGGGGG", "getStation: -->" + mStation.size());
         for (int j = 0; j < mStation.size(); j++) {
+
             MapAdress mapAdress3 = mStation.get(j);
             Log.e("ddddddGGGGGG4444", "getStation: -->" + mStation.get(j).getLastTime() + "..." + mStation.get(j).getDsTime());
             double lat = Double.valueOf(mapAdress3.getDsLatitude());
@@ -365,7 +371,7 @@ public class MapActivity extends AppCompatActivity {
                 finish();
                 break;
             case R.id.rl_yg_dw:
-   
+
                 break;
         }
     }

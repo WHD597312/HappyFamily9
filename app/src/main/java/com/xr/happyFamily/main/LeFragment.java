@@ -154,13 +154,14 @@ public class LeFragment extends Fragment {
         page = 1;
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         long msgTime = preferences.getLong("msgTime", 0);
-        derailPo = preferences.getInt("derailPo", -1);
+
         Log.e("youguires111", "onViewClicked: -->" + derailPo);
         banner.setBannerStyle(BannerConfig.NOT_INDICATOR);
         getDataBase();
         Log.e("qqqqqqIIIII2222", "??????");
         return view;
     }
+
 
     String birthday;
 
@@ -217,6 +218,7 @@ public class LeFragment extends Fragment {
         preferences = getActivity().getSharedPreferences("my", MODE_PRIVATE);
         birthday = preferences.getString("birthday", "");
         userId = preferences.getString("userId", "");
+        derailPo = preferences.getInt("derailPo", -1);
         long msgTime = preferences.getLong("msgTime", 0);
         MsgDaoImpl msgDao = new MsgDaoImpl(getActivity());
         int msgNum = msgDao.findNumbByTime(msgTime);

@@ -694,7 +694,6 @@ public class HttpUtils {
                     .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
                     .build();
             Response response=okHttpClient.newCall(request).execute();
-
             if(response.isSuccessful()) {
                 Log.e("qqqqqqqqXXXX", "111111");
                 result = response.body().string();
@@ -726,7 +725,6 @@ public class HttpUtils {
                 File file = (File) entry.getValue();
                 RequestBody fileBody = RequestBody.create(MEDIA_TYPE_FILE, file);
                 String  name =  entry.getKey().toString();
-                String fileName = file.getName();
                 requestBody.addFormDataPart("files", name, fileBody);
             }
             Request request = new Request.Builder()

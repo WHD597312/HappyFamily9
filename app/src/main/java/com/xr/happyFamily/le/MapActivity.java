@@ -33,6 +33,7 @@ import com.baidu.mapapi.map.BaiduMap;
 import com.baidu.mapapi.map.BitmapDescriptor;
 import com.baidu.mapapi.map.BitmapDescriptorFactory;
 import com.baidu.mapapi.map.InfoWindow;
+import com.baidu.mapapi.map.MapStatus;
 import com.baidu.mapapi.map.MapStatusUpdate;
 import com.baidu.mapapi.map.MapStatusUpdateFactory;
 import com.baidu.mapapi.map.MapView;
@@ -43,6 +44,7 @@ import com.baidu.mapapi.map.OverlayOptions;
 import com.baidu.mapapi.map.PolylineOptions;
 import com.baidu.mapapi.model.LatLng;
 import com.baidu.mapapi.utils.CoordinateConverter;
+import com.bumptech.glide.Glide;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.le.Yougui.UsageContract;
 import com.xr.happyFamily.le.Yougui.UsageStatAdapter;
@@ -52,11 +54,13 @@ import com.xr.happyFamily.le.pojo.AppUsing;
 import com.xr.happyFamily.le.pojo.MapAdress;
 import com.xr.happyFamily.together.MyDialog;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.util.GlideCircleTransform;
 import com.xr.happyFamily.together.util.Utils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -76,7 +80,7 @@ public class MapActivity extends AppCompatActivity {
     private LocationClient client;//定位监听
     private LocationClientOption mOption;//定位属性
     private MyLocationData locData;//定位坐标
-    private InfoWindow mInfoWindow;//地图文字位置提醒
+
     private double mCurrentLat = 0.0;
     private double mCurrentLon = 0.0;
     private int mCurrentDirection = 0;
@@ -100,6 +104,7 @@ public class MapActivity extends AppCompatActivity {
     TextView tv_map_mes;
     @BindView(R.id.tv_mao_rj)
     TextView tv_mao_rj;
+    @BindView(R.id.iv_map_photo) ImageView image_user;/**用户头像*/
     String ip = "http://47.98.131.11:8084";
     /*  @BindView(R.id.lvAppTime)
       ListView lvAppTime;*/
@@ -361,17 +366,37 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-
+        if (preferences.contains("image")){
+            String image=preferences.getString("image","");
+            if (!Utils.isEmpty(image)){
+                File file=new File(image);
+                Glide.with(this).load(file).transform(new GlideCircleTransform(this)).into(image_user);
+            }
+        }
     }
 
-    @OnClick({R.id.iv_map_back, R.id.rl_yg_dw})
+    @OnClick({R.id.iv_map_back, R.id.rl_yg_dw ,R.id.iv_map_photo})
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.iv_map_back:
                 finish();
                 break;
             case R.id.rl_yg_dw:
+                double lat = Double.valueOf(mStation.get(mStation.size()-1).getDsLatitude());
+                double lng = Double.valueOf(mStation.get(mStation.size()-1).getDsLongitude());
+                LatLng LocationPoint = new LatLng(lat, lng);
+                MapStatus mMapStatus = new MapStatus.Builder()
+                        .target(LocationPoint)
+                        .zoom(18)
+                        .build();
+//定义MapStatusUpdate对象，以便描述地图状态将要发生的变化
+                MapStatusUpdate mMapStatusUpdate = MapStatusUpdateFactory.newMapStatus(mMapStatus);
+//改变地图状态
+                mBaiduMap.animateMapStatus(mMapStatusUpdate);
+                break;
 
+            case R.id.iv_map_photo:
+                startActivity(new Intent(MapActivity.this,JcActivity.class));
                 break;
         }
     }
@@ -448,20 +473,14 @@ public class MapActivity extends AppCompatActivity {
                     int id = arg0.getExtraInfo().getInt("id");
                     String last = stampToDate(Long.valueOf(mStation.get(id).getLastTime()));
                     String first = stampToDate(mStation.get(id).getDsTime());
-                    Toast.makeText(MapActivity.this, first + "--" + last, Toast.LENGTH_SHORT).show();
+//                    Toast.makeText(MapActivity.this, first + "--" + last, Toast.LENGTH_SHORT).show();
                     Log.e("TTTTTTFFF", "onMarkerClick: -->" + mStation.get(id).getLastTime() + "..." + id);
-                    //创建InfoWindow展示的view
-//                    Button button = new Button(getApplicationContext());
-//                    button.setBackgroundResource(R.drawable.popup);
-////定义用于显示该InfoWindow的坐标点
-//                    LatLng pt = new LatLng(Double.valueOf(mStation.get(id).getDsLongitude()), Double.valueOf(mStation.get(id).getDsLatitude()));
-//                    button.setText(first + "--" + last);
-////创建InfoWindow , 传入 view， 地理坐标， y 轴偏移量
-//                    InfoWindow mInfoWindow = new InfoWindow(button, pt, -47);
-//
-////显示InfoWindow
-//                    mBaiduMap.showInfoWindow(mInfoWindow);
-                    return true;
+                    View view = View.inflate(MapActivity.this, R.layout.activity_map_info, null);
+                    Button xiugai = (Button) view.findViewById(R.id.bt_map_in);
+                    xiugai.setText(first + "--" + last);
+                    final InfoWindow mInfoWindow = new InfoWindow(view, arg0.getPosition(), -47);
+                    mBaiduMap.showInfoWindow(mInfoWindow);
+                    return false;
                 }
             });
             //打卡范围
@@ -585,6 +604,7 @@ public class MapActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        mMapView.onDestroy();
         ButterKnife.bind(this).unbind();//解绑
     }
 

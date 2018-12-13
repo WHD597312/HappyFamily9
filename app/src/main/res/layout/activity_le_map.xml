@@ -25,13 +25,16 @@
             android:textSize="@dimen/sp_19"
             android:textColor="@color/black"
             />
+
         <ImageView
             android:id="@+id/iv_map_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_40"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_12"
-            />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/image_user" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_map_mes"
@@ -122,7 +125,7 @@
             android:layout_marginLeft="@dimen/dp_jy_12"
             android:layout_marginBottom="@dimen/dp_jy_12"
             >
-        <!--    <ImageView
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:src="@mipmap/yg_dwbj"
@@ -133,7 +136,8 @@
             android:layout_height="wrap_content"
             android:src="@mipmap/yg_dw"
             android:layout_centerInParent="true"
-            />-->
+                android:paddingBottom="@dimen/dp_jy_5"
+            />
 
         </RelativeLayout>
 

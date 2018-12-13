@@ -695,7 +695,7 @@ public class DeviceDetailActivity extends AppCompatActivity {
     }
 
 
-    //设置蒙版
+       //设置蒙版
     private void backgroundAlpha(float f) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
         lp.alpha = f;

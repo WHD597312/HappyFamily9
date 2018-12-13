@@ -130,6 +130,7 @@ public class MsgDerailAdapter extends RecyclerView.Adapter<MsgDerailAdapter.MyVi
                 }
 
 
+
             }
         });
 //

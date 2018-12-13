@@ -45,7 +45,7 @@ public class MQTTMessageReveiver extends BroadcastReceiver {
 
             Intent mqttIntent = new Intent(context,MQService.class);
             mqttIntent.putExtra("reconnect","reconnect");
-            mqttIntent.putExtra("isClockFinish","isClockFinish");
+//            mqttIntent.putExtra("isClockFinish","isClockFinish");
             context.startService(mqttIntent);
         }
 

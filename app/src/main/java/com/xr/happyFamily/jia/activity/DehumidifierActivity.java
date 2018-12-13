@@ -79,8 +79,8 @@ public class DehumidifierActivity extends AppCompatActivity {
     RelativeLayout head;
     @BindView(R.id.tv_now)
     TextView tvNow;
-    @BindView(R.id.tv_set)
-    TextView tvSet;
+    @BindView(R.id.tv_hum_now)
+    TextView tvHumNow;
     @BindView(R.id.ll_wendu)
     LinearLayout llWendu;
     @BindView(R.id.doubleWaveView)
@@ -362,6 +362,9 @@ public class DehumidifierActivity extends AppCompatActivity {
             setResult(6000, intent2);
             finish();
         } else {
+                String name = deviceChild.getName();
+                tvTitle.setText("" + name);
+
             scrollView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -390,6 +393,12 @@ public class DehumidifierActivity extends AppCompatActivity {
                 }
             }
         }
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        running = false;
     }
 
     @Override
@@ -460,16 +469,16 @@ public class DehumidifierActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.ll_time:
-                int state=4;
+                int state = 4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else if(timerMoudle==2)
+                    else if (timerMoudle == 2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else if(timerMoudle ==2)
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup = new TimePickViewPopup(this, state, timerHour, timerMin);
@@ -504,8 +513,8 @@ public class DehumidifierActivity extends AppCompatActivity {
                 });
                 break;
             case R.id.ll_hum:
-                if(isOpen)
-                showPopup();
+                if (isOpen)
+                    showPopup();
                 break;
             case R.id.ll_fengsu:
                 if (isOpen) {
@@ -610,7 +619,7 @@ public class DehumidifierActivity extends AppCompatActivity {
                         Intent data = new Intent();
                         data.putExtra("houseId", houseId);
                         DehumidifierActivity.this.setResult(6000, data);
-                        DehumidifierActivity.this.finish();
+                        finish();
                     } else {
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();
@@ -729,7 +738,10 @@ public class DehumidifierActivity extends AppCompatActivity {
             tvNow.setText(sensorSimpleTemp + "");
         else
             tvNow.setText("——");
-        tvSet.setText(dehumSetHum + "");
+        if (sensorSimpleHum > 0)
+            tvHumNow.setText(sensorSimpleHum + "");
+        else
+            tvHumNow.setText("——");
         if (waterLevel > 0) {
             tvWater.setText(waterLevel + "");
             doubleWaveView.setProHeight(waterLevel);
@@ -749,8 +761,8 @@ public class DehumidifierActivity extends AppCompatActivity {
 //        } else if (socketTimer == 1) {
 //            image_timer.setImageResource(R.mipmap.socket_timer);
 //        }
-        if(mPopWindow!=null){
-            if(mPopWindow.isShowing()&&(!isTouch)){
+        if (mPopWindow != null) {
+            if (mPopWindow.isShowing() && (!isTouch)) {
                 humSeekBar.setProgress(deviceChild.getDehumSetHum() - 30);
             }
         }
@@ -761,16 +773,16 @@ public class DehumidifierActivity extends AppCompatActivity {
         }
         if (customViewPopipup != null) {
             if (customViewPopipup.isShowing()) {
-                int state=4;
+                int state = 4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else if(timerMoudle==2)
+                    else if (timerMoudle == 2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else if(timerMoudle ==2)
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup.setData(state, timerHour, timerMin);
@@ -896,10 +908,10 @@ public class DehumidifierActivity extends AppCompatActivity {
     private Context mContext = DehumidifierActivity.this;
     private HumSeekBar humSeekBar;
     private TextView tv_queding;
-    boolean isTouch=false;
+    boolean isTouch = false;
 
     private void showPopup() {
-        isTouch=false;
+        isTouch = false;
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_dehumidifier_hum, null);
         humSeekBar = (HumSeekBar) contentViewSign.findViewById(R.id.humSeekBar);
         humSeekBar.setProgress(deviceChild.getDehumSetHum() - 30);
@@ -916,7 +928,7 @@ public class DehumidifierActivity extends AppCompatActivity {
         humSeekBar.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
-                isTouch=true;
+                isTouch = true;
                 return false;
             }
         });

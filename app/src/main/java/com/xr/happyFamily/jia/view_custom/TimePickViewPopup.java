@@ -33,6 +33,9 @@ public class TimePickViewPopup extends PopupWindow {
     private LoopView loop_state, loop_hour, loop_min;
     int[] data = {0, 0, 0};
     boolean isTouch = false;
+    ArrayList<String> statelist = new ArrayList();
+    ArrayList<String> hourlist = new ArrayList();
+    ArrayList<String> minlist = new ArrayList();
 
     public TimePickViewPopup(final Context context, int state, int hour, int min) {
         data[0] = state;
@@ -70,9 +73,7 @@ public class TimePickViewPopup extends PopupWindow {
         loop_state = (LoopView) view.findViewById(R.id.loop_state);
         loop_hour = (LoopView) view.findViewById(R.id.loop_hour);
         loop_min = (LoopView) view.findViewById(R.id.loop_min);
-        ArrayList<String> statelist = new ArrayList();
-        ArrayList<String> hourlist = new ArrayList();
-        ArrayList<String> minlist = new ArrayList();
+
         statelist.add("倒计时");
         statelist.add("定时");
         statelist.add("关闭");
@@ -170,36 +171,54 @@ public class TimePickViewPopup extends PopupWindow {
 
         //0：倒计时开
         if (state == 0) {
-            hour = hour - mHour;
-            min = min - mMinute;
+            int a=hour*60+min;
+            int b=mHour*60+mMinute;
+            if(a<b){
+                int sumMins=hour*60+min+(1440-(mHour*60+mMinute));
+                hour=sumMins/60%24;
+                min=sumMins%60;
+            }else {
+                int sumMins=hour*60+min-(mHour*60+mMinute);
+                hour=sumMins/60%24;
+                min=sumMins%60;
+            }
             data[1] = data[1] - mHour;
             data[2] = data[2] - mMinute;
             data[0]=0;
             loop_hour.setInitPosition(hour);
+            loop_hour.setCurrentPosition(hour);
             loop_min.setInitPosition(min);
+            loop_min.setCurrentPosition(min);
             loop_state.setInitPosition(0);
+            loop_state.setCurrentPosition(0);
         }
         //2:倒计时关
         else if (state == 2) {
             loop_hour.setInitPosition(0);
             loop_min.setInitPosition(0);
             loop_state.setInitPosition(2);
+            loop_hour.setCurrentPosition(0);
+            loop_min.setCurrentPosition(0);
+            loop_state.setCurrentPosition(2);
             data[1]=0;
             data[2]=0;
             data[0]=2;
         } else {
             loop_hour.setInitPosition(hour);
             loop_min.setInitPosition(min);
-
+            loop_hour.setCurrentPosition(hour);
+            loop_min.setCurrentPosition(min);
             //1:定时开
             if (state == 1) {
                 loop_state.setInitPosition(1);
+                loop_state.setCurrentPosition(1);
                 data[0]=1;
             }
 
             //3:定时关
             else if (state == 3) {
                 loop_state.setInitPosition(2);
+                loop_state.setCurrentPosition(2);
                 data[0]=2;
             }
 
@@ -208,6 +227,9 @@ public class TimePickViewPopup extends PopupWindow {
                 loop_hour.setInitPosition(mHour);
                 loop_min.setInitPosition(mMinute);
                 loop_state.setInitPosition(2);
+                loop_hour.setCurrentPosition(mHour);
+                loop_min.setCurrentPosition(mMinute);
+                loop_state.setCurrentPosition(2);
                 data[0]=2;
                 data[1]=mHour;
                 data[2]=mMinute;
@@ -276,9 +298,22 @@ public class TimePickViewPopup extends PopupWindow {
                 data[0]=2;
             } else if (state == 0) {
                 data[0]=0;
+                int a=hour*60+min;
+                int b=mHour2*60+mMinute2;
+                if(a<b){
+                    int sumMins=hour*60+min+(1440-(mHour2*60+mMinute2));
+                    hour=sumMins/60%24;
+                    min=sumMins%60;
+                }else {
+                    int sumMins=hour*60+min-(mHour2*60+mMinute2);
+                    hour=sumMins/60%24;
+                    min=sumMins%60;
+                }
+                int hourIndex=hourlist.indexOf(hour+"");
+                int minIndex=minlist.indexOf(min+"");
                 loop_state.setCurrentPosition(0);
-                loop_hour.setCurrentPosition(mHour - mHour2);
-                loop_min.setCurrentPosition(mMin - mMinute2);
+                loop_hour.setCurrentPosition(hourIndex);
+                loop_min.setCurrentPosition(minIndex);
                 Log.e("qqqqqqDDDDD22", mMin + "," + mMinute2);
             } else if (state == 1) {
                 data[0]=1;

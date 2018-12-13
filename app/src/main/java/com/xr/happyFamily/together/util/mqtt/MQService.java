@@ -92,6 +92,7 @@ import org.w3c.dom.Text;
 import java.io.File;
 import java.net.URLEncoder;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -182,8 +183,8 @@ public class MQService extends Service {
 //        isFinish = false;
 //        countTimer = new CountTimer(10000, 1000);
 //        countTimer.start();
-        String isClockFinish = intent.getStringExtra("isClockFinish");
-        Log.i("iiiiiiiii", "-->" + isClockFinish);
+//        String isClockFinish = intent.getStringExtra("isClockFinish");
+//        Log.i("iiiiiiiii", "-->" + isClockFinish);
         SharedPreferences preferences = getSharedPreferences("position", MODE_PRIVATE);
         String clockData = preferences.getString("clockData", "");
 
@@ -309,10 +310,8 @@ public class MQService extends Service {
      * 加载MQTT返回的消息
      */
     class LoadAsyncTask extends AsyncTask<String, Void, Object> {
-
         @Override
         protected Object doInBackground(String... strings) {
-
             String topicName = strings[0];/**收到的主题*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
@@ -431,6 +430,9 @@ public class MQService extends Service {
                             if (!success2) {
                                 subscribe(offlineTopicName, 1);
                             }
+                            if (type==2){
+                                sendData(macAddress);
+                            }
                             if (deviceType == 3) {
                                 String topicName2 = "p99/sensor1/" + macAddress + "/set";
                                 String city = deviceChild.getHouseAddress();
@@ -476,10 +478,10 @@ public class MQService extends Service {
                                     file.delete();
                                 }
                             }
-                            cancelAllsubscibe();
                             Message msg = handler.obtainMessage();
                             msg.what = 2;
                             handler.sendMessage(msg);
+                            cancelAllsubscibe();
                             hourseDao.deleteAll();
                             roomDao.deleteAll();
                             deviceChildDao.deleteAll();
@@ -488,21 +490,23 @@ public class MQService extends Service {
                             userInfosDao.deleteAll();
                             friendDataDao.deleteAll();
                             msgDao.deleteAll();
+
                         }
                     }
                 }
                 if (MainActivity.running == false) {
                     FamilyFragmentManager.running = false;
                 }
+                Log.i("FamilyFragmentManager","-->"+FamilyFragmentManager.running);
                 if ("reSet".equals(message)) {
+                    Log.i("reSet","-->"+macAddress);
                     if (deviceChild != null) {
+                        deviceChildDao.delete(deviceChild);
                         long sharedId2 = deviceChild.getShareId();
                         if (sharedId2 == Long.MAX_VALUE) {
                             sharedId = sharedId2;
                         }
-                        deviceChildDao.delete(deviceChild);
                         unsubscribe(topicName);
-
                         if (deviceChild.getType() == 2) {
                             Message msg = handler.obtainMessage();
                             msg.what = 6;
@@ -560,7 +564,7 @@ public class MQService extends Service {
                         int index = messageJsonArray.getInt(1);
                         int index2 = messageJsonArray.getInt(2);
                         String x = "" + index + index2;
-                        type = Integer.parseInt(x);
+                        type=deviceChild.getType();
                     }
 
                 }
@@ -568,150 +572,246 @@ public class MQService extends Service {
                     case 1:
                         break;
                     case 2:/**取暖器*/
-
-                        if (messageJsonArray != null) {
+                        /**电暖器2018-11-23之前数据协议*/
+//                        if (messageJsonArray != null) {
+//                            busModel = messageJsonArray.getInt(3);
+//                            int mMcuVersion = messageJsonArray.getInt(4);
+//                            mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+//                            int mWifiVersion = messageJsonArray.getInt(5);
+//                            wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+//
+//                            warmerRunState = messageJsonArray.getInt(7);
+//                            curRunState2 = messageJsonArray.getInt(8);
+//                            curRunState3 = messageJsonArray.getInt(9);
+//
+//                            int[] x = TenTwoUtil.changeToTwo(warmerRunState);
+//                            deviceState = x[7];
+//                            rateState = x[6] + "" + x[5];
+//                            lockState = x[4];
+//                            screenState = x[3];
+//                            warmerFall = x[2];
+//
+//                            waramerSetTemp = messageJsonArray.getInt(10);
+//                            warmerCurTemp = messageJsonArray.getInt(11);
+//
+//                            Log.i("warmerCurTemp", "-->" + warmerCurTemp);
+//
+//                            warmerSampleData = messageJsonArray.getInt(12);
+//                            warmerRatePower = messageJsonArray.getInt(13);
+//                            warmerCurRunRoatePower = messageJsonArray.getInt(14);
+//
+//                            timerHour = messageJsonArray.getInt(15);
+//                            timerMin = messageJsonArray.getInt(16);
+//                            checkCode = messageJsonArray.getInt(17);
+//                            endCode = messageJsonArray.getInt(18);
+//                        }
+//                        if (deviceChild != null) {
+//                            if (type != -1) {
+//                                deviceChild.setType(type);
+//                            }
+//                            if (busModel != -1) {
+//                                deviceChild.setBusModel(busModel);
+//                            }
+//                            if (timerMoudle != -1) {
+//                                deviceChild.setTimerMoudle(timerMoudle);
+//                            }
+//                            if (!TextUtils.isEmpty(wifiVersion)) {
+//                                deviceChild.setWifiVersion(wifiVersion);
+//                            }
+//                            if (!TextUtils.isEmpty(mcuVersion)) {
+//                                deviceChild.setMcuVersion(mcuVersion);
+//                            }
+//                            if (waramerSetTemp != -1) {
+//                                deviceChild.setWaramerSetTemp(waramerSetTemp);
+//                            }
+//                            if (warmerCurTemp != -1) {
+//                                deviceChild.setWarmerCurTemp(warmerCurTemp - 128);
+//                            }
+//                            if (warmerSampleData != -1) {
+//                                deviceChild.setWarmerSampleData(warmerSampleData - 128);
+//                            }
+//                            if (warmerRatePower != -1) {
+//                                deviceChild.setWarmerRatePower(warmerRatePower);
+//                            }
+//                            if (warmerCurRunRoatePower != -1) {
+//                                deviceChild.setWarmerCurRunRoatePower(warmerCurRunRoatePower);
+//                            }
+//                            if (deviceState != -1) {
+//                                deviceChild.setDeviceState(deviceState);
+//                            }
+//                            if (!TextUtils.isEmpty(rateState)) {
+//                                deviceChild.setRateState(rateState);
+//                            }
+//                            if (lockState != -1) {
+//                                deviceChild.setLockState(lockState);
+//                            }
+//                            if (screenState != -1) {
+//                                deviceChild.setScreenState(screenState);
+//                            }
+//                            if (curRunState2 != -1) {
+//                                deviceChild.setCurRunState2(curRunState2);
+//                            }
+//                            if (curRunState3 != -1) {
+//                                deviceChild.setCurRunState3(curRunState3);
+//                            }
+//                            if (timerHour != -1) {
+//                                deviceChild.setTimerHour(timerHour);
+//                            }
+//                            if (timerMin != -1) {
+//                                deviceChild.setTimerMin(timerMin);
+//                            }
+//                            if (checkCode != -1) {
+//                                deviceChild.setCheckCode(checkCode);
+//                            }
+//                            if (endCode != -1) {
+//                                deviceChild.setEndCode(endCode);
+//                            }
+//                            if (warmerFall != -1) {
+//                                deviceChild.setWarmerFall(warmerFall);
+//                            }
+//                            if (warmerFall == 1) {
+//                                falling = 1;
+//                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
+//                                Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
+//                                long houseId = deviceChild.getHouseId();
+//                                notifyIntent.putExtra("houseId", houseId);
+//
+//                                notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
+//                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//
+//                                PendingIntent notifyPendingIntent =
+//                                        PendingIntent.getActivity(getApplicationContext(), 0, notifyIntent,
+//                                                PendingIntent.FLAG_UPDATE_CURRENT);
+//
+//                                builder.setContentText(deviceChild.getName() + "已倾倒")
+//                                        .setSmallIcon(R.mipmap.ic_launcher)
+//                                        .setDefaults(Notification.DEFAULT_ALL)
+//                                        .setAutoCancel(true);
+//                                builder.setContentIntent(notifyPendingIntent);
+//
+//                                NotificationManager mNotificationManager =
+//                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
+//                                mNotificationManager.notify(0, builder.build());
+//                                Message msg = handler.obtainMessage();
+//                                msg.what = 5;
+//                                msg.obj = macAddress;
+//                                mac = null;
+//                                handler.sendMessage(msg);
+//                            } else {
+//                                Message msg = handler.obtainMessage();
+//                                msg.what = 6;
+//                                msg.obj = macAddress;
+//                                mac = macAddress;
+//                                handler.sendMessage(msg);
+//                                falling = 0;
+//                            }
+////                            deviceChild.setWarmerFall(wa);
+//                            int ss = deviceChild.getDeviceId();
+//                            int deviceUsedCount = deviceChild.getDeviceUsedCount();
+//                            deviceChild.setDeviceUsedCount(deviceUsedCount + 1);
+//                            deviceChild.setOnline(true);
+//                            long shareId2 = deviceChild.getShareId();
+//                            if (shareId2 == Long.MAX_VALUE) {
+//                                sharedId = Long.MAX_VALUE;
+//                            }
+//                            deviceChildDao.update(deviceChild);
+//                            Log.i("deviceChildDao", "-->" + deviceChild.getDeviceId());
+//                        }
+                        if (messageJsonArray!=null){
                             busModel = messageJsonArray.getInt(3);
+                            deviceChild.setBusModel(busModel);
                             int mMcuVersion = messageJsonArray.getInt(4);
                             mcuVersion = "v" + mMcuVersion / 16 + "." + mMcuVersion % 16;
+                            deviceChild.setMcuVersion(mcuVersion);
                             int mWifiVersion = messageJsonArray.getInt(5);
                             wifiVersion = "v" + mWifiVersion / 16 + "." + mWifiVersion % 16;
+                            deviceChild.setWifiVersion(wifiVersion);
 
                             warmerRunState = messageJsonArray.getInt(7);
-                            curRunState2 = messageJsonArray.getInt(8);
-                            curRunState3 = messageJsonArray.getInt(9);
-
                             int[] x = TenTwoUtil.changeToTwo(warmerRunState);
-                            deviceState = x[7];
-                            rateState = x[6] + "" + x[5];
-                            lockState = x[4];
-                            screenState = x[3];
-                            warmerFall = x[2];
+                            deviceState = x[7];/**开关状态*/
+                            deviceChild.setDeviceState(deviceState);/**取暖器开关*/
+                            rateState = x[6] + "" + x[5];/**档位*/
+                            deviceChild.setRateState(rateState);
+                            lockState = x[4];/**屏幕锁定*/
+                            deviceChild.setLockState(lockState);
+                            screenState = x[3];/**屏保*/
+                            deviceChild.setScreenState(screenState);
+                            timerMoudle=x[2];/**定时*/
+                            deviceChild.setIsSocketTimerMode(timerMoudle);
 
-                            waramerSetTemp = messageJsonArray.getInt(10);
-                            warmerCurTemp = messageJsonArray.getInt(11);
-
-                            Log.i("warmerCurTemp", "-->" + warmerCurTemp);
-
-                            warmerSampleData = messageJsonArray.getInt(12);
-                            warmerRatePower = messageJsonArray.getInt(13);
-                            warmerCurRunRoatePower = messageJsonArray.getInt(14);
-
-                            timerHour = messageJsonArray.getInt(15);
-                            timerMin = messageJsonArray.getInt(16);
-                            checkCode = messageJsonArray.getInt(17);
-                            endCode = messageJsonArray.getInt(18);
-                        }
-                        if (deviceChild != null) {
-                            if (type != -1) {
-                                deviceChild.setType(type);
-                            }
-                            if (busModel != -1) {
-                                deviceChild.setBusModel(busModel);
-                            }
-                            if (timerMoudle != -1) {
-                                deviceChild.setTimerMoudle(timerMoudle);
-                            }
-                            if (!TextUtils.isEmpty(wifiVersion)) {
-                                deviceChild.setWifiVersion(wifiVersion);
-                            }
-                            if (!TextUtils.isEmpty(mcuVersion)) {
-                                deviceChild.setMcuVersion(mcuVersion);
-                            }
-                            if (waramerSetTemp != -1) {
-                                deviceChild.setWaramerSetTemp(waramerSetTemp);
-                            }
-                            if (warmerCurTemp != -1) {
-                                deviceChild.setWarmerCurTemp(warmerCurTemp - 128);
-                            }
-                            if (warmerSampleData != -1) {
-                                deviceChild.setWarmerSampleData(warmerSampleData - 128);
-                            }
-                            if (warmerRatePower != -1) {
-                                deviceChild.setWarmerRatePower(warmerRatePower);
-                            }
-                            if (warmerCurRunRoatePower != -1) {
-                                deviceChild.setWarmerCurRunRoatePower(warmerCurRunRoatePower);
-                            }
-                            if (deviceState != -1) {
-                                deviceChild.setDeviceState(deviceState);
-                            }
-                            if (!TextUtils.isEmpty(rateState)) {
-                                deviceChild.setRateState(rateState);
-                            }
-                            if (lockState != -1) {
-                                deviceChild.setLockState(lockState);
-                            }
-                            if (screenState != -1) {
-                                deviceChild.setScreenState(screenState);
-                            }
-                            if (curRunState2 != -1) {
-                                deviceChild.setCurRunState2(curRunState2);
-                            }
-                            if (curRunState3 != -1) {
-                                deviceChild.setCurRunState3(curRunState3);
-                            }
-                            if (timerHour != -1) {
-                                deviceChild.setTimerHour(timerHour);
-                            }
-                            if (timerMin != -1) {
-                                deviceChild.setTimerMin(timerMin);
-                            }
-                            if (checkCode != -1) {
-                                deviceChild.setCheckCode(checkCode);
-                            }
-                            if (endCode != -1) {
-                                deviceChild.setEndCode(endCode);
-                            }
-                            if (warmerFall != -1) {
-                                deviceChild.setWarmerFall(warmerFall);
-                            }
-                            if (warmerFall == 1) {
-                                falling = 1;
-                                NotificationCompat.Builder builder = new NotificationCompat.Builder(getApplicationContext());
-                                Intent notifyIntent = new Intent(getApplicationContext(), MainActivity.class);
-                                long houseId = deviceChild.getHouseId();
-                                notifyIntent.putExtra("houseId", houseId);
-
-                                notifyIntent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK
-                                        | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-
-                                PendingIntent notifyPendingIntent =
-                                        PendingIntent.getActivity(getApplicationContext(), 0, notifyIntent,
-                                                PendingIntent.FLAG_UPDATE_CURRENT);
-
-                                builder.setContentText(deviceChild.getName() + "已倾倒")
-                                        .setSmallIcon(R.mipmap.ic_launcher)
-                                        .setDefaults(Notification.DEFAULT_ALL)
-                                        .setAutoCancel(true);
-                                builder.setContentIntent(notifyPendingIntent);
-
-                                NotificationManager mNotificationManager =
-                                        (NotificationManager) getSystemService(Context.NOTIFICATION_SERVICE);
-                                mNotificationManager.notify(0, builder.build());
-                                Message msg = handler.obtainMessage();
-                                msg.what = 5;
-                                msg.obj = macAddress;
-                                mac = null;
-                                handler.sendMessage(msg);
-                            } else {
-                                Message msg = handler.obtainMessage();
-                                msg.what = 6;
-                                msg.obj = macAddress;
-                                mac = macAddress;
-                                handler.sendMessage(msg);
-                                falling = 0;
-                            }
-//                            deviceChild.setWarmerFall(wa);
-                            int ss = deviceChild.getDeviceId();
-                            int deviceUsedCount = deviceChild.getDeviceUsedCount();
-                            deviceChild.setDeviceUsedCount(deviceUsedCount + 1);
+                            curRunState2 = messageJsonArray.getInt(8);
+                            int[] x2=TenTwoUtil.changeToTwo(curRunState2);
+                            int lock=x2[0];
+                            deviceChild.setLock(lock);
+                            deviceChild.setCurRunState2(curRunState2);
+                            curRunState3=messageJsonArray.getInt(9);
+                            deviceChild.setCurRunState3(curRunState3);
+                            int week=messageJsonArray.getInt(10);/**定时日期*/
+                            deviceChild.setWeek(week);
+//                            int[] x3=TenTwoUtil.changeToTwo(week);
+//                            int week1=x3[0];
+//                            int week2=x3[1];
+//                            int week3=x3[2];
+//                            int week4=x3[3];
+//                            int week5=x3[4];
+//                            int week6=x3[5];
+//                            int week7=x3[6];
+                            int timerOpenOneHour=messageJsonArray.getInt(11);
+                            deviceChild.setTimerOpenOneHour(timerOpenOneHour);
+                            int timerOpenOneMin=messageJsonArray.getInt(12);
+                            deviceChild.setTimerOpenOneMin(timerOpenOneMin);
+                            int timerCloseOneHour=messageJsonArray.getInt(13);
+                            deviceChild.setTimerCloseOneHour(timerCloseOneHour);
+                            int timerCloseOneMin=messageJsonArray.getInt(14);
+                            deviceChild.setTimerCloseOneMin(timerCloseOneMin);
+                            int timerOpenTwoHour=messageJsonArray.getInt(15);
+                            deviceChild.setTimerOpenTwoHour(timerOpenTwoHour);
+                            int timerOpenTwoMin=messageJsonArray.getInt(16);
+                            deviceChild.setTimerOpenTwoMin(timerOpenTwoMin);
+                            int timerCloseTwoHour=messageJsonArray.getInt(17);
+                            deviceChild.setTimerCloseTwoHour(timerCloseTwoHour);
+                            int timerCloseTwoMin=messageJsonArray.getInt(18);
+                            deviceChild.setTimerCloseTwoMin(timerCloseTwoMin);
+                            int timerOpenThrHour=messageJsonArray.getInt(19);
+                            deviceChild.setTimerOpenThrHour(timerOpenThrHour);
+                            int timerOpenThrMin=messageJsonArray.getInt(20);
+                            deviceChild.setTimerOpenThrMin(timerOpenThrMin);
+                            int timerCloseThrHour=messageJsonArray.getInt(21);
+                            deviceChild.setTimerCloseThrHour(timerCloseThrHour);
+                            int timerCloseThrMin=messageJsonArray.getInt(22);
+                            deviceChild.setTimerCloseThrMin(timerCloseThrMin);
+                            int timerOpenForHour=messageJsonArray.getInt(23);
+                            deviceChild.setTimerOpenForHour(timerOpenForHour);
+                            int timerOpenForMin=messageJsonArray.getInt(24);
+                            deviceChild.setTimerOpenForMin(timerOpenForMin);
+                            int timerCloseForHour=messageJsonArray.getInt(25);
+                            deviceChild.setTimerCloseForHour(timerCloseForHour);
+                            int timerCloseForMin=messageJsonArray.getInt(26);
+                            deviceChild.setTimerCloseForMin(timerCloseForMin);
+                            int timerOne=messageJsonArray.getInt(27);
+                            deviceChild.setTimerOne(timerOne);
+                            int timerTwo=messageJsonArray.getInt(28);
+                            deviceChild.setTimerTwo(timerTwo);
+                            int timerThr=messageJsonArray.getInt(29);
+                            deviceChild.setTimerThr(timerThr);
+                            int timerFor=messageJsonArray.getInt(30);
+                            deviceChild.setTimerFor(timerFor);
+                             waramerSetTemp=messageJsonArray.getInt(31);
+                             deviceChild.setWaramerSetTemp(waramerSetTemp);
+                            int warmerSetTime=messageJsonArray.getInt(32);
+                            deviceChild.setTimerHour(warmerSetTime);
+                            int warmerCurrentTemp=messageJsonArray.getInt(33)-128;
+                            deviceChild.setWarmerCurTemp(warmerCurrentTemp);
+                            int warmerHumSampleData=messageJsonArray.getInt(34);
+                            deviceChild.setWarmerSampleData(warmerHumSampleData);
+                            int warmerPower=messageJsonArray.getInt(35);
+                            deviceChild.setWarmerRatePower(warmerPower);
+                            int warmerCurrentRunRate=messageJsonArray.getInt(36);
+                            deviceChild.setWarmerCurRunRoatePower(warmerCurrentRunRate);
+                            int ready=messageJsonArray.getInt(37);
                             deviceChild.setOnline(true);
-                            long shareId2 = deviceChild.getShareId();
-                            if (shareId2 == Long.MAX_VALUE) {
-                                sharedId = Long.MAX_VALUE;
-                            }
                             deviceChildDao.update(deviceChild);
-                            Log.i("deviceChildDao", "-->" + deviceChild.getDeviceId());
                         }
                         break;
                     case 3:
@@ -1803,23 +1903,11 @@ public class MQService extends Service {
                     break;
                 case 2:
                     // 获取电源管理器对象
-                    PowerManager pm = (PowerManager) MyApplication.getContext()
-                            .getSystemService(Context.POWER_SERVICE);
-                    boolean screenOn = pm.isScreenOn();
-                    if (!screenOn) {
-                        // 获取PowerManager.WakeLock对象,后面的参数|表示同时传入两个值,最后的是LogCat里用的Tag
-                        PowerManager.WakeLock wl = pm.newWakeLock(
-                                PowerManager.ACQUIRE_CAUSES_WAKEUP |
-                                        PowerManager.SCREEN_BRIGHT_WAKE_LOCK, "bright");
-                        wl.acquire(10000); // 点亮屏幕
-                        wl.release(); // 释放
-                    }
-
                     if (!LoginActivity.running) {
+                        Toast.makeText(MQService.this, "该账号已在其他设备上登录", Toast.LENGTH_SHORT).show();
                         Intent notifyIntent = new Intent(MQService.this, LoginActivity.class);
                         notifyIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                         startActivity(notifyIntent);
-                        Toast.makeText(MQService.this, "该账号已在其他设备上登录", Toast.LENGTH_SHORT).show();
                     }
                     break;
                 case 5:
@@ -1972,5 +2060,54 @@ public class MQService extends Service {
 //
 //        }
 //    }
+    public void sendData(String macAddress){
+        try {
+            Calendar calendar=Calendar.getInstance();
+            int headCode=85;
+            int effectTime=1;
+            int year=calendar.get(Calendar.YEAR);
+            int yearHigh=year/256;
+            int yearLow=year%256;
+            int month=calendar.get(Calendar.MONTH)+1;
+            int day=calendar.get(Calendar.DAY_OF_MONTH);
+            int week=calendar.get(Calendar.DAY_OF_WEEK);
+            week=Utils.getWeek(week);
+            int hour=calendar.get(Calendar.HOUR_OF_DAY);
+            int min=calendar.get(Calendar.MINUTE);
+            int second=calendar.get(Calendar.SECOND);
+            int funCode=2;
 
+
+            int endCode=136;
+            JSONArray jsonArray=new JSONArray();
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,effectTime);
+            jsonArray.put(2,yearHigh);
+            jsonArray.put(3,yearLow);
+            jsonArray.put(4,month);
+            jsonArray.put(5,day);
+            jsonArray.put(6,week);
+            jsonArray.put(7,hour);
+            jsonArray.put(8,min);
+            jsonArray.put(9,second);
+            jsonArray.put(10,funCode);
+            int sum=0;
+            for (int i = 0; i <11 ; i++) {
+                sum=sum+jsonArray.getInt(i);
+            }
+            int checkCode=sum%256;
+            jsonArray.put(11,checkCode);
+            jsonArray.put(12,endCode);
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("Warmer",jsonArray);
+            String topicName="p99/warmer1/"+macAddress+"/set";
+            String s=jsonObject.toString();
+            boolean success=publish(topicName,1,s);
+            if (!success){
+                publish(topicName,1,s);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 }

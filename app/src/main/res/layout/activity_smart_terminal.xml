@@ -387,7 +387,7 @@
             android:scaleType="centerCrop"
             android:layout_below="@+id/image_hum_set"
             android:layout_alignLeft="@+id/image_hum_set"
-            android:layout_marginTop="@dimen/dp_jy_135"
+            android:layout_marginTop="@dimen/dp_jy_140"
             android:layout_marginBottom="@dimen/dp_jy_5"
             />
 
@@ -469,7 +469,7 @@
             android:scaleType="centerCrop"
             android:layout_below="@+id/image_set_temp"
             android:layout_alignLeft="@+id/image_set_temp"
-            android:layout_marginTop="@dimen/dp_jy_135"
+            android:layout_marginTop="@dimen/dp_jy_140"
             android:layout_marginBottom="@dimen/dp_jy_5"
             />
 

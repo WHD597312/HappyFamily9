@@ -284,7 +284,9 @@ public class FamilyFragmentManager extends Fragment {
                             step2 = mqService.subscribe(offlineTopicName, 1);
                             Log.i("step", "-->" + step1 + "," + step2);
                         }
-
+                        if (type==2){
+                            mqService.sendData(macAddress);
+                        }
                         Log.i("step", "-->" + step1 + "," + step2);
                     }
                 } catch (Exception e) {
@@ -301,6 +303,7 @@ public class FamilyFragmentManager extends Fragment {
         Log.i("FamilyFragmentManager", "-->onStart");
         running = true;
     }
+
 
     @Override
     public void onAttach(Context context) {

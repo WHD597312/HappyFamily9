@@ -475,7 +475,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
 
             int code = 0;
             Map<String, Object> params = maps[0];
-            String result = HttpUtils.postOkHpptRequest(url, params);
+            String result = HttpUtils.requestPost(url, params);
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -543,7 +543,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             int code = 0;
 //            Map<String, Object> params = maps[0];
             String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
-            String result = HttpUtils.getOkHpptRequest(url);
+            String result = HttpUtils.requestGet(url);
             Log.i("ffffffff", "--->: " + result);
             try {
                 if (!Utils.isEmpty(result)) {

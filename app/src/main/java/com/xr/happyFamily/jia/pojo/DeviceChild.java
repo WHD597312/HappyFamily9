@@ -3,6 +3,7 @@ package com.xr.happyFamily.jia.pojo;
 import org.greenrobot.greendao.annotation.Entity;
 import org.greenrobot.greendao.annotation.Id;
 import org.greenrobot.greendao.annotation.Generated;
+import org.greenrobot.greendao.annotation.Transient;
 
 import java.io.Serializable;
 
@@ -33,6 +34,28 @@ public class DeviceChild implements Serializable{
     int deviceState=0;/**开关机状态 0表示关机，1表示开机*/
     int warmerFall;/**机器倾斜*/
     String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
+    int lock;/**机器锁定状态*/
+    int week;
+    int timerOpenOneHour;
+    int timerOpenOneMin;
+    int timerCloseOneHour;
+    int timerCloseOneMin;
+    int timerOpenTwoHour;
+    int timerOpenTwoMin;
+    int timerCloseTwoHour;
+    int timerCloseTwoMin;
+    int timerOpenThrHour;
+    int timerOpenThrMin;
+    int timerCloseThrHour;
+    int timerCloseThrMin;
+    int timerOpenForHour;
+    int timerOpenForMin;
+    int timerCloseForHour;
+    int timerCloseForMin;
+    int timerOne;
+    int timerTwo;
+    int timerThr;
+    int timerFor;
     int lockState=0;/** 屏幕是否锁定 1：锁定 0：未锁定*/
     int screenState=0;/**屏保是否开启 1：开启 0：未开启 */
     int curRunState2=0;/**机器当前运行状态2  (保留)*/
@@ -760,6 +783,12 @@ public class DeviceChild implements Serializable{
     public void setHouseAddress(String houseAddress) {
         this.houseAddress = houseAddress;
     }
+    public int getLock() {
+        return this.lock;
+    }
+    public void setLock(int lock) {
+        this.lock = lock;
+    }
 
     public DeviceChild(long houseId, long roomId, int deviceUsedCount, int type, String macAddress, String name, int userId) {
         this.houseId = houseId;
@@ -775,20 +804,22 @@ public class DeviceChild implements Serializable{
     @Generated(hash = 1973447423)
     public DeviceChild() {
     }
-    @Generated(hash = 723934043)
+    @Generated(hash = 869457734)
     public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
             String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
-            int warmerCurRunRoatePower, int warmerRunState, int deviceState, int warmerFall, String rateState, int lockState, int screenState, int curRunState2, int curRunState3,
-            int timerHour, int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState,
-            int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp,
-            int socketState, int socketTimer, int socketTimerHour, int socketTimerMin, int socketCurrent, int socketVal, int socketPowerConsume, int timerSwitch, int waterLevel,
-            String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow, int equipCurdPowerHigh, int equipCurdPowerLow, int faultCode, String purifierState, int dehumSetTemp,
-            int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp, int dehumSleep, int dehumAnion, int dehumDrying, int dehumDefrost, String aCondState, int aCondSetTemp1,
-            int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1, int aCondSimpleTemp2, int aCondInnerTemp, int aCondOuterTemp, int aCondSleep, int aCondSUpDown,
-            int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay,
-            String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2,
-            int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9,
-            int wPurifierfilter10, String houseAddress, String province) {
+            int warmerCurRunRoatePower, int warmerRunState, int deviceState, int warmerFall, String rateState, int lock, int week, int timerOpenOneHour, int timerOpenOneMin,
+            int timerCloseOneHour, int timerCloseOneMin, int timerOpenTwoHour, int timerOpenTwoMin, int timerCloseTwoHour, int timerCloseTwoMin, int timerOpenThrHour,
+            int timerOpenThrMin, int timerCloseThrHour, int timerCloseThrMin, int timerOpenForHour, int timerOpenForMin, int timerCloseForHour, int timerCloseForMin, int timerOne,
+            int timerTwo, int timerThr, int timerFor, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour, int timerMin, int checkCode, int endCode,
+            int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx,
+            int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp, int socketState, int socketTimer, int socketTimerHour, int socketTimerMin,
+            int socketCurrent, int socketVal, int socketPowerConsume, int timerSwitch, int waterLevel, String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow,
+            int equipCurdPowerHigh, int equipCurdPowerLow, int faultCode, String purifierState, int dehumSetTemp, int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp,
+            int dehumSleep, int dehumAnion, int dehumDrying, int dehumDefrost, String aCondState, int aCondSetTemp1, int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1,
+            int aCondSimpleTemp2, int aCondInnerTemp, int aCondOuterTemp, int aCondSleep, int aCondSUpDown, int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode,
+            int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity,
+            int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5,
+            int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10, String houseAddress, String province) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -813,6 +844,28 @@ public class DeviceChild implements Serializable{
         this.deviceState = deviceState;
         this.warmerFall = warmerFall;
         this.rateState = rateState;
+        this.lock = lock;
+        this.week = week;
+        this.timerOpenOneHour = timerOpenOneHour;
+        this.timerOpenOneMin = timerOpenOneMin;
+        this.timerCloseOneHour = timerCloseOneHour;
+        this.timerCloseOneMin = timerCloseOneMin;
+        this.timerOpenTwoHour = timerOpenTwoHour;
+        this.timerOpenTwoMin = timerOpenTwoMin;
+        this.timerCloseTwoHour = timerCloseTwoHour;
+        this.timerCloseTwoMin = timerCloseTwoMin;
+        this.timerOpenThrHour = timerOpenThrHour;
+        this.timerOpenThrMin = timerOpenThrMin;
+        this.timerCloseThrHour = timerCloseThrHour;
+        this.timerCloseThrMin = timerCloseThrMin;
+        this.timerOpenForHour = timerOpenForHour;
+        this.timerOpenForMin = timerOpenForMin;
+        this.timerCloseForHour = timerCloseForHour;
+        this.timerCloseForMin = timerCloseForMin;
+        this.timerOne = timerOne;
+        this.timerTwo = timerTwo;
+        this.timerThr = timerThr;
+        this.timerFor = timerFor;
         this.lockState = lockState;
         this.screenState = screenState;
         this.curRunState2 = curRunState2;
@@ -896,7 +949,171 @@ public class DeviceChild implements Serializable{
         this.houseAddress = houseAddress;
         this.province = province;
     }
-   
+    public int getWeek() {
+        return week;
+    }
 
-    
+    public void setWeek(int week) {
+        this.week = week;
+    }
+
+    public int getTimerOpenOneHour() {
+        return timerOpenOneHour;
+    }
+
+    public void setTimerOpenOneHour(int timerOpenOneHour) {
+        this.timerOpenOneHour = timerOpenOneHour;
+    }
+
+    public int getTimerOpenOneMin() {
+        return timerOpenOneMin;
+    }
+
+    public void setTimerOpenOneMin(int timerOpenOneMin) {
+        this.timerOpenOneMin = timerOpenOneMin;
+    }
+
+    public int getTimerCloseOneHour() {
+        return timerCloseOneHour;
+    }
+
+    public void setTimerCloseOneHour(int timerCloseOneHour) {
+        this.timerCloseOneHour = timerCloseOneHour;
+    }
+
+    public int getTimerCloseOneMin() {
+        return timerCloseOneMin;
+    }
+
+    public void setTimerCloseOneMin(int timerCloseOneMin) {
+        this.timerCloseOneMin = timerCloseOneMin;
+    }
+
+    public int getTimerOpenTwoHour() {
+        return timerOpenTwoHour;
+    }
+
+    public void setTimerOpenTwoHour(int timerOpenTwoHour) {
+        this.timerOpenTwoHour = timerOpenTwoHour;
+    }
+
+    public int getTimerOpenTwoMin() {
+        return timerOpenTwoMin;
+    }
+
+    public void setTimerOpenTwoMin(int timerOpenTwoMin) {
+        this.timerOpenTwoMin = timerOpenTwoMin;
+    }
+
+    public int getTimerCloseTwoHour() {
+        return timerCloseTwoHour;
+    }
+
+    public void setTimerCloseTwoHour(int timerCloseTwoHour) {
+        this.timerCloseTwoHour = timerCloseTwoHour;
+    }
+
+    public int getTimerCloseTwoMin() {
+        return timerCloseTwoMin;
+    }
+
+    public void setTimerCloseTwoMin(int timerCloseTwoMin) {
+        this.timerCloseTwoMin = timerCloseTwoMin;
+    }
+
+    public int getTimerOpenThrHour() {
+        return timerOpenThrHour;
+    }
+
+    public void setTimerOpenThrHour(int timerOpenThrHour) {
+        this.timerOpenThrHour = timerOpenThrHour;
+    }
+
+    public int getTimerOpenThrMin() {
+        return timerOpenThrMin;
+    }
+
+    public void setTimerOpenThrMin(int timerOpenThrMin) {
+        this.timerOpenThrMin = timerOpenThrMin;
+    }
+
+    public int getTimerCloseThrHour() {
+        return timerCloseThrHour;
+    }
+
+    public void setTimerCloseThrHour(int timerCloseThrHour) {
+        this.timerCloseThrHour = timerCloseThrHour;
+    }
+
+    public int getTimerCloseThrMin() {
+        return timerCloseThrMin;
+    }
+
+    public void setTimerCloseThrMin(int timerCloseThrMin) {
+        this.timerCloseThrMin = timerCloseThrMin;
+    }
+
+    public int getTimerOpenForHour() {
+        return timerOpenForHour;
+    }
+
+    public void setTimerOpenForHour(int timerOpenForHour) {
+        this.timerOpenForHour = timerOpenForHour;
+    }
+
+    public int getTimerOpenForMin() {
+        return timerOpenForMin;
+    }
+
+    public void setTimerOpenForMin(int timerOpenForMin) {
+        this.timerOpenForMin = timerOpenForMin;
+    }
+
+    public int getTimerCloseForHour() {
+        return timerCloseForHour;
+    }
+
+    public void setTimerCloseForHour(int timerCloseForHour) {
+        this.timerCloseForHour = timerCloseForHour;
+    }
+
+    public int getTimerCloseForMin() {
+        return timerCloseForMin;
+    }
+
+    public void setTimerCloseForMin(int timerCloseForMin) {
+        this.timerCloseForMin = timerCloseForMin;
+    }
+
+    public int getTimerOne() {
+        return timerOne;
+    }
+
+    public void setTimerOne(int timerOne) {
+        this.timerOne = timerOne;
+    }
+
+    public int getTimerTwo() {
+        return timerTwo;
+    }
+
+    public void setTimerTwo(int timerTwo) {
+        this.timerTwo = timerTwo;
+    }
+
+    public int getTimerThr() {
+        return timerThr;
+    }
+
+    public void setTimerThr(int timerThr) {
+        this.timerThr = timerThr;
+    }
+
+    public int getTimerFor() {
+        return timerFor;
+    }
+
+    public void setTimerFor(int timerFor) {
+        this.timerFor = timerFor;
+    }
 }

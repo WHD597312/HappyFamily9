@@ -1,5 +1,7 @@
 package com.xr.happyFamily.jia.activity;
 
+import android.Manifest;
+import android.annotation.TargetApi;
 import android.app.ProgressDialog;
 import android.content.BroadcastReceiver;
 import android.content.ComponentName;
@@ -9,9 +11,18 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
+import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.wifi.WifiInfo;
+import android.net.wifi.WifiManager;
 import android.os.AsyncTask;
+import android.os.Build;
 import android.os.CountDownTimer;
 import android.os.IBinder;
+import android.support.annotation.NonNull;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -25,10 +36,13 @@ import android.view.KeyEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
+import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.PopupWindow;
 import android.widget.RelativeLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.amap.api.location.AMapLocation;
@@ -54,6 +68,7 @@ import com.xr.happyFamily.jia.pojo.Hourse;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.HttpUtils;
+import com.xr.happyFamily.together.http.NetWorkUtil;
 import com.xr.happyFamily.together.util.IsChinese;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.location.CheckPermissionsActivity;
@@ -63,7 +78,9 @@ import com.xr.happyFamily.together.util.mqtt.MQService;
 import org.angmarch.views.NiceSpinner;
 import org.json.JSONObject;
 
+import java.lang.reflect.Method;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -74,14 +91,27 @@ import butterknife.OnClick;
 import butterknife.Unbinder;
 import pl.droidsonroids.gif.GifDrawable;
 import pl.droidsonroids.gif.GifImageView;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class AddDeviceActivity extends CheckPermissionsActivity {
+public class AddDeviceActivity extends AppCompatActivity implements EasyPermissions.PermissionCallbacks {
 
     private AMapLocationClient locationClient = null;
     private AMapLocationClientOption locationOption = null;
     Unbinder unbinder;
     @BindView(R.id.wifi_layout)
     RelativeLayout wifi_layout;
+    @BindView(R.id.layout_2g) RelativeLayout layout_2g;/**2g布局*/
+    @BindView(R.id.et_content) EditText et_content;
+    @BindView(R.id.layout_add_2g) RelativeLayout layout_add_2g;/**2G添加设备的布局*/
+    @BindView(R.id.img_2g) ImageView img_2g;
+    @BindView(R.id.tv_2g) TextView tv_2g;/**2g*/
+    @BindView(R.id.view) View view_2g;
+    @BindView(R.id.layout_add_wifi) RelativeLayout layout_add_wifi;/**WiFi添加设备的布局*/
+    @BindView(R.id.tv_wifi2) TextView tv_wifi2;/**wifi*/
+    @BindView(R.id.img_wifi) ImageView img_wifi;
+    @BindView(R.id.view2) View view2;
     /**
      * wifi添加设备的布局
      */
@@ -105,7 +135,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     private String mac = null;
 //    MessageReceiver receiver;
     public static boolean running = false;
-
     DeviceChild deviceChild = null;
     SharedPreferences my;
     private RoomDaoImpl roomDao;
@@ -124,13 +153,17 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
      * 区
      */
 
+    private static final int REQUEST_PERMISSION = 0x01;
+    String userId;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_device);
         if (getSupportActionBar() != null) {
             getSupportActionBar().hide();
         }
+        setContentView(R.layout.activity_add_device);
+
 //        macAddressPreferences = getSharedPreferences("macAddress", Context.MODE_PRIVATE);
         unbinder = ButterKnife.bind(this);
         application = (MyApplication) getApplicationContext();
@@ -138,6 +171,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             application.addActivity(this);
         }
         my = getSharedPreferences("my", Context.MODE_PRIVATE);
+        userId = my.getString("userId", "");
         Intent service = new Intent(AddDeviceActivity.this, MQService.class);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
 //        IntentFilter intentFilter = new IntentFilter("AddDeviceActivity");
@@ -147,6 +181,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         mWifiAdmin = new EspWifiAdminSimple(this);
+        registerBroadcastReceiver();
 
 
         et_wifi.addTextChangedListener(new TextWatcher() {
@@ -187,8 +222,7 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
 //            }
 //
 //        });
-        initLocation();
-        startLocation();//开始定位
+
     }
 
     long roomId;
@@ -227,6 +261,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             }
 
             if (popupWindow2 != null && popupWindow2.isShowing()) {
+                isMatching=false;
+                wifiName="";
                 if (gifDrawable != null && gifDrawable.isRunning()) {
                     gifDrawable.stop();
                 }
@@ -246,75 +282,59 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         return super.onKeyDown(keyCode, event);
     }
 
+    private static final int RC_CAMERA_AND_LOCATION=0;
     @Override
     protected void onResume() {
         super.onResume();
+        permissionGrantedSuccess();
         running = true;
-        String apSsid = mWifiAdmin.getWifiConnectedSsid();
-//        if (apSsid != null) {
-//            nice_spinner.setText(apSsid);
-//        } else {
-//            nice_spinner.setText("");
-//        }
-//        SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
-//        if (wifi.contains(apSsid)) {
-//            String pswd = wifi.getString(apSsid, "");
-//            et_wifi.setText(pswd);
-//        }else {
-//            et_wifi.setText("");
-
-        SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
-        if (wifi.contains(apSsid)) {
-            nice_spinner.setText(apSsid);
-            nice_spinner.setFocusable(false);
-            String pswd = wifi.getString(apSsid, "");
-            et_wifi.setText(pswd);
-        } else {
-            nice_spinner.setText(apSsid);
-            nice_spinner.setFocusable(false);
-            et_wifi.setText("");
-        }
-        if (!TextUtils.isEmpty(apSsid)) {
-            char[] chars = apSsid.toCharArray();
-            nice_spinner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.showToast(AddDeviceActivity.this, "WiFi名称不可编辑");
-                }
-            });
-
-            for (char c : chars) {
-                if (IsChinese.isChinese(c)) {
-                    Utils.showToast(AddDeviceActivity.this, "WiFi名称不能是中文");
-                    nice_spinner.setText("");
-                    et_wifi.setText("");
-                    break;
-                }
-            }
-        } else {
-            nice_spinner.setText("");
-            nice_spinner.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    Utils.showToast(AddDeviceActivity.this, "请连接英文名称的wifi");
-                }
-            });
-            et_wifi.setText("");
-        }
-
-        String userId = my.getString("userId", "");
-        Log.i("userId", "-->" + userId);
     }
 
-    @OnClick({R.id.back, R.id.image_scan, R.id.bt_add_finish})
+    private boolean isNeedCheck=true;
+    @AfterPermissionGranted(RC_CAMERA_AND_LOCATION)
+    private void permissionGrantedSuccess(){
+        String[] perms = {Manifest.permission.ACCESS_COARSE_LOCATION,Manifest.permission.ACCESS_FINE_LOCATION};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+            initLocation();
+            startLocation();//开始定位
+            // 已经申请过权限，做想做的事
+        } else {
+//             没有申请过权限，现在去申请
+            if (isNeedCheck){
+                EasyPermissions.requestPermissions(this, getString(R.string.location),
+                        RC_CAMERA_AND_LOCATION, perms);
+            }
+        }
+    }
+
+    int matchMethod=1;
+    @OnClick({R.id.wifi_layout,R.id.layout_2g,R.id.nice_spinner,R.id.back,R.id.layout_add_2g,R.id.layout_add_wifi,R.id.image_scan, R.id.bt_add_finish})
     public void onClick(View view) {
         switch (view.getId()) {
+            case R.id.wifi_layout:
+                matchMethod=0;
+                layout_2g.setVisibility(View.GONE);
+                wifi_layout.setVisibility(View.VISIBLE);
+                break;
+            case R.id.layout_2g:
+                matchMethod=1;
+                wifi_layout.setVisibility(View.GONE);
+                layout_2g.setVisibility(View.VISIBLE);
+                break;
+            case R.id.nice_spinner:
+                if (matchMethod==0 && Utils.isEmpty(wifiName)){
+                    Utils.showToast(AddDeviceActivity.this, "请连接英文名称的wifi");
+                }else if (matchMethod==0 && !Utils.isEmpty(wifiName)){
+                    Utils.showToast(AddDeviceActivity.this, "WiFi名称不接编辑");
+                }
+                break;
             case R.id.back:
                 if (mEsptouchTask != null) {
                     mEsptouchTask.interrupt();
                 }
-
                 if (popupWindow2 != null && popupWindow2.isShowing()) {
+                    isMatching=false;
+                    wifiName="";
                     if (gifDrawable != null && gifDrawable.isRunning()) {
                         gifDrawable.stop();
                     }
@@ -330,38 +350,97 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                 setResult(6000, intent);
                 finish();
                 break;
+            case R.id.layout_add_2g:
+                matchMethod=1;
+                wifi_layout.setVisibility(View.GONE);
+                layout_2g.setVisibility(View.VISIBLE);
+                img_2g.setImageResource(R.mipmap.two_2g1);
+                img_wifi.setImageResource(R.mipmap.wifi);
+                tv_2g.setTextColor(getResources().getColor(R.color.green2));
+                tv_wifi2.setTextColor(getResources().getColor(R.color.color_black4));
+
+                view_2g.setVisibility(View.VISIBLE);
+                nice_spinner.setFocusable(true);
+                nice_spinner.setFocusableInTouchMode(true);
+                nice_spinner.requestFocus();
+                view2.setVisibility(View.GONE);
+                if (!NetWorkUtil.isConn(this)){
+                    Utils.showToast(this,"请连接网络");
+                }
+                break;
+            case R.id.layout_add_wifi:
+                matchMethod=0;
+                layout_2g.setVisibility(View.GONE);
+                wifi_layout.setVisibility(View.VISIBLE);
+                nice_spinner.setHint("WiFi名称");
+                nice_spinner.setText(wifiName);
+                et_wifi.setVisibility(View.VISIBLE);
+                et_wifi.setHint("WiFi密码");
+                et_wifi.setText(wifiPswd);
+                img_wifi.setImageResource(R.mipmap.wifi1);
+                img_2g.setImageResource(R.mipmap.two_2g);
+                tv_2g.setTextColor(getResources().getColor(R.color.color_black4));
+                tv_wifi2.setTextColor(getResources().getColor(R.color.green2));
+                view_2g.setVisibility(View.GONE);
+                view2.setVisibility(View.VISIBLE);
+                nice_spinner.setFocusable(false);
+                matchMethod=0;
+                if (!NetWorkUtil.isWifiConnected()){
+                    Utils.showToast(this,"请连接英文名称的WiFi");
+                }
+                break;
             case R.id.image_scan:
                 Intent intent2 = new Intent(this, QRScannerActivity.class);
                 intent2.putExtra("houseId", houseId);
+                intent2.putExtra("roomId",roomId);
+                intent2.putExtra("roomName",roomName);
+                intent2.putExtra("userId",userId);
+                intent2.putExtra("city",city);
+                intent2.putExtra("province",province);
                 startActivity(intent2);
                 break;
             case R.id.bt_add_finish:
-                String ssid = nice_spinner.getText().toString();
-                if (!TextUtils.isEmpty(ssid))
-                    ssid.trim();
-                String apPassword = et_wifi.getText().toString();
-                if (!TextUtils.isEmpty(apPassword))
-                    apPassword.trim();
-                String apBssid = mWifiAdmin.getWifiConnectedBssid();
-                String taskResultCountStr = "1";
-                if (__IEsptouchTask.DEBUG) {
+                if (matchMethod==0){
+                    String ssid =nice_spinner.getText().toString();
+                    String apPassword = et_wifi.getText().toString();
+                    String apBssid = bSsid;
+                    String taskResultCountStr = "1";
+                    if (__IEsptouchTask.DEBUG) {
 //                    Log.d(TAG, "mBtnConfirm is clicked, mEdtApSsid = " + apSsid
 //                            + ", " + " mEdtApPassword = " + apPassword);
-                }
-                if (TextUtils.isEmpty(ssid)) {
-                    Utils.showToast(AddDeviceActivity.this, "请连接英文名称的WiFi");
-                    break;
-                }
-                if (TextUtils.isEmpty(apPassword)) {
-                    Utils.showToast(AddDeviceActivity.this, "请输入wifi密码");
-                    break;
-                }
-                nice_spinner.setEnabled(false);
-                et_wifi.setEnabled(false);
-                bt_add_finish.setEnabled(false);
-                if (!TextUtils.isEmpty(ssid)) {
-                    popupmenuWindow3();
-                    new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+                    }
+                    if (TextUtils.isEmpty(ssid)) {
+                        Utils.showToast(AddDeviceActivity.this, "请连接英文名称的WiFi");
+                        break;
+                    }
+                    if (TextUtils.isEmpty(apPassword)) {
+                        Utils.showToast(AddDeviceActivity.this, "请输入wifi密码");
+                        break;
+                    }
+                    nice_spinner.setEnabled(false);
+                    et_wifi.setEnabled(false);
+                    bt_add_finish.setEnabled(false);
+                    if (!TextUtils.isEmpty(ssid)) {
+                        popupmenuWindow3();
+                        isMatching=true;
+                        wifiName=ssid;
+                        new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
+                    }
+                }else {
+                    String content=et_content.getText().toString();
+                    if (!TextUtils.isEmpty(content)){
+                        Map<String, Object> params = new HashMap<>();
+                        params.put("deviceName", content);
+                        params.put("deviceType", 0);
+                        params.put("deviceMacAddress", content);
+                        params.put("houseId", houseId);
+                        params.put("roomId", roomId);
+                        String userId = my.getString("userId", "");
+                        params.put("userId", userId);
+                        new AddDeviceInOldRoomAsync().execute(params);
+                    }else {
+                        Utils.showToast(this,"请输入设备序列号");
+                    }
                 }
 //                Intent service = new Intent(AddDeviceActivity.this, MQService.class);
 //                isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
@@ -412,6 +491,37 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
     private static final String TAG = "Esptouch";
     private EspWifiAdminSimple mWifiAdmin;
 
+    @TargetApi(23)
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        // 把执行结果的操作给EasyPermissions
+        System.out.println(requestCode);
+        if (isNeedCheck){
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        }
+    }
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog
+                    .Builder(this)
+                    .setTitle("提示")
+                    .setRationale("请点击\"设置\"打开定位权限。")
+                    .setPositiveButton("设置")
+                    .setNegativeButton("取消")
+                    .build()
+                    .show();
+            isNeedCheck=false;
+        }
+    }
+
     private class AddDeviceAsync extends AsyncTask<String, Void, Void> {
         @Override
         protected Void doInBackground(String... macs) {
@@ -453,16 +563,12 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         } catch (Exception e) {
             e.printStackTrace();
         }
-
         image_heater_help.setVisibility(View.VISIBLE);
         if (gifDrawable != null) {
             gifDrawable.start();
             image_heater_help.setImageDrawable(gifDrawable);
         }
-
-        if (popupWindow2 == null)
-            popupWindow2 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
-
+        popupWindow2 = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //添加弹出、弹入的动画
         popupWindow2.setAnimationStyle(R.style.Popupwindow);
         backgroundAlpha(0.6f);
@@ -474,7 +580,6 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         popupWindow2.showAtLocation(et_wifi, Gravity.CENTER, 0, 0);
         //添加按键事件监听
     }
-
     //设置蒙版
     private void backgroundAlpha(float f) {
         WindowManager.LayoutParams lp = getWindow().getAttributes();
@@ -585,6 +690,8 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     }
                 } else {
                     if (popupWindow2 != null && popupWindow2.isShowing()) {
+                        isMatching=false;
+                        wifiName="";
                         if (gifDrawable != null && gifDrawable.isPlaying()) {
                             gifDrawable.stop();
 
@@ -683,6 +790,9 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
         if (unbinder != null) {
             unbinder.unbind();
         }
+        if (mReceiverRegistered) {
+            unregisterReceiver(mReceiver);
+        }
         if (TextUtils.isEmpty(addSuccess)) {
             try {
                 if (isBound) {
@@ -714,30 +824,24 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
                     String returnCode = jsonObject.getString("returnCode");
                     if ("100".equals(returnCode)) {
                         code=100;
-                        SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
-                        wifi.edit().putString(mWifiAdmin.getWifiConnectedSsid(), et_wifi.getText().toString()).commit();
+                        if (matchMethod==0){
+                            SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
+                            wifi.edit().putString(mWifiAdmin.getWifiConnectedSsid(), et_wifi.getText().toString()).commit();
+                        }
                         JSONObject returnData = jsonObject.getJSONObject("returnData");
                         int deviceType = returnData.getInt("deviceType");
                         String deviceMacAddress = returnData.getString("deviceMacAddress");
                         int deviceId = returnData.getInt("deviceId");
                         String deviceName = returnData.getString("deviceName");
-                        List<DeviceChild> deleteDevices = deviceChildDao.findDeviceByMacAddress(macAddress);
+                        List<DeviceChild> deleteDevices = deviceChildDao.findDeviceByMacAddress(deviceMacAddress);
                         if (deleteDevices != null && !deleteDevices.isEmpty()) {
                             deviceChildDao.deleteDevices(deleteDevices);
                         }
-//                        List<DeviceChild> deviceChildren = deviceChildDao.findAllDevice();
-//                        for (DeviceChild deviceChild2 : deviceChildren) {
-//                            if (macAddress.equals(deviceChild2.getMacAddress())) {
-//                                deviceChildDao.delete(deviceChild2);
-//                                break;
-//                            }
-//                        }
                         if (TextUtils.isEmpty(city)) {
                             city = houseAddress;
                             if (city.contains("市")) {
                                 city = city.substring(0, city.length() - 1);
                             }
-
                         } else {
                             if (city.contains("市")) {
                                 city = city.substring(0, city.length() - 1);
@@ -1079,5 +1183,147 @@ public class AddDeviceActivity extends CheckPermissionsActivity {
             locationClient = null;
             locationOption = null;
         }
+    }
+    private boolean isMatching=false;
+    private String wifiName;
+    private boolean mReceiverRegistered = false;
+    private boolean isSDKAtLeastP() {
+        return Build.VERSION.SDK_INT >= 28;
+    }
+    private void registerBroadcastReceiver() {
+        IntentFilter filter = new IntentFilter(WifiManager.NETWORK_STATE_CHANGED_ACTION);
+        if (isSDKAtLeastP()) {
+            filter.addAction(LocationManager.PROVIDERS_CHANGED_ACTION);
+        }
+        registerReceiver(mReceiver, filter);
+        mReceiverRegistered = true;
+    }
+    private BroadcastReceiver mReceiver = new BroadcastReceiver() {
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            if (action == null) {
+                return;
+            }
+            WifiManager wifiManager = (WifiManager) context.getApplicationContext()
+                    .getSystemService(WIFI_SERVICE);
+            assert wifiManager != null;
+            switch (action) {
+                case WifiManager.NETWORK_STATE_CHANGED_ACTION:
+                    if (intent.hasExtra(WifiManager.EXTRA_WIFI_INFO)) {
+                        wifiInfo = intent.getParcelableExtra(WifiManager.EXTRA_WIFI_INFO);
+                    } else {
+                        wifiInfo = wifiManager.getConnectionInfo();
+                    }
+                    onWifiChanged(wifiInfo);
+                    break;
+                case LocationManager.PROVIDERS_CHANGED_ACTION:
+                    wifiInfo=wifiManager.getConnectionInfo();
+                    onWifiChanged(wifiInfo);
+                    break;
+            }
+        }
+    };
+    String bSsid="";
+    String wifiPswd="";
+    WifiInfo wifiInfo;
+    private void onWifiChanged(WifiInfo info) {
+        if (info == null) {
+                if (matchMethod==0){
+                    nice_spinner.setText("");
+                    et_wifi.setText("");
+                    Utils.showToast(AddDeviceActivity.this,"WiFi已中断，请连接WiFi重新配置");
+                    if (mEsptouchTask != null) {
+                        mEsptouchTask.interrupt();
+                    }
+                    if (popupWindow2 != null && popupWindow2.isShowing()) {
+                        if (gifDrawable != null && gifDrawable.isRunning()) {
+                            gifDrawable.stop();
+                        }
+                        nice_spinner.setEnabled(true);
+                        et_wifi.setEnabled(true);
+                        bt_add_finish.setEnabled(true);
+                        popupWindow2.dismiss();
+                        backgroundAlpha(1f);
+                    }
+                }
+        } else {
+                String apSsid = info.getSSID();
+                bSsid=info.getBSSID();
+                if (apSsid.startsWith("\"") && apSsid.endsWith("\"")) {
+                    apSsid = apSsid.substring(1, apSsid.length() - 1);
+                }
+                SharedPreferences wifi = getSharedPreferences("wifi", MODE_PRIVATE);
+                if (wifi.contains(apSsid)) {
+                    wifiName=apSsid;
+                    String pswd = wifi.getString(apSsid, "");
+                    wifiPswd=pswd;
+                    et_wifi.setText(wifiPswd);
+                } else {
+                    if ("<unknown ssid>".equals(apSsid)){
+                        wifiName="";
+                    }else {
+                        wifiName=apSsid;
+                    }
+                    wifiPswd="";
+                }
+                if (!TextUtils.isEmpty(wifiName)) {
+                    if (apSsid.contains("+") || apSsid.contains("/") ||apSsid.contains("#")) {
+                        nice_spinner.setText("");
+                        wifiName="";
+                        Utils.showToast(AddDeviceActivity.this, "WiFi名称为不含有+/#特殊符号的英文");
+                    }else {
+                        char[] chars = apSsid.toCharArray();
+                        for (char c : chars) {
+                            if (IsChinese.isChinese(c)) {
+                                Utils.showToast(AddDeviceActivity.this, "WiFi名称不能是中文");
+                                wifiName="";
+                                wifiPswd="";
+                                break;
+                            }
+                        }
+                    }
+                } else if (TextUtils.isEmpty(wifiName)){
+                    wifiName="";
+                    wifiPswd="";
+                }
+                if (matchMethod==0){
+                    nice_spinner.setText(wifiName);
+                    et_wifi.setText(wifiPswd);
+                }
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    int frequence = info.getFrequency();
+                    if (frequence > 4900 && frequence < 5900) {
+                        // Connected 5G wifi. Device does not support 5G
+                        wifiName="";
+                        wifiPswd="";
+                        if (matchMethod==0){
+                            nice_spinner.setText("");
+                            nice_spinner.setHint("不支持5G WiFi");
+                            et_wifi.setText("");
+                        }
+                    }
+                }
+                if (isMatching && !TextUtils.isEmpty(wifiName) && !wifiName.equals(apSsid)){
+                    isMatching=false;
+                    wifiName="";
+                    Utils.showToast(AddDeviceActivity.this,"WiFi已切换,请重新配置");
+                    if (mEsptouchTask != null) {
+                        mEsptouchTask.interrupt();
+                    }
+                    if (popupWindow2 != null && popupWindow2.isShowing()) {
+                        if (gifDrawable != null && gifDrawable.isRunning()) {
+                            gifDrawable.stop();
+                        }
+                        nice_spinner.setEnabled(true);
+                        nice_spinner.setFocusable(false);
+                        et_wifi.setEnabled(true);
+                        bt_add_finish.setEnabled(true);
+                        popupWindow2.dismiss();
+                        backgroundAlpha(1f);
+                    }
+                }
+            }
+
     }
 }

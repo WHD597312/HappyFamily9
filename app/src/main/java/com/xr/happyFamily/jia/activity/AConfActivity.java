@@ -786,7 +786,13 @@ public class AConfActivity extends AppCompatActivity {
             imgOpen.setImageResource(R.mipmap.ic_air_kai1);
             llState.setVisibility(View.VISIBLE);
             llState2.setVisibility(View.VISIBLE);
-            arcprogressBar.setSign(aCondSetTemp1 - 16);
+            int mCondSetTemp=aCondSetTemp1-16;
+            Log.e("qqqqqTemp",mCondSetTemp+"????");
+            if (mCondSetTemp<=0)
+                mCondSetTemp=0;
+            else if (mCondSetTemp>=16)
+                mCondSetTemp=16;
+            arcprogressBar.setSign(mCondSetTemp);
             tvSheding2.setText(aCondSetTemp1+"℃");
             arcprogressBar.setOpen(true);
             initState();
@@ -1030,6 +1036,9 @@ public class AConfActivity extends AppCompatActivity {
             intent.putExtra("houseId",houseId);
             setResult(6000,intent);
             finish();
+        }else {
+            String name = deviceChild.getName();
+            tvTitle.setText("" + name);
         }
     }
 

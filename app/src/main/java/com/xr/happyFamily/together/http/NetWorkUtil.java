@@ -46,6 +46,23 @@ public class NetWorkUtil {
         return bisConnFlag;
     }
 
+    /***
+     * 判断可用的网络的类型
+     * @param context
+     * @return
+     */
+    public static int getNetworkAvailable(Context context){
+        int netWork=-1;
+        ConnectivityManager manager = (ConnectivityManager)context.getSystemService(Context.CONNECTIVITY_SERVICE);
+        NetworkInfo.State gprs = manager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState();
+        NetworkInfo.State wifi = manager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState();
+        if (gprs == NetworkInfo.State.CONNECTED || gprs == NetworkInfo.State.CONNECTING) {
+            netWork=1;
+        } else if (wifi == NetworkInfo.State.CONNECTED || wifi == NetworkInfo.State.CONNECTING) {//判断为wifi状态下才加载广告，如果是GPRS手机网络则不加载！
+            netWork=0;
+        }
+        return netWork;
+    }
 
     /**
      * 如果没有网络 弹出dialog对话框,,,是否进入设置网络的页面

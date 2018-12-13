@@ -205,16 +205,16 @@ public class APurifierActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.ll_time:
-                int state=4;
+                int state = 4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else if(timerMoudle==2)
+                    else if (timerMoudle == 2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else if(timerMoudle ==2)
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup = new TimePickViewPopup(this, state, timerHour, timerMin);
@@ -380,7 +380,7 @@ public class APurifierActivity extends AppCompatActivity {
             imgKai.setImageResource(R.mipmap.ic_atm_kai1);
             imgFeng.setImageResource(R.mipmap.ic_atm_feng1);
 
-            Log.e("qqqqqqState",purifierState);
+            Log.e("qqqqqqState", purifierState);
             if ("00".equals(purifierState)) {
                 imgZi.setImageResource(R.mipmap.ic_atm_zi1);
                 imgShui.setImageResource(R.mipmap.ic_atm_shui);
@@ -429,16 +429,16 @@ public class APurifierActivity extends AppCompatActivity {
         }
         if (customViewPopipup != null) {
             if (customViewPopipup.isShowing()) {
-                int state=4;
+                int state = 4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else if(timerMoudle==2)
+                    else if (timerMoudle == 2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else if(timerMoudle ==2)
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup.setData(state, timerHour, timerMin);
@@ -546,6 +546,8 @@ public class APurifierActivity extends AppCompatActivity {
         running = true;
         deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild != null) {
+            String name = deviceChild.getName();
+            tvTitle.setText("" + name);
             boolean online = deviceChild.getOnline();
             if (online) {
                 relative.setVisibility(View.VISIBLE);

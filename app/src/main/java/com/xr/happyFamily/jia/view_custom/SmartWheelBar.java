@@ -492,7 +492,13 @@ public class SmartWheelBar extends View {
                     toast.setGravity(Gravity.CENTER,0,0);
                     toast.show();
                     break;
+                }else if (isCanTouch==true && deviceState==2){
+                    Toast toast= Toast.makeText(getContext(),"该设备已锁定,请在web上解锁",Toast.LENGTH_SHORT);
+                    toast.setGravity(Gravity.CENTER,0,0);
+                    toast.show();
+                    break;
                 }
+
                 if (isCanTouch){
                     touchX = event.getX();
                     touchY = event.getY();
@@ -523,9 +529,21 @@ public class SmartWheelBar extends View {
                     }
                     if (isInCiecle(touchX, touchY)) {
                         onDrawInvalidate();
+                        if (mOnWheelCheckListener != null) {
+                            if (isCanTouch && deviceState==1){
+                                mOnWheelCheckListener.onMoveChange(this,mStartAngle);
+                            }else if (isCanTouch && deviceState==2){
+                                Toast toast= Toast.makeText(getContext(),"该设备已锁定,请在web上解锁",Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER,0,0);
+                                toast.show();
+                            }else if (isCanTouch==false){
+                                Toast toast= Toast.makeText(getContext(),"该设备已关机",Toast.LENGTH_SHORT);
+                                toast.setGravity(Gravity.CENTER,0,0);
+                                toast.show();
+                            }
+                        }
                     }
                 }
-
                 break;
             case MotionEvent.ACTION_UP:
                     touchX = event.getX();
@@ -543,8 +561,16 @@ public class SmartWheelBar extends View {
                     onDrawInvalidate();
                     if (mOnWheelCheckListener != null) {
 //                        mOnWheelCheckListener.onCheck(checkPosition);
-                        if (isCanTouch){
+                        if (isCanTouch && deviceState==1){
                             mOnWheelCheckListener.onChanged(this, mStartAngle);
+                        }else if (isCanTouch && deviceState==2){
+                            Toast toast= Toast.makeText(getContext(),"该设备已锁定,请在web上解锁",Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            toast.show();
+                        }else if (isCanTouch==false){
+                            Toast toast= Toast.makeText(getContext(),"该设备已关机",Toast.LENGTH_SHORT);
+                            toast.setGravity(Gravity.CENTER,0,0);
+                            toast.show();
                         }
                     }
                 break;
@@ -563,9 +589,9 @@ public class SmartWheelBar extends View {
         Log.i("y", "-->" + y);
         float distance = (float) Math.sqrt((x - bigCircleRadus) * (x - bigCircleRadus) + (y - bigCircleRadus) * (y - bigCircleRadus));
         Log.i("distance", "-->" + distance);
-        int smallCircleRadus = bigCircleRadus / 2 + 50;
+        int smallCircleRadus = bigCircleRadus / 4;
         Log.i("smallCircleRadus", "-->" + smallCircleRadus);
-        if (distance >= smallCircleRadus && distance <= bigCircleRadus)
+        if (distance >= smallCircleRadus && distance <= bigCircleRadus+50)
             return true;
         else
             return false;
@@ -690,5 +716,7 @@ public class SmartWheelBar extends View {
     public interface OnWheelCheckListener {
         //        void onCheck(int position);
         void onChanged(SmartWheelBar wheelBar, float curAngle);
+        void onMoveChange(SmartWheelBar wheelBar,float curAngle);
     }
+
 }

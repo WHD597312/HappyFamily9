@@ -15,10 +15,12 @@ import android.os.Build;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Base64;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
@@ -55,8 +57,11 @@ import java.util.Vector;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 import butterknife.Unbinder;
+import pub.devrel.easypermissions.AfterPermissionGranted;
+import pub.devrel.easypermissions.AppSettingsDialog;
+import pub.devrel.easypermissions.EasyPermissions;
 
-public class QRScannerActivity extends AppCompatActivity implements SurfaceHolder.Callback {
+public class QRScannerActivity extends AppCompatActivity implements SurfaceHolder.Callback,EasyPermissions.PermissionCallbacks {
 
     ViewfinderView viewfinderView;
     private CaptureActivityHandler handler;
@@ -112,6 +117,13 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
         userId = my.getString("userId", "");
         Intent intent = getIntent();
         houseId = intent.getLongExtra("houseId", 0);
+        roomId=intent.getLongExtra("roomId",0);
+        roomName=intent.getStringExtra("roomName");
+        userId=intent.getStringExtra("userId");
+        city=intent.getStringExtra("city");
+        province=intent.getStringExtra("province");
+        Intent service = new Intent(QRScannerActivity.this, MQService.class);
+        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
     }
 
     private void init() {
@@ -128,8 +140,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
     @Override
     protected void onStart() {
         super.onStart();
-        Intent service = new Intent(QRScannerActivity.this, MQService.class);
-        isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+
 //        deviceGroupDao = new DeviceGroupDaoImpl(getApplicationContext());
 //        deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
 //        preferences = getSharedPreferences("my", Context.MODE_PRIVATE);
@@ -138,6 +149,7 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
     @Override
     protected void onResume() {
         super.onResume();
+        permissionGrantedSuccess();
         SurfaceView surfaceView = (SurfaceView) findViewById(R.id.preview_view);
         SurfaceHolder surfaceHolder = surfaceView.getHolder();
         if (hasSurface) {
@@ -198,7 +210,6 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
         if (handler!=null){
             handler.removeCallbacksAndMessages(null);
         }
-
     }
 
     /**
@@ -225,7 +236,6 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                                 String[] ss = content.split("&");
                                 String s0 = ss[0];
                                 String deviceId = s0.substring(s0.indexOf("'") + 1);
-
                                 Map<String, Object> params = new HashMap<>();
                                 params.put("deviceId", deviceId);
                                 params.put("userId", userId);
@@ -233,7 +243,19 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
                             }
                         }
                     }else {
-                        Toast.makeText(QRScannerActivity.this, "扫描内容不符合!", Toast.LENGTH_SHORT).show();
+                        if (content.startsWith("P99")){
+                            String macAddress=content.substring(content.indexOf(":")+1);
+                            Map<String, Object> params = new HashMap<>();
+                            params.put("deviceName", macAddress);
+                            params.put("deviceType", 0);
+                            params.put("deviceMacAddress", macAddress);
+                            params.put("houseId", houseId);
+                            params.put("roomId", roomId);
+                            params.put("userId", userId);
+                            new AddDeviceInOldRoomAsync().execute(params);
+                        }else {
+                            Toast.makeText(QRScannerActivity.this, "扫描内容不符合!", Toast.LENGTH_SHORT).show();
+                        }
                     }
                 }
             }
@@ -258,6 +280,50 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
             bound = false;
         }
     };
+
+    @Override
+    public void onPermissionsGranted(int requestCode, List<String> perms) {
+
+    }
+
+    @Override
+    public void onPermissionsDenied(int requestCode, List<String> perms) {
+        if (EasyPermissions.somePermissionPermanentlyDenied(this, perms)) {
+            new AppSettingsDialog
+                    .Builder(this)
+                    .setTitle("提示")
+                    .setRationale("请点击\"设置\"打开相机权限。")
+                    .setPositiveButton("设置")
+                    .setNegativeButton("取消")
+                    .build()
+                    .show();
+            isNeedCheck=false;
+        }
+    }
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (isNeedCheck){
+            EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this);
+        }
+    }
+
+    private static final int PERMISSION_CAMERA=0;
+    private boolean isNeedCheck=true;
+    @AfterPermissionGranted(PERMISSION_CAMERA)
+    private void permissionGrantedSuccess(){
+        String[] perms = {Manifest.permission.CAMERA};
+        if (EasyPermissions.hasPermissions(this, perms)) {
+
+        } else {
+//             没有申请过权限，现在去申请
+            if (isNeedCheck){
+                EasyPermissions.requestPermissions(this, getString(R.string.camer),
+                        PERMISSION_CAMERA, perms);
+            }
+        }
+    }
+
 
     class QrCodeAsync extends AsyncTask<Map<String, Object>, Void, Integer> {
         @Override
@@ -375,6 +441,153 @@ public class QRScannerActivity extends AppCompatActivity implements SurfaceHolde
         }
     }
 
+    long roomId;
+    int mPosition;
+    String roomName;
+    String houseAddress;
+    private String city="";
+    private String province="";
+    private String inOldRoom = HttpUtils.ipAddress + "/family/device/registerDeviceInOldRoom";
+    class AddDeviceInOldRoomAsync extends AsyncTask<Map<String, Object>, Void, Integer> {
+
+        @Override
+        protected Integer doInBackground(Map<String, Object>... maps) {
+            int code = 0;
+            Map<String, Object> params = maps[0];
+            String result = HttpUtils.postOkHpptRequest(inOldRoom, params);
+            Log.i("resultAdddevice", "-->" + result);
+            if (!TextUtils.isEmpty(result)) {
+                try {
+                    JSONObject jsonObject = new JSONObject(result);
+                    String returnCode = jsonObject.getString("returnCode");
+                    if ("100".equals(returnCode)) {
+                        code=100;
+
+                        JSONObject returnData = jsonObject.getJSONObject("returnData");
+                        int deviceType = returnData.getInt("deviceType");
+                        String deviceMacAddress = returnData.getString("deviceMacAddress");
+                        int deviceId = returnData.getInt("deviceId");
+                        String deviceName = returnData.getString("deviceName");
+                        List<DeviceChild> deleteDevices = deviceChildDao.findDeviceByMacAddress(deviceMacAddress);
+                        if (deleteDevices != null && !deleteDevices.isEmpty()) {
+                            deviceChildDao.deleteDevices(deleteDevices);
+                        }
+                        if (TextUtils.isEmpty(city)) {
+                            city = houseAddress;
+                            if (city.contains("市")) {
+                                city = city.substring(0, city.length() - 1);
+                            }
+                        } else {
+                            if (city.contains("市")) {
+                                city = city.substring(0, city.length() - 1);
+                            }
+                        }
+                        if (TextUtils.isEmpty(province)){
+                            province="";
+                        }
+                        DeviceChild deviceChild = new DeviceChild();
+                        deviceChild.setRoomName(roomName);
+                        deviceChild.setName(deviceName);
+                        deviceChild.setType(deviceType);
+                        deviceChild.setDeviceId(deviceId);
+                        deviceChild.setHouseId(houseId);
+                        deviceChild.setRoomId(roomId);
+                        deviceChild.setHouseAddress(city);
+                        deviceChild.setMacAddress(deviceMacAddress);
+                        deviceChild.setProvince(province);
+                        deviceChildDao.insert(deviceChild);
+                        String topicName2 = "p99/" + deviceMacAddress + "/transfer";
+                        if (mqService != null) {
+                            boolean success = mqService.subscribe(topicName2, 1);
+                            if (success) {
+                                String topicName = "p99/" + deviceMacAddress + "/set";
+                                String payLoad = "getType";
+                                boolean step2 = mqService.publish(topicName, 1, payLoad);
+                                if (!step2){
+                                    step2 = mqService.publish(topicName, 1, payLoad);
+                                }
+                            }
+                        }
+
+//                        String macAddress = deviceMacAddress;
+//                        code = Integer.parseInt(returnCode);
+//                        String onlineTopicName = "";
+//                        String offlineTopicName = "";
+//                        if (2 == deviceType) {
+//                            onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
+//                        } else if (3 == deviceType) {
+//                            onlineTopicName = "p99/sensor1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/sensor1/" + macAddress + "/lwt";
+//                        } else if (4 == deviceType) {
+//                            onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
+//                        } else if (5 == deviceType) {
+//                            onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
+//                        } else if (6 == deviceType) {
+//                            onlineTopicName = "p99/aConditioning1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/aConditioning1/" + macAddress + "/lwt";
+//                        } else if (7 == deviceType) {
+//                            onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
+//                        } else if (8 == deviceType) {
+//                            onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
+//                            offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+//                        }
+//                        if (!TextUtils.isEmpty(onlineTopicName) && !TextUtils.isEmpty(offlineTopicName)) {
+//                            boolean success = mqService.subscribe(onlineTopicName, 1);
+//                            boolean success2 = mqService.subscribe(offlineTopicName, 1);
+//                            if (!success) {
+//                                mqService.subscribe(onlineTopicName, 1);
+//                            }
+//                            if (!success2) {
+//                                mqService.subscribe(offlineTopicName, 1);
+//                            }
+//                            if (deviceType == 3) {
+//                                String topicName = "p99/sensor1/" + macAddress + "/set";
+//                                if (TextUtils.isEmpty(city)) {
+//                                    city = houseAddress;
+//                                    if (city.contains("市")) {
+//                                        city = city.substring(0, city.length() - 1);
+//                                    }
+//                                    String info = "url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "utf-8");
+//                                    mqService.publish(topicName, 1, info);
+//                                } else {
+//                                    if (city.contains("市")) {
+//                                        city = city.substring(0, city.length() - 1);
+//                                    }
+//                                    String info = "url:http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "utf-8") + "&province=" + URLEncoder.encode(province, "utf-8");
+//                                    mqService.publish(topicName, 1, info);
+//                                }
+//                            }
+//                        }
+                    }
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+            return code;
+        }
+
+        @Override
+        protected void onPostExecute(Integer code) {
+            super.onPostExecute(code);
+            switch (code) {
+                case 100:
+                    Toast.makeText(QRScannerActivity.this, "添加设备成功", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(QRScannerActivity.this,MainActivity.class);
+                    intent.putExtra("houseId", houseId);
+                    intent.putExtra("room","room");
+                    startActivity(intent);
+                    break;
+                    default:
+                        Toast.makeText(QRScannerActivity.this, "添加设备设备", Toast.LENGTH_LONG).show();
+                        break;
+
+            }
+        }
+    }
     private void initCamera(SurfaceHolder surfaceHolder) {
         try {
             CameraManager.get().openDriver(surfaceHolder);

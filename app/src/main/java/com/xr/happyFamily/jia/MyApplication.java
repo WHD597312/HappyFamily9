@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.baidu.mapapi.SDKInitializer;
 import com.tencent.mm.opensdk.openapi.IWXAPI;
 import com.tencent.mm.opensdk.openapi.WXAPIFactory;
+import com.xr.exception.SecyrityCrash;
 import com.xr.happyFamily.le.BDmapActivity;
 
 import java.util.ArrayList;
@@ -47,13 +48,14 @@ public class MyApplication extends Application {
     public void onCreate() {
         super.onCreate();
         app = this;
-        OkHttpClient client = new OkHttpClient.Builder()
-                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
-                .build();
+//        OkHttpClient client = new OkHttpClient.Builder()
+//                .protocols(Collections.singletonList(Protocol.HTTP_1_1))
+//                .build();
       /*  Picasso.setSingletonInstance(new Picasso.Builder(this).
                 downloader(new ImageDownLoader(client))
                 .build());*/
         mContext = getApplicationContext();
+        SecyrityCrash.install();
         // android 7.0系统解决拍照的问题
         StrictMode.VmPolicy.Builder builder = new StrictMode.VmPolicy.Builder();
         StrictMode.setVmPolicy(builder.build());

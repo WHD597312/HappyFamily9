@@ -296,7 +296,6 @@ public class RoomFragment extends Fragment {
                     }else {
                         deleteDeviceDialog();
                     }
-
                     return true;
                 }
             });

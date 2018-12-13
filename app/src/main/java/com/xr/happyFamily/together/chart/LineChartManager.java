@@ -87,6 +87,7 @@ public class LineChartManager {
         lineDataSet.setDrawCircleHole(true);
         lineDataSet.setValueTextSize(9f);
         leftAxis.setGridColor(Color.GRAY);
+
         //设置折线图填充
         lineDataSet.setDrawFilled(mode);
         lineDataSet.setFormLineWidth(1f);

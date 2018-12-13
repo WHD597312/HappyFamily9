@@ -169,10 +169,9 @@ public class qdActivity extends Activity {
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
-
             int code = 0;
             Map<String, Object> params = maps[0];
-            String result = HttpUtils.postOkHpptRequest(url, params);
+            String result = HttpUtils.requestPost(url, params);
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -250,7 +249,7 @@ public class qdActivity extends Activity {
             int code = 0;
 //            Map<String, Object> params = maps[0];
             String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
-            String result = HttpUtils.getOkHpptRequest(url);
+            String result = HttpUtils.requestGet(url);
 
             Log.i("ffffffff", "--->: " + result);
             try {

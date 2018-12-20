@@ -368,6 +368,7 @@ public class PurifierActivity extends AppCompatActivity {
             jsonArray.put(3,busMode);/**商业模式*/
             jsonArray.put(4,dataLength);/**数据长度*/
             jsonArray.put(5,35);/**数据位*/
+
             int wPurifierEndYear=deviceChild.getWPurifierEndYear();
             int wPurifierEndYearHigh=wPurifierEndYear/256;
             sum=sum+wPurifierEndYearHigh;

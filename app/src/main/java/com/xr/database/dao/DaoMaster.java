@@ -21,40 +21,40 @@ public class DaoMaster extends AbstractDaoMaster {
 
     /** Creates underlying database table using DAOs. */
     public static void createAllTables(Database db, boolean ifNotExists) {
+        LeImageDao.createTable(db, ifNotExists);
+        ShopBannerDao.createTable(db, ifNotExists);
+        ShopListDao.createTable(db, ifNotExists);
         DeviceChildDao.createTable(db, ifNotExists);
         HourseDao.createTable(db, ifNotExists);
         RoomDao.createTable(db, ifNotExists);
         TimeTaskDao.createTable(db, ifNotExists);
+        AppUsingDao.createTable(db, ifNotExists);
         ClockBeanDao.createTable(db, ifNotExists);
+        DerailBeanDao.createTable(db, ifNotExists);
+        DerailResultDao.createTable(db, ifNotExists);
         FriendDataDao.createTable(db, ifNotExists);
         MsgDataDao.createTable(db, ifNotExists);
         TimeDao.createTable(db, ifNotExists);
         UserInfoDao.createTable(db, ifNotExists);
-        LeImageDao.createTable(db, ifNotExists);
-        ShopBannerDao.createTable(db, ifNotExists);
-        ShopListDao.createTable(db, ifNotExists);
-        DerailBeanDao.createTable(db, ifNotExists);
-        DerailResultDao.createTable(db, ifNotExists);
-        AppUsingDao.createTable(db, ifNotExists);
     }
 
     /** Drops underlying database table using DAOs. */
     public static void dropAllTables(Database db, boolean ifExists) {
+        LeImageDao.dropTable(db, ifExists);
+        ShopBannerDao.dropTable(db, ifExists);
+        ShopListDao.dropTable(db, ifExists);
         DeviceChildDao.dropTable(db, ifExists);
         HourseDao.dropTable(db, ifExists);
         RoomDao.dropTable(db, ifExists);
         TimeTaskDao.dropTable(db, ifExists);
+        AppUsingDao.dropTable(db, ifExists);
         ClockBeanDao.dropTable(db, ifExists);
+        DerailBeanDao.dropTable(db, ifExists);
+        DerailResultDao.dropTable(db, ifExists);
         FriendDataDao.dropTable(db, ifExists);
         MsgDataDao.dropTable(db, ifExists);
         TimeDao.dropTable(db, ifExists);
         UserInfoDao.dropTable(db, ifExists);
-        LeImageDao.dropTable(db, ifExists);
-        ShopBannerDao.dropTable(db, ifExists);
-        ShopListDao.dropTable(db, ifExists);
-        DerailBeanDao.dropTable(db, ifExists);
-        DerailResultDao.dropTable(db, ifExists);
-        AppUsingDao.dropTable(db, ifExists);
     }
 
     /**
@@ -73,21 +73,21 @@ public class DaoMaster extends AbstractDaoMaster {
 
     public DaoMaster(Database db) {
         super(db, SCHEMA_VERSION);
+        registerDaoClass(LeImageDao.class);
+        registerDaoClass(ShopBannerDao.class);
+        registerDaoClass(ShopListDao.class);
         registerDaoClass(DeviceChildDao.class);
         registerDaoClass(HourseDao.class);
         registerDaoClass(RoomDao.class);
         registerDaoClass(TimeTaskDao.class);
+        registerDaoClass(AppUsingDao.class);
         registerDaoClass(ClockBeanDao.class);
+        registerDaoClass(DerailBeanDao.class);
+        registerDaoClass(DerailResultDao.class);
         registerDaoClass(FriendDataDao.class);
         registerDaoClass(MsgDataDao.class);
         registerDaoClass(TimeDao.class);
         registerDaoClass(UserInfoDao.class);
-        registerDaoClass(LeImageDao.class);
-        registerDaoClass(ShopBannerDao.class);
-        registerDaoClass(ShopListDao.class);
-        registerDaoClass(DerailBeanDao.class);
-        registerDaoClass(DerailResultDao.class);
-        registerDaoClass(AppUsingDao.class);
     }
 
     public DaoSession newSession() {

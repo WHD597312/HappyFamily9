@@ -52,7 +52,7 @@ public class RoomAdapter extends ArrayAdapter {
         return super.getPosition(item);
     }
 
-    private String imageUrl="http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
+    private String imageUrl="http://img.p99.store/room/choose/";
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 

@@ -312,7 +312,7 @@ public class MQService extends Service {
         @Override
         protected Object doInBackground(String... strings) {
 
-            String topicName = strings[0];/**收到的主题*/
+                String topicName = strings[0];/**收到的主题*/
             Log.i("topicName", "-->:" + topicName);
             String macAddress = null;
             if (topicName.startsWith("p99/" + phone)) {

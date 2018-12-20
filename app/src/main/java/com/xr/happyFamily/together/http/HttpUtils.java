@@ -163,8 +163,6 @@ public class HttpUtils {
 
 
     static String httpUrl="http://47.98.131.11:8084/";
-
-
     public static String headerPostOkHpptRequest(Context context, String url, Map<String, Object> map) {
         String result = null;
         Context mContext = context;

@@ -9,7 +9,9 @@
         android:id="@+id/vp_flower"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        android:layout_weight="1"></com.xr.happyFamily.le.view.NoSrcollViewPage>
+        android:layout_weight="1">
+
+    </com.xr.happyFamily.le.view.NoSrcollViewPage>
     <TextView
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_jy_1"

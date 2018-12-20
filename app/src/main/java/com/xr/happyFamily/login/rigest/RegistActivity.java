@@ -100,7 +100,8 @@ public class RegistActivity extends AppCompatActivity {
                 //回调完成
                 if (event == SMSSDK.EVENT_SUBMIT_VERIFICATION_CODE) {
                     //提交验证码成功
-                    @SuppressWarnings("unchecked") HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
+                    @SuppressWarnings("unchecked")
+                    HashMap<String, Object> phoneMap = (HashMap<String, Object>) data;
                     String country = (String) phoneMap.get("country");
                     String phone = (String) phoneMap.get("phone");
                     Log.d(TAG, "提交验证码成功--country=" + country + "--phone" + phone);

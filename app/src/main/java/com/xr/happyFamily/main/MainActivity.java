@@ -270,25 +270,25 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
     }
 
     SharedPreferences preferencesclock;
-    Intent clockintent;
-    ClockService clcokservice;
-    boolean boundclock;
-    ServiceConnection clockconnection=new ServiceConnection() {
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
-            clcokservice = binder.getService();
-            clcokservice.acquireWakeLock(MainActivity.this);
-            boundclock = true;
-            clcokservice.setDerailPo(derailPo);
-            clcokservice.startClock();
-            clcokservice.getDerail();
-            Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->" );
-        }
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-        }
-    };
+        Intent clockintent;
+        ClockService clcokservice;
+        boolean boundclock;
+        ServiceConnection clockconnection=new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+                clcokservice = binder.getService();
+                clcokservice.acquireWakeLock(MainActivity.this);
+                boundclock = true;
+                clcokservice.setDerailPo(derailPo);
+                clcokservice.startClock();
+                clcokservice.getDerail();
+                Log.e("QQQQQQQQQQQDDDDDDD", "onServiceConnected: ------->" );
+            }
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+            }
+        };
 
 
     //    MQService mqService;

@@ -58,7 +58,6 @@ public class RoomAdapter extends ArrayAdapter {
 
         convertView=View.inflate(mContext,resourceId,null);
         ViewHolder viewHolder=new ViewHolder(convertView);
-
         Room room = rooms.get(position); // 获取当前项的Room实例
         if (room!=null){
             String roomType=room.getRoomType();

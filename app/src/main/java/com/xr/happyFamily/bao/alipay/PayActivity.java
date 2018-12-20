@@ -48,8 +48,6 @@ public class PayActivity extends AppCompatActivity {
         Bundle extras = getIntent().getExtras();
         orderNumber=extras.getString("orderNumber");
         new payAsync().execute();
-
-
     }
 
     Map<String,String> map=new HashMap<>();

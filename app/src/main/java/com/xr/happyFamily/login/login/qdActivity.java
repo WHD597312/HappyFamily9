@@ -169,10 +169,9 @@ public class qdActivity extends Activity {
     class LoginAsyncTask extends AsyncTask<Map<String, Object>, Void, Integer> {
         @Override
         protected Integer doInBackground(Map<String, Object>... maps) {
-
             int code = 0;
             Map<String, Object> params = maps[0];
-            String result = HttpUtils.postOkHpptRequest(url, params);
+            String result = HttpUtils.requestPost(url, params);
             try {
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
@@ -250,7 +249,7 @@ public class qdActivity extends Activity {
             int code = 0;
 //            Map<String, Object> params = maps[0];
             String url = ip + "/family/house/getHouseDeviceByUser?userId=" + userId;
-            String result = HttpUtils.getOkHpptRequest(url);
+            String result = HttpUtils.requestGet(url);
 
             Log.i("ffffffff", "--->: " + result);
             try {
@@ -383,6 +382,7 @@ public class qdActivity extends Activity {
                                 String deviceName=jsonObject2.getString("deviceName");
                                 int deviceType=jsonObject2.getInt("deviceType");
                                 int roomId=jsonObject2.getInt("roomId");
+                                int houseId=jsonObject2.getInt("houseId");
                                 String deviceMacAddress=jsonObject2.getString("deviceMacAddress");
 //                                List<DeviceChild> deviceChildren=deviceChildDao.findAllDevice();
                                 DeviceChild deviceChild2=deviceChildDao.findDeviceByMacAddress2(deviceMacAddress);
@@ -399,6 +399,7 @@ public class qdActivity extends Activity {
 
                                     deviceChild2=new DeviceChild();
                                     deviceChild2.setUserId(userId);
+                                    deviceChild2.setHouseId(houseId);
                                     deviceChild2.setShareId(Long.MAX_VALUE);
                                     deviceChild2.setName(deviceName);
                                     deviceChild2.setDeviceId(deviceId);

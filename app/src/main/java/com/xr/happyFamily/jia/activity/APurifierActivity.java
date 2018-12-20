@@ -155,7 +155,6 @@ public class APurifierActivity extends AppCompatActivity {
         if (circle_anim != null) {
             imgQuan.startAnimation(circle_anim);  //开始动画
         }
-
     }
 
 
@@ -190,7 +189,7 @@ public class APurifierActivity extends AppCompatActivity {
                     atmState = 1;
 //                    imgShui.setImageResource(R.mipmap.ic_atm_shui1);
 //                    imgZi.setImageResource(R.mipmap.ic_atm_zi);
-                    deviceChild.setPurifierState("001");
+                    deviceChild.setPurifierState("01");
                     send(deviceChild);
                     setMode(deviceChild);
                 }
@@ -200,24 +199,22 @@ public class APurifierActivity extends AppCompatActivity {
                     atmState = 0;
 //                    imgZi.setImageResource(R.mipmap.ic_atm_zi1);
 //                    imgShui.setImageResource(R.mipmap.ic_atm_shui);
-                    deviceChild.setPurifierState("000");
+                    deviceChild.setPurifierState("00");
                     send(deviceChild);
                     setMode(deviceChild);
                 }
                 break;
             case R.id.ll_time:
-                int state;
-                Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
+                int state = 4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else
+                    else if (timerMoudle == 2)
                         state = 3;
-                }
-                else {
+                } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup = new TimePickViewPopup(this, state, timerHour, timerMin);
@@ -382,7 +379,9 @@ public class APurifierActivity extends AppCompatActivity {
             isOpen = true;
             imgKai.setImageResource(R.mipmap.ic_atm_kai1);
             imgFeng.setImageResource(R.mipmap.ic_atm_feng1);
-            if ("000".equals(purifierState)) {
+
+            Log.e("qqqqqqState", purifierState);
+            if ("00".equals(purifierState)) {
                 imgZi.setImageResource(R.mipmap.ic_atm_zi1);
                 imgShui.setImageResource(R.mipmap.ic_atm_shui);
             } else {
@@ -430,17 +429,16 @@ public class APurifierActivity extends AppCompatActivity {
         }
         if (customViewPopipup != null) {
             if (customViewPopipup.isShowing()) {
-                int state;
-                Log.e("qqqqqMTimeNNNN", timerSwitch + "," + timerMoudle+","+timerHour+","+timerMin);
+                int state = 4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else
+                    else if (timerMoudle == 2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup.setData(state, timerHour, timerMin);
@@ -548,6 +546,8 @@ public class APurifierActivity extends AppCompatActivity {
         running = true;
         deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild != null) {
+            String name = deviceChild.getName();
+            tvTitle.setText("" + name);
             boolean online = deviceChild.getOnline();
             if (online) {
                 relative.setVisibility(View.VISIBLE);

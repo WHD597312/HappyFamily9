@@ -85,7 +85,6 @@ public class RoomFragment extends Fragment {
     private DeviceChildDaoImpl deviceChildDao;
     @BindView(R.id.balcony_li)
     LinearLayout balcony_li;
-    private List<DeviceChild> deviceChildren;
     @BindView(R.id.gv_balcony_home)
     MyGridview mGridView;
     private List<DeviceChild> mGridData = new ArrayList<>();
@@ -158,10 +157,10 @@ public class RoomFragment extends Fragment {
             houseId = room.getHouseId();
 //            tv_roomname.setText(myName);
             tv_roomname.setText(name);
-            deviceChildren = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
-            Log.i("deviceSize", "-->" + deviceChildren.size());
+//            deviceChildren = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
+//            Log.i("deviceSize", "-->" + deviceChildren.size());
             mGridData = deviceChildDao.findHouseInRoomDevices(houseId, roomId);
-            final DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId, roomId);
+            DeviceChild deviceChild = deviceChildDao.findOnlineEstDevice(houseId, roomId);
             if (deviceChild == null) {
                 tv_balcony_wd.setVisibility(View.GONE);
                 tv_balcony_23.setVisibility(View.GONE);
@@ -297,7 +296,6 @@ public class RoomFragment extends Fragment {
                     }else {
                         deleteDeviceDialog();
                     }
-
                     return true;
                 }
             });

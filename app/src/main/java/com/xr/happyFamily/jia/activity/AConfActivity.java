@@ -421,17 +421,16 @@ public class AConfActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.view_left:
-                int state;
-                Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
+                int state=4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else
+                    else if(timerMoudle==2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if(timerMoudle ==2)
                         state = 1;
                 }
                 customViewPopipup = new TimePickViewPopup(this, state, timerHour, timerMin);
@@ -473,6 +472,7 @@ public class AConfActivity extends AppCompatActivity {
                 intent.putExtra("curdPower",curdPower);
                 intent.putExtra("deviceId",  deviceChild.getDeviceId());
                 intent.putExtra("dataType",7);
+                intent.putExtra("Id",deviceChild.getId());
                 startActivity(intent);
                 break;
         }
@@ -786,7 +786,13 @@ public class AConfActivity extends AppCompatActivity {
             imgOpen.setImageResource(R.mipmap.ic_air_kai1);
             llState.setVisibility(View.VISIBLE);
             llState2.setVisibility(View.VISIBLE);
-            arcprogressBar.setSign(aCondSetTemp1 - 16);
+            int mCondSetTemp=aCondSetTemp1-16;
+            Log.e("qqqqqTemp",mCondSetTemp+"????");
+            if (mCondSetTemp<=0)
+                mCondSetTemp=0;
+            else if (mCondSetTemp>=16)
+                mCondSetTemp=16;
+            arcprogressBar.setSign(mCondSetTemp);
             tvSheding2.setText(aCondSetTemp1+"℃");
             arcprogressBar.setOpen(true);
             initState();
@@ -863,21 +869,21 @@ public class AConfActivity extends AppCompatActivity {
 
         if (fengSuViewPopup != null) {
             if (fengSuViewPopup.isShowing()) {
-                fengSuViewPopup.setWind(rateState);
+                fengSuViewPopup.setWind(windLevel);
             }
         }
         if (customViewPopipup != null) {
             if (customViewPopipup.isShowing()) {
-                int state;
+                int state=4;
                 if (timerSwitch == 0) {
                     if (timerMoudle == 1)
                         state = 2;
-                    else
+                    else if(timerMoudle==2)
                         state = 3;
                 } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if(timerMoudle ==2)
                         state = 1;
                 }
                 customViewPopipup.setData(state, timerHour, timerMin);
@@ -1030,6 +1036,9 @@ public class AConfActivity extends AppCompatActivity {
             intent.putExtra("houseId",houseId);
             setResult(6000,intent);
             finish();
+        }else {
+            String name = deviceChild.getName();
+            tvTitle.setText("" + name);
         }
     }
 

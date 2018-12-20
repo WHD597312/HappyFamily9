@@ -26,13 +26,14 @@ import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.weigan.loopview.LoopView;
+import com.weigan.loopview.OnItemSelectedListener;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
 import com.xr.happyFamily.jia.view_custom.HomeDialog;
 import com.xr.happyFamily.jia.view_custom.MySeekBar;
-import com.xr.happyFamily.jia.view_custom.TimePickViewPopup;
 import com.xr.happyFamily.jia.view_custom.Timepicker3;
 import com.xr.happyFamily.jia.xnty.NoFastClickUtils;
 import com.xr.happyFamily.main.MainActivity;
@@ -45,7 +46,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -100,6 +103,10 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
     long houseId;
     long deviceId;
 
+    private List<String> timers = new ArrayList<>();
+    private List<String> hours = new ArrayList<>();
+    private List<String> mins = new ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -122,16 +129,25 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         IntentFilter intentFilter = new IntentFilter("SocketActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
+        timers.add("倒计时");
+        timers.add("定时");
+        timers.add("关闭");
+        for (int i = 0; i < 24; i++) {
+            hours.add(i + "");
+        }
+        for (int i = 0; i < 60; i++) {
+            mins.add(i + "");
+        }
     }
 
     @Override
     protected void onStart() {
         super.onStart();
         running = true;
-        deviceChild=deviceChildDao.findById(deviceId);
+        deviceChild = deviceChildDao.findById(deviceId);
         if (deviceChild != null) {
-            String name=deviceChild.getName();
-            tv_title.setText(""+name);
+            String name = deviceChild.getName();
+            tv_title.setText("" + name);
             boolean online = deviceChild.getOnline();
             if (online) {
                 relative.setVisibility(View.VISIBLE);
@@ -160,7 +176,8 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                 finish();
                 break;
             case R.id.image_timer:
-                popupTimerWindow();
+//                popupTimerWindow();
+                popupTimeWinow();
                 break;
             case R.id.image_switch2:
                 if (NoFastClickUtils.isFastClick()) {
@@ -256,6 +273,192 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         tv_timer.setOnClickListener(listener);
     }
 
+    private PopupWindow popupTimeWinow;
+    LoopView loop_state, loop_hour, loop_min;
+    int state, hour, min;
+
+    public void popupTimeWinow() {
+        if (popupTimeWinow != null && popupTimeWinow.isShowing()) {
+            return;
+        }
+
+        View view = View.inflate(this, R.layout.popup_timepick, null);
+
+
+        popupTimeWinow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
+        //点击空白处时，隐藏掉pop窗口
+        popupTimeWinow.setFocusable(true);
+        popupTimeWinow.setOutsideTouchable(true);
+
+        loop_state = (LoopView) view.findViewById(R.id.loop_state);/**模式*/
+        loop_state.setItems(timers);
+        int isSocketTimerMode = deviceChild.getIsSocketTimerMode();
+        int socketTimer = deviceChild.getSocketTimer();
+        int socketTimerHour = deviceChild.getSocketTimerHour();
+        int socketTimerMin = deviceChild.getSocketTimerMin();
+        if (isSocketTimerMode == 1) {
+            if (socketTimer == 2) {
+                loop_state.setInitPosition(0);
+            } else if (socketTimer == 1) {
+                loop_state.setInitPosition(1);
+            } else
+                loop_state.setInitPosition(2);
+        }
+        //设置初始位置
+        loop_state.setCenterTextColor(0xff37d39e);
+        //设置字体大小
+        loop_state.setTextSize(18);
+        //设置是否循环播放
+        loop_state.setNotLoop();
+        loop_state.setItemsVisibleCount(7);
+        loop_state.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                loop_state.setCurrentPosition(index);
+                state = index;
+            }
+        });
+
+        loop_hour = (LoopView) view.findViewById(R.id.loop_hour);
+        loop_hour.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                loop_hour.setCurrentPosition(index);
+                hour = index;
+            }
+        });
+
+        loop_hour.setItems(hours);
+        loop_hour.setCenterTextColor(0xff37d39e);
+        loop_hour.setTextSize(18);
+        //设置是否循环播放
+        loop_hour.setItemsVisibleCount(7);
+
+
+        loop_min = (LoopView) view.findViewById(R.id.loop_min);
+        loop_min.setItems(mins);
+        loop_min.setCenterTextColor(0xff37d39e);
+        loop_min.setTextSize(18);
+
+        Calendar calendar = Calendar.getInstance();
+        int hour2 = calendar.get(Calendar.HOUR_OF_DAY);
+        int min2 = calendar.get(Calendar.MINUTE);
+        //设置是否循环播放
+        loop_min.setItemsVisibleCount(7);
+        if (isSocketTimerMode == 1) {
+            if (socketTimer == 1) {
+//                int a = hour2*60+min2+socketTimerHour * 60 + socketTimerMin;
+//                socketTimerHour = a / 60 % 24;
+//                socketTimerMin = a % 60;
+//                a=socketTimerHour*60+socketTimerMin;
+//                int b=hour2*60+min2;
+//                if (a<b){
+//                    int sumMins=socketTimerHour*60+socketTimerMin+(1440-(hour2*60+min2));
+//                    socketTimerHour=sumMins/60%24;
+//                    socketTimerMin=sumMins%60;
+//                }else {
+//                    int sumMins=socketTimerHour*60+socketTimerMin-(hour2*60+min2);
+//                    socketTimerHour=sumMins/60%24;
+//                    socketTimerMin=sumMins%60;
+//                }
+                int indexHour = hours.indexOf(socketTimerHour + "");
+                loop_hour.setInitPosition(indexHour);
+                int minHour = mins.indexOf(socketTimerMin + "");
+                loop_min.setInitPosition(minHour);
+                loop_state.setInitPosition(0);
+                loop_min.setCurrentPosition(minHour);
+                hour=indexHour;
+                min=minHour;
+                state=0;
+            } else if (socketTimer == 2) {
+                int indexHour = hours.indexOf(socketTimerHour + "");
+                loop_hour.setInitPosition(indexHour);
+                int minHour = mins.indexOf(socketTimerMin + "");
+                loop_min.setInitPosition(minHour);
+                loop_state.setInitPosition(1);
+                hour=indexHour;
+                min=minHour;
+                state=1;
+            }
+        } else {
+            int hourIndex=hours.indexOf(hour2+"");
+            int minIndex=mins.indexOf(min2+"");
+            loop_hour.setInitPosition(hourIndex);
+            loop_min.setInitPosition(minIndex);
+            loop_state.setInitPosition(2);
+            hour=hourIndex;
+            min=minIndex;
+            state=2;
+        }
+
+        loop_min.setListener(new OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(int index) {
+                loop_min.setCurrentPosition(index);
+                min = index;
+            }
+        });
+
+
+        TextView tv_quxiao = (TextView) view.findViewById(R.id.tv_quxiao);
+        TextView tv_queding = (TextView) view.findViewById(R.id.tv_queding);
+
+        //添加弹出、弹入的动画
+        popupTimeWinow.setAnimationStyle(R.style.Popupwindow);
+        ColorDrawable dw = new ColorDrawable(0x30000000);
+        popupTimeWinow.setBackgroundDrawable(dw);
+        popupTimeWinow.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
+
+
+        //添加按键事件监听
+
+
+        View.OnClickListener listener = new View.OnClickListener() {
+            public void onClick(View v) {
+                switch (v.getId()) {
+                    case R.id.tv_queding:
+                        if (state == 0) {
+                            int socketHour = Integer.parseInt(hours.get(hour));
+                            int socketMin = Integer.parseInt(mins.get(min));
+                            deviceChild.setSocketTimerHour(socketHour);
+                            deviceChild.setSocketTimerMin(socketMin);
+                            deviceChild.setSocketTimer(1);
+                            deviceChild.setIsSocketTimerMode(1);
+                        } else if (state == 1) {
+                            int socketTimerHour=Integer.parseInt(hours.get(hour));
+                            int socketTimerMin=Integer.parseInt(mins.get(min));
+                            deviceChild.setSocketTimerHour(socketTimerHour);
+                            deviceChild.setSocketTimerMin(socketTimerMin);
+                            deviceChild.setSocketTimer(2);
+                            deviceChild.setIsSocketTimerMode(1);
+                        } else if (state == 2) {
+                            deviceChild.setSocketTimerHour(0);
+                            deviceChild.setTimerMin(0);
+                            deviceChild.setSocketTimer(0);
+                            deviceChild.setIsSocketTimerMode(0);
+                        }
+                        setMode(deviceChild);
+                        send(deviceChild);
+                        popupTimeWinow.dismiss();
+                        break;
+                    case R.id.tv_quxiao:
+                        popupTimeWinow.dismiss();
+                        break;
+                }
+            }
+        };
+        tv_queding.setOnClickListener(listener);
+        tv_quxiao.setOnClickListener(listener);
+//
+//        popupWindow.setOnDismissListener(new PopupWindow.OnDismissListener() {
+//            @Override
+//            public void onDismiss() {
+//                backgroundAlpha(1.0f);
+//            }
+//        });
+
+    }
+
     public void popUpWindow() {
         if (popupWindow != null && popupWindow.isShowing()) {
             return;
@@ -330,7 +533,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
 
     @Override
     public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-        Log.i("SeekBar","-->"+progress);
+        Log.i("SeekBar", "-->" + progress);
     }
 
     @Override
@@ -384,73 +587,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             }
         }
     }
-
     private PopupWindow popupWindow;
-    TimePickViewPopup timePickViewPopup;
-
-    public void popupTimerWindow() {
-        if (timePickViewPopup != null && timePickViewPopup.isShowing()) {
-            return;
-        }
-        Calendar calendar = Calendar.getInstance();
-        int hour = calendar.get(Calendar.HOUR_OF_DAY);
-        int min = calendar.get(Calendar.MINUTE);
-        if (timePickViewPopup==null)
-            timePickViewPopup = new TimePickViewPopup(SocketActivity.this, 1, hour, min);
-        timePickViewPopup.showAtLocation(relative4, Gravity.BOTTOM | Gravity.CENTER_HORIZONTAL, 0, 0);
-        TextView tv_ensure = timePickViewPopup.getPublishView();
-        tv_ensure.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int[] timeData = timePickViewPopup.getData();
-                if (timeData[0] == 0) {
-                    deviceChild.setSocketTimer(1);
-                    deviceChild.setSocketTimerHour(timeData[1]);
-                    deviceChild.setSocketTimerMin(timeData[2]);
-                    deviceChild.setIsSocketTimerMode(1);
-                    setMode(deviceChild);
-                    send(deviceChild);
-                } else if (timeData[0] == 1) {
-                    deviceChild.setSocketTimer(2);
-                    deviceChild.setSocketTimerHour(timeData[1]);
-                    deviceChild.setSocketTimerMin(timeData[2]);
-                    deviceChild.setIsSocketTimerMode(1);
-                    setMode(deviceChild);
-                    send(deviceChild);
-                } else if (timeData[0] == 2) {
-                    deviceChild.setIsSocketTimerMode(0);
-                    setMode(deviceChild);
-                    send(deviceChild);
-                }
-                timePickViewPopup.dismiss();
-            }
-        });
-        //添加按键事件监听
-
-//        View.OnClickListener listener = new View.OnClickListener() {
-//            public void onClick(View v) {
-//                switch (v.getId()) {
-//                    case R.id.image_cancle:
-//                        popupWindow.dismiss();
-//                        backgroundAlpha(1f);
-//                        break;
-//                    case R.id.image_ensure:
-//                        int sh= tv_timer_hour.getValue();
-//                        int min=tv_timer_min.getValue();
-//                        deviceChild.setSocketTimerOpenHour(sh);
-//                        deviceChild.setSocketTimerOpenMin(min);
-//                        setMode(deviceChild);
-//                        send(deviceChild);
-//                        popupWindow.dismiss();
-//                        backgroundAlpha(1f);
-//                        break;
-//                }
-//            }
-//        };
-//
-//        image_cancle.setOnClickListener(listener);
-//        image_ensure.setOnClickListener(listener);
-    }
 
     //设置蒙版
     private void backgroundAlpha(float f) {
@@ -468,23 +605,23 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             DeviceChild deviceChild2 = (DeviceChild) intent.getSerializableExtra("deviceChild");
             String noNet = intent.getStringExtra("noNet");
             if (!TextUtils.isEmpty(noNet)) {
-                if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
-                    timePickViewPopup.dismiss();
+                if (popupTimeWinow != null && popupTimeWinow.isShowing()) {
+                    popupTimeWinow.dismiss();
                 }
                 relative.setVisibility(View.GONE);
                 tv_offline.setVisibility(View.VISIBLE);
             } else {
-                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild != null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
-                        if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
-                            timePickViewPopup.dismiss();
+                        if (popupTimeWinow != null && popupTimeWinow.isShowing()) {
+                            popupTimeWinow.dismiss();
                         }
                         Toast.makeText(SocketActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();
                         Intent data = new Intent(SocketActivity.this, MainActivity.class);
                         data.putExtra("houseId", houseId);
                         startActivity(data);
-                    } else{
+                    } else {
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();
                         if (online) {
@@ -492,8 +629,8 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
                             tv_offline.setVisibility(View.GONE);
                             setMode(deviceChild);
                         } else {
-                            if (timePickViewPopup!=null && timePickViewPopup.isShowing()){
-                                timePickViewPopup.dismiss();
+                            if (popupTimeWinow != null && popupTimeWinow.isShowing()) {
+                                popupTimeWinow.dismiss();
                             }
                             relative.setVisibility(View.GONE);
                             tv_offline.setVisibility(View.VISIBLE);
@@ -525,11 +662,20 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
         int socketTimerHour = deviceChild.getSocketTimerHour();/**插座定时模式开的 时*/
         int socketTimerMin = deviceChild.getSocketTimerMin();/**插座定时模式开的 分*/
         int isSocketTimerMode = deviceChild.getIsSocketTimerMode();
+        int socketTimer=deviceChild.getSocketTimer();
         if (socketState == 1) {/**插座当前状态开*/
             tv_switch_state.setText("插座电源已开启");
             socket_switch.setImageResource(R.mipmap.socket_switch);
             if (isSocketTimerMode == 1) {
                 tv_close_socket.setVisibility(View.VISIBLE);
+                if (socketTimer==1){
+                    Calendar calendar = Calendar.getInstance();
+                    int hour2 = calendar.get(Calendar.HOUR_OF_DAY);
+                    int min2 = calendar.get(Calendar.MINUTE);
+                    int a=hour2*60+min2+socketTimerHour*60+socketTimerMin;
+                    socketTimerHour = a / 60 % 24;
+                    socketTimerMin = a % 60;
+                }
                 tv_close_socket.setText(socketTimerHour + ":" + socketTimerMin + "关闭插座");
                 tv_timer.setText(socketTimerHour + ":" + socketTimerMin);
             } else if (isSocketTimerMode == 0) {
@@ -541,6 +687,14 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             tv_switch_state.setText("插座电源已关闭");
             if (isSocketTimerMode == 1) {
                 tv_close_socket.setVisibility(View.VISIBLE);
+                if (socketTimer==1){
+                    Calendar calendar = Calendar.getInstance();
+                    int hour2 = calendar.get(Calendar.HOUR_OF_DAY);
+                    int min2 = calendar.get(Calendar.MINUTE);
+                    int a=hour2*60+min2+socketTimerHour*60+socketTimerMin;
+                    socketTimerHour = a / 60 % 24;
+                    socketTimerMin = a % 60;
+                }
                 tv_close_socket.setText(socketTimerHour + ":" + socketTimerMin + "开启插座");
                 tv_timer.setText(socketTimerHour + ":" + socketTimerMin);
             } else {
@@ -552,6 +706,47 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             image_timer.setImageResource(R.mipmap.socket_timer_close);
         } else if (isSocketTimerMode == 1) {
             image_timer.setImageResource(R.mipmap.socket_timer);
+        }
+
+        if (popupTimeWinow!=null && popupTimeWinow.isShowing()){
+            Calendar calendar = Calendar.getInstance();
+            int hour2 = calendar.get(Calendar.HOUR_OF_DAY);
+            int min2 = calendar.get(Calendar.MINUTE);
+            if (isSocketTimerMode == 1) {
+                if (socketTimer == 1) {
+//                    int a = hour2*60+min2+socketTimerHour * 60 + socketTimerMin;
+//                    socketTimerHour = a / 60 % 24;
+//                    socketTimerMin = a % 60;
+//                    a=socketTimerHour*60+socketTimerMin;
+//                    int b=hour2*60+min2;
+//                    if (a<b){
+//                        int sumMins=socketTimerHour*60+socketTimerMin+(1440-(hour2*60+min2));
+//                        socketTimerHour=sumMins/60%24;
+//                        socketTimerMin=sumMins%60;
+//                    }else {
+//                        int sumMins=socketTimerHour*60+socketTimerMin-(hour2*60+min2);
+//                        socketTimerHour=sumMins/60%24;
+//                        socketTimerMin=sumMins%60;
+//                    }
+                    int indexHour = hours.indexOf(socketTimerHour + "");
+                    loop_hour.setCurrentPosition(indexHour);
+                    int minHour = mins.indexOf(socketTimerMin + "");
+                    loop_min.setCurrentPosition(minHour);
+                    loop_state.setCurrentPosition(0);
+                } else if (socketTimer == 2) {
+                    int indexHour = hours.indexOf(socketTimerHour + "");
+                    loop_hour.setCurrentPosition(indexHour);
+                    int minHour = mins.indexOf(socketTimerMin + "");
+                    loop_min.setCurrentPosition(minHour);
+                    loop_state.setCurrentPosition(1);
+                }
+            } else {
+                int hourIndex=hours.indexOf(hour2+"");
+                int minIndex=mins.indexOf(min2+"");
+                loop_hour.setCurrentPosition(hourIndex);
+                loop_min.setCurrentPosition(minIndex);
+                loop_state.setCurrentPosition(2);
+            }
         }
     }
 
@@ -602,7 +797,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             jsonArray.put(6, socketPowerLow);
             jsonArray.put(7, 0);
             jsonArray.put(8, dataContent);
-            jsonArray.put(9,socketTimer);
+            jsonArray.put(9, socketTimer);
             jsonArray.put(10, socketTimerHour);
             jsonArray.put(11, socketTimerMin);
             jsonArray.put(12, checkCode);/**校验码*/
@@ -610,7 +805,7 @@ public class SocketActivity extends AppCompatActivity implements SeekBar.OnSeekB
             jsonObject.put("Socket", jsonArray);
 
             if (isBound) {
-                String macAddress=deviceChild.getMacAddress();
+                String macAddress = deviceChild.getMacAddress();
                 String topicName = "p99/socket1/" + macAddress + "/set";
                 String s = jsonObject.toString();
                 boolean success = mqService.publish(topicName, 1, s);

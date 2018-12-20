@@ -86,10 +86,13 @@ public class LineChartManager {
         //设置曲线值的圆点是实心还是空心
         lineDataSet.setDrawCircleHole(true);
         lineDataSet.setValueTextSize(9f);
+        leftAxis.setGridColor(Color.GRAY);
+
         //设置折线图填充
         lineDataSet.setDrawFilled(mode);
         lineDataSet.setFormLineWidth(1f);
         lineDataSet.setFormSize(15.f);
+
         xAxis.setAxisLineColor(Color.WHITE);
         leftAxis.setAxisLineColor(Color.WHITE);
         xAxis.setAxisLineWidth(1.5f);
@@ -207,7 +210,7 @@ public class LineChartManager {
             name = "高限制线";
         }
         LimitLine hightLimit = new LimitLine(high, name);
-        hightLimit.setLineWidth(2f);
+        hightLimit.setLineWidth(0.5f);
         hightLimit.setTextSize(10f);
         hightLimit.setLineColor(color);
         hightLimit.setTextColor(color);

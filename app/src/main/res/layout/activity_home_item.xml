@@ -24,7 +24,7 @@
         android:layout_marginLeft="@dimen/dp_jy_15"
         android:layout_marginTop="@dimen/dp_jy_5"
         android:textSize="@dimen/sp_14"
-        android:text="智能终端"
+        android:text="智能设备"
         android:textColor="@color/black" />
 
     <TextView
@@ -34,9 +34,9 @@
         android:layout_below="@+id/tv_device_type"
         android:layout_marginLeft="@dimen/dp_jy_14"
         android:layout_marginTop="@dimen/dp_jy_18"
-        android:text="电源开"
+        android:text="离线"
         android:textSize="@dimen/sp_10"
-        android:textColor="@color/green2" />
+         />
     <View
         android:id="@+id/view_homeitem"
         android:layout_width="@dimen/dp_jy_8"
@@ -46,7 +46,6 @@
         android:layout_alignBottom="@+id/tv_device_switch"
         android:layout_marginBottom="@dimen/dp_jy_3"
         android:layout_marginLeft="@dimen/dp_jy_9"
-
         />
 
     <ImageView
@@ -55,6 +54,6 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/dp_jy_4"
         android:layout_marginLeft="@dimen/dp_jy_81"
-        android:src="@mipmap/sb_dnq" />
+        android:src="@mipmap/default_p99" />
 
 </RelativeLayout>

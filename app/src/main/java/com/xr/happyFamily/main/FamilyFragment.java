@@ -181,7 +181,7 @@ public class FamilyFragment extends Fragment {
                     DeviceChild deviceChild = commonDevices.get(position);
                     DeviceChild deviceChild2 = deviceChildDao.findById(deviceChild.getId());
                     if (deviceChild2 == null) {
-                        Utils.showToast(getActivity(),"该设备已重置");
+                        Utils.showToast(getActivity(), "该设备已重置");
                         commonDevices.remove(position);
                         mGridViewAdapter.notifyDataSetChanged();
                     } else {
@@ -284,12 +284,12 @@ public class FamilyFragment extends Fragment {
                     mPositionPreferences.edit().clear().commit();
                     mPosition = position;
                     mdeledeviceChild = shareDevices.get(position);
-                    DeviceChild deviceChild=deviceChildDao.findById(mdeledeviceChild.getId());
-                    if (deviceChild==null){
-                        Utils.showToast(getActivity(),"该设备已重置");
+                    DeviceChild deviceChild = deviceChildDao.findById(mdeledeviceChild.getId());
+                    if (deviceChild == null) {
+                        Utils.showToast(getActivity(), "该设备已重置");
                         shareDevices.remove(position);
                         shareViewAdapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         Log.i("mdeledeviceChild", "-->" + mdeledeviceChild.getDeviceId());
                         deleteDeviceDialog();
                     }
@@ -303,7 +303,7 @@ public class FamilyFragment extends Fragment {
                     DeviceChild deviceChild = shareDevices.get(position);
                     DeviceChild deviceChild2 = deviceChildDao.findById(deviceChild.getId());
                     if (deviceChild2 == null) {
-                        Utils.showToast(getActivity(),"该设备已重置");
+                        Utils.showToast(getActivity(), "该设备已重置");
                         shareDevices.remove(position);
                         shareViewAdapter.notifyDataSetChanged();
                     } else {
@@ -380,13 +380,17 @@ public class FamilyFragment extends Fragment {
                                 Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                             }
                         } else if (type == 8) {
-                            String deviceName = deviceChild.getName();
-                            long deviceId = deviceChild.getId();
-                            Intent intent = new Intent(getActivity(), PurifierActivity.class);
-                            intent.putExtra("deviceName", deviceName);
-                            intent.putExtra("deviceId", deviceId);
-                            intent.putExtra("houseId", houseId);
-                            startActivityForResult(intent, 6000);
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
                         }
                     }
 
@@ -462,9 +466,9 @@ public class FamilyFragment extends Fragment {
                                 onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
                                 offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                             }
-                            String reSet="reSet";
+                            String reSet = "reSet";
                             if (!TextUtils.isEmpty(onlineTopicName))
-                                mqService.publish(onlineTopicName,1,reSet);
+                                mqService.publish(onlineTopicName, 1, reSet);
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);
                             }
@@ -668,84 +672,86 @@ public class FamilyFragment extends Fragment {
             String noNet = intent.getStringExtra("noNet");
             DeviceChild deviceChild2 = (DeviceChild) intent.getSerializableExtra("deviceChild");
             long sharedId = intent.getLongExtra("sharedId", 0);
-            if (!TextUtils.isEmpty(noNet)) {
-                for (int i = 0; i < commonDevices.size(); i++) {
-                    DeviceChild deviceChild = commonDevices.get(i);
-                    deviceChild.setOnline(false);
-                    commonDevices.set(i, deviceChild);
-                }
-                mGridViewAdapter.notifyDataSetChanged();
-                for (int i = 0; i < shareDevices.size(); i++) {
-                    DeviceChild deviceChild = shareDevices.get(i);
-                    deviceChild.setOnline(false);
-                    shareDevices.set(i, deviceChild);
-                }
-                shareViewAdapter.notifyDataSetChanged();
-            } else {
-                if (deviceChild2 == null) {
-                    if (sharedId == Long.MAX_VALUE) {
-                        for (int i = 0; i < shareDevices.size(); i++) {
-                            DeviceChild deviceChild = shareDevices.get(i);
-                            String mac = deviceChild.getMacAddress();
-                            if (mac.equals(macAddress) && deviceChild2 == null) {
-                                Toast.makeText(getActivity(), macAddress + "设备已重置", Toast.LENGTH_SHORT).show();
-                                List<DeviceChild> deviceChildren = deviceChildDao.findHouseCommonDevices(houseId);
-                                List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
-                                if (deviceChildren.isEmpty() && shareDevices2.isEmpty()) {
-                                    Intent intent2 = new Intent(getActivity(), MainActivity.class);
-                                    intent2.putExtra("refersh", "refresh");
-                                    intent2.putExtra("houseId", houseId);
-                                    startActivity(intent2);
-                                } else {
-                                    shareViewAdapter.remove(deviceChild);
-                                    shareViewAdapter.notifyDataSetChanged();
-                                }
-                                break;
-                            }
-                        }
-                    } else {
-                        for (int i = 0; i < commonDevices.size(); i++) {
-                            DeviceChild deviceChild = commonDevices.get(i);
-                            String mac = deviceChild.getMacAddress();
-                            if (mac.equals(macAddress) && deviceChild2 == null) {
-                                Toast.makeText(getActivity(), macAddress + "设备已重置", Toast.LENGTH_SHORT).show();
-                                List<DeviceChild> deviceChildren = deviceChildDao.findHouseCommonDevices(houseId);
-                                List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
-                                if (deviceChildren.isEmpty() && shareDevices2.isEmpty()) {
-                                    Intent intent2 = new Intent(getActivity(), MainActivity.class);
-                                    intent2.putExtra("refersh", "refresh");
-                                    intent2.putExtra("houseId", houseId);
-                                    startActivity(intent2);
-                                } else {
-                                    commonDevices.remove(deviceChild);
-                                    mGridViewAdapter.notifyDataSetChanged();
-                                }
-                                break;
-                            }
-                        }
+            if (commonDevices != null && mGridViewAdapter != null && shareDevices != null && shareViewAdapter != null) {
+                if (!TextUtils.isEmpty(noNet)) {
+                    for (int i = 0; i < commonDevices.size(); i++) {
+                        DeviceChild deviceChild = commonDevices.get(i);
+                        deviceChild.setOnline(false);
+                        commonDevices.set(i, deviceChild);
                     }
-                } else if (deviceChild2 != null) {
-                    if (sharedId == Long.MAX_VALUE) {
-                        for (int i = 0; i < shareDevices.size(); i++) {
-                            DeviceChild deviceChild = shareDevices.get(i);
-                            String mac = deviceChild.getMacAddress();
-                            if (mac.equals(macAddress) && deviceChild2 != null) {
-                                shareDevices.set(i, deviceChild2);
-                                break;
+                    mGridViewAdapter.notifyDataSetChanged();
+                    for (int i = 0; i < shareDevices.size(); i++) {
+                        DeviceChild deviceChild = shareDevices.get(i);
+                        deviceChild.setOnline(false);
+                        shareDevices.set(i, deviceChild);
+                    }
+                    shareViewAdapter.notifyDataSetChanged();
+                } else {
+                    if (deviceChild2 == null) {
+                        if (sharedId == Long.MAX_VALUE) {
+                            for (int i = 0; i < shareDevices.size(); i++) {
+                                DeviceChild deviceChild = shareDevices.get(i);
+                                String mac = deviceChild.getMacAddress();
+                                if (mac.equals(macAddress) && deviceChild2 == null) {
+                                    Toast.makeText(getActivity(), macAddress + "设备已重置", Toast.LENGTH_SHORT).show();
+                                    List<DeviceChild> deviceChildren = deviceChildDao.findHouseCommonDevices(houseId);
+                                    List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
+                                    if (deviceChildren.isEmpty() && shareDevices2.isEmpty()) {
+                                        Intent intent2 = new Intent(getActivity(), MainActivity.class);
+                                        intent2.putExtra("refersh", "refresh");
+                                        intent2.putExtra("houseId", houseId);
+                                        startActivity(intent2);
+                                    } else {
+                                        shareViewAdapter.remove(deviceChild);
+                                        shareViewAdapter.notifyDataSetChanged();
+                                    }
+                                    break;
+                                }
+                            }
+                        } else {
+                            for (int i = 0; i < commonDevices.size(); i++) {
+                                DeviceChild deviceChild = commonDevices.get(i);
+                                String mac = deviceChild.getMacAddress();
+                                if (mac.equals(macAddress) && deviceChild2 == null) {
+                                    Toast.makeText(getActivity(), macAddress + "设备已重置", Toast.LENGTH_SHORT).show();
+                                    List<DeviceChild> deviceChildren = deviceChildDao.findHouseCommonDevices(houseId);
+                                    List<DeviceChild> shareDevices2 = deviceChildDao.findShareDevice(userId);
+                                    if (deviceChildren.isEmpty() && shareDevices2.isEmpty()) {
+                                        Intent intent2 = new Intent(getActivity(), MainActivity.class);
+                                        intent2.putExtra("refersh", "refresh");
+                                        intent2.putExtra("houseId", houseId);
+                                        startActivity(intent2);
+                                    } else {
+                                        commonDevices.remove(deviceChild);
+                                        mGridViewAdapter.notifyDataSetChanged();
+                                    }
+                                    break;
+                                }
                             }
                         }
-                        shareViewAdapter.notifyDataSetChanged();
-                    } else {
-                        for (int i = 0; i < commonDevices.size(); i++) {
-                            DeviceChild deviceChild = commonDevices.get(i);
-                            String mac = deviceChild.getMacAddress();
-                            if (mac.equals(macAddress) && deviceChild2 != null) {
-                                deviceChild2.setCommon("common");
-                                commonDevices.set(i, deviceChild2);
-                                break;
+                    } else if (deviceChild2 != null) {
+                        if (sharedId == Long.MAX_VALUE) {
+                            for (int i = 0; i < shareDevices.size(); i++) {
+                                DeviceChild deviceChild = shareDevices.get(i);
+                                String mac = deviceChild.getMacAddress();
+                                if (mac.equals(macAddress) && deviceChild2 != null) {
+                                    shareDevices.set(i, deviceChild2);
+                                    break;
+                                }
                             }
+                            shareViewAdapter.notifyDataSetChanged();
+                        } else {
+                            for (int i = 0; i < commonDevices.size(); i++) {
+                                DeviceChild deviceChild = commonDevices.get(i);
+                                String mac = deviceChild.getMacAddress();
+                                if (mac.equals(macAddress) && deviceChild2 != null) {
+                                    deviceChild2.setCommon("common");
+                                    commonDevices.set(i, deviceChild2);
+                                    break;
+                                }
+                            }
+                            mGridViewAdapter.notifyDataSetChanged();
                         }
-                        mGridViewAdapter.notifyDataSetChanged();
                     }
                 }
             }

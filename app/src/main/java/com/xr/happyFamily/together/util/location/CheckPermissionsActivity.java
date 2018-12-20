@@ -11,13 +11,9 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.os.Build;
-import android.os.Bundle;
 import android.provider.Settings;
-import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.KeyEvent;
-
-import com.xr.happyFamily.jia.MyApplication;
 
 import java.lang.reflect.Method;
 import java.util.ArrayList;
@@ -35,16 +31,6 @@ import java.util.List;
  * @since 2.5.0
  */
 public class CheckPermissionsActivity extends AppCompatActivity {
-    private MyApplication application;
-
-    @Override
-    protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        if (application == null) {
-            application = (MyApplication) getApplication();
-        }
-    }
-
     /**
      * 需要进行检测的权限数组
      */
@@ -153,22 +139,26 @@ public class CheckPermissionsActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * 显示提示信息
      *
      * @since 2.5.0
      */
+    AlertDialog dialog=null;
     private void showMissingPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("当前应用缺少必要权限。\\n\\n请点击\\\"设置\\\"-\\\"权限\\\"-打开所需权限。");
+        builder.setMessage("当前应用缺少必要权限。请点击\"设置\"打开所需权限。");
 
         // 拒绝, 退出应用
         builder.setNegativeButton("取消",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        application.removeAllActivity();
+                        if (dialog!=null){
+                            dialog.dismiss();
+                        }
                     }
                 });
 
@@ -181,8 +171,7 @@ public class CheckPermissionsActivity extends AppCompatActivity {
                 });
 
         builder.setCancelable(false);
-
-        builder.show();
+        dialog=builder.show();
     }
 
     /**

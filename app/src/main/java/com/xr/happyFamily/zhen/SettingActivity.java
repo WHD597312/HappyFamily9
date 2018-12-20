@@ -275,14 +275,8 @@ public class SettingActivity extends AppCompatActivity{
 //                                startActivity(intent);
 //                            }
 //                        });
-
-
-
             }
         });
-
-
-
 
     }
     TimerTask task;
@@ -328,7 +322,7 @@ public class SettingActivity extends AppCompatActivity{
                         preferences.edit().remove("derailPo").commit();
                         clcokservice.setDerailPo(-1);
                     }
-                    application.removeActivity(SettingActivity.this);
+//                    application.removeActivity(SettingActivity.this);
                     Log.e("FFFFFFFFSSSS", "onClick: -->"+preferences.getInt("derailPo",-1) );
                     if (mqService!=null){
                         mqService.cancelAllsubscibe();

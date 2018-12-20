@@ -18,9 +18,12 @@
     <string name="if_register_needed">如果您需要注册功能…</string>
     <string name="after_auth">一般来说第三方登录时，第三方平台已经为您完成用户身份校验，您可以放心让用户登录。\n\n但如果您需要判断用户是否为新用户，可以在授权操作完成后，将用户的信息通过字段“HashMap userInfo”携带给login方法。客户端通过“String userId”执行登录请求，如果服务端判定此userId为未注册用户，可以将userInfo发送给注册接口，获取用户在此平台上的昵称、头像等数据，然后执行注册</string>
     <string name="ok">确定</string>
+    <string name="no">取消</string>
     <string name="title_activity_account">AccountActivity</string>
     <string name="app">p99</string>
     <string name="login_only_can_input">qwertyuioplkjhgfdsazxcvbnmQWERTYUIOPLKJHGFDSAZXCVBNM1234567890</string>
     <string name="rule_text">0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ`¬!"£$%^*()~=#{}[];':,./?/*-_+&#060;&#062;&#064;&#038;&#034;</string>
     <string name="title_activity_download">DownloadActivity</string>
+    <string name="location">请打开定位权限</string>
+    <string name="camer">请打开相机权限</string>
 </resources>

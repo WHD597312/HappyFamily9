@@ -2099,7 +2099,6 @@ public class MQService extends Service {
             jsonArray.put(11,checkCode);
             jsonArray.put(12,endCode);
             JSONObject jsonObject=new JSONObject();
-            
             jsonObject.put("Warmer",jsonArray);
             String topicName="p99/warmer1/"+macAddress+"/set";
             String s=jsonObject.toString();

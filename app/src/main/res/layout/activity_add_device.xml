@@ -38,15 +38,169 @@
             android:layout_centerVertical="true"
             app:srcCompat="@mipmap/scan" />
     </RelativeLayout>
+    <LinearLayout
+        android:id="@+id/layout_add"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_below="@+id/head_title"
+        android:background="@color/white"
+        >
+        <RelativeLayout
+            android:id="@+id/layout_add_2g"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:id="@+id/tv_2g0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="  "
+                android:gravity="center"
+                />
+            <ImageView
+                android:id="@+id/img_2g"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/two_2g1"
+                android:scaleType="centerInside"
+                android:layout_marginRight="@dimen/dp_jy_3"
+                android:layout_toRightOf="@+id/tv_2g0"
+                />
+            <TextView
+                android:id="@+id/tv_2g"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="2G添加  "
+                android:textColor="@color/green2"
+                android:textSize="@dimen/sp_17"
+                android:gravity="center"
+                android:layout_toRightOf="@+id/img_2g"
+                />
+            <View
+                android:id="@+id/view"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@color/green2"
+                android:layout_below="@+id/tv_2g"
+                android:layout_alignLeft="@+id/tv_2g0"
+                android:layout_alignRight="@+id/tv_2g"
+                android:layout_marginTop="@dimen/dp_jy_5"
+                />
+        </RelativeLayout>
+        <RelativeLayout
+            android:id="@+id/layout_add_wifi"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:gravity="center"
+            android:layout_gravity="center"
+            >
+            <TextView
+                android:id="@+id/tv_wifi0"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text=" "
+                android:gravity="center"
+                />
+            <ImageView
+                android:id="@+id/img_wifi"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/wifi"
+                android:scaleType="centerInside"
+                android:layout_marginRight="@dimen/dp_jy_3"
+                android:layout_toRightOf="@+id/tv_wifi0"
+                android:layout_marginTop="@dimen/dp_jy_3"
 
+                />
+            <TextView
+                android:id="@+id/tv_wifi2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="WiFi添加  "
+                android:textSize="@dimen/sp_17"
+                android:gravity="center"
+                android:layout_toRightOf="@+id/img_wifi"
+                />
+            <View
+                android:id="@+id/view2"
+                android:layout_width="wrap_content"
+                android:layout_height="@dimen/dp_jy_3"
+                android:background="@color/green2"
+                android:layout_below="@+id/tv_wifi2"
+                android:layout_alignLeft="@+id/tv_wifi0"
+                android:layout_alignRight="@+id/tv_wifi2"
+                android:layout_marginTop="@dimen/dp_jy_5"
+                android:visibility="gone"
+                />
+        </RelativeLayout>
+    </LinearLayout>
+
+    <View
+        android:layout_width="@dimen/dp_jy_3"
+        android:layout_height="match_parent"
+        android:layout_alignTop="@+id/layout_add"
+        android:layout_alignBottom="@+id/layout_add"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_jy_3"
+        android:background="@color/color_gray2"
+        android:layout_marginBottom="@dimen/dp_jy_3"
+        />
+
+
+    <RelativeLayout
+        android:id="@+id/layout_2g"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/layout_add"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        >
+        <TextView
+            android:id="@+id/tv_2g2"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_jy_30"
+            android:text="■"
+            android:textColor="@color/black"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/sp_16" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_jy_30"
+            android:layout_alignTop="@+id/tv_2g2"
+            android:layout_toRightOf="@+id/tv_2g2"
+            android:text="填写扫描二维码获取到的序列号"
+            android:layout_marginLeft="@dimen/dp_jy_5"
+            android:gravity="center_vertical"
+            android:textSize="@dimen/sp_16" />
+
+        <EditText
+            android:id="@+id/et_content"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_50"
+            android:layout_below="@id/tv_2g2"
+            android:layout_marginTop="@dimen/dp_jy_10"
+            android:background="@color/white"
+            android:paddingLeft="@dimen/dp_jy_20"
+            android:hint="请填写获取的序列号"
+            android:inputType="text"
+            />
+    </RelativeLayout>
     <RelativeLayout
         android:id="@+id/wifi_layout"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/head_title"
+        android:layout_below="@+id/layout_add"
         android:layout_marginLeft="@dimen/dp_jy_12"
         android:layout_marginRight="@dimen/dp_jy_12"
-        android:layout_marginTop="@dimen/dp_jy_20"
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:visibility="gone"
         >
         <TextView
             android:id="@+id/tv_wifi"
@@ -55,27 +209,28 @@
             android:text="■"
             android:textColor="@color/black"
             android:gravity="center_vertical"
-            android:textSize="11sp" />
+            android:textSize="@dimen/sp_16" />
 
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="@dimen/dp_jy_30"
             android:layout_alignTop="@+id/tv_wifi"
             android:layout_toRightOf="@+id/tv_wifi"
-            android:text="填写要连接的无线网络"
+            android:text="请填写要连接的网络"
             android:layout_marginLeft="@dimen/dp_jy_5"
             android:gravity="center_vertical"
-            android:textSize="@dimen/sp_15" />
+            android:textSize="@dimen/sp_16" />
 
         <EditText
             android:id="@+id/nice_spinner"
             android:layout_width="match_parent"
             android:layout_height="@dimen/dp_jy_50"
             android:layout_below="@id/tv_wifi"
-            android:layout_marginTop="@dimen/dp_jy_15"
+            android:layout_marginTop="@dimen/dp_jy_10"
             android:background="@color/white"
             android:paddingLeft="@dimen/dp_jy_20"
-            android:hint="wifi名称 "
+            android:hint="WiFi名称"
+            android:inputType="text"
             />
         <EditText
             android:id="@+id/et_wifi"
@@ -86,9 +241,8 @@
             android:background="@color/white"
             android:paddingLeft="@dimen/dp_jy_20"
             android:inputType="textVisiblePassword"
-            android:hint="wifi密码"
+            android:hint="WiFi密码"
             />
-
         <pl.droidsonroids.gif.GifImageView
             android:id="@+id/image_gif"
             android:layout_width="match_parent"

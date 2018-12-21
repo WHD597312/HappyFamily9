@@ -52,13 +52,12 @@ public class RoomAdapter extends ArrayAdapter {
         return super.getPosition(item);
     }
 
-    private String imageUrl="http://p9zaf8j1m.bkt.clouddn.com/room/choose/";
+    private String imageUrl="http://img.p99.store/room/choose/";
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
 
         convertView=View.inflate(mContext,resourceId,null);
         ViewHolder viewHolder=new ViewHolder(convertView);
-
         Room room = rooms.get(position); // 获取当前项的Room实例
         if (room!=null){
             String roomType=room.getRoomType();

@@ -132,7 +132,7 @@
                         android:orientation="horizontal">
 
                         <TextView
-                            android:id="@+id/tv_set"
+                            android:id="@+id/tv_hum_now"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:text="——"
@@ -142,9 +142,9 @@
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_alignBottom="@id/tv_set"
+                            android:layout_alignBottom="@id/tv_hum_now"
                             android:layout_marginBottom="@dimen/dp_jy_3"
-                            android:layout_toRightOf="@id/tv_set"
+                            android:layout_toRightOf="@id/tv_hum_now"
                             android:text="%"
                             android:textColor="#0DCEFE"
                             android:textSize="@dimen/sp_12" />
@@ -154,7 +154,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_below="@id/tv_now"
-                        android:text="设定湿度"
+                        android:text="当前湿度"
                         android:textColor="#A8A8A8"
                         android:textSize="@dimen/sp_14" />
                 </LinearLayout>

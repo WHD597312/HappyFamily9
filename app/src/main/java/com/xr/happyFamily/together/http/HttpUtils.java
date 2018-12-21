@@ -8,7 +8,10 @@ import android.widget.Toast;
 
 
 import com.alibaba.fastjson.JSONObject;
+import com.google.gson.Gson;
+import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
+import com.xr.happyFamily.le.pojo.AppUsing;
 import com.zhy.http.okhttp.OkHttpUtils;
 import com.zhy.http.okhttp.builder.GetBuilder;
 
@@ -21,9 +24,11 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
+import okhttp3.Cache;
 import okhttp3.Call;
 import okhttp3.Callback;
 import okhttp3.Interceptor;
@@ -33,6 +38,9 @@ import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.RequestBody;
 import okhttp3.Response;
+import okhttp3.ResponseBody;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
 
 
 /**
@@ -262,7 +270,7 @@ public class HttpUtils {
                 result= response.body().string();
             }else {
                 result=response.code()+"";
-                NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
+//                NetWorkUtil.showNoNetWorkDlg(MyApplication.getContext());
             }
         }catch (Exception e){
             e.printStackTrace();
@@ -402,12 +410,6 @@ public class HttpUtils {
                 Log.e("qqqqqqqq???", result);
             }
 
-            String code = "0";
-            org.json.JSONObject jsonObject1 = new org.json.JSONObject(result);
-            code = jsonObject1.getString("returnCode");
-            if (!code.equals("100")) {
-                Toast.makeText(mContext, jsonObject1.getString("returnMsg"), Toast.LENGTH_SHORT).show();
-            }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -555,6 +557,7 @@ public class HttpUtils {
         return result;
     }
 
+
     public static String postOkHpptRequest3(String url, org.json.JSONObject jsonObject) {
         String result = null;
         try {
@@ -665,15 +668,64 @@ public class HttpUtils {
             //入参-字符串
 
             MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
-            for (Map.Entry entry : paramsMap.entrySet()) {
-                requestBody.addFormDataPart(entry.getKey().toString(), entry.getValue().toString());
+            if (paramsMap!=null){
+                for (Map.Entry entry : paramsMap.entrySet()) {
+                    requestBody.addFormDataPart(entry.getKey().toString(), entry.getValue().toString());
+                }
             }
+
             //入参-文件
             for (Map.Entry entry : fileMap.entrySet()) {
                 File file = (File) entry.getValue();
                 RequestBody fileBody = RequestBody.create(MEDIA_TYPE_FILE, file);
                 String fileName = file.getName();
                 requestBody.addFormDataPart("files", fileName, fileBody);
+            }
+            Request request = new Request.Builder()
+                    .addHeader("authorization",token)
+                    .url(url)
+                    .post(requestBody.build())
+                    .build();
+
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(5, TimeUnit.SECONDS)//设置连接超时
+                    .readTimeout(5, TimeUnit.SECONDS)//读取超时
+                    .writeTimeout(5, TimeUnit.SECONDS)//写入超时
+                    .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
+                    .build();
+            Response response=okHttpClient.newCall(request).execute();
+            if(response.isSuccessful()) {
+                Log.e("qqqqqqqqXXXX", "111111");
+                result = response.body().string();
+            }
+            for (Map.Entry entry : fileMap.entrySet()) {
+                File file = (File) entry.getValue();
+                file.delete();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String upFileAndDesc1(String url,  Map<String, Object> fileMap){
+        String result=null;
+        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
+        String token =my.getString("token","");
+        MediaType MEDIA_TYPE_FILE = MediaType.parse("image/png");
+        try {
+            //入参-字符串
+
+            MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+
+
+            //入参-文件
+            for (Map.Entry entry : fileMap.entrySet()) {
+                File file = (File) entry.getValue();
+                RequestBody fileBody = RequestBody.create(MEDIA_TYPE_FILE, file);
+                String  name =  entry.getKey().toString();
+                requestBody.addFormDataPart("files", name, fileBody);
             }
             Request request = new Request.Builder()
                     .addHeader("authorization",token)
@@ -702,6 +754,8 @@ public class HttpUtils {
         }
         return result;
     }
+
+
     public static String upLoadFile(String url, String fileNmae, File file) {
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
 //            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
@@ -719,6 +773,139 @@ public class HttpUtils {
                 result = response.code() + "";
             }
         } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static String upUsedApps(String url,List <AppUsing> appUsings){
+        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
+        String token =my.getString("token","");
+        String result = null;
+        try{
+            JSONArray jsonArray=new JSONArray();
+            MediaType MEDIA_TYPE_FILE = MediaType.parse("image/jpg");
+            String CONTENT_TYPE = "application/json";
+            MultipartBody.Builder requestBody = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            for (AppUsing appUsing:appUsings){
+                requestBody.addFormDataPart("appName",appUsing.getAppName());
+                requestBody.addFormDataPart("useLastTime",appUsing.getAppUseLastTime());
+                requestBody.addFormDataPart("useTime",appUsing.getUseTime());
+                requestBody.addFormDataPart("appDerailId",appUsing.getAppDerailId()+"");
+                jsonArray.put(appUsing);
+            }
+            String ss=jsonArray.toString();
+            RequestBody requestBody2 = RequestBody.create(MediaType.parse(CONTENT_TYPE), ss);
+
+            Request request = new Request.Builder()
+                    .addHeader("authorization",token)
+                    .url(url)
+                    .post(requestBody2)
+                    .build();
+
+            OkHttpClient okHttpClient = new OkHttpClient.Builder()
+                    .connectTimeout(5, TimeUnit.SECONDS)//设置连接超时
+                    .readTimeout(5, TimeUnit.SECONDS)//读取超时
+                    .writeTimeout(5, TimeUnit.SECONDS)//写入超时
+                    .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
+                    .build();
+            Response response=okHttpClient.newCall(request).execute();
+
+            if(response.isSuccessful()) {
+                Log.e("qqqqqqqqXXXX", "111111");
+                result = response.body().string();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+        }
+        return result;
+    }
+    public static String baseUrl = "http://47.98.131.11:8084/";
+
+    public static String requestPost(String url,Map<String, Object> params) {
+        String result = null;
+        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+        String token =my.getString("token","");
+        try {
+            File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
+            int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
+            Cache cache = new Cache(httpCacheDirectory, cacheSize);
+            Retrofit retrofit = new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(baseUrl)
+                    .client(new OkHttpClient.Builder()
+                            .connectTimeout(3, TimeUnit.SECONDS)//设置连接超时
+                            .readTimeout(5, TimeUnit.SECONDS)//读取超时
+                            .writeTimeout(5, TimeUnit.SECONDS)//写入超时
+                            .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
+                            .build())
+                    .build();
+            HttpService httpService = retrofit.create(HttpService.class);
+            String CONTENT_TYPE = "application/json";
+            Gson gson = new Gson();
+            String content = gson.toJson(params);
+            RequestBody body = RequestBody.create(MediaType.parse(CONTENT_TYPE), content);
+            retrofit2.Call<ResponseBody> call=httpService.postQuest(token,url,body);
+            retrofit2.Response<ResponseBody> response = call.execute();
+            result = response.body().string();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String requestGet(String url) {
+        String result = null;
+        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+        String token =my.getString("token","");
+        try {
+            File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
+            int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
+            Cache cache = new Cache(httpCacheDirectory, cacheSize);
+            Retrofit retrofit = new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(baseUrl)
+                    .client(new OkHttpClient.Builder()
+                            .connectTimeout(3, TimeUnit.SECONDS)//设置连接超时
+                            .readTimeout(5, TimeUnit.SECONDS)//读取超时
+                            .writeTimeout(5, TimeUnit.SECONDS)//写入超时
+                            .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
+                            .cache(cache)//把缓存添加进来
+                            .build())
+                    .build();
+            HttpService httpService = retrofit.create(HttpService.class);
+            retrofit2.Call<ResponseBody> call=httpService.getRequest(token,url);
+            retrofit2.Response<ResponseBody> response = call.execute();
+            result = response.body().string();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return result;
+    }
+
+    public static String uploadFile(String userId,File file){
+        String result=null;
+        try {
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+            String token =my.getString("token","");
+            Retrofit retrofit=new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(baseUrl)
+                    .build();
+            HttpService userService=retrofit.create(HttpService.class);
+            // 创建 RequestBody，用于封装构建RequestBody
+            RequestBody requestFile = RequestBody.create(MediaType.parse("multipart/form-data"), file);
+            // MultipartBody.Part  和后端约定好Key，这里的partName是用image
+            MultipartBody.Part body = MultipartBody.Part.createFormData("file", file.getName(), requestFile);
+            // 执行请求
+            retrofit2.Call<ResponseBody> call = userService.uploadFile(token,userId, body);
+            retrofit2.Response<ResponseBody> response=call.execute();
+            boolean success=response.isSuccessful();
+            if (success){
+                result=response.code()+"";
+            }
+        }catch (Exception e){
             e.printStackTrace();
         }
         return result;

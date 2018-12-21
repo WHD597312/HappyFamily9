@@ -25,13 +25,16 @@
             android:textSize="@dimen/sp_19"
             android:textColor="@color/black"
             />
+
         <ImageView
             android:id="@+id/iv_map_photo"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="@dimen/dp_jy_40"
+            android:layout_height="@dimen/dp_jy_40"
+            android:layout_centerVertical="true"
             android:layout_alignParentRight="true"
             android:layout_marginRight="@dimen/dp_jy_12"
-            />
+            android:scaleType="centerCrop"
+            android:src="@mipmap/image_user" />
     </RelativeLayout>
     <RelativeLayout
         android:id="@+id/rl_map_mes"
@@ -114,70 +117,34 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             />
-
-    </RelativeLayout>
-
-    <RelativeLayout
-        android:id="@+id/rl_map_bd"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:layout_below="@+id/rl_map_mes"
-
-        >
-
         <RelativeLayout
+            android:id="@+id/rl_yg_dw"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_centerInParent="true"
-            android:visibility="gone"
+            android:layout_alignParentBottom="true"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            android:layout_marginBottom="@dimen/dp_jy_12"
             >
-
-            <TextView
-                android:id="@+id/tv_map_1"
+            <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_centerHorizontal="true"
-                android:text="绑定成功后"
-                android:textSize="@dimen/sp_18" />
-
-            <TextView
-                android:id="@+id/tv_map_2"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_map_1"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_jy_12"
-                android:text="可查看好友位置信息"
-                android:textSize="@dimen/sp_18" />
-
-            <TextView
-                android:id="@+id/tv_map_3"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_map_2"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_jy_12"
-                android:text="使用软件记录"
-                android:textSize="@dimen/sp_18" />
-
-            <Button
-                android:id="@+id/bt_map_add"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_below="@+id/tv_map_3"
-                android:layout_centerHorizontal="true"
-                android:layout_marginTop="@dimen/dp_jy_30"
-                android:background="@mipmap/map_bt"
-                android:paddingBottom="@dimen/dp_jy_5"
-                android:text="绑定好友"
-                android:textColor="@color/white"
-                android:textSize="@dimen/sp_16"
-
+                android:src="@mipmap/yg_dwbj"
+                android:layout_centerInParent="true"
                 />
+            <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/yg_dw"
+            android:layout_centerInParent="true"
+                android:paddingBottom="@dimen/dp_jy_5"
+            />
+
         </RelativeLayout>
 
 
     </RelativeLayout>
+
+
     <RelativeLayout
         android:id="@+id/rl_map_rjxq"
         android:layout_width="match_parent"
@@ -186,12 +153,14 @@
         android:visibility="gone"
         >
 
-        <ListView
-            android:id="@+id/lvAppTime"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
-        </ListView>
+        <android.support.v7.widget.RecyclerView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/recyclerview"
+            />
+
+
 
     </RelativeLayout>
 

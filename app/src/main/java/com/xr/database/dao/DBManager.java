@@ -8,7 +8,7 @@ import android.database.sqlite.SQLiteDatabase;
  */
 
 public class DBManager {
-    private final static String dbName="p99_db";
+    private final static String dbName="p99_db2";
     private static DBManager mInstance;
     private DaoMaster.DevOpenHelper openHelper;
     private Context context;

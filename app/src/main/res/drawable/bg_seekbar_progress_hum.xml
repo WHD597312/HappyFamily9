@@ -2,7 +2,7 @@
 <layer-list xmlns:android="http://schemas.android.com/apk/res/android">
 
     <!-- 底部背景 -->
-    <item android:id="@android:id/background" android:height="2dp">
+    <item android:id="@android:id/background" android:height="0dp">
         <shape>
             <corners android:radius="10dp"/>
             <size android:height="5dp" />

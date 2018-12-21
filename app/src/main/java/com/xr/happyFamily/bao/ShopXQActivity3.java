@@ -118,8 +118,6 @@ public class ShopXQActivity3 extends AppCompatActivity {
     TextView tv1;
     @BindView(R.id.tv_address)
     TextView tvAddress;
-    @BindView(R.id.img_address)
-    ImageView imgAddress;
     @BindView(R.id.tv2)
     TextView tv2;
     @BindView(R.id.tv_time)
@@ -257,9 +255,17 @@ public class ShopXQActivity3 extends AppCompatActivity {
         setmTitle();
     }
 
+    boolean running=false;
     @Override
     protected void onStart() {
         super.onStart();
+        running=true;
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
+        running=false;
     }
 
     @Override
@@ -285,7 +291,6 @@ public class ShopXQActivity3 extends AppCompatActivity {
         imgs = new ImageView[]{img1, img2, img3, img4, img5};
         imgs2 = new ImageView[]{pjImg1, pjImg2, pjImg3, pjImg4, pjImg5};
         web.getSettings().setJavaScriptEnabled(true);
-
         web.setWebViewClient(new WebViewClient() {
             @Override
             public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -362,7 +367,6 @@ public class ShopXQActivity3 extends AppCompatActivity {
         pjList.add("做工精细（0）");
         pjList.add("使用舒服（0）");
         adapter_pinglun.setItems(pjList);
-        getData();
     }
 
     @Override
@@ -521,7 +525,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
     }
 
-    String returnData = "";
+    String addressReturnData = "";
     Receive receive;
 
     class getAddressAsync extends AsyncTask<Map<String, Object>, Void, String> {
@@ -540,8 +544,8 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                    returnData = jsonObject.getString("returnData");
-                    if (!Utils.isEmpty(returnData)) {
+                    addressReturnData = jsonObject.getString("returnData");
+                    if (!Utils.isEmpty(addressReturnData)) {
 
                         Gson gson = new Gson();
                         receive = gson.fromJson(jsonObject.getString("returnData"), Receive.class);
@@ -556,8 +560,10 @@ public class ShopXQActivity3 extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
+            Log.e("qqqqqLLL",addressReturnData);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                if (!"null".equals(returnData)) {
+                if (!"null".equals(addressReturnData)) {
+                    Log.e("qqqqqLLL","11111");
                     if (tvAddress != null)
                         tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                     isAddress = true;
@@ -565,6 +571,8 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     if (isWeight)
                         getTime();
                 } else {
+                    Log.e("qqqqqLLL","22222");
+
                     if (tvAddress != null)
                         tvAddress.setText("没有地址信息，请点击后添加地址");
                 }
@@ -915,6 +923,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
     private class MyLoader extends ImageLoader {
         @Override
         public void displayImage(Context context, Object path, ImageView imageView) {
+            if (running)
             Glide.with(context).load((String) path).into(imageView);
         }
     }
@@ -928,15 +937,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
     static String sign_1, sing_2, sing_3;
 
 
-    public static String[] getData() {
-        Log.e("qqqqqqqqqGGGGG", "11111111");
-        String[] str = new String[3];
-        str[0] = sign_1;
-        str[1] = sing_2;
-        str[2] = sing_3;
-        Log.e("qqqqqqqqqGGGGG222", sign_1 + "," + sing_2 + "," + sing_3);
-        return str;
-    }
+
 
 
     boolean isWeight = false, isAddress = false;
@@ -967,7 +968,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                    returnData = jsonObject.getString("returnData");
+                    String returnData = jsonObject.getString("returnData");
                     if (!Utils.isEmpty(returnData)) {
                         JsonObject content = new JsonParser().parse(returnData.toString()).getAsJsonObject();
                         JsonArray list = content.getAsJsonArray("RecommendDetail");
@@ -1030,8 +1031,9 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
 
     ImageView[] imgs,imgs2;
-    String average, total = "0", satisfaction = "0", packing = "0";
     String countReturnData = "";
+
+    String  average,beautiful="0", total="0", cost="0", fine="0", comfortable="0", satisfaction="0", packing="0";
 
     class getCountAsync extends AsyncTask<Map<String, Object>, Void, String> {
         @Override
@@ -1040,22 +1042,36 @@ public class ShopXQActivity3 extends AppCompatActivity {
             Map<String, Object> params = maps[0];
             String url = "order/getCountRate";
             String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
-            Log.i("result", "-->" + result);
+            Log.i("result","-->"+result);
             String code = "";
 
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
-                        code = result;
-                    } else {
+                        code=result;
+                    }else {
                         code = "100";
                         JSONObject jsonObject = new JSONObject(result);
                         JSONObject returnData = jsonObject.getJSONObject("returnData");
                         average = returnData.getString("average");
                         Log.i("average2", "-->" + average);
                         total = returnData.getString("total");
+                        beautiful = returnData.getString("beautiful");
+                        cost = returnData.getString("cost");
+                        fine = returnData.getString("fine");
+                        comfortable = returnData.getString("comfortable");
                         //满意度
                         satisfaction = returnData.getString("satisfaction");
+                        packing = returnData.getString("packing");
+
+//        list.add("质量好（100）");
+                        pjList.clear();
+                        pjList.add("全部（" + total + "）");
+                        pjList.add("美观（" + beautiful + "）");
+                        pjList.add("性价比高（" + cost + "）");
+                        pjList.add("包装好（" + packing + "）");
+                        pjList.add("做工精细（" + fine + "）");
+                        pjList.add("使用舒服（" + comfortable + "）");
                     }
                 }
             } catch (Exception e) {
@@ -1068,16 +1084,25 @@ public class ShopXQActivity3 extends AppCompatActivity {
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
             if (!Utils.isEmpty(s) && "100".equals(s)) {
-                Log.i("average", "-->" + average);
-                if (!"null".equals(returnData)) {
-                    if (tvHaoping != null) {
+                Log.i("average","-->"+average);
+
+                    if(!Utils.isEmpty(average+"")) {
+                        int ave = (int)(Float.parseFloat(average)*10 + 5)/10;
+                        for (int i = 0; i < ave; i++) {
+                            imgs2[i].setImageResource(R.mipmap.ic_pl_xx_true);
+                        }
+                    }
+                    adapter_pinglun.notifyDataSetChanged();
+                    if (tvHaoping!=null) {
                         if (total.equals("0"))
+
                             tvHaoping.setText("满意度:100%");
+
                         else
                             tvHaoping.setText("满意度:" + Integer.parseInt(satisfaction) * 100 / Integer.parseInt(total) + "%");
                     }
 //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
-                } else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                }else if (!Utils.isEmpty(s) && "401".equals(s)) {
                     Toast.makeText(mContext, "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
                     SharedPreferences preferences;
                     preferences = mContext.getSharedPreferences("my", MODE_PRIVATE);
@@ -1087,10 +1112,9 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     }
                     startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
                 }
-            }
+
         }
     }
-
 
     List<ShopPinglunBean> shopPinglunBeanList = new ArrayList<>();
 
@@ -1110,7 +1134,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     }
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getString("returnCode");
-                    returnData = jsonObject.getString("returnData");
+                    String returnData = jsonObject.getString("returnData");
                     if (!Utils.isEmpty(returnData)) {
                         JsonObject content = new JsonParser().parse(jsonObject.toString()).getAsJsonObject();
                         JsonArray list = content.getAsJsonArray("returnData");

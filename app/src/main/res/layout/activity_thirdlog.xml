@@ -158,6 +158,8 @@
           android:layout_marginRight="@dimen/dp_jy_35"
           android:layout_alignParentBottom="true"
           android:background="@mipmap/anniu1"
+          android:textSize="@dimen/sp_18"
+          android:paddingBottom="@dimen/dp_jy_2"
           android:text="完成"
           android:textColor="@color/green2" />
    </RelativeLayout>

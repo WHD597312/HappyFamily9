@@ -139,22 +139,26 @@ public class CheckPermissionsActivity extends AppCompatActivity {
         }
     }
 
+
     /**
      * 显示提示信息
      *
      * @since 2.5.0
      */
+    AlertDialog dialog=null;
     private void showMissingPermissionDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("提示");
-        builder.setMessage("当前应用缺少必要权限。\\n\\n请点击\\\"设置\\\"-\\\"权限\\\"-打开所需权限。");
+        builder.setMessage("当前应用缺少必要权限。请点击\"设置\"打开所需权限。");
 
         // 拒绝, 退出应用
         builder.setNegativeButton("取消",
                 new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
-                        finish();
+                        if (dialog!=null){
+                            dialog.dismiss();
+                        }
                     }
                 });
 
@@ -167,8 +171,7 @@ public class CheckPermissionsActivity extends AppCompatActivity {
                 });
 
         builder.setCancelable(false);
-
-        builder.show();
+        dialog=builder.show();
     }
 
     /**

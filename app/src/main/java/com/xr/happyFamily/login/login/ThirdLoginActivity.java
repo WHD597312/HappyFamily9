@@ -163,7 +163,7 @@ public class ThirdLoginActivity extends AppCompatActivity {
                         params.put("password",password);
                         params.put("userId",userId);
                         new RegistAsyncTask().execute(params);
-//                new getShopAsync().execute(params);
+
                         firstClick=0;
                     }
 
@@ -230,7 +230,8 @@ public class ThirdLoginActivity extends AppCompatActivity {
     /****
      *
      * 注册逻辑
-     * ******/
+     *
+     ****/
     class RegistAsyncTask extends AsyncTask<Map<String,Object>,Void,String> {
 
         @Override

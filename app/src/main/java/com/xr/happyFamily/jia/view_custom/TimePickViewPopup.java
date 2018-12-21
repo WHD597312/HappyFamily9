@@ -3,7 +3,9 @@ package com.xr.happyFamily.jia.view_custom;
 import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.util.Log;
+import android.util.TimeUtils;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupWindow;
@@ -12,8 +14,11 @@ import android.widget.TextView;
 import com.weigan.loopview.LoopView;
 import com.weigan.loopview.OnItemSelectedListener;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.le.pojo.Time;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.concurrent.TimeUnit;
 
 /**
  * Created by YongLiu on 2017/7/20.
@@ -27,12 +32,16 @@ public class TimePickViewPopup extends PopupWindow {
     private TextView tv_quxiao, tv_queding;
     private LoopView loop_state, loop_hour, loop_min;
     int[] data = {0, 0, 0};
+    boolean isTouch = false;
+    ArrayList<String> statelist = new ArrayList();
+    ArrayList<String> hourlist = new ArrayList();
+    ArrayList<String> minlist = new ArrayList();
 
-    public TimePickViewPopup(final Context context,int state,int hour,int min) {
-        Log.e("qqqqqTime222",state+","+hour+","+min);
-        data[0]=state;
-        data[1]=hour;
-        data[2]=min;
+    public TimePickViewPopup(final Context context, int state, int hour, int min) {
+        data[0] = state;
+        data[1] = hour;
+        data[2] = min;
+
         /**
          * 注意：我们的接口同时作为成员变量传入，因为我们用于监听子Item的数据监听
          * */
@@ -61,20 +70,18 @@ public class TimePickViewPopup extends PopupWindow {
                 dismiss();
             }
         });
-        loop_state= (LoopView) view.findViewById(R.id.loop_state);
-        loop_hour= (LoopView) view.findViewById(R.id.loop_hour);
-        loop_min= (LoopView) view.findViewById(R.id.loop_min);
-        ArrayList<String> statelist = new ArrayList();
-        ArrayList<String> hourlist = new ArrayList();
-        ArrayList<String> minlist = new ArrayList();
+        loop_state = (LoopView) view.findViewById(R.id.loop_state);
+        loop_hour = (LoopView) view.findViewById(R.id.loop_hour);
+        loop_min = (LoopView) view.findViewById(R.id.loop_min);
+
         statelist.add("倒计时");
         statelist.add("定时");
         statelist.add("关闭");
         for (int i = 0; i < 24; i++) {
-            hourlist.add( i+"");
+            hourlist.add(i + "");
         }
         for (int i = 0; i < 60; i++) {
-            minlist.add( i+"");
+            minlist.add(i + "");
         }
         //设置是否循环播放
         loop_state.setNotLoop();
@@ -83,9 +90,34 @@ public class TimePickViewPopup extends PopupWindow {
         loop_state.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                data[0]=index;
+                data[0] = index;
             }
         });
+
+        loop_state.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                isTouch = true;
+                return false;
+            }
+        });
+
+        loop_hour.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                isTouch = true;
+                return false;
+            }
+        });
+
+        loop_min.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                isTouch = true;
+                return false;
+            }
+        });
+
         //设置原始数据
         loop_state.setItems(statelist);
         //设置初始位置
@@ -100,7 +132,7 @@ public class TimePickViewPopup extends PopupWindow {
         loop_hour.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                data[1]=index;
+                data[1] = index;
             }
         });
         //设置原始数据
@@ -118,7 +150,7 @@ public class TimePickViewPopup extends PopupWindow {
         loop_min.setListener(new OnItemSelectedListener() {
             @Override
             public void onItemSelected(int index) {
-                data[2]=index;
+                data[2] = index;
             }
         });
         //设置原始数据
@@ -131,9 +163,80 @@ public class TimePickViewPopup extends PopupWindow {
         loop_min.setTextSize(18);
         loop_hour.setInitPosition(0);
         loop_min.setInitPosition(0);
-        loop_state.setInitPosition(state);
-        loop_hour.setInitPosition(hour);
-        loop_min.setInitPosition(min);
+
+
+        Calendar c = Calendar.getInstance();//
+        int mHour = c.get(Calendar.HOUR_OF_DAY);//时
+        int mMinute = c.get(Calendar.MINUTE);//分
+
+        //0：倒计时开
+        if (state == 0) {
+            int a=hour*60+min;
+            int b=mHour*60+mMinute;
+            if(a<b){
+                int sumMins=hour*60+min+(1440-(mHour*60+mMinute));
+                hour=sumMins/60%24;
+                min=sumMins%60;
+            }else {
+                int sumMins=hour*60+min-(mHour*60+mMinute);
+                hour=sumMins/60%24;
+                min=sumMins%60;
+            }
+            data[1] = data[1] - mHour;
+            data[2] = data[2] - mMinute;
+            data[0]=0;
+            loop_hour.setInitPosition(hour);
+            loop_hour.setCurrentPosition(hour);
+            loop_min.setInitPosition(min);
+            loop_min.setCurrentPosition(min);
+            loop_state.setInitPosition(0);
+            loop_state.setCurrentPosition(0);
+        }
+        //2:倒计时关
+        else if (state == 2) {
+            loop_hour.setInitPosition(0);
+            loop_min.setInitPosition(0);
+            loop_state.setInitPosition(2);
+            loop_hour.setCurrentPosition(0);
+            loop_min.setCurrentPosition(0);
+            loop_state.setCurrentPosition(2);
+            data[1]=0;
+            data[2]=0;
+            data[0]=2;
+        } else {
+            loop_hour.setInitPosition(hour);
+            loop_min.setInitPosition(min);
+            loop_hour.setCurrentPosition(hour);
+            loop_min.setCurrentPosition(min);
+            //1:定时开
+            if (state == 1) {
+                loop_state.setInitPosition(1);
+                loop_state.setCurrentPosition(1);
+                data[0]=1;
+            }
+
+            //3:定时关
+            else if (state == 3) {
+                loop_state.setInitPosition(2);
+                loop_state.setCurrentPosition(2);
+                data[0]=2;
+            }
+
+            //无计时状态 计时器关
+            else {
+                loop_hour.setInitPosition(mHour);
+                loop_min.setInitPosition(mMinute);
+                loop_state.setInitPosition(2);
+                loop_hour.setCurrentPosition(mHour);
+                loop_min.setCurrentPosition(mMinute);
+                loop_state.setCurrentPosition(2);
+                data[0]=2;
+                data[1]=mHour;
+                data[2]=mMinute;
+            }
+
+        }
+
 
     }
 
@@ -155,7 +258,70 @@ public class TimePickViewPopup extends PopupWindow {
     }
 
     public int[] getData() {
-        Log.e("qqqqDDD",data[2]+"?");
+        Calendar c = Calendar.getInstance();//
+        int mHour = c.get(Calendar.HOUR_OF_DAY);//时
+        int mMinute = c.get(Calendar.MINUTE);//分
+        if (data[0] == 0) {
+            data[2] = data[2] + mMinute;
+            if (data[2] > 59) {
+                data[2] = data[2] - 60;
+                data[1] = data[1] + 1;
+            }
+
+            data[1] = data[1] + mHour;
+            if(data[1]>24){
+                data[1]=data[1]-24;
+            }
+        }
         return data;
+    }
+
+
+    public void setData(int state, int hour, int min) {
+        if (!isTouch) {
+            int mHour = hour;
+            int mMin = min;
+            Calendar c = Calendar.getInstance();//
+            int mHour2 = c.get(Calendar.HOUR_OF_DAY);//时
+            int mMinute2 = c.get(Calendar.MINUTE);//分
+            if (state == 2) {
+                loop_hour.setCurrentPosition(0);
+                loop_min.setCurrentPosition(0);
+                loop_state.setCurrentPosition(2);
+                data[1]=0;
+                data[2]=0;
+                data[0]=2;
+            } else if (state == 3) {
+                loop_state.setCurrentPosition(2);
+                loop_hour.setCurrentPosition(mHour);
+                loop_min.setCurrentPosition(mMin);
+                data[0]=2;
+            } else if (state == 0) {
+                data[0]=0;
+                int a=hour*60+min;
+                int b=mHour2*60+mMinute2;
+                if(a<b){
+                    int sumMins=hour*60+min+(1440-(mHour2*60+mMinute2));
+                    hour=sumMins/60%24;
+                    min=sumMins%60;
+                }else {
+                    int sumMins=hour*60+min-(mHour2*60+mMinute2);
+                    hour=sumMins/60%24;
+                    min=sumMins%60;
+                }
+                int hourIndex=hourlist.indexOf(hour+"");
+                int minIndex=minlist.indexOf(min+"");
+                loop_state.setCurrentPosition(0);
+                loop_hour.setCurrentPosition(hourIndex);
+                loop_min.setCurrentPosition(minIndex);
+                Log.e("qqqqqqDDDDD22", mMin + "," + mMinute2);
+            } else if (state == 1) {
+                data[0]=1;
+                loop_state.setCurrentPosition(1);
+                loop_hour.setCurrentPosition(mHour);
+                loop_min.setCurrentPosition(mMin);
+            }
+
+        }
     }
 }

@@ -153,22 +153,23 @@ public class FamilyFragmentManager extends Fragment {
         protected String doInBackground(Void... voids) {
             String temperature = null;
             try {
-                Log.i("city","-->"+city);
-                String url = "http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "UTF-8");
-                String result = HttpUtils.getOkHpptRequest(url);
-                Log.i("result", "-->" + result);
-                if (!TextUtils.isEmpty(result)) {
-                    JSONObject jsonObject = new JSONObject(result);
-                    String msg = jsonObject.getString("msg");
-                    if ("success".equals(msg)) {
-                        JSONArray jsonArray = jsonObject.getJSONArray("result");
-                        int len = jsonArray.length();
-                        JSONObject jsonObject2 = jsonArray.getJSONObject(0);
-                        temperature = jsonObject2.getString("temperature");
-                        Log.i("temperature", "-->" + temperature);
+                if (!TextUtils.isEmpty(city)){
+                    String url = "http://apicloud.mob.com/v1/weather/query?key=257a640199764&city=" + URLEncoder.encode(city, "UTF-8");
+                    String result = HttpUtils.getOkHpptRequest(url);
+                    Log.i("result", "-->" + result);
+                    if (!TextUtils.isEmpty(result)) {
+                        JSONObject jsonObject = new JSONObject(result);
+                        String msg = jsonObject.getString("msg");
+                        if ("success".equals(msg)) {
+                            JSONArray jsonArray = jsonObject.getJSONArray("result");
+                            int len = jsonArray.length();
+                            JSONObject jsonObject2 = jsonArray.getJSONObject(0);
+                            temperature = jsonObject2.getString("temperature");
+                            Log.i("temperature", "-->" + temperature);
+                        }
                     }
-
                 }
+
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -195,6 +196,31 @@ public class FamilyFragmentManager extends Fragment {
             MQService.LocalBinder binder = (MQService.LocalBinder) service;
             mqService = binder.getService();
             bound = true;
+            try {
+                List<DeviceChild> list = deviceChildDao.findZerosType(0);
+                if (mqService!=null &&list != null && !list.isEmpty()) {
+                    for (DeviceChild deviceChild : list) {
+                        if (deviceChild.getType() == 0) {
+                            String macAddress = deviceChild.getMacAddress();
+                            String topicName = "p99/" + macAddress + "/transfer";
+                            boolean success = mqService.subscribe(topicName, 1);
+                            if (!success) {
+                                success = mqService.subscribe(topicName, 1);
+                            }
+                            if (success) {
+                                String topicName2 = "p99/" + macAddress + "/set";
+                                String payLoad = "getType";
+                                boolean step2 = mqService.publish(topicName2, 1, payLoad);
+                                if (!step2) {
+                                    step2 = mqService.publish(topicName2, 1, payLoad);
+                                }
+                            }
+                        }
+                    }
+                }
+            }catch (Exception e) {
+                e.printStackTrace();
+            }
             if (!TextUtils.isEmpty(load)) {
                 List<DeviceChild> deviceChildren = deviceChildDao.findHouseDevices(houseId);
                 new LoadDevicesAsync().execute(deviceChildren);
@@ -218,7 +244,6 @@ public class FamilyFragmentManager extends Fragment {
                 String onlineTopicName = "";
                 String offlineTopicName = "";
                 switch (type) {
-
                     case 2:
                         onlineTopicName = "p99/warmer1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/warmer1/" + macAddress + "/lwt";
@@ -230,9 +255,7 @@ public class FamilyFragmentManager extends Fragment {
                     case 4:
                         onlineTopicName = "p99/socket1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/socket1/" + macAddress + "/lwt";
-
                         break;
-
                     case 5:
                         onlineTopicName = "p99/dehumidifier1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/dehumidifier1/" + macAddress + "/lwt";
@@ -244,12 +267,10 @@ public class FamilyFragmentManager extends Fragment {
                     case 7:
                         onlineTopicName = "p99/aPurifier1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/aPurifier1/" + macAddress + "/lwt";
-
                         break;
                     case 8:
                         onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
-
                 }
                 try {
                     if (bound) {
@@ -263,7 +284,9 @@ public class FamilyFragmentManager extends Fragment {
                             step2 = mqService.subscribe(offlineTopicName, 1);
                             Log.i("step", "-->" + step1 + "," + step2);
                         }
-
+                        if (type==2){
+                            mqService.sendData(macAddress);
+                        }
                         Log.i("step", "-->" + step1 + "," + step2);
                     }
                 } catch (Exception e) {
@@ -280,6 +303,7 @@ public class FamilyFragmentManager extends Fragment {
         Log.i("FamilyFragmentManager", "-->onStart");
         running = true;
     }
+
 
     @Override
     public void onAttach(Context context) {

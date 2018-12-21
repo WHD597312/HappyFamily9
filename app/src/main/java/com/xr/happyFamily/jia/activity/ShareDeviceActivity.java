@@ -17,6 +17,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Base64;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.KeyEvent;
@@ -41,6 +42,7 @@ import com.xr.happyFamily.together.share.PlatformUtil;
 import com.xr.happyFamily.together.util.BitmapCompressUtils;
 import com.xr.happyFamily.together.util.GlideCacheUtil;
 import com.xr.happyFamily.together.util.Utils;
+import com.xr.happyFamily.together.util.ZXingUtils;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -89,6 +91,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
     public static boolean running=false;
 
     MessageReceiver receiver;
+    String share;
 
     @Override
     protected void onRestart() {
@@ -117,16 +120,30 @@ public class ShareDeviceActivity extends AppCompatActivity {
         deviceChild = deviceChildDao.findById(id);
         houseId=deviceChild.getHouseId();
         type=deviceChild.getType();
+        String userId=preferences.getString("userId","");
         if (deviceChild != null) {
             tv_version.setText(deviceChild.getWifiVersion()+","+deviceChild.getMcuVersion());
             String name = deviceChild.getName();
             tv_device.setText(name);
+            int deviceId=deviceChild.getDeviceId();
+            String macAddress=deviceChild.getMacAddress();
+            int type=deviceChild.getType();
+            long roomId=deviceChild.getRoomId();
+            long houseId=deviceChild.getHouseId();
+            String deviceName=deviceChild.getName();
+            share="deviceId'"+deviceId+"&userId'"+userId+"&macAddress'"+macAddress+"&deviceType'"+type+"&roomId'"+roomId+"&houseId'"+houseId+"&deviceName'"+deviceName;
+            try {
+                share=new String(Base64.encode(share.getBytes("utf-8"), Base64.NO_WRAP),"UTF-8");
+                createQrCode();
+            }catch (Exception e){
+                e.printStackTrace();
+            }
         }
 
         IntentFilter intentFilter = new IntentFilter("ShareDeviceActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
-        new ShareQrCodeAsync().execute();
+//        new ShareQrCodeAsync().execute();
     }
 
     @OnClick({R.id.back, R.id.image_more,R.id.btn_update_version})
@@ -203,6 +220,7 @@ public class ShareDeviceActivity extends AppCompatActivity {
             public void onClick(View v) {
                 switch (v.getId()) {
                     case R.id.tv_save_phone:
+                        Utils.showToast(ShareDeviceActivity.this,"保存成功");
                         break;
                     case R.id.tv_send_wechat:
                         if (mBitmap!=null){
@@ -266,6 +284,12 @@ public class ShareDeviceActivity extends AppCompatActivity {
         if (receiver!=null){
             unregisterReceiver(receiver);
         }
+    }
+    /**生成二维码*/
+    private void createQrCode(){
+        Bitmap bitmap = ZXingUtils.createQRImage(share,400, 400);
+        img_qrCode.setImageBitmap(bitmap);
+        mBitmap=bitmap;
     }
 
     class ShareQrCodeAsync extends AsyncTask<Void, Void, Bitmap> {

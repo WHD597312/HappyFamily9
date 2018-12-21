@@ -27,12 +27,17 @@
     android:paddingRight="@dimen/dp_jy_15"
     android:gravity="center_vertical"
     android:background="@mipmap/bg_clock_msg">
+    <ImageView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@mipmap/ic_msg_msg"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:id="@+id/tv_name"
         android:textSize="@dimen/sp_12"
-        android:textColor="#3393ED"/>
+        android:layout_marginLeft="@dimen/dp_jy_5"
+        android:textColor="@color/color_msg"/>
 
 
 

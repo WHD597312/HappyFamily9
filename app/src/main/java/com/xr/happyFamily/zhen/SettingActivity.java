@@ -1,5 +1,6 @@
 package com.xr.happyFamily.zhen;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.DownloadManager;
@@ -33,6 +34,8 @@ import android.widget.Toast;
 import com.donkingliang.groupedadapter.adapter.GroupedRecyclerViewAdapter;
 import com.donkingliang.groupedadapter.holder.BaseViewHolder;
 import com.xr.database.dao.daoimpl.ClockDaoImpl;
+import com.xr.database.dao.daoimpl.DerailBeanDaoImpl;
+import com.xr.database.dao.daoimpl.DerailResultDaoImpl;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.FriendDataDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
@@ -44,6 +47,7 @@ import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.jia.pojo.Room;
 import com.xr.happyFamily.login.login.LoginActivity;
+import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.NoFastClickUtils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
@@ -110,9 +114,18 @@ public class SettingActivity extends AppCompatActivity{
      * 联系人数据库
      */
     private MsgDaoImpl msgDao;
+    /**
+     * 有轨申请数据库
+     */
+    private DerailBeanDaoImpl derailBeanDao;
+    /**
+     * 有轨申请回复数据库
+     */
+    private DerailResultDaoImpl derailResultDao;
 
     private boolean isBound = false;
 
+    private     int derailPo;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -126,6 +139,8 @@ public class SettingActivity extends AppCompatActivity{
         }
         Intent service = new Intent(this, MQService.class);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
+        clockintent = new Intent(SettingActivity.this, ClockService.class);
+        clockisBound = bindService(clockintent, clockconnection, Context.BIND_AUTO_CREATE);
         hourseDao = new HourseDaoImpl(getApplicationContext());
         roomDao = new RoomDaoImpl(getApplicationContext());
         deviceChildDao = new DeviceChildDaoImpl(getApplicationContext());
@@ -134,8 +149,11 @@ public class SettingActivity extends AppCompatActivity{
         timeDao = new TimeDaoImpl(getApplicationContext());
         userInfosDao = new UserInfosDaoImpl(getApplicationContext());
         msgDao = new MsgDaoImpl(getApplicationContext());
+        derailResultDao=new DerailResultDaoImpl(getApplicationContext());
+        derailBeanDao= new DerailBeanDaoImpl(getApplicationContext());
 
         preferences = getSharedPreferences("my", MODE_PRIVATE);
+        derailPo = preferences.getInt("derailPo", -1);
         unbinder = ButterKnife.bind(this);
         adatper = new SettingAdatper(this);
         roomDao = new RoomDaoImpl(this);
@@ -257,9 +275,6 @@ public class SettingActivity extends AppCompatActivity{
 //                                startActivity(intent);
 //                            }
 //                        });
-
-
-
             }
         });
 
@@ -303,6 +318,12 @@ public class SettingActivity extends AppCompatActivity{
                             file.delete();
                         }
                     }
+                    if (preferences.contains("derailPo")){
+                        preferences.edit().remove("derailPo").commit();
+                        clcokservice.setDerailPo(-1);
+                    }
+//                    application.removeActivity(SettingActivity.this);
+                    Log.e("FFFFFFFFSSSS", "onClick: -->"+preferences.getInt("derailPo",-1) );
                     if (mqService!=null){
                         mqService.cancelAllsubscibe();
                     }
@@ -314,16 +335,47 @@ public class SettingActivity extends AppCompatActivity{
                     userInfosDao.deleteAll();
                     friendDataDao.deleteAll();
                     msgDao.deleteAll();
+                    derailBeanDao.deleteAll();
+                    derailResultDao.deleteAll();
 
                     SharedPreferences mPositionPreferences = getSharedPreferences("position", MODE_PRIVATE);
                     mPositionPreferences.edit().clear().commit();
                     Intent exit = new Intent(this, LoginActivity.class);
                     exit.putExtra("logout","logout");
+                    List<Activity> activities=application.getActivities();
+                    for (Activity activity:activities){
+                        Log.i("activity","-->"+activity);
+                        if (!(activity instanceof SettingActivity)){
+                            activity.finish();
+                        }
+                    }
                     startActivity(exit);
                 }
                 break;
         }
     }
+
+
+    Intent clockintent;
+    ClockService clcokservice;
+    boolean boundclock;
+    private  boolean clockisBound;
+    ServiceConnection clockconnection=new ServiceConnection() {
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            ClockService.LocalBinder binder = (ClockService.LocalBinder) service;
+            clcokservice = binder.getService();
+            boundclock = true;
+
+        }
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+        }
+    };
+
+
+
+
 
     MQService mqService;
     boolean bound;
@@ -358,6 +410,9 @@ public class SettingActivity extends AppCompatActivity{
         }
         if (isBound && connection != null) {
             unbindService(connection);
+        }
+        if (clockisBound &&clockconnection!=null){
+            unbindService(clockconnection);
         }
         handler.removeCallbacksAndMessages(null);
     }

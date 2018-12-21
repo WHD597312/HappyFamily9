@@ -153,7 +153,9 @@ public class TempChatActivity extends AppCompatActivity {
             int code=0;
             int deviceId=deviceChild.getDeviceId();
             String url=tempChartLineUrl+"?deviceId="+deviceId+"&dataType=9";
+            Log.i("url","-->"+url);
             String result=HttpUtils.getOkHpptRequest(url);
+            Log.i("result","-->"+result);
             List<Integer> list=new ArrayList<>();
             if (result!=null){
                 try {
@@ -219,7 +221,7 @@ public class TempChatActivity extends AppCompatActivity {
                 lineChartManager1.showLineChart(TempChatActivity.this,xValues, list, names.get(0), colours.get(0));
                 lineChartManager1.setDescription("");
                 lineChartManager1.setYAxis(max, 0, 7);
-                lineChartManager1.setHightLimitLine(max,"度",0);
+                lineChartManager1.setHightLimitLine(max,"度",Color.GRAY);
 //                //创建多条折线的图表
 //                lineChartManager1.showLineChart(TempChatActivity.this,xValues, yValues.get(0), names.get(0), colours.get(0));
 //                lineChartManager1.setDescription("");

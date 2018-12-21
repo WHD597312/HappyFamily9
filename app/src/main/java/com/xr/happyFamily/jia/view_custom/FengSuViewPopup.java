@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -27,15 +28,17 @@ public class FengSuViewPopup extends PopupWindow {
     private final View view;
 
 
-    String state="-1";
-    private TextView tv_low,tv_mid,tv_height,tv_queding;
-    private LinearLayout ll_low,ll_mid,ll_height;
-    Drawable dra_fengsu1,dra_fengsu11,dra_fengsu2,dra_fengsu22,dra_fengsu3,dra_fengsu33;
-
+    String state = "-1";
+    private TextView tv_low, tv_mid, tv_height, tv_queding;
+    private LinearLayout ll_low, ll_mid, ll_height;
+    Drawable dra_fengsu1, dra_fengsu11, dra_fengsu2, dra_fengsu22, dra_fengsu3, dra_fengsu33;
+    boolean isTouch = false;
 
 
     public FengSuViewPopup(final Context context, String state2) {
-        state=state2;
+        state = state2;
+        if (!newState.equals("-1"))
+            state = newState;
         /**
          * 注意：我们的接口同时作为成员变量传入，因为我们用于监听子Item的数据监听
          * */
@@ -62,56 +65,54 @@ public class FengSuViewPopup extends PopupWindow {
         tv_height = (TextView) view.findViewById(R.id.tv_wind_height);
         tv_queding = (TextView) view.findViewById(R.id.tv_queding);
 
-        dra_fengsu1= context.getResources().getDrawable(R.mipmap.ic_fengsu1);
+        dra_fengsu1 = context.getResources().getDrawable(R.mipmap.ic_fengsu1);
         dra_fengsu1.setBounds(0, 0, dra_fengsu1.getMinimumWidth(), dra_fengsu1.getMinimumHeight());
-        dra_fengsu11= context.getResources().getDrawable(R.mipmap.ic_fengsu11);
+        dra_fengsu11 = context.getResources().getDrawable(R.mipmap.ic_fengsu11);
         dra_fengsu11.setBounds(0, 0, dra_fengsu11.getMinimumWidth(), dra_fengsu11.getMinimumHeight());
-        dra_fengsu2= context.getResources().getDrawable(R.mipmap.ic_fengsu2);
+        dra_fengsu2 = context.getResources().getDrawable(R.mipmap.ic_fengsu2);
         dra_fengsu2.setBounds(0, 0, dra_fengsu2.getMinimumWidth(), dra_fengsu2.getMinimumHeight());
-        dra_fengsu22= context.getResources().getDrawable(R.mipmap.ic_fengsu22);
+        dra_fengsu22 = context.getResources().getDrawable(R.mipmap.ic_fengsu22);
         dra_fengsu22.setBounds(0, 0, dra_fengsu22.getMinimumWidth(), dra_fengsu22.getMinimumHeight());
-        dra_fengsu3= context.getResources().getDrawable(R.mipmap.ic_fengsu3);
+        dra_fengsu3 = context.getResources().getDrawable(R.mipmap.ic_fengsu3);
         dra_fengsu3.setBounds(0, 0, dra_fengsu3.getMinimumWidth(), dra_fengsu3.getMinimumHeight());
-        dra_fengsu33= context.getResources().getDrawable(R.mipmap.ic_fengsu33);
+        dra_fengsu33 = context.getResources().getDrawable(R.mipmap.ic_fengsu33);
         dra_fengsu33.setBounds(0, 0, dra_fengsu33.getMinimumWidth(), dra_fengsu33.getMinimumHeight());
 
 
-            if (state.equals("000"))
-                tv_low.setCompoundDrawables(dra_fengsu11, null, null, null);
-            else if (state.equals("001"))
-                tv_mid.setCompoundDrawables(dra_fengsu22, null, null, null);
-            else if (state.equals("010"))
-                tv_height.setCompoundDrawables(dra_fengsu33, null, null, null);
+        if (state.equals("000"))
+            tv_low.setCompoundDrawables(dra_fengsu11, null, null, null);
+        else if (state.equals("001"))
+            tv_mid.setCompoundDrawables(dra_fengsu22, null, null, null);
+        else if (state.equals("010"))
+            tv_height.setCompoundDrawables(dra_fengsu33, null, null, null);
 
         ll_low.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    state="000";
+                isTouch = true;
+                state = "000";
                 initDraw();
-                tv_low.setCompoundDrawables(dra_fengsu11,null,null,null);
+                tv_low.setCompoundDrawables(dra_fengsu11, null, null, null);
             }
         });
 
         ll_mid.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    state="001";
+                isTouch = true;
+                state = "001";
                 initDraw();
-                initDraw();
-                tv_mid.setCompoundDrawables(dra_fengsu22,null,null,null);
+                tv_mid.setCompoundDrawables(dra_fengsu22, null, null, null);
             }
         });
 
         ll_height.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                    state="010";
+                isTouch = true;
+                state = "010";
                 initDraw();
-                initDraw();
-                tv_height.setCompoundDrawables(dra_fengsu33,null,null,null);
+                tv_height.setCompoundDrawables(dra_fengsu33, null, null, null);
             }
         });
 
@@ -137,10 +138,25 @@ public class FengSuViewPopup extends PopupWindow {
     }
 
 
-    public void initDraw(){
-        tv_low.setCompoundDrawables(dra_fengsu1,null,null,null);
-        tv_mid.setCompoundDrawables(dra_fengsu2,null,null,null);
-        tv_height.setCompoundDrawables(dra_fengsu3,null,null,null);
+    public void initDraw() {
+        tv_low.setCompoundDrawables(dra_fengsu1, null, null, null);
+        tv_mid.setCompoundDrawables(dra_fengsu2, null, null, null);
+        tv_height.setCompoundDrawables(dra_fengsu3, null, null, null);
     }
 
+    private String newState = "-1";
+
+    public void setWind(String state2) {
+        if (!isTouch) {
+            initDraw();
+            state = state2;
+            if (state.equals("000"))
+                tv_low.setCompoundDrawables(dra_fengsu11, null, null, null);
+            else if (state.equals("001"))
+                tv_mid.setCompoundDrawables(dra_fengsu22, null, null, null);
+            else if (state.equals("010"))
+                tv_height.setCompoundDrawables(dra_fengsu33, null, null, null);
+        }
+
+    }
 }

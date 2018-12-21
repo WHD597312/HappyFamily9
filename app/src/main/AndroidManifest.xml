@@ -80,6 +80,12 @@
             android:value="57bea7cd7ce34ab79dc987f0ff6a222b" />
 
         <service android:name="com.amap.api.location.APSService" />
+
+        <service android:name="com.baidu.location.f"
+                  android:enabled="true"
+                  android:process=":remote" />
+
+
         <service
             android:name=".together.util.mqtt.MQService"
             android:enabled="true"
@@ -102,15 +108,13 @@
 
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
-            android:value="kjgCMxtnMYdDenel3guWudC3zwThNsPR" />
-
+            android:value="0SkWiTmS4AIg04Q56KLIzDGXR7QVCa3o" />
         <activity
             android:hardwareAccelerated="false"
             android:name=".login.login.qdActivity"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -127,7 +131,9 @@
             android:name=".le.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".login.login.LoginActivity" />
+        <activity android:name=".login.login.LoginActivity"
+            android:screenOrientation="portrait"
+            />
         <activity
             android:hardwareAccelerated="false"
             android:name=".zhen.AboutActivity"
@@ -200,7 +206,7 @@
         <activity
             android:name=".main.MainActivity"
             android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="false"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
         <activity
             android:hardwareAccelerated="false"
@@ -320,7 +326,7 @@
             android:name=".bao.ShopDingdanActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-        />
+
         <activity
             android:name=".bao.ShopSearchActivity"
             android:launchMode="singleTask"
@@ -524,6 +530,13 @@
         <activity android:name=".le.FriendActivity"
             android:screenOrientation="portrait"
             />
+        <activity android:name=".zhen.VersionActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".le.YouGuiActivity"
+            android:screenOrientation="portrait"
+            />
+        <activity android:name=".le.JcActivity" />
 
     </application>
 

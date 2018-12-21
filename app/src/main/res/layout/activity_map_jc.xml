@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+    <RelativeLayout
+        android:id="@+id/rl_map_title"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_50"
+        android:background="@color/color_white"
+        >
+        <ImageView
+            android:id="@+id/iv_map_back"
+            android:layout_width="@dimen/dp_jy_15"
+            android:layout_height="@dimen/dp_jy_23"
+            android:src="@mipmap/map_back"
+            android:layout_centerVertical="true"
+            android:layout_marginLeft="@dimen/dp_jy_12"
+            />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="有“轨”"
+            android:layout_centerInParent="true"
+            android:textSize="@dimen/sp_19"
+            android:textColor="@color/black"
+            />
+
+
+    </RelativeLayout>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_200"
+        android:layout_alignTop="@+id/iv_map_photo"
+        android:layout_marginTop="@dimen/dp_jy_40"
+        android:layout_marginLeft="@dimen/dp_jy_12"
+        android:layout_marginRight="@dimen/dp_jy_12"
+        android:background="@drawable/bg_fill_white10"
+        >
+        <Button
+            android:id="@+id/bt_jc"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_le_map"
+            android:layout_alignParentBottom="true"
+            android:layout_marginBottom="@dimen/dp_jy_50"
+            android:layout_marginLeft="@dimen/dp_jy_20"
+            android:layout_marginRight="@dimen/dp_jy_20"
+            android:text="解除绑定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_18"
+            />
+
+    </RelativeLayout>
+    <ImageView
+        android:id="@+id/iv_map_photo"
+        android:layout_width="@dimen/dp_jy_80"
+        android:layout_height="@dimen/dp_jy_80"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="@dimen/dp_jy_100"
+        android:scaleType="centerCrop"
+        android:src="@mipmap/image_user" />
+
+</RelativeLayout>

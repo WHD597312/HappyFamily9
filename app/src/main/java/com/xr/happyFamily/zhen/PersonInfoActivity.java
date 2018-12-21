@@ -1019,7 +1019,9 @@ public class PersonInfoActivity extends AppCompatActivity {
                         //android 6.0权限问题
                         if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                                 ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.showToast(PersonInfoActivity.this,"请打开相机权限");
                             ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, CAMERAPRESS);
+
                         } else {
                             startCamera();
                         }
@@ -1039,6 +1041,7 @@ public class PersonInfoActivity extends AppCompatActivity {
                         //android 6.0权限问题
                         if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
                                 ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+                            Utils.showToast(PersonInfoActivity.this,"请打开相机权限");
                             ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
                         } else {
                             startGallery();

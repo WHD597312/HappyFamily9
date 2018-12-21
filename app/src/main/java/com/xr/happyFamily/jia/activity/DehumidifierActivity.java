@@ -79,8 +79,8 @@ public class DehumidifierActivity extends AppCompatActivity {
     RelativeLayout head;
     @BindView(R.id.tv_now)
     TextView tvNow;
-    @BindView(R.id.tv_set)
-    TextView tvSet;
+    @BindView(R.id.tv_hum_now)
+    TextView tvHumNow;
     @BindView(R.id.ll_wendu)
     LinearLayout llWendu;
     @BindView(R.id.doubleWaveView)
@@ -180,7 +180,7 @@ public class DehumidifierActivity extends AppCompatActivity {
         houseId = intent.getLongExtra("houseId", 0);
         Intent service = new Intent(this, MQService.class);
         isBound = bindService(service, connection, Context.BIND_AUTO_CREATE);
-        IntentFilter intentFilter = new IntentFilter("CsjActivity");
+        IntentFilter intentFilter = new IntentFilter("DehumidifierActivity");
         receiver = new MessageReceiver();
         registerReceiver(receiver, intentFilter);
 
@@ -362,6 +362,9 @@ public class DehumidifierActivity extends AppCompatActivity {
             setResult(6000, intent2);
             finish();
         } else {
+                String name = deviceChild.getName();
+                tvTitle.setText("" + name);
+
             scrollView.post(new Runnable() {
                 @Override
                 public void run() {
@@ -393,6 +396,12 @@ public class DehumidifierActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onStop() {
+        super.onStop();
+        running = false;
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         if (unbinder != null) {
@@ -409,7 +418,6 @@ public class DehumidifierActivity extends AppCompatActivity {
 
     boolean isMore = false;
     boolean isOpen = false, isSleep = false, isShuang = false, isFu = false, isGanyi = false;
-    int state = 0;
     int[] timeData = new int[2];
 
     @OnClick({R.id.image_back, R.id.image_more, R.id.img_more, R.id.img_more2, R.id.ll_kai, R.id.ll_time, R.id.ll_hum, R.id.ll_fengsu, R.id.ll_shui, R.id.ll_shuang, R.id.ll_fu, R.id.ll_ganyi})
@@ -461,14 +469,16 @@ public class DehumidifierActivity extends AppCompatActivity {
                 }
                 break;
             case R.id.ll_time:
-                int state;
-                Log.e("qqqqqTime", timerSwitch + "," + timerMoudle);
-                if (timerSwitch == 0)
-                    state = 2;
-                else {
+                int state = 4;
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else if (timerMoudle == 2)
+                        state = 3;
+                } else {
                     if (timerMoudle == 1)
                         state = 0;
-                    else
+                    else if (timerMoudle == 2)
                         state = 1;
                 }
                 customViewPopipup = new TimePickViewPopup(this, state, timerHour, timerMin);
@@ -503,7 +513,8 @@ public class DehumidifierActivity extends AppCompatActivity {
                 });
                 break;
             case R.id.ll_hum:
-                showPopup();
+                if (isOpen)
+                    showPopup();
                 break;
             case R.id.ll_fengsu:
                 if (isOpen) {
@@ -530,26 +541,30 @@ public class DehumidifierActivity extends AppCompatActivity {
                 break;
             case R.id.ll_shui:
                 if (isOpen) {
-                    initState();
-                    deviceChild.setDehumSleep(1);
+                    if (deviceChild.getDehumSleep() == 1)
+                        deviceChild.setDehumSleep(0);
+                    else
+                        deviceChild.setDehumSleep(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 }
                 break;
             case R.id.ll_shuang:
                 if (isOpen) {
-                    initState();
-                    deviceChild.setDehumDefrost(1);
+                    if (deviceChild.getDehumDefrost() == 1)
+                        deviceChild.setDehumDefrost(0);
+                    else
+                        deviceChild.setDehumDefrost(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 }
                 break;
             case R.id.ll_fu:
                 if (isOpen) {
-
-
-                    initState();
-                    deviceChild.setDehumAnion(1);
+                    if (deviceChild.getDehumAnion() == 1)
+                        deviceChild.setDehumAnion(0);
+                    else
+                        deviceChild.setDehumAnion(1);
 
                     setMode(deviceChild);
                     send(deviceChild);
@@ -557,8 +572,10 @@ public class DehumidifierActivity extends AppCompatActivity {
                 break;
             case R.id.ll_ganyi:
                 if (isOpen) {
-                    initState();
-                    deviceChild.setDehumDrying(1);
+                    if (deviceChild.getDehumDrying() == 1)
+                        deviceChild.setDehumDrying(0);
+                    else
+                        deviceChild.setDehumDrying(1);
                     setMode(deviceChild);
                     send(deviceChild);
                 }
@@ -595,14 +612,14 @@ public class DehumidifierActivity extends AppCompatActivity {
                 relative.setVisibility(View.GONE);
                 tvOffline.setVisibility(View.VISIBLE);
             } else {
-                if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
+                if (!TextUtils.isEmpty(macAddress) && deviceChild != null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
                         Toast.makeText(DehumidifierActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
                         long houseId = deviceChild.getHouseId();
                         Intent data = new Intent();
                         data.putExtra("houseId", houseId);
                         DehumidifierActivity.this.setResult(6000, data);
-                        DehumidifierActivity.this.finish();
+                        finish();
                     } else {
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();
@@ -721,7 +738,10 @@ public class DehumidifierActivity extends AppCompatActivity {
             tvNow.setText(sensorSimpleTemp + "");
         else
             tvNow.setText("——");
-        tvSet.setText(dehumSetHum + "");
+        if (sensorSimpleHum > 0)
+            tvHumNow.setText(sensorSimpleHum + "");
+        else
+            tvHumNow.setText("——");
         if (waterLevel > 0) {
             tvWater.setText(waterLevel + "");
             doubleWaveView.setProHeight(waterLevel);
@@ -741,6 +761,35 @@ public class DehumidifierActivity extends AppCompatActivity {
 //        } else if (socketTimer == 1) {
 //            image_timer.setImageResource(R.mipmap.socket_timer);
 //        }
+        if (mPopWindow != null) {
+            if (mPopWindow.isShowing() && (!isTouch)) {
+                humSeekBar.setProgress(deviceChild.getDehumSetHum() - 30);
+            }
+        }
+        if (fengSuViewPopup != null) {
+            if (fengSuViewPopup.isShowing()) {
+                fengSuViewPopup.setWind(windLevel);
+            }
+        }
+        if (customViewPopipup != null) {
+            if (customViewPopipup.isShowing()) {
+                int state = 4;
+                if (timerSwitch == 0) {
+                    if (timerMoudle == 1)
+                        state = 2;
+                    else if (timerMoudle == 2)
+                        state = 3;
+                } else {
+                    if (timerMoudle == 1)
+                        state = 0;
+                    else if (timerMoudle == 2)
+                        state = 1;
+                }
+                customViewPopipup.setData(state, timerHour, timerMin);
+            }
+        }
+
+        Log.e("qqqqqqTTTTT", windLevel + "风速" + waterLevel + "水位" + sensorSimpleTemp + "温度");
     }
 
     private void send(DeviceChild deviceChild) {
@@ -811,8 +860,8 @@ public class DehumidifierActivity extends AppCompatActivity {
             jsonArray.put(5, warmerRunState);
             jsonArray.put(6, curRunState2);
             jsonArray.put(7, curRunState3);
-            jsonArray.put(8, dehumSetTemp);
-            jsonArray.put(9, dehumSetHum);
+            jsonArray.put(8, dehumSetHum);
+            jsonArray.put(9, dehumSetTemp);
             jsonArray.put(10, timerMoudle);
             jsonArray.put(11, timeHour);
             jsonArray.put(12, timeMin);
@@ -859,9 +908,10 @@ public class DehumidifierActivity extends AppCompatActivity {
     private Context mContext = DehumidifierActivity.this;
     private HumSeekBar humSeekBar;
     private TextView tv_queding;
+    boolean isTouch = false;
 
     private void showPopup() {
-
+        isTouch = false;
         contentViewSign = LayoutInflater.from(mContext).inflate(R.layout.popup_dehumidifier_hum, null);
         humSeekBar = (HumSeekBar) contentViewSign.findViewById(R.id.humSeekBar);
         humSeekBar.setProgress(deviceChild.getDehumSetHum() - 30);
@@ -875,8 +925,15 @@ public class DehumidifierActivity extends AppCompatActivity {
                 send(deviceChild);
             }
         });
+        humSeekBar.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                isTouch = true;
+                return false;
+            }
+        });
         mPopWindow = new PopupWindow(contentViewSign);
-        mPopWindow.setWidth(ViewGroup.LayoutParams.WRAP_CONTENT);
+        mPopWindow.setWidth(ViewGroup.LayoutParams.MATCH_PARENT);
         mPopWindow.setHeight(ViewGroup.LayoutParams.WRAP_CONTENT);
         //在PopupWindow里面就加上下面代码，让键盘弹出时，不会挡住pop窗口。
         mPopWindow.setInputMethodMode(PopupWindow.INPUT_METHOD_NEEDED);
@@ -888,7 +945,7 @@ public class DehumidifierActivity extends AppCompatActivity {
         backgroundAlpha(0.5f);
         //添加pop窗口关闭事件
         mPopWindow.setOnDismissListener(new poponDismissListener());
-        mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.CENTER, 0, 0);
+        mPopWindow.showAtLocation(this.getWindow().getDecorView(), Gravity.BOTTOM, 0, 0);
     }
 
 

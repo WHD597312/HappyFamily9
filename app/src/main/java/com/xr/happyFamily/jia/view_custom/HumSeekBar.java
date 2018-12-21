@@ -13,6 +13,7 @@ import android.support.v7.widget.AppCompatSeekBar;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
+import android.view.Window;
 
 import com.xr.happyFamily.R;
 
@@ -117,9 +118,12 @@ public class HumSeekBar extends AppCompatSeekBar {
 
         //设置文字显示方向
         if(mTextOrientation == ORIENTATION_TOP) {
+            Log.e("qqqqqqAAAAA","11111111");
             //设置SeekBar顶部数值文字预留空间，左右为数值背景图片的一半，顶部为数值背景图片高度加五的间隔
-            setPadding((int) Math.ceil(mBgWidth) / 2, (int) Math.ceil(mBgHeight) + 5, (int) Math.ceil(mBgWidth) / 2, 0);
+
+            setPadding((int) Math.ceil(mBgWidth) / 2, 0, (int) Math.ceil(mBgWidth) / 2, 0);
         } else {
+            Log.e("qqqqqqAAAAA","22222");
             //设置SeekBar顶部数值文字预留空间，左右为数值背景图片的一半，底部为数值背景图片高度加五的间隔
             setPadding((int) Math.ceil(mBgWidth) / 2, 0, (int) Math.ceil(mBgWidth) / 2, (int) Math.ceil(mBgHeight) + 5);
         }
@@ -134,19 +138,22 @@ public class HumSeekBar extends AppCompatSeekBar {
         //计算数值背景X坐标
         float bgX = bgRect.width() * getProgress() / getMax();
         //计算数值背景Y坐标
-        float bgY =bgRect.height()+17;
+        float bgY =(this.getHeight()-mBackgroundBitmap.getHeight())/2;
         if(mTextOrientation == ORIENTATION_BOTTOM) {
-            bgY = mBgHeight + 10;
+            bgY = mBgHeight ;
         }
 
         //计算数值文字X坐标
         float textX = bgX + (mBgWidth - mTextWidth) / 2;
         float textY =bgY-15;
 
+        Log.e("qqqqqHHHH", this.getHeight()+"????"+bgY+"???"+mBackgroundBitmap.getHeight()+"???"+(bgY+mBackgroundBitmap.getHeight())/2);
         //绘制文字和背景
         canvas.drawBitmap(mBackgroundBitmap, bgX, bgY, mPaint);
         canvas.drawText(mText, textX, textY, mPaint);
     }
+
+
 
     @Override
     public boolean onTouchEvent(MotionEvent event) {

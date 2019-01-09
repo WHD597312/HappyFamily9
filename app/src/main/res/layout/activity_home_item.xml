@@ -46,6 +46,7 @@
         android:layout_alignBottom="@+id/tv_device_switch"
         android:layout_marginBottom="@dimen/dp_jy_3"
         android:layout_marginLeft="@dimen/dp_jy_9"
+        android:visibility="gone"
         />
 
     <ImageView

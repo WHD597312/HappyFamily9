@@ -197,7 +197,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         }
         if (!preferences.contains("image")) {
             if (preferences.contains("headImgUrl")) {
-                new LoadUserImageAsync().execute();
+//                new LoadUserImageAsync().execute();
             }
         }
 
@@ -372,7 +372,7 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
 
         if (!preferences.contains("image")){
             if (preferences.contains("headImgUrl")){
-                new LoadUserImageAsync().execute();
+//                new LoadUserImageAsync().execute();
             }
         }
 //        boolean running = clcokservice.getisYgRunning();

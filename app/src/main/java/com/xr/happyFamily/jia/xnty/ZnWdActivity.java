@@ -70,12 +70,9 @@ public class ZnWdActivity extends AppCompatActivity {
         }
 
         try {//加载动画
-
             gifDrawable1=new GifDrawable(getResources(),R.mipmap.wd_fs);
             gifDrawable2=new GifDrawable(getResources(),R.mipmap.pm25_xh);
             gifDrawable3=new GifDrawable(getResources(),R.mipmap.wd_kt);
-
-
         }catch (Exception e){
             e.printStackTrace();
         }

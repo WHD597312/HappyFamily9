@@ -93,6 +93,7 @@ import org.w3c.dom.Text;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -197,7 +198,56 @@ public class MQService extends Service {
         }
         return super.onStartCommand(intent, flags, startId);
     }
+    public void sendData(String macAddress){
+        try {
+            Calendar calendar=Calendar.getInstance();
+            int headCode=85;
+            int effectTime=1;
+            int year=calendar.get(Calendar.YEAR);
+            int yearHigh=year/256;
+            int yearLow=year%256;
+            int month=calendar.get(Calendar.MONTH)+1;
+            int day=calendar.get(Calendar.DAY_OF_MONTH);
+            int week=calendar.get(Calendar.DAY_OF_WEEK);
+            week=Utils.getWeek(week);
+            int hour=calendar.get(Calendar.HOUR_OF_DAY);
+            int min=calendar.get(Calendar.MINUTE);
+            int second=calendar.get(Calendar.SECOND);
+            int funCode=2;
 
+
+            int endCode=136;
+            JSONArray jsonArray=new JSONArray();
+            jsonArray.put(0,headCode);
+            jsonArray.put(1,effectTime);
+            jsonArray.put(2,yearHigh);
+            jsonArray.put(3,yearLow);
+            jsonArray.put(4,month);
+            jsonArray.put(5,day);
+            jsonArray.put(6,week);
+            jsonArray.put(7,hour);
+            jsonArray.put(8,min);
+            jsonArray.put(9,second);
+            jsonArray.put(10,funCode);
+            int sum=0;
+            for (int i = 0; i <11 ; i++) {
+                sum=sum+jsonArray.getInt(i);
+            }
+            int checkCode=sum%256;
+            jsonArray.put(11,checkCode);
+            jsonArray.put(12,endCode);
+            JSONObject jsonObject=new JSONObject();
+            jsonObject.put("Warmer",jsonArray);
+            String topicName="p99/warmer1/"+macAddress+"/set";
+            String s=jsonObject.toString();
+            boolean success=publish(topicName,1,s);
+            if (!success){
+                publish(topicName,1,s);
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
     /**
      * 销毁服务，则断开MQTT,释放资源
      */

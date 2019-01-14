@@ -40,7 +40,7 @@ import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 
-import android.support.v7.app.NotificationCompat;
+
 
 import java.util.ArrayList;
 import java.util.Calendar;

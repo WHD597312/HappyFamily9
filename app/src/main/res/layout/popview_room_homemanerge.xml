@@ -32,6 +32,7 @@
         android:layout_marginLeft="@dimen/dp_jy_10"
         android:layout_toRightOf="@+id/iv_rename_r1"
         android:layout_alignTop="@+id/iv_rename_r1"
+        android:layout_alignBottom="@+id/iv_rename_r1"
         android:layout_centerVertical="true"
         android:id="@+id/tv_rname_r1"
         android:text="更改房间名"
@@ -61,6 +62,7 @@
             android:layout_marginLeft="@dimen/dp_jy_10"
             android:layout_toRightOf="@+id/iv_del_r1"
             android:layout_alignTop="@+id/iv_del_r1"
+            android:layout_alignBottom="@+id/iv_del_r1"
             android:text="删除房间"
             />
     </RelativeLayout>

@@ -65,6 +65,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="icon,label,theme">
+        <meta-data
+            android:name="design_width"
+            android:value="768" />
+        <meta-data
+            android:name="design_height"
+            android:value="1280" />
+
         <provider
             android:name="android.support.v4.content.FileProvider"
             android:authorities="com.hm.camerademo.fileprovider2"

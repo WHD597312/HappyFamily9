@@ -609,7 +609,6 @@ public class MainActivity extends AppCompatActivity implements FamilyFragmentMan
         } else if (position == 0) {
             layout_bottom.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override

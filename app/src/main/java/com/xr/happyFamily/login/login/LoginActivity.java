@@ -236,17 +236,18 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     break;
                 }
                 boolean isConn = NetWorkUtil.isConn(MyApplication.getContext());
-                if (isConn){
-                    showProgressDialog("正在登录，请稍后...");
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("phone", phone);
-                    params.put("password", password);
-                    new LoginAsyncTask().execute(params);
-                    CountTimer countTimer = new CountTimer(6000, 1000);
-                    countTimer.start();
-                }else {
-                    Utils.showToast(this, "无网络可用，请检查网络");
-                }
+//                if (isConn){
+//
+//                }else {
+//                    Utils.showToast(this, "无网络可用，请检查网络");
+//                }
+//                showProgressDialog("正在登录，请稍后...");
+                Map<String, Object> params = new HashMap<>();
+                params.put("phone", phone);
+                params.put("password", password);
+                new LoginAsyncTask().execute(params);
+//                CountTimer countTimer = new CountTimer(6000, 1000);
+//                countTimer.start();
 
 
 

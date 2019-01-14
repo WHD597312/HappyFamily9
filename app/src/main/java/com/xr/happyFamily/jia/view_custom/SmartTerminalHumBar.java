@@ -300,12 +300,13 @@ public class SmartTerminalHumBar extends View {
 //        canvas.drawArc(new RectF(left, top, right, bottom), 135, (float) 270, false, mReachedPaint);
         mReachedPaint.setColor(getResources().getColor(R.color.color_deep_blue));
 
-        canvas.drawArc(new RectF(left,top,right,bottom),135,100,false,mReachedPaint);
+        canvas.drawArc(new RectF(left,top,right,bottom),135,88,false,mReachedPaint);
 
         mReachedPaint.setColor(getResources().getColor(R.color.color_deep_green));
-        canvas.drawArc(new RectF(left,top,right,bottom),255,50,false,mReachedPaint);
+        canvas.drawArc(new RectF(left,top,right,bottom),240,63,false,mReachedPaint);
         mReachedPaint.setColor(getResources().getColor(R.color.color_deep_yellow));
-        canvas.drawArc(new RectF(left,top,right,bottom),325,80,false,mReachedPaint);
+        canvas.drawArc(new RectF(left,top,right,bottom),320,81,false,mReachedPaint);
+        //
         //画锚点
 //        mPointerPaint.setColor(getResources().getColor(R.color.color_black3));
 
@@ -354,9 +355,9 @@ public class SmartTerminalHumBar extends View {
 //        String[] strs2 = null;
 //        module = "1";
 
-        String[]  strs = new String[]{"舒","", "适", "", "", "", "","","","","","干","","燥","","","","","","","","","","","","","","","","","","","","","潮","","湿"};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
+//        String[]  strs = new String[]{"舒","", "适", "", "", "", "","","","","","潮","","湿","","","","","","","","","","","","","","","","","","","","","干","","燥"};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
 
-
+        String[]  strs = new String[]{"","", "", "", "", "", "","","","","潮","","","湿","","","","","","","","","","","","","","","","","","","干","","","燥","","","","","","","","","舒","", "","适", ""};//绘制数字1-12  (数字角度不对  可以进行相关的处理)
 
         mPaint.setColor(Color.WHITE);
         mPaint.setTextSize(TypedValue.applyDimension(TypedValue.COMPLEX_UNIT_SP, 14, getResources().getDisplayMetrics()));

@@ -586,7 +586,6 @@ public class MainActivity extends CheckPermissionsActivity implements FamilyFrag
         } else if (position == 0) {
             layout_bottom.setVisibility(View.VISIBLE);
         }
-
     }
 
     @Override

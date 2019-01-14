@@ -103,7 +103,7 @@ import java.util.concurrent.TimeUnit;
 public class MQService extends Service {
 
     private String TAG = "MQService";
-    
+
     private String host = "tcp://47.98.131.11:1883";
     private String userName = "admin";
     private String passWord = "Xr7891122";

@@ -42,7 +42,6 @@ import com.xr.happyFamily.together.util.TenTwoUtil;
 import com.xr.happyFamily.together.util.Utils;
 import com.xr.happyFamily.together.util.mqtt.MQService;
 import com.xr.happyFamily.together.util.receiver.MQTTMessageReveiver;
-import com.zhy.autolayout.AutoLayoutActivity;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -66,7 +65,7 @@ import butterknife.Unbinder;
 /**
  * 智能终端
  */
-public class SmartTerminalActivity extends AutoLayoutActivity implements View.OnTouchListener {
+public class SmartTerminalActivity extends AppCompatActivity implements View.OnTouchListener {
 
     Unbinder unbinder;
     MyApplication myApplication;
@@ -503,57 +502,57 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                 setResult(6000, intent);
                 finish();
                 break;
-//            case R.id.smart_temp_decrease:
-//                tempCurProgress = smartTerminalBar.getCurProcess();
-//                tempCurProgress = tempCurProgress - 1;
-//                if (tempCurProgress <= -30) {
-//                    tempCurProgress = -30;
-//                }
-//                temp = (int) tempCurProgress + 31;
-//                if (temp <= 5) {
-//                    temp = 5;
-//                } else if (temp >= 42) {
-//                    temp = 42;
-//                }
-//                Message tempDecrease = handler.obtainMessage();
-//                tempDecrease.arg1 = 0;/**减温度标记*/
-//                handler.sendMessage(tempDecrease);
-//
-//                break;
-//            case R.id.smart_temp_add:
-//                tempCurProgress = smartTerminalBar.getCurProcess();
-//                tempCurProgress = tempCurProgress + 1;
-//                if (tempCurProgress >= 17) {
-//                    tempCurProgress = 17;
-//                }
-//                temp = (int) tempCurProgress + 30;
-//                if (temp >= 42) {
-//                    temp = 42;
-//                }
-//                Message tempAdd = handler.obtainMessage();
-//                tempAdd.arg1 = 1;/**加温度标记*/
-//                handler.sendMessage(tempAdd);
-//                break;
-//            case R.id.smart_hum_decrease:
-//                humCurProgress = smartTerminalHumBar.getCurProcess();
-//                humCurProgress = humCurProgress - 1;
-//                if (humCurProgress <= -12) {
-//                    humCurProgress = -12;
-//                }
-//                Message humDecrease = handler.obtainMessage();
-//                humDecrease.arg1 = 2;/**减湿度标记*/
-//                handler.sendMessage(humDecrease);
-//                break;
-//            case R.id.smart_hum_add:
-//                humCurProgress = smartTerminalHumBar.getCurProcess();
-//                humCurProgress = humCurProgress + 1;
-//                if (humCurProgress >= 34) {
-//                    humCurProgress = 34;
-//                }
-//                Message humAdd = handler.obtainMessage();
-//                humAdd.arg1 = 3;/**加湿度标记*/
-//                handler.sendMessage(humAdd);
-//                break;
+            case R.id.smart_temp_decrease:
+                tempCurProgress = smartTerminalBar.getCurProcess();
+                tempCurProgress = tempCurProgress - 1;
+                if (tempCurProgress <= -12) {
+                    tempCurProgress = -12;
+                }
+                temp = (int) tempCurProgress + 16;
+                if (temp <= 5) {
+                    temp = 5;
+                } else if (temp >= 42) {
+                    temp = 42;
+                }
+                Message tempDecrease = handler.obtainMessage();
+                tempDecrease.arg1 = 0;/**减温度标记*/
+                handler.sendMessage(tempDecrease);
+
+                break;
+            case R.id.smart_temp_add:
+                tempCurProgress = smartTerminalBar.getCurProcess();
+                tempCurProgress = tempCurProgress + 1;
+                if (tempCurProgress >= 34) {
+                    tempCurProgress = 34;
+                }
+                temp = (int) tempCurProgress + 16;
+                if (temp >= 42) {
+                    temp = 42;
+                }
+                Message tempAdd = handler.obtainMessage();
+                tempAdd.arg1 = 1;/**加温度标记*/
+                handler.sendMessage(tempAdd);
+                break;
+            case R.id.smart_hum_decrease:
+                humCurProgress = smartTerminalHumBar.getCurProcess();
+                humCurProgress = humCurProgress - 1;
+                if (humCurProgress <= -12) {
+                    humCurProgress = -12;
+                }
+                Message humDecrease = handler.obtainMessage();
+                humDecrease.arg1 = 2;/**减湿度标记*/
+                handler.sendMessage(humDecrease);
+                break;
+            case R.id.smart_hum_add:
+                humCurProgress = smartTerminalHumBar.getCurProcess();
+                humCurProgress = humCurProgress + 1;
+                if (humCurProgress >= 34) {
+                    humCurProgress = 34;
+                }
+                Message humAdd = handler.obtainMessage();
+                humAdd.arg1 = 3;/**加湿度标记*/
+                handler.sendMessage(humAdd);
+                break;
             case R.id.image_linkage:
                 if (linkList.isEmpty()) {
                     Toast.makeText(this, "没有可联动的设备", Toast.LENGTH_SHORT).show();
@@ -901,11 +900,6 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
 
         }
     };
-
-    /**
-     * 向联动的设备发送智能终端的温度，湿度
-     * @param deviceChild
-     */
     private void sendLindedDevice(DeviceChild deviceChild){
         int type=deviceChild.getType();
         switch (type){
@@ -1043,6 +1037,7 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
     public boolean onTouch(View v, MotionEvent event) {
         switch (v.getId()) {
             case R.id.smart_temp_decrease:
+
                 if (event.getAction() == MotionEvent.ACTION_DOWN) {
                     onClick = true;
                     new Thread() {
@@ -1051,10 +1046,9 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                             while (onClick) {
                                 tempCurProgress = smartTerminalBar.getCurProcess();
                                 tempCurProgress = tempCurProgress - 1;
-                                if (tempCurProgress <= -28) {
-                                    tempCurProgress = -28;
+                                if (tempCurProgress <= -12) {
+                                    tempCurProgress = -12;
                                 }
-                                Log.i("tempCurProgress","-->"+tempCurProgress);
                                 try {
                                     Thread.sleep(100);
                                 } catch (Exception e) {
@@ -1068,21 +1062,11 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                     }.start();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     onClick = false;
-                    if (tempCurProgress>=-28 && tempCurProgress<=-13){
-                        temp=(int)tempCurProgress+29;
-                    } else if (tempCurProgress>=-9 && tempCurProgress<=1){
-                        temp=(int) tempCurProgress+25;
-                    }else if (tempCurProgress>=2 && tempCurProgress<=17){
-                        if (tempCurProgress==17){
-                            temp=42;
-                        }else
-                            temp=(int)tempCurProgress+24;
-                    }
-                    if (temp<=0){
-                        temp=0;
-                    }
-                    if (temp>=42){
-                        temp=42;
+                    temp = (int) tempCurProgress + 15;
+                    if (temp <= 5) {
+                        temp = 5;
+                    } else if (temp >= 42) {
+                        temp = 42;
                     }
                     for (Map.Entry<String, DeviceChild> entry : linkDeviceChildMap.entrySet()) {
                         DeviceChild deviceChild3 = entry.getValue();
@@ -1103,11 +1087,11 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                         public void run() {
                             while (onClick) {
                                 tempCurProgress = smartTerminalBar.getCurProcess();
-                                tempCurProgress=tempCurProgress+1;
-                                if (tempCurProgress >= 17) {
-                                    tempCurProgress =17;
+                                tempCurProgress++;
+                                if (tempCurProgress >= 34) {
+                                    tempCurProgress = 34;
                                 }
-                                Log.i("tempCurProgress","-->"+tempCurProgress);
+
                                 try {
                                     Thread.sleep(100);
                                 } catch (Exception e) {
@@ -1121,21 +1105,11 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                     }.start();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     onClick = false;
-                    if (tempCurProgress>=-28 && tempCurProgress<=-13){
-                        temp=(int)tempCurProgress+29;
-                    } else if (tempCurProgress>=-9 && tempCurProgress<=1){
-                        temp=(int) tempCurProgress+25;
-                    }else if (tempCurProgress>=2 && tempCurProgress<=17){
-                        if (tempCurProgress==17){
-                            temp=42;
-                        }else
-                            temp=(int)tempCurProgress+24;
-                    }
-                    if (temp<=0){
-                        temp=0;
-                    }
-                    if (temp>=42){
-                        temp=42;
+                    temp = (int) tempCurProgress + 15;
+                    if (temp <= 5) {
+                        temp = 5;
+                    } else if (temp >= 42) {
+                        temp = 42;
                     }
                     for (Map.Entry<String, DeviceChild> entry : linkDeviceChildMap.entrySet()) {
                         DeviceChild deviceChild3 = entry.getValue();
@@ -1157,10 +1131,9 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                             while (onClick) {
                                 humCurProgress = smartTerminalHumBar.getCurProcess();
                                 humCurProgress = humCurProgress - 1;
-                                if (humCurProgress <= -28) {
-                                    humCurProgress = -28;
+                                if (humCurProgress <= -12) {
+                                    humCurProgress = -12;
                                 }
-                                Log.i("humCurProgress","-->"+humCurProgress);
                                 try {
                                     Thread.sleep(100);
                                 } catch (Exception e) {
@@ -1174,28 +1147,11 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                     }.start();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     onClick = false;
-                    if (humCurProgress>=-28 && humCurProgress<=-13){
-                        if (humCurProgress==-13){
-                            hum=29;
-                        }else if (humCurProgress<-13)
-                            hum=((int) humCurProgress+28)*2;
-                    } else if (humCurProgress>=-11 && humCurProgress<=1){
-                        if (humCurProgress==-11){
-                            hum=30;
-                        }else{
-                            int hum2=((int) humCurProgress+28)*2;
-                            if (hum2>=hum){
-                                hum=hum-2;
-                            }else {
-                                hum=hum2;
-                            }
-                        }
-                    }else if (humCurProgress>=2 && humCurProgress<=17){
-                        if (humCurProgress==17){
-                            hum=90;
-                        }else{
-                            hum=((int)humCurProgress+28)*2;
-                        }
+                    hum = (int) humCurProgress + 15;
+                    if (hum <= 5) {
+                        hum = 5;
+                    } else if (hum >= 42) {
+                        hum = 42;
                     }
                     tv_smart_hum.setText(hum+"%");
                 }
@@ -1208,11 +1164,10 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                         public void run() {
                             while (onClick) {
                                 humCurProgress = smartTerminalHumBar.getCurProcess();
-                                humCurProgress=humCurProgress+1;
-                                if (humCurProgress >= 17) {
-                                    humCurProgress =17;
+                                humCurProgress = humCurProgress + 1;
+                                if (humCurProgress >= 34) {
+                                    humCurProgress = 34;
                                 }
-                                Log.i("humCurProgress","-->"+humCurProgress);
                                 try {
                                     Thread.sleep(100);
                                 } catch (Exception e) {
@@ -1226,28 +1181,11 @@ public class SmartTerminalActivity extends AutoLayoutActivity implements View.On
                     }.start();
                 } else if (event.getAction() == MotionEvent.ACTION_UP) {
                     onClick = false;
-                    if (humCurProgress>=-28 && humCurProgress<=-13){
-                        if (humCurProgress==-13){
-                            hum=29;
-                        }else
-                            hum=((int) humCurProgress+28)*2;
-                    } else if (humCurProgress>=-11 && humCurProgress<=1){
-                        if (humCurProgress==-11){
-                            hum=30;
-                        }else{
-                            int hum2=((int) humCurProgress+28)*2;
-                            if (hum2<=hum){
-                                hum=hum+2;
-                            }else {
-                                hum=hum2;
-                            }
-                        }
-                    }else if (humCurProgress>=2 && humCurProgress<=17) {
-                        if (humCurProgress == 17) {
-                            hum = 90;
-                        } else {
-                            hum = ((int) humCurProgress + 28) * 2;
-                        }
+                    hum = (int) humCurProgress + 15;
+                    if (hum <= 5) {
+                        hum = 5;
+                    } else if (hum >= 42) {
+                        hum = 42;
                     }
                     tv_smart_hum.setText(hum+"%");
                 }

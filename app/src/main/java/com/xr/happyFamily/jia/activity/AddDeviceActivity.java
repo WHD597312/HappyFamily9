@@ -360,12 +360,10 @@ public class AddDeviceActivity extends AppCompatActivity implements EasyPermissi
                 tv_wifi2.setTextColor(getResources().getColor(R.color.color_black4));
 
                 view_2g.setVisibility(View.VISIBLE);
-                view_2g.setBackgroundColor(getResources().getColor(R.color.green2));
                 nice_spinner.setFocusable(true);
                 nice_spinner.setFocusableInTouchMode(true);
                 nice_spinner.requestFocus();
-//                view2.setVisibility(View.GONE);
-                view2.setBackgroundColor(getResources().getColor(R.color.white));
+                view2.setVisibility(View.GONE);
                 if (!NetWorkUtil.isConn(this)){
                     Utils.showToast(this,"请连接网络");
                 }
@@ -383,8 +381,8 @@ public class AddDeviceActivity extends AppCompatActivity implements EasyPermissi
                 img_2g.setImageResource(R.mipmap.two_2g);
                 tv_2g.setTextColor(getResources().getColor(R.color.color_black4));
                 tv_wifi2.setTextColor(getResources().getColor(R.color.green2));
-                view_2g.setBackgroundColor(getResources().getColor(R.color.white));
-                view2.setBackgroundColor(getResources().getColor(R.color.green2));
+                view_2g.setVisibility(View.GONE);
+                view2.setVisibility(View.VISIBLE);
                 nice_spinner.setFocusable(false);
                 matchMethod=0;
                 if (!NetWorkUtil.isWifiConnected()){

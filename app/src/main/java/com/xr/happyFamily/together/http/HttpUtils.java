@@ -168,6 +168,8 @@ public class HttpUtils {
 
 
     static String httpUrl="http://47.98.131.11:8084/";
+
+
     public static String headerPostOkHpptRequest(Context context, String url, Map<String, Object> map) {
         String result = null;
         Context mContext = context;
@@ -618,6 +620,11 @@ public class HttpUtils {
         return result;
     }
 
+    /**
+     *
+     * @param url
+     * @return
+     */
     public static String getOkHpptRequest(String url) {
 //        File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
 //        int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
@@ -656,6 +663,13 @@ public class HttpUtils {
         return result;
     }
 
+    /**
+     * 多表单上传
+     * @param url
+     * @param paramsMap
+     * @param fileMap
+     * @return
+     */
     public static String upFileAndDesc(String url, Map<String, Object> paramsMap, Map<String, Object> fileMap){
         String result=null;
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
@@ -706,6 +720,12 @@ public class HttpUtils {
         return result;
     }
 
+    /**
+     * 提交多个图片
+     * @param url
+     * @param fileMap  fileMap集合的key 为参数名称，value为参数值
+     * @return
+     */
     public static String upFileAndDesc1(String url,  Map<String, Object> fileMap){
         String result=null;
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
@@ -753,6 +773,13 @@ public class HttpUtils {
         return result;
     }
 
+    /**
+     * 上传文件
+     * @param url
+     * @param fileNmae 文件名称
+     * @param file 文件
+     * @return
+     */
 
     public static String upLoadFile(String url, String fileNmae, File file) {
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
@@ -820,6 +847,12 @@ public class HttpUtils {
     }
     public static String baseUrl = "http://47.98.131.11:8084/";
 
+    /**
+     *
+     * @param url 完整的url地址 如http://localhost:8080/user
+     * @param params 参数信息，传map集合就可以
+     * @return
+     */
     public static String requestPost(String url,Map<String, Object> params) {
         String result = null;
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
@@ -852,6 +885,11 @@ public class HttpUtils {
         return result;
     }
 
+    /**
+     *
+     * @param url 完整的url地址 如http:localhost:8080/user?name=xxx
+     * @return
+     */
     public static String requestGet(String url) {
         String result = null;
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
@@ -882,6 +920,12 @@ public class HttpUtils {
         return result;
     }
 
+    /***
+     * 上传文件
+     * @param userId
+     * @param file
+     * @return
+     */
     public static String uploadFile(String userId,File file){
         String result=null;
         try {

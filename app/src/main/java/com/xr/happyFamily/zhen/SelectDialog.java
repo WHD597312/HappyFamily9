@@ -120,7 +120,7 @@ public class SelectDialog extends Dialog implements OnClickListener,OnItemClickL
         super.onCreate(savedInstanceState);
         View view = getLayoutInflater().inflate(R.layout.view_dialog_select,
                 null);
-        setContentView(view, new LayoutParams(LayoutParams.MATCH_PARENT,
+        setContentView(view, new LayoutParams(LayoutParams.FILL_PARENT,
                 LayoutParams.WRAP_CONTENT));
         Window window = getWindow();
         // 设置显示动画

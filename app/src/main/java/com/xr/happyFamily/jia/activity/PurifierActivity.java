@@ -352,42 +352,33 @@ public class PurifierActivity extends AppCompatActivity {
             JSONArray jsonArray=new JSONArray();
             int headCode=144;
             jsonArray.put(0,headCode);/**头码*/
-            sum=sum+headCode;
             int type=deviceChild.getType();
             int typeHigh=type/256;
-            sum=sum+typeHigh;
             int typeLow=type%256;
-            sum=sum+typeLow;
             int dataLength=8;
-            sum=sum+dataLength;
-
             int busMode=deviceChild.getBusModel();
-            sum=sum+busMode;
             jsonArray.put(1,typeHigh);/**类型 高位*/
             jsonArray.put(2,typeLow);/**类型 低位*/
             jsonArray.put(3,busMode);/**商业模式*/
             jsonArray.put(4,dataLength);/**数据长度*/
             jsonArray.put(5,35);/**数据位*/
-
+            sum=sum+35;
             int wPurifierEndYear=deviceChild.getWPurifierEndYear();
             int wPurifierEndYearHigh=wPurifierEndYear/256;
-            sum=sum+wPurifierEndYearHigh;
-            jsonArray.put(6,0);
+
+            jsonArray.put(6,wPurifierEndYearHigh);
             int wPurifierEndYearLow=wPurifierEndYear%256;
-            sum=sum+wPurifierEndYearLow;
-            jsonArray.put(7,0);
+            jsonArray.put(7,wPurifierEndYearLow);
+
             int wPurifierEndMonth=deviceChild.getWPurifierEndMonth();
-            sum=sum+wPurifierEndMonth;
-            jsonArray.put(8,0);
+            jsonArray.put(8,wPurifierEndMonth);
             int wPurifierEndDay=deviceChild.getWPurifierEndDay();
-            sum=sum+wPurifierEndDay;
-            jsonArray.put(9,0);
+            jsonArray.put(9,wPurifierEndDay);
+
             int wPurifierEndFlow=deviceChild.getWPurifierEndFlow();
             int wPurifierEndFlowHigh=wPurifierEndFlow/256;
-            sum=sum+wPurifierEndFlowHigh;
             jsonArray.put(10,wPurifierEndFlowHigh);
             int wPurifierEndFlowLow=wPurifierEndFlow%256;
-            sum=sum+wPurifierEndFlowLow;
             jsonArray.put(11,wPurifierEndFlowLow);
             String wPurifierState=deviceChild.getWPurifierState();
             if (!TextUtils.isEmpty(wPurifierState)){
@@ -404,13 +395,14 @@ public class PurifierActivity extends AppCompatActivity {
             }else {
                 jsonArray.put(12,0);
             }
+            sum=headCode+type+busMode+dataLength+wPurifierEndYear+wPurifierEndMonth+wPurifierEndDay+sum;
             int checkCode=sum%256;
             jsonArray.put(13,checkCode);/**校验码*/
             jsonArray.put(14,9);/**结束码*/
-            jsonObject.put("Warmer",jsonArray);
+            jsonObject.put("WPurifier",jsonArray);
 
             if (isBound){
-                String topicName="p99/warmer/"+deviceChild.getMacAddress()+"/set";
+                String topicName="p99/wPurifier1/"+deviceChild.getMacAddress()+"/set";
                 String s=jsonObject.toString();
                 boolean success=mqService.publish(topicName,1,s);
                 if (success){
@@ -540,12 +532,12 @@ public class PurifierActivity extends AppCompatActivity {
             } else {
                 if (!TextUtils.isEmpty(macAddress) && deviceChild!=null && macAddress.equals(deviceChild.getMacAddress())) {
                     if (deviceChild2 == null) {
-                        Toast.makeText(PurifierActivity.this, "该设备已重置", Toast.LENGTH_SHORT).show();
-                        long houseId = deviceChild.getHouseId();
-                        Intent data = new Intent();
-                        data.putExtra("houseId", houseId);
-                        PurifierActivity.this.setResult(6000, data);
-                        PurifierActivity.this.finish();
+                        Toast.makeText(PurifierActivity.this,"该设备已重置",Toast.LENGTH_SHORT).show();
+                        long houseId=deviceChild.getHouseId();
+                        Intent data=new Intent();
+                        data.putExtra("houseId",houseId);
+                        PurifierActivity.this.setResult(6000,data);
+                        finish();
                     } else {
                         deviceChild = deviceChild2;
                         boolean online = deviceChild.getOnline();

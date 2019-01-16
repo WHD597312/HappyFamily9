@@ -11,7 +11,6 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.GET_TASKS" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <!-- 锁屏显示界面 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
@@ -19,9 +18,6 @@
 
     <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
     <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-    <uses-permission
-        android:name="android.permission.CHANGE_CONFIGURATION"
-        tools:ignore="ProtectedPermissions" />
 
     <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -32,10 +28,7 @@
     <!-- 用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
 
-    <!-- 更改设置 -->
-    <uses-permission
-        android:name="android.permission.WRITE_SETTINGS"
-        tools:ignore="ProtectedPermissions" />
+
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -53,12 +46,12 @@
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-
+    <!--android:networkSecurityConfig="@xml/network_security_config"-->
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-        android:networkSecurityConfig="@xml/network_security_config"
+
         android:largeHeap="true"
         android:icon="@mipmap/app"
         android:label="P99"
@@ -398,7 +391,6 @@
             android:windowSoftInputMode="adjustResize|stateHidden" >
         </activity>
 
-
         <activity
             android:name=".wxapi.WXPayActiviy"
             android:exported="true"
@@ -406,9 +398,7 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
-
                 <category android:name="android.intent.category.DEFAULT" />
-
                 <data android:scheme="wx44acbeed9571e8cf" />
             </intent-filter>
         </activity>

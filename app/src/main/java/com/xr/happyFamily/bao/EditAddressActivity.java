@@ -64,7 +64,6 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
     TextView titleText;
     @BindView(R.id.title_rightText)
     TextView titleRightText;
-
     @BindView(R.id.tv_choose)
     TextView tvChoose;
     @BindView(R.id.view_line)
@@ -354,6 +353,7 @@ public class EditAddressActivity extends AppCompatActivity implements View.OnCli
             if (cities.size() > 0) {
                 districts = cities.get(sign_city).getDistricts();
                 for (int a = 0; a < districts.size(); a++) {
+                    if (!districts.get(a).getName().equals(cities.get(sign_city).getName()))
                         data.add(districts.get(a).getName());
                 }
             } else {

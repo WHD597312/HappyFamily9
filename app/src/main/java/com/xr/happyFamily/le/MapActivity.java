@@ -521,7 +521,6 @@ public class MapActivity extends AppCompatActivity {
     int i = 0;
 
     public BitmapDescriptor getBitmapDescriptor() {
-
         i++;
         BitmapDescriptor bttmap = null;
         View item_view = LayoutInflater.from(this).inflate(R.layout.activity_yougui_marker, null);

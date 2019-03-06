@@ -9,7 +9,7 @@ repositories {
 }
 
 greendao {
-    schemaVersion 45
+    schemaVersion 46
     daoPackage 'com.xr.database.dao'
     targetGenDir 'src/main/java'
 }

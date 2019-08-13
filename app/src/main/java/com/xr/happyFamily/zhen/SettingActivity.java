@@ -51,9 +51,7 @@ import com.xr.happyFamily.main.MainActivity;
 import com.xr.happyFamily.together.http.NoFastClickUtils;
 import com.xr.happyFamily.together.util.mqtt.ClockService;
 import com.xr.happyFamily.together.util.mqtt.MQService;
-import com.xr.happyFamily.together.util.reloadapp.UpdateManager;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.FileCallBack;
+
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -249,32 +247,6 @@ public class SettingActivity extends AppCompatActivity{
                 id = downloadManager.enqueue(request);
                 task.run();
                 tv_device_ensure.setClickable(false);
-//                OkHttpUtils.get()
-//                        .url(appUrl)
-//                        .build()
-//                        .execute(new FileCallBack(Environment.getExternalStorageDirectory().getAbsolutePath(),"p99.apk") {
-//                            @Override
-//                            public void inProgress(float progress) {
-//                                Log.i("progress","-->"+progress);
-//                                progressBar.setProgress((int) progress*10);
-//                            }
-//
-//                            @Override
-//                            public void onError(com.squareup.okhttp.Request request, Exception e) {
-//
-//                                Toast.makeText(SettingActivity.this,"下载失败",Toast.LENGTH_SHORT).show();
-//                                dialog.dismiss();
-//                            }
-//
-//                            @Override
-//                            public void onResponse(File file) {
-//                                Toast.makeText(SettingActivity.this, "下载完成",Toast.LENGTH_SHORT).show();
-//                                Log.e("apkpath",file.getAbsolutePath());
-//                                Intent intent = new Intent(Intent.ACTION_VIEW);
-//                                intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
-//                                startActivity(intent);
-//                            }
-//                        });
             }
         });
 

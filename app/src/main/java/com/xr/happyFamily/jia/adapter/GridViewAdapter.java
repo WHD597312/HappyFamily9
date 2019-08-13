@@ -236,11 +236,6 @@ public class GridViewAdapter extends ArrayAdapter {
                     holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
                     holder.view.setVisibility(View.VISIBLE);
                     holder.tv_device_switch.setText("在线");
-//                        if (socketState==1){
-//                            holder.tv_device_switch.setText("电源开");
-//                        }else if (socketState==0){
-//                            holder.tv_device_switch.setText("电源关");
-//                        }
                 } else {
                     holder.view.setVisibility(View.GONE);
                     holder.tv_device_switch.setText("离线");
@@ -255,6 +250,29 @@ public class GridViewAdapter extends ArrayAdapter {
                 if (TextUtils.isEmpty(common)) {
                     holder.tv_device_name.setText(item.getName());
                     holder.tv_device_type.setText("净水器");
+                } else {
+                    String roomName = item.getRoomName();
+                    Log.i("roomName", "-->" + roomName);
+                    holder.tv_device_name.setText(roomName);
+                    holder.tv_device_type.setText(item.getName());
+                }
+                if (online) {
+                    holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.green2));
+                    holder.view.setVisibility(View.VISIBLE);
+                    holder.tv_device_switch.setText("在线");
+                } else {
+                    holder.view.setVisibility(View.GONE);
+                    holder.tv_device_switch.setText("离线");
+                    holder.tv_device_switch.setTextColor(mContext.getResources().getColor(R.color.color_gray3));
+                }
+            }else if (type == 9) {
+                Picasso.with(mContext).load(R.mipmap.qunuanqi2).into(holder.imageView);
+                boolean online = item.getOnline();
+
+                Log.i("common", "-->" + common);
+                if (TextUtils.isEmpty(common)) {
+                    holder.tv_device_name.setText(item.getName());
+                    holder.tv_device_type.setText("取暖器2");
                 } else {
                     String roomName = item.getRoomName();
                     Log.i("roomName", "-->" + roomName);

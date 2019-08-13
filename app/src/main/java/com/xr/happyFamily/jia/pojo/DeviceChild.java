@@ -20,6 +20,15 @@ public class DeviceChild implements Serializable{
     String share;/**分享设备*/
     int type;/**设备类型*/
     int busModel;/**商业模式*/
+    private int warmerScreen;//取暖器是否有屏幕
+    int heaterControl;//主从设备
+    int tempCheck;//温度校正
+    int mode;//工作模式
+    int rateGrade;//功率档位
+    int gradeVersion;//升级版本号
+    int gradeState;//升级状态
+    int wVerion;
+    int mVersion;
     String macAddress;/**mac地址*/
     String name;/**设备名称*/
     int timerMoudle=0;/**定时器模式*/
@@ -35,6 +44,8 @@ public class DeviceChild implements Serializable{
     int warmerFall;/**机器倾斜*/
     String rateState=null;/**功率状态  11: 3档 10: 2档  01: 1档*/
     int lock;/**机器锁定状态*/
+    @Transient
+    int heaterCheck;//取暖器设置主从 是否选中
     int week;
     int timerOpenOneHour;
     int timerOpenOneMin;
@@ -146,7 +157,74 @@ public class DeviceChild implements Serializable{
     int wPurifierfilter1,wPurifierfilter2,wPurifierfilter3,wPurifierfilter4,wPurifierfilter5,wPurifierfilter6,wPurifierfilter7,wPurifierfilter8,wPurifierfilter9,wPurifierfilter10;
 
     private String houseAddress="";/**设备家庭真实地址*/
-    private String province;/**设备所在的省份*/
+    private String province;
+
+    public int getMode() {
+        return mode;
+    }
+
+    public void setMode(int mode) {
+        this.mode = mode;
+    }
+
+    public int getHeaterControl() {
+        return heaterControl;
+    }
+
+    public int getTempCheck() {
+        return tempCheck;
+    }
+
+    public void setTempCheck(int tempCheck) {
+        this.tempCheck = tempCheck;
+    }
+
+    public void setHeaterControl(int heaterControl) {
+        this.heaterControl = heaterControl;
+    }
+
+    public int getRateGrade() {
+        return rateGrade;
+    }
+
+    public void setRateGrade(int rateGrade) {
+        this.rateGrade = rateGrade;
+    }
+
+    public int getGradeVersion() {
+        return gradeVersion;
+    }
+
+    public int getGradeState() {
+        return gradeState;
+    }
+
+    public void setGradeState(int gradeState) {
+        this.gradeState = gradeState;
+    }
+
+    public void setGradeVersion(int gradeVersion) {
+        this.gradeVersion = gradeVersion;
+    }
+
+    public int getmVersion() {
+        return mVersion;
+    }
+
+    public void setmVersion(int mVersion) {
+        this.mVersion = mVersion;
+    }
+
+    public int getwVerion() {
+        return wVerion;
+    }
+
+    public void setwVerion(int wVerion) {
+        this.wVerion = wVerion;
+    }
+
+    /**设备所在的省份*/
+
     public int getWPurifierfilter10() {
         return this.wPurifierfilter10;
     }
@@ -195,6 +273,7 @@ public class DeviceChild implements Serializable{
     public void setWPurifierfilter3(int wPurifierfilter3) {
         this.wPurifierfilter3 = wPurifierfilter3;
     }
+
     public int getWPurifierfilter2() {
         return this.wPurifierfilter2;
     }
@@ -800,26 +879,23 @@ public class DeviceChild implements Serializable{
         this.userId = userId;
     }
 
-
-    @Generated(hash = 1973447423)
-    public DeviceChild() {
-    }
-    @Generated(hash = 869457734)
-    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel,
-            String macAddress, String name, int timerMoudle, String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower,
-            int warmerCurRunRoatePower, int warmerRunState, int deviceState, int warmerFall, String rateState, int lock, int week, int timerOpenOneHour, int timerOpenOneMin,
-            int timerCloseOneHour, int timerCloseOneMin, int timerOpenTwoHour, int timerOpenTwoMin, int timerCloseTwoHour, int timerCloseTwoMin, int timerOpenThrHour,
-            int timerOpenThrMin, int timerCloseThrHour, int timerCloseThrMin, int timerOpenForHour, int timerOpenForMin, int timerCloseForHour, int timerCloseForMin, int timerOne,
-            int timerTwo, int timerThr, int timerFor, int lockState, int screenState, int curRunState2, int curRunState3, int timerHour, int timerMin, int checkCode, int endCode,
-            int userId, int img, int deviceId, int linked, int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx,
-            int sensorHcho, int socketPowerHigh, int socketPowerLow, int socketPower, int socketTemp, int socketState, int socketTimer, int socketTimerHour, int socketTimerMin,
-            int socketCurrent, int socketVal, int socketPowerConsume, int timerSwitch, int waterLevel, String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow,
-            int equipCurdPowerHigh, int equipCurdPowerLow, int faultCode, String purifierState, int dehumSetTemp, int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp,
-            int dehumSleep, int dehumAnion, int dehumDrying, int dehumDefrost, String aCondState, int aCondSetTemp1, int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1,
-            int aCondSimpleTemp2, int aCondInnerTemp, int aCondOuterTemp, int aCondSleep, int aCondSUpDown, int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode,
-            int wPurifierEndFlow, int wPurifierEndYear, int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity,
-            int wPurifierCurTemp, int wPurifierOutQuqlity, int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5,
-            int wPurifierfilter6, int wPurifierfilter7, int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10, String houseAddress, String province) {
+    @Generated(hash = 448935873)
+    public DeviceChild(Long id, boolean online, long houseId, long roomId, int deviceUsedCount, String roomName, String common, String share, int type, int busModel, int warmerScreen,
+            int heaterControl, int tempCheck, int mode, int rateGrade, int gradeVersion, int gradeState, int wVerion, int mVersion, String macAddress, String name, int timerMoudle,
+            String mcuVersion, String wifiVersion, int waramerSetTemp, int warmerCurTemp, int warmerSampleData, int warmerRatePower, int warmerCurRunRoatePower, int warmerRunState,
+            int deviceState, int warmerFall, String rateState, int lock, int week, int timerOpenOneHour, int timerOpenOneMin, int timerCloseOneHour, int timerCloseOneMin,
+            int timerOpenTwoHour, int timerOpenTwoMin, int timerCloseTwoHour, int timerCloseTwoMin, int timerOpenThrHour, int timerOpenThrMin, int timerCloseThrHour,
+            int timerCloseThrMin, int timerOpenForHour, int timerOpenForMin, int timerCloseForHour, int timerCloseForMin, int timerOne, int timerTwo, int timerThr, int timerFor,
+            int lockState, int screenState, int curRunState2, int curRunState3, int timerHour, int timerMin, int checkCode, int endCode, int userId, int img, int deviceId, int linked,
+            int linkedSensorId, long shareId, int sensorState, int sensorSimpleTemp, int sensorSimpleHum, int sorsorPm, int sensorOx, int sensorHcho, int socketPowerHigh,
+            int socketPowerLow, int socketPower, int socketTemp, int socketState, int socketTimer, int socketTimerHour, int socketTimerMin, int socketCurrent, int socketVal,
+            int socketPowerConsume, int timerSwitch, int waterLevel, String windLevel, int equipRatedPowerHigh, int equipRatedPowerLow, int equipCurdPowerHigh, int equipCurdPowerLow,
+            int faultCode, String purifierState, int dehumSetTemp, int dehumSetHum, int dehumInnerTemp, int dehumOuterTemp, int dehumSleep, int dehumAnion, int dehumDrying,
+            int dehumDefrost, String aCondState, int aCondSetTemp1, int aCondSetTemp2, int aCondSetData, int aCondSimpleTemp1, int aCondSimpleTemp2, int aCondInnerTemp,
+            int aCondOuterTemp, int aCondSleep, int aCondSUpDown, int aCondSLeftRight, int socketTimerMode, int isSocketTimerMode, int wPurifierEndFlow, int wPurifierEndYear,
+            int wPurifierEndMonth, int wPurifierEndDay, String wPurifierState, int wPurifierFlowData, int wPurifierPrimaryQuqlity, int wPurifierCurTemp, int wPurifierOutQuqlity,
+            int wPurifierfilter1, int wPurifierfilter2, int wPurifierfilter3, int wPurifierfilter4, int wPurifierfilter5, int wPurifierfilter6, int wPurifierfilter7,
+            int wPurifierfilter8, int wPurifierfilter9, int wPurifierfilter10, String houseAddress, String province) {
         this.id = id;
         this.online = online;
         this.houseId = houseId;
@@ -830,6 +906,15 @@ public class DeviceChild implements Serializable{
         this.share = share;
         this.type = type;
         this.busModel = busModel;
+        this.warmerScreen = warmerScreen;
+        this.heaterControl = heaterControl;
+        this.tempCheck = tempCheck;
+        this.mode = mode;
+        this.rateGrade = rateGrade;
+        this.gradeVersion = gradeVersion;
+        this.gradeState = gradeState;
+        this.wVerion = wVerion;
+        this.mVersion = mVersion;
         this.macAddress = macAddress;
         this.name = name;
         this.timerMoudle = timerMoudle;
@@ -949,6 +1034,20 @@ public class DeviceChild implements Serializable{
         this.houseAddress = houseAddress;
         this.province = province;
     }
+
+    @Generated(hash = 1973447423)
+    public DeviceChild() {
+    }
+
+
+    public void setHeaterCheck(int heaterCheck) {
+        this.heaterCheck = heaterCheck;
+    }
+
+    public int getHeaterCheck() {
+        return heaterCheck;
+    }
+
     public int getWeek() {
         return week;
     }
@@ -1115,5 +1214,29 @@ public class DeviceChild implements Serializable{
 
     public void setTimerFor(int timerFor) {
         this.timerFor = timerFor;
+    }
+
+    public int getMVersion() {
+        return this.mVersion;
+    }
+
+    public void setMVersion(int mVersion) {
+        this.mVersion = mVersion;
+    }
+
+    public int getWVerion() {
+        return this.wVerion;
+    }
+
+    public void setWVerion(int wVerion) {
+        this.wVerion = wVerion;
+    }
+
+    public void setWarmerScreen(int warmerScreen) {
+        this.warmerScreen = warmerScreen;
+    }
+
+    public int getWarmerScreen() {
+        return warmerScreen;
     }
 }

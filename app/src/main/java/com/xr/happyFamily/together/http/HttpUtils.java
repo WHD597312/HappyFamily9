@@ -12,8 +12,7 @@ import com.google.gson.Gson;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.jia.MyApplication;
 import com.xr.happyFamily.le.pojo.AppUsing;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.builder.GetBuilder;
+
 
 
 import org.json.JSONArray;
@@ -24,6 +23,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -41,6 +41,7 @@ import okhttp3.Response;
 import okhttp3.ResponseBody;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
+import retrofit2.http.Multipart;
 
 
 /**
@@ -366,17 +367,17 @@ public class HttpUtils {
         try {
             String CONTENT_TYPE = "application/json";
 
-            String JSON_DATA = "{\n" +
-                    "\"deviceId\":1129,\n" +
-                    "\"deviceTimeControlDtos\":\n" +
-                    "[\n" +
-                    "{\n" +
-                    "\"week\":2,\n" +
-                    "\"deviceTimeControlList\":[\n" +
-                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
-                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
-                    "     ]\n" +
-                    "}";
+//            String JSON_DATA = "{\n" +
+//                    "\"deviceId\":1129,\n" +
+//                    "\"deviceTimeControlDtos\":\n" +
+//                    "[\n" +
+//                    "{\n" +
+//                    "\"week\":2,\n" +
+//                    "\"deviceTimeControlList\":[\n" +
+//                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
+//                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
+//                    "     ]\n" +
+//                    "}";
             JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, Object> param : map.entrySet()) {
                 jsonObject.put(param.getKey(), param.getValue());
@@ -420,18 +421,18 @@ public class HttpUtils {
         String result = null;
         try {
             String CONTENT_TYPE = "application/json";
-
-            String JSON_DATA = "{\n" +
-                    "\"deviceId\":1129,\n" +
-                    "\"deviceTimeControlDtos\":\n" +
-                    "[\n" +
-                    "{\n" +
-                    "\"week\":2,\n" +
-                    "\"deviceTimeControlList\":[\n" +
-                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
-                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
-                    "     ]\n" +
-                    "}";
+//
+//            String JSON_DATA = "{\n" +
+//                    "\"deviceId\":1129,\n" +
+//                    "\"deviceTimeControlDtos\":\n" +
+//                    "[\n" +
+//                    "{\n" +
+//                    "\"week\":2,\n" +
+//                    "\"deviceTimeControlList\":[\n" +
+//                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
+//                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
+//                    "     ]\n" +
+//                    "}";
             JSONObject jsonObject = new JSONObject();
             for (Map.Entry<String, Object> param : map.entrySet()) {
                 jsonObject.put(param.getKey(), param.getValue());
@@ -497,13 +498,13 @@ public class HttpUtils {
             return response;
         }
     };
-    private static GetBuilder getBuilder;
-    public static GetBuilder getBuilder(){
-        if (getBuilder == null){
-            getBuilder = OkHttpUtils.get();
-        }
-        return getBuilder;
-    }
+//    private static GetBuilder getBuilder;
+//    public static GetBuilder getBuilder(){
+//        if (getBuilder == null){
+//            getBuilder = OkHttpUtils.get();
+//        }
+//        return getBuilder;
+//    }
 
 
 
@@ -563,17 +564,17 @@ public class HttpUtils {
         try {
             String CONTENT_TYPE = "application/json";
 
-            String JSON_DATA = "{\n" +
-                    "\"deviceId\":1129,\n" +
-                    "\"deviceTimeControlDtos\":\n" +
-                    "[\n" +
-                    "{\n" +
-                    "\"week\":2,\n" +
-                    "\"deviceTimeControlList\":[\n" +
-                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
-                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
-                    "     ]\n" +
-                    "}";
+//            String JSON_DATA = "{\n" +
+//                    "\"deviceId\":1129,\n" +
+//                    "\"deviceTimeControlDtos\":\n" +
+//                    "[\n" +
+//                    "{\n" +
+//                    "\"week\":2,\n" +
+//                    "\"deviceTimeControlList\":[\n" +
+//                    "         {\"temp\":2.0,\"openTime\":2,\"closeTime\":3},\n" +
+//                    "         {\"temp\":2.0,\"openTime\":4,\"closeTime\":5}\n" +
+//                    "     ]\n" +
+//                    "}";
 
 
             RequestBody requestBody = RequestBody.create(MediaType.parse(CONTENT_TYPE), jsonObject.toString());
@@ -773,35 +774,35 @@ public class HttpUtils {
         return result;
     }
 
-    /**
-     * 上传文件
-     * @param url
-     * @param fileNmae 文件名称
-     * @param file 文件
-     * @return
-     */
+//    /**
+//     * 上传文件
+//     * @param url
+//     * @param fileNmae 文件名称
+//     * @param file 文件
+//     * @return
+//     */
 
-    public static String upLoadFile(String url, String fileNmae, File file) {
-        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
-//            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
-        String token =my.getString("token","");
-        String result = null;
-        try {
-            com.squareup.okhttp.Response response = OkHttpUtils.post()
-                    .addHeader("authorization",token)
-                    .addHeader(" content-type", "multipart/form-data")
-                    .addFile("file", fileNmae, file)
-                    .url(url)
-                    .build()
-                    .execute();
-            if (response.isSuccessful()) {
-                result = response.code() + "";
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return result;
-    }
+//    public static String upLoadFile(String url, String fileNmae, File file) {
+//        SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+////            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
+//        String token =my.getString("token","");
+//        String result = null;
+//        try {
+//            com.squareup.okhttp.Response response = OkHttpUtils.post()
+//                    .addHeader("authorization",token)
+//                    .addHeader(" content-type", "multipart/form-data")
+//                    .addFile("file", fileNmae, file)
+//                    .url(url)
+//                    .build()
+//                    .execute();
+//            if (response.isSuccessful()) {
+//                result = response.code() + "";
+//            }
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        return result;
+//    }
     public static String upUsedApps(String url,List <AppUsing> appUsings){
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
 //            SharedPreferences userSettings= ge6getSharedPreferences("my", 0);
@@ -858,14 +859,14 @@ public class HttpUtils {
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
         String token =my.getString("token","");
         try {
-            File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
-            int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
-            Cache cache = new Cache(httpCacheDirectory, cacheSize);
+//            File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
+//            int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
+//            Cache cache = new Cache(httpCacheDirectory, cacheSize);
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
                     .baseUrl(baseUrl)
                     .client(new OkHttpClient.Builder()
-                            .connectTimeout(3, TimeUnit.SECONDS)//设置连接超时
+                            .connectTimeout(5, TimeUnit.SECONDS)//设置连接超时
                             .readTimeout(5, TimeUnit.SECONDS)//读取超时
                             .writeTimeout(5, TimeUnit.SECONDS)//写入超时
                             .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
@@ -895,9 +896,9 @@ public class HttpUtils {
         SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
         String token =my.getString("token","");
         try {
-            File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
-            int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
-            Cache cache = new Cache(httpCacheDirectory, cacheSize);
+//            File httpCacheDirectory = new File(MyApplication.getContext().getCacheDir(), "HttpCache");//这里为了方便直接把文件放在了SD卡根目录的HttpCache中，一般放在context.getCacheDir()中
+//            int cacheSize = 10 * 1024 * 1024;//设置缓存文件大小为10M
+//            Cache cache = new Cache(httpCacheDirectory, cacheSize);
             Retrofit retrofit = new Retrofit.Builder()
                     .addConverterFactory(GsonConverterFactory.create())
                     .baseUrl(baseUrl)
@@ -906,7 +907,7 @@ public class HttpUtils {
                             .readTimeout(5, TimeUnit.SECONDS)//读取超时
                             .writeTimeout(5, TimeUnit.SECONDS)//写入超时
                             .addNetworkInterceptor(REWRITE_CACHE_CONTROL_INTERCEPTOR)//添加自定义缓存拦截器（后面讲解），注意这里需要使用.addNetworkInterceptor
-                            .cache(cache)//把缓存添加进来
+//                            .cache(cache)//把缓存添加进来
                             .build())
                     .build();
             HttpService httpService = retrofit.create(HttpService.class);
@@ -952,4 +953,49 @@ public class HttpUtils {
         }
         return result;
     }
+
+    /**
+     * 上传多个文件与文本参数
+     * @param url
+     * @param paramsMap
+     * @param filesMap
+     * @return
+     */
+    public static String upLoadFileAndDesc(String url,Map<String,Object> paramsMap,Map<String,Object> filesMap){
+        String result=null;
+        try {
+            Retrofit retrofit=new Retrofit.Builder()
+                    .addConverterFactory(GsonConverterFactory.create())
+                    .baseUrl(baseUrl)
+                    .build();
+            HttpService userService=retrofit.create(HttpService.class);
+
+            MultipartBody.Builder requestBodyMap = new MultipartBody.Builder().setType(MultipartBody.FORM);
+            for (Map.Entry<String,Object> entry:paramsMap.entrySet()){
+                String key=entry.getKey();
+                String value=entry.getValue()+"";
+                requestBodyMap.addFormDataPart(key,value);
+            }
+            //入参-文件
+            for (Map.Entry entry : filesMap.entrySet()) {
+                File file = (File) entry.getValue();
+                RequestBody requestFile = RequestBody.create(MediaType.parse("image/*"), file);
+                String fileName = file.getName();
+                requestBodyMap.addFormDataPart("files",fileName,requestFile);
+            }
+            SharedPreferences my=MyApplication.getContext().getSharedPreferences("my",Context.MODE_PRIVATE);
+            String token =my.getString("token","");
+            retrofit2.Call<ResponseBody> call = userService.upLoadFileAndDesc(url,token,requestBodyMap.build());
+            retrofit2.Response<ResponseBody> response=call.execute();
+            boolean success=response.isSuccessful();
+            if (success){
+                result=response.body().string();
+            }
+        }catch (Exception e){
+            e.printStackTrace();
+            Log.e("LoadFileAndDesc","-->"+e.getMessage());
+        }
+        return result;
+    }
+
 }

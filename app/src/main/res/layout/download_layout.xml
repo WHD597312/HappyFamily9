@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="@dimen/dp_jy_160"
+    android:layout_height="@dimen/dp_jy_180"
     android:background="@drawable/bg_shape"
     android:id="@+id/rl_homed_del"
     >
@@ -9,18 +9,21 @@
         android:id="@+id/tv_device_del"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="更新版本"
-        android:textColor="@color/color_gray4"
-        android:textSize="16sp"
+        android:text="版本更新"
+        android:textColor="#333333"
+        android:textSize="@dimen/sp_18"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="@dimen/dp_jy_45"
         />
     <ProgressBar
+        android:layout_marginTop="@dimen/dp_jy_20"
         android:id="@+id/progress"
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="@dimen/dp_jy_10"
         android:layout_below="@+id/tv_device_del"
+        android:layout_marginLeft="@dimen/dp_jy_20"
+        android:layout_marginRight="@dimen/dp_jy_20"
         android:progressDrawable="@drawable/progress_bar_layer_list"
         />
 
@@ -35,7 +38,7 @@
         <Button
             android:id="@+id/tv_device_cancel"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_jy_35"
+            android:layout_height="@dimen/dp_jy_40"
             android:background="@drawable/bg_shape_anniugray"
             android:text="取消"
             android:layout_marginRight="@dimen/dp_jy_12"
@@ -47,7 +50,7 @@
         <Button
             android:id="@+id/tv_device_ensure"
             android:layout_width="0dp"
-            android:layout_height="@dimen/dp_jy_35"
+            android:layout_height="@dimen/dp_jy_40"
             android:layout_gravity="center"
             android:gravity="center"
             android:background="@drawable/shape_detail_back"
@@ -56,6 +59,5 @@
             android:text="确定"
             android:layout_weight="1"
             />
-
     </LinearLayout>
 </RelativeLayout>

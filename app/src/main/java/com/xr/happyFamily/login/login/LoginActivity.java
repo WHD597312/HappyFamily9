@@ -118,9 +118,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         imageView.setImageResource(R.mipmap.yanjing13x);
         mContext=this;
 //        imageView.setImageTintList(ColorStateList.valueOf(ContextCompat.getColor(this,R.color.green5)));
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().hide();
-        }
+//        if (getSupportActionBar() != null) {
+//            getSupportActionBar().hide();
+//        }
         preferences = getSharedPreferences("my", MODE_PRIVATE);
 
         if (application == null) {
@@ -145,7 +145,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     }
 
     SharedPreferences preferences;
-    private String login;
+//    private String login;
     @Override
     protected void onStart() {
         super.onStart();
@@ -179,39 +179,39 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     protected void onResume() {
         super.onResume();
     }
-    class CountTimer extends CountDownTimer {
-        public CountTimer(long millisInFuture, long countDownInterval) {
-            super(millisInFuture, countDownInterval);
-        }
-
-        /**
-         * 倒计时过程中调用
-         *
-         * @param millisUntilFinished
-         */
-        @Override
-        public void onTick(long millisUntilFinished) {
-
-            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
-        }
-
-        /**
-         * 倒计时完成后调用
-         */
-
-        @Override
-        public void onFinish() {
-            Log.e("Tag", "倒计时完成");
-            if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
-                loginAsyncTask.cancel(true);
-            }
-            if (hourseAsyncTask!=null && hourseAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
-                hourseAsyncTask.cancel(true);
-            }
-            hideProgressDialog1();
-
-        }
-    }
+//    class CountTimer extends CountDownTimer {
+//        public CountTimer(long millisInFuture, long countDownInterval) {
+//            super(millisInFuture, countDownInterval);
+//        }
+//
+//        /**
+//         * 倒计时过程中调用
+//         *
+//         * @param millisUntilFinished
+//         */
+//        @Override
+//        public void onTick(long millisUntilFinished) {
+//
+//            Log.e("Tag", "倒计时=" + (millisUntilFinished / 1000));
+//        }
+//
+//        /**
+//         * 倒计时完成后调用
+//         */
+//
+//        @Override
+//        public void onFinish() {
+//            Log.e("Tag", "倒计时完成");
+//            if (loginAsyncTask!=null && loginAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+//                loginAsyncTask.cancel(true);
+//            }
+//            if (hourseAsyncTask!=null && hourseAsyncTask.getStatus() == AsyncTask.Status.RUNNING){
+//                hourseAsyncTask.cancel(true);
+//            }
+//            hideProgressDialog1();
+//
+//        }
+//    }
     String phone;
     String password;
 
@@ -241,9 +241,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     Map<String, Object> params = new HashMap<>();
                     params.put("phone", phone);
                     params.put("password", password);
-                    new LoginAsyncTask().execute(params);
-                    CountTimer countTimer = new CountTimer(6000, 1000);
-                    countTimer.start();
+                    new LoginAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
+//                    CountTimer countTimer = new CountTimer(6000, 1000);
+//                    countTimer.start();
                 }else {
                     Utils.showToast(this, "无网络可用，请检查网络");
                 }
@@ -416,8 +416,8 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                        startActivity(intent);
                    }else {
                        userId= String.valueOf(ThirduserId);
-                       new YouguiAsync().execute();
-                       new hourseAsyncTask().execute();
+                       new YouguiAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                       new hourseAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
 
                    }
                     break;
@@ -442,7 +442,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
     LoginAsyncTask loginAsyncTask;
     //隐藏dialog
     public void hideProgressDialog() {
-        if (progressDialog != null){
+        if (progressDialog != null && progressDialog.isShowing()){
             progressDialog.dismiss();
         }
     }
@@ -477,6 +477,10 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
             Map<String, Object> params = maps[0];
             String result = HttpUtils.requestPost(url, params);
             try {
+                if (TextUtils.isEmpty(result)){
+                    Thread.currentThread().sleep(300);
+                    result=HttpUtils.requestPost(url,params);
+                }
                 if (!Utils.isEmpty(result)) {
                     JSONObject jsonObject = new JSONObject(result);
                     code = jsonObject.getInt("returnCode");
@@ -499,8 +503,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                         }
                         boolean success=editor.commit();
                         if (success){
-                            new hourseAsyncTask().execute();
-                            new YouguiAsync().execute();
+
                         }
                     }
                 }
@@ -524,8 +527,9 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
                     hideProgressDialog();
                     break;
                 case 100:
+                    new hourseAsyncTask().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
+                    new YouguiAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                     Log.e("ggggggggggg", "onPostExecute: -->" );
-
                     break;
                     default:
                     hideProgressDialog1();
@@ -739,20 +743,22 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
 
                     break;
                 case 100:
+                    Utils.showToast(LoginActivity.this, "登录成功");
                     Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                     if (mPositionPreferences.contains("position")){
                         mPositionPreferences.edit().clear().commit();
                     }
-                    if (TextUtils.isEmpty(login)){
-                        Utils.showToast(LoginActivity.this, "登录成功");
-                        intent.putExtra("login0","login0");
-                    }
+//                    if (TextUtils.isEmpty(login)){
+//
+//                        intent.putExtra("login0","login0");
+//                    }
+                    hideProgressDialog();
                     running=false;
 //                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK | Intent.FLAG_ACTIVITY_NEW_TASK);
                     intent.putExtra("load","load");
                     intent.putExtra("login","login");
                     startActivity(intent);
-                    hideProgressDialog();
+
                     break;
                     default:
                         Utils.showToast(LoginActivity.this, "网络崩溃啦，请重新登录");
@@ -772,7 +778,7 @@ public class LoginActivity extends CheckPermissionsActivity implements Callback,
         protected Integer doInBackground(Void... voids) {
             int code = 0 ;
             String url = ip+"/happy/derailed/getDerailStatus?adminId="+userId;
-            String result = HttpUtils.getOkHpptRequest(url);
+            String result = HttpUtils.requestGet(url);
             Log.e("yougui", "doInBackground: -->"+result );
             try {
                 if (!TextUtils.isEmpty(result)){

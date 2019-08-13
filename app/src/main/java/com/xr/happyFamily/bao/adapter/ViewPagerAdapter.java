@@ -17,7 +17,6 @@ import com.squareup.picasso.Picasso;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.ShopXQActivity;
 import com.xr.happyFamily.bao.ShopXQActivity3;
-import com.xr.happyFamily.bao.view.LazyViewPager;
 import com.xr.happyFamily.bean.ShopBannerBean;
 import com.xr.happyFamily.bean.ShopPageBean;
 

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    android:id="@+id/rl_header"
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_50"
+    android:background="@drawable/shape_master"
+    >
+    <TextView
+        android:id="@+id/tv_header"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:text="主控设备"
+        android:textSize="@dimen/sp_16"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:layout_marginLeft="@dimen/dp_jy_15"
+        android:layout_centerVertical="true"
+        />
+    <ImageView
+        android:id="@+id/img_add"
+        android:layout_width="@dimen/dp_jy_40"
+        android:layout_height="@dimen/dp_jy_40"
+        android:src="@mipmap/heater_smart_add"
+        android:scaleType="centerInside"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="@dimen/dp_jy_15"
+        android:layout_centerVertical="true"
+        />
+
+</RelativeLayout>

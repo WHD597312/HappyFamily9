@@ -271,6 +271,13 @@ public class FamilyFragmentManager extends Fragment {
                     case 8:
                         onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
                         offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
+                        break;
+                    case 9:
+                        onlineTopicName = "p99/heater/" + macAddress + "/transfer";
+                        offlineTopicName = "p99/heater/" + macAddress + "/lwt";
+
+
+                        break;
                 }
                 try {
                     if (bound) {
@@ -286,6 +293,10 @@ public class FamilyFragmentManager extends Fragment {
                         }
                         if (type==2){
                             mqService.sendData(macAddress);
+                        }else if (type==9){
+                            String topicName3="p99/heater/"+macAddress+"/upgrade/transfer";
+                            mqService.subscribe(topicName3,1);
+                            mqService.getData(macAddress);
                         }
                         Log.i("step", "-->" + step1 + "," + step2);
                     }

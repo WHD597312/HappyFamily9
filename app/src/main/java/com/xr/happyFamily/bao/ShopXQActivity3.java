@@ -73,9 +73,11 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -275,10 +277,10 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
     @Override
     public void onResume() {
+        super.onResume();
         Map<String, Object> params2 = new HashMap<>();
         params2.put("userId", userId);
-        new getAddressAsync().execute(params2);
-        super.onResume();
+        new getAddressAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params2);
     }
 
 
@@ -411,7 +413,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     Map<String, Object> params = new HashMap<>();
                     params.put("priceId", priceId);
                     params.put("quantity", num);
-                    new addShopAsync().execute(params);
+                    new addShopAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                 }
 
                 break;
@@ -534,7 +536,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
             Map<String, Object> params = maps[0];
             String url = "receive/getDefaultReceive";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.requestPost(url, params);
             String code = "";
 
             try {
@@ -587,7 +589,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
             Map<String, Object> params = maps[0];
             String url = "shoppingcart/addOneToShoppingCart";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.requestPost(url, params);
             String code = "";
 
             try {
@@ -708,11 +710,10 @@ public class ShopXQActivity3 extends AppCompatActivity {
                     Map<String, Object> params = new HashMap<>();
                     params.put("priceId", priceId);
                     params.put("quantity", num);
-                    new addShopAsync().execute(params);
+                    new addShopAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
                 } else {
                     Toast.makeText(mContext, "请选择商品规格", Toast.LENGTH_SHORT).show();
                 }
-
             }
         });
         tv_buy.setOnClickListener(new View.OnClickListener() {
@@ -795,19 +796,20 @@ public class ShopXQActivity3 extends AppCompatActivity {
     public List<GoodsPrice> getList() {
         return list_price;
     }
-
+    Map<String, Object> params = new ConcurrentHashMap<>();
+    Map<String, Object> params2 = new ConcurrentHashMap<>();
     public void setmTitle() {
-        Map<String, Object> params = new HashMap<>();
+        params.clear();
         params.put("goodsId", goodsId);
         dialog = MyDialog.showDialog(mContext);
         dialog.show();
-        new getShopAsync().execute(params);
-        Map<String, Object> params2 = new HashMap<>();
+        new getShopAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
+        params2.clear();
         params2.put("userId", userId);
-        new getAddressAsync().execute(params2);
+        new getAddressAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params2);
 
-        new getRateAsync().execute(params);
-        new getCountAsync().execute(params);
+        new getRateAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
+        new getCountAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
 
     }
 
@@ -822,7 +824,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
         protected String doInBackground(Map<String, Object>... maps) {
             Map<String, Object> params = maps[0];
             String url = "goods/getGoodsById";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.requestPost(url, params);
             String code = "";
 
             try {
@@ -1026,7 +1028,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
         params.put("goodsId", goodsId);
         if (!"全部".equals(tag))
             params.put("tag", tag);
-        new getRateAsync().execute(params);
+        new getRateAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
     }
 
 
@@ -1041,7 +1043,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
             Map<String, Object> params = maps[0];
             String url = "order/getCountRate";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.requestPost(url, params);
             Log.i("result","-->"+result);
             String code = "";
 
@@ -1124,7 +1126,7 @@ public class ShopXQActivity3 extends AppCompatActivity {
 
             Map<String, Object> params = maps[0];
             String url = "order/getRateByGoodsIdAndTag";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.requestPost(url, params);
             String code = "";
 
             try {
@@ -1157,42 +1159,46 @@ public class ShopXQActivity3 extends AppCompatActivity {
         @Override
         protected void onPostExecute(String s) {
             super.onPostExecute(s);
-            if (!Utils.isEmpty(s) && "100".equals(s)) {
-//                Log.e("qqqqqqqqqqqRece",receive.getContact()+"!");
-//                pinglunAdapter.notifyDataSetChanged();
-                pinglunAdapter.notifyDataSetChanged();
-                if (shopPinglunBeanList.size() == 0) {
-                    tvPinglunNodata.setVisibility(View.VISIBLE);
-                    llPingjiaData.setVisibility(View.GONE);
-                } else {
-                    int last = shopPinglunBeanList.size() - 1;
-                    tvNumber.setText("评论（" + shopPinglunBeanList.size() + "）");
-                    llPingjiaData.setVisibility(View.VISIBLE);
-                    tvPinglunNodata.setVisibility(View.GONE);
-                    if (shopPinglunBeanList.get(last).getHeadImgUrl() != null)
-                        Glide.with(mContext).load(shopPinglunBeanList.get(last).getHeadImgUrl().toString()).transform(new GlideCircleTransform(getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(imgTouxiang);
-                    for (int i = 0; i < shopPinglunBeanList.get(last).getBuyerRate(); i++) {
-                        imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);
+            try {
+                if (!Utils.isEmpty(s) && "100".equals(s)) {
+    //                Log.e("qqqqqqqqqqqRece",receive.getContact()+"!");
+    //                pinglunAdapter.notifyDataSetChanged();
+                    pinglunAdapter.notifyDataSetChanged();
+                    if (shopPinglunBeanList.size() == 0) {
+                        tvPinglunNodata.setVisibility(View.VISIBLE);
+                        llPingjiaData.setVisibility(View.GONE);
+                    } else {
+                        int last = shopPinglunBeanList.size() - 1;
+                        tvNumber.setText("评论（" + shopPinglunBeanList.size() + "）");
+                        llPingjiaData.setVisibility(View.VISIBLE);
+                        tvPinglunNodata.setVisibility(View.GONE);
+                        if (shopPinglunBeanList.get(last).getHeadImgUrl() != null)
+                            Glide.with(mContext).load(shopPinglunBeanList.get(last).getHeadImgUrl().toString()).transform(new GlideCircleTransform(getApplicationContext())).error(R.mipmap.ic_touxiang_moren).into(imgTouxiang);
+                        for (int i = 0; i < shopPinglunBeanList.get(last).getBuyerRate(); i++) {
+                            imgs[i].setImageResource(R.mipmap.ic_pl_xx_true);
+                        }
+                        if(shopPinglunBeanList.get(last).getUsername()!=null) {
+                            if (shopPinglunBeanList.get(last).getAnonymous())
+                                tvPinglunName.setText("匿名");
+                            else
+                                tvPinglunName.setText(shopPinglunBeanList.get(last).getUsername());
+                        }
+                        tvPinglun.setText(shopPinglunBeanList.get(last).getComment());
+                        tvPinglunTime.setText(TimeUtils.getTime(shopPinglunBeanList.get(last).getCreateTime() + ""));
                     }
-                    if(shopPinglunBeanList.get(last).getUsername()!=null) {
-                        if (shopPinglunBeanList.get(last).getAnonymous())
-                            tvPinglunName.setText("匿名");
-                        else
-                            tvPinglunName.setText(shopPinglunBeanList.get(last).getUsername());
+    //                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
+                } else if (!Utils.isEmpty(s) && "401".equals(s)) {
+                    Toast.makeText(mContext, "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
+                    SharedPreferences preferences;
+                    preferences = mContext.getSharedPreferences("my", MODE_PRIVATE);
+                    MyDialog.setStart(false);
+                    if (preferences.contains("password")) {
+                        preferences.edit().remove("password").commit();
                     }
-                    tvPinglun.setText(shopPinglunBeanList.get(last).getComment());
-                    tvPinglunTime.setText(TimeUtils.getTime(shopPinglunBeanList.get(last).getCreateTime() + ""));
+                    startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
                 }
-//                    tvAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
-            } else if (!Utils.isEmpty(s) && "401".equals(s)) {
-                Toast.makeText(mContext, "用户信息超时请重新登陆", Toast.LENGTH_SHORT).show();
-                SharedPreferences preferences;
-                preferences = mContext.getSharedPreferences("my", MODE_PRIVATE);
-                MyDialog.setStart(false);
-                if (preferences.contains("password")) {
-                    preferences.edit().remove("password").commit();
-                }
-                startActivity(new Intent(mContext.getApplicationContext(), LoginActivity.class));
+            } catch (Exception e) {
+                e.printStackTrace();
             }
         }
 

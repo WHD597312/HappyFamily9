@@ -277,7 +277,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
         params.put("pageNum", page + "");
         params.put("pageRow", "6");
         params.put("state",state);
-        new ShopAsync().execute(params);
+        new ShopAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
     }
 
     Boolean isData = true;
@@ -298,7 +298,7 @@ public class ShopSearchResultActivity extends AppCompatActivity {
             }else if(state==2){
                 url=url+"&desc=1";
             }
-            String result = HttpUtils.doGet(ShopSearchResultActivity.this, url);
+            String result = HttpUtils.requestGet(url);
             String code = "";
 
             try {

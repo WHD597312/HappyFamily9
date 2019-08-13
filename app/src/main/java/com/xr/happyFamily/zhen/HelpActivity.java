@@ -197,7 +197,7 @@ public class HelpActivity extends AppCompatActivity implements ImagePickerAdapte
                                 break;
                             case 1:
                                 //打开选择,本次允许选择的数量
-                                ImagePicker.getInstance().setSelectLimit(maxImgCount - selImageList.size());
+                                ImagePicker.getInstance().setSelectLimit(1);
                                 Intent intent1 = new Intent(HelpActivity.this, ImageGridActivity.class);
                                 startActivityForResult(intent1, REQUEST_CODE_SELECT);
                                 break;
@@ -262,7 +262,7 @@ public class HelpActivity extends AppCompatActivity implements ImagePickerAdapte
             Map<String,Object> paramsMap=maps[0];
             Map<String, Object> fileMap=maps[1];
             try {
-                String result=HttpUtils.upFileAndDesc(upUrl,paramsMap,fileMap);
+                String result=HttpUtils.upLoadFileAndDesc(upUrl,paramsMap,fileMap);
                 Log.i("result","-->"+result);
                 if (!TextUtils.isEmpty(result)){
                     JSONObject jsonObject = new JSONObject(result);

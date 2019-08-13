@@ -64,7 +64,6 @@
     <dimen name="dp_jy_58">58dp</dimen>
     <dimen name="dp_jy_59">59dp</dimen>
     <dimen name="dp_jy_60">60dp</dimen>
-    <dimen name="dp_jy_60.5">60.5dp</dimen>
     <dimen name="dp_jy_61">61dp</dimen>
     <dimen name="dp_jy_62">62dp</dimen>
     <dimen name="dp_jy_63">63dp</dimen>
@@ -99,7 +98,6 @@
     <dimen name="dp_jy_92">92dp</dimen>
     <dimen name="dp_jy_93">93dp</dimen>
     <dimen name="dp_jy_94">94dp</dimen>
-    <dimen name="dp_jy_94.5">94.5dp</dimen>
     <dimen name="dp_jy_95">95dp</dimen>
     <dimen name="dp_jy_96">96dp</dimen>
     <dimen name="dp_jy_97">97dp</dimen>
@@ -199,7 +197,6 @@
     <dimen name="dp_jy_191">191dp</dimen>
     <dimen name="dp_jy_192">192dp</dimen>
     <dimen name="dp_jy_193">193dp</dimen>
-    <dimen name="dp_jy_193.75">193.75dp</dimen>
     <dimen name="dp_jy_194">194dp</dimen>
     <dimen name="dp_jy_195">195dp</dimen>
     <dimen name="dp_jy_196">196dp</dimen>
@@ -307,6 +304,7 @@
     <dimen name="dp_jy_298">298dp</dimen>
     <dimen name="dp_jy_299">299dp</dimen>
     <dimen name="dp_jy_300">300dp</dimen>
+    <dimen name="dp_jy_320">320dp</dimen>
     <dimen name="dp_jy_380">380dp</dimen>
     <dimen name="dp_jy_400">400dp</dimen>
     <dimen name="dp_jy_445">445dp</dimen>
@@ -316,6 +314,7 @@
     <dimen name="dp_jy_479">479dp</dimen>
     <dimen name="dp_jy_480">480dp</dimen>
     <dimen name="dp_jy_490">490dp</dimen>
+    <dimen name="dp__35">-35dp</dimen>
     <dimen name="sp_5">5sp</dimen>
     <dimen name="sp_6">6sp</dimen>
     <dimen name="sp_7">7sp</dimen>

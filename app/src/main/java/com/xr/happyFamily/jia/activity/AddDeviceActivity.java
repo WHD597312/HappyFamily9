@@ -325,7 +325,7 @@ public class AddDeviceActivity extends AppCompatActivity implements EasyPermissi
                 if (matchMethod==0 && Utils.isEmpty(wifiName)){
                     Utils.showToast(AddDeviceActivity.this, "请连接英文名称的wifi");
                 }else if (matchMethod==0 && !Utils.isEmpty(wifiName)){
-                    Utils.showToast(AddDeviceActivity.this, "WiFi名称不接编辑");
+                    Utils.showToast(AddDeviceActivity.this, "WiFi名称不能编辑");
                 }
                 break;
             case R.id.back:
@@ -424,6 +424,15 @@ public class AddDeviceActivity extends AppCompatActivity implements EasyPermissi
                         popupmenuWindow3();
                         isMatching=true;
                         wifiName=ssid;
+//                        Map<String, Object> params = new HashMap<>();
+//                        params.put("deviceName", "asdf1245");
+//                        params.put("deviceType", 0);
+//                        params.put("deviceMacAddress", "heateasdf12478");
+//                        params.put("houseId", houseId);
+//                        params.put("roomId", roomId);
+//                        String userId = my.getString("userId", "");
+//                        params.put("userId", userId);
+//                        new AddDeviceInOldRoomAsync().execute(params);
                         new EsptouchAsyncTask3().execute(ssid, apBssid, apPassword, taskResultCountStr);
                     }
                 }else {
@@ -764,7 +773,7 @@ public class AddDeviceActivity extends AppCompatActivity implements EasyPermissi
                     }
                 }
                 popupWindow2.dismiss();
-                backgroundAlpha(1f);
+                    backgroundAlpha(1f);
 
             }
             //设置倒计时结束之后的按钮样式

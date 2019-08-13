@@ -14,6 +14,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ApplicationInfo;
 import android.content.pm.PackageManager;
+import android.content.res.Configuration;
 import android.graphics.Bitmap;
 import android.graphics.Canvas;
 import android.graphics.Paint;
@@ -640,10 +641,10 @@ public class ClockService extends Service {
         editor2.putStringSet("clockSignTime", setList);
 
         editor2.commit();
-        Notification notification = new Notification.Builder(getApplicationContext())
-                .setWhen(System.currentTimeMillis())
-                .build();
-        startForeground(110, notification);
+//        Notification notification = new Notification.Builder(getApplicationContext())
+//                .setWhen(System.currentTimeMillis())
+//                .build();
+//        startForeground(110, notification);
 //        startClock();
         return START_NOT_STICKY;
     }
@@ -836,7 +837,20 @@ public class ClockService extends Service {
         });
         qinglvClockDialog.setCanceledOnTouchOutside(false);
         qinglvClockDialog.setCancelable(false);
-        qinglvClockDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+            params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+
+            qinglvClockDialog.getWindow().setAttributes(params);
+        } else {
+            qinglvClockDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         qinglvClockDialog.show();
     }
 
@@ -858,7 +872,20 @@ public class ClockService extends Service {
         });
         qunzuClockDialog.setCanceledOnTouchOutside(false);
         qunzuClockDialog.setCancelable(false);
-        qunzuClockDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+            params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+
+            qunzuClockDialog.getWindow().setAttributes(params);
+        } else {
+            qunzuClockDialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         qunzuClockDialog.show();
     }
 
@@ -889,7 +916,20 @@ public class ClockService extends Service {
         dialog4.setCancelable(false);
         dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
 
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+            params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
 
+            dialog4.getWindow().setAttributes(params);
+        } else {
+            dialog4.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         dialog4.show();
 
     }
@@ -912,7 +952,20 @@ public class ClockService extends Service {
         });
         dialog2.setCanceledOnTouchOutside(false);
         dialog2.setCancelable(false);
-        dialog2.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+            params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+
+            dialog2.getWindow().setAttributes(params);
+        } else {
+            dialog2.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         dialog2.show();
     }
 
@@ -935,9 +988,23 @@ public class ClockService extends Service {
 
             }
         });
+
         dialog.setCanceledOnTouchOutside(false);
         dialog.setCancelable(false);
-        dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        if (Build.VERSION.SDK_INT >= 26) {//8.0新特性
+            WindowManager.LayoutParams params = new WindowManager.LayoutParams();
+            params.screenOrientation = Configuration.ORIENTATION_PORTRAIT;
+            params.type = WindowManager.LayoutParams.TYPE_APPLICATION_OVERLAY;
+            params.flags = WindowManager.LayoutParams.FLAG_NOT_FOCUSABLE
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS
+                    | WindowManager.LayoutParams.FLAG_LAYOUT_IN_SCREEN
+                    | WindowManager.LayoutParams.FLAG_NOT_TOUCH_MODAL
+                    | WindowManager.LayoutParams.FLAG_SHOW_WHEN_LOCKED;
+
+            dialog.getWindow().setAttributes(params);
+        } else {
+            dialog.getWindow().setType(WindowManager.LayoutParams.TYPE_SYSTEM_ALERT);
+        }
         dialog.show();
     }
 

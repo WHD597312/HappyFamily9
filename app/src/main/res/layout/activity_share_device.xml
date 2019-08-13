@@ -99,7 +99,19 @@
             android:text="升级"
             android:textSize="@dimen/sp_16"
             />
-
+        <Button
+            android:visibility="gone"
+            android:id="@+id/btn_update_version2"
+            android:layout_width="wrap_content"
+            android:layout_height="@dimen/dp_jy_25"
+            android:layout_alignTop="@+id/tv_version"
+            android:layout_centerVertical="true"
+            android:layout_toRightOf="@+id/btn_update_version"
+            android:layout_marginLeft="@dimen/dp_jy_10"
+            android:background="@drawable/shape_device_update_version"
+            android:text="升级"
+            android:textSize="@dimen/sp_16"
+            />
         <ImageView
             android:id="@+id/img_qrCode"
             android:layout_below="@+id/btn_update_version"

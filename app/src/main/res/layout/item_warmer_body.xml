@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="@dimen/dp_jy_80"
+    android:background="@color/white"
+    >
+    <View
+        android:layout_marginTop="@dimen/dp_jy_15"
+        android:id="@+id/view"
+        android:layout_width="@dimen/dp_jy_14"
+        android:layout_height="@dimen/dp_jy_14"
+        android:background="#54BB6A"
+        android:layout_marginLeft="@dimen/dp_jy_15"
+
+        />
+    <TextView
+        android:layout_marginTop="@dimen/dp_jy_10"
+        android:layout_toRightOf="@+id/view"
+        android:id="@+id/tv_device"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="设备"
+        android:textColor="@color/heater_black"
+        android:textSize="@dimen/sp_18"
+        android:layout_marginLeft="@dimen/dp_jy_7"
+        />
+    <TextView
+        android:id="@+id/tv_offline"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tv_device"
+        android:text="离线"
+        android:layout_alignLeft="@id/tv_device"
+        android:layout_marginTop="@dimen/dp_jy_5"
+        android:textSize="@dimen/sp_14"
+        android:layout_marginBottom="@dimen/dp_jy_10"
+        />
+    <ImageView
+        android:id="@+id/img_arrow"
+        android:layout_width="@dimen/dp_jy_40"
+        android:layout_height="@dimen/dp_jy_40"
+        android:layout_centerVertical="true"
+        android:layout_alignParentRight="true"
+        android:scaleType="centerInside"
+        android:src="@mipmap/heater_arrow"
+        android:layout_marginRight="@dimen/dp_jy_15"
+        />
+    <View
+        android:id="@+id/view2"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dp_jy_1"
+        android:layout_alignParentBottom="true"
+        android:background="#dddddd"
+        android:layout_marginLeft="@dimen/dp_jy_15"
+        android:layout_marginRight="@dimen/dp_jy_15"
+        android:visibility="gone"
+        />
+</RelativeLayout>

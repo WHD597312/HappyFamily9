@@ -122,6 +122,14 @@ public class ShopConfActivity extends AppCompatActivity {
         application.addActivity(this);
         setContentView(R.layout.activity_shop_conf);
         ButterKnife.bind(this);
+        Map<String, Object> params = new HashMap<>();
+        SharedPreferences userSettings = getSharedPreferences("my", 0);
+        String url = userSettings.getString("userId", "1000");
+        params.put("userId", url);
+        /*获取地址信息*/
+
+//        new getAddressAsync().execute(params);
+        new getAddressAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params) ;
 
         mContext = ShopConfActivity.this;
         titleText.setText("确认信息");
@@ -140,11 +148,7 @@ public class ShopConfActivity extends AppCompatActivity {
         pay_false = getResources().getDrawable(R.mipmap.weixuanzhong3x);
         pay_true.setBounds(0, 0, pay_true.getMinimumWidth(), pay_true.getMinimumHeight());
         pay_false.setBounds(0, 0, pay_false.getMinimumWidth(), pay_false.getMinimumHeight());
-        Map<String, Object> params = new HashMap<>();
-        SharedPreferences userSettings = getSharedPreferences("my", 0);
-        String url = userSettings.getString("userId", "1000");
-        params.put("userId", url);
-        new getAddressAsync().execute(params);
+
         Bundle bundle = getIntent().getExtras();
         type = bundle.getString("type");
         if ("DingDan".equals(type)) {
@@ -233,7 +237,8 @@ public class ShopConfActivity extends AppCompatActivity {
                     params.put("orderDetailsList", mlist);
                     //邮费
                     params.put("postFee", 0);
-                    new postOrderAsync().execute(params);
+                    new postOrderAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params) ;
+//                    new postOrderAsync().execute(params);
                 } else {
                     ToastUtil.showShortToast("请先设置收货地址");
                 }
@@ -277,9 +282,8 @@ public class ShopConfActivity extends AppCompatActivity {
 
             Map<String, Object> params = maps[0];
             String url = "receive/getDefaultReceive";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.requestPost( url, params);
             String code = "";
-
             try {
                 if (!Utils.isEmpty(result)) {
                     if (result.length() < 6) {
@@ -310,12 +314,14 @@ public class ShopConfActivity extends AppCompatActivity {
                     tvConfAddress.setText(receive.getReceiveProvince() + " " + receive.getReceiveCity() + " " + receive.getReceiveCounty() + " " + receive.getReceiveAddress());
                     tvConfName.setText(receive.getContact());
                     tvConfTel.setText(receive.getTel());
-                    Map<String, Object> params = new HashMap<>();
-                    params.put("goodsName", "hello");
-//                    params.put("weight", );
-                    params.put("receiveId", receiveId);
-                    params.put("weight", weight);
-                    new getPostFeeAsync().execute(params);
+                    if (isShopData&&isAddress)
+                        MyDialog.closeDialog(dialog);
+//                    Map<String, Object> params = new HashMap<>();
+//                    params.put("goodsName", "hello");
+////                    params.put("weight", );
+//                    params.put("receiveId", receiveId);
+//                    params.put("weight", weight);
+//                    new getPostFeeAsync().execute(params);
 
 
                 } else {
@@ -340,7 +346,8 @@ public class ShopConfActivity extends AppCompatActivity {
 
             Map<String, Object> params = maps[0];
             String url = "logistics/getPostFee";
-            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+//            String result = HttpUtils.headerPostOkHpptRequest(mContext, url, params);
+            String result = HttpUtils.postOkHpptRequest(  HttpUtils.baseUrl+url, params);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
@@ -496,7 +503,6 @@ public class ShopConfActivity extends AppCompatActivity {
             if (!Utils.isEmpty(s) && "100".equals(s)) {
                 isShopData = true;
                 dingDanXQAdapter.notifyDataSetChanged();
-
                 if (isShopData && isAddress)
                     MyDialog.closeDialog(dialog);
             } else if (!Utils.isEmpty(s) && "401".equals(s)) {
@@ -519,6 +525,6 @@ public class ShopConfActivity extends AppCompatActivity {
         SharedPreferences userSettings = getSharedPreferences("my", 0);
         String url = userSettings.getString("userId", "1000");
         params.put("userId", url);
-        new getAddressAsync().execute(params);
+        new getAddressAsync().executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR,params);
     }
 }

@@ -35,6 +35,7 @@ import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.HourseDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.ChangeEquipmentActivity;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.ChooseHourseActivity;
@@ -47,6 +48,7 @@ import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
+import com.xr.happyFamily.jia.activity.WamerActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
@@ -272,6 +274,27 @@ public class FamilyFragment extends Fragment {
                                 startActivityForResult(intent, 6000);
                             } else {
                                 Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 9) {
+                            if (online) {
+                                int heaterControl = deviceChild.getHeaterControl();
+                                if (heaterControl == 3) {
+                                    ToastUtil.showShortToast("从设备不能操作");
+                                } else {
+                                    String deviceName = deviceChild.getName();
+                                    long deviceId = deviceChild.getId();
+                                    Intent intent = new Intent(getActivity(), WamerActivity.class);
+                                    intent.putExtra("deviceName", deviceName);
+                                    intent.putExtra("deviceId", deviceId);
+                                    intent.putExtra("houseId", houseId);
+                                    intent.putExtra("device", deviceChild);
+                                    startActivityForResult(intent, 6000);
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                                if (mqService!=null){
+                                    mqService.getData(deviceChild.getMacAddress());
+                                }
                             }
                         }
                     }

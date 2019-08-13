@@ -34,124 +34,133 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         public final static Property Share = new Property(7, String.class, "share", false, "SHARE");
         public final static Property Type = new Property(8, int.class, "type", false, "TYPE");
         public final static Property BusModel = new Property(9, int.class, "busModel", false, "BUS_MODEL");
-        public final static Property MacAddress = new Property(10, String.class, "macAddress", false, "MAC_ADDRESS");
-        public final static Property Name = new Property(11, String.class, "name", false, "NAME");
-        public final static Property TimerMoudle = new Property(12, int.class, "timerMoudle", false, "TIMER_MOUDLE");
-        public final static Property McuVersion = new Property(13, String.class, "mcuVersion", false, "MCU_VERSION");
-        public final static Property WifiVersion = new Property(14, String.class, "wifiVersion", false, "WIFI_VERSION");
-        public final static Property WaramerSetTemp = new Property(15, int.class, "waramerSetTemp", false, "WARAMER_SET_TEMP");
-        public final static Property WarmerCurTemp = new Property(16, int.class, "warmerCurTemp", false, "WARMER_CUR_TEMP");
-        public final static Property WarmerSampleData = new Property(17, int.class, "warmerSampleData", false, "WARMER_SAMPLE_DATA");
-        public final static Property WarmerRatePower = new Property(18, int.class, "warmerRatePower", false, "WARMER_RATE_POWER");
-        public final static Property WarmerCurRunRoatePower = new Property(19, int.class, "warmerCurRunRoatePower", false, "WARMER_CUR_RUN_ROATE_POWER");
-        public final static Property WarmerRunState = new Property(20, int.class, "warmerRunState", false, "WARMER_RUN_STATE");
-        public final static Property DeviceState = new Property(21, int.class, "deviceState", false, "DEVICE_STATE");
-        public final static Property WarmerFall = new Property(22, int.class, "warmerFall", false, "WARMER_FALL");
-        public final static Property RateState = new Property(23, String.class, "rateState", false, "RATE_STATE");
-        public final static Property Lock = new Property(24, int.class, "lock", false, "LOCK");
-        public final static Property Week = new Property(25, int.class, "week", false, "WEEK");
-        public final static Property TimerOpenOneHour = new Property(26, int.class, "timerOpenOneHour", false, "TIMER_OPEN_ONE_HOUR");
-        public final static Property TimerOpenOneMin = new Property(27, int.class, "timerOpenOneMin", false, "TIMER_OPEN_ONE_MIN");
-        public final static Property TimerCloseOneHour = new Property(28, int.class, "timerCloseOneHour", false, "TIMER_CLOSE_ONE_HOUR");
-        public final static Property TimerCloseOneMin = new Property(29, int.class, "timerCloseOneMin", false, "TIMER_CLOSE_ONE_MIN");
-        public final static Property TimerOpenTwoHour = new Property(30, int.class, "timerOpenTwoHour", false, "TIMER_OPEN_TWO_HOUR");
-        public final static Property TimerOpenTwoMin = new Property(31, int.class, "timerOpenTwoMin", false, "TIMER_OPEN_TWO_MIN");
-        public final static Property TimerCloseTwoHour = new Property(32, int.class, "timerCloseTwoHour", false, "TIMER_CLOSE_TWO_HOUR");
-        public final static Property TimerCloseTwoMin = new Property(33, int.class, "timerCloseTwoMin", false, "TIMER_CLOSE_TWO_MIN");
-        public final static Property TimerOpenThrHour = new Property(34, int.class, "timerOpenThrHour", false, "TIMER_OPEN_THR_HOUR");
-        public final static Property TimerOpenThrMin = new Property(35, int.class, "timerOpenThrMin", false, "TIMER_OPEN_THR_MIN");
-        public final static Property TimerCloseThrHour = new Property(36, int.class, "timerCloseThrHour", false, "TIMER_CLOSE_THR_HOUR");
-        public final static Property TimerCloseThrMin = new Property(37, int.class, "timerCloseThrMin", false, "TIMER_CLOSE_THR_MIN");
-        public final static Property TimerOpenForHour = new Property(38, int.class, "timerOpenForHour", false, "TIMER_OPEN_FOR_HOUR");
-        public final static Property TimerOpenForMin = new Property(39, int.class, "timerOpenForMin", false, "TIMER_OPEN_FOR_MIN");
-        public final static Property TimerCloseForHour = new Property(40, int.class, "timerCloseForHour", false, "TIMER_CLOSE_FOR_HOUR");
-        public final static Property TimerCloseForMin = new Property(41, int.class, "timerCloseForMin", false, "TIMER_CLOSE_FOR_MIN");
-        public final static Property TimerOne = new Property(42, int.class, "timerOne", false, "TIMER_ONE");
-        public final static Property TimerTwo = new Property(43, int.class, "timerTwo", false, "TIMER_TWO");
-        public final static Property TimerThr = new Property(44, int.class, "timerThr", false, "TIMER_THR");
-        public final static Property TimerFor = new Property(45, int.class, "timerFor", false, "TIMER_FOR");
-        public final static Property LockState = new Property(46, int.class, "lockState", false, "LOCK_STATE");
-        public final static Property ScreenState = new Property(47, int.class, "screenState", false, "SCREEN_STATE");
-        public final static Property CurRunState2 = new Property(48, int.class, "curRunState2", false, "CUR_RUN_STATE2");
-        public final static Property CurRunState3 = new Property(49, int.class, "curRunState3", false, "CUR_RUN_STATE3");
-        public final static Property TimerHour = new Property(50, int.class, "timerHour", false, "TIMER_HOUR");
-        public final static Property TimerMin = new Property(51, int.class, "timerMin", false, "TIMER_MIN");
-        public final static Property CheckCode = new Property(52, int.class, "checkCode", false, "CHECK_CODE");
-        public final static Property EndCode = new Property(53, int.class, "endCode", false, "END_CODE");
-        public final static Property UserId = new Property(54, int.class, "userId", false, "USER_ID");
-        public final static Property Img = new Property(55, int.class, "img", false, "IMG");
-        public final static Property DeviceId = new Property(56, int.class, "deviceId", false, "DEVICE_ID");
-        public final static Property Linked = new Property(57, int.class, "linked", false, "LINKED");
-        public final static Property LinkedSensorId = new Property(58, int.class, "linkedSensorId", false, "LINKED_SENSOR_ID");
-        public final static Property ShareId = new Property(59, long.class, "shareId", false, "SHARE_ID");
-        public final static Property SensorState = new Property(60, int.class, "sensorState", false, "SENSOR_STATE");
-        public final static Property SensorSimpleTemp = new Property(61, int.class, "sensorSimpleTemp", false, "SENSOR_SIMPLE_TEMP");
-        public final static Property SensorSimpleHum = new Property(62, int.class, "sensorSimpleHum", false, "SENSOR_SIMPLE_HUM");
-        public final static Property SorsorPm = new Property(63, int.class, "sorsorPm", false, "SORSOR_PM");
-        public final static Property SensorOx = new Property(64, int.class, "sensorOx", false, "SENSOR_OX");
-        public final static Property SensorHcho = new Property(65, int.class, "sensorHcho", false, "SENSOR_HCHO");
-        public final static Property SocketPowerHigh = new Property(66, int.class, "socketPowerHigh", false, "SOCKET_POWER_HIGH");
-        public final static Property SocketPowerLow = new Property(67, int.class, "socketPowerLow", false, "SOCKET_POWER_LOW");
-        public final static Property SocketPower = new Property(68, int.class, "socketPower", false, "SOCKET_POWER");
-        public final static Property SocketTemp = new Property(69, int.class, "socketTemp", false, "SOCKET_TEMP");
-        public final static Property SocketState = new Property(70, int.class, "socketState", false, "SOCKET_STATE");
-        public final static Property SocketTimer = new Property(71, int.class, "socketTimer", false, "SOCKET_TIMER");
-        public final static Property SocketTimerHour = new Property(72, int.class, "socketTimerHour", false, "SOCKET_TIMER_HOUR");
-        public final static Property SocketTimerMin = new Property(73, int.class, "socketTimerMin", false, "SOCKET_TIMER_MIN");
-        public final static Property SocketCurrent = new Property(74, int.class, "socketCurrent", false, "SOCKET_CURRENT");
-        public final static Property SocketVal = new Property(75, int.class, "socketVal", false, "SOCKET_VAL");
-        public final static Property SocketPowerConsume = new Property(76, int.class, "socketPowerConsume", false, "SOCKET_POWER_CONSUME");
-        public final static Property TimerSwitch = new Property(77, int.class, "timerSwitch", false, "TIMER_SWITCH");
-        public final static Property WaterLevel = new Property(78, int.class, "waterLevel", false, "WATER_LEVEL");
-        public final static Property WindLevel = new Property(79, String.class, "windLevel", false, "WIND_LEVEL");
-        public final static Property EquipRatedPowerHigh = new Property(80, int.class, "equipRatedPowerHigh", false, "EQUIP_RATED_POWER_HIGH");
-        public final static Property EquipRatedPowerLow = new Property(81, int.class, "equipRatedPowerLow", false, "EQUIP_RATED_POWER_LOW");
-        public final static Property EquipCurdPowerHigh = new Property(82, int.class, "equipCurdPowerHigh", false, "EQUIP_CURD_POWER_HIGH");
-        public final static Property EquipCurdPowerLow = new Property(83, int.class, "equipCurdPowerLow", false, "EQUIP_CURD_POWER_LOW");
-        public final static Property FaultCode = new Property(84, int.class, "faultCode", false, "FAULT_CODE");
-        public final static Property PurifierState = new Property(85, String.class, "purifierState", false, "PURIFIER_STATE");
-        public final static Property DehumSetTemp = new Property(86, int.class, "dehumSetTemp", false, "DEHUM_SET_TEMP");
-        public final static Property DehumSetHum = new Property(87, int.class, "dehumSetHum", false, "DEHUM_SET_HUM");
-        public final static Property DehumInnerTemp = new Property(88, int.class, "dehumInnerTemp", false, "DEHUM_INNER_TEMP");
-        public final static Property DehumOuterTemp = new Property(89, int.class, "dehumOuterTemp", false, "DEHUM_OUTER_TEMP");
-        public final static Property DehumSleep = new Property(90, int.class, "dehumSleep", false, "DEHUM_SLEEP");
-        public final static Property DehumAnion = new Property(91, int.class, "dehumAnion", false, "DEHUM_ANION");
-        public final static Property DehumDrying = new Property(92, int.class, "dehumDrying", false, "DEHUM_DRYING");
-        public final static Property DehumDefrost = new Property(93, int.class, "dehumDefrost", false, "DEHUM_DEFROST");
-        public final static Property ACondState = new Property(94, String.class, "aCondState", false, "A_COND_STATE");
-        public final static Property ACondSetTemp1 = new Property(95, int.class, "aCondSetTemp1", false, "A_COND_SET_TEMP1");
-        public final static Property ACondSetTemp2 = new Property(96, int.class, "aCondSetTemp2", false, "A_COND_SET_TEMP2");
-        public final static Property ACondSetData = new Property(97, int.class, "aCondSetData", false, "A_COND_SET_DATA");
-        public final static Property ACondSimpleTemp1 = new Property(98, int.class, "aCondSimpleTemp1", false, "A_COND_SIMPLE_TEMP1");
-        public final static Property ACondSimpleTemp2 = new Property(99, int.class, "aCondSimpleTemp2", false, "A_COND_SIMPLE_TEMP2");
-        public final static Property ACondInnerTemp = new Property(100, int.class, "aCondInnerTemp", false, "A_COND_INNER_TEMP");
-        public final static Property ACondOuterTemp = new Property(101, int.class, "aCondOuterTemp", false, "A_COND_OUTER_TEMP");
-        public final static Property ACondSleep = new Property(102, int.class, "aCondSleep", false, "A_COND_SLEEP");
-        public final static Property ACondSUpDown = new Property(103, int.class, "aCondSUpDown", false, "A_COND_SUP_DOWN");
-        public final static Property ACondSLeftRight = new Property(104, int.class, "aCondSLeftRight", false, "A_COND_SLEFT_RIGHT");
-        public final static Property SocketTimerMode = new Property(105, int.class, "socketTimerMode", false, "SOCKET_TIMER_MODE");
-        public final static Property IsSocketTimerMode = new Property(106, int.class, "isSocketTimerMode", false, "IS_SOCKET_TIMER_MODE");
-        public final static Property WPurifierEndFlow = new Property(107, int.class, "wPurifierEndFlow", false, "W_PURIFIER_END_FLOW");
-        public final static Property WPurifierEndYear = new Property(108, int.class, "wPurifierEndYear", false, "W_PURIFIER_END_YEAR");
-        public final static Property WPurifierEndMonth = new Property(109, int.class, "wPurifierEndMonth", false, "W_PURIFIER_END_MONTH");
-        public final static Property WPurifierEndDay = new Property(110, int.class, "wPurifierEndDay", false, "W_PURIFIER_END_DAY");
-        public final static Property WPurifierState = new Property(111, String.class, "wPurifierState", false, "W_PURIFIER_STATE");
-        public final static Property WPurifierFlowData = new Property(112, int.class, "wPurifierFlowData", false, "W_PURIFIER_FLOW_DATA");
-        public final static Property WPurifierPrimaryQuqlity = new Property(113, int.class, "wPurifierPrimaryQuqlity", false, "W_PURIFIER_PRIMARY_QUQLITY");
-        public final static Property WPurifierCurTemp = new Property(114, int.class, "wPurifierCurTemp", false, "W_PURIFIER_CUR_TEMP");
-        public final static Property WPurifierOutQuqlity = new Property(115, int.class, "wPurifierOutQuqlity", false, "W_PURIFIER_OUT_QUQLITY");
-        public final static Property WPurifierfilter1 = new Property(116, int.class, "wPurifierfilter1", false, "W_PURIFIERFILTER1");
-        public final static Property WPurifierfilter2 = new Property(117, int.class, "wPurifierfilter2", false, "W_PURIFIERFILTER2");
-        public final static Property WPurifierfilter3 = new Property(118, int.class, "wPurifierfilter3", false, "W_PURIFIERFILTER3");
-        public final static Property WPurifierfilter4 = new Property(119, int.class, "wPurifierfilter4", false, "W_PURIFIERFILTER4");
-        public final static Property WPurifierfilter5 = new Property(120, int.class, "wPurifierfilter5", false, "W_PURIFIERFILTER5");
-        public final static Property WPurifierfilter6 = new Property(121, int.class, "wPurifierfilter6", false, "W_PURIFIERFILTER6");
-        public final static Property WPurifierfilter7 = new Property(122, int.class, "wPurifierfilter7", false, "W_PURIFIERFILTER7");
-        public final static Property WPurifierfilter8 = new Property(123, int.class, "wPurifierfilter8", false, "W_PURIFIERFILTER8");
-        public final static Property WPurifierfilter9 = new Property(124, int.class, "wPurifierfilter9", false, "W_PURIFIERFILTER9");
-        public final static Property WPurifierfilter10 = new Property(125, int.class, "wPurifierfilter10", false, "W_PURIFIERFILTER10");
-        public final static Property HouseAddress = new Property(126, String.class, "houseAddress", false, "HOUSE_ADDRESS");
-        public final static Property Province = new Property(127, String.class, "province", false, "PROVINCE");
+        public final static Property WarmerScreen = new Property(10, int.class, "warmerScreen", false, "WARMER_SCREEN");
+        public final static Property HeaterControl = new Property(11, int.class, "heaterControl", false, "HEATER_CONTROL");
+        public final static Property TempCheck = new Property(12, int.class, "tempCheck", false, "TEMP_CHECK");
+        public final static Property Mode = new Property(13, int.class, "mode", false, "MODE");
+        public final static Property RateGrade = new Property(14, int.class, "rateGrade", false, "RATE_GRADE");
+        public final static Property GradeVersion = new Property(15, int.class, "gradeVersion", false, "GRADE_VERSION");
+        public final static Property GradeState = new Property(16, int.class, "gradeState", false, "GRADE_STATE");
+        public final static Property WVerion = new Property(17, int.class, "wVerion", false, "W_VERION");
+        public final static Property MVersion = new Property(18, int.class, "mVersion", false, "M_VERSION");
+        public final static Property MacAddress = new Property(19, String.class, "macAddress", false, "MAC_ADDRESS");
+        public final static Property Name = new Property(20, String.class, "name", false, "NAME");
+        public final static Property TimerMoudle = new Property(21, int.class, "timerMoudle", false, "TIMER_MOUDLE");
+        public final static Property McuVersion = new Property(22, String.class, "mcuVersion", false, "MCU_VERSION");
+        public final static Property WifiVersion = new Property(23, String.class, "wifiVersion", false, "WIFI_VERSION");
+        public final static Property WaramerSetTemp = new Property(24, int.class, "waramerSetTemp", false, "WARAMER_SET_TEMP");
+        public final static Property WarmerCurTemp = new Property(25, int.class, "warmerCurTemp", false, "WARMER_CUR_TEMP");
+        public final static Property WarmerSampleData = new Property(26, int.class, "warmerSampleData", false, "WARMER_SAMPLE_DATA");
+        public final static Property WarmerRatePower = new Property(27, int.class, "warmerRatePower", false, "WARMER_RATE_POWER");
+        public final static Property WarmerCurRunRoatePower = new Property(28, int.class, "warmerCurRunRoatePower", false, "WARMER_CUR_RUN_ROATE_POWER");
+        public final static Property WarmerRunState = new Property(29, int.class, "warmerRunState", false, "WARMER_RUN_STATE");
+        public final static Property DeviceState = new Property(30, int.class, "deviceState", false, "DEVICE_STATE");
+        public final static Property WarmerFall = new Property(31, int.class, "warmerFall", false, "WARMER_FALL");
+        public final static Property RateState = new Property(32, String.class, "rateState", false, "RATE_STATE");
+        public final static Property Lock = new Property(33, int.class, "lock", false, "LOCK");
+        public final static Property Week = new Property(34, int.class, "week", false, "WEEK");
+        public final static Property TimerOpenOneHour = new Property(35, int.class, "timerOpenOneHour", false, "TIMER_OPEN_ONE_HOUR");
+        public final static Property TimerOpenOneMin = new Property(36, int.class, "timerOpenOneMin", false, "TIMER_OPEN_ONE_MIN");
+        public final static Property TimerCloseOneHour = new Property(37, int.class, "timerCloseOneHour", false, "TIMER_CLOSE_ONE_HOUR");
+        public final static Property TimerCloseOneMin = new Property(38, int.class, "timerCloseOneMin", false, "TIMER_CLOSE_ONE_MIN");
+        public final static Property TimerOpenTwoHour = new Property(39, int.class, "timerOpenTwoHour", false, "TIMER_OPEN_TWO_HOUR");
+        public final static Property TimerOpenTwoMin = new Property(40, int.class, "timerOpenTwoMin", false, "TIMER_OPEN_TWO_MIN");
+        public final static Property TimerCloseTwoHour = new Property(41, int.class, "timerCloseTwoHour", false, "TIMER_CLOSE_TWO_HOUR");
+        public final static Property TimerCloseTwoMin = new Property(42, int.class, "timerCloseTwoMin", false, "TIMER_CLOSE_TWO_MIN");
+        public final static Property TimerOpenThrHour = new Property(43, int.class, "timerOpenThrHour", false, "TIMER_OPEN_THR_HOUR");
+        public final static Property TimerOpenThrMin = new Property(44, int.class, "timerOpenThrMin", false, "TIMER_OPEN_THR_MIN");
+        public final static Property TimerCloseThrHour = new Property(45, int.class, "timerCloseThrHour", false, "TIMER_CLOSE_THR_HOUR");
+        public final static Property TimerCloseThrMin = new Property(46, int.class, "timerCloseThrMin", false, "TIMER_CLOSE_THR_MIN");
+        public final static Property TimerOpenForHour = new Property(47, int.class, "timerOpenForHour", false, "TIMER_OPEN_FOR_HOUR");
+        public final static Property TimerOpenForMin = new Property(48, int.class, "timerOpenForMin", false, "TIMER_OPEN_FOR_MIN");
+        public final static Property TimerCloseForHour = new Property(49, int.class, "timerCloseForHour", false, "TIMER_CLOSE_FOR_HOUR");
+        public final static Property TimerCloseForMin = new Property(50, int.class, "timerCloseForMin", false, "TIMER_CLOSE_FOR_MIN");
+        public final static Property TimerOne = new Property(51, int.class, "timerOne", false, "TIMER_ONE");
+        public final static Property TimerTwo = new Property(52, int.class, "timerTwo", false, "TIMER_TWO");
+        public final static Property TimerThr = new Property(53, int.class, "timerThr", false, "TIMER_THR");
+        public final static Property TimerFor = new Property(54, int.class, "timerFor", false, "TIMER_FOR");
+        public final static Property LockState = new Property(55, int.class, "lockState", false, "LOCK_STATE");
+        public final static Property ScreenState = new Property(56, int.class, "screenState", false, "SCREEN_STATE");
+        public final static Property CurRunState2 = new Property(57, int.class, "curRunState2", false, "CUR_RUN_STATE2");
+        public final static Property CurRunState3 = new Property(58, int.class, "curRunState3", false, "CUR_RUN_STATE3");
+        public final static Property TimerHour = new Property(59, int.class, "timerHour", false, "TIMER_HOUR");
+        public final static Property TimerMin = new Property(60, int.class, "timerMin", false, "TIMER_MIN");
+        public final static Property CheckCode = new Property(61, int.class, "checkCode", false, "CHECK_CODE");
+        public final static Property EndCode = new Property(62, int.class, "endCode", false, "END_CODE");
+        public final static Property UserId = new Property(63, int.class, "userId", false, "USER_ID");
+        public final static Property Img = new Property(64, int.class, "img", false, "IMG");
+        public final static Property DeviceId = new Property(65, int.class, "deviceId", false, "DEVICE_ID");
+        public final static Property Linked = new Property(66, int.class, "linked", false, "LINKED");
+        public final static Property LinkedSensorId = new Property(67, int.class, "linkedSensorId", false, "LINKED_SENSOR_ID");
+        public final static Property ShareId = new Property(68, long.class, "shareId", false, "SHARE_ID");
+        public final static Property SensorState = new Property(69, int.class, "sensorState", false, "SENSOR_STATE");
+        public final static Property SensorSimpleTemp = new Property(70, int.class, "sensorSimpleTemp", false, "SENSOR_SIMPLE_TEMP");
+        public final static Property SensorSimpleHum = new Property(71, int.class, "sensorSimpleHum", false, "SENSOR_SIMPLE_HUM");
+        public final static Property SorsorPm = new Property(72, int.class, "sorsorPm", false, "SORSOR_PM");
+        public final static Property SensorOx = new Property(73, int.class, "sensorOx", false, "SENSOR_OX");
+        public final static Property SensorHcho = new Property(74, int.class, "sensorHcho", false, "SENSOR_HCHO");
+        public final static Property SocketPowerHigh = new Property(75, int.class, "socketPowerHigh", false, "SOCKET_POWER_HIGH");
+        public final static Property SocketPowerLow = new Property(76, int.class, "socketPowerLow", false, "SOCKET_POWER_LOW");
+        public final static Property SocketPower = new Property(77, int.class, "socketPower", false, "SOCKET_POWER");
+        public final static Property SocketTemp = new Property(78, int.class, "socketTemp", false, "SOCKET_TEMP");
+        public final static Property SocketState = new Property(79, int.class, "socketState", false, "SOCKET_STATE");
+        public final static Property SocketTimer = new Property(80, int.class, "socketTimer", false, "SOCKET_TIMER");
+        public final static Property SocketTimerHour = new Property(81, int.class, "socketTimerHour", false, "SOCKET_TIMER_HOUR");
+        public final static Property SocketTimerMin = new Property(82, int.class, "socketTimerMin", false, "SOCKET_TIMER_MIN");
+        public final static Property SocketCurrent = new Property(83, int.class, "socketCurrent", false, "SOCKET_CURRENT");
+        public final static Property SocketVal = new Property(84, int.class, "socketVal", false, "SOCKET_VAL");
+        public final static Property SocketPowerConsume = new Property(85, int.class, "socketPowerConsume", false, "SOCKET_POWER_CONSUME");
+        public final static Property TimerSwitch = new Property(86, int.class, "timerSwitch", false, "TIMER_SWITCH");
+        public final static Property WaterLevel = new Property(87, int.class, "waterLevel", false, "WATER_LEVEL");
+        public final static Property WindLevel = new Property(88, String.class, "windLevel", false, "WIND_LEVEL");
+        public final static Property EquipRatedPowerHigh = new Property(89, int.class, "equipRatedPowerHigh", false, "EQUIP_RATED_POWER_HIGH");
+        public final static Property EquipRatedPowerLow = new Property(90, int.class, "equipRatedPowerLow", false, "EQUIP_RATED_POWER_LOW");
+        public final static Property EquipCurdPowerHigh = new Property(91, int.class, "equipCurdPowerHigh", false, "EQUIP_CURD_POWER_HIGH");
+        public final static Property EquipCurdPowerLow = new Property(92, int.class, "equipCurdPowerLow", false, "EQUIP_CURD_POWER_LOW");
+        public final static Property FaultCode = new Property(93, int.class, "faultCode", false, "FAULT_CODE");
+        public final static Property PurifierState = new Property(94, String.class, "purifierState", false, "PURIFIER_STATE");
+        public final static Property DehumSetTemp = new Property(95, int.class, "dehumSetTemp", false, "DEHUM_SET_TEMP");
+        public final static Property DehumSetHum = new Property(96, int.class, "dehumSetHum", false, "DEHUM_SET_HUM");
+        public final static Property DehumInnerTemp = new Property(97, int.class, "dehumInnerTemp", false, "DEHUM_INNER_TEMP");
+        public final static Property DehumOuterTemp = new Property(98, int.class, "dehumOuterTemp", false, "DEHUM_OUTER_TEMP");
+        public final static Property DehumSleep = new Property(99, int.class, "dehumSleep", false, "DEHUM_SLEEP");
+        public final static Property DehumAnion = new Property(100, int.class, "dehumAnion", false, "DEHUM_ANION");
+        public final static Property DehumDrying = new Property(101, int.class, "dehumDrying", false, "DEHUM_DRYING");
+        public final static Property DehumDefrost = new Property(102, int.class, "dehumDefrost", false, "DEHUM_DEFROST");
+        public final static Property ACondState = new Property(103, String.class, "aCondState", false, "A_COND_STATE");
+        public final static Property ACondSetTemp1 = new Property(104, int.class, "aCondSetTemp1", false, "A_COND_SET_TEMP1");
+        public final static Property ACondSetTemp2 = new Property(105, int.class, "aCondSetTemp2", false, "A_COND_SET_TEMP2");
+        public final static Property ACondSetData = new Property(106, int.class, "aCondSetData", false, "A_COND_SET_DATA");
+        public final static Property ACondSimpleTemp1 = new Property(107, int.class, "aCondSimpleTemp1", false, "A_COND_SIMPLE_TEMP1");
+        public final static Property ACondSimpleTemp2 = new Property(108, int.class, "aCondSimpleTemp2", false, "A_COND_SIMPLE_TEMP2");
+        public final static Property ACondInnerTemp = new Property(109, int.class, "aCondInnerTemp", false, "A_COND_INNER_TEMP");
+        public final static Property ACondOuterTemp = new Property(110, int.class, "aCondOuterTemp", false, "A_COND_OUTER_TEMP");
+        public final static Property ACondSleep = new Property(111, int.class, "aCondSleep", false, "A_COND_SLEEP");
+        public final static Property ACondSUpDown = new Property(112, int.class, "aCondSUpDown", false, "A_COND_SUP_DOWN");
+        public final static Property ACondSLeftRight = new Property(113, int.class, "aCondSLeftRight", false, "A_COND_SLEFT_RIGHT");
+        public final static Property SocketTimerMode = new Property(114, int.class, "socketTimerMode", false, "SOCKET_TIMER_MODE");
+        public final static Property IsSocketTimerMode = new Property(115, int.class, "isSocketTimerMode", false, "IS_SOCKET_TIMER_MODE");
+        public final static Property WPurifierEndFlow = new Property(116, int.class, "wPurifierEndFlow", false, "W_PURIFIER_END_FLOW");
+        public final static Property WPurifierEndYear = new Property(117, int.class, "wPurifierEndYear", false, "W_PURIFIER_END_YEAR");
+        public final static Property WPurifierEndMonth = new Property(118, int.class, "wPurifierEndMonth", false, "W_PURIFIER_END_MONTH");
+        public final static Property WPurifierEndDay = new Property(119, int.class, "wPurifierEndDay", false, "W_PURIFIER_END_DAY");
+        public final static Property WPurifierState = new Property(120, String.class, "wPurifierState", false, "W_PURIFIER_STATE");
+        public final static Property WPurifierFlowData = new Property(121, int.class, "wPurifierFlowData", false, "W_PURIFIER_FLOW_DATA");
+        public final static Property WPurifierPrimaryQuqlity = new Property(122, int.class, "wPurifierPrimaryQuqlity", false, "W_PURIFIER_PRIMARY_QUQLITY");
+        public final static Property WPurifierCurTemp = new Property(123, int.class, "wPurifierCurTemp", false, "W_PURIFIER_CUR_TEMP");
+        public final static Property WPurifierOutQuqlity = new Property(124, int.class, "wPurifierOutQuqlity", false, "W_PURIFIER_OUT_QUQLITY");
+        public final static Property WPurifierfilter1 = new Property(125, int.class, "wPurifierfilter1", false, "W_PURIFIERFILTER1");
+        public final static Property WPurifierfilter2 = new Property(126, int.class, "wPurifierfilter2", false, "W_PURIFIERFILTER2");
+        public final static Property WPurifierfilter3 = new Property(127, int.class, "wPurifierfilter3", false, "W_PURIFIERFILTER3");
+        public final static Property WPurifierfilter4 = new Property(128, int.class, "wPurifierfilter4", false, "W_PURIFIERFILTER4");
+        public final static Property WPurifierfilter5 = new Property(129, int.class, "wPurifierfilter5", false, "W_PURIFIERFILTER5");
+        public final static Property WPurifierfilter6 = new Property(130, int.class, "wPurifierfilter6", false, "W_PURIFIERFILTER6");
+        public final static Property WPurifierfilter7 = new Property(131, int.class, "wPurifierfilter7", false, "W_PURIFIERFILTER7");
+        public final static Property WPurifierfilter8 = new Property(132, int.class, "wPurifierfilter8", false, "W_PURIFIERFILTER8");
+        public final static Property WPurifierfilter9 = new Property(133, int.class, "wPurifierfilter9", false, "W_PURIFIERFILTER9");
+        public final static Property WPurifierfilter10 = new Property(134, int.class, "wPurifierfilter10", false, "W_PURIFIERFILTER10");
+        public final static Property HouseAddress = new Property(135, String.class, "houseAddress", false, "HOUSE_ADDRESS");
+        public final static Property Province = new Property(136, String.class, "province", false, "PROVINCE");
     }
 
 
@@ -177,124 +186,133 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
                 "\"SHARE\" TEXT," + // 7: share
                 "\"TYPE\" INTEGER NOT NULL ," + // 8: type
                 "\"BUS_MODEL\" INTEGER NOT NULL ," + // 9: busModel
-                "\"MAC_ADDRESS\" TEXT," + // 10: macAddress
-                "\"NAME\" TEXT," + // 11: name
-                "\"TIMER_MOUDLE\" INTEGER NOT NULL ," + // 12: timerMoudle
-                "\"MCU_VERSION\" TEXT," + // 13: mcuVersion
-                "\"WIFI_VERSION\" TEXT," + // 14: wifiVersion
-                "\"WARAMER_SET_TEMP\" INTEGER NOT NULL ," + // 15: waramerSetTemp
-                "\"WARMER_CUR_TEMP\" INTEGER NOT NULL ," + // 16: warmerCurTemp
-                "\"WARMER_SAMPLE_DATA\" INTEGER NOT NULL ," + // 17: warmerSampleData
-                "\"WARMER_RATE_POWER\" INTEGER NOT NULL ," + // 18: warmerRatePower
-                "\"WARMER_CUR_RUN_ROATE_POWER\" INTEGER NOT NULL ," + // 19: warmerCurRunRoatePower
-                "\"WARMER_RUN_STATE\" INTEGER NOT NULL ," + // 20: warmerRunState
-                "\"DEVICE_STATE\" INTEGER NOT NULL ," + // 21: deviceState
-                "\"WARMER_FALL\" INTEGER NOT NULL ," + // 22: warmerFall
-                "\"RATE_STATE\" TEXT," + // 23: rateState
-                "\"LOCK\" INTEGER NOT NULL ," + // 24: lock
-                "\"WEEK\" INTEGER NOT NULL ," + // 25: week
-                "\"TIMER_OPEN_ONE_HOUR\" INTEGER NOT NULL ," + // 26: timerOpenOneHour
-                "\"TIMER_OPEN_ONE_MIN\" INTEGER NOT NULL ," + // 27: timerOpenOneMin
-                "\"TIMER_CLOSE_ONE_HOUR\" INTEGER NOT NULL ," + // 28: timerCloseOneHour
-                "\"TIMER_CLOSE_ONE_MIN\" INTEGER NOT NULL ," + // 29: timerCloseOneMin
-                "\"TIMER_OPEN_TWO_HOUR\" INTEGER NOT NULL ," + // 30: timerOpenTwoHour
-                "\"TIMER_OPEN_TWO_MIN\" INTEGER NOT NULL ," + // 31: timerOpenTwoMin
-                "\"TIMER_CLOSE_TWO_HOUR\" INTEGER NOT NULL ," + // 32: timerCloseTwoHour
-                "\"TIMER_CLOSE_TWO_MIN\" INTEGER NOT NULL ," + // 33: timerCloseTwoMin
-                "\"TIMER_OPEN_THR_HOUR\" INTEGER NOT NULL ," + // 34: timerOpenThrHour
-                "\"TIMER_OPEN_THR_MIN\" INTEGER NOT NULL ," + // 35: timerOpenThrMin
-                "\"TIMER_CLOSE_THR_HOUR\" INTEGER NOT NULL ," + // 36: timerCloseThrHour
-                "\"TIMER_CLOSE_THR_MIN\" INTEGER NOT NULL ," + // 37: timerCloseThrMin
-                "\"TIMER_OPEN_FOR_HOUR\" INTEGER NOT NULL ," + // 38: timerOpenForHour
-                "\"TIMER_OPEN_FOR_MIN\" INTEGER NOT NULL ," + // 39: timerOpenForMin
-                "\"TIMER_CLOSE_FOR_HOUR\" INTEGER NOT NULL ," + // 40: timerCloseForHour
-                "\"TIMER_CLOSE_FOR_MIN\" INTEGER NOT NULL ," + // 41: timerCloseForMin
-                "\"TIMER_ONE\" INTEGER NOT NULL ," + // 42: timerOne
-                "\"TIMER_TWO\" INTEGER NOT NULL ," + // 43: timerTwo
-                "\"TIMER_THR\" INTEGER NOT NULL ," + // 44: timerThr
-                "\"TIMER_FOR\" INTEGER NOT NULL ," + // 45: timerFor
-                "\"LOCK_STATE\" INTEGER NOT NULL ," + // 46: lockState
-                "\"SCREEN_STATE\" INTEGER NOT NULL ," + // 47: screenState
-                "\"CUR_RUN_STATE2\" INTEGER NOT NULL ," + // 48: curRunState2
-                "\"CUR_RUN_STATE3\" INTEGER NOT NULL ," + // 49: curRunState3
-                "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 50: timerHour
-                "\"TIMER_MIN\" INTEGER NOT NULL ," + // 51: timerMin
-                "\"CHECK_CODE\" INTEGER NOT NULL ," + // 52: checkCode
-                "\"END_CODE\" INTEGER NOT NULL ," + // 53: endCode
-                "\"USER_ID\" INTEGER NOT NULL ," + // 54: userId
-                "\"IMG\" INTEGER NOT NULL ," + // 55: img
-                "\"DEVICE_ID\" INTEGER NOT NULL ," + // 56: deviceId
-                "\"LINKED\" INTEGER NOT NULL ," + // 57: linked
-                "\"LINKED_SENSOR_ID\" INTEGER NOT NULL ," + // 58: linkedSensorId
-                "\"SHARE_ID\" INTEGER NOT NULL ," + // 59: shareId
-                "\"SENSOR_STATE\" INTEGER NOT NULL ," + // 60: sensorState
-                "\"SENSOR_SIMPLE_TEMP\" INTEGER NOT NULL ," + // 61: sensorSimpleTemp
-                "\"SENSOR_SIMPLE_HUM\" INTEGER NOT NULL ," + // 62: sensorSimpleHum
-                "\"SORSOR_PM\" INTEGER NOT NULL ," + // 63: sorsorPm
-                "\"SENSOR_OX\" INTEGER NOT NULL ," + // 64: sensorOx
-                "\"SENSOR_HCHO\" INTEGER NOT NULL ," + // 65: sensorHcho
-                "\"SOCKET_POWER_HIGH\" INTEGER NOT NULL ," + // 66: socketPowerHigh
-                "\"SOCKET_POWER_LOW\" INTEGER NOT NULL ," + // 67: socketPowerLow
-                "\"SOCKET_POWER\" INTEGER NOT NULL ," + // 68: socketPower
-                "\"SOCKET_TEMP\" INTEGER NOT NULL ," + // 69: socketTemp
-                "\"SOCKET_STATE\" INTEGER NOT NULL ," + // 70: socketState
-                "\"SOCKET_TIMER\" INTEGER NOT NULL ," + // 71: socketTimer
-                "\"SOCKET_TIMER_HOUR\" INTEGER NOT NULL ," + // 72: socketTimerHour
-                "\"SOCKET_TIMER_MIN\" INTEGER NOT NULL ," + // 73: socketTimerMin
-                "\"SOCKET_CURRENT\" INTEGER NOT NULL ," + // 74: socketCurrent
-                "\"SOCKET_VAL\" INTEGER NOT NULL ," + // 75: socketVal
-                "\"SOCKET_POWER_CONSUME\" INTEGER NOT NULL ," + // 76: socketPowerConsume
-                "\"TIMER_SWITCH\" INTEGER NOT NULL ," + // 77: timerSwitch
-                "\"WATER_LEVEL\" INTEGER NOT NULL ," + // 78: waterLevel
-                "\"WIND_LEVEL\" TEXT," + // 79: windLevel
-                "\"EQUIP_RATED_POWER_HIGH\" INTEGER NOT NULL ," + // 80: equipRatedPowerHigh
-                "\"EQUIP_RATED_POWER_LOW\" INTEGER NOT NULL ," + // 81: equipRatedPowerLow
-                "\"EQUIP_CURD_POWER_HIGH\" INTEGER NOT NULL ," + // 82: equipCurdPowerHigh
-                "\"EQUIP_CURD_POWER_LOW\" INTEGER NOT NULL ," + // 83: equipCurdPowerLow
-                "\"FAULT_CODE\" INTEGER NOT NULL ," + // 84: faultCode
-                "\"PURIFIER_STATE\" TEXT," + // 85: purifierState
-                "\"DEHUM_SET_TEMP\" INTEGER NOT NULL ," + // 86: dehumSetTemp
-                "\"DEHUM_SET_HUM\" INTEGER NOT NULL ," + // 87: dehumSetHum
-                "\"DEHUM_INNER_TEMP\" INTEGER NOT NULL ," + // 88: dehumInnerTemp
-                "\"DEHUM_OUTER_TEMP\" INTEGER NOT NULL ," + // 89: dehumOuterTemp
-                "\"DEHUM_SLEEP\" INTEGER NOT NULL ," + // 90: dehumSleep
-                "\"DEHUM_ANION\" INTEGER NOT NULL ," + // 91: dehumAnion
-                "\"DEHUM_DRYING\" INTEGER NOT NULL ," + // 92: dehumDrying
-                "\"DEHUM_DEFROST\" INTEGER NOT NULL ," + // 93: dehumDefrost
-                "\"A_COND_STATE\" TEXT," + // 94: aCondState
-                "\"A_COND_SET_TEMP1\" INTEGER NOT NULL ," + // 95: aCondSetTemp1
-                "\"A_COND_SET_TEMP2\" INTEGER NOT NULL ," + // 96: aCondSetTemp2
-                "\"A_COND_SET_DATA\" INTEGER NOT NULL ," + // 97: aCondSetData
-                "\"A_COND_SIMPLE_TEMP1\" INTEGER NOT NULL ," + // 98: aCondSimpleTemp1
-                "\"A_COND_SIMPLE_TEMP2\" INTEGER NOT NULL ," + // 99: aCondSimpleTemp2
-                "\"A_COND_INNER_TEMP\" INTEGER NOT NULL ," + // 100: aCondInnerTemp
-                "\"A_COND_OUTER_TEMP\" INTEGER NOT NULL ," + // 101: aCondOuterTemp
-                "\"A_COND_SLEEP\" INTEGER NOT NULL ," + // 102: aCondSleep
-                "\"A_COND_SUP_DOWN\" INTEGER NOT NULL ," + // 103: aCondSUpDown
-                "\"A_COND_SLEFT_RIGHT\" INTEGER NOT NULL ," + // 104: aCondSLeftRight
-                "\"SOCKET_TIMER_MODE\" INTEGER NOT NULL ," + // 105: socketTimerMode
-                "\"IS_SOCKET_TIMER_MODE\" INTEGER NOT NULL ," + // 106: isSocketTimerMode
-                "\"W_PURIFIER_END_FLOW\" INTEGER NOT NULL ," + // 107: wPurifierEndFlow
-                "\"W_PURIFIER_END_YEAR\" INTEGER NOT NULL ," + // 108: wPurifierEndYear
-                "\"W_PURIFIER_END_MONTH\" INTEGER NOT NULL ," + // 109: wPurifierEndMonth
-                "\"W_PURIFIER_END_DAY\" INTEGER NOT NULL ," + // 110: wPurifierEndDay
-                "\"W_PURIFIER_STATE\" TEXT," + // 111: wPurifierState
-                "\"W_PURIFIER_FLOW_DATA\" INTEGER NOT NULL ," + // 112: wPurifierFlowData
-                "\"W_PURIFIER_PRIMARY_QUQLITY\" INTEGER NOT NULL ," + // 113: wPurifierPrimaryQuqlity
-                "\"W_PURIFIER_CUR_TEMP\" INTEGER NOT NULL ," + // 114: wPurifierCurTemp
-                "\"W_PURIFIER_OUT_QUQLITY\" INTEGER NOT NULL ," + // 115: wPurifierOutQuqlity
-                "\"W_PURIFIERFILTER1\" INTEGER NOT NULL ," + // 116: wPurifierfilter1
-                "\"W_PURIFIERFILTER2\" INTEGER NOT NULL ," + // 117: wPurifierfilter2
-                "\"W_PURIFIERFILTER3\" INTEGER NOT NULL ," + // 118: wPurifierfilter3
-                "\"W_PURIFIERFILTER4\" INTEGER NOT NULL ," + // 119: wPurifierfilter4
-                "\"W_PURIFIERFILTER5\" INTEGER NOT NULL ," + // 120: wPurifierfilter5
-                "\"W_PURIFIERFILTER6\" INTEGER NOT NULL ," + // 121: wPurifierfilter6
-                "\"W_PURIFIERFILTER7\" INTEGER NOT NULL ," + // 122: wPurifierfilter7
-                "\"W_PURIFIERFILTER8\" INTEGER NOT NULL ," + // 123: wPurifierfilter8
-                "\"W_PURIFIERFILTER9\" INTEGER NOT NULL ," + // 124: wPurifierfilter9
-                "\"W_PURIFIERFILTER10\" INTEGER NOT NULL ," + // 125: wPurifierfilter10
-                "\"HOUSE_ADDRESS\" TEXT," + // 126: houseAddress
-                "\"PROVINCE\" TEXT);"); // 127: province
+                "\"WARMER_SCREEN\" INTEGER NOT NULL ," + // 10: warmerScreen
+                "\"HEATER_CONTROL\" INTEGER NOT NULL ," + // 11: heaterControl
+                "\"TEMP_CHECK\" INTEGER NOT NULL ," + // 12: tempCheck
+                "\"MODE\" INTEGER NOT NULL ," + // 13: mode
+                "\"RATE_GRADE\" INTEGER NOT NULL ," + // 14: rateGrade
+                "\"GRADE_VERSION\" INTEGER NOT NULL ," + // 15: gradeVersion
+                "\"GRADE_STATE\" INTEGER NOT NULL ," + // 16: gradeState
+                "\"W_VERION\" INTEGER NOT NULL ," + // 17: wVerion
+                "\"M_VERSION\" INTEGER NOT NULL ," + // 18: mVersion
+                "\"MAC_ADDRESS\" TEXT," + // 19: macAddress
+                "\"NAME\" TEXT," + // 20: name
+                "\"TIMER_MOUDLE\" INTEGER NOT NULL ," + // 21: timerMoudle
+                "\"MCU_VERSION\" TEXT," + // 22: mcuVersion
+                "\"WIFI_VERSION\" TEXT," + // 23: wifiVersion
+                "\"WARAMER_SET_TEMP\" INTEGER NOT NULL ," + // 24: waramerSetTemp
+                "\"WARMER_CUR_TEMP\" INTEGER NOT NULL ," + // 25: warmerCurTemp
+                "\"WARMER_SAMPLE_DATA\" INTEGER NOT NULL ," + // 26: warmerSampleData
+                "\"WARMER_RATE_POWER\" INTEGER NOT NULL ," + // 27: warmerRatePower
+                "\"WARMER_CUR_RUN_ROATE_POWER\" INTEGER NOT NULL ," + // 28: warmerCurRunRoatePower
+                "\"WARMER_RUN_STATE\" INTEGER NOT NULL ," + // 29: warmerRunState
+                "\"DEVICE_STATE\" INTEGER NOT NULL ," + // 30: deviceState
+                "\"WARMER_FALL\" INTEGER NOT NULL ," + // 31: warmerFall
+                "\"RATE_STATE\" TEXT," + // 32: rateState
+                "\"LOCK\" INTEGER NOT NULL ," + // 33: lock
+                "\"WEEK\" INTEGER NOT NULL ," + // 34: week
+                "\"TIMER_OPEN_ONE_HOUR\" INTEGER NOT NULL ," + // 35: timerOpenOneHour
+                "\"TIMER_OPEN_ONE_MIN\" INTEGER NOT NULL ," + // 36: timerOpenOneMin
+                "\"TIMER_CLOSE_ONE_HOUR\" INTEGER NOT NULL ," + // 37: timerCloseOneHour
+                "\"TIMER_CLOSE_ONE_MIN\" INTEGER NOT NULL ," + // 38: timerCloseOneMin
+                "\"TIMER_OPEN_TWO_HOUR\" INTEGER NOT NULL ," + // 39: timerOpenTwoHour
+                "\"TIMER_OPEN_TWO_MIN\" INTEGER NOT NULL ," + // 40: timerOpenTwoMin
+                "\"TIMER_CLOSE_TWO_HOUR\" INTEGER NOT NULL ," + // 41: timerCloseTwoHour
+                "\"TIMER_CLOSE_TWO_MIN\" INTEGER NOT NULL ," + // 42: timerCloseTwoMin
+                "\"TIMER_OPEN_THR_HOUR\" INTEGER NOT NULL ," + // 43: timerOpenThrHour
+                "\"TIMER_OPEN_THR_MIN\" INTEGER NOT NULL ," + // 44: timerOpenThrMin
+                "\"TIMER_CLOSE_THR_HOUR\" INTEGER NOT NULL ," + // 45: timerCloseThrHour
+                "\"TIMER_CLOSE_THR_MIN\" INTEGER NOT NULL ," + // 46: timerCloseThrMin
+                "\"TIMER_OPEN_FOR_HOUR\" INTEGER NOT NULL ," + // 47: timerOpenForHour
+                "\"TIMER_OPEN_FOR_MIN\" INTEGER NOT NULL ," + // 48: timerOpenForMin
+                "\"TIMER_CLOSE_FOR_HOUR\" INTEGER NOT NULL ," + // 49: timerCloseForHour
+                "\"TIMER_CLOSE_FOR_MIN\" INTEGER NOT NULL ," + // 50: timerCloseForMin
+                "\"TIMER_ONE\" INTEGER NOT NULL ," + // 51: timerOne
+                "\"TIMER_TWO\" INTEGER NOT NULL ," + // 52: timerTwo
+                "\"TIMER_THR\" INTEGER NOT NULL ," + // 53: timerThr
+                "\"TIMER_FOR\" INTEGER NOT NULL ," + // 54: timerFor
+                "\"LOCK_STATE\" INTEGER NOT NULL ," + // 55: lockState
+                "\"SCREEN_STATE\" INTEGER NOT NULL ," + // 56: screenState
+                "\"CUR_RUN_STATE2\" INTEGER NOT NULL ," + // 57: curRunState2
+                "\"CUR_RUN_STATE3\" INTEGER NOT NULL ," + // 58: curRunState3
+                "\"TIMER_HOUR\" INTEGER NOT NULL ," + // 59: timerHour
+                "\"TIMER_MIN\" INTEGER NOT NULL ," + // 60: timerMin
+                "\"CHECK_CODE\" INTEGER NOT NULL ," + // 61: checkCode
+                "\"END_CODE\" INTEGER NOT NULL ," + // 62: endCode
+                "\"USER_ID\" INTEGER NOT NULL ," + // 63: userId
+                "\"IMG\" INTEGER NOT NULL ," + // 64: img
+                "\"DEVICE_ID\" INTEGER NOT NULL ," + // 65: deviceId
+                "\"LINKED\" INTEGER NOT NULL ," + // 66: linked
+                "\"LINKED_SENSOR_ID\" INTEGER NOT NULL ," + // 67: linkedSensorId
+                "\"SHARE_ID\" INTEGER NOT NULL ," + // 68: shareId
+                "\"SENSOR_STATE\" INTEGER NOT NULL ," + // 69: sensorState
+                "\"SENSOR_SIMPLE_TEMP\" INTEGER NOT NULL ," + // 70: sensorSimpleTemp
+                "\"SENSOR_SIMPLE_HUM\" INTEGER NOT NULL ," + // 71: sensorSimpleHum
+                "\"SORSOR_PM\" INTEGER NOT NULL ," + // 72: sorsorPm
+                "\"SENSOR_OX\" INTEGER NOT NULL ," + // 73: sensorOx
+                "\"SENSOR_HCHO\" INTEGER NOT NULL ," + // 74: sensorHcho
+                "\"SOCKET_POWER_HIGH\" INTEGER NOT NULL ," + // 75: socketPowerHigh
+                "\"SOCKET_POWER_LOW\" INTEGER NOT NULL ," + // 76: socketPowerLow
+                "\"SOCKET_POWER\" INTEGER NOT NULL ," + // 77: socketPower
+                "\"SOCKET_TEMP\" INTEGER NOT NULL ," + // 78: socketTemp
+                "\"SOCKET_STATE\" INTEGER NOT NULL ," + // 79: socketState
+                "\"SOCKET_TIMER\" INTEGER NOT NULL ," + // 80: socketTimer
+                "\"SOCKET_TIMER_HOUR\" INTEGER NOT NULL ," + // 81: socketTimerHour
+                "\"SOCKET_TIMER_MIN\" INTEGER NOT NULL ," + // 82: socketTimerMin
+                "\"SOCKET_CURRENT\" INTEGER NOT NULL ," + // 83: socketCurrent
+                "\"SOCKET_VAL\" INTEGER NOT NULL ," + // 84: socketVal
+                "\"SOCKET_POWER_CONSUME\" INTEGER NOT NULL ," + // 85: socketPowerConsume
+                "\"TIMER_SWITCH\" INTEGER NOT NULL ," + // 86: timerSwitch
+                "\"WATER_LEVEL\" INTEGER NOT NULL ," + // 87: waterLevel
+                "\"WIND_LEVEL\" TEXT," + // 88: windLevel
+                "\"EQUIP_RATED_POWER_HIGH\" INTEGER NOT NULL ," + // 89: equipRatedPowerHigh
+                "\"EQUIP_RATED_POWER_LOW\" INTEGER NOT NULL ," + // 90: equipRatedPowerLow
+                "\"EQUIP_CURD_POWER_HIGH\" INTEGER NOT NULL ," + // 91: equipCurdPowerHigh
+                "\"EQUIP_CURD_POWER_LOW\" INTEGER NOT NULL ," + // 92: equipCurdPowerLow
+                "\"FAULT_CODE\" INTEGER NOT NULL ," + // 93: faultCode
+                "\"PURIFIER_STATE\" TEXT," + // 94: purifierState
+                "\"DEHUM_SET_TEMP\" INTEGER NOT NULL ," + // 95: dehumSetTemp
+                "\"DEHUM_SET_HUM\" INTEGER NOT NULL ," + // 96: dehumSetHum
+                "\"DEHUM_INNER_TEMP\" INTEGER NOT NULL ," + // 97: dehumInnerTemp
+                "\"DEHUM_OUTER_TEMP\" INTEGER NOT NULL ," + // 98: dehumOuterTemp
+                "\"DEHUM_SLEEP\" INTEGER NOT NULL ," + // 99: dehumSleep
+                "\"DEHUM_ANION\" INTEGER NOT NULL ," + // 100: dehumAnion
+                "\"DEHUM_DRYING\" INTEGER NOT NULL ," + // 101: dehumDrying
+                "\"DEHUM_DEFROST\" INTEGER NOT NULL ," + // 102: dehumDefrost
+                "\"A_COND_STATE\" TEXT," + // 103: aCondState
+                "\"A_COND_SET_TEMP1\" INTEGER NOT NULL ," + // 104: aCondSetTemp1
+                "\"A_COND_SET_TEMP2\" INTEGER NOT NULL ," + // 105: aCondSetTemp2
+                "\"A_COND_SET_DATA\" INTEGER NOT NULL ," + // 106: aCondSetData
+                "\"A_COND_SIMPLE_TEMP1\" INTEGER NOT NULL ," + // 107: aCondSimpleTemp1
+                "\"A_COND_SIMPLE_TEMP2\" INTEGER NOT NULL ," + // 108: aCondSimpleTemp2
+                "\"A_COND_INNER_TEMP\" INTEGER NOT NULL ," + // 109: aCondInnerTemp
+                "\"A_COND_OUTER_TEMP\" INTEGER NOT NULL ," + // 110: aCondOuterTemp
+                "\"A_COND_SLEEP\" INTEGER NOT NULL ," + // 111: aCondSleep
+                "\"A_COND_SUP_DOWN\" INTEGER NOT NULL ," + // 112: aCondSUpDown
+                "\"A_COND_SLEFT_RIGHT\" INTEGER NOT NULL ," + // 113: aCondSLeftRight
+                "\"SOCKET_TIMER_MODE\" INTEGER NOT NULL ," + // 114: socketTimerMode
+                "\"IS_SOCKET_TIMER_MODE\" INTEGER NOT NULL ," + // 115: isSocketTimerMode
+                "\"W_PURIFIER_END_FLOW\" INTEGER NOT NULL ," + // 116: wPurifierEndFlow
+                "\"W_PURIFIER_END_YEAR\" INTEGER NOT NULL ," + // 117: wPurifierEndYear
+                "\"W_PURIFIER_END_MONTH\" INTEGER NOT NULL ," + // 118: wPurifierEndMonth
+                "\"W_PURIFIER_END_DAY\" INTEGER NOT NULL ," + // 119: wPurifierEndDay
+                "\"W_PURIFIER_STATE\" TEXT," + // 120: wPurifierState
+                "\"W_PURIFIER_FLOW_DATA\" INTEGER NOT NULL ," + // 121: wPurifierFlowData
+                "\"W_PURIFIER_PRIMARY_QUQLITY\" INTEGER NOT NULL ," + // 122: wPurifierPrimaryQuqlity
+                "\"W_PURIFIER_CUR_TEMP\" INTEGER NOT NULL ," + // 123: wPurifierCurTemp
+                "\"W_PURIFIER_OUT_QUQLITY\" INTEGER NOT NULL ," + // 124: wPurifierOutQuqlity
+                "\"W_PURIFIERFILTER1\" INTEGER NOT NULL ," + // 125: wPurifierfilter1
+                "\"W_PURIFIERFILTER2\" INTEGER NOT NULL ," + // 126: wPurifierfilter2
+                "\"W_PURIFIERFILTER3\" INTEGER NOT NULL ," + // 127: wPurifierfilter3
+                "\"W_PURIFIERFILTER4\" INTEGER NOT NULL ," + // 128: wPurifierfilter4
+                "\"W_PURIFIERFILTER5\" INTEGER NOT NULL ," + // 129: wPurifierfilter5
+                "\"W_PURIFIERFILTER6\" INTEGER NOT NULL ," + // 130: wPurifierfilter6
+                "\"W_PURIFIERFILTER7\" INTEGER NOT NULL ," + // 131: wPurifierfilter7
+                "\"W_PURIFIERFILTER8\" INTEGER NOT NULL ," + // 132: wPurifierfilter8
+                "\"W_PURIFIERFILTER9\" INTEGER NOT NULL ," + // 133: wPurifierfilter9
+                "\"W_PURIFIERFILTER10\" INTEGER NOT NULL ," + // 134: wPurifierfilter10
+                "\"HOUSE_ADDRESS\" TEXT," + // 135: houseAddress
+                "\"PROVINCE\" TEXT);"); // 136: province
     }
 
     /** Drops the underlying database table. */
@@ -332,167 +350,176 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         }
         stmt.bindLong(9, entity.getType());
         stmt.bindLong(10, entity.getBusModel());
+        stmt.bindLong(11, entity.getWarmerScreen());
+        stmt.bindLong(12, entity.getHeaterControl());
+        stmt.bindLong(13, entity.getTempCheck());
+        stmt.bindLong(14, entity.getMode());
+        stmt.bindLong(15, entity.getRateGrade());
+        stmt.bindLong(16, entity.getGradeVersion());
+        stmt.bindLong(17, entity.getGradeState());
+        stmt.bindLong(18, entity.getWVerion());
+        stmt.bindLong(19, entity.getMVersion());
  
         String macAddress = entity.getMacAddress();
         if (macAddress != null) {
-            stmt.bindString(11, macAddress);
+            stmt.bindString(20, macAddress);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(12, name);
+            stmt.bindString(21, name);
         }
-        stmt.bindLong(13, entity.getTimerMoudle());
+        stmt.bindLong(22, entity.getTimerMoudle());
  
         String mcuVersion = entity.getMcuVersion();
         if (mcuVersion != null) {
-            stmt.bindString(14, mcuVersion);
+            stmt.bindString(23, mcuVersion);
         }
  
         String wifiVersion = entity.getWifiVersion();
         if (wifiVersion != null) {
-            stmt.bindString(15, wifiVersion);
+            stmt.bindString(24, wifiVersion);
         }
-        stmt.bindLong(16, entity.getWaramerSetTemp());
-        stmt.bindLong(17, entity.getWarmerCurTemp());
-        stmt.bindLong(18, entity.getWarmerSampleData());
-        stmt.bindLong(19, entity.getWarmerRatePower());
-        stmt.bindLong(20, entity.getWarmerCurRunRoatePower());
-        stmt.bindLong(21, entity.getWarmerRunState());
-        stmt.bindLong(22, entity.getDeviceState());
-        stmt.bindLong(23, entity.getWarmerFall());
+        stmt.bindLong(25, entity.getWaramerSetTemp());
+        stmt.bindLong(26, entity.getWarmerCurTemp());
+        stmt.bindLong(27, entity.getWarmerSampleData());
+        stmt.bindLong(28, entity.getWarmerRatePower());
+        stmt.bindLong(29, entity.getWarmerCurRunRoatePower());
+        stmt.bindLong(30, entity.getWarmerRunState());
+        stmt.bindLong(31, entity.getDeviceState());
+        stmt.bindLong(32, entity.getWarmerFall());
  
         String rateState = entity.getRateState();
         if (rateState != null) {
-            stmt.bindString(24, rateState);
+            stmt.bindString(33, rateState);
         }
-        stmt.bindLong(25, entity.getLock());
-        stmt.bindLong(26, entity.getWeek());
-        stmt.bindLong(27, entity.getTimerOpenOneHour());
-        stmt.bindLong(28, entity.getTimerOpenOneMin());
-        stmt.bindLong(29, entity.getTimerCloseOneHour());
-        stmt.bindLong(30, entity.getTimerCloseOneMin());
-        stmt.bindLong(31, entity.getTimerOpenTwoHour());
-        stmt.bindLong(32, entity.getTimerOpenTwoMin());
-        stmt.bindLong(33, entity.getTimerCloseTwoHour());
-        stmt.bindLong(34, entity.getTimerCloseTwoMin());
-        stmt.bindLong(35, entity.getTimerOpenThrHour());
-        stmt.bindLong(36, entity.getTimerOpenThrMin());
-        stmt.bindLong(37, entity.getTimerCloseThrHour());
-        stmt.bindLong(38, entity.getTimerCloseThrMin());
-        stmt.bindLong(39, entity.getTimerOpenForHour());
-        stmt.bindLong(40, entity.getTimerOpenForMin());
-        stmt.bindLong(41, entity.getTimerCloseForHour());
-        stmt.bindLong(42, entity.getTimerCloseForMin());
-        stmt.bindLong(43, entity.getTimerOne());
-        stmt.bindLong(44, entity.getTimerTwo());
-        stmt.bindLong(45, entity.getTimerThr());
-        stmt.bindLong(46, entity.getTimerFor());
-        stmt.bindLong(47, entity.getLockState());
-        stmt.bindLong(48, entity.getScreenState());
-        stmt.bindLong(49, entity.getCurRunState2());
-        stmt.bindLong(50, entity.getCurRunState3());
-        stmt.bindLong(51, entity.getTimerHour());
-        stmt.bindLong(52, entity.getTimerMin());
-        stmt.bindLong(53, entity.getCheckCode());
-        stmt.bindLong(54, entity.getEndCode());
-        stmt.bindLong(55, entity.getUserId());
-        stmt.bindLong(56, entity.getImg());
-        stmt.bindLong(57, entity.getDeviceId());
-        stmt.bindLong(58, entity.getLinked());
-        stmt.bindLong(59, entity.getLinkedSensorId());
-        stmt.bindLong(60, entity.getShareId());
-        stmt.bindLong(61, entity.getSensorState());
-        stmt.bindLong(62, entity.getSensorSimpleTemp());
-        stmt.bindLong(63, entity.getSensorSimpleHum());
-        stmt.bindLong(64, entity.getSorsorPm());
-        stmt.bindLong(65, entity.getSensorOx());
-        stmt.bindLong(66, entity.getSensorHcho());
-        stmt.bindLong(67, entity.getSocketPowerHigh());
-        stmt.bindLong(68, entity.getSocketPowerLow());
-        stmt.bindLong(69, entity.getSocketPower());
-        stmt.bindLong(70, entity.getSocketTemp());
-        stmt.bindLong(71, entity.getSocketState());
-        stmt.bindLong(72, entity.getSocketTimer());
-        stmt.bindLong(73, entity.getSocketTimerHour());
-        stmt.bindLong(74, entity.getSocketTimerMin());
-        stmt.bindLong(75, entity.getSocketCurrent());
-        stmt.bindLong(76, entity.getSocketVal());
-        stmt.bindLong(77, entity.getSocketPowerConsume());
-        stmt.bindLong(78, entity.getTimerSwitch());
-        stmt.bindLong(79, entity.getWaterLevel());
+        stmt.bindLong(34, entity.getLock());
+        stmt.bindLong(35, entity.getWeek());
+        stmt.bindLong(36, entity.getTimerOpenOneHour());
+        stmt.bindLong(37, entity.getTimerOpenOneMin());
+        stmt.bindLong(38, entity.getTimerCloseOneHour());
+        stmt.bindLong(39, entity.getTimerCloseOneMin());
+        stmt.bindLong(40, entity.getTimerOpenTwoHour());
+        stmt.bindLong(41, entity.getTimerOpenTwoMin());
+        stmt.bindLong(42, entity.getTimerCloseTwoHour());
+        stmt.bindLong(43, entity.getTimerCloseTwoMin());
+        stmt.bindLong(44, entity.getTimerOpenThrHour());
+        stmt.bindLong(45, entity.getTimerOpenThrMin());
+        stmt.bindLong(46, entity.getTimerCloseThrHour());
+        stmt.bindLong(47, entity.getTimerCloseThrMin());
+        stmt.bindLong(48, entity.getTimerOpenForHour());
+        stmt.bindLong(49, entity.getTimerOpenForMin());
+        stmt.bindLong(50, entity.getTimerCloseForHour());
+        stmt.bindLong(51, entity.getTimerCloseForMin());
+        stmt.bindLong(52, entity.getTimerOne());
+        stmt.bindLong(53, entity.getTimerTwo());
+        stmt.bindLong(54, entity.getTimerThr());
+        stmt.bindLong(55, entity.getTimerFor());
+        stmt.bindLong(56, entity.getLockState());
+        stmt.bindLong(57, entity.getScreenState());
+        stmt.bindLong(58, entity.getCurRunState2());
+        stmt.bindLong(59, entity.getCurRunState3());
+        stmt.bindLong(60, entity.getTimerHour());
+        stmt.bindLong(61, entity.getTimerMin());
+        stmt.bindLong(62, entity.getCheckCode());
+        stmt.bindLong(63, entity.getEndCode());
+        stmt.bindLong(64, entity.getUserId());
+        stmt.bindLong(65, entity.getImg());
+        stmt.bindLong(66, entity.getDeviceId());
+        stmt.bindLong(67, entity.getLinked());
+        stmt.bindLong(68, entity.getLinkedSensorId());
+        stmt.bindLong(69, entity.getShareId());
+        stmt.bindLong(70, entity.getSensorState());
+        stmt.bindLong(71, entity.getSensorSimpleTemp());
+        stmt.bindLong(72, entity.getSensorSimpleHum());
+        stmt.bindLong(73, entity.getSorsorPm());
+        stmt.bindLong(74, entity.getSensorOx());
+        stmt.bindLong(75, entity.getSensorHcho());
+        stmt.bindLong(76, entity.getSocketPowerHigh());
+        stmt.bindLong(77, entity.getSocketPowerLow());
+        stmt.bindLong(78, entity.getSocketPower());
+        stmt.bindLong(79, entity.getSocketTemp());
+        stmt.bindLong(80, entity.getSocketState());
+        stmt.bindLong(81, entity.getSocketTimer());
+        stmt.bindLong(82, entity.getSocketTimerHour());
+        stmt.bindLong(83, entity.getSocketTimerMin());
+        stmt.bindLong(84, entity.getSocketCurrent());
+        stmt.bindLong(85, entity.getSocketVal());
+        stmt.bindLong(86, entity.getSocketPowerConsume());
+        stmt.bindLong(87, entity.getTimerSwitch());
+        stmt.bindLong(88, entity.getWaterLevel());
  
         String windLevel = entity.getWindLevel();
         if (windLevel != null) {
-            stmt.bindString(80, windLevel);
+            stmt.bindString(89, windLevel);
         }
-        stmt.bindLong(81, entity.getEquipRatedPowerHigh());
-        stmt.bindLong(82, entity.getEquipRatedPowerLow());
-        stmt.bindLong(83, entity.getEquipCurdPowerHigh());
-        stmt.bindLong(84, entity.getEquipCurdPowerLow());
-        stmt.bindLong(85, entity.getFaultCode());
+        stmt.bindLong(90, entity.getEquipRatedPowerHigh());
+        stmt.bindLong(91, entity.getEquipRatedPowerLow());
+        stmt.bindLong(92, entity.getEquipCurdPowerHigh());
+        stmt.bindLong(93, entity.getEquipCurdPowerLow());
+        stmt.bindLong(94, entity.getFaultCode());
  
         String purifierState = entity.getPurifierState();
         if (purifierState != null) {
-            stmt.bindString(86, purifierState);
+            stmt.bindString(95, purifierState);
         }
-        stmt.bindLong(87, entity.getDehumSetTemp());
-        stmt.bindLong(88, entity.getDehumSetHum());
-        stmt.bindLong(89, entity.getDehumInnerTemp());
-        stmt.bindLong(90, entity.getDehumOuterTemp());
-        stmt.bindLong(91, entity.getDehumSleep());
-        stmt.bindLong(92, entity.getDehumAnion());
-        stmt.bindLong(93, entity.getDehumDrying());
-        stmt.bindLong(94, entity.getDehumDefrost());
+        stmt.bindLong(96, entity.getDehumSetTemp());
+        stmt.bindLong(97, entity.getDehumSetHum());
+        stmt.bindLong(98, entity.getDehumInnerTemp());
+        stmt.bindLong(99, entity.getDehumOuterTemp());
+        stmt.bindLong(100, entity.getDehumSleep());
+        stmt.bindLong(101, entity.getDehumAnion());
+        stmt.bindLong(102, entity.getDehumDrying());
+        stmt.bindLong(103, entity.getDehumDefrost());
  
         String aCondState = entity.getACondState();
         if (aCondState != null) {
-            stmt.bindString(95, aCondState);
+            stmt.bindString(104, aCondState);
         }
-        stmt.bindLong(96, entity.getACondSetTemp1());
-        stmt.bindLong(97, entity.getACondSetTemp2());
-        stmt.bindLong(98, entity.getACondSetData());
-        stmt.bindLong(99, entity.getACondSimpleTemp1());
-        stmt.bindLong(100, entity.getACondSimpleTemp2());
-        stmt.bindLong(101, entity.getACondInnerTemp());
-        stmt.bindLong(102, entity.getACondOuterTemp());
-        stmt.bindLong(103, entity.getACondSleep());
-        stmt.bindLong(104, entity.getACondSUpDown());
-        stmt.bindLong(105, entity.getACondSLeftRight());
-        stmt.bindLong(106, entity.getSocketTimerMode());
-        stmt.bindLong(107, entity.getIsSocketTimerMode());
-        stmt.bindLong(108, entity.getWPurifierEndFlow());
-        stmt.bindLong(109, entity.getWPurifierEndYear());
-        stmt.bindLong(110, entity.getWPurifierEndMonth());
-        stmt.bindLong(111, entity.getWPurifierEndDay());
+        stmt.bindLong(105, entity.getACondSetTemp1());
+        stmt.bindLong(106, entity.getACondSetTemp2());
+        stmt.bindLong(107, entity.getACondSetData());
+        stmt.bindLong(108, entity.getACondSimpleTemp1());
+        stmt.bindLong(109, entity.getACondSimpleTemp2());
+        stmt.bindLong(110, entity.getACondInnerTemp());
+        stmt.bindLong(111, entity.getACondOuterTemp());
+        stmt.bindLong(112, entity.getACondSleep());
+        stmt.bindLong(113, entity.getACondSUpDown());
+        stmt.bindLong(114, entity.getACondSLeftRight());
+        stmt.bindLong(115, entity.getSocketTimerMode());
+        stmt.bindLong(116, entity.getIsSocketTimerMode());
+        stmt.bindLong(117, entity.getWPurifierEndFlow());
+        stmt.bindLong(118, entity.getWPurifierEndYear());
+        stmt.bindLong(119, entity.getWPurifierEndMonth());
+        stmt.bindLong(120, entity.getWPurifierEndDay());
  
         String wPurifierState = entity.getWPurifierState();
         if (wPurifierState != null) {
-            stmt.bindString(112, wPurifierState);
+            stmt.bindString(121, wPurifierState);
         }
-        stmt.bindLong(113, entity.getWPurifierFlowData());
-        stmt.bindLong(114, entity.getWPurifierPrimaryQuqlity());
-        stmt.bindLong(115, entity.getWPurifierCurTemp());
-        stmt.bindLong(116, entity.getWPurifierOutQuqlity());
-        stmt.bindLong(117, entity.getWPurifierfilter1());
-        stmt.bindLong(118, entity.getWPurifierfilter2());
-        stmt.bindLong(119, entity.getWPurifierfilter3());
-        stmt.bindLong(120, entity.getWPurifierfilter4());
-        stmt.bindLong(121, entity.getWPurifierfilter5());
-        stmt.bindLong(122, entity.getWPurifierfilter6());
-        stmt.bindLong(123, entity.getWPurifierfilter7());
-        stmt.bindLong(124, entity.getWPurifierfilter8());
-        stmt.bindLong(125, entity.getWPurifierfilter9());
-        stmt.bindLong(126, entity.getWPurifierfilter10());
+        stmt.bindLong(122, entity.getWPurifierFlowData());
+        stmt.bindLong(123, entity.getWPurifierPrimaryQuqlity());
+        stmt.bindLong(124, entity.getWPurifierCurTemp());
+        stmt.bindLong(125, entity.getWPurifierOutQuqlity());
+        stmt.bindLong(126, entity.getWPurifierfilter1());
+        stmt.bindLong(127, entity.getWPurifierfilter2());
+        stmt.bindLong(128, entity.getWPurifierfilter3());
+        stmt.bindLong(129, entity.getWPurifierfilter4());
+        stmt.bindLong(130, entity.getWPurifierfilter5());
+        stmt.bindLong(131, entity.getWPurifierfilter6());
+        stmt.bindLong(132, entity.getWPurifierfilter7());
+        stmt.bindLong(133, entity.getWPurifierfilter8());
+        stmt.bindLong(134, entity.getWPurifierfilter9());
+        stmt.bindLong(135, entity.getWPurifierfilter10());
  
         String houseAddress = entity.getHouseAddress();
         if (houseAddress != null) {
-            stmt.bindString(127, houseAddress);
+            stmt.bindString(136, houseAddress);
         }
  
         String province = entity.getProvince();
         if (province != null) {
-            stmt.bindString(128, province);
+            stmt.bindString(137, province);
         }
     }
 
@@ -525,167 +552,176 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         }
         stmt.bindLong(9, entity.getType());
         stmt.bindLong(10, entity.getBusModel());
+        stmt.bindLong(11, entity.getWarmerScreen());
+        stmt.bindLong(12, entity.getHeaterControl());
+        stmt.bindLong(13, entity.getTempCheck());
+        stmt.bindLong(14, entity.getMode());
+        stmt.bindLong(15, entity.getRateGrade());
+        stmt.bindLong(16, entity.getGradeVersion());
+        stmt.bindLong(17, entity.getGradeState());
+        stmt.bindLong(18, entity.getWVerion());
+        stmt.bindLong(19, entity.getMVersion());
  
         String macAddress = entity.getMacAddress();
         if (macAddress != null) {
-            stmt.bindString(11, macAddress);
+            stmt.bindString(20, macAddress);
         }
  
         String name = entity.getName();
         if (name != null) {
-            stmt.bindString(12, name);
+            stmt.bindString(21, name);
         }
-        stmt.bindLong(13, entity.getTimerMoudle());
+        stmt.bindLong(22, entity.getTimerMoudle());
  
         String mcuVersion = entity.getMcuVersion();
         if (mcuVersion != null) {
-            stmt.bindString(14, mcuVersion);
+            stmt.bindString(23, mcuVersion);
         }
  
         String wifiVersion = entity.getWifiVersion();
         if (wifiVersion != null) {
-            stmt.bindString(15, wifiVersion);
+            stmt.bindString(24, wifiVersion);
         }
-        stmt.bindLong(16, entity.getWaramerSetTemp());
-        stmt.bindLong(17, entity.getWarmerCurTemp());
-        stmt.bindLong(18, entity.getWarmerSampleData());
-        stmt.bindLong(19, entity.getWarmerRatePower());
-        stmt.bindLong(20, entity.getWarmerCurRunRoatePower());
-        stmt.bindLong(21, entity.getWarmerRunState());
-        stmt.bindLong(22, entity.getDeviceState());
-        stmt.bindLong(23, entity.getWarmerFall());
+        stmt.bindLong(25, entity.getWaramerSetTemp());
+        stmt.bindLong(26, entity.getWarmerCurTemp());
+        stmt.bindLong(27, entity.getWarmerSampleData());
+        stmt.bindLong(28, entity.getWarmerRatePower());
+        stmt.bindLong(29, entity.getWarmerCurRunRoatePower());
+        stmt.bindLong(30, entity.getWarmerRunState());
+        stmt.bindLong(31, entity.getDeviceState());
+        stmt.bindLong(32, entity.getWarmerFall());
  
         String rateState = entity.getRateState();
         if (rateState != null) {
-            stmt.bindString(24, rateState);
+            stmt.bindString(33, rateState);
         }
-        stmt.bindLong(25, entity.getLock());
-        stmt.bindLong(26, entity.getWeek());
-        stmt.bindLong(27, entity.getTimerOpenOneHour());
-        stmt.bindLong(28, entity.getTimerOpenOneMin());
-        stmt.bindLong(29, entity.getTimerCloseOneHour());
-        stmt.bindLong(30, entity.getTimerCloseOneMin());
-        stmt.bindLong(31, entity.getTimerOpenTwoHour());
-        stmt.bindLong(32, entity.getTimerOpenTwoMin());
-        stmt.bindLong(33, entity.getTimerCloseTwoHour());
-        stmt.bindLong(34, entity.getTimerCloseTwoMin());
-        stmt.bindLong(35, entity.getTimerOpenThrHour());
-        stmt.bindLong(36, entity.getTimerOpenThrMin());
-        stmt.bindLong(37, entity.getTimerCloseThrHour());
-        stmt.bindLong(38, entity.getTimerCloseThrMin());
-        stmt.bindLong(39, entity.getTimerOpenForHour());
-        stmt.bindLong(40, entity.getTimerOpenForMin());
-        stmt.bindLong(41, entity.getTimerCloseForHour());
-        stmt.bindLong(42, entity.getTimerCloseForMin());
-        stmt.bindLong(43, entity.getTimerOne());
-        stmt.bindLong(44, entity.getTimerTwo());
-        stmt.bindLong(45, entity.getTimerThr());
-        stmt.bindLong(46, entity.getTimerFor());
-        stmt.bindLong(47, entity.getLockState());
-        stmt.bindLong(48, entity.getScreenState());
-        stmt.bindLong(49, entity.getCurRunState2());
-        stmt.bindLong(50, entity.getCurRunState3());
-        stmt.bindLong(51, entity.getTimerHour());
-        stmt.bindLong(52, entity.getTimerMin());
-        stmt.bindLong(53, entity.getCheckCode());
-        stmt.bindLong(54, entity.getEndCode());
-        stmt.bindLong(55, entity.getUserId());
-        stmt.bindLong(56, entity.getImg());
-        stmt.bindLong(57, entity.getDeviceId());
-        stmt.bindLong(58, entity.getLinked());
-        stmt.bindLong(59, entity.getLinkedSensorId());
-        stmt.bindLong(60, entity.getShareId());
-        stmt.bindLong(61, entity.getSensorState());
-        stmt.bindLong(62, entity.getSensorSimpleTemp());
-        stmt.bindLong(63, entity.getSensorSimpleHum());
-        stmt.bindLong(64, entity.getSorsorPm());
-        stmt.bindLong(65, entity.getSensorOx());
-        stmt.bindLong(66, entity.getSensorHcho());
-        stmt.bindLong(67, entity.getSocketPowerHigh());
-        stmt.bindLong(68, entity.getSocketPowerLow());
-        stmt.bindLong(69, entity.getSocketPower());
-        stmt.bindLong(70, entity.getSocketTemp());
-        stmt.bindLong(71, entity.getSocketState());
-        stmt.bindLong(72, entity.getSocketTimer());
-        stmt.bindLong(73, entity.getSocketTimerHour());
-        stmt.bindLong(74, entity.getSocketTimerMin());
-        stmt.bindLong(75, entity.getSocketCurrent());
-        stmt.bindLong(76, entity.getSocketVal());
-        stmt.bindLong(77, entity.getSocketPowerConsume());
-        stmt.bindLong(78, entity.getTimerSwitch());
-        stmt.bindLong(79, entity.getWaterLevel());
+        stmt.bindLong(34, entity.getLock());
+        stmt.bindLong(35, entity.getWeek());
+        stmt.bindLong(36, entity.getTimerOpenOneHour());
+        stmt.bindLong(37, entity.getTimerOpenOneMin());
+        stmt.bindLong(38, entity.getTimerCloseOneHour());
+        stmt.bindLong(39, entity.getTimerCloseOneMin());
+        stmt.bindLong(40, entity.getTimerOpenTwoHour());
+        stmt.bindLong(41, entity.getTimerOpenTwoMin());
+        stmt.bindLong(42, entity.getTimerCloseTwoHour());
+        stmt.bindLong(43, entity.getTimerCloseTwoMin());
+        stmt.bindLong(44, entity.getTimerOpenThrHour());
+        stmt.bindLong(45, entity.getTimerOpenThrMin());
+        stmt.bindLong(46, entity.getTimerCloseThrHour());
+        stmt.bindLong(47, entity.getTimerCloseThrMin());
+        stmt.bindLong(48, entity.getTimerOpenForHour());
+        stmt.bindLong(49, entity.getTimerOpenForMin());
+        stmt.bindLong(50, entity.getTimerCloseForHour());
+        stmt.bindLong(51, entity.getTimerCloseForMin());
+        stmt.bindLong(52, entity.getTimerOne());
+        stmt.bindLong(53, entity.getTimerTwo());
+        stmt.bindLong(54, entity.getTimerThr());
+        stmt.bindLong(55, entity.getTimerFor());
+        stmt.bindLong(56, entity.getLockState());
+        stmt.bindLong(57, entity.getScreenState());
+        stmt.bindLong(58, entity.getCurRunState2());
+        stmt.bindLong(59, entity.getCurRunState3());
+        stmt.bindLong(60, entity.getTimerHour());
+        stmt.bindLong(61, entity.getTimerMin());
+        stmt.bindLong(62, entity.getCheckCode());
+        stmt.bindLong(63, entity.getEndCode());
+        stmt.bindLong(64, entity.getUserId());
+        stmt.bindLong(65, entity.getImg());
+        stmt.bindLong(66, entity.getDeviceId());
+        stmt.bindLong(67, entity.getLinked());
+        stmt.bindLong(68, entity.getLinkedSensorId());
+        stmt.bindLong(69, entity.getShareId());
+        stmt.bindLong(70, entity.getSensorState());
+        stmt.bindLong(71, entity.getSensorSimpleTemp());
+        stmt.bindLong(72, entity.getSensorSimpleHum());
+        stmt.bindLong(73, entity.getSorsorPm());
+        stmt.bindLong(74, entity.getSensorOx());
+        stmt.bindLong(75, entity.getSensorHcho());
+        stmt.bindLong(76, entity.getSocketPowerHigh());
+        stmt.bindLong(77, entity.getSocketPowerLow());
+        stmt.bindLong(78, entity.getSocketPower());
+        stmt.bindLong(79, entity.getSocketTemp());
+        stmt.bindLong(80, entity.getSocketState());
+        stmt.bindLong(81, entity.getSocketTimer());
+        stmt.bindLong(82, entity.getSocketTimerHour());
+        stmt.bindLong(83, entity.getSocketTimerMin());
+        stmt.bindLong(84, entity.getSocketCurrent());
+        stmt.bindLong(85, entity.getSocketVal());
+        stmt.bindLong(86, entity.getSocketPowerConsume());
+        stmt.bindLong(87, entity.getTimerSwitch());
+        stmt.bindLong(88, entity.getWaterLevel());
  
         String windLevel = entity.getWindLevel();
         if (windLevel != null) {
-            stmt.bindString(80, windLevel);
+            stmt.bindString(89, windLevel);
         }
-        stmt.bindLong(81, entity.getEquipRatedPowerHigh());
-        stmt.bindLong(82, entity.getEquipRatedPowerLow());
-        stmt.bindLong(83, entity.getEquipCurdPowerHigh());
-        stmt.bindLong(84, entity.getEquipCurdPowerLow());
-        stmt.bindLong(85, entity.getFaultCode());
+        stmt.bindLong(90, entity.getEquipRatedPowerHigh());
+        stmt.bindLong(91, entity.getEquipRatedPowerLow());
+        stmt.bindLong(92, entity.getEquipCurdPowerHigh());
+        stmt.bindLong(93, entity.getEquipCurdPowerLow());
+        stmt.bindLong(94, entity.getFaultCode());
  
         String purifierState = entity.getPurifierState();
         if (purifierState != null) {
-            stmt.bindString(86, purifierState);
+            stmt.bindString(95, purifierState);
         }
-        stmt.bindLong(87, entity.getDehumSetTemp());
-        stmt.bindLong(88, entity.getDehumSetHum());
-        stmt.bindLong(89, entity.getDehumInnerTemp());
-        stmt.bindLong(90, entity.getDehumOuterTemp());
-        stmt.bindLong(91, entity.getDehumSleep());
-        stmt.bindLong(92, entity.getDehumAnion());
-        stmt.bindLong(93, entity.getDehumDrying());
-        stmt.bindLong(94, entity.getDehumDefrost());
+        stmt.bindLong(96, entity.getDehumSetTemp());
+        stmt.bindLong(97, entity.getDehumSetHum());
+        stmt.bindLong(98, entity.getDehumInnerTemp());
+        stmt.bindLong(99, entity.getDehumOuterTemp());
+        stmt.bindLong(100, entity.getDehumSleep());
+        stmt.bindLong(101, entity.getDehumAnion());
+        stmt.bindLong(102, entity.getDehumDrying());
+        stmt.bindLong(103, entity.getDehumDefrost());
  
         String aCondState = entity.getACondState();
         if (aCondState != null) {
-            stmt.bindString(95, aCondState);
+            stmt.bindString(104, aCondState);
         }
-        stmt.bindLong(96, entity.getACondSetTemp1());
-        stmt.bindLong(97, entity.getACondSetTemp2());
-        stmt.bindLong(98, entity.getACondSetData());
-        stmt.bindLong(99, entity.getACondSimpleTemp1());
-        stmt.bindLong(100, entity.getACondSimpleTemp2());
-        stmt.bindLong(101, entity.getACondInnerTemp());
-        stmt.bindLong(102, entity.getACondOuterTemp());
-        stmt.bindLong(103, entity.getACondSleep());
-        stmt.bindLong(104, entity.getACondSUpDown());
-        stmt.bindLong(105, entity.getACondSLeftRight());
-        stmt.bindLong(106, entity.getSocketTimerMode());
-        stmt.bindLong(107, entity.getIsSocketTimerMode());
-        stmt.bindLong(108, entity.getWPurifierEndFlow());
-        stmt.bindLong(109, entity.getWPurifierEndYear());
-        stmt.bindLong(110, entity.getWPurifierEndMonth());
-        stmt.bindLong(111, entity.getWPurifierEndDay());
+        stmt.bindLong(105, entity.getACondSetTemp1());
+        stmt.bindLong(106, entity.getACondSetTemp2());
+        stmt.bindLong(107, entity.getACondSetData());
+        stmt.bindLong(108, entity.getACondSimpleTemp1());
+        stmt.bindLong(109, entity.getACondSimpleTemp2());
+        stmt.bindLong(110, entity.getACondInnerTemp());
+        stmt.bindLong(111, entity.getACondOuterTemp());
+        stmt.bindLong(112, entity.getACondSleep());
+        stmt.bindLong(113, entity.getACondSUpDown());
+        stmt.bindLong(114, entity.getACondSLeftRight());
+        stmt.bindLong(115, entity.getSocketTimerMode());
+        stmt.bindLong(116, entity.getIsSocketTimerMode());
+        stmt.bindLong(117, entity.getWPurifierEndFlow());
+        stmt.bindLong(118, entity.getWPurifierEndYear());
+        stmt.bindLong(119, entity.getWPurifierEndMonth());
+        stmt.bindLong(120, entity.getWPurifierEndDay());
  
         String wPurifierState = entity.getWPurifierState();
         if (wPurifierState != null) {
-            stmt.bindString(112, wPurifierState);
+            stmt.bindString(121, wPurifierState);
         }
-        stmt.bindLong(113, entity.getWPurifierFlowData());
-        stmt.bindLong(114, entity.getWPurifierPrimaryQuqlity());
-        stmt.bindLong(115, entity.getWPurifierCurTemp());
-        stmt.bindLong(116, entity.getWPurifierOutQuqlity());
-        stmt.bindLong(117, entity.getWPurifierfilter1());
-        stmt.bindLong(118, entity.getWPurifierfilter2());
-        stmt.bindLong(119, entity.getWPurifierfilter3());
-        stmt.bindLong(120, entity.getWPurifierfilter4());
-        stmt.bindLong(121, entity.getWPurifierfilter5());
-        stmt.bindLong(122, entity.getWPurifierfilter6());
-        stmt.bindLong(123, entity.getWPurifierfilter7());
-        stmt.bindLong(124, entity.getWPurifierfilter8());
-        stmt.bindLong(125, entity.getWPurifierfilter9());
-        stmt.bindLong(126, entity.getWPurifierfilter10());
+        stmt.bindLong(122, entity.getWPurifierFlowData());
+        stmt.bindLong(123, entity.getWPurifierPrimaryQuqlity());
+        stmt.bindLong(124, entity.getWPurifierCurTemp());
+        stmt.bindLong(125, entity.getWPurifierOutQuqlity());
+        stmt.bindLong(126, entity.getWPurifierfilter1());
+        stmt.bindLong(127, entity.getWPurifierfilter2());
+        stmt.bindLong(128, entity.getWPurifierfilter3());
+        stmt.bindLong(129, entity.getWPurifierfilter4());
+        stmt.bindLong(130, entity.getWPurifierfilter5());
+        stmt.bindLong(131, entity.getWPurifierfilter6());
+        stmt.bindLong(132, entity.getWPurifierfilter7());
+        stmt.bindLong(133, entity.getWPurifierfilter8());
+        stmt.bindLong(134, entity.getWPurifierfilter9());
+        stmt.bindLong(135, entity.getWPurifierfilter10());
  
         String houseAddress = entity.getHouseAddress();
         if (houseAddress != null) {
-            stmt.bindString(127, houseAddress);
+            stmt.bindString(136, houseAddress);
         }
  
         String province = entity.getProvince();
         if (province != null) {
-            stmt.bindString(128, province);
+            stmt.bindString(137, province);
         }
     }
 
@@ -707,124 +743,133 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
             cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7), // share
             cursor.getInt(offset + 8), // type
             cursor.getInt(offset + 9), // busModel
-            cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10), // macAddress
-            cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11), // name
-            cursor.getInt(offset + 12), // timerMoudle
-            cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13), // mcuVersion
-            cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14), // wifiVersion
-            cursor.getInt(offset + 15), // waramerSetTemp
-            cursor.getInt(offset + 16), // warmerCurTemp
-            cursor.getInt(offset + 17), // warmerSampleData
-            cursor.getInt(offset + 18), // warmerRatePower
-            cursor.getInt(offset + 19), // warmerCurRunRoatePower
-            cursor.getInt(offset + 20), // warmerRunState
-            cursor.getInt(offset + 21), // deviceState
-            cursor.getInt(offset + 22), // warmerFall
-            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // rateState
-            cursor.getInt(offset + 24), // lock
-            cursor.getInt(offset + 25), // week
-            cursor.getInt(offset + 26), // timerOpenOneHour
-            cursor.getInt(offset + 27), // timerOpenOneMin
-            cursor.getInt(offset + 28), // timerCloseOneHour
-            cursor.getInt(offset + 29), // timerCloseOneMin
-            cursor.getInt(offset + 30), // timerOpenTwoHour
-            cursor.getInt(offset + 31), // timerOpenTwoMin
-            cursor.getInt(offset + 32), // timerCloseTwoHour
-            cursor.getInt(offset + 33), // timerCloseTwoMin
-            cursor.getInt(offset + 34), // timerOpenThrHour
-            cursor.getInt(offset + 35), // timerOpenThrMin
-            cursor.getInt(offset + 36), // timerCloseThrHour
-            cursor.getInt(offset + 37), // timerCloseThrMin
-            cursor.getInt(offset + 38), // timerOpenForHour
-            cursor.getInt(offset + 39), // timerOpenForMin
-            cursor.getInt(offset + 40), // timerCloseForHour
-            cursor.getInt(offset + 41), // timerCloseForMin
-            cursor.getInt(offset + 42), // timerOne
-            cursor.getInt(offset + 43), // timerTwo
-            cursor.getInt(offset + 44), // timerThr
-            cursor.getInt(offset + 45), // timerFor
-            cursor.getInt(offset + 46), // lockState
-            cursor.getInt(offset + 47), // screenState
-            cursor.getInt(offset + 48), // curRunState2
-            cursor.getInt(offset + 49), // curRunState3
-            cursor.getInt(offset + 50), // timerHour
-            cursor.getInt(offset + 51), // timerMin
-            cursor.getInt(offset + 52), // checkCode
-            cursor.getInt(offset + 53), // endCode
-            cursor.getInt(offset + 54), // userId
-            cursor.getInt(offset + 55), // img
-            cursor.getInt(offset + 56), // deviceId
-            cursor.getInt(offset + 57), // linked
-            cursor.getInt(offset + 58), // linkedSensorId
-            cursor.getLong(offset + 59), // shareId
-            cursor.getInt(offset + 60), // sensorState
-            cursor.getInt(offset + 61), // sensorSimpleTemp
-            cursor.getInt(offset + 62), // sensorSimpleHum
-            cursor.getInt(offset + 63), // sorsorPm
-            cursor.getInt(offset + 64), // sensorOx
-            cursor.getInt(offset + 65), // sensorHcho
-            cursor.getInt(offset + 66), // socketPowerHigh
-            cursor.getInt(offset + 67), // socketPowerLow
-            cursor.getInt(offset + 68), // socketPower
-            cursor.getInt(offset + 69), // socketTemp
-            cursor.getInt(offset + 70), // socketState
-            cursor.getInt(offset + 71), // socketTimer
-            cursor.getInt(offset + 72), // socketTimerHour
-            cursor.getInt(offset + 73), // socketTimerMin
-            cursor.getInt(offset + 74), // socketCurrent
-            cursor.getInt(offset + 75), // socketVal
-            cursor.getInt(offset + 76), // socketPowerConsume
-            cursor.getInt(offset + 77), // timerSwitch
-            cursor.getInt(offset + 78), // waterLevel
-            cursor.isNull(offset + 79) ? null : cursor.getString(offset + 79), // windLevel
-            cursor.getInt(offset + 80), // equipRatedPowerHigh
-            cursor.getInt(offset + 81), // equipRatedPowerLow
-            cursor.getInt(offset + 82), // equipCurdPowerHigh
-            cursor.getInt(offset + 83), // equipCurdPowerLow
-            cursor.getInt(offset + 84), // faultCode
-            cursor.isNull(offset + 85) ? null : cursor.getString(offset + 85), // purifierState
-            cursor.getInt(offset + 86), // dehumSetTemp
-            cursor.getInt(offset + 87), // dehumSetHum
-            cursor.getInt(offset + 88), // dehumInnerTemp
-            cursor.getInt(offset + 89), // dehumOuterTemp
-            cursor.getInt(offset + 90), // dehumSleep
-            cursor.getInt(offset + 91), // dehumAnion
-            cursor.getInt(offset + 92), // dehumDrying
-            cursor.getInt(offset + 93), // dehumDefrost
-            cursor.isNull(offset + 94) ? null : cursor.getString(offset + 94), // aCondState
-            cursor.getInt(offset + 95), // aCondSetTemp1
-            cursor.getInt(offset + 96), // aCondSetTemp2
-            cursor.getInt(offset + 97), // aCondSetData
-            cursor.getInt(offset + 98), // aCondSimpleTemp1
-            cursor.getInt(offset + 99), // aCondSimpleTemp2
-            cursor.getInt(offset + 100), // aCondInnerTemp
-            cursor.getInt(offset + 101), // aCondOuterTemp
-            cursor.getInt(offset + 102), // aCondSleep
-            cursor.getInt(offset + 103), // aCondSUpDown
-            cursor.getInt(offset + 104), // aCondSLeftRight
-            cursor.getInt(offset + 105), // socketTimerMode
-            cursor.getInt(offset + 106), // isSocketTimerMode
-            cursor.getInt(offset + 107), // wPurifierEndFlow
-            cursor.getInt(offset + 108), // wPurifierEndYear
-            cursor.getInt(offset + 109), // wPurifierEndMonth
-            cursor.getInt(offset + 110), // wPurifierEndDay
-            cursor.isNull(offset + 111) ? null : cursor.getString(offset + 111), // wPurifierState
-            cursor.getInt(offset + 112), // wPurifierFlowData
-            cursor.getInt(offset + 113), // wPurifierPrimaryQuqlity
-            cursor.getInt(offset + 114), // wPurifierCurTemp
-            cursor.getInt(offset + 115), // wPurifierOutQuqlity
-            cursor.getInt(offset + 116), // wPurifierfilter1
-            cursor.getInt(offset + 117), // wPurifierfilter2
-            cursor.getInt(offset + 118), // wPurifierfilter3
-            cursor.getInt(offset + 119), // wPurifierfilter4
-            cursor.getInt(offset + 120), // wPurifierfilter5
-            cursor.getInt(offset + 121), // wPurifierfilter6
-            cursor.getInt(offset + 122), // wPurifierfilter7
-            cursor.getInt(offset + 123), // wPurifierfilter8
-            cursor.getInt(offset + 124), // wPurifierfilter9
-            cursor.getInt(offset + 125), // wPurifierfilter10
-            cursor.isNull(offset + 126) ? null : cursor.getString(offset + 126), // houseAddress
-            cursor.isNull(offset + 127) ? null : cursor.getString(offset + 127) // province
+            cursor.getInt(offset + 10), // warmerScreen
+            cursor.getInt(offset + 11), // heaterControl
+            cursor.getInt(offset + 12), // tempCheck
+            cursor.getInt(offset + 13), // mode
+            cursor.getInt(offset + 14), // rateGrade
+            cursor.getInt(offset + 15), // gradeVersion
+            cursor.getInt(offset + 16), // gradeState
+            cursor.getInt(offset + 17), // wVerion
+            cursor.getInt(offset + 18), // mVersion
+            cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19), // macAddress
+            cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20), // name
+            cursor.getInt(offset + 21), // timerMoudle
+            cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22), // mcuVersion
+            cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23), // wifiVersion
+            cursor.getInt(offset + 24), // waramerSetTemp
+            cursor.getInt(offset + 25), // warmerCurTemp
+            cursor.getInt(offset + 26), // warmerSampleData
+            cursor.getInt(offset + 27), // warmerRatePower
+            cursor.getInt(offset + 28), // warmerCurRunRoatePower
+            cursor.getInt(offset + 29), // warmerRunState
+            cursor.getInt(offset + 30), // deviceState
+            cursor.getInt(offset + 31), // warmerFall
+            cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32), // rateState
+            cursor.getInt(offset + 33), // lock
+            cursor.getInt(offset + 34), // week
+            cursor.getInt(offset + 35), // timerOpenOneHour
+            cursor.getInt(offset + 36), // timerOpenOneMin
+            cursor.getInt(offset + 37), // timerCloseOneHour
+            cursor.getInt(offset + 38), // timerCloseOneMin
+            cursor.getInt(offset + 39), // timerOpenTwoHour
+            cursor.getInt(offset + 40), // timerOpenTwoMin
+            cursor.getInt(offset + 41), // timerCloseTwoHour
+            cursor.getInt(offset + 42), // timerCloseTwoMin
+            cursor.getInt(offset + 43), // timerOpenThrHour
+            cursor.getInt(offset + 44), // timerOpenThrMin
+            cursor.getInt(offset + 45), // timerCloseThrHour
+            cursor.getInt(offset + 46), // timerCloseThrMin
+            cursor.getInt(offset + 47), // timerOpenForHour
+            cursor.getInt(offset + 48), // timerOpenForMin
+            cursor.getInt(offset + 49), // timerCloseForHour
+            cursor.getInt(offset + 50), // timerCloseForMin
+            cursor.getInt(offset + 51), // timerOne
+            cursor.getInt(offset + 52), // timerTwo
+            cursor.getInt(offset + 53), // timerThr
+            cursor.getInt(offset + 54), // timerFor
+            cursor.getInt(offset + 55), // lockState
+            cursor.getInt(offset + 56), // screenState
+            cursor.getInt(offset + 57), // curRunState2
+            cursor.getInt(offset + 58), // curRunState3
+            cursor.getInt(offset + 59), // timerHour
+            cursor.getInt(offset + 60), // timerMin
+            cursor.getInt(offset + 61), // checkCode
+            cursor.getInt(offset + 62), // endCode
+            cursor.getInt(offset + 63), // userId
+            cursor.getInt(offset + 64), // img
+            cursor.getInt(offset + 65), // deviceId
+            cursor.getInt(offset + 66), // linked
+            cursor.getInt(offset + 67), // linkedSensorId
+            cursor.getLong(offset + 68), // shareId
+            cursor.getInt(offset + 69), // sensorState
+            cursor.getInt(offset + 70), // sensorSimpleTemp
+            cursor.getInt(offset + 71), // sensorSimpleHum
+            cursor.getInt(offset + 72), // sorsorPm
+            cursor.getInt(offset + 73), // sensorOx
+            cursor.getInt(offset + 74), // sensorHcho
+            cursor.getInt(offset + 75), // socketPowerHigh
+            cursor.getInt(offset + 76), // socketPowerLow
+            cursor.getInt(offset + 77), // socketPower
+            cursor.getInt(offset + 78), // socketTemp
+            cursor.getInt(offset + 79), // socketState
+            cursor.getInt(offset + 80), // socketTimer
+            cursor.getInt(offset + 81), // socketTimerHour
+            cursor.getInt(offset + 82), // socketTimerMin
+            cursor.getInt(offset + 83), // socketCurrent
+            cursor.getInt(offset + 84), // socketVal
+            cursor.getInt(offset + 85), // socketPowerConsume
+            cursor.getInt(offset + 86), // timerSwitch
+            cursor.getInt(offset + 87), // waterLevel
+            cursor.isNull(offset + 88) ? null : cursor.getString(offset + 88), // windLevel
+            cursor.getInt(offset + 89), // equipRatedPowerHigh
+            cursor.getInt(offset + 90), // equipRatedPowerLow
+            cursor.getInt(offset + 91), // equipCurdPowerHigh
+            cursor.getInt(offset + 92), // equipCurdPowerLow
+            cursor.getInt(offset + 93), // faultCode
+            cursor.isNull(offset + 94) ? null : cursor.getString(offset + 94), // purifierState
+            cursor.getInt(offset + 95), // dehumSetTemp
+            cursor.getInt(offset + 96), // dehumSetHum
+            cursor.getInt(offset + 97), // dehumInnerTemp
+            cursor.getInt(offset + 98), // dehumOuterTemp
+            cursor.getInt(offset + 99), // dehumSleep
+            cursor.getInt(offset + 100), // dehumAnion
+            cursor.getInt(offset + 101), // dehumDrying
+            cursor.getInt(offset + 102), // dehumDefrost
+            cursor.isNull(offset + 103) ? null : cursor.getString(offset + 103), // aCondState
+            cursor.getInt(offset + 104), // aCondSetTemp1
+            cursor.getInt(offset + 105), // aCondSetTemp2
+            cursor.getInt(offset + 106), // aCondSetData
+            cursor.getInt(offset + 107), // aCondSimpleTemp1
+            cursor.getInt(offset + 108), // aCondSimpleTemp2
+            cursor.getInt(offset + 109), // aCondInnerTemp
+            cursor.getInt(offset + 110), // aCondOuterTemp
+            cursor.getInt(offset + 111), // aCondSleep
+            cursor.getInt(offset + 112), // aCondSUpDown
+            cursor.getInt(offset + 113), // aCondSLeftRight
+            cursor.getInt(offset + 114), // socketTimerMode
+            cursor.getInt(offset + 115), // isSocketTimerMode
+            cursor.getInt(offset + 116), // wPurifierEndFlow
+            cursor.getInt(offset + 117), // wPurifierEndYear
+            cursor.getInt(offset + 118), // wPurifierEndMonth
+            cursor.getInt(offset + 119), // wPurifierEndDay
+            cursor.isNull(offset + 120) ? null : cursor.getString(offset + 120), // wPurifierState
+            cursor.getInt(offset + 121), // wPurifierFlowData
+            cursor.getInt(offset + 122), // wPurifierPrimaryQuqlity
+            cursor.getInt(offset + 123), // wPurifierCurTemp
+            cursor.getInt(offset + 124), // wPurifierOutQuqlity
+            cursor.getInt(offset + 125), // wPurifierfilter1
+            cursor.getInt(offset + 126), // wPurifierfilter2
+            cursor.getInt(offset + 127), // wPurifierfilter3
+            cursor.getInt(offset + 128), // wPurifierfilter4
+            cursor.getInt(offset + 129), // wPurifierfilter5
+            cursor.getInt(offset + 130), // wPurifierfilter6
+            cursor.getInt(offset + 131), // wPurifierfilter7
+            cursor.getInt(offset + 132), // wPurifierfilter8
+            cursor.getInt(offset + 133), // wPurifierfilter9
+            cursor.getInt(offset + 134), // wPurifierfilter10
+            cursor.isNull(offset + 135) ? null : cursor.getString(offset + 135), // houseAddress
+            cursor.isNull(offset + 136) ? null : cursor.getString(offset + 136) // province
         );
         return entity;
     }
@@ -841,124 +886,133 @@ public class DeviceChildDao extends AbstractDao<DeviceChild, Long> {
         entity.setShare(cursor.isNull(offset + 7) ? null : cursor.getString(offset + 7));
         entity.setType(cursor.getInt(offset + 8));
         entity.setBusModel(cursor.getInt(offset + 9));
-        entity.setMacAddress(cursor.isNull(offset + 10) ? null : cursor.getString(offset + 10));
-        entity.setName(cursor.isNull(offset + 11) ? null : cursor.getString(offset + 11));
-        entity.setTimerMoudle(cursor.getInt(offset + 12));
-        entity.setMcuVersion(cursor.isNull(offset + 13) ? null : cursor.getString(offset + 13));
-        entity.setWifiVersion(cursor.isNull(offset + 14) ? null : cursor.getString(offset + 14));
-        entity.setWaramerSetTemp(cursor.getInt(offset + 15));
-        entity.setWarmerCurTemp(cursor.getInt(offset + 16));
-        entity.setWarmerSampleData(cursor.getInt(offset + 17));
-        entity.setWarmerRatePower(cursor.getInt(offset + 18));
-        entity.setWarmerCurRunRoatePower(cursor.getInt(offset + 19));
-        entity.setWarmerRunState(cursor.getInt(offset + 20));
-        entity.setDeviceState(cursor.getInt(offset + 21));
-        entity.setWarmerFall(cursor.getInt(offset + 22));
-        entity.setRateState(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
-        entity.setLock(cursor.getInt(offset + 24));
-        entity.setWeek(cursor.getInt(offset + 25));
-        entity.setTimerOpenOneHour(cursor.getInt(offset + 26));
-        entity.setTimerOpenOneMin(cursor.getInt(offset + 27));
-        entity.setTimerCloseOneHour(cursor.getInt(offset + 28));
-        entity.setTimerCloseOneMin(cursor.getInt(offset + 29));
-        entity.setTimerOpenTwoHour(cursor.getInt(offset + 30));
-        entity.setTimerOpenTwoMin(cursor.getInt(offset + 31));
-        entity.setTimerCloseTwoHour(cursor.getInt(offset + 32));
-        entity.setTimerCloseTwoMin(cursor.getInt(offset + 33));
-        entity.setTimerOpenThrHour(cursor.getInt(offset + 34));
-        entity.setTimerOpenThrMin(cursor.getInt(offset + 35));
-        entity.setTimerCloseThrHour(cursor.getInt(offset + 36));
-        entity.setTimerCloseThrMin(cursor.getInt(offset + 37));
-        entity.setTimerOpenForHour(cursor.getInt(offset + 38));
-        entity.setTimerOpenForMin(cursor.getInt(offset + 39));
-        entity.setTimerCloseForHour(cursor.getInt(offset + 40));
-        entity.setTimerCloseForMin(cursor.getInt(offset + 41));
-        entity.setTimerOne(cursor.getInt(offset + 42));
-        entity.setTimerTwo(cursor.getInt(offset + 43));
-        entity.setTimerThr(cursor.getInt(offset + 44));
-        entity.setTimerFor(cursor.getInt(offset + 45));
-        entity.setLockState(cursor.getInt(offset + 46));
-        entity.setScreenState(cursor.getInt(offset + 47));
-        entity.setCurRunState2(cursor.getInt(offset + 48));
-        entity.setCurRunState3(cursor.getInt(offset + 49));
-        entity.setTimerHour(cursor.getInt(offset + 50));
-        entity.setTimerMin(cursor.getInt(offset + 51));
-        entity.setCheckCode(cursor.getInt(offset + 52));
-        entity.setEndCode(cursor.getInt(offset + 53));
-        entity.setUserId(cursor.getInt(offset + 54));
-        entity.setImg(cursor.getInt(offset + 55));
-        entity.setDeviceId(cursor.getInt(offset + 56));
-        entity.setLinked(cursor.getInt(offset + 57));
-        entity.setLinkedSensorId(cursor.getInt(offset + 58));
-        entity.setShareId(cursor.getLong(offset + 59));
-        entity.setSensorState(cursor.getInt(offset + 60));
-        entity.setSensorSimpleTemp(cursor.getInt(offset + 61));
-        entity.setSensorSimpleHum(cursor.getInt(offset + 62));
-        entity.setSorsorPm(cursor.getInt(offset + 63));
-        entity.setSensorOx(cursor.getInt(offset + 64));
-        entity.setSensorHcho(cursor.getInt(offset + 65));
-        entity.setSocketPowerHigh(cursor.getInt(offset + 66));
-        entity.setSocketPowerLow(cursor.getInt(offset + 67));
-        entity.setSocketPower(cursor.getInt(offset + 68));
-        entity.setSocketTemp(cursor.getInt(offset + 69));
-        entity.setSocketState(cursor.getInt(offset + 70));
-        entity.setSocketTimer(cursor.getInt(offset + 71));
-        entity.setSocketTimerHour(cursor.getInt(offset + 72));
-        entity.setSocketTimerMin(cursor.getInt(offset + 73));
-        entity.setSocketCurrent(cursor.getInt(offset + 74));
-        entity.setSocketVal(cursor.getInt(offset + 75));
-        entity.setSocketPowerConsume(cursor.getInt(offset + 76));
-        entity.setTimerSwitch(cursor.getInt(offset + 77));
-        entity.setWaterLevel(cursor.getInt(offset + 78));
-        entity.setWindLevel(cursor.isNull(offset + 79) ? null : cursor.getString(offset + 79));
-        entity.setEquipRatedPowerHigh(cursor.getInt(offset + 80));
-        entity.setEquipRatedPowerLow(cursor.getInt(offset + 81));
-        entity.setEquipCurdPowerHigh(cursor.getInt(offset + 82));
-        entity.setEquipCurdPowerLow(cursor.getInt(offset + 83));
-        entity.setFaultCode(cursor.getInt(offset + 84));
-        entity.setPurifierState(cursor.isNull(offset + 85) ? null : cursor.getString(offset + 85));
-        entity.setDehumSetTemp(cursor.getInt(offset + 86));
-        entity.setDehumSetHum(cursor.getInt(offset + 87));
-        entity.setDehumInnerTemp(cursor.getInt(offset + 88));
-        entity.setDehumOuterTemp(cursor.getInt(offset + 89));
-        entity.setDehumSleep(cursor.getInt(offset + 90));
-        entity.setDehumAnion(cursor.getInt(offset + 91));
-        entity.setDehumDrying(cursor.getInt(offset + 92));
-        entity.setDehumDefrost(cursor.getInt(offset + 93));
-        entity.setACondState(cursor.isNull(offset + 94) ? null : cursor.getString(offset + 94));
-        entity.setACondSetTemp1(cursor.getInt(offset + 95));
-        entity.setACondSetTemp2(cursor.getInt(offset + 96));
-        entity.setACondSetData(cursor.getInt(offset + 97));
-        entity.setACondSimpleTemp1(cursor.getInt(offset + 98));
-        entity.setACondSimpleTemp2(cursor.getInt(offset + 99));
-        entity.setACondInnerTemp(cursor.getInt(offset + 100));
-        entity.setACondOuterTemp(cursor.getInt(offset + 101));
-        entity.setACondSleep(cursor.getInt(offset + 102));
-        entity.setACondSUpDown(cursor.getInt(offset + 103));
-        entity.setACondSLeftRight(cursor.getInt(offset + 104));
-        entity.setSocketTimerMode(cursor.getInt(offset + 105));
-        entity.setIsSocketTimerMode(cursor.getInt(offset + 106));
-        entity.setWPurifierEndFlow(cursor.getInt(offset + 107));
-        entity.setWPurifierEndYear(cursor.getInt(offset + 108));
-        entity.setWPurifierEndMonth(cursor.getInt(offset + 109));
-        entity.setWPurifierEndDay(cursor.getInt(offset + 110));
-        entity.setWPurifierState(cursor.isNull(offset + 111) ? null : cursor.getString(offset + 111));
-        entity.setWPurifierFlowData(cursor.getInt(offset + 112));
-        entity.setWPurifierPrimaryQuqlity(cursor.getInt(offset + 113));
-        entity.setWPurifierCurTemp(cursor.getInt(offset + 114));
-        entity.setWPurifierOutQuqlity(cursor.getInt(offset + 115));
-        entity.setWPurifierfilter1(cursor.getInt(offset + 116));
-        entity.setWPurifierfilter2(cursor.getInt(offset + 117));
-        entity.setWPurifierfilter3(cursor.getInt(offset + 118));
-        entity.setWPurifierfilter4(cursor.getInt(offset + 119));
-        entity.setWPurifierfilter5(cursor.getInt(offset + 120));
-        entity.setWPurifierfilter6(cursor.getInt(offset + 121));
-        entity.setWPurifierfilter7(cursor.getInt(offset + 122));
-        entity.setWPurifierfilter8(cursor.getInt(offset + 123));
-        entity.setWPurifierfilter9(cursor.getInt(offset + 124));
-        entity.setWPurifierfilter10(cursor.getInt(offset + 125));
-        entity.setHouseAddress(cursor.isNull(offset + 126) ? null : cursor.getString(offset + 126));
-        entity.setProvince(cursor.isNull(offset + 127) ? null : cursor.getString(offset + 127));
+        entity.setWarmerScreen(cursor.getInt(offset + 10));
+        entity.setHeaterControl(cursor.getInt(offset + 11));
+        entity.setTempCheck(cursor.getInt(offset + 12));
+        entity.setMode(cursor.getInt(offset + 13));
+        entity.setRateGrade(cursor.getInt(offset + 14));
+        entity.setGradeVersion(cursor.getInt(offset + 15));
+        entity.setGradeState(cursor.getInt(offset + 16));
+        entity.setWVerion(cursor.getInt(offset + 17));
+        entity.setMVersion(cursor.getInt(offset + 18));
+        entity.setMacAddress(cursor.isNull(offset + 19) ? null : cursor.getString(offset + 19));
+        entity.setName(cursor.isNull(offset + 20) ? null : cursor.getString(offset + 20));
+        entity.setTimerMoudle(cursor.getInt(offset + 21));
+        entity.setMcuVersion(cursor.isNull(offset + 22) ? null : cursor.getString(offset + 22));
+        entity.setWifiVersion(cursor.isNull(offset + 23) ? null : cursor.getString(offset + 23));
+        entity.setWaramerSetTemp(cursor.getInt(offset + 24));
+        entity.setWarmerCurTemp(cursor.getInt(offset + 25));
+        entity.setWarmerSampleData(cursor.getInt(offset + 26));
+        entity.setWarmerRatePower(cursor.getInt(offset + 27));
+        entity.setWarmerCurRunRoatePower(cursor.getInt(offset + 28));
+        entity.setWarmerRunState(cursor.getInt(offset + 29));
+        entity.setDeviceState(cursor.getInt(offset + 30));
+        entity.setWarmerFall(cursor.getInt(offset + 31));
+        entity.setRateState(cursor.isNull(offset + 32) ? null : cursor.getString(offset + 32));
+        entity.setLock(cursor.getInt(offset + 33));
+        entity.setWeek(cursor.getInt(offset + 34));
+        entity.setTimerOpenOneHour(cursor.getInt(offset + 35));
+        entity.setTimerOpenOneMin(cursor.getInt(offset + 36));
+        entity.setTimerCloseOneHour(cursor.getInt(offset + 37));
+        entity.setTimerCloseOneMin(cursor.getInt(offset + 38));
+        entity.setTimerOpenTwoHour(cursor.getInt(offset + 39));
+        entity.setTimerOpenTwoMin(cursor.getInt(offset + 40));
+        entity.setTimerCloseTwoHour(cursor.getInt(offset + 41));
+        entity.setTimerCloseTwoMin(cursor.getInt(offset + 42));
+        entity.setTimerOpenThrHour(cursor.getInt(offset + 43));
+        entity.setTimerOpenThrMin(cursor.getInt(offset + 44));
+        entity.setTimerCloseThrHour(cursor.getInt(offset + 45));
+        entity.setTimerCloseThrMin(cursor.getInt(offset + 46));
+        entity.setTimerOpenForHour(cursor.getInt(offset + 47));
+        entity.setTimerOpenForMin(cursor.getInt(offset + 48));
+        entity.setTimerCloseForHour(cursor.getInt(offset + 49));
+        entity.setTimerCloseForMin(cursor.getInt(offset + 50));
+        entity.setTimerOne(cursor.getInt(offset + 51));
+        entity.setTimerTwo(cursor.getInt(offset + 52));
+        entity.setTimerThr(cursor.getInt(offset + 53));
+        entity.setTimerFor(cursor.getInt(offset + 54));
+        entity.setLockState(cursor.getInt(offset + 55));
+        entity.setScreenState(cursor.getInt(offset + 56));
+        entity.setCurRunState2(cursor.getInt(offset + 57));
+        entity.setCurRunState3(cursor.getInt(offset + 58));
+        entity.setTimerHour(cursor.getInt(offset + 59));
+        entity.setTimerMin(cursor.getInt(offset + 60));
+        entity.setCheckCode(cursor.getInt(offset + 61));
+        entity.setEndCode(cursor.getInt(offset + 62));
+        entity.setUserId(cursor.getInt(offset + 63));
+        entity.setImg(cursor.getInt(offset + 64));
+        entity.setDeviceId(cursor.getInt(offset + 65));
+        entity.setLinked(cursor.getInt(offset + 66));
+        entity.setLinkedSensorId(cursor.getInt(offset + 67));
+        entity.setShareId(cursor.getLong(offset + 68));
+        entity.setSensorState(cursor.getInt(offset + 69));
+        entity.setSensorSimpleTemp(cursor.getInt(offset + 70));
+        entity.setSensorSimpleHum(cursor.getInt(offset + 71));
+        entity.setSorsorPm(cursor.getInt(offset + 72));
+        entity.setSensorOx(cursor.getInt(offset + 73));
+        entity.setSensorHcho(cursor.getInt(offset + 74));
+        entity.setSocketPowerHigh(cursor.getInt(offset + 75));
+        entity.setSocketPowerLow(cursor.getInt(offset + 76));
+        entity.setSocketPower(cursor.getInt(offset + 77));
+        entity.setSocketTemp(cursor.getInt(offset + 78));
+        entity.setSocketState(cursor.getInt(offset + 79));
+        entity.setSocketTimer(cursor.getInt(offset + 80));
+        entity.setSocketTimerHour(cursor.getInt(offset + 81));
+        entity.setSocketTimerMin(cursor.getInt(offset + 82));
+        entity.setSocketCurrent(cursor.getInt(offset + 83));
+        entity.setSocketVal(cursor.getInt(offset + 84));
+        entity.setSocketPowerConsume(cursor.getInt(offset + 85));
+        entity.setTimerSwitch(cursor.getInt(offset + 86));
+        entity.setWaterLevel(cursor.getInt(offset + 87));
+        entity.setWindLevel(cursor.isNull(offset + 88) ? null : cursor.getString(offset + 88));
+        entity.setEquipRatedPowerHigh(cursor.getInt(offset + 89));
+        entity.setEquipRatedPowerLow(cursor.getInt(offset + 90));
+        entity.setEquipCurdPowerHigh(cursor.getInt(offset + 91));
+        entity.setEquipCurdPowerLow(cursor.getInt(offset + 92));
+        entity.setFaultCode(cursor.getInt(offset + 93));
+        entity.setPurifierState(cursor.isNull(offset + 94) ? null : cursor.getString(offset + 94));
+        entity.setDehumSetTemp(cursor.getInt(offset + 95));
+        entity.setDehumSetHum(cursor.getInt(offset + 96));
+        entity.setDehumInnerTemp(cursor.getInt(offset + 97));
+        entity.setDehumOuterTemp(cursor.getInt(offset + 98));
+        entity.setDehumSleep(cursor.getInt(offset + 99));
+        entity.setDehumAnion(cursor.getInt(offset + 100));
+        entity.setDehumDrying(cursor.getInt(offset + 101));
+        entity.setDehumDefrost(cursor.getInt(offset + 102));
+        entity.setACondState(cursor.isNull(offset + 103) ? null : cursor.getString(offset + 103));
+        entity.setACondSetTemp1(cursor.getInt(offset + 104));
+        entity.setACondSetTemp2(cursor.getInt(offset + 105));
+        entity.setACondSetData(cursor.getInt(offset + 106));
+        entity.setACondSimpleTemp1(cursor.getInt(offset + 107));
+        entity.setACondSimpleTemp2(cursor.getInt(offset + 108));
+        entity.setACondInnerTemp(cursor.getInt(offset + 109));
+        entity.setACondOuterTemp(cursor.getInt(offset + 110));
+        entity.setACondSleep(cursor.getInt(offset + 111));
+        entity.setACondSUpDown(cursor.getInt(offset + 112));
+        entity.setACondSLeftRight(cursor.getInt(offset + 113));
+        entity.setSocketTimerMode(cursor.getInt(offset + 114));
+        entity.setIsSocketTimerMode(cursor.getInt(offset + 115));
+        entity.setWPurifierEndFlow(cursor.getInt(offset + 116));
+        entity.setWPurifierEndYear(cursor.getInt(offset + 117));
+        entity.setWPurifierEndMonth(cursor.getInt(offset + 118));
+        entity.setWPurifierEndDay(cursor.getInt(offset + 119));
+        entity.setWPurifierState(cursor.isNull(offset + 120) ? null : cursor.getString(offset + 120));
+        entity.setWPurifierFlowData(cursor.getInt(offset + 121));
+        entity.setWPurifierPrimaryQuqlity(cursor.getInt(offset + 122));
+        entity.setWPurifierCurTemp(cursor.getInt(offset + 123));
+        entity.setWPurifierOutQuqlity(cursor.getInt(offset + 124));
+        entity.setWPurifierfilter1(cursor.getInt(offset + 125));
+        entity.setWPurifierfilter2(cursor.getInt(offset + 126));
+        entity.setWPurifierfilter3(cursor.getInt(offset + 127));
+        entity.setWPurifierfilter4(cursor.getInt(offset + 128));
+        entity.setWPurifierfilter5(cursor.getInt(offset + 129));
+        entity.setWPurifierfilter6(cursor.getInt(offset + 130));
+        entity.setWPurifierfilter7(cursor.getInt(offset + 131));
+        entity.setWPurifierfilter8(cursor.getInt(offset + 132));
+        entity.setWPurifierfilter9(cursor.getInt(offset + 133));
+        entity.setWPurifierfilter10(cursor.getInt(offset + 134));
+        entity.setHouseAddress(cursor.isNull(offset + 135) ? null : cursor.getString(offset + 135));
+        entity.setProvince(cursor.isNull(offset + 136) ? null : cursor.getString(offset + 136));
      }
     
     @Override

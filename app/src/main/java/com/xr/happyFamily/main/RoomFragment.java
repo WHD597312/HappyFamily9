@@ -39,6 +39,7 @@ import com.xr.database.dao.DeviceChildDao;
 import com.xr.database.dao.daoimpl.DeviceChildDaoImpl;
 import com.xr.database.dao.daoimpl.RoomDaoImpl;
 import com.xr.happyFamily.R;
+import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.ChangeRoomActivity;
 import com.xr.happyFamily.jia.MyGridview;
 import com.xr.happyFamily.jia.activity.AConfActivity;
@@ -49,6 +50,8 @@ import com.xr.happyFamily.jia.activity.DeviceDetailActivity;
 import com.xr.happyFamily.jia.activity.PurifierActivity;
 import com.xr.happyFamily.jia.activity.SmartTerminalActivity;
 import com.xr.happyFamily.jia.activity.SocketActivity;
+import com.xr.happyFamily.jia.activity.WamerActivity;
+import com.xr.happyFamily.jia.activity.WarmerSmartActivity;
 import com.xr.happyFamily.jia.adapter.GridViewAdapter;
 import com.xr.happyFamily.jia.adapter.RoomAdapter;
 import com.xr.happyFamily.jia.pojo.DeviceChild;
@@ -189,12 +192,12 @@ public class RoomFragment extends Fragment {
                 @Override
                 public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                     DeviceChild deviceChild = mGridData.get(position);
-                    DeviceChild deviceChild2=deviceChildDao.findById(deviceChild.getId());
-                    if (deviceChild2==null){
-                        Utils.showToast(getActivity(),"该设备已重置");
+                    DeviceChild deviceChild2 = deviceChildDao.findById(deviceChild.getId());
+                    if (deviceChild2 == null) {
+                        Utils.showToast(getActivity(), "该设备已重置");
                         mGridData.remove(position);
                         mGridViewAdapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         int type = deviceChild.getType();
                         boolean online = deviceChild.getOnline();
                         if (type == 2) {
@@ -277,6 +280,40 @@ public class RoomFragment extends Fragment {
                             } else {
                                 Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
                             }
+                        } else if (type == 8) {
+                            if (online) {
+                                String deviceName = deviceChild.getName();
+                                long deviceId = deviceChild.getId();
+                                Intent intent = new Intent(getActivity(), PurifierActivity.class);
+                                intent.putExtra("deviceName", deviceName);
+                                intent.putExtra("deviceId", deviceId);
+                                intent.putExtra("houseId", houseId);
+                                startActivityForResult(intent, 6000);
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                            }
+                        } else if (type == 9) {
+                            if (online) {
+                                int heaterControl=deviceChild.getHeaterControl();
+                                if (heaterControl==3){
+                                    ToastUtil.showShortToast("从设备不能操作");
+                                }else {
+                                    String deviceName = deviceChild.getName();
+                                    long deviceId = deviceChild.getId();
+                                    Intent intent = new Intent(getActivity(), WamerActivity.class);
+                                    intent.putExtra("deviceName", deviceName);
+                                    intent.putExtra("deviceId", deviceId);
+                                    intent.putExtra("houseId", houseId);
+                                    intent.putExtra("device", deviceChild);
+                                    startActivityForResult(intent, 6000);
+                                }
+                            } else {
+                                Toast.makeText(getActivity(), "该设备离线", Toast.LENGTH_SHORT).show();
+                                if (mqService!=null){
+                                    mqService.getData(deviceChild.getMacAddress());
+                                }
+
+                            }
                         }
                     }
 
@@ -288,12 +325,12 @@ public class RoomFragment extends Fragment {
                     mPosition = position;
                     mdeledeviceChild = mGridData.get(position);
                     Log.i("mdeledeviceChild", "-->" + mdeledeviceChild.getDeviceId());
-                    DeviceChild deviceChild2=deviceChildDao.findById(mdeledeviceChild.getId());
-                    if (deviceChild2==null){
-                        Utils.showToast(getActivity(),"该设备已重置");
+                    DeviceChild deviceChild2 = deviceChildDao.findById(mdeledeviceChild.getId());
+                    if (deviceChild2 == null) {
+                        Utils.showToast(getActivity(), "该设备已重置");
                         mGridData.remove(position);
                         mGridViewAdapter.notifyDataSetChanged();
-                    }else {
+                    } else {
                         deleteDeviceDialog();
                     }
                     return true;
@@ -530,14 +567,13 @@ public class RoomFragment extends Fragment {
             return;
         }
 
-
         View view = View.inflate(getActivity(), R.layout.popview_room_homemanerge, null);
         int width = getResources().getDisplayMetrics().widthPixels;
         int height = getResources().getDisplayMetrics().heightPixels;
         RelativeLayout rl_room_rename = (RelativeLayout) view.findViewById(R.id.rl_room_rename);
         RelativeLayout tv_timer = (RelativeLayout) view.findViewById(R.id.rl_room_del);
-
-
+        RelativeLayout rl_room_smart = view.findViewById(R.id.rl_room_smart);
+        rl_room_smart.setVisibility(View.VISIBLE);
         popupWindow = new PopupWindow(view, ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT, true);
         //点击空白处时，隐藏掉pop窗口
         popupWindow.setFocusable(true);
@@ -562,14 +598,36 @@ public class RoomFragment extends Fragment {
                         deleteHomeDialog();
                         popupWindow.dismiss();
                         break;
+                    case R.id.rl_room_smart:
+                        List<DeviceChild> heaterDevices = deviceChildDao.findHeaterDevice(houseId, roomId);
+                        Log.i("heaterDevices","-->"+heaterDevices.size());
+                        if (heaterDevices.size() > 1) {
+                            popupWindow.dismiss();
+                            Intent intent = new Intent(getActivity(), WarmerSmartActivity.class);
+                            intent.putExtra("houseId",houseId);
+                            intent.putExtra("roomId",roomId);
+                            startActivityForResult(intent, 200);
+                        } else {
+                            ToastUtil.showShortToast("智能设备数量不足");
+                        }
+                        break;
                 }
             }
         };
 
         rl_room_rename.setOnClickListener(listener);
         tv_timer.setOnClickListener(listener);
+        rl_room_smart.setOnClickListener(listener);
     }
 
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (resultCode == 200) {
+
+        }
+    }
 
     private String houseName;
 
@@ -685,9 +743,9 @@ public class RoomFragment extends Fragment {
                                 offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
                             }
 
-                            String reSet="reSet";
+                            String reSet = "reSet";
                             if (!TextUtils.isEmpty(onlineTopicName))
-                                mqService.publish(onlineTopicName,1,reSet);
+                                mqService.publish(onlineTopicName, 1, reSet);
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);
                             }
@@ -774,11 +832,11 @@ public class RoomFragment extends Fragment {
                                 case 8:
                                     onlineTopicName = "p99/wPurifier1/" + macAddress + "/transfer";
                                     offlineTopicName = "p99/wPurifier1/" + macAddress + "/lwt";
-                               break;
+                                    break;
                             }
-                            String reSet="reSet";
+                            String reSet = "reSet";
                             if (!TextUtils.isEmpty(onlineTopicName))
-                                mqService.publish(onlineTopicName,1,reSet);
+                                mqService.publish(onlineTopicName, 1, reSet);
                             if (!TextUtils.isEmpty(onlineTopicName)) {
                                 mqService.unsubscribe(onlineTopicName);
                             }
@@ -893,11 +951,6 @@ public class RoomFragment extends Fragment {
                         mGridData.remove(deviceChild);
                         mGridViewAdapter.notifyDataSetChanged();
                         Toast.makeText(getActivity(), macAddress + "设备已重置", Toast.LENGTH_SHORT).show();
-//                        Intent intent2=new Intent(getActivity(),MainActivity.class);
-//                        intent2.putExtra("houseId",houseId);
-//                        intent2.putExtra("refersh","refersh");
-//                        startActivity(intent2);
-//                        getActivity().overridePendingTransition(R.anim.topout, R.anim.topout);
                         break;
                     } else if (mac.equals(macAddress) && deviceChild2 != null) {
                         mGridData.set(i, deviceChild2);

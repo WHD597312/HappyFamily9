@@ -85,7 +85,7 @@ public class ShopXqAdapter extends RecyclerView.Adapter<ShopXqAdapter.MyViewHold
             str1 = matcher.replaceAll("");
         }
         if (str1.length()>0) {
-            Picasso.with(context)
+            Glide.with(context)
                     .load(str1)
                     .placeholder(R.mipmap.bg_loading)
                     .into(holder.img_footBanner);

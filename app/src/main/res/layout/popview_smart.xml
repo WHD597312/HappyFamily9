@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@drawable/shape_smart_pop"
+        >
+        <RelativeLayout
+            android:id="@+id/pop_header"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_50">
+            <TextView
+                android:id="@+id/tv_pop_header"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/dp_jy_40"
+                android:text="选择设备"
+                android:textColor="@color/heater_black"
+                android:gravity="center"
+                android:textSize="@dimen/sp_18"
+                android:layout_centerVertical="true"
+                />
+           <ImageView
+               android:id="@+id/img_pop_cancel"
+               android:layout_width="@dimen/dp_jy_40"
+               android:layout_height="@dimen/dp_jy_40"
+               android:src="@mipmap/heater_cancle"
+               android:scaleType="centerInside"
+               android:layout_alignParentRight="true"
+               android:layout_centerVertical="true"
+               android:layout_marginRight="@dimen/dp_jy_15"
+               />
+        </RelativeLayout>
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_1"
+            android:layout_below="@+id/pop_header"
+            android:background="#dddddd"
+            />
+       <android.support.v7.widget.RecyclerView
+           android:layout_below="@+id/view"
+           android:id="@+id/rl_pop"
+           android:layout_width="match_parent"
+           android:layout_height="wrap_content"/>
+        <View
+            android:id="@+id/view2"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/dp_jy_1"
+            android:layout_below="@+id/rl_pop"
+            android:background="#CCCCCC"
+            android:layout_marginLeft="@dimen/dp_jy_15"
+            android:layout_marginRight="@dimen/dp_jy_15"
+            />
+
+        <Button
+            android:layout_marginTop="@dimen/dp_jy_60"
+            android:layout_centerHorizontal="true"
+            android:layout_below="@+id/rl_pop"
+            android:id="@+id/btn_submit"
+            android:layout_width="@dimen/dp_jy_240"
+            android:layout_height="@dimen/dp_jy_40"
+            android:background="@drawable/pop_smart_ensure"
+            android:text="确定"
+            android:textColor="@color/white"
+            android:textSize="@dimen/sp_18"
+            android:layout_marginBottom="@dimen/dp_jy_30"
+            />
+
+    </RelativeLayout>
+</android.support.constraint.ConstraintLayout>

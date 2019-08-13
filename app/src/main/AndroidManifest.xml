@@ -11,24 +11,14 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.RECEIVE_SMS" />
     <uses-permission android:name="android.permission.READ_SMS" />
-    <uses-permission android:name="android.permission.VIBRATE" />
-    <!-- 锁屏显示界面 -->
+    <uses-permission android:name="android.permission.VIBRATE" /> <!-- 锁屏显示界面 -->
     <uses-permission android:name="android.permission.DISABLE_KEYGUARD" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
-
-    <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
-
-    <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
-    <uses-permission android:name="android.permission.WAKE_LOCK" />
-
-    <!-- 需要运行时注册的权限 -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" /> <!-- 这个权限用于获取wifi的获取权限，wifi信息会用来进行网络定位 -->
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" /> <!-- 不是SDK需要的权限，是示例中的后台唤醒定位需要的权限 -->
+    <uses-permission android:name="android.permission.WAKE_LOCK" /> <!-- 需要运行时注册的权限 -->
     <!-- 用于进行网络定位 -->
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 用于访问GPS定位 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于访问GPS定位 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
-
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.CHANGE_WIFI_MULTICAST_STATE" />
     <uses-permission android:name="android.permission.CHANGE_NETWORK_STATE" />
@@ -39,32 +29,47 @@
 
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <!-- 用于提高GPS定位速度 -->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" /> <!-- 用于提高GPS定位速度 -->
     <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
     <uses-permission android:name="android.permission.SYSTEM_ALERT_WINDOW" />
     <uses-permission
         android:name="android.permission.PACKAGE_USAGE_STATS"
         tools:ignore="ProtectedPermissions" />
-    <!--android:networkSecurityConfig="@xml/network_security_config"-->
+
     <application
         android:name=".jia.MyApplication"
         android:allowBackup="true"
         android:hardwareAccelerated="false"
-
-        android:largeHeap="true"
         android:icon="@mipmap/app"
         android:label="P99"
+        android:largeHeap="true"
+        android:networkSecurityConfig="@xml/network_security_config"
         android:roundIcon="@mipmap/app"
         android:supportsRtl="true"
         android:theme="@style/AppTheme"
         tools:replace="icon,label,theme">
+        <activity android:name=".jia.activity.WarmerSmartActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
+            />
+        <activity
+            android:name=".jia.activity.WarmerAddTimerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jia.activity.WamerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jia.activity.WatmerTimerActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <meta-data
-            android:name="design_width"
-            android:value="768" />
+            android:name="design_width_in_dp"
+            android:value="360" />
         <meta-data
-            android:name="design_height"
-            android:value="1280" />
+            android:name="design_height_in_dp"
+            android:value="640" />
 
         <provider
             android:name="android.support.v4.content.FileProvider"
@@ -81,12 +86,10 @@
             android:value="57bea7cd7ce34ab79dc987f0ff6a222b" />
 
         <service android:name="com.amap.api.location.APSService" />
-
-        <service android:name="com.baidu.location.f"
-                  android:enabled="true"
-                  android:process=":remote" />
-
-
+        <service
+            android:name="com.baidu.location.f"
+            android:enabled="true"
+            android:process=":remote" />
         <service
             android:name=".together.util.mqtt.MQService"
             android:enabled="true"
@@ -110,12 +113,15 @@
         <meta-data
             android:name="com.baidu.lbsapi.API_KEY"
             android:value="0SkWiTmS4AIg04Q56KLIzDGXR7QVCa3o" />
+
         <activity
-            android:hardwareAccelerated="false"
             android:name=".login.login.qdActivity"
-            android:screenOrientation="portrait">
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -124,20 +130,22 @@
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".login.login.GuideActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".le.MapActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
-        <activity android:name=".login.login.LoginActivity"
+        <activity
+            android:name=".login.login.LoginActivity"
             android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar"
             />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".zhen.AboutActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -193,7 +201,8 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.AddDeviceActivity"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
 
         <receiver
             android:name=".le.BtClock.RingReceiver"
@@ -206,12 +215,12 @@
 
         <activity
             android:name=".main.MainActivity"
-            android:theme="@style/AppTheme.NoActionBar"
             android:hardwareAccelerated="true"
-            android:screenOrientation="portrait" />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.ShareDeviceActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -221,8 +230,8 @@
             android:screenOrientation="portrait"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.DeviceDetailActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -235,10 +244,9 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.xnty.Smartsj"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:hardwareAccelerated="false"
-            />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.xnty.AirConditionerActivity"
             android:screenOrientation="portrait"
@@ -254,19 +262,17 @@
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".jia.HourseActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
             android:hardwareAccelerated="false"
-            />
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
             android:name=".login.rigest.RegistFinishActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
-            android:theme="@style/AppTheme.NoActionBar"
-            android:hardwareAccelerated="false"
-            />
-        <activity android:name=".jia.ChangeRoomActivity"
-            android:hardwareAccelerated="false"
-            />
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".jia.ChangeRoomActivity"
+            android:hardwareAccelerated="false" />
         <activity
             android:name="com.tencent.tauth.AuthActivity"
             android:launchMode="singleTask"
@@ -287,8 +293,8 @@
             android:screenOrientation="behind"
             android:theme="@android:style/Theme.Translucent.NoTitleBar" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.QRScannerActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
@@ -327,7 +333,6 @@
             android:name=".bao.ShopDingdanActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name=".bao.ShopSearchActivity"
             android:launchMode="singleTask"
@@ -382,15 +387,12 @@
             android:name=".bao.alipay.PayActivity"
             android:launchMode="singleTop"
             android:screenOrientation="portrait" />
-
         <activity
             android:name="com.alipay.sdk.app.H5PayActivity"
             android:configChanges="orientation|keyboardHidden|navigation"
             android:exported="false"
             android:screenOrientation="behind"
-            android:windowSoftInputMode="adjustResize|stateHidden" >
-        </activity>
-
+            android:windowSoftInputMode="adjustResize|stateHidden" />
         <activity
             android:name=".wxapi.WXPayActiviy"
             android:exported="true"
@@ -398,7 +400,9 @@
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
+
                 <category android:name="android.intent.category.DEFAULT" />
+
                 <data android:scheme="wx44acbeed9571e8cf" />
             </intent-filter>
         </activity>
@@ -449,40 +453,40 @@
             android:name=".le.clock.MsgActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".zhen.SettingActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".zhen.PersonInfoActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="true"
             android:name=".jia.activity.SmartTerminalActivity"
+            android:hardwareAccelerated="true"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.SmartLinkedActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".le.clock.FriendFindActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".le.clock.FriendAddActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".zhen.AccountActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".zhen.ReSetpswdActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".zhen.HelpActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".le.clock.MusicActivity"
@@ -492,26 +496,25 @@
             android:screenOrientation="portrait"
             android:theme="@style/ImagePickerThemeFullScreen" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.TempChatActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.SocketActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.PurifierActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
-            android:hardwareAccelerated="false"
             android:name=".jia.activity.UseWaterRecordActivity"
+            android:hardwareAccelerated="false"
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.LiveActivity"
-            android:screenOrientation="portrait"
             android:hardwareAccelerated="false"
-            />
+            android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.APurifierActivity"
             android:screenOrientation="portrait" />
@@ -523,19 +526,18 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".jia.activity.DehumidifierActivity"
-            android:screenOrientation="portrait"
-            android:hardwareAccelerated="false"/>
-        <activity android:name=".le.FriendActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".zhen.VersionActivity"
-            android:screenOrientation="portrait"
-            />
-        <activity android:name=".le.YouGuiActivity"
-            android:screenOrientation="portrait"
-            />
+            android:hardwareAccelerated="false"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.FriendActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".zhen.VersionActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".le.YouGuiActivity"
+            android:screenOrientation="portrait" />
         <activity android:name=".le.JcActivity" />
-
     </application>
 
 </manifest>

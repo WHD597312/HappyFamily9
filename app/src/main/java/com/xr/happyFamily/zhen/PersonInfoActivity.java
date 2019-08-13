@@ -48,6 +48,10 @@ import com.bumptech.glide.load.model.LazyHeaders;
 import com.jzxiang.pickerview.TimePickerDialog;
 import com.jzxiang.pickerview.data.Type;
 import com.jzxiang.pickerview.listener.OnDateSetListener;
+import com.lzy.imagepicker.ImagePicker;
+import com.lzy.imagepicker.bean.ImageItem;
+import com.lzy.imagepicker.ui.ImageGridActivity;
+import com.lzy.imagepicker.view.CropImageView;
 import com.xr.happyFamily.R;
 import com.xr.happyFamily.bao.base.ToastUtil;
 import com.xr.happyFamily.jia.MyApplication;
@@ -63,6 +67,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
@@ -99,6 +104,24 @@ public class PersonInfoActivity extends AppCompatActivity {
 
         adapter=new PersonAdapter(this);
         list_set.setAdapter(adapter);
+
+        initImagePicker();
+    }
+    public static final int REQUEST_CODE_SELECT = 100;
+    public static final int REQUEST_CODE_PREVIEW = 101;
+    private void initImagePicker() {
+        ImagePicker imagePicker = ImagePicker.getInstance();
+        imagePicker.setImageLoader(new GlideImageLoader());   //设置图片加载器
+        imagePicker.setShowCamera(false);                      //显示拍照按钮
+        imagePicker.setCrop(true);                            //允许裁剪（单选才有效）
+        imagePicker.setSaveRectangle(true);                   //是否按矩形区域保存
+        imagePicker.setSelectLimit(1);              //选中数量限制
+        imagePicker.setMultiMode(false);                      //多选
+        imagePicker.setStyle(CropImageView.Style.RECTANGLE);  //裁剪框的形状
+        imagePicker.setFocusWidth(800);                       //裁剪框的宽度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setFocusHeight(800);                      //裁剪框的高度。单位像素（圆形自动取宽高最小值）
+        imagePicker.setOutPutX(1000);                         //保存文件的宽度。单位像素
+        imagePicker.setOutPutY(1000);                         //保存文件的高度。单位像素
     }
 
     private String username;
@@ -597,18 +620,21 @@ public class PersonInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (popupWindow != null && popupWindow.isShowing()) {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        //android 6.0权限问题
-                        if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                                ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
-                        } else {
-                            startGallery();
-                        }
-
-                    } else {
-                        startGallery();
-                    }
+                    ImagePicker.getInstance().setSelectLimit(1);
+                    Intent intent1 = new Intent(PersonInfoActivity.this, ImageGridActivity.class);
+                    startActivityForResult(intent1, REQUEST_CODE_SELECT);
+//                    if (Build.VERSION.SDK_INT >= 23) {
+//                        //android 6.0权限问题
+//                        if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+//                                ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                            ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
+//                        } else {
+//                            startGallery();
+//                        }
+//
+//                    } else {
+//                        startGallery();
+//                    }
                 }
                 backgroundAlpha(1.0f);
                 popupWindow.dismiss();
@@ -779,7 +805,7 @@ public class PersonInfoActivity extends AppCompatActivity {
             File file = files[0];
             String userId = preferences.getString("userId", "");
             String url =upLoadImg+userId;
-            String result = HttpUtils.upLoadFile(url, "HeadPortrait2.jpg", file);
+            String result = HttpUtils.uploadFile(url, file);
             if (!Utils.isEmpty(result)) {
                 code = Integer.parseInt(result);
             }
@@ -876,15 +902,27 @@ public class PersonInfoActivity extends AppCompatActivity {
                     cropPhoto(imageUri);
                 }
                 break;
-            case ICON:
-                if (resultCode == RESULT_OK) {
-                    if (Build.VERSION.SDK_INT >= 19) {
-                        // 4.4及以上系统使用这个方法处理图片
-                        handleImageOnKitKat(data);
-                    } else {
-                        // 4.4以下系统使用这个方法处理图片
-                        handleImageBeforeKitKat(data);
+            case REQUEST_CODE_SELECT:
+                if (resultCode == ImagePicker.RESULT_CODE_ITEMS) {
+                    if (data!=null){
+                        ArrayList<ImageItem> images = (ArrayList<ImageItem>) data.getSerializableExtra(ImagePicker.EXTRA_RESULT_ITEMS);
+
+                        if (images!=null && !images.isEmpty()){
+                            ImageItem imageItem = images.get(0);
+                            Log.i("images","-->"+imageItem.path);
+                            File file2=new File(imageItem.path);
+                            if (file2!=null && file2.exists()){
+                                upImage(file2);
+                            }
+                        }
                     }
+//                    if (Build.VERSION.SDK_INT >= 19) {
+//                        // 4.4及以上系统使用这个方法处理图片
+//                        handleImageOnKitKat(data);
+//                    } else {
+//                        // 4.4以下系统使用这个方法处理图片
+//                        handleImageBeforeKitKat(data);
+//                    }
                 }
                 break;
             case PICTURE_CUT://裁剪完成
@@ -1037,19 +1075,23 @@ public class PersonInfoActivity extends AppCompatActivity {
             @Override
             public void onClick(View view) {
                 if (popupWindow != null && popupWindow.isShowing()) {
-                    if (Build.VERSION.SDK_INT >= 23) {
-                        //android 6.0权限问题
-                        if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
-                                ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                            Utils.showToast(PersonInfoActivity.this,"请打开相机权限");
-                            ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
-                        } else {
-                            startGallery();
-                        }
-
-                    } else {
-                        startGallery();
-                    }
+                    //打开选择,本次允许选择的数量
+                    ImagePicker.getInstance().setSelectLimit(1);
+                    Intent intent1 = new Intent(PersonInfoActivity.this, ImageGridActivity.class);
+                    startActivityForResult(intent1, REQUEST_CODE_SELECT);
+//                    if (Build.VERSION.SDK_INT >= 23) {
+//                        //android 6.0权限问题
+//                        if (ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED ||
+//                                ContextCompat.checkSelfPermission(PersonInfoActivity.this, Manifest.permission.WRITE_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
+//                            Utils.showToast(PersonInfoActivity.this,"请打开相机权限");
+//                            ActivityCompat.requestPermissions(PersonInfoActivity.this, new String[]{Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE}, ICONPRESS);
+//                        } else {
+//                            startGallery();
+//                        }
+//
+//                    } else {
+//                        startGallery();
+//                    }
                 }
                 backgroundAlpha(1.0f);
                 popupWindow.dismiss();

@@ -23,8 +23,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.xr.happyFamily.R;
-import com.zhy.http.okhttp.OkHttpUtils;
-import com.zhy.http.okhttp.callback.FileCallBack;
+
 
 import okhttp3.Call;
 import okhttp3.Callback;

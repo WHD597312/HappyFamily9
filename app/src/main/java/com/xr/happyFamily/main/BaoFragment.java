@@ -34,6 +34,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
+import com.google.gson.JsonSyntaxException;
 import com.jwenfeng.library.pulltorefresh.BaseRefreshListener;
 import com.jwenfeng.library.pulltorefresh.PullToRefreshLayout;
 import com.squareup.picasso.Picasso;
@@ -171,7 +172,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     ;
     boolean isData = true;
     //    private MyDialog dialog;
-    private static CountTimer countTimer;
+    private  CountTimer countTimer = new CountTimer(5000, 1000);
     private boolean isFirst = true;
     SimpleAdapter moreAdapter;
     List<Map<String, Object>> list_more = new ArrayList<>();
@@ -208,11 +209,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
         if (shopBannerDao.findAll().size() == 0) {
             getAdByPageAsync = new getAdByPageAsync();
-            getAdByPageAsync.execute();
+            getAdByPageAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
         if (shopListDao.findAll().size() == 0) {
             getHomePageAsync = new getHomePageAsync();
-            getHomePageAsync.execute();
+            getHomePageAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
         }
         return view;
     }
@@ -436,10 +437,10 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                     isRefresh = true;
                     if (countTimer != null)
                         countTimer.cancel();
-                    countTimer = new CountTimer(5000, 1000);
+
                     countTimer.start();
                     getHomePageAsync = new getHomePageAsync();
-                    getHomePageAsync.execute();
+                    getHomePageAsync.executeOnExecutor(AsyncTask.THREAD_POOL_EXECUTOR);
                 }else {
                     ToastUtil.showShortToast("请检查网络是否可用");
                     swipeContent.finishRefresh();
@@ -454,7 +455,6 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
                 isLoading = true;
                 if (countTimer != null)
                     countTimer.cancel();
-                countTimer = new CountTimer(5000, 1000);
                 countTimer.start();
                 getShopData(lastVisibleItem, page);
                 }else {
@@ -852,7 +852,7 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
 
             String url = "/ad/getAdByPage?pageNum=1&pageRow=10";
 
-            String result = HttpUtils.doGet(mContext, url);
+            String result = HttpUtils.requestGet( url);
             String code = "";
             try {
                 if (!Utils.isEmpty(result)) {
@@ -929,11 +929,11 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
         public void onFinish() {
             if (isRefresh) {
                 swipeContent.finishRefresh();
-                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
             }
             if (isLoading) {
                 swipeContent.finishLoadMore();
-                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
+//                Toast.makeText(mContext, "加载超时请重试", Toast.LENGTH_SHORT).show();
                 page--;
             }
         }
@@ -973,26 +973,30 @@ public class BaoFragment extends Fragment implements View.OnClickListener {
     }
 
     public void upData(int i) {
-        if (i == 0) {
-            llTuijian.setVisibility(View.VISIBLE);
-        } else {
-            llTuijian.setVisibility(View.GONE);
-        }
-        list_shop.clear();
-
-
-        if (data.length > 0) {
-            JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
-            JsonArray list = content.getAsJsonArray("list");
-            Gson gson = new Gson();
-            if (list != null) {
-                for (JsonElement user : list) {
-                    //通过反射 得到UserBean.class
-                    ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
-                    list_shop.add(userList);
-                }
+        try {
+            if (i == 0) {
+                llTuijian.setVisibility(View.VISIBLE);
+            } else {
+                llTuijian.setVisibility(View.GONE);
             }
-            shopAdapter.notifyDataSetChanged();
+            list_shop.clear();
+
+
+            if (data!=null && data.length > 0) {
+                JsonObject content = new JsonParser().parse(data[i]).getAsJsonObject();
+                JsonArray list = content.getAsJsonArray("list");
+                Gson gson = new Gson();
+                if (list != null) {
+                    for (JsonElement user : list) {
+                        //通过反射 得到UserBean.class
+                        ShopBean.ReturnData.MyList userList = gson.fromJson(user, ShopBean.ReturnData.MyList.class);
+                        list_shop.add(userList);
+                    }
+                }
+                shopAdapter.notifyDataSetChanged();
+            }
+        } catch(Exception e) {
+            e.printStackTrace();
         }
     }
 
